@@ -16,14 +16,21 @@
             <a class="brand" href="index.html">
                 <span class="brand-mark">75</span>
                 <span class="brand-copy">
-                    <strong>Mersch75</strong>
-                    <span>Handball Club</span>
+                    <strong>Mersch75 Handball</strong>
+                    <span>Zesumme Staark</span>
                 </span>
             </a>
-            <nav class="site-nav static-nav">
-                <a href="inside.html">Inside</a>
+            <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menü</button>
+            <nav class="site-nav" id="site-nav">
+                <a href="training.html">Training</a>
                 <a class="is-active" href="matchcenter.html">Matchcenter</a>
+                <a href="matchday.html">Matchday</a>
+                <a href="news.html">News</a>
+                <a href="inside.html">Inside</a>
+                <a href="gallery.html">Galerie</a>
+                <a href="links.html">Links</a>
                 <a href="join.html">Join Us</a>
+                <a href="community.html">Community</a>
                 <a href="contact.html">Contact</a>
             </nav>
         </header>
@@ -31,32 +38,83 @@
         <main class="page-main">
             <section class="page-hero">
                 <p class="eyebrow">Matchcenter</p>
-                <h1>Spieltage, Hinweise und Live-Module werden hier zentral gebündelt.</h1>
-                <p class="lead">Im WordPress-Export tauchen mehrere Varianten von Live-Center- und Generator-Seiten auf. Statt diese technische Historie mitzuschleppen, entsteht hier eine klare Oberfläche für den Spielbetrieb.</p>
+                <h1>Spieltag öffentlich anzeigen, intern pflegen und ohne WordPress veröffentlichen.</h1>
+                <p class="lead">Der saubere Schnitt für GitHub Pages ist kein Plugin-Ersatz, sondern ein kleines System aus zwei Teilen: eine interne Generator-App für Redaktion und eine öffentliche Matchday-Seite für Besucherinnen und Besucher.</p>
+                <div class="matchday-actions">
+                    <a class="hero-button hero-button-primary" href="matchday.html">Spieltag ansehen</a>
+                    <a class="hero-button hero-button-secondary" href="generator.html">Generator öffnen</a>
+                </div>
             </section>
 
             <section class="section three-column-layout">
                 <article class="panel">
                     <span class="card-tag">Matchday</span>
-                    <h2>Aktueller Spieltag</h2>
-                    <p>Platzhalter für Begegnungen, Halleninfos und kurzfristige Updates.</p>
+                    <h2>Öffentliche Spieltagsseite</h2>
+                    <p>Die neue Seite zeigt Begegnungen, Halleninfos, Hinweise und den Fokus-Match in einem klaren Layout statt als zusammengesetzte WordPress-Sonderseite.</p>
+                    <div class="inline-action-row">
+                        <a class="hero-button hero-button-secondary" href="matchday.html">Zur Matchday-Seite</a>
+                    </div>
                 </article>
                 <article class="panel">
-                    <span class="card-tag">Kalender</span>
-                    <h2>Nächste Termine</h2>
-                    <p>Hier folgen strukturierte Listen für Heimspiele, Auswärtsspiele und Vereins-Events.</p>
+                    <span class="card-tag">Generator App</span>
+                    <h2>Interne Pflegeoberfläche</h2>
+                    <p>Der bisherige Generator bleibt erhalten, wird aber als interne App im Repo gedacht. Dort pflegt ihr Spielplan, Matchday-Landingpage und spätere Exportformate an einer Stelle.</p>
+                    <div class="inline-action-row">
+                        <a class="hero-button hero-button-secondary" href="generator.html">App starten</a>
+                    </div>
                 </article>
                 <article class="panel">
-                    <span class="card-tag">Live</span>
-                    <h2>Später erweiterbar</h2>
-                    <p>Falls ein externer Feed oder manuelle Live-Daten bleiben sollen, bekommt das hier einen definierten Platz.</p>
+                    <span class="card-tag">Datenfluss</span>
+                    <h2>Ein Datensatz für beide Seiten</h2>
+                    <p>Die öffentliche Matchday-Seite liest ein gemeinsames Datenobjekt. Das ist robuster als WordPress-Shortcodes und lokal direkt testbar, auch ohne Build- oder Server-Schicht.</p>
                 </article>
             </section>
 
             <section class="section panel">
-                <h2>Warum dieser Schnitt sinnvoll ist</h2>
-                <p>Der Export zeigt mehrere experimentelle Seiten für Generatoren und Live-Center. Für GitHub Pages ist eine reduzierte, robuste Darstellung sinnvoller als eine direkte Übernahme alter WordPress-Sonderlogik.</p>
+                <h2>Warum diese Struktur hier besser passt</h2>
+                <p>GitHub Pages kann keine WordPress-Logik oder serverseitigen Editor-Workflows ersetzen. Deshalb ist die bessere Lösung eine kleine statische App: der Generator bleibt euer Redaktionswerkzeug, die Website zeigt nur das veröffentlichte Ergebnis. Das trennt Pflege und Ausgabe sauber, vermeidet Plugin-Abhängigkeiten und macht spätere Verbesserungen deutlich einfacher.</p>
             </section>
+
+            <section class="section two-column-layout">
+                <article class="panel emphasis-panel">
+                    <span class="card-tag">Jetzt angelegt</span>
+                    <h2>Öffentliche Matchday-Route</h2>
+                    <p>Mit der neuen Matchday-Seite ist bereits die Ausgabeebene vorbereitet. Sie kann künftig direkt aus dem Generator-Datensatz gespeist werden.</p>
+                </article>
+                <article class="panel">
+                    <span class="card-tag">Nächster Schritt</span>
+                    <h2>Generator an denselben Datensatz hängen</h2>
+                    <p>Der nächste sinnvolle Ausbau ist ein sauberer Import-/Export-Flow aus der Generator-App heraus, damit ihr den Spieltag ohne Code-Edit aktualisieren könnt.</p>
+                </article>
+            </section>
+
+            <footer class="site-page-footer">
+                <div class="site-page-footer-shell">
+                    <div class="site-page-footer-brand">
+                        <img src="Media/Logo-Mersch75-50-Joer-3D.png" alt="Mersch75 50 Joer">
+                        <div>
+                            <strong>Mersch75 Handball</strong>
+                            <p>Training, Matchday, News an Club-Liewen an enger kloerer statescher Struktur fir GitHub Pages.</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="site-page-footer-links">
+                            <a href="matchday.html">Matchday</a>
+                            <a href="training.html">Training</a>
+                            <a href="news.html">News</a>
+                            <a href="inside.html">Inside</a>
+                            <a href="gallery.html">Galerie</a>
+                            <a href="contact.html">Contact</a>
+                        </div>
+                        <div class="site-page-footer-meta">
+                            <a href="mailto:info@mersch75.lu">info@mersch75.lu</a>
+                            <span>288 00 399</span>
+                            <span>21, rue des Prés · L-7561 Mersch</span>
+                            <span>© <span id="current-year"></span> Mersch75 Handball</span>
+                        </div>
+                    </div>
+                </div>
+            </footer>
         </main>
     </div>
 

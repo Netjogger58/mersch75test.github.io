@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matchday | Mersch75 Handball</title>
+    <meta name="description" content="Aktueller Spieltag von Mersch75: Begegnungen, Halleninfos und Hinweise in einer öffentlichen Matchday-Ansicht.">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="matchday-page">
+    <div class="site-shell">
+        <header class="site-header compact-header">
+            <a class="brand" href="index.html">
+                <span class="brand-mark">75</span>
+                <span class="brand-copy">
+                    <strong>Mersch75 Handball</strong>
+                    <span>Zesumme Staark</span>
+                </span>
+            </a>
+            <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menü</button>
+            <nav class="site-nav" id="site-nav">
+                <a href="training.html">Training</a>
+                <a href="matchcenter.html">Matchcenter</a>
+                <a href="inside.html">Inside</a>
+                <a class="is-active" href="matchday.html">Matchday</a>
+                <a href="news.html">News</a>
+                <a href="gallery.html">Galerie</a>
+                <a href="links.html">Links</a>
+                <a href="join.html">Join Us</a>
+                <a href="community.html">Community</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+        </header>
+
+        <main class="page-main">
+            <section class="page-hero matchday-hero">
+                <p class="eyebrow" id="matchday-week-label">Spieltag</p>
+                <h1 id="matchday-title">De nächste Spilldag op ee Bléck.</h1>
+                <p class="lead" id="matchday-subtitle">Hei leeft déi ëffentlech Ausgab vum Matchday.</p>
+                <div class="matchday-actions">
+                    <a class="hero-button hero-button-primary" href="matchcenter.html">Zum Matchcenter</a>
+                    <a class="hero-button hero-button-secondary" data-generator-link href="generator.html">Generator-App öffnen</a>
+                </div>
+            </section>
+
+            <section class="section two-column-layout">
+                <article class="panel matchday-highlight">
+                    <span class="card-tag" id="featured-badge">Featured Match</span>
+                    <h2 id="featured-matchup">Mersch75 vs Gegner</h2>
+                    <p class="lead" id="featured-competition">Axa League</p>
+                    <div class="matchday-detail-stack">
+                        <div class="matchday-detail-row">
+                            <strong>Datum</strong>
+                            <span id="featured-date"></span>
+                        </div>
+                        <div class="matchday-detail-row">
+                            <strong>Zeit</strong>
+                            <span id="featured-time"></span>
+                        </div>
+                        <div class="matchday-detail-row">
+                            <strong>Ort</strong>
+                            <span id="featured-venue"></span>
+                        </div>
+                        <div class="matchday-detail-row">
+                            <strong>Hinweis</strong>
+                            <span id="featured-note"></span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="panel">
+                    <span class="card-tag">Publikationsmodell</span>
+                    <h2>So funktioniert die neue Matchday-Struktur</h2>
+                    <div class="matchday-detail-stack">
+                        <div class="matchday-detail-row">
+                            <strong>Pflege</strong>
+                            <span>Generator-App im Repo</span>
+                        </div>
+                        <div class="matchday-detail-row">
+                            <strong>Ausgabe</strong>
+                            <span>Öffentliche Matchday-Seite für Besucher</span>
+                        </div>
+                        <div class="matchday-detail-row">
+                            <strong>Letztes Update</strong>
+                            <span id="publish-updated"></span>
+                        </div>
+                        <div class="matchday-detail-row">
+                            <strong>Verantwortlich</strong>
+                            <span id="publish-owner"></span>
+                        </div>
+                    </div>
+                    <div class="inline-action-row">
+                        <a class="hero-button hero-button-secondary" data-generator-link href="generator.html">Daten im Generator pflegen</a>
+                    </div>
+                </article>
+            </section>
+
+            <section class="section">
+                <span class="card-tag">Spielplan</span>
+                <h2>Begegnungen dieses Spieltags</h2>
+                <div class="fixture-grid" id="fixture-list"></div>
+            </section>
+
+            <section class="section two-column-layout">
+                <article class="panel">
+                    <span class="card-tag">Hinweise</span>
+                    <h2>Für Fans und Familien</h2>
+                    <ul class="matchday-note-list" id="matchday-notes"></ul>
+                </article>
+                <article class="panel emphasis-panel">
+                    <span class="card-tag">Warum das besser ist</span>
+                    <h2>Kein WordPress nötig</h2>
+                    <p>Die Seite liest nur veröffentlichte Matchday-Daten. Dadurch bleibt die öffentliche Ansicht stabil, schnell und unabhängig von älteren WordPress-Workarounds oder Plugin-Logik.</p>
+                </article>
+            </section>
+
+            <footer class="site-page-footer">
+                <div class="site-page-footer-shell">
+                    <div class="site-page-footer-brand">
+                        <img src="Media/Logo-Mersch75-50-Joer-3D.png" alt="Mersch75 50 Joer">
+                        <div>
+                            <strong>Mersch75 Handball</strong>
+                            <p>Training, Matchday, News an Club-Liewen an enger kloerer statescher Struktur fir GitHub Pages.</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="site-page-footer-links">
+                            <a href="matchcenter.html">Matchcenter</a>
+                            <a href="training.html">Training</a>
+                            <a href="news.html">News</a>
+                            <a href="inside.html">Inside</a>
+                            <a href="gallery.html">Galerie</a>
+                            <a href="contact.html">Contact</a>
+                        </div>
+                        <div class="site-page-footer-meta">
+                            <a href="mailto:info@mersch75.lu">info@mersch75.lu</a>
+                            <span>288 00 399</span>
+                            <span>21, rue des Prés · L-7561 Mersch</span>
+                            <span>© <span id="current-year"></span> Mersch75 Handball</span>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <script src="matchday-data.js"></script>
+    <script src="matchday.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

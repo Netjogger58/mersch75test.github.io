@@ -1,0 +1,2071 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Mersch75 Matchday Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,600;0,700;0,800;0,900;1,600;1,700;1,800;1,900&family=Barlow:ital,wght@0,600;0,700;0,800;0,900;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+:root {
+    --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --primary-blue: #002f65;
+    --primary-yellow: #ffde00;
+    --secondary-blue: #005eb8;
+    --hover-blue: #004488;
+    --dark-blue: #001a38;
+    --hover-yellow: #e5c300;
+    --bg-light: #f5f5f7;
+    --text-gray: #555;
+    --border-gray: #ccc;
+}
+
+#m75-gen-wrapper { margin: 0 auto; padding: 0 0 40px 0; font-family: var(--font-stack); background: var(--bg-light); overflow-x: hidden; }
+#m75-gen-wrapper * { box-sizing: border-box; }
+
+#m75-gen-wrapper .top-nav { background: var(--primary-blue); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 10px 20px; box-shadow: 0 3px 10px rgba(0, 0, 0, .3); position: sticky; top: 0; z-index: 9999; }
+#m75-gen-wrapper .top-nav .brand { color: var(--primary-yellow); font-weight: 900; font-size: 15px; padding: 6px 0; white-space: nowrap; }
+#m75-gen-wrapper .top-nav-links { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+#m75-gen-wrapper .top-nav-links a { color: white; text-decoration: none; font-size: 12px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; padding: 10px 14px; border-radius: 999px; background: rgba(255, 255, 255, .12); }
+#m75-gen-wrapper .top-nav-links a:hover { background: rgba(255, 255, 255, .22); }
+
+#m75-gen-wrapper .controls { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, .05); margin-bottom: 20px; }
+#m75-gen-wrapper .panel-landscape { background: #fffdf0; border: 2px solid var(--primary-yellow); }
+#m75-gen-wrapper .controls h2 { color: var(--primary-blue); margin-top: 0; border-bottom: 2px solid var(--primary-yellow); padding-bottom: 10px; }
+
+#m75-gen-wrapper .magic-box { background: #f0f7ff; border: 2px solid var(--secondary-blue); padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+#m75-gen-wrapper .magic-box h3 { margin: 0 0 10px 0; color: var(--secondary-blue); font-size: 16px; }
+#m75-gen-wrapper .magic-box textarea { width: 100%; height: 80px; padding: 10px; border: 1px solid #b3d4ff; border-radius: 6px; box-sizing: border-box; font-family: monospace; font-size: 12px; resize: vertical; margin-bottom: 10px; }
+
+#m75-gen-wrapper .schedule-viewer { background: #eef7e5; border: 2px dashed #4caf50; padding: 15px; border-radius: 8px; text-align: center; margin-bottom: 20px; }
+#m75-gen-wrapper .schedule-viewer h3 { margin: 0 0 10px 0; color: #2e7d32; font-size: 16px; }
+#m75-gen-wrapper .schedule-viewer select { border-color: #4caf50; font-weight: bold; margin-bottom: 10px; max-width: 400px; padding: 8px; border-radius: 5px; width: 100%; }
+#m75-gen-wrapper .weekend-tools { display: grid; gap: 10px; margin-bottom: 18px; }
+#m75-gen-wrapper .weekend-button-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+#m75-gen-wrapper .btn-weekend { border: none; padding: 12px 18px; border-radius: 8px; background: var(--primary-blue); color: white; font-size: 13px; font-weight: 800; letter-spacing: 0.03em; }
+#m75-gen-wrapper .btn-weekend.alt { background: var(--primary-yellow); color: var(--primary-blue); }
+#m75-gen-wrapper .weekend-status { min-height: 18px; font-size: 12px; font-weight: 700; color: #2e7d32; }
+
+#m75-gen-wrapper button { cursor: pointer; transition: .3s; box-sizing: border-box; }
+#m75-gen-wrapper .btn-magic { background: var(--secondary-blue); color: white; border: none; padding: 12px 20px; font-size: 14px; font-weight: bold; border-radius: 6px; width: 100%; }
+#m75-gen-wrapper .btn-magic:hover { background: var(--hover-blue); }
+#m75-gen-wrapper .btn-portrait-dl { background: var(--primary-blue); color: var(--primary-yellow); border: none; padding: 12px 25px; font-size: 15px; font-weight: bold; border-radius: 8px; white-space: nowrap; }
+#m75-gen-wrapper .btn-portrait-dl:hover { background: var(--dark-blue); color: white; }
+#m75-gen-wrapper .btn-switch { background: #CACACC; color: var(--primary-blue); border: none; padding: 15px; font-size: 15px; font-weight: bold; border-radius: 8px; flex: 1; }
+#m75-gen-wrapper .btn-switch:hover { background: #b3b3b5; }
+#m75-gen-wrapper .btn-reset { background: transparent; border: 1px solid var(--border-gray); border-radius: 4px; cursor: pointer; font-size: 10px; color: var(--text-gray); padding: 2px 6px; margin-left: auto; display: flex; align-items: center; justify-content: center; }
+
+#m75-gen-wrapper .youth-mode-btn { background: #eef7e5; border: 2px dashed #4caf50; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; }
+#m75-gen-wrapper .youth-mode-btn label { font-size: 16px; font-weight: bold; color: #2e7d32; cursor: pointer; margin: 0; }
+
+#m75-gen-wrapper .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 15px; }
+#m75-gen-wrapper .game-block { background: #fdfdfd; border: 1px solid #ddd; border-radius: 8px; padding: 15px; position: relative; transition: opacity .3s; }
+#m75-gen-wrapper .game-block h3 { margin: 0 0 10px 0; font-size: 15px; color: var(--primary-blue); display: flex; justify-content: space-between; align-items: center; }
+
+#m75-gen-wrapper .row { display: flex; gap: 10px; margin-bottom: 8px; align-items: center; }
+#m75-gen-wrapper .col { flex: 1; min-width: 0; }
+#m75-gen-wrapper label { display: block; font-weight: bold; font-size: 11px; margin-bottom: 4px; color: var(--text-gray); text-transform: uppercase; }
+#m75-gen-wrapper input[type="text"], #m75-gen-wrapper input[type="date"], #m75-gen-wrapper input[type="time"], #m75-gen-wrapper select { width: 100%; padding: 8px; border: 1px solid var(--border-gray); border-radius: 4px; box-sizing: border-box; font-size: 13px; }
+
+#m75-gen-wrapper .toggle-label { font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 5px; color: var(--secondary-blue); text-transform: none; }
+#m75-gen-wrapper .toggle-label input { width: auto; margin: 0; }
+#m75-gen-wrapper select.category-select { font-weight: bold; background: white; cursor: pointer; }
+
+#m75-gen-wrapper .download-menu-wrapper { position: relative; flex: 1; min-width: 250px; }
+#m75-gen-wrapper .download-menu-btn { width: 100%; border: none; padding: 15px; font-size: 15px; font-weight: bold; border-radius: 8px; background: var(--primary-yellow); color: var(--primary-blue); display: flex; align-items: center; justify-content: center; gap: 8px; height: 100%; }
+#m75-gen-wrapper .download-dropdown { display: none; position: absolute; top: 110%; left: 0; right: 0; background: white; border: 2px solid var(--primary-blue); border-radius: 8px; box-shadow: 0 5px 20px rgba(0, 0, 0, .2); z-index: 1000; overflow: hidden; }
+#m75-gen-wrapper .download-dropdown.active { display: block; }
+#m75-gen-wrapper .download-option { padding: 13px 20px; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #e0e0e0; font-size: 14px; }
+#m75-gen-wrapper .download-option:hover { background: #f0f7ff; }
+
+#m75-gen-wrapper .preview-container { display: flex; flex-direction: column; align-items: center; gap: 40px; margin-top: 30px; margin-bottom: 20px; width: 100%; }
+#m75-gen-wrapper .preview-wrapper { background: #e0e0e0; position: relative; overflow: hidden; border-radius: 12px; display: block; box-shadow: 0 10px 30px rgba(0, 0, 0, .2); min-height: 200px; }
+#m75-gen-wrapper #wrapper-landscape { width: 100%; max-width: 1600px; }
+
+#m75-gen-wrapper #poster { width: 1600px; min-width: 1600px; height: 838px; min-height: 838px; position: absolute; top: 0; left: 0; overflow: hidden; background: linear-gradient(105deg, #a2b9c7 0%, #d0dbe0 30%, #f4ebd4 65%, #faf5ce 100%); font-family: 'Exo 2', sans-serif; transform-origin: top left !important; -webkit-transform-origin: top left !important; image-rendering: high-quality; }
+#m75-gen-wrapper .abs { position: absolute; box-sizing: border-box; transition: all .5s ease; }
+#m75-gen-wrapper .game-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
+
+#m75-gen-wrapper .layer-combined { top: 8px; left: -2px; width: 1720px; height: 600px; background-image: url('https://www.mersch75.lu/wp-content/uploads/2026/03/Handballfeld-mat-Draach-an-der-Perspectiv-scaled.png'); background-size: 100% 100%; background-position: left top; background-repeat: no-repeat; z-index: 1; opacity: .25; mix-blend-mode: multiply; }
+
+#m75-gen-wrapper .mixvoip-left, #m75-gen-wrapper .mixvoip-right { top: 25px; z-index: 3; display: flex; align-items: center; }
+#m75-gen-wrapper .mixvoip-left { left: 108px; }
+#m75-gen-wrapper .mixvoip-right { left: 1217px; }
+#m75-gen-wrapper .mixvoip-left img, #m75-gen-wrapper .mixvoip-right img { width: 280px; height: auto; object-fit: contain; }
+
+#m75-gen-wrapper .matchday-text { top: 15px; left: 50%; transform: translateX(-50%); font-size: 75px; font-weight: 900; font-style: italic; color: var(--primary-blue); z-index: 3; display: flex; align-items: flex-end; letter-spacing: -2px; }
+#m75-gen-wrapper .matchday-text img { height: 90px; width: auto; object-fit: contain; }
+
+#m75-gen-wrapper .layer-50years { top: 160px; left: 50%; transform: translateX(-50%); width: 170px; height: 170px; background-color: transparent !important; z-index: 4; display: flex; justify-content: center; align-items: center; }
+#m75-gen-wrapper .layer-50years img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+#m75-gen-wrapper .sponsor-white-field { top: 738px; left: 0; width: 1600px; height: 100px; background: white; z-index: 50; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; box-sizing: border-box; }
+#m75-gen-wrapper .sp-50logo { width: 90px; height: auto; max-height: 80px; object-fit: contain; flex-shrink: 0; }
+#m75-gen-wrapper .sp-list { width: 100%; display: flex; justify-content: center; align-items: center; flex: 1; }
+#m75-gen-wrapper .sp-item { flex: 1; display: flex; justify-content: center; align-items: center; height: 80px; padding: 0 8px; border: none !important; border-right: none !important; }
+#m75-gen-wrapper .sp-item img { max-width: 100%; max-height: 65px; object-fit: contain; }
+
+#m75-gen-wrapper .logo-box { background: white; display: flex; justify-content: center; align-items: center; box-shadow: 0 5px 15px rgba(0, 0, 0, .1); overflow: hidden; pointer-events: auto; }
+#m75-gen-wrapper .logo-box img { width: 100%; height: 100%; object-fit: contain; }
+
+#m75-gen-wrapper .badge { background: var(--primary-blue); color: var(--primary-yellow); display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 5px 20px rgba(0, 0, 0, .2); text-align: center; pointer-events: auto; }
+#m75-gen-wrapper .badge .sub { font-weight: 700; text-transform: uppercase; text-align: center; line-height: 1.1; }
+#m75-gen-wrapper .badge .main { font-weight: 900; font-style: italic; line-height: 1; display:flex; flex-direction:column; justify-content:center; align-items:center; }
+#m75-gen-wrapper .text-blue { color: var(--primary-blue) !important; pointer-events: auto; text-align: center; transition: color .5s; }
+
+#m75-gen-wrapper .team-checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; background: white; padding: 15px; border-radius: 12px; border: 1px solid var(--border-gray); }
+#m75-gen-wrapper .landscape-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+#m75-gen-wrapper .portrait-team-item { background: #fdfdfd; border: 1px solid #e0e0e0; border-radius: 8px; padding: 12px; transition: .2s; display: flex; flex-direction: column; }
+#m75-gen-wrapper .team-main-cb { font-weight: bold; color: var(--primary-blue); font-size: 14px; display: flex; align-items: center; gap: 6px; margin-bottom: 8px; cursor: pointer; }
+#m75-gen-wrapper .options-row { display: flex; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; align-items: center; justify-content: space-between; }
+#m75-gen-wrapper .team-order { width: 35px; padding: 3px; text-align: center; border: 2px solid var(--secondary-blue); border-radius: 5px; font-size: 12px; font-weight: bold; color: var(--primary-blue); background: #f0f7ff; }
+
+#m75-gen-wrapper .team-slider-wrap { display: flex; flex-direction: column; gap: 8px; border-top: 1px solid #eee; padding-top: 10px; margin-top: auto; }
+#m75-gen-wrapper .slider-row { display: flex; align-items: center; gap: 6px; }
+#m75-gen-wrapper .sl-lbl { font-size: 10px; font-weight: bold; width: 40px; color: var(--text-gray); text-transform: uppercase; flex-shrink: 0; }
+#m75-gen-wrapper .slider-row input[type="range"] { flex: 1; min-width: 40px; cursor: pointer; margin: 0; }
+#m75-gen-wrapper .sl-val { font-size: 11px; font-weight: bold; font-family: monospace; color: var(--secondary-blue); width: 35px; text-align: right; flex-shrink: 0; }
+
+#m75-gen-wrapper .portrait-section { display: flex; flex-direction: row; flex-wrap: wrap; align-items: flex-start; justify-content: center; gap: 40px; width: 100%; max-width: 1600px; margin: 0 auto; box-sizing: border-box; }
+#m75-gen-wrapper .portrait-left-col { flex: 0 0 auto; display: flex; justify-content: center; align-items: flex-start; min-width: 800px; max-width: 100%; overflow: auto; }
+#m75-gen-wrapper #wrapper-portrait { flex: 0 0 auto; background: #e0e0e0; position: relative; overflow: visible; border-radius: 12px; display: block; box-shadow: 0 10px 30px rgba(0, 0, 0, .2); min-height: 1060px; min-width: 800px; max-width: 100%; }
+
+#m75-gen-wrapper .portrait-controls { flex: 0 0 580px; max-width: 100%; background: #fffdf0; border: 2px solid var(--primary-yellow); padding: 25px; border-radius: 16px; display: flex; flex-direction: column; gap: 20px; box-sizing: border-box; box-shadow: 0 10px 40px rgba(0, 0, 0, .06); }
+#m75-gen-wrapper .portrait-controls-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 15px; flex-wrap: wrap; margin-bottom: 5px; }
+#m75-gen-wrapper .portrait-controls h3 { margin: 0 0 8px 0; color: var(--primary-blue); font-size: 18px; }
+
+#m75-gen-wrapper #poster-portrait { display: flex; flex-direction: column; width: 800px; min-width: 800px; position: absolute; top: 0; left: 0; overflow: hidden; background: linear-gradient(135deg, #a2b9c7 0%, #d0dbe0 30%, #f4ebd4 65%, #faf5ce 100%); font-family: 'Exo 2', sans-serif; transform-origin: top left !important; -webkit-transform-origin: top left !important; box-shadow: 0 10px 30px rgba(0, 0, 0, .3); border-radius: 12px; }
+
+#m75-gen-wrapper .p-header-wrapper { display: flex; flex-direction: column; align-items: center; padding-top: 25px; width: 100%; z-index: 5; }
+#m75-gen-wrapper .p-header-top { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 0 40px; box-sizing: border-box; }
+#m75-gen-wrapper .p-header-top .img-50 { object-fit: contain; width: auto; height: auto; max-width: 100%; }
+#m75-gen-wrapper .p-matchday-banner { text-align: center; margin-top: 5px; }
+#m75-gen-wrapper .p-matchday-banner img { object-fit: contain; margin-bottom: -4px; width: auto; height: auto; max-width: 100%; }
+
+#m75-gen-wrapper #p-dynamic-container { flex: 1; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; align-content: flex-start; gap: 35px 0; padding: 10px; box-sizing: border-box; width: 100%; z-index: 4; }
+#m75-gen-wrapper .p-game-block { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; box-sizing: border-box; padding: 0 15px; }
+#m75-gen-wrapper .p-game-title { font-family: 'Barlow', sans-serif; font-weight: 900; font-style: italic; color: var(--primary-blue); text-align: center; line-height: 1.15; margin-bottom: 10px; }
+#m75-gen-wrapper .p-game-matchup { display: flex; align-items: center; justify-content: center; gap: 15px; }
+#m75-gen-wrapper .p-logo-box { background: white; border-radius: 15px; padding: 10px; box-shadow: 0 5px 20px rgba(0, 0, 0, .15); display: flex; justify-content: center; align-items: center; overflow: hidden; }
+#m75-gen-wrapper .p-logo-box img { width: 100%; height: 100%; object-fit: contain; }
+#m75-gen-wrapper .p-badge { background: var(--primary-blue); color: var(--primary-yellow); border-radius: 12px; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 5px 20px rgba(0, 0, 0, .25); text-align: center; }
+#m75-gen-wrapper .p-game-info { font-family: 'Barlow', sans-serif; font-weight: 700; color: #333; text-align: center; line-height: 1.25; margin-top: 12px; }
+#m75-gen-wrapper .p-game-info .date { font-weight: 900; color: var(--primary-blue); }
+
+#m75-gen-wrapper .p-footer { height: 150px; width: 100%; background: white; display: flex; align-items: center; justify-content: space-between; padding: 0 40px !important; box-sizing: border-box; box-shadow: 0 -5px 20px rgba(0, 0, 0, .1); z-index: 10; flex-shrink: 0; margin-top: auto; }
+#m75-gen-wrapper .p-footer-50logo { width: 90px; height: auto; max-height: 80px; object-fit: contain; flex-shrink: 0; }
+#m75-gen-wrapper .p-footer-sponsors { display: flex; flex-direction: column; flex: 1; justify-content: center; align-items: center; height: 100%; padding: 0 20px; gap: 15px; }
+#m75-gen-wrapper .p-footer-row { display: flex; justify-content: center; align-items: center; width: 100%; gap: 25px; }
+#m75-gen-wrapper .p-footer-sp { display: flex; justify-content: center; align-items: center; }
+#m75-gen-wrapper .p-footer-row-top .p-footer-sp img { max-width: 120px; max-height: 48px; object-fit: contain; }
+#m75-gen-wrapper .p-footer-row-bottom .p-footer-sp img { max-width: 100px; max-height: 42px; object-fit: contain; }
+</style>
+
+<div id="m75-gen-wrapper">
+    <nav class="top-nav">
+        <div class="brand">Mersch75 Matchday App</div>
+        <div class="top-nav-links">
+            <a href="matchday.html">Öffentlicher Spieltag</a>
+            <a href="matchcenter.html">Matchcenter</a>
+            <a href="index.html">Website</a>
+        </div>
+    </nav>
+
+    <div class="controls" style="margin:20px;">
+        <h2>Matchday Generator</h2>
+        <div class="magic-box">
+            <h3>✨ Magischer Scanner</h3>
+            <p style="font-size:12px;margin-top:0;">Kopiere den Text aus dem FLH Portal und füge ihn hier ein:</p>
+            <textarea id="magic-text" placeholder="Hier einfügen..."></textarea>
+            <button class="btn-magic" id="btn-magic-scan">✨ Spiele magisch einlesen &amp; ausfüllen</button>
+        </div>
+        
+        <div class="schedule-viewer">
+            <h3>💾 Gespeicherte Spielwochen</h3>
+            <div class="weekend-tools">
+                <div class="weekend-button-row">
+                    <button class="btn-weekend" id="btn-weekend-current">Dieses Wochenende automatisch laden</button>
+                    <button class="btn-weekend alt" id="btn-weekend-next">Nächstes Wochenende laden</button>
+                </div>
+                <div class="weekend-status" id="weekend-status">Saisonspiele für Mersch sind bereits vorbereitet. Die App kann das passende Wochenende direkt vorladen.</div>
+            </div>
+            <select id="week-selector">
+                <option value="">-- Spielwoche auswählen --</option>
+                <option value="w_14_09_25">08.09. - 14.09.25</option>
+                <option value="w_21_09_25">15.09. - 21.09.25</option>
+                <option value="w_28_09_25">22.09. - 28.09.25</option>
+                <option value="w_05_10_25">29.09. - 05.10.25</option>
+                <option value="w_12_10_25">06.10. - 12.10.25</option>
+                <option value="w_19_10_25">13.10. - 19.10.25</option>
+                <option value="w_26_10_25">20.10. - 26.10.25</option>
+                <option value="w_09_11_25">03.11. - 09.11.25</option>
+                <option value="w_16_11_25">10.11. - 16.11.25</option>
+                <option value="w_23_11_25">17.11. - 23.11.25</option>
+                <option value="w_30_11_25">24.11. - 30.11.25</option>
+                <option value="w_07_12_25">01.12. - 07.12.25</option>
+                <option value="w_14_12_25">08.12. - 14.12.25</option>
+                <option value="w_21_12_25">15.12. - 21.12.25</option>
+                <option value="w_11_01_26">05.01. - 11.01.26</option>
+                <option value="w_18_01_26">12.01. - 18.01.26</option>
+                <option value="w_25_01_26">19.01. - 25.01.26</option>
+                <option value="w_01_02_26">26.01. - 01.02.26</option>
+                <option value="w_08_02_26">02.02. - 08.02.26</option>
+                <option value="w_01_03_26">23.02. - 01.03.26</option>
+                <option value="w_08_03_26">02.03. - 08.03.26</option>
+                <option value="w_15_03_26">09.03. - 15.03.26</option>
+                <option value="w_22_03_26">16.03. - 22.03.26</option>
+                <option value="w_29_03_26">23.03. - 29.03.26</option>
+                <option value="w_12_04_26">06.04. - 12.04.26</option>
+                <option value="w_19_04_26">13.04. - 19.04.26</option>
+                <option value="w_26_04_26">20.04. - 26.04.26</option>
+                <option value="w_03_05_26">27.04. - 03.05.26</option>
+                <option value="w_10_05_26">04.05. - 10.05.26</option>
+                <option value="w_17_05_26">11.05. - 17.05.26</option>
+                <option value="w_24_05_26">18.05. - 24.05.26</option>
+                <option value="w_07_06_26">01.06. - 07.06.26</option>
+                <option value="w_14_06_26">08.06. - 14.06.26</option>
+            </select>
+        </div>
+        
+        <div class="form-grid" id="dynamic-form-grid"></div>
+    </div>
+
+    <div class="preview-container" style="margin-bottom: 20px;">
+        <div id="wrapper-landscape" class="preview-wrapper">
+            <div id="poster">
+                <div class="abs layer-combined"></div>
+                <div class="abs mixvoip-left">
+                    <img src="https://www.mersch75.lu/wp-content/uploads/2026/03/Mixvoip.png" crossorigin="anonymous" alt="Mixvoip">
+                </div>
+                <div class="abs mixvoip-right">
+                    <img src="https://www.mersch75.lu/wp-content/uploads/2026/03/Mixvoip.png" crossorigin="anonymous" alt="Mixvoip">
+                </div>
+                
+                <div class="abs matchday-text">
+                    <img src="https://www.mersch75.lu/wp-content/uploads/2026/03/Matchday2.png" crossorigin="anonymous" alt="Matchday">
+                </div>
+
+                <div class="abs layer-50years">
+                    <img src="https://www.mersch75.lu/wp-content/uploads/2026/03/Logo-Mersch75-50-Joer-3D-new.png" crossorigin="anonymous" alt="50 Joer">
+                </div>
+
+                <div class="abs sponsor-white-field">
+                    <img src="https://www.mersch75.lu/wp-content/uploads/2026/03/Logo-Mersch75-50-Joer-3D-new.png" class="sp-50logo" crossorigin="anonymous" alt="50">
+                    <div class="sp-list">
+                        <div class="sp-item"><img src="https://www.mersch75.lu/wp-content/uploads/2026/03/Equidem.png" crossorigin="anonymous" alt="Equidem"></div>
+                        <div class="sp-item"><img src="https://www.mersch75.lu/wp-content/uploads/2026/03/Schilling.png" crossorigin="anonymous" alt="Schilling"></div>
+                        <div class="sp-item"><img src="https://www.mersch75.lu/wp-content/uploads/2026/03/PetersSports.png" crossorigin="anonymous" alt="Peters Sports"></div>
+                        <div class="sp-item"><img src="https://www.mersch75.lu/wp-content/uploads/2026/03/Taxx-Logo-with-brand-normal-horizontal_transparent-1-scaled.jpg" crossorigin="anonymous" alt="Taxx.lu"></div>
+                        <div class="sp-item"><img src="https://www.mersch75.lu/wp-content/uploads/2026/03/MansfeldImmobiliere-laang-new.png" crossorigin="anonymous" alt="Mansfeld"></div>
+                        <div class="sp-item"><img src="https://www.mersch75.lu/wp-content/uploads/2026/03/Rives-de-lAlzette.png" crossorigin="anonymous" alt="Rives l'Alzette"></div>
+                        <div class="sp-item"><img src="https://www.mersch75.lu/wp-content/uploads/2026/03/Erasmy.png" crossorigin="anonymous" alt="Erasmy"></div>
+                        <div class="sp-item"><img src="https://www.mersch75.lu/wp-content/uploads/2026/03/SafetyCo@2x.png" crossorigin="anonymous" alt="SafetyCom"></div>
+                    </div>
+                    <img src="https://www.mersch75.lu/wp-content/uploads/2026/03/Logo-Mersch75-50-Joer-3D-new.png" class="sp-50logo" crossorigin="anonymous" alt="50">
+                </div>
+                
+                <div id="l-dynamic-main"></div>
+                <div id="l-dynamic-tournoi"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls panel-landscape" style="max-width: 1600px; margin: 0 auto 60px auto;">
+        <div class="portrait-controls-header">
+            <div>
+                <h3>🖥️ Landscape Poster Einstellungen</h3>
+                <p>Steuere hier völlig unabhängig die Positionen (1-8) und die Schieberegler für das große Querformat.</p>
+            </div>
+            <div style="display:flex;gap:10px;align-items:stretch;">
+                <button class="btn-switch" id="btn-switch-landscape" style="padding:10px 15px;font-size:13px;">🔄 Switch Pos 1 &amp; 2</button>
+                <div class="download-menu-wrapper">
+                    <button class="download-menu-btn" id="btn-dl-menu">⬇ Download Landscape Poster</button>
+                    <div class="download-dropdown" id="download-dropdown">
+                        <div class="download-option" data-format="png">🖼 PNG 4K Qualität</div>
+                        <div class="download-option" data-format="jpeg">📷 JPEG 4K Qualität</div>
+                        <div class="download-option" data-format="pdf">📄 PDF Druck-optimiert</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="youth-mode-btn">
+            <input type="checkbox" id="toggle-youth-mode">
+            <label for="toggle-youth-mode">🌟 JUGEND-MODUS AKTIVIEREN (Nur U15, U13, U11 groß nebeneinander)</label>
+        </div>
+        
+        <div class="team-checkbox-grid landscape-grid" id="landscape-settings-grid"></div>
+    </div>
+
+    <div class="portrait-section">
+        
+        <div class="portrait-left-col">
+            <div id="wrapper-portrait" class="preview-wrapper">
+                <div id="poster-portrait">
+                    <div class="p-header-wrapper">
+                        <div class="p-header-top">
+                            <img class="img-50" src="https://www.mersch75.lu/wp-content/uploads/2026/03/Logo-Mersch75-50-Joer-3D-new.png" crossorigin="anonymous" alt="50">
+                            <img class="img-mixvoip" src="https://www.mersch75.lu/wp-content/uploads/2026/03/Mixvoip.png" crossorigin="anonymous" alt="Mixvoip">
+                            <img class="img-50" src="https://www.mersch75.lu/wp-content/uploads/2026/03/Logo-Mersch75-50-Joer-3D-new.png" crossorigin="anonymous" alt="50">
+                        </div>
+                        
+                        <div class="p-matchday-banner">
+                            <img src="https://www.mersch75.lu/wp-content/uploads/2026/03/Matchday2.png" crossorigin="anonymous" alt="Matchday">
+                        </div>
+                    </div>
+                    
+                    <div id="p-dynamic-container"></div>
+                    
+                    <div class="p-footer">
+                        <img src="https://www.mersch75.lu/wp-content/uploads/2026/03/Logo-Mersch75-50-Joer-3D-new.png" class="p-footer-50logo" alt="Logo" crossorigin="anonymous">
+                        <div class="p-footer-sponsors">
+                            <div class="p-footer-row p-footer-row-top">
+                                <div class="p-footer-sp"><img src="https://www.mersch75.lu/wp-content/uploads/2026/03/Mixvoip.png" alt="Mixvoip" crossorigin="anonymous"></div>
+                                <div class="p-footer-sp"><img src="https://www.mersch75.lu/wp-content/uploads/2026/03/PetersSports.png" alt="Peters Sports" crossorigin="anonymous"></div>
+                                <div class="p-footer-sp"><img src="https://www.mersch75.lu/wp-content/uploads/2026/03/Taxx-Logo-with-brand-normal-horizontal_transparent-1-scaled.jpg" alt="Taxx.lu" crossorigin="anonymous"></div>
+                                <div class="p-footer-sp"><img src="https://www.mersch75.lu/wp-content/uploads/2026/03/MansfeldImmobiliere-laang-new.png" alt="Mansfeld" crossorigin="anonymous"></div>
+                            </div>
+                            <div class="p-footer-row p-footer-row-bottom">
+                                <div class="p-footer-sp"><img src="https://www.mersch75.lu/wp-content/uploads/2026/03/Equidem.png" alt="Equidem" crossorigin="anonymous"></div>
+                                <div class="p-footer-sp"><img src="https://www.mersch75.lu/wp-content/uploads/2026/03/Schilling.png" alt="Schilling" crossorigin="anonymous"></div>
+                                <div class="p-footer-sp"><img src="https://www.mersch75.lu/wp-content/uploads/2026/03/Rives-de-lAlzette.png" alt="Rives Alzette" crossorigin="anonymous"></div>
+                                <div class="p-footer-sp"><img src="https://www.mersch75.lu/wp-content/uploads/2026/03/Erasmy.png" alt="Erasmy" crossorigin="anonymous"></div>
+                                <div class="p-footer-sp"><img src="https://www.mersch75.lu/wp-content/uploads/2026/03/SafetyCo@2x.png" alt="SafetyCom" crossorigin="anonymous"></div>
+                            </div>
+                        </div>
+                        <img src="https://www.mersch75.lu/wp-content/uploads/2026/03/Logo-Mersch75-50-Joer-3D-new.png" class="p-footer-50logo" alt="Logo" crossorigin="anonymous">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="portrait-controls">
+            <div class="portrait-controls-header">
+                <div>
+                    <h3>📱 Multi-Team Portrait-Poster</h3>
+                </div>
+                <div style="display:flex;gap:10px;align-items:stretch;">
+                    <button class="btn-switch" id="btn-switch-portrait" style="padding:10px 15px;font-size:13px;">🔄 Switch M/F (Portrait)</button>
+                    <button class="btn-portrait-dl" id="btn-dl-portrait-top">📸 Portrait laden</button>
+                </div>
+            </div>
+            <div class="team-checkbox-grid" id="portrait-team-selector"></div>
+        </div>
+        
+    </div>
+</div>
+<script>
+window.teamPhotos = {};
+
+const CONFIG = {
+    gameTypes: ["Season Games", "Championnat", "Coupe", "Playoff", "Tournoi", "Finale", "1/2 Finale", "1/4 Finale", "1/8 Finale"],
+    address1: "21, rue des Prés | L-7561 Mersch",
+    address2: "rue de la Piscine | L-7572 Mersch",
+    ballLogo: "https://www.mersch75.lu/wp-content/uploads/2026/03/M75_realistesche-3D-Ball-op-Mooss-1-2.png", 
+    merschLogo: "https://www.mersch75.lu/wp-content/uploads/2026/03/Logo-Mersch75.jpg",
+    merschFELogo: "https://www.mersch75.lu/wp-content/uploads/2026/03/Logo-Mersch75_FE.jpg"
+};
+
+const TEAM_CONFIGS = [
+    { id: "s1",     title: "HERREN 1 (H-PRO)",   defaultTitle: "AXA League - Playoff Montée Männer", defaultType: "Season Games" },
+    { id: "fe",     title: "FRAUEN (D-PRO)",     defaultTitle: "Playoff Promotioun Fraen",         defaultType: "Season Games" },
+    { id: "s2",     title: "HERREN 2 (H2)",      defaultTitle: "Season Games H2", defaultType: "Season Games" },
+    { id: "u15",    title: "JUGEND: U15G",        defaultTitle: "Season Games U15",            defaultType: "Season Games" },
+    { id: "u13pe",  title: "JUGEND: U13M-PE",     defaultTitle: "PlayOff U13",    defaultType: "PlayOff" },
+    { id: "u13p3",  title: "JUGEND: U13M-P3",     defaultTitle: "Quali U13",    defaultType: "Season Games" },
+    { id: "u11MEL", title: "JUGEND: U11M-Elite",  defaultTitle: "Season Games U11",              defaultType: "PlayOff" },
+    { id: "u11MES", title: "JUGEND: U11 Espoir", defaultTitle: "--- TOURNOI --- U11", defaultType: "Tournoi" },
+    { id: "u9M",     title: "JUGEND: U9M",         defaultTitle: "--- TOURNOI --- U9",          defaultType: "Tournoi" },
+    { id: "u7M",     title: "JUGEND: U7M",         defaultTitle: "--- TOURNOI --- U7",          defaultType: "Tournoi" }
+];
+
+const teamSuffixes = {
+    'u13pe': ' EL',
+    'u13p3': ' ES',
+    'u11MEL': ' EL',
+    'u11MES': ' ES'
+};
+
+const badgeLabels = {
+    'fe': 'FE', 's1': 'H1', 's2': 'H2', 'u15': 'U15', 'u13pe': 'U13', 'u13p3': 'U13',
+    'u11MEL': 'U11', 'u11MES': 'U11', 'u9M': 'U9', 'u7M': 'U7'
+};
+
+const teams = {
+    "-": "", 
+    "Spielfrei": "https://www.mersch75.lu/wp-content/uploads/2026/03/M75_realistesche-3D-Ball-op-Mooss-1-2.png", 
+    "Tournoi": "https://www.mersch75.lu/wp-content/uploads/2026/03/Logo-Mersch75-50-Joer-3D-new.png",
+    "HB Bieles": "https://www.mersch75.lu/wp-content/uploads/2026/03/Handball-Bieles.jpg",
+    "HC Berchem 1": "https://www.mersch75.lu/wp-content/uploads/2026/03/HC-Berchem.jpg",
+    "HC Berchem 2": "https://www.mersch75.lu/wp-content/uploads/2026/03/HC-Berchem-2.jpg",
+    "HC Berchem 3": "https://www.mersch75.lu/wp-content/uploads/2026/03/HC-Berchem-3.jpg",
+    "HC Berchem": "https://www.mersch75.lu/wp-content/uploads/2026/03/HC-Berchem.jpg",
+    "CHEV Diekirch 1": "https://www.mersch75.lu/wp-content/uploads/2026/03/CHEV_Logo_CMYK.jpg",
+    "CHEV Diekirch 2": "https://www.mersch75.lu/wp-content/uploads/2026/03/CHEV_Logo_CMYK.jpg",
+    "CHEV Diekirch": "https://www.mersch75.lu/wp-content/uploads/2026/03/CHEV_Logo_CMYK.jpg",
+    "Red Boys Differdange 1": "https://www.mersch75.lu/wp-content/uploads/2026/03/RedBoys.jpg",
+    "Red Boys Differdange 2": "https://www.mersch75.lu/wp-content/uploads/2026/03/RedBoys-2.jpg",
+    "Red Boys Differdange 3": "https://www.mersch75.lu/wp-content/uploads/2026/03/RedBoys-3.jpg",
+    "Red Boys Differdange": "https://www.mersch75.lu/wp-content/uploads/2026/03/RedBoys.jpg",
+    "HB Dudelange 1": "https://www.mersch75.lu/wp-content/uploads/2026/03/Logo-HBD.jpg",
+    "HB Dudelange 2": "https://www.mersch75.lu/wp-content/uploads/2026/03/Logo-HBD2.jpg",
+    "HB Dudelange": "https://www.mersch75.lu/wp-content/uploads/2026/03/Logo-HBD.jpg",
+    "HB Museldall 1": "https://www.mersch75.lu/wp-content/uploads/2026/03/HB-Museldall.jpg",
+    "HB Museldall 2": "https://www.mersch75.lu/wp-content/uploads/2026/03/HB-Museldall.jpg",
+    "HB Museldall 3": "https://www.mersch75.lu/wp-content/uploads/2026/03/HB-Museldall.jpg",
+    "HB Museldall": "https://www.mersch75.lu/wp-content/uploads/2026/03/HB-Museldall.jpg",
+    "HB Museldall U11": "https://www.mersch75.lu/wp-content/uploads/2026/04/Logo-Kaeerjeng-Museldall-U11M-1001-Kopie-3.webp",
+    "HB Käerjeng 1": "https://www.mersch75.lu/wp-content/uploads/2026/03/HBKaerjeng.jpg",
+    "HB Käerjeng 2": "https://www.mersch75.lu/wp-content/uploads/2026/03/HBKaerjeng-2.jpg",
+    "HB Käerjeng 3": "https://www.mersch75.lu/wp-content/uploads/2026/03/HBKaerjeng-3.jpg",
+    "HB Käerjeng": "https://www.mersch75.lu/wp-content/uploads/2026/03/HBKaerjeng.jpg",
+    "Entente Käerjeng/HB Esch": "https://www.mersch75.lu/wp-content/uploads/2026/03/EntenteKaerjengEsch.jpg",
+    "Käerjeng/Esch": "https://www.mersch75.lu/wp-content/uploads/2026/03/EntenteKaerjengEsch.jpg",
+    "Entente HB Bieles/HB Pétange": "https://www.mersch75.lu/wp-content/uploads/2026/03/EntenteBielesPeiteng.jpg",
+    "HB Bieles/Pétange": "https://www.mersch75.lu/wp-content/uploads/2026/03/EntenteBielesPeiteng.jpg",
+    "Handball Leideleng": "https://www.mersch75.lu/wp-content/uploads/2026/03/RedSharks-Leideleng.jpg",
+    "HB Leideleng": "https://www.mersch75.lu/wp-content/uploads/2026/03/RedSharks-Leideleng.jpg",
+    "HC Standard 1": "https://www.mersch75.lu/wp-content/uploads/2026/03/HC-Standard.jpg",
+    "HC Standard 2": "https://www.mersch75.lu/wp-content/uploads/2026/03/HC-Standard-2.jpg",
+    "HC Standard": "https://www.mersch75.lu/wp-content/uploads/2026/03/HC-Standard.jpg",
+    "Mersch75 1": "https://www.mersch75.lu/wp-content/uploads/2026/03/Logo-Mersch75.jpg",
+    "Mersch75 FE": "https://www.mersch75.lu/wp-content/uploads/2026/03/Logo-Mersch75_FE.jpg",
+    "HB Pétange": "https://www.mersch75.lu/wp-content/uploads/2026/03/HBPeiteng.jpg",
+    "HC Atert Redange": "https://www.mersch75.lu/wp-content/uploads/2026/03/HC-Reiden.jpg",
+    "HC Redange": "https://www.mersch75.lu/wp-content/uploads/2026/03/HC-Reiden.jpg",
+    "Espérance Rumelange": "https://www.mersch75.lu/wp-content/uploads/2026/03/Esperance-Remeleng.jpg",
+    "Esp Rumelange": "https://www.mersch75.lu/wp-content/uploads/2026/03/Esperance-Remeleng.jpg",
+    "HBC Schifflange 1": "https://www.mersch75.lu/wp-content/uploads/2026/03/HBC-Schifflange-1001.jpg",
+    "HBC Schifflange 2": "https://www.mersch75.lu/wp-content/uploads/2026/03/HBC-Schifflange-2.jpg",
+    "HBC Schifflange 3": "https://www.mersch75.lu/wp-content/uploads/2026/03/HBC-Schifflange-3.jpg",
+    "HBC Schifflange": "https://www.mersch75.lu/wp-content/uploads/2026/03/HBC-Schifflange-1001.jpg",
+    "HBC Attert (B)": "https://www.mersch75.lu/wp-content/uploads/2026/03/HBC-Attert-scaled.jpg",
+    "HB Esch 1": "https://www.mersch75.lu/wp-content/uploads/2026/03/HB-Esch.jpg",
+    "HB Esch 2": "https://www.mersch75.lu/wp-content/uploads/2026/03/HB-Esch-2.jpg",
+    "HB Esch 3": "https://www.mersch75.lu/wp-content/uploads/2026/03/HB-Esch-3.jpg",
+    "HB Esch": "https://www.mersch75.lu/wp-content/uploads/2026/03/HB-Esch.jpg"
+};
+
+const aliases = {
+    "HBD": "HB Dudelange", "HBCS": "HBC Schifflange", "CHEV": "CHEV Diekirch", "RBD": "Red Boys Differdange",
+    "HBK": "HB Käerjeng", "HBP": "HB Pétange", "HCST": "HC Standard", "HCB": "HC Berchem", "HBM": "HB Museldall", "HBL": "HB Leideleng",
+    "HB PETANGE": "HB Pétange", "HB PEITENG": "HB Pétange"
+};
+
+const addresses = {
+    "HB Leideleng": "7, Place des Martyrs | L-3361 Leudelange", "CHEV Diekirch": "rue J. Merten | L-9257 Diekirch",
+    "HB Pétange": "46, rue Pierre Hamer | L-4737 Pétange", "HB Pétange 2": "rue Jos Moscardo | L-4840 Rodange",
+    "Esp Rumelange": "66, rue des Martyrs | L-3739 Rumelange", "HBC Schifflange": "12, rue du Parc | L-3872 Schifflange",
+    "HC Redange": "20, rue Seitert | L-8508 Rédange", "HB Museldall": "op Flor | L-6751 Grevenmacher",
+    "HB Dudelange": "2, rue R Hartmann | L-3425 Dudelange", "HB Dudelange 2": "2, rue R Hartmann | L-3425 Dudelange",
+    "Red Boys Differdange": "av. Parc des Sports | L-4671 Oberkorn", "Red Boys Differdange 2": "av. Parc des Sports | L-4671 Oberkorn",
+    "Red Boys": "av. Parc des Sports | L-4671 Oberkorn", "Red Boys Diff": "av. Parc des Sports | L-4671 Oberkorn",
+    "HB Käerjeng": "54e, av de Luxembg | L-4950 Bascharage", "HB Käerjeng 2": "54e, av de Luxembg | L-4950 Bascharage",
+    "HB Bieles/Pétange": "rue Claude Monnet | L-4368 Belval", "HB Bieles": "rue Claude Monnet | L-4368 Belval",
+    "HC Standard": "42, rue F. Gangler | L-1613 Bonnevoie", "HC Standard 2": "42, rue F. Gangler | L-1613 Bonnevoie",
+    "Käerjeng/Esch": "54e, av de Luxembg | L-4950 Bascharage", "HC Berchem": "rue A.Schintgen | L-3321 Berchem",
+    "HC Berchem 2": "rue A.Schintgen | L-3321 Berchem", "HB Schifflange 2": "12, rue du Parc | L-3872 Schifflange",
+    "Handball Esch": "Bvd Hubert Clement | L-4064 Esch Alzette", "HB Esch": "Bvd Hubert Clement | L-4064 Esch Alzette",
+    "HBC Attert (B)": "3 au Village | B-6717 Attert", "HB Museldall U11": "op Flor | L-6751 Grevenmacher", "Tournoi": ""
+};
+
+const hallCodes = {
+    "290101": "21, rue des Prés | L-7561 Mersch", "290102": "rue de la Piscine | L-7572 Mersch", "290103": "50, rue de la Gare | L-7448 Lintgen",
+    "290141": "av. Parc des Sports | L-4671 Oberkorn", "290142": "100, rue JB Scharlé | L-4666 Niederkorn", "290143": "2, place des Alliés | L-4508 Differdange",  
+    "290121": "46, rue Pierre Hamer | L-4737 Pétange", "290122": "rue Jos Moscardo | L-4840 Rodange",         
+    "290011": "54e, av de Luxembg | L-4950 Bascharage", "290021": "rue A.Schintgen | L-3321 Berchem",
+    "290181": "42, rue F. Gangler | L-1613 Bonnevoie", "290211": "Bvd Hubert Clement | L-4064 Esch Alzette",
+    "290051": "2, rue R Hartmann | L-3425 Dudelange", "290161": "12, rue du Parc | L-3872 Schifflange",
+    "290231": "7, Place des Martyrs | L-3361 Leudelange", "290041": "rue J. Merten | L-9257 Diekirch",
+    "290151": "66, rue des Martyrs | L-3739 Rumelange", "290131": "20, rue Seitert | L-8508 Rédange",
+    "290091": "op Flor | L-6751 Grevenmacher", "290224": "3 au Village | B-6717 Attert", "290032": "rue Claude Monnet | L-4368 Belval"
+};
+
+const allGamesData = [
+    { team: "HERREN 1 (H-PRO)", datum: "10.05.26 20:00", heim: "HB Petange", gast: "Mersch75", score: "", sbo: "", rtl: "" },
+    { team: "HERREN 1 (H-PRO)", datum: "16.05.26 20:15", heim: "Esp Rumelange", gast: "Mersch75", score: "", sbo: "", rtl: "" },
+    { team: "HERREN 1 (H-PRO)", datum: "23.05.26 20:15", heim: "Mersch75", gast: "HBC Schifflange", score: "", sbo: "", rtl: "" },
+    { team: "HERREN 1 (H-PRO)", datum: "12.10.25 18:15", heim: "Mersch75", gast: "HC Redange", score: "35:24", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3122231", rtl: "" },
+    { team: "HERREN 1 (H-PRO)", datum: "17.10.25 20:15", heim: "HB Leideleng", gast: "Mersch75", score: "34:30", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3123221", rtl: "" },
+    { team: "HERREN 1 (H-PRO)", datum: "26.10.25 18:15", heim: "Mersch75", gast: "HBC Schifflange", score: "38:22", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3137641", rtl: "https://youtu.be/fbTVc2Hesq8" },
+    { team: "HERREN 1 (H-PRO)", datum: "15.11.25 20:15", heim: "HB Pétange", gast: "Mersch75", score: "45:25", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3177426", rtl: "" },
+    { team: "HERREN 1 (H-PRO)", datum: "23.11.25 18:15", heim: "Mersch75", gast: "HB Museldall", score: "43:31", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3202071", rtl: "https://youtu.be/tm-RmshWyhY" },
+    { team: "HERREN 1 (H-PRO)", datum: "07.12.25 18:15", heim: "HC Redange", gast: "Mersch75", score: "32:33", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3235293", rtl: "" },
+    { team: "HERREN 1 (H-PRO)", datum: "14.12.25 18:15", heim: "Mersch75", gast: "HB Leideleng", score: "29:25", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3250341", rtl: "" },
+    { team: "HERREN 1 (H-PRO)", datum: "17.01.26 20:15", heim: "HBC Schifflange", gast: "Mersch75", score: "32:32", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3270341", rtl: "" },
+    { team: "HERREN 1 (H-PRO)", datum: "01.02.26 18:55", heim: "Mersch75", gast: "HB Pétange", score: "24:41", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3305685", rtl: "" },
+    { team: "HERREN 1 (H-PRO)", datum: "07.02.26 18:00", heim: "HB Museldall", gast: "Mersch75", score: "36:21", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3311917", rtl: "" },
+    { team: "HERREN 1 (H-PRO)", datum: "01.03.26 16:00", heim: "Mersch75", gast: "HB Leideleng", score: "28:23", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3357291", rtl: "https://play.rtl.lu/live-arena/13265" },
+    { team: "HERREN 1 (H-PRO)", datum: "07.03.26 20:15", heim: "CHEV Diekirch", gast: "Mersch75", score: "40:20", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3368421", rtl: "https://play.rtl.lu/live-arena/13268?summary=1" },
+    { team: "HERREN 1 (H-PRO)", datum: "22.03.26 16:00", heim: "Mersch75", gast: "Esp Rumelange", score: "29:43", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3410756", rtl: "https://play.rtl.lu/live-arena/13274?summary=1" },
+    { team: "HERREN 1 (H-PRO)", datum: "28.03.26 20:15", heim: "HBC Schifflange", gast: "Mersch75", score: "26:26", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3416716", rtl: "https://play.rtl.lu/live-arena/13277?summary=1" },
+    { team: "HERREN 1 (H-PRO)", datum: "12.04.26 17:00", heim: "Mersch75", gast: "HB Petange", score: "34:33", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3422986", rtl: "https://play.rtl.lu/live-arena/13271?summary=1" },
+    { team: "HERREN 1 (H-PRO)", datum: "17.04.26 20:15", heim: "HB Leideleng", gast: "Mersch75", score: "35:28", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3424376", rtl: "https://youtu.be/HQaFVejrQdQ" },
+    { team: "HERREN 1 (H-PRO)", datum: "03.05.26 16:00", heim: "Mersch75", gast: "CHEV Diekirch", score: "26:37", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3464046", rtl: "https://play.rtl.lu/live-arena/13283?summary=1" },
+    
+    { team: "FRAUEN (D-PRO)", datum: "03.05.26 14:00", heim: "Red Boys Differdange 2", gast: "Mersch75", score: "23:29", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3462841", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "10.05.26 16:00", heim: "Mersch75", gast: "HB Käerjeng 2", score: "", sbo: "", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "14.09.25 16:00", heim: "Mersch75", gast: "HC Redange", score: "27:28", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3053901", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "21.09.25 18:00", heim: "HBC Schifflange", gast: "Mersch75", score: "13:40", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3071231", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "28.09.25 16:00", heim: "Mersch75", gast: "CHEV Diekirch", score: "16:39", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3089326", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "12.10.25 16:00", heim: "Mersch75", gast: "HB Bieles/Pétange", score: "28:17", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3120761", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "16.10.25 20:00", heim: "Red Boys Differdange 2", gast: "Mersch75", score: "26:24", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3123086", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "19.10.25 16:00", heim: "Mersch75", gast: "HB Käerjeng 2", score: "39:20", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3130826", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "26.10.25 16:00", heim: "Mersch75", gast: "HB Dudelange 2", score: "39:11", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3136851", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "08.11.25 18:00", heim: "HC Redange", gast: "Mersch75", score: "24:39", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3156746", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "16.11.25 16:00", heim: "Mersch75", gast: "HBC Schifflange", score: "30:19", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3184621", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "23.11.25 17:00", heim: "CHEV Diekirch", gast: "Mersch75", score: "52:23", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3200956", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "29.11.25 18:00", heim: "HB Bieles/Pétange", gast: "Mersch75", score: "19:25", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3210141", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "07.12.25 16:00", heim: "Mersch75", gast: "Red Boys Differdange 2", score: "30:22", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3233929", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "14.12.25 16:00", heim: "HB Käerjeng 2", gast: "Mersch75", score: "31:29", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3249049", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "18.12.25 19:30", heim: "HB Dudelange 2", gast: "Mersch75", score: "21:18", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3251249", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "11.01.26 18:00", heim: "HBC Schifflange", gast: "Mersch75", score: "9:31", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3262981", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "18.01.26 16:00", heim: "Mersch75", gast: "HB Bieles/Pétange", score: "31:28", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3276105", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "01.02.26 20:00", heim: "HB Dudelange 2", gast: "Mersch75", score: "29:21", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3305761", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "08.02.26 16:00", heim: "Mersch75", gast: "Red Boys Differdange 2", score: "20:0", sbo: "", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "28.02.26 18:00", heim: "HB Käerjeng 2", gast: "Mersch75", score: "24:44", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3348661", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "15.03.26 16:00", heim: "Mersch75", gast: "HBC Schifflange", score: "20:0", sbo: "", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "21.03.26 18:00", heim: "HB Bieles/Pétange", gast: "Mersch75", score: "23:23", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3403091", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "19.04.26 16:00", heim: "Mersch75", gast: "HB Dudelange 2", score: "26:23", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3435541", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "03.05.26 14:00", heim: "Red Boys Differdange 2", gast: "Mersch75", score: "23:29", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3462841", rtl: "" },
+        
+    { team: "JUGEND: U15G", datum: "17.05.26 14:00", heim: "Mersch75", gast: "HC Redange", score: "", sbo: "", rtl: "" },
+    { team: "JUGEND: U15G", datum: "07.06.26 16:00", heim: "CHEV Diekirch", gast: "Mersch75", score: "", sbo: "", rtl: "" },
+    { team: "JUGEND: U15G", datum: "28.09.25 14:30", heim: "CHEV Diekirch", gast: "Mersch75", score: "42:23", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3087411", rtl: "" },
+    { team: "JUGEND: U15G", datum: "05.10.25 16:00", heim: "Mersch75", gast: "HB Museldall", score: "40:21", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3106596", rtl: "" },
+    { team: "JUGEND: U15G", datum: "12.10.25 14:00", heim: "Mersch75", gast: "HC Redange", score: "39:15", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3119146", rtl: "" },
+    { team: "JUGEND: U15G", datum: "26.10.25 14:00", heim: "Mersch75", gast: "HBC Schifflange", score: "20:42", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3136046", rtl: "" },
+    { team: "JUGEND: U15G", datum: "16.11.25 14:00", heim: "Käerjeng/Esch", gast: "Mersch75", score: "41:25", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3181866", rtl: "" },
+    { team: "JUGEND: U15G", datum: "23.11.25 16:00", heim: "Mersch75", gast: "Red Boys Differdange", score: "22:34", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3200176", rtl: "" },
+    { team: "JUGEND: U15G", datum: "07.12.25 14:00", heim: "Mersch75", gast: "HC Standard 2", score: "41:20", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3232369", rtl: "" },
+    { team: "JUGEND: U15G", datum: "14.12.25 15:15", heim: "Mersch75", gast: "CHEV Diekirch", score: "31:40", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3248425", rtl: "" },
+    { team: "JUGEND: U15G", datum: "18.01.26 14:00", heim: "HB Museldall", gast: "Mersch75", score: "31:36", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3274157", rtl: "" },
+    { team: "JUGEND: U15G", datum: "25.01.26 15:00", heim: "HC Redange", gast: "Mersch75", score: "16:42", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3289797", rtl: "" },
+    { team: "JUGEND: U15G", datum: "01.02.26 18:00", heim: "HBC Schifflange", gast: "Mersch75", score: "20:0", sbo: "", rtl: "" },
+    { team: "JUGEND: U15G", datum: "01.03.26 14:00", heim: "Mersch75", gast: "Käerjeng/Esch", score: "19:42", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3354871", rtl: "" },
+    { team: "JUGEND: U15G", datum: "07.03.26 18:00", heim: "Red Boys Differdange", gast: "Mersch75", score: "20:0", sbo: "", rtl: "" },
+    { team: "JUGEND: U15G", datum: "14.03.26 16:00", heim: "HC Standard 2", gast: "Mersch75", score: "25:31", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3382976", rtl: "" },
+    { team: "JUGEND: U15G", datum: "19.04.26 14:00", heim: "Mersch75", gast: "HB Museldall", score: "39:25", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3433736", rtl: "" },
+    { team: "JUGEND: U15G", datum: "03.05.26 16:00", heim: "HC Standard 2", gast: "Mersch75", score: "34:48", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3463956", rtl: "" },
+
+    { team: "JUGEND: U13M-PE", datum: "08.05.26 18:00", heim: "Mersch75", gast: "HBC Schifflange", score: "", sbo: "", rtl: "", halle: "290102" },
+    { team: "JUGEND: U13M-PE", datum: "16.05.26 10:30", heim: "Mersch75", gast: "HC Standard 2", score: "", sbo: "", rtl: "" },
+    { team: "JUGEND: U13M-PE", datum: "23.05.26 15:00", heim: "HB Pétange", gast: "Mersch75", score: "", bem: "Remis du 17.01.2026", sbo: "", rtl: "" },
+    { team: "JUGEND: U13M-PE", datum: "06.06.26 10:30", heim: "Mersch75", gast: "HB Esch", score: "", sbo: "", rtl: "" },
+    { team: "JUGEND: U13M-P3", datum: "27.09.25 15:00", heim: "HBC Schifflange", gast: "Mersch75", score: "29:15", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3076531", rtl: "" },
+    { team: "JUGEND: U13M-P3", datum: "04.10.25 13:45", heim: "Red Boys Differdange 2", gast: "Mersch75", score: "42:19", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3094911", rtl: "" },
+    { team: "JUGEND: U13M-P3", datum: "11.10.25 14:00", heim: "HC Standard 2", gast: "Mersch75", score: "15:42", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3111376", rtl: "" },
+    { team: "JUGEND: U13M-P3", datum: "24.10.25 19:00", heim: "Mersch75", gast: "HBC Schifflange", score: "22:34", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3132161", rtl: "" },
+    { team: "JUGEND: U13M-P3", datum: "15.11.25 10:30", heim: "Mersch75", gast: "Red Boys Differdange 2", score: "23:33", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3168681", rtl: "" },
+    { team: "JUGEND: U13M", datum: "22.11.25 10:30", heim: "Mersch75", gast: "HC Standard 2", score: "24:13", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3188426", rtl: "" },
+    { team: "JUGEND: U13M-PE", datum: "05.12.25 19:00", heim: "Mersch75", gast: "HB Museldall", score: "25:18", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3221521", rtl: "" },
+    { team: "JUGEND: U13M-PE", datum: "13.12.25 14:00", heim: "HC Berchem 2", gast: "Mersch75", score: "21:26", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3238813", rtl: "" },
+    { team: "JUGEND: U13M-PE", datum: "24.01.26 16:00", heim: "HB Dudelange 2", gast: "Mersch75", score: "16:25", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3288729", rtl: "" },
+    { team: "JUGEND: U13M-PE", datum: "31.01.26 16:00", heim: "HB Schifflange 2", gast: "Mersch75", score: "20:28", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3296897", rtl: "" },
+    { team: "JUGEND: U13M-PE", datum: "07.02.26 14:00", heim: "HC Standard 2", gast: "Mersch75", score: "12:23", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3308465", rtl: "" },
+    { team: "JUGEND: U13M-PE", datum: "28.02.26 14:00", heim: "Handball Esch", gast: "Mersch75", score: "25:33", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3344336", rtl: "" },
+    { team: "JUGEND: U13M-PE", datum: "07.03.26 16:00", heim: "HB Museldall", gast: "Mersch75", score: "19:35", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3364736", rtl: "" },
+    { team: "JUGEND: U13M-PE", datum: "15.03.26 14:00", heim: "Mersch75", gast: "HC Berchem 2", score: "32:18", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3390871", rtl: "" },
+    { team: "JUGEND: U13M-PE", datum: "17.04.26 19:00", heim: "Mersch75", gast: "HB Pétange", score: "29:15", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3424146", rtl: "" },
+    { team: "JUGEND: U13M-PE", datum: "02.05.26 10:30", heim: "Mersch75", gast: "HB Dudelange 2", score: "49:22", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3454511", rtl: "" },  
+
+    { team: "JUGEND: U13M-PE", datum: "08.05.26 18:00", heim: "Mersch75", gast: "HBC Schifflange", score: "", sbo: "", rtl: "", nr: "29503046", halle: "290102" },
+    { team: "JUGEND: U13M-PE", datum: "16.05.26 10:30", heim: "Mersch75", gast: "HC Standard 2",   score: "", sbo: "", rtl: "", nr: "29503049" },
+    { team: "JUGEND: U13M-PE", datum: "30.05.26 10:30", heim: "Mersch75", gast: "HB Esch",          score: "", bem: "remis du 6.6.26", sbo: "", rtl: "", nr: "29503052" },
+
+    { team: "JUGEND: U11M-ES", datum: "17.05.26 10:00", heim: "Mersch75 🏠", gast: "Tournoi", score: "-", bem: "Mersch75/CHEV/HB Pétange", sbo: "", rtl: "" },
+    { team: "JUGEND: U11M-ES", datum: "14.06.26 10:00", heim: "Mersch75 🏠", gast: "Tournoi", score: "-", bem: "Mersch75/CHEV/HB Museldall", sbo: "", rtl: "" },
+    { team: "JUGEND: U11M-ES", datum: "12.10.25 10:00", heim: "Mersch75", gast: "Tournoi", score: "-", bem: "Mersch2, Museldall1, Museldall2,Käerjeng", sbo: "", rtl: "" },
+    { team: "JUGEND: U11M-ES", datum: "26.10.25 10:00", heim: "Berchem", gast: "Tournoi", score: "-", bem: "Mersch75, Mersch75_2, Berchem2", sbo: "", rtl: "" },
+    { team: "JUGEND: U11M-ES", datum: "16.11.25 10:00", heim: "Standard", gast: "Tournoi", score: "-", bem: "Mersch75,1+2 Standard, 1+2, Redboys", sbo: "", rtl: "" },
+    { team: "JUGEND: U11M-ES", datum: "14.12.25 10:00", heim: "Mersch75", gast: "Tournoi", score: "-", bem: "Mersch75, 1+2, Käerjeng", sbo: "", rtl: "" },
+    { team: "JUGEND: U11M-ES", datum: "18.01.26 10:00", heim: "Mersch75", gast: "Tournoi", score: "-", bem: "HBC Schifflange, CHEV", sbo: "", rtl: "" },
+    { team: "JUGEND: U11M-ES", datum: "01.02.26 10:00", heim: "Standard", gast: "Tournoi", score: "-", bem: "Mersch75/HCS/CHEV/Museldall/Bierchem", sbo: "", rtl: "" },
+    { team: "JUGEND: U11M-ES", datum: "01.03.26 10:00", heim: "Berchem", gast: "Tournoi", score: "-", bem: "Mersch75/HBLeudl./Péiteng1&2", sbo: "", rtl: "" },
+    { team: "JUGEND: U11M-ES", datum: "08.03.26 10:00", heim: "Mersch75", gast: "Tournoi", score: "-", bem: "HC Standard/HCBS", sbo: "", rtl: "" },
+    { team: "JUGEND: U11M-ES", datum: "22.03.26 10:00", heim: "Mersch75", gast: "Tournoi", score: "-", bem: "HBD/HB Leudelange", sbo: "", rtl: "" },
+    { team: "JUGEND: U11M-ES", datum: "19.04.26 10:00", heim: "Dudelange", gast: "Tournoi", score: "-", bem: "Mersch75/HBPétange/HC Standard", sbo: "", rtl: "" },
+    { team: "JUGEND: U11M-ES", datum: "03.05.26 10:00", heim: "Museldall", gast: "Tournoi", score: "-", bem: "Mersch75/HBD/HBCS/CHEV", sbo: "", rtl: "" },  
+    
+    { team: "JUGEND: U11M-EL", datum: "17.05.26 14:00", heim: "Mersch75", gast: "HC Standard", score: "", sbo: "", rtl: "" },
+    { team: "JUGEND: U11M-EL", datum: "07.06.26 14:00", heim: "HC Standard", gast: "Mersch75", score: "", sbo: "", rtl: "" }, 
+    { team: "JUGEND: U11M-EL", datum: "11.01.26 10:00", heim: "Mersch75", gast: "Handball Esch", score: "24:15", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3259137", rtl: "" },
+    { team: "JUGEND: U11M-EL", datum: "25.01.26 14:00", heim: "HBC Schifflange", gast: "Mersch75", score: "31:23", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3288729", rtl: "" },
+    { team: "JUGEND: U11M-EL", datum: "01.02.26 14:00", heim: "Mersch75", gast: "HC Berchem", score: "23:26", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3302965", rtl: "" },
+    { team: "JUGEND: U11M-EL", datum: "08.02.26 10:00", heim: "Red Boys", gast: "Mersch75", score: "16:26", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3313481", rtl: "" },
+    { team: "JUGEND: U11M-EL", datum: "01.03.26 14:00", heim: "Handball Esch", gast: "Mersch75", score: "17:25", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3354461", rtl: "" },
+    { team: "JUGEND: U11M-EL", datum: "15.03.26 10:00", heim: "Mersch75", gast: "HBC Schifflange", score: "29:20", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3386916", rtl: "" },
+    { team: "JUGEND: U11M-EL", datum: "22.03.26 13:00", heim: "HC Berchem", gast: "Mersch75", score: "25:22", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3407236", rtl: "" },
+    { team: "JUGEND: U11M-EL", datum: "19.04.26 10:00", heim: "Mersch75", gast: "Red Boys Diff", score: "32:6", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3431106", rtl: "" },
+    { team: "JUGEND: U11M-EL", datum: "03.05.26 10:00", heim: "HB Museldall", gast: "Mersch75", score: "3:20", sbo: "", rtl: "" },
+    { team: "JUGEND: U11M-EL", datum: "03.05.26 11:04", heim: "Mersch75", gast: "HB Käerjeng", score: "25:16", sbo: "", rtl: "" },     
+    
+    { team: "JUGEND: U9M", datum: "19.04.26 10:00", heim: "Pétange", gast: "Tournoi 10", score: "-", bem: "Mersch75,HB Käerjeng,HC Standard, HB Dudelange,Handball Leideleng", sbo: "", rtl: "" },
+    { team: "JUGEND: U9M", datum: "03.05.26 10:00", heim: "Red Boys", gast: "Tournoi 11", score: "-", bem: "Mersch75, HB Käerjeng, HB Esch, HBCS, HC Berchem, HB Péiteng", sbo: "", rtl: "" },
+    { team: "JUGEND: U9M", datum: "17.05.26 10:00", heim: "Käerjeng", gast: "Tournoi 12", score: "-", bem: "Mersch75, HB Museldall, HB Dudelange, HC Standard, HBCS", sbo: "", rtl: "" },
+    { team: "JUGEND: U9M", datum: "07.06.26 10:00", heim: "Dudelange", gast: "Tournoi 13", score: "-", bem: "Mersch75, HB Esch, HB Bieles, HB Leudelange, HBCS, HB Käerjeng", sbo: "", rtl: "" },
+    { team: "JUGEND: U9M", datum: "05.10.25 10:00", heim: "Schifflange", gast: "Tournoi", score: "-", bem: "Mersch75, Museldall, RedBoys, Esch, Berchem, Bieles", sbo: "", rtl: "" },
+    { team: "JUGEND: U9M", datum: "19.10.25 10:00", heim: "Standard", gast: "Tournoi", score: "-", bem: "Mersch75, Esch, RedBoys, Petange, Leudelange, Bieles", sbo: "", rtl: "" },
+    { team: "JUGEND: U9M", datum: "23.11.25 10:00", heim: "Mersch75", gast: "Tournoi", score: "-", bem: "Museldall, Diekirch, Standard, Esch, Käerjeng", sbo: "", rtl: "" },
+    { team: "JUGEND: U9M", datum: "07.12.25 10:00", heim: "Coque", gast: "Tournoi", score: "-", bem: "Mersch75", sbo: "", rtl: "" },
+    { team: "JUGEND: U9M", datum: "11.01.26 10:00", heim: "Bieles", gast: "Tournoi", score: "-", bem: "Mersch75,HBB,HBL,HBK,RBD, HBD", sbo: "", rtl: "" },
+    { team: "JUGEND: U9M", datum: "25.01.26 10:00", heim: "Chev Diekirch", gast: "Tournoi", score: "-", bem: "Mersch75,HCB,HBM,HCST,HBL", sbo: "", rtl: "" },
+    { team: "JUGEND: U9M", datum: "01.02.26 09:30", heim: "Coque", gast: "Tournoi", score: "-", bem: "Mersch75", sbo: "", rtl: "" },
+    { team: "JUGEND: U9M", datum: "01.03.26 10:00", heim: "Mersch75", gast: "Tournoi", score: "-", bem: "HCB,HCST,HBD,HBK,CHEV", sbo: "", rtl: "" },
+
+    { team: "JUGEND: U7M", datum: "26.10.25 10:00", heim: "Mersch75", gast: "Tournoi", score: "-", bem: "", sbo: "", rtl: "" },
+    { team: "JUGEND: U7M", datum: "30.11.25 10:00", heim: "Plateau 07", gast: "Mersch75", score: "-", bem: "", sbo: "", rtl: "" },
+    { team: "JUGEND: U7M", datum: "01.02.26 10:00", heim: "Museldall", gast: "Mersch75", score: "-", bem: "", sbo: "", rtl: "" },
+
+    { team: "JUGEND: U11M-E", datum: "03.05.26 10:00", heim: "Mersch75", gast: "HB Museldall U11", score: "", bem: "Mersch75/HB Käerjeng/HB Museldall U11", sbo: "", rtl: "" },
+
+    { team: "JUGEND: U11 Espoirs", datum: "18.01.26 10:00", heim: "Mersch75", gast: "Tournoi", score: "-", sbo: "", rtl: "" },
+    { team: "JUGEND: U11 Espoirs", datum: "01.02.26 10:00", heim: "HC Standard", gast: "Mersch75", score: "-", bem: "HCST/CHEV/HBM/M75/ICB", sbo: "", rtl: "" },
+    { team: "JUGEND: U11 Espoirs", datum: "01.03.26 10:00", heim: "HC Berchem", gast: "Mersch75", score: "-", bem: "ICD/M75/IBL/HBP/IBP2", sbo: "", rtl: "" },
+    { team: "JUGEND: U11 Espoirs", datum: "22.03.26 10:00", heim: "Mersch75", gast: "Tournoi", score: "-", bem: "M75/HBD/HBL", sbo: "", rtl: "" },
+    { team: "JUGEND: U11 Espoirs", datum: "19.04.26 10:00", heim: "HB Dudelange", gast: "Mersch75", score: "-", bem: "HBD/HBP/HCST/M75", sbo: "", rtl: "" },
+    { team: "JUGEND: U11 Espoirs", datum: "03.05.26 10:00", heim: "HB Museldall", gast: "Mersch75", score: "-", bem: "HBM/HDD/HBCS/CHEV/M75", sbo: "", rtl: "" },
+    { team: "JUGEND: U11 Espoirs", datum: "17.05.26 10:00", heim: "Mersch75", gast: "Tournoi", score: "-", bem: "M75/HBD/CHEV/HBP/HCST", sbo: "", rtl: "" },
+    { team: "JUGEND: U11 Espoirs", datum: "14.06.26 10:00", heim: "Mersch75", gast: "Tournoi", score: "-", bem: "M75/HUL/HBM/CHEV", sbo: "", rtl: "" }
+];
+</script>
+<script>
+function renderFormBlocks() {
+    const grid = document.getElementById('dynamic-form-grid');
+    if (!grid) return;
+    const teamOpts = Object.keys(teams).map(function(t) { return '<option value="' + t + '">' + t + '</option>'; }).join('');
+    let html = '';
+    for (let i = 0; i < TEAM_CONFIGS.length; i++) {
+        const team = TEAM_CONFIGS[i];
+        const typeOpts = CONFIG.gameTypes.map(function(t) {
+            const isSelected = (t === team.defaultType) ? ' selected' : '';
+            return '<option value="' + t + '"' + isSelected + '>' + t + '</option>';
+        }).join('');
+        html += '<div class="game-block" id="ctrl-' + team.id + '">';
+        html += '<h3>' + team.title + ' <label class="toggle-label"><input type="checkbox" checked class="trigger-toggle" data-team="' + team.id + '"> Spielt?</label></h3>';
+        
+        html += '<div class="row" style="background:#f0f8ff; padding:5px; border-radius:4px; margin-bottom:10px;">';
+        html += '<div class="col" style="flex:1;"><label class="toggle-label" style="margin:0;"><input type="checkbox" class="trigger-photo-toggle" data-team="' + team.id + '"> Foto anstatt Spiel?</label></div>';
+        html += '<div class="col" style="flex:1;"><input type="file" accept="image/*" class="trigger-photo-file" data-team="' + team.id + '" style="display:none; font-size:10px; width:100%;"></div></div>';
+
+        html += '<div class="row">';
+        html += '<div class="col"><select id="' + team.id + '-home" class="trigger-autofill" data-team="' + team.id + '"><option value="home1">Heim (Halle 1)</option><option value="home2">Heim (Krounebierg)</option><option value="away">Auswärts</option></select></div>';
+        html += '<div class="col"><select id="' + team.id + '-opp" class="trigger-autofill" data-team="' + team.id + '">' + teamOpts + '</select></div>';
+        html += '</div>';
+        html += '<div class="row">';
+        html += '<div class="col"><label>Datum</label><input type="date" id="' + team.id + '-date" class="trigger-view"></div>';
+        html += '<div class="col"><label>Uhrzeit</label><input type="time" id="' + team.id + '-time" class="trigger-view"></div>';
+        html += '<div class="col"><label>Kategorie</label><select id="' + team.id + '-type" class="category-select trigger-view">' + typeOpts + '</select></div>';
+        html += '</div>';
+        html += '<input type="text" id="' + team.id + '-loc" class="trigger-view trigger-text" placeholder="Adresse">';
+        html += '</div>';
+    }
+    grid.innerHTML = html;
+}
+
+function renderLandscapeControls() {
+    const grid = document.getElementById('landscape-settings-grid');
+    if (!grid) return;
+    let html = '';
+    for (let index = 0; index < TEAM_CONFIGS.length; index++) {
+        const team = TEAM_CONFIGS[index];
+        const lp = index + 1; 
+        let defaultLogoScale = 100, defaultTitleScale = 100, defaultTextScale = 100;
+        let mainHtml = '';
+        mainHtml += '<div class="options-row" style="justify-content:space-between; margin-top:8px;">';
+        mainHtml += '<label title="Position">Pos: <input type="number" class="team-order trigger-land-pos" id="' + team.id + '-land-pos" data-team="' + team.id + '" data-current-pos="' + lp + '" value="' + lp + '" min="1" max="9" oninput="handleLandOrderChange(this)"></label>';
+        mainHtml += '<button type="button" class="btn-reset" onclick="resetLandTeamSettings(\'' + team.id + '\')">🔄 Reset</button>';
+        mainHtml += '</div>';
+        mainHtml += '<div style="margin-top:8px;"><input type="text" id="' + team.id + '-land-title" class="trigger-view trigger-text" value="' + team.defaultTitle + '" placeholder="Titel" style="width:100%;font-size:11px;padding:6px;border:1px solid var(--border-gray);border-radius:4px;"></div>';
+        mainHtml += '<div class="team-slider-wrap">';
+        mainHtml += '<div class="slider-row"><span class="sl-lbl">Logo</span><input type="range" class="land-scale-logo" data-team="' + team.id + '" min="50" max="200" value="' + defaultLogoScale + '" oninput="this.nextElementSibling.innerText=this.value+\'%\'; updateLandscapePreview();"><span class="sl-val">' + defaultLogoScale + '%</span></div>';
+        mainHtml += '<div class="slider-row"><span class="sl-lbl">Titel</span><input type="range" class="land-scale-title" data-team="' + team.id + '" min="50" max="200" value="' + defaultTitleScale + '" oninput="this.nextElementSibling.innerText=this.value+\'%\'; updateLandscapePreview();"><span class="sl-val">' + defaultTitleScale + '%</span></div>';
+        mainHtml += '<div class="slider-row"><span class="sl-lbl">Text</span><input type="range" class="land-scale-text" data-team="' + team.id + '" min="50" max="200" value="' + defaultTextScale + '" oninput="this.nextElementSibling.innerText=this.value+\'%\'; updateLandscapePreview();"><span class="sl-val">' + defaultTextScale + '%</span></div>';
+        mainHtml += '<div class="slider-row"><span class="sl-lbl">Foto</span><input type="range" class="land-scale-photo" data-team="' + team.id + '" min="50" max="220" value="100" oninput="this.nextElementSibling.innerText=this.value+\'%\'; updateLandscapePreview();"><span class="sl-val">100%</span></div>';
+        mainHtml += '</div>';
+
+        html += '<div class="portrait-team-item">';
+        html += '<div style="display:flex;justify-content:space-between;align-items:center;">';
+        html += '<label class="team-main-cb" style="margin:0;"><input type="checkbox" class="trigger-land-show" id="' + team.id + '-land-show" data-team="' + team.id + '" checked onchange="updateLandscapePreview()"> ' + team.title + '</label>';
+        html += '</div>' + mainHtml + '</div>';
+    }
+    
+    html += '<div class="portrait-team-item" style="background:#f0f7ff;border-color:var(--secondary-blue);">';
+    html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><label class="team-main-cb" style="color:var(--secondary-blue);cursor:default;margin:0;">🎚️ Kopfzeile &amp; Logos</label><button type="button" class="btn-reset" onclick="resetLandHeaderSettings()">🔄 Reset</button></div>';
+    html += '<div class="team-slider-wrap" style="margin-top:10px;border-top:none;">';
+    html += '<div class="slider-row"><span class="sl-lbl">MixVoip L</span><input type="range" id="l-scale-mixvoip-l" min="100" max="500" value="280" oninput="this.nextElementSibling.innerText=this.value;updateLandscapePreview();"><span class="sl-val">280</span></div>';
+    html += '<div class="slider-row"><span class="sl-lbl">Matchday</span><input type="range" id="l-scale-matchday" min="40" max="250" value="90" oninput="this.nextElementSibling.innerText=this.value;updateLandscapePreview();"><span class="sl-val">90</span></div>';
+    html += '<div class="slider-row"><span class="sl-lbl">MixVoip R</span><input type="range" id="l-scale-mixvoip-r" min="100" max="500" value="280" oninput="this.nextElementSibling.innerText=this.value;updateLandscapePreview();"><span class="sl-val">280</span></div>';
+    html += '<div class="slider-row"><span class="sl-lbl">50 Jahre</span><input type="range" id="l-scale-50years" min="50" max="300" value="170" oninput="this.nextElementSibling.innerText=this.value;updateLandscapePreview();"><span class="sl-val">170</span></div>';
+    html += '</div></div>';
+    grid.innerHTML = html;
+}
+
+function renderPortraitControls() {
+    const selector = document.getElementById('portrait-team-selector');
+    if (!selector) return;
+    let html = '';
+    for (let i = 0; i < TEAM_CONFIGS.length; i++) {
+        const team = TEAM_CONFIGS[i];
+        const chk = 'checked';
+        html += '<div class="portrait-team-item">';
+        html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">';
+        html += '<label class="team-main-cb" style="margin:0;"><input type="checkbox" class="cb-portrait" value="' + team.id + '" ' + chk + '> ' + team.title + '</label>';
+        html += '<button type="button" class="btn-reset" onclick="resetTeamSettings(\'' + team.id + '\')">🔄 Reset</button>';
+        html += '</div>';
+        html += '<div class="options-row">';
+        html += '<label><input type="checkbox" class="cb-title" value="' + team.id + '" checked> Titel</label>';
+        html += '<label>Breite: <select class="cb-width" data-team="' + team.id + '" onchange="handleWidthToggle(this)" style="padding:2px; font-size:11px; margin-left:4px; width:auto;"><option value="100">100%</option><option value="50">50%</option><option value="33">33%</option></select></label>';
+        html += '<label>Pos: <input type="number" class="team-order trigger-port-pos" data-team="' + team.id + '" data-current-pos="' + (i + 1) + '" value="' + (i + 1) + '" min="1" max="9" oninput="handlePortraitOrderChange(this)"></label>';
+        html += '</div>';
+        html += '<div class="team-slider-wrap">';
+        html += '<div class="slider-row"><span class="sl-lbl">Logo</span><input type="range" class="team-scale-logo" data-team="' + team.id + '" min="30" max="250" value="140" oninput="this.nextElementSibling.innerText=this.value; updatePortraitPreview();"><span class="sl-val">140</span></div>';
+        html += '<div class="slider-row"><span class="sl-lbl">Titel</span><input type="range" class="team-scale-title" data-team="' + team.id + '" min="10" max="60" value="34" oninput="this.nextElementSibling.innerText=this.value; updatePortraitPreview();"><span class="sl-val">34</span></div>';
+        html += '<div class="slider-row"><span class="sl-lbl">Text</span><input type="range" class="team-scale-text" data-team="' + team.id + '" min="8" max="40" value="22" oninput="this.nextElementSibling.innerText=this.value; updatePortraitPreview();"><span class="sl-val">22</span></div>';
+        html += '<div class="slider-row"><span class="sl-lbl">Foto</span><input type="range" class="team-scale-photo" data-team="' + team.id + '" min="50" max="220" value="100" oninput="this.nextElementSibling.innerText=this.value+\'%\'; updatePortraitPreview();"><span class="sl-val">100%</span></div>';
+        html += '</div></div>';
+    }
+    html += '<div class="portrait-team-item" style="background:#f0f7ff;border-color:var(--secondary-blue);">';
+    html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><label class="team-main-cb" style="color:var(--secondary-blue);cursor:default;margin:0;">🎚️ Kopfzeile &amp; Poster</label><button type="button" class="btn-reset" onclick="resetHeaderSettings()">🔄 Reset</button></div>';
+    html += '<div class="team-slider-wrap" style="margin-top:10px;border-top:none;">';
+    html += '<div class="slider-row"><span class="sl-lbl">Poster B.</span><input type="range" id="p-scale-width" min="650" max="1200" value="800" oninput="this.nextElementSibling.innerText=this.value;updatePortraitPreview();"><span class="sl-val">800</span></div>';
+    html += '<div class="slider-row"><span class="sl-lbl">Poster H.</span><input type="range" id="p-scale-height" min="866" max="2000" value="1060" oninput="this.nextElementSibling.innerText=this.value;updatePortraitPreview();"><span class="sl-val">1060</span></div>';
+    html += '<div class="slider-row"><span class="sl-lbl">50 J.</span> <input type="range" id="p-scale-50years" min="40" max="150" value="100" oninput="this.nextElementSibling.innerText=this.value;updatePortraitPreview();"><span class="sl-val">100</span></div>';
+    html += '<div class="slider-row"><span class="sl-lbl">MixVoip</span><input type="range" id="p-scale-mixvoip" min="100" max="400" value="280" oninput="this.nextElementSibling.innerText=this.value;updatePortraitPreview();"><span class="sl-val">280</span></div>';
+    html += '<div class="slider-row"><span class="sl-lbl">Matchd.</span><input type="range" id="p-scale-matchday" min="40" max="250" value="130" oninput="this.nextElementSibling.innerText=this.value;updatePortraitPreview();"><span class="sl-val">130</span></div>';
+    html += '</div></div>';
+    selector.innerHTML = html;
+}
+
+function handleLandOrderChange(el) {
+    const all = Array.from(document.querySelectorAll('.trigger-land-pos'));
+    let n = parseInt(el.value); let o = parseInt(el.getAttribute('data-current-pos'));
+    if (isNaN(n) || n < 1) n = 1; if (n > 9) n = 9; el.value = n; if (n === o) return;
+    for (let i = 0; i < all.length; i++) {
+        const x = all[i]; if (x === el) continue;
+        let p = parseInt(x.getAttribute('data-current-pos'));
+        if (n < o) { if (p >= n && p < o) { p++; x.value = p; } } else { if (p <= n && p > o) { p--; x.value = p; } }
+    }
+    for (let i = 0; i < all.length; i++) { all[i].setAttribute('data-current-pos', all[i].value); }
+    updateLandscapePreview();
+}
+
+function handlePortraitOrderChange(el) {
+    const all = Array.from(document.querySelectorAll('.trigger-port-pos'));
+    let n = parseInt(el.value); let o = parseInt(el.getAttribute('data-current-pos'));
+    if (isNaN(n) || n < 1) n = 1; if (n > 9) n = 9; el.value = n; if (n === o) return;
+    for (let i = 0; i < all.length; i++) {
+        const x = all[i]; if (x === el) continue;
+        let p = parseInt(x.getAttribute('data-current-pos'));
+        if (n < o) { if (p >= n && p < o) { p++; x.value = p; } } else { if (p <= n && p > o) { p--; x.value = p; } }
+    }
+    for (let i = 0; i < all.length; i++) { all[i].setAttribute('data-current-pos', all[i].value); }
+    updatePortraitPreview();
+}
+
+function handleWidthToggle(sel) {
+    const t = sel.dataset.team; const val = sel.value;
+    const ls = document.querySelector('.team-scale-logo[data-team="' + t + '"]');
+    const ts = document.querySelector('.team-scale-title[data-team="' + t + '"]');
+    const tx = document.querySelector('.team-scale-text[data-team="' + t + '"]');
+    const ph = document.querySelector('.team-scale-photo[data-team="' + t + '"]');
+    if (val === "33") { if (ls) ls.value = 60; if (ts) ts.value = 14; if (tx) tx.value = 11; } 
+    else if (val === "50") { if (ls) ls.value = 85; if (ts) ts.value = 20; if (tx) tx.value = 14; } 
+    else { if (ls) ls.value = 140; if (ts) ts.value = 34; if (tx) tx.value = 22; }
+    if (ls && ls.nextElementSibling) ls.nextElementSibling.innerText = ls.value;
+    if (ts && ts.nextElementSibling) ts.nextElementSibling.innerText = ts.value; 
+    if (tx && tx.nextElementSibling) tx.nextElementSibling.innerText = tx.value;
+    if (ph && ph.nextElementSibling) ph.nextElementSibling.innerText = ph.value + '%';
+    updatePortraitPreview();
+}
+
+function resetTeamSettings(id) {
+    const ct = document.querySelector('.cb-title[value="' + id + '"]');
+    const cw = document.querySelector('.cb-width[data-team="' + id + '"]');
+    if (ct) ct.checked = true; if (cw) cw.value = "100";
+    const ls = document.querySelector('.team-scale-logo[data-team="' + id + '"]');
+    const ts = document.querySelector('.team-scale-title[data-team="' + id + '"]');
+    const tx = document.querySelector('.team-scale-text[data-team="' + id + '"]');
+    const ph = document.querySelector('.team-scale-photo[data-team="' + id + '"]');
+    if (ls) { ls.value = 140; if (ls.nextElementSibling) ls.nextElementSibling.innerText = "140"; }
+    if (ts) { ts.value = 34;  if (ts.nextElementSibling) ts.nextElementSibling.innerText = "34"; }
+    if (tx) { tx.value = 22;  if (tx.nextElementSibling) tx.nextElementSibling.innerText = "22"; }
+    if (ph) { ph.value = 100; if (ph.nextElementSibling) ph.nextElementSibling.innerText = "100%"; }
+    updatePortraitPreview();
+}
+
+function resetLandTeamSettings(id) {
+    const ls = document.querySelector('.land-scale-logo[data-team="' + id + '"]');
+    const ts = document.querySelector('.land-scale-title[data-team="' + id + '"]');
+    const tx = document.querySelector('.land-scale-text[data-team="' + id + '"]');
+    const ph = document.querySelector('.land-scale-photo[data-team="' + id + '"]');
+    if (ls) { ls.value = 100; if(ls.nextElementSibling) ls.nextElementSibling.innerText = '100%'; }
+    if (ts) { ts.value = 100; if(ts.nextElementSibling) ts.nextElementSibling.innerText = '100%'; }
+    if (tx) { tx.value = 100; if(tx.nextElementSibling) tx.nextElementSibling.innerText = '100%'; }
+    if (ph) { ph.value = 100; if(ph.nextElementSibling) ph.nextElementSibling.innerText = '100%'; }
+    updateLandscapePreview();
+}
+
+function resetHeaderSettings() {
+    const w = document.getElementById('p-scale-width'); const h = document.getElementById('p-scale-height');
+    const f = document.getElementById('p-scale-50years'); const m = document.getElementById('p-scale-mixvoip');
+    const d = document.getElementById('p-scale-matchday');
+    if (w) { w.value = 800; w.nextElementSibling.innerText = "800"; }
+    if (h) { h.value = 1060; h.nextElementSibling.innerText = "1060"; }
+    if (f) { f.value = 100; f.nextElementSibling.innerText = "100"; }
+    if (m) { m.value = 280; m.nextElementSibling.innerText = "280"; }
+    if (d) { d.value = 130; d.nextElementSibling.innerText = "130"; }
+    updatePortraitPreview();
+}
+
+function resetLandHeaderSettings() {
+    const ml = document.getElementById('l-scale-mixvoip-l'); const md = document.getElementById('l-scale-matchday');
+    const mr = document.getElementById('l-scale-mixvoip-r'); const f = document.getElementById('l-scale-50years');
+    if (ml) { ml.value = 280; ml.nextElementSibling.innerText = "280"; }
+    if (md) { md.value = 90; md.nextElementSibling.innerText = "90"; }
+    if (mr) { mr.value = 280; mr.nextElementSibling.innerText = "280"; }
+    if (f) { f.value = 170; f.nextElementSibling.innerText = "170"; }
+    updateLandscapePreview();
+}
+
+function formatDate(dateStr, timeStr) {
+    if (!dateStr) return "";
+    const p = dateStr.split('-'); if (p.length !== 3) return "";
+    const d = new Date(p[0], parseInt(p[1], 10) - 1, p[2]);
+    const days = ['SO', 'MO', 'DI', 'MI', 'DO', 'FR', 'SA'];
+    let t = "";
+    if (timeStr) { t = timeStr.replace(/\s/g, '').replace(':', 'h'); t = t.replace(/h+/gi, 'h'); } else { t = "00h00"; }
+    return '<span style="font-family: \'Barlow\', sans-serif !important; font-style: normal !important; font-weight: 800 !important;">' + days[d.getDay()] + ' - ' + p[2] + '.' + p[1] + '.' + p[0] + ' - ' + t + '</span>';
+}
+
+function loadSavedSchedule() {
+    const sel = document.getElementById('week-selector'); if (!sel) return; const v = sel.value; if (!v) return;
+    const text = sel.options[sel.selectedIndex].text; const parts = text.split('-'); if(parts.length !== 2) { sel.value = ""; return; }
+    const cleanDate = function(dStr) { let s = dStr.trim(); if(s.charAt(s.length - 1) === '.') { s = s.slice(0, -1); } return s; };
+    let startStr = cleanDate(parts[0]); let endStr = cleanDate(parts[1]); let p2 = endStr.split('.'); let yearStr = "";
+    if (p2.length === 3) { yearStr = p2[2]; }
+    let p1 = startStr.split('.'); if (p1.length >= 2) { if (p1.length === 2 || !p1[2] || p1[2] === "") { startStr = p1[0] + "." + p1[1] + "." + yearStr; } }
+    const parseD = function(s) { const p = s.split('.'); if (p.length < 3 || !p[2]) return 0; let yr = parseInt(p[2], 10); if (yr < 100) yr += 2000; return new Date(yr, parseInt(p[1], 10)-1, parseInt(p[0], 10)).getTime(); };
+    const startT = parseD(startStr); const endT = parseD(endStr) + 86399999; let rawText = "";
+    if (typeof allGamesData !== 'undefined') {
+        for (let i = 0; i < allGamesData.length; i++) {
+            const game = allGamesData[i]; if (!game.datum || game.datum === "-") continue;
+            const gameDateStr = cleanDate(game.datum.split(' ')[0]); const gT = parseD(gameDateStr);
+            if (gT >= startT && gT <= endT) {
+                const halleStr = game.halle ? " " + game.halle : "";
+                rawText += game.team + " " + game.datum + halleStr + " " + game.heim + " - " + game.gast + "\n";
+            }
+        }
+    }
+    if (rawText.trim().length > 0) { const txtArea = document.getElementById('magic-text'); if (txtArea) txtArea.value = rawText; setTimeout(function() { magicScan(); }, 100); } 
+    else { alert("Keine Spiele für diese Woche in der Datenbank gefunden."); }
+    sel.value = "";
+}
+
+function parseGameDateValue(game) {
+    if (!game || !game.datum) return null;
+    const parts = game.datum.split(' ');
+    const datePart = parts[0];
+    const timePart = parts[1] || '00:00';
+    const dateSegments = datePart.split('.');
+    const timeSegments = timePart.split(':');
+
+    if (dateSegments.length !== 3) return null;
+
+    let year = parseInt(dateSegments[2], 10);
+    if (year < 100) year += 2000;
+
+    return new Date(
+        year,
+        parseInt(dateSegments[1], 10) - 1,
+        parseInt(dateSegments[0], 10),
+        parseInt(timeSegments[0] || '0', 10),
+        parseInt(timeSegments[1] || '0', 10),
+        0,
+        0
+    );
+}
+
+function buildRawScheduleText(games) {
+    return games.map(function(game) {
+        const hallSuffix = game.halle ? ' ' + game.halle : '';
+        return game.team + ' ' + game.datum + hallSuffix + ' ' + game.heim + ' - ' + game.gast;
+    }).join('\n');
+}
+
+function getNormalizedGeneratorTeamKey(teamName) {
+    const normalized = String(teamName || '').toUpperCase();
+
+    if (normalized.indexOf('U09') !== -1 || normalized.indexOf('U9') !== -1) return 'u9M';
+    if (normalized.indexOf('U07') !== -1 || normalized.indexOf('U7') !== -1) return 'u7M';
+    if (normalized.indexOf('U11M-ES') !== -1 || normalized.indexOf('U11 ES') !== -1 || normalized.indexOf('ESPOIR') !== -1) return 'u11MES';
+    if (normalized.indexOf('U11M-E') !== -1 || normalized.indexOf('U11ME') !== -1 || normalized.indexOf('ELITE') !== -1) return 'u11MEL';
+    if (normalized.indexOf('U11') !== -1 && normalized.indexOf('TOURNOI') !== -1) return 'u11MES';
+    if (normalized.indexOf('U11') !== -1) return 'u11MEL';
+    if (normalized.indexOf('U15') !== -1) return 'u15';
+    if (normalized.indexOf('U13M-P3') !== -1) return 'u13p3';
+    if (normalized.indexOf('U13') !== -1) return 'u13pe';
+    if (normalized.indexOf('D-PRO') !== -1 || normalized.indexOf('FRAUEN') !== -1 || normalized.indexOf('DAMES') !== -1) return 'fe';
+    if (normalized.indexOf('H-PRO') !== -1 || normalized.indexOf('MÄNNER') !== -1 || normalized.indexOf('HOMMES') !== -1) return 's1';
+
+    return normalized;
+}
+
+function setWeekendStatus(message, isError) {
+    const status = document.getElementById('weekend-status');
+    if (!status) return;
+    status.textContent = message;
+    status.style.color = isError ? '#b42318' : '#2e7d32';
+}
+
+function getWeekendRange(offsetWeeks) {
+    const today = new Date();
+    const base = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const day = base.getDay();
+    const friday = new Date(base);
+    const diffToFriday = day <= 4 ? 5 - day : day === 5 ? 0 : day === 6 ? -1 : -2;
+    friday.setDate(base.getDate() + diffToFriday + ((offsetWeeks || 0) * 7));
+
+    const sunday = new Date(friday);
+    sunday.setDate(friday.getDate() + 2);
+    sunday.setHours(23, 59, 59, 999);
+
+    friday.setHours(0, 0, 0, 0);
+
+    return { start: friday, end: sunday };
+}
+
+function loadWeekendSchedule(offsetWeeks) {
+    const range = getWeekendRange(offsetWeeks || 0);
+    const uniqueKeys = new Set();
+    const filteredGames = (typeof allGamesData !== 'undefined' ? allGamesData : []).filter(function(game) {
+        const gameDate = parseGameDateValue(game);
+        if (!gameDate || gameDate < range.start || gameDate > range.end) {
+            return false;
+        }
+
+        const uniqueKey = getNormalizedGeneratorTeamKey(game.team) + '|' + game.datum;
+        if (uniqueKeys.has(uniqueKey)) {
+            return false;
+        }
+
+        uniqueKeys.add(uniqueKey);
+        return true;
+    }).sort(function(a, b) {
+        return parseGameDateValue(a) - parseGameDateValue(b);
+    });
+
+    if (!filteredGames.length) {
+        setWeekendStatus('Keine Mersch-Spiele für dieses Wochenende in der Saisonliste gefunden.', true);
+        return;
+    }
+
+    const txtArea = document.getElementById('magic-text');
+    if (!txtArea) return;
+
+    txtArea.value = buildRawScheduleText(filteredGames);
+    setWeekendStatus(filteredGames.length + ' Spiele automatisch für ' + range.start.toLocaleDateString('de-DE') + ' bis ' + range.end.toLocaleDateString('de-DE') + ' geladen.', false);
+    setTimeout(function() { magicScan(); }, 80);
+}
+
+function magicScan() {
+    const txtArea = document.getElementById('magic-text'); if (!txtArea) return; const rawText = txtArea.value;
+    if (!rawText || !rawText.trim() || typeof teams === 'undefined' || typeof aliases === 'undefined') return;
+    const lines = rawText.split('\n');
+    const sT = Object.keys(teams).sort(function(a, b) { return b.length - a.length; });
+    const sA = Object.keys(aliases).sort(function(a, b) { return b.length - a.length; });
+
+    for (let i = 0; i < TEAM_CONFIGS.length; i++) {
+        const t = TEAM_CONFIGS[i];
+        try { 
+            const pt = document.querySelector('.trigger-photo-toggle[data-team="' + t.id + '"]');
+            const isPhotoActive = pt && pt.checked && window.teamPhotos[t.id];
+
+            const oppEl = document.getElementById(t.id + '-opp'); if (oppEl) oppEl.value = "-"; 
+            const dateEl = document.getElementById(t.id + '-date'); if (dateEl) dateEl.value = "";
+            const timeEl = document.getElementById(t.id + '-time'); if (timeEl) timeEl.value = ""; 
+            const typeEl = document.getElementById(t.id + '-type'); if (typeEl) typeEl.value = t.defaultType; 
+            const homeEl = document.getElementById(t.id + '-home'); if (homeEl) homeEl.value = "home1";
+            const locEl = document.getElementById(t.id + '-loc'); if (locEl) locEl.value = "";
+            
+            const mainCb = document.querySelector('.trigger-toggle[data-team="' + t.id + '"]'); 
+            if (mainCb) mainCb.checked = false;
+            
+            const landCb = document.getElementById(t.id + '-land-show'); 
+            if (landCb && !isPhotoActive) landCb.checked = false;
+            
+            const portCb = document.querySelector('.cb-portrait[value="' + t.id + '"]'); 
+            if (portCb && !isPhotoActive) portCb.checked = false;
+            
+            toggleTeam(t.id, false); 
+        } catch(e) {}
+    }
+
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i]; if (!line || !line.trim()) continue;
+        try {
+            const ul = line.trim().toUpperCase(); let p = null;
+            if (ul.indexOf("U09") !== -1 || ul.indexOf("U9") !== -1) p = 'u9M';
+            else if (ul.indexOf("U07") !== -1 || ul.indexOf("U7") !== -1) p = 'u7M';
+            else if (ul.indexOf("U11M-E") !== -1 || ul.indexOf("U11ME") !== -1 || ul.indexOf("ELITE") !== -1) p = 'u11MEL';
+            else if ((ul.indexOf("U11") !== -1 && ul.indexOf("TOURNOI") !== -1) || ul.indexOf("ESPOIR") !== -1) p = 'u11MES';
+            else if (ul.indexOf("U11") !== -1) p = 'u11MEL'; 
+            else if (ul.indexOf("U15") !== -1) p = 'u15';
+            else if (ul.indexOf("U13M-P3") !== -1) p = 'u13p3';
+            else if (ul.indexOf("U13") !== -1) p = 'u13pe';
+            else if (ul.indexOf("D-PRO") !== -1 || ul.indexOf("FRAUEN") !== -1 || ul.indexOf("DAMES") !== -1 || ul.indexOf("D-SEN") !== -1 || ul.indexOf("D-C-LN") !== -1) p = 'fe';
+            else if (ul.indexOf("H-AXA") !== -1 || ul.indexOf("MÄNNER") !== -1 || ul.indexOf("HOMMES") !== -1 || ul.indexOf("H-SEN") !== -1 || ul.indexOf("H-C-LN") !== -1 || ul.indexOf("H-PRO") !== -1) p = 's1';
+            
+            if (!p) continue;
+            
+            const activateTeamCheckboxes = (teamPrefix) => {
+                const mainCb = document.querySelector('.trigger-toggle[data-team="' + teamPrefix + '"]'); if (mainCb) mainCb.checked = true;
+                const landCb = document.getElementById(teamPrefix + '-land-show'); if (landCb) landCb.checked = true;
+                const portCb = document.querySelector('.cb-portrait[value="' + teamPrefix + '"]'); if (portCb) portCb.checked = true;
+            };
+
+            if (ul.indexOf("SPIELFREI") !== -1 || /\bSPIELFREI\b/.test(ul)) { 
+                const oppEl = document.getElementById(p + '-opp'); if (oppEl) oppEl.value = "Spielfrei"; 
+                const homeEl = document.getElementById(p + '-home'); if (homeEl) homeEl.value = "away";
+                const locEl = document.getElementById(p + '-loc'); if (locEl) locEl.value = ""; 
+                activateTeamCheckboxes(p); toggleTeam(p, true); autoFill(p, true); continue;
+            }
+            
+            const ti = document.getElementById(p + '-type');
+            if (ti) {
+                let c = null;
+                if (ul.indexOf("1/2 FINAL") !== -1) c = "1/2 Finale"; 
+                else if (ul.indexOf("1/4 FINAL") !== -1) c = "1/4 Finale";
+                else if (ul.indexOf("1/8 FINAL") !== -1) c = "1/8 Finale";
+                else if (ul.indexOf("FINALE") !== -1 && ul.indexOf("1/") === -1) c = "Finale";
+                else if (ul.indexOf("COUPE") !== -1 || ul.indexOf("-C2") !== -1 || ul.indexOf("M-C") !== -1 || ul.indexOf("G-C") !== -1 || ul.indexOf("-C-LN") !== -1) c = "Coupe";
+                else if (ul.indexOf("PLAYOFF") !== -1 || ul.indexOf("-PO") !== -1 || ul.indexOf("-PE") !== -1 || ul.indexOf("PROMOTIOUN") !== -1 || ul.indexOf("PROM") !== -1) c = "Playoff";
+                else if (ul.indexOf("CHAMPIONNAT") !== -1 || ul.indexOf("-CH") !== -1) c = "Championnat";
+                else if (ul.indexOf("TOURNOI") !== -1 || ul.indexOf("ESPOIRS") !== -1) c = "Tournoi";
+                else c = "Season Games";
+                if (c) ti.value = c;
+            }
+            
+            const dm = line.match(/(\d{1,2})\.(\d{1,2})\.(\d{2,4})/);
+            if (dm) { 
+                let y = dm[3]; if (y.length === 2) y = "20" + y; 
+                const dEl = document.getElementById(p + '-date'); if (dEl) dEl.value = y + '-' + dm[2].padStart(2, '0') + '-' + dm[1].padStart(2, '0');
+            }
+            
+            const tm = line.match(/(\d{1,2})\s*[:hH]\s*(\d{2})/);
+            if (tm) { 
+                const tEl = document.getElementById(p + '-time'); if (tEl) tEl.value = tm[1].padStart(2, '0') + ':' + tm[2];
+            }
+            
+            let opp = null; let ms = "";
+            for (let j = 0; j < sT.length; j++) { 
+                const t = sT[j]; if (t !== "Spielfrei" && t !== "-" && ul.indexOf(t.toUpperCase()) !== -1) { opp = t; ms = t.toUpperCase(); break; } 
+            }
+            if (!opp) { 
+                for (let j = 0; j < sA.length; j++) { 
+                    const a = sA[j]; if (ul.indexOf(a) !== -1) { opp = aliases[a]; ms = a; break; } 
+                } 
+            }
+            
+            if (opp) { const oppEl = document.getElementById(p + '-opp'); if (oppEl) oppEl.value = opp; }
+
+            const mIdx = ul.indexOf("MERSCH"); let os = ms.split(' ')[0];
+            if (["HB", "HC", "HBC", "ESP", "RED", "ENTENTE", "CHEV", "LOGO", "HANDBALL"].indexOf(os) !== -1) { 
+                const parts = ms.split(' '); os = (parts.length > 1) ? parts[1] : os; 
+            }
+            let oi = ul.indexOf(os); if (oi === -1) oi = ul.indexOf(ms);
+
+            const hEl = document.getElementById(p + '-home');
+            if (hEl) {
+                if (line.indexOf("290101") !== -1) { hEl.value = "home1"; } 
+                else if (line.indexOf("290102") !== -1) { hEl.value = "home2"; } 
+                else if (mIdx !== -1 && oi !== -1) { hEl.value = (mIdx < oi) ? "home1" : "away"; } 
+                else if (mIdx !== -1) { hEl.value = "home1"; } else { hEl.value = "home1"; }
+            }
+
+            activateTeamCheckboxes(p); toggleTeam(p, true); autoFill(p, true);
+
+            const lEl = document.getElementById(p + '-loc');
+            if (lEl && typeof hallCodes !== 'undefined') {
+                for (let code in hallCodes) { if (line.indexOf(code) !== -1) { lEl.value = hallCodes[code]; break; } }
+            }
+        } catch (err) { console.error("Fehler beim Scannen der Zeile: " + line, err); }
+    }
+    
+    setTimeout(function() { 
+        updateAllPreviews(); scalePoster(); 
+        let hadData = false;
+        for (let i = 0; i < lines.length; i++) { if (lines[i].trim().length > 0) { hadData = true; break; } }
+        if (hadData) { const txtArea = document.getElementById('magic-text'); if (txtArea) txtArea.value = ""; } 
+    }, 150);
+}
+
+function autoFill(prefix, skipPreview) {
+    try {
+        const hs = document.getElementById(prefix + '-home'); if (!hs) return;
+        const oppEl = document.getElementById(prefix + '-opp'); if (!oppEl) return;
+        const opp = oppEl.value; const ih = (hs.value.indexOf('home') === 0);
+        
+        const locEl = document.getElementById(prefix + '-loc');
+        if (locEl) {
+            if (ih) { locEl.value = (hs.value === 'home2') ? CONFIG.address2 : CONFIG.address1; } 
+            else { 
+                if (opp === "Spielfrei" || opp === "-") { locEl.value = ""; } 
+                else { locEl.value = (typeof addresses !== 'undefined' && addresses[opp]) ? addresses[opp] : ""; }
+            }
+        }
+        if (skipPreview !== true) { updateAllPreviews(); }
+    } catch(e) { console.error("AutoFill Fehler:", e); }
+}
+</script>
+<script>
+function getAssignedPos(prefix) {
+    const el = document.getElementById(prefix + '-land-pos');
+    return el ? parseInt(el.value, 10) : 99;
+}
+
+function updateLandscapePreview() {
+    const smLEl = document.getElementById('l-scale-mixvoip-l'); const smL = smLEl ? smLEl.value : 280;
+    const sdEl = document.getElementById('l-scale-matchday'); const sd = sdEl ? sdEl.value : 90; 
+    const smREl = document.getElementById('l-scale-mixvoip-r'); const smR = smREl ? smREl.value : 280; 
+    const s50El = document.getElementById('l-scale-50years'); const s50 = s50El ? s50El.value : 170;
+    
+    const imgMixL = document.querySelector('.mixvoip-left img'); if (imgMixL) imgMixL.style.width = smL + 'px';
+    const imgMixR = document.querySelector('.mixvoip-right img'); if (imgMixR) imgMixR.style.width = smR + 'px';
+    const imgMatch = document.querySelector('.matchday-text img'); if (imgMatch) imgMatch.style.height = sd + 'px';
+    const layer50 = document.querySelector('.layer-50years'); if (layer50) { layer50.style.width = s50 + 'px'; layer50.style.height = s50 + 'px'; }
+    
+    const cont = document.getElementById('l-dynamic-main'); if (!cont) return;
+    cont.innerHTML = '';
+    const ymEl = document.getElementById('toggle-youth-mode'); const ym = ymEl ? ymEl.checked : false;
+    
+    let allActive = []; let at = [];
+    
+    for (let i = 0; i < TEAM_CONFIGS.length; i++) {
+        const p = TEAM_CONFIGS[i].id;
+        const show = document.getElementById(p + '-land-show');
+        if (show && show.checked) {
+            const cb = document.querySelector('.trigger-toggle[data-team="' + p + '"]');
+            const hasGame = cb && cb.checked;
+            if (p === 'u11MES' || p === 'u9M' || p === 'u7M') {
+                at.push({ id: p, hasGame: hasGame });
+            } else {
+                allActive.push({ id: p, hasGame: hasGame });
+            }
+        }
+    }
+    
+    const sortFn = function(a, b) {
+        return getAssignedPos(a.id) - getAssignedPos(b.id);
+    };
+    allActive.sort(sortFn); at.sort(sortFn);
+    
+    let tTop = 130; let tLeft = 1142; const ht = (at.length > 0);
+    
+    let topTier = []; let lowTier = [];
+
+    if (ym) {
+        lowTier = allActive;
+    } else {
+        topTier = allActive.filter(t => getAssignedPos(t.id) <= 2);
+        lowTier = allActive.filter(t => getAssignedPos(t.id) > 2);
+    }
+
+    if (ht) {
+        tTop = 110;
+        const youthStartY = 330; const rowHeight = 140; const colOffset1 = 8; const colOffset2 = 183; const colOffset3 = 328;
+        
+        if (topTier.length === 2) {
+            renderLandscapeGame(topTier[0].id, { type: 'big', top: 350, left: 19 }, cont, topTier[0].hasGame);
+            renderLandscapeGame(topTier[1].id, { type: 'big', top: 350, left: 571 }, cont, topTier[1].hasGame);
+        } else if (topTier.length === 1) {
+            renderLandscapeGame(topTier[0].id, { type: 'big', top: 350, left: 571 }, cont, topTier[0].hasGame);
+        }
+
+        const smallSlots = [
+            { type: 'youth3col', top: youthStartY, left: 1142, col1: colOffset1, col2: colOffset2, col3: colOffset3 },
+            { type: 'youth3col', top: youthStartY + rowHeight, left: 1142, col1: colOffset1, col2: colOffset2, col3: colOffset3 },
+            { type: 'youth3col', top: youthStartY + (rowHeight * 2), left: 1142, col1: colOffset1, col2: colOffset2, col3: colOffset3 }
+        ];
+
+        for (let i = 0; i < lowTier.length && i < smallSlots.length; i++) {
+            renderLandscapeGame(lowTier[i].id, smallSlots[i], cont, lowTier[i].hasGame);
+        }
+
+    } else {
+        tTop = 80; tLeft = 1142;
+
+        if (ym) {
+            let ySlots = [];
+            if (lowTier.length >= 4) { 
+                ySlots = [ { type: 'big', top: 350, left: 36 }, { type: 'big', top: 350, left: 400 }, { type: 'big', top: 350, left: 780 }, { type: 'big', top: 350, left: 1160 } ];
+            } else if (lowTier.length === 3) { 
+                ySlots = [ { type: 'big', top: 350, left: 36 }, { type: 'big', top: 350, left: 570 }, { type: 'big', top: 350, left: 1104 } ];
+            } else if (lowTier.length === 2) { 
+                ySlots = [ { type: 'big', top: 350, left: 260 }, { type: 'big', top: 350, left: 880 } ];
+            } else if (lowTier.length === 1) { 
+                ySlots = [ { type: 'big', top: 350, left: 570 } ];
+            }
+            for (let i = 0; i < lowTier.length; i++) {
+                renderLandscapeGame(lowTier[i].id, ySlots[i], cont, lowTier[i].hasGame);
+            }
+        } else {
+            let baseLeft = 1142 + 33 - 130;
+            
+            if (topTier.length === 2) {
+                renderLandscapeGame(topTier[0].id, { type: 'big', top: 350, left: 19 }, cont, topTier[0].hasGame);
+                renderLandscapeGame(topTier[1].id, { type: 'big', top: 350, left: 571 }, cont, topTier[1].hasGame);
+            } else if (topTier.length === 1) {
+                renderLandscapeGame(topTier[0].id, { type: 'big', top: 350, left: 571 }, cont, topTier[0].hasGame);
+                baseLeft = 1130; 
+            } else if (topTier.length === 0 && lowTier.length <= 3 && lowTier.length > 0) {
+                let centerSlots = [];
+                if (lowTier.length === 3) {
+                    centerSlots = [ { type: 'big', top: 350, left: 36 }, { type: 'big', top: 350, left: 570 }, { type: 'big', top: 350, left: 1104 } ];
+                } else if (lowTier.length === 2) {
+                    centerSlots = [ { type: 'big', top: 350, left: 260 }, { type: 'big', top: 350, left: 880 } ];
+                } else if (lowTier.length === 1) {
+                    centerSlots = [ { type: 'big', top: 350, left: 570 } ];
+                }
+                for (let i = 0; i < lowTier.length; i++) {
+                    renderLandscapeGame(lowTier[i].id, centerSlots[i], cont, lowTier[i].hasGame);
+                }
+                lowTier = []; 
+            }
+
+            let s3 = 330, s4 = 465, s5 = 600, s6 = 735;
+            if (lowTier.length >= 4) { s3 = 250; s4 = 385; s5 = 520; s6 = 655; }
+            else if (lowTier.length === 3) { s3 = 330; s4 = 465; s5 = 600; }
+            else if (lowTier.length === 2) { s3 = 398; s4 = 533; }
+            else if (lowTier.length === 1) { s3 = 465; }
+
+            let smallSlots = [
+                { type: 'small', top: s3, left: baseLeft },
+                { type: 'small', top: s4, left: baseLeft },
+                { type: 'small', top: s5, left: baseLeft },
+                { type: 'small', top: s6, left: baseLeft }
+            ];
+
+            for (let i = 0; i < lowTier.length && i < smallSlots.length; i++) {
+                renderLandscapeGame(lowTier[i].id, smallSlots[i], cont, lowTier[i].hasGame);
+            }
+        }
+    }
+    
+    const tc = document.getElementById('l-dynamic-tournoi');
+    if (tc) {
+        tc.innerHTML = '';
+        if (at.length > 0) {
+            const tcc = 'text-blue'; const tbg = 'var(--primary-blue)';
+            let th = '<div class="abs ' + tcc + '" style="top:' + tTop + 'px;left:' + tLeft + 'px;width:431px;height:30px;font-size:24px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;text-align:center;">--- TOURNOI ---</div>';
+            th += '<div class="abs" style="top:' + (tTop + 40) + 'px;left:' + (tLeft + 55) + 'px;width:320px;height:3px;background:' + tbg + ';"></div>';
+            th += '<div class="abs" style="top:' + (tTop + 40) + 'px;left:' + (tLeft + 55) + 'px;width:3px;height:10px;background:' + tbg + ';"></div>';
+            th += '<div class="abs" style="top:' + (tTop + 40) + 'px;left:' + (tLeft + 215) + 'px;width:3px;height:10px;background:' + tbg + ';"></div>';
+            th += '<div class="abs" style="top:' + (tTop + 40) + 'px;left:' + (tLeft + 375) + 'px;width:3px;height:10px;background:' + tbg + ';"></div>';
+            var ts2 = [ { top: tTop + 50, left: tLeft + 33 }, { top: tTop + 50, left: tLeft + 193 }, { top: tTop + 50, left: tLeft + 353 } ];
+            
+            var playingT = [];
+            for (var ti = 0; ti < at.length; ti++) { if (at[ti].hasGame) playingT.push(at[ti]); }
+            
+            var cols = [null, null, null];
+            if (playingT.length === 0) {
+                for (var ti = 0; ti < at.length && ti < 3; ti++) { cols[ti] = { id: at[ti].id, active: false }; }
+            } else if (playingT.length === 1) {
+                cols[0] = { id: null, active: false }; cols[1] = { id: playingT[0].id, active: true }; cols[2] = { id: null, active: false };
+            } else if (playingT.length === 2) {
+                cols[0] = { id: playingT[0].id, active: true }; cols[1] = { id: null, active: false }; cols[2] = { id: playingT[1].id, active: true };
+            } else {
+                for (var ti = 0; ti < 3; ti++) { cols[ti] = { id: playingT[ti].id, active: true }; }
+            }
+            
+            for (var ci = 0; ci < 3; ci++) {
+                var col = cols[ci];
+                if (!col) continue;
+                var csl = ts2[ci];
+                th += '<div class="abs game-layer" style="display:block;">';
+                if (col.id) {
+                    var cp = col.id;
+                    var typeEl = document.getElementById(cp + '-type');
+                    var tv = (typeEl ? typeEl.value : "Tournoi") + (teamSuffixes[cp] || '');
+                    var mb = badgeLabels[cp] || cp.replace('esp', '').toUpperCase();
+                    var csclLEl = document.querySelector('.land-scale-logo[data-team="' + cp + '"]');
+                    var csclL = (csclLEl ? parseInt(csclLEl.value, 10) : 100) / 100;
+                    var csclTeEl = document.querySelector('.land-scale-text[data-team="' + cp + '"]');
+                    var csclTe = (csclTeEl ? parseInt(csclTeEl.value, 10) : 100) / 100;
+                    var csclPhotoEl = document.querySelector('.land-scale-photo[data-team="' + cp + '"]');
+                    var csclPhoto = csclPhotoEl ? parseInt(csclPhotoEl.value, 10) : 100;
+                    if (isNaN(csclPhoto)) csclPhoto = 100;
+                    
+                    const photoToggle = document.querySelector('.trigger-photo-toggle[data-team="' + cp + '"]');
+                    const showPhoto = photoToggle && photoToggle.checked && window.teamPhotos[cp];
+                    
+                    if (col.active && showPhoto) {
+                        th += '<div class="abs" style="top:' + (csl.top + 32) + 'px;left:' + csl.left + 'px;width:50px;height:50px;border-radius:8px;overflow:hidden;box-shadow: 0 5px 15px rgba(0,0,0,0.1); transform: scale(' + csclL + '); transform-origin: top center;"><img src="' + window.teamPhotos[cp] + '" style="position:absolute;top:50%;left:50%;width:' + csclPhoto + '%;height:' + csclPhoto + '%;object-fit:cover;transform:translate(-50%,-50%);"></div>';
+                        th += '<div class="abs text-blue" style="top:' + (csl.top - 7) + 'px;left:' + (csl.left - 50) + 'px;width:150px;text-align:center;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;font-size:12px;">' + (document.getElementById(cp + '-land-title').value) + '</div>';
+                    } else if (col.active) {
+                        th += '<div class="abs badge" style="top:' + csl.top + 'px;left:' + csl.left + 'px;width:50px;height:28px;border-radius:6px;transform: scale(' + csclL + '); transform-origin: top center;"><div class="sub" style="font-size:6px;">' + tv + '</div><div class="main" style="font-size:15px;font-weight:900;font-style:italic;">' + mb + '</div></div>';
+                        var cOppEl = document.getElementById(cp + '-opp');
+                        var cOpp = cOppEl ? cOppEl.value : "-";
+                        var cHomeEl = document.getElementById(cp + '-home');
+                        var cIh = cHomeEl ? (cHomeEl.value.indexOf('home') === 0) : true;
+                        var cOl = (typeof teams !== 'undefined' && teams[cOpp]) ? teams[cOpp] : CONFIG.ballLogo;
+                        var cl1 = cIh ? CONFIG.merschLogo : cOl;
+                        if (cOpp === "-" || cOpp === "Spielfrei") cl1 = CONFIG.merschLogo;
+                        th += '<div class="abs logo-box" style="top:' + (csl.top + 32) + 'px;left:' + csl.left + 'px;width:50px;height:50px;border-radius:8px;padding:4px; transform: scale(' + csclL + '); transform-origin: top center;"><img src="' + cl1 + '" crossorigin="anonymous"></div>';
+                        var ctxh = '';
+                        var cDateEl = document.getElementById(cp + '-date');
+                        var cDv = cDateEl ? cDateEl.value : "";
+                        var cTimeEl = document.getElementById(cp + '-time');
+                        var cTv = cTimeEl ? cTimeEl.value : "";
+                        var cLocEl = document.getElementById(cp + '-loc');
+                        var cLocVal = cLocEl ? cLocEl.value : "";
+                        if (cDv || cLocVal) {
+                            var cDs = cDv ? formatDate(cDv, cTv) : "";
+                            var cLs = "";
+                            if (cLocVal) {
+                                var cParts = cLocVal.split('|');
+                                for (var ck = 0; ck < cParts.length; ck++) { cParts[ck] = cParts[ck].trim(); }
+                                cLs = cParts.join('<br>');
+                            }
+                            var cLc = '#444';
+                            if (cDs) ctxh += '<div style="font-family:\'Barlow\',sans-serif;font-weight:800;color:' + cLc + ';font-size:' + (14 * csclTe) + 'px;line-height:1.1;">' + cDs + '</div>';
+                            if (cLs) ctxh += '<div style="font-family:\'Barlow\',sans-serif;font-weight:600;color:' + cLc + ';font-size:' + (11 * csclTe) + 'px;line-height:1.1;margin-top:2px;">' + cLs + '</div>';
+                        }
+                        th += '<div class="abs" style="top:' + (csl.top + 88) + 'px;left:' + (csl.left - 85) + 'px;width:220px;height:auto;text-align:center;overflow:visible;display:flex;flex-direction:column;justify-content:flex-start;align-items:center;">' + ctxh + '</div>';
+                    } else {
+                        th += '<div class="abs badge" style="top:' + csl.top + 'px;left:' + csl.left + 'px;width:50px;height:28px;border-radius:6px;transform: scale(' + csclL + '); transform-origin: top center;"><div class="sub" style="font-size:6px;">' + tv + '</div><div class="main" style="font-size:15px;font-weight:900;font-style:italic;">' + mb + '</div></div>';
+                        th += '<div class="abs logo-box" style="top:' + (csl.top + 32) + 'px;left:' + csl.left + 'px;width:50px;height:50px;border-radius:8px;padding:4px; transform: scale(' + csclL + '); transform-origin: top center;"><img src="' + CONFIG.ballLogo + '" crossorigin="anonymous"></div>';
+                    }
+                } else {
+                    th += '<div class="abs logo-box" style="top:' + (csl.top + 32) + 'px;left:' + csl.left + 'px;width:50px;height:50px;border-radius:8px;padding:4px;"><img src="' + CONFIG.ballLogo + '" crossorigin="anonymous"></div>';
+                }
+                th += '</div>';
+            }
+            tc.innerHTML += th;
+        }
+    }
+}
+
+function renderLandscapeGame(prefix, sl, cont, hasGame) {
+    const oppEl = document.getElementById(prefix + '-opp');
+    const opp = oppEl ? oppEl.value : "-"; 
+    
+    const homeEl = document.getElementById(prefix + '-home');
+    const ih = homeEl ? (homeEl.value.indexOf('home') === 0) : true;
+    
+    const typeEl = document.getElementById(prefix + '-type');
+    let tv = typeEl ? typeEl.value : "Season Games";
+    tv += (teamSuffixes[prefix] || ''); 
+
+    const mb = badgeLabels[prefix] || prefix.replace('esp', '').toUpperCase(); 
+    const ml = (prefix === 'fe') ? CONFIG.merschFELogo : CONFIG.merschLogo;
+
+    const sclLEl = document.querySelector('.land-scale-logo[data-team="' + prefix + '"]');
+    const sclL = (sclLEl ? parseInt(sclLEl.value, 10) : 100) / 100;
+    
+    const sclTiEl = document.querySelector('.land-scale-title[data-team="' + prefix + '"]');
+    const sclTi = (sclTiEl ? parseInt(sclTiEl.value, 10) : 100) / 100;
+    
+    const sclTeEl = document.querySelector('.land-scale-text[data-team="' + prefix + '"]');
+    const sclTe = (sclTeEl ? parseInt(sclTeEl.value, 10) : 100) / 100;
+
+    const sclPhotoEl = document.querySelector('.land-scale-photo[data-team="' + prefix + '"]');
+    let sclPhoto = sclPhotoEl ? parseInt(sclPhotoEl.value, 10) : 100;
+    if (isNaN(sclPhoto)) sclPhoto = 100;
+    
+    const titleEl = document.getElementById(prefix + '-land-title');
+    const ts = titleEl ? titleEl.value : "";
+
+    const photoToggle = document.querySelector('.trigger-photo-toggle[data-team="' + prefix + '"]');
+    const showPhoto = photoToggle && photoToggle.checked && window.teamPhotos[prefix];
+
+    if (showPhoto) {
+        let pW, pH, pTop, pLeft;
+        let titleHtml = '';
+        
+        if (sl.type === 'big') {
+            pW = 458; pH = 260; pTop = sl.top + 95; pLeft = sl.left;
+            titleHtml = ts ? '<div class="abs text-blue" style="top:' + sl.top + 'px;left:' + sl.left + 'px;width:458px;height:80px;font-size:' + (37 * sclTi) + 'px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;line-height:1.1;display:flex;align-items:flex-end;justify-content:center;text-align:center;pointer-events:auto;color:var(--primary-blue);">' + ts + '</div>' : '';
+        } else if (sl.type === 'youth3col') {
+            pW = 420; pH = 100; pTop = sl.top; pLeft = sl.left + (sl.col1 || 0);
+            const titleWidth = (sl.col3 || 320) + 100;
+            titleHtml = ts ? '<div class="abs text-blue" style="top:' + (sl.top - 32) + 'px;left:' + pLeft + 'px;width:' + titleWidth + 'px;height:25px;font-size:' + (16 * sclTi) + 'px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;line-height:1;display:flex;align-items:flex-end;justify-content:center;text-align:center;pointer-events:auto;color:var(--primary-blue);">' + ts + '</div>' : '';
+        } else {
+            pW = 320; pH = 80; pTop = sl.top; pLeft = sl.left;
+            titleHtml = ts ? '<div class="abs text-blue" style="top:' + (sl.top - 32) + 'px;left:' + pLeft + 'px;width:' + pW + 'px;height:25px;font-size:' + (18 * sclTi) + 'px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;line-height:1;display:flex;align-items:flex-end;justify-content:center;text-align:center;pointer-events:auto;color:var(--primary-blue);">' + ts + '</div>' : '';
+        }
+        
+        let html = '<div class="abs game-layer" style="display:block;">';
+        html += titleHtml;
+        html += '<div class="abs" style="top:' + pTop + 'px; left:' + pLeft + 'px; width:' + pW + 'px; height:' + pH + 'px; border-radius:12px; overflow:hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.15);"><img src="' + window.teamPhotos[prefix] + '" style="position:absolute; top:50%; left:50%; width:' + sclPhoto + '%; height:' + sclPhoto + '%; object-fit:cover; transform:translate(-50%,-50%);"></div>';
+        html += '</div>';
+        cont.innerHTML += html;
+        return;
+    }
+
+    if (!hasGame) {
+        let html = '';
+        if (sl.type === 'big') {
+            html += '<div class="abs game-layer" style="display:block;">';
+            html += '<div class="abs text-blue" style="top:' + sl.top + 'px;left:' + sl.left + 'px;width:458px;height:80px;font-size:' + (37 * sclTi) + 'px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;line-height:1.1;display:flex;align-items:flex-end;justify-content:center;text-align:center;pointer-events:auto;color:var(--primary-blue);">' + ts + '</div>';
+            html += '<div class="abs logo-box" style="top:' + (sl.top + 95) + 'px;left:' + sl.left + 'px;width:150px;height:150px;border-radius:20px;padding:10px;transform: scale(' + sclL + '); transform-origin: top center;"><img src="' + ml + '" crossorigin="anonymous"></div>';
+            html += '<div class="abs badge" style="top:' + (sl.top + 110) + 'px;left:' + (sl.left + 169) + 'px;width:120px;height:120px;border-radius:16px;transform: scale(' + sclL + '); transform-origin: top center;"><div class="sub" style="font-size:11px;margin-bottom:-2px;">' + tv + '</div><div class="main" style="font-size:50px;">' + mb + '</div></div>';
+            html += '<div class="abs logo-box" style="top:' + (sl.top + 95) + 'px;left:' + (sl.left + 308) + 'px;width:150px;height:150px;border-radius:20px;padding:10px;transform: scale(' + sclL + '); transform-origin: top center;"><img src="' + CONFIG.ballLogo + '" crossorigin="anonymous"></div>';
+            html += '</div>';
+        } else if (sl.type === 'youth3col') {
+            const logoSize = 100;
+            const badgeW = 70;
+            const badgeH = 32;
+            const colOffset1 = sl.col1 || 0;
+            const colOffset2 = sl.col2 || 160;
+            const colOffset3 = sl.col3 || 320;
+            
+            const titleLeft = sl.left + colOffset1;
+            const titleWidth = colOffset3 + logoSize;
+            const titleHtml = ts ? '<div class="abs text-blue" style="top:' + (sl.top - 32) + 'px;left:' + titleLeft + 'px;width:' + titleWidth + 'px;height:25px;font-size:' + (16 * sclTi) + 'px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;line-height:1;display:flex;align-items:flex-end;justify-content:center;text-align:center;pointer-events:auto;color:var(--primary-blue);">' + ts + '</div>' : '';
+            html += '<div class="abs game-layer" style="display:block;">';
+            html += titleHtml;
+            html += '<div class="abs logo-box" style="top:' + sl.top + 'px;left:' + (sl.left + colOffset1) + 'px;width:' + logoSize + 'px;height:' + logoSize + 'px;border-radius:10px;padding:4px;transform: scale(' + sclL + '); transform-origin: top center;"><img src="' + ml + '" crossorigin="anonymous"></div>';
+            html += '<div class="abs badge" style="top:' + sl.top + 'px;left:' + (sl.left + colOffset2) + 'px;width:' + badgeW + 'px;height:' + badgeH + 'px;border-radius:6px;transform: scale(' + sclL + '); transform-origin: top center;"><div class="sub" style="font-size:7px;">' + tv + '</div><div class="main" style="font-size:16px;">' + mb + '</div></div>';
+            html += '<div class="abs logo-box" style="top:' + sl.top + 'px;left:' + (sl.left + colOffset3) + 'px;width:' + logoSize + 'px;height:' + logoSize + 'px;border-radius:10px;padding:4px;transform: scale(' + sclL + '); transform-origin: top center;"><img src="' + CONFIG.ballLogo + '" crossorigin="anonymous"></div>';
+            html += '</div>';
+        } else {
+            const logoSize = 80;
+            const badgeW = 90;
+            const badgeH = 40;
+            
+            const heimLeft = sl.left; 
+            const badgeLeft = sl.left + 115; 
+            const gastLeft = sl.left + 240;
+            const totalWidth = 320;
+            
+            const titleHtml = ts ? '<div class="abs text-blue" style="top:' + (sl.top - 32) + 'px;left:' + heimLeft + 'px;width:' + totalWidth + 'px;height:25px;font-size:' + (18 * sclTi) + 'px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;line-height:1;display:flex;align-items:flex-end;justify-content:center;text-align:center;pointer-events:auto;color:var(--primary-blue);">' + ts + '</div>' : '';
+            
+            html += '<div class="abs game-layer" style="display:block;">';
+            html += titleHtml;
+            html += '<div class="abs logo-box" style="top:' + sl.top + 'px;left:' + heimLeft + 'px;width:' + logoSize + 'px;height:' + logoSize + 'px;border-radius:12px;padding:6px;transform: scale(' + sclL + '); transform-origin: top center;"><img src="' + ml + '" crossorigin="anonymous"></div>';
+            html += '<div class="abs badge" style="top:' + (sl.top + 20) + 'px;left:' + badgeLeft + 'px;width:' + badgeW + 'px;height:' + badgeH + 'px;border-radius:8px;transform: scale(' + sclL + '); transform-origin: top center;"><div class="sub" style="font-size:8px;">' + tv + '</div><div class="main" style="font-size:22px;">' + mb + '</div></div>';
+            html += '<div class="abs logo-box" style="top:' + sl.top + 'px;left:' + gastLeft + 'px;width:' + logoSize + 'px;height:' + logoSize + 'px;border-radius:12px;padding:6px;transform: scale(' + sclL + '); transform-origin: top center;"><img src="' + CONFIG.ballLogo + '" crossorigin="anonymous"></div>';
+            html += '</div>';
+        }
+        cont.innerHTML += html;
+        return;
+    } 
+
+    const ol = (typeof teams !== 'undefined' && teams[opp]) ? teams[opp] : CONFIG.ballLogo;
+    const dateEl = document.getElementById(prefix + '-date');
+    const dv = dateEl ? dateEl.value : ""; 
+    
+    const timeEl = document.getElementById(prefix + '-time');
+    const tv2 = timeEl ? timeEl.value : ""; 
+    
+    let l1, l2, th = '';
+    if (opp === "-" || opp === "Spielfrei") { 
+        l1 = ml; l2 = CONFIG.ballLogo; 
+    } else { 
+        l1 = ih ? ml : ol; l2 = ih ? ol : ml;
+    }
+    
+    const ds = dv ? formatDate(dv, tv2) : "";
+    let ls = "";
+    const locEl = document.getElementById(prefix + '-loc');
+    if (dv && locEl && locEl.value) {
+        const parts = locEl.value.split('|');
+        for(let k = 0; k < parts.length; k++) { parts[k] = parts[k].trim(); }
+        ls = parts.join('<br>');
+    }
+    
+    const lc = '#444';
+    if (ds || ls) {
+        if (sl.type === 'big') { 
+            th = '<span style="font-family:\'Barlow\',sans-serif;font-weight:800;color:' + lc + ';">' + ds + '</span><br><span style="font-family:\'Barlow\',sans-serif;font-weight:600;font-size:0.85em;color:' + lc + ';line-height:1.3;">' + ls + '</span>';
+        } else {
+            var baseDt = 11, baseLc = 10;
+            if (['u15', 'u13pe', 'u13p3', 'u11MEL', 'u11MES'].indexOf(prefix) !== -1) { 
+                baseDt = 19; baseLc = 17;
+            } else if (['u9M', 'u7M'].indexOf(prefix) !== -1) { 
+                baseDt = 9; baseLc = 9; 
+            }
+            th = '<div style="font-family:\'Barlow\',sans-serif;font-weight:800;font-size:' + (baseDt * sclTe) + 'px;color:' + lc + ';">' + ds + '</div><div style="font-family:\'Barlow\',sans-serif;font-weight:600;font-size:' + (baseLc * sclTe) + 'px;color:' + lc + ';line-height:1.1;margin-top:2px;">' + ls + '</div>';
+        }
+    }
+    
+    let html = '';
+    if (sl.type === 'big') {
+        html += '<div class="abs game-layer" style="display:block;">';
+        html += '<div class="abs text-blue" style="top:' + sl.top + 'px;left:' + sl.left + 'px;width:458px;height:80px;font-size:' + (37 * sclTi) + 'px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;line-height:1.1;display:flex;align-items:flex-end;justify-content:center;text-align:center;pointer-events:auto;color:var(--primary-blue);">' + ts + '</div>';
+        html += '<div class="abs logo-box" style="top:' + (sl.top + 95) + 'px;left:' + sl.left + 'px;width:150px;height:150px;border-radius:20px;padding:10px;transform: scale(' + sclL + '); transform-origin: top center;"><img src="' + l1 + '" crossorigin="anonymous"></div>';
+        html += '<div class="abs badge" style="top:' + (sl.top + 110) + 'px;left:' + (sl.left + 169) + 'px;width:120px;height:120px;border-radius:16px;transform: scale(' + sclL + '); transform-origin: top center;"><div class="sub" style="font-size:11px;margin-bottom:-2px;">' + tv + '</div><div class="main" style="font-size:50px;">' + mb + '</div></div>';
+        html += '<div class="abs logo-box" style="top:' + (sl.top + 95) + 'px;left:' + (sl.left + 308) + 'px;width:150px;height:150px;border-radius:20px;padding:10px;transform: scale(' + sclL + '); transform-origin: top center;"><img src="' + l2 + '" crossorigin="anonymous"></div>';
+        html += '<div class="abs" style="top:' + (sl.top + 260) + 'px;left:' + sl.left + 'px;width:458px;font-size:' + (30 * sclTe) + 'px;line-height:1.3;text-align:center;overflow:visible;">' + th + '</div>';
+        html += '</div>';
+    } else if (sl.type === 'youth3col') {
+        const logoSize = 100;
+        const badgeW = 70;
+        const badgeH = 32;
+        const colOffset1 = sl.col1 || 0;
+        const colOffset2 = sl.col2 || 160;
+        const colOffset3 = sl.col3 || 320;
+        
+        const titleLeft = sl.left + colOffset1;
+        const titleWidth = colOffset3 + logoSize;
+        const titleHtml = ts ? '<div class="abs text-blue" style="top:' + (sl.top - 32) + 'px;left:' + titleLeft + 'px;width:' + titleWidth + 'px;height:25px;font-size:' + (16 * sclTi) + 'px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;line-height:1;display:flex;align-items:flex-end;justify-content:center;text-align:center;pointer-events:auto;color:var(--primary-blue);">' + ts + '</div>' : '';
+        html += '<div class="abs game-layer" style="display:block;">';
+        html += titleHtml;
+        html += '<div class="abs logo-box" style="top:' + sl.top + 'px;left:' + (sl.left + colOffset1) + 'px;width:' + logoSize + 'px;height:' + logoSize + 'px;border-radius:10px;padding:4px;transform: scale(' + sclL + '); transform-origin: top center;"><img src="' + l1 + '" crossorigin="anonymous"></div>';
+        html += '<div class="abs badge" style="top:' + sl.top + 'px;left:' + (sl.left + colOffset2) + 'px;width:' + badgeW + 'px;height:' + badgeH + 'px;border-radius:6px;transform: scale(' + sclL + '); transform-origin: top center;"><div class="sub" style="font-size:7px;">' + tv + '</div><div class="main" style="font-size:16px;">' + mb + '</div></div>';
+        html += '<div class="abs logo-box" style="top:' + sl.top + 'px;left:' + (sl.left + colOffset3) + 'px;width:' + logoSize + 'px;height:' + logoSize + 'px;border-radius:10px;padding:4px;transform: scale(' + sclL + '); transform-origin: top center;"><img src="' + l2 + '" crossorigin="anonymous"></div>';
+        if (th) {
+            const textW = 200;
+            const badgeCenter = sl.left + colOffset2 + (badgeW / 2);
+            const textLeft = badgeCenter - (textW / 2);
+            html += '<div class="abs" style="top:' + (sl.top + badgeH + 5 + ((sclL - 1) * badgeH)) + 'px;left:' + textLeft + 'px;width:' + textW + 'px;height:auto;text-align:center;overflow:visible;line-height:1.1;">' + th + '</div>';
+        }
+        html += '</div>';
+    } else {
+        const logoSize = 80;
+        const badgeW = 90;
+        const badgeH = 40;
+        
+        const heimLeft = sl.left; 
+        const badgeLeft = sl.left + 115; 
+        const gastLeft = sl.left + 240;
+        const totalWidth = 320;
+        
+        const titleHtml = ts ? '<div class="abs text-blue" style="top:' + (sl.top - 32) + 'px;left:' + heimLeft + 'px;width:' + totalWidth + 'px;height:25px;font-size:' + (18 * sclTi) + 'px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;line-height:1;display:flex;align-items:flex-end;justify-content:center;text-align:center;pointer-events:auto;color:var(--primary-blue);">' + ts + '</div>' : '';
+        const dateTop = sl.top + badgeH + 45;
+        
+        html += '<div class="abs game-layer" style="display:block;">';
+        html += titleHtml;
+        html += '<div class="abs logo-box" style="top:' + sl.top + 'px;left:' + heimLeft + 'px;width:' + logoSize + 'px;height:' + logoSize + 'px;border-radius:12px;padding:6px;transform: scale(' + sclL + '); transform-origin: top center;"><img src="' + l1 + '" crossorigin="anonymous"></div>';
+        html += '<div class="abs badge" style="top:' + (sl.top + 20) + 'px;left:' + badgeLeft + 'px;width:' + badgeW + 'px;height:' + badgeH + 'px;border-radius:8px;transform: scale(' + sclL + '); transform-origin: top center;"><div class="sub" style="font-size:8px;">' + tv + '</div><div class="main" style="font-size:22px;">' + mb + '</div></div>';
+        html += '<div class="abs logo-box" style="top:' + sl.top + 'px;left:' + gastLeft + 'px;width:' + logoSize + 'px;height:' + logoSize + 'px;border-radius:12px;padding:6px;transform: scale(' + sclL + '); transform-origin: top center;"><img src="' + l2 + '" crossorigin="anonymous"></div>';
+        html += '<div class="abs" style="top:' + dateTop + 'px;left:' + heimLeft + 'px;width:' + totalWidth + 'px;height:auto;text-align:center;overflow:visible;line-height:1.2;">' + th + '</div>';
+        html += '</div>';
+    }
+    cont.innerHTML += html;
+}
+</script>
+<script>
+function updatePortraitPreview() {
+    const wEl = document.getElementById('p-scale-width');
+    const w = wEl ? parseInt(wEl.value, 10) : 800; 
+    
+    const hEl = document.getElementById('p-scale-height');
+    const h = hEl ? parseInt(hEl.value, 10) : 1060;
+    
+    const pp = document.getElementById('poster-portrait');
+    if (pp) {
+        pp.style.width = w + 'px';
+        pp.style.minWidth = w + 'px'; 
+        pp.style.height = h + 'px'; 
+        pp.style.minHeight = h + 'px';
+    }
+    
+    const footerScale = w / 800;
+    const footer = document.querySelector('.p-footer');
+    if (footer) {
+        footer.style.height = (150 * footerScale) + 'px';
+        footer.style.padding = '0 ' + (40 * footerScale) + 'px';
+    }
+    
+    const headerTop = document.querySelector('.p-header-top');
+    if (headerTop) {
+        headerTop.style.padding = '0 ' + (40 * footerScale) + 'px';
+    }
+    
+    const fLogo = document.querySelectorAll('.p-footer-50logo');
+    for (let i = 0; i < fLogo.length; i++) { 
+        fLogo[i].style.width = (90 * footerScale) + 'px';
+        fLogo[i].style.height = 'auto'; 
+        fLogo[i].style.maxHeight = (80 * footerScale) + 'px'; 
+    }
+
+    const spTop = document.querySelectorAll('.p-footer-row-top .p-footer-sp img');
+    for (let i = 0; i < spTop.length; i++) { 
+        spTop[i].style.maxWidth = (120 * footerScale) + 'px';
+        spTop[i].style.maxHeight = (48 * footerScale) + 'px'; 
+    }
+    
+    const spBot = document.querySelectorAll('.p-footer-row-bottom .p-footer-sp img');
+    for (let i = 0; i < spBot.length; i++) { 
+        spBot[i].style.maxWidth = (100 * footerScale) + 'px';
+        spBot[i].style.maxHeight = (42 * footerScale) + 'px'; 
+    }
+
+    const s50El = document.getElementById('p-scale-50years');
+    const s50 = s50El ? s50El.value : 100; 
+    
+    const smEl = document.getElementById('p-scale-mixvoip');
+    const sm = smEl ? smEl.value : 280; 
+    
+    const sdEl = document.getElementById('p-scale-matchday');
+    const sd = sdEl ? sdEl.value : 130;
+    
+    const top50 = document.querySelectorAll('.p-header-top .img-50');
+    for (let i = 0; i < top50.length; i++) { 
+        top50[i].style.width = s50 + 'px';
+        top50[i].style.height = 'auto'; 
+    }
+    
+    const im = document.querySelector('.p-header-top .img-mixvoip');
+    if (im) im.style.width = sm + 'px';
+    
+    const id = document.querySelector('.p-matchday-banner img'); 
+    if (id) id.style.height = sd + 'px';
+    const cont = document.getElementById('p-dynamic-container'); 
+    if (!cont) return;
+    cont.innerHTML = '';
+    
+    const cbChecked = document.querySelectorAll('.cb-portrait:checked');
+    let ap = [];
+    for (let i = 0; i < cbChecked.length; i++) {
+        const p = cbChecked[i].value;
+        const cb = document.querySelector('.trigger-toggle[data-team="' + p + '"]');
+        ap.push({ id: p, hasGame: cb && cb.checked });
+    }
+    
+    if (ap.length === 0) { 
+        cont.innerHTML = '<h2 style="color:#002f65;text-align:center;width:100%;">Bitte wählen Sie<br>Teams aus.</h2>';
+        scalePoster(); 
+        return; 
+    }
+    
+    ap.sort(function(a, b) { 
+        const posAEl = document.querySelector('.trigger-port-pos[data-team="' + a.id + '"]');
+        const posBEl = document.querySelector('.trigger-port-pos[data-team="' + b.id + '"]');
+        const posA = posAEl ? parseInt(posAEl.value, 10) : 99; 
+        const posB = posBEl ? parseInt(posBEl.value, 10) : 99; 
+        return posA - posB; 
+    });
+
+    const titles = { 
+        'fe': 'Playoff Promotioun Fraen', 
+        's1': 'AXA League - Playoff Montée Männer', 
+        'u15': 'Season Games U15', 
+        'u13pe': 'Playoff Entscheedung U13', 
+        'u11MEL': 'Season Games U11', 
+        'u11MES': '--- TOURNOI --- U11', 
+        'u9M': '--- TOURNOI --- U9', 
+        'u7M': '--- TOURNOI --- U7' 
+    };
+
+    for (let i = 0; i < ap.length; i++) {
+        const teamObj = ap[i];
+        const prefix = teamObj.id;
+        const hasGame = teamObj.hasGame;
+        
+        const typeEl = document.getElementById(prefix + '-type');
+        let tv = typeEl ? typeEl.value : "Season Games";
+        const suffix = teamSuffixes[prefix] || '';
+        tv += suffix;
+
+        const mb = badgeLabels[prefix] || prefix.replace('esp', '').toUpperCase();
+        let mainContent = mb;
+        
+        const oppEl = document.getElementById(prefix + '-opp');
+        const opp = oppEl ? oppEl.value : "-"; 
+        
+        const homeEl = document.getElementById(prefix + '-home');
+        const ih = homeEl ? (homeEl.value.indexOf('home') === 0) : true;
+        let itour = false;
+        if (prefix === 'u11MES' || prefix === 'u9M' || prefix === 'u7M') itour = true;
+        const titleCb = document.querySelector('.cb-title[value="' + prefix + '"]');
+        const stt = titleCb ? titleCb.checked : false;
+        const widthSel = document.querySelector('.cb-width[data-team="' + prefix + '"]');
+        const widthVal = widthSel ? widthSel.value : "100";
+        const slEl = document.querySelector('.team-scale-logo[data-team="' + prefix + '"]');
+        const sl = slEl ? parseInt(slEl.value, 10) : 140;
+        const stEl = document.querySelector('.team-scale-title[data-team="' + prefix + '"]');
+        const st = stEl ? parseInt(stEl.value, 10) : 34;
+        const sxEl = document.querySelector('.team-scale-text[data-team="' + prefix + '"]');
+        const sx = sxEl ? parseInt(sxEl.value, 10) : 22;
+
+        const photoScaleEl = document.querySelector('.team-scale-photo[data-team="' + prefix + '"]');
+        let photoScale = photoScaleEl ? parseInt(photoScaleEl.value, 10) : 100;
+        if (isNaN(photoScale)) photoScale = 100;
+        
+        const ml = (prefix === 'fe') ? CONFIG.merschFELogo : CONFIG.merschLogo;
+        const ol = (typeof teams !== 'undefined' && teams[opp]) ? teams[opp] : CONFIG.ballLogo;
+        
+        const dateEl = document.getElementById(prefix + '-date');
+        const dv = dateEl ? dateEl.value : ""; 
+        
+        const timeEl = document.getElementById(prefix + '-time');
+        const tv2 = timeEl ? timeEl.value : "";
+        
+        let l1, l2, ih2 = '';
+        
+        if (!hasGame) {
+            l1 = ml; l2 = CONFIG.ballLogo;
+        } else if (itour) { 
+            l1 = ih ? CONFIG.merschLogo : ((opp !== "-" && opp !== "Spielfrei") ? ol : CONFIG.ballLogo); l2 = "";
+        } else { 
+            if (opp === "-" || opp === "Spielfrei") { l1 = ml; l2 = CONFIG.ballLogo; } 
+            else { l1 = ih ? ml : ol; l2 = ih ? ol : ml; } 
+        }
+        
+        const locEl = document.getElementById(prefix + '-loc');
+        const locVal = locEl ? locEl.value : "";
+        
+        if (hasGame && (dv || locVal)) {
+            const ds = dv ? formatDate(dv, tv2) : ""; 
+            let ls = "";
+            if (locVal) {
+                const parts = locVal.split('|');
+                for(let k = 0; k < parts.length; k++) { parts[k] = parts[k].trim(); }
+                ls = parts.join('<br>');
+            }
+            ih2 = '<div class="p-game-info" style="font-family:\'Barlow\',sans-serif;font-size:' + sx + 'px;"><span class="date" style="font-weight:800;color:var(--primary-blue);">' + ds + '</span><br><span style="font-weight:600;color:#444;">' + ls + '</span></div>';
+        }
+        
+        const bs = sl * 0.8;
+        const bf = bs * 0.45;
+        
+        const photoToggle = document.querySelector('.trigger-photo-toggle[data-team="' + prefix + '"]');
+        const showPhoto = photoToggle && photoToggle.checked && window.teamPhotos[prefix];
+        
+        let lh = '';
+        if (showPhoto) {
+            lh += '<div style="width:100%; display:flex; justify-content:center; overflow:hidden; border-radius:15px;"><img src="' + window.teamPhotos[prefix] + '" style="width:' + photoScale + '%; max-width:none; height:auto; border-radius:15px; box-shadow: 0 5px 20px rgba(0,0,0,0.15); object-fit:contain;"></div>';
+        } else {
+            if (itour) {
+                lh += '<div class="p-logo-box" style="width:' + sl + 'px;height:' + sl + 'px;"><img src="' + l1 + '" crossorigin="anonymous"></div>';
+                lh += '<div class="p-badge" style="width:' + bs + 'px;height:' + bs + 'px;"><div class="sub" style="font-size:' + (bf * 0.25) + 'px;">' + tv + '</div><div class="main" style="font-size:' + bf + 'px;">' + mainContent + '</div></div>';
+            } else {
+                lh += '<div class="p-logo-box" style="width:' + sl + 'px;height:' + sl + 'px;"><img src="' + l1 + '" crossorigin="anonymous"></div>';
+                lh += '<div class="p-badge" style="width:' + bs + 'px;height:' + bs + 'px;"><div class="sub" style="font-size:' + (bf * 0.25) + 'px;">' + tv + '</div><div class="main" style="font-size:' + bf + 'px;">' + mainContent + '</div></div>';
+                lh += '<div class="p-logo-box" style="width:' + sl + 'px;height:' + sl + 'px;"><img src="' + l2 + '" crossorigin="anonymous"></div>';
+            }
+        }
+        
+        let customTitle = titles[prefix] || '';
+        if(customTitle.indexOf('EL') === -1 && customTitle.indexOf('ES') === -1) {
+            customTitle += suffix;
+        }
+
+        const titleHtmlStr = stt ? '<div class="p-game-title" style="font-size:' + st + 'px;">' + customTitle + '</div>' : '';
+        
+        const gb = document.createElement('div');
+        gb.className = 'p-game-block';
+        
+        if (widthVal === "33") {
+            gb.style.width = '33.33%'; gb.style.padding = '0 5px';
+        } else if (widthVal === "50") {
+            gb.style.width = '50%'; gb.style.padding = '0 15px';
+        } else {
+            gb.style.width = '100%'; gb.style.padding = '0 15px';
+        }
+        
+        const mt = !stt ? 'margin-top:10px;' : '';
+        gb.innerHTML = titleHtmlStr + '<div class="p-game-matchup" style="' + mt + '">' + lh + '</div>' + (showPhoto ? '' : ih2);
+        cont.appendChild(gb);
+    }
+    
+    scalePoster();
+}
+
+function downloadPortraitImage() {
+    const el = document.getElementById('poster-portrait');
+    if (!el) return;
+    const orig = el.style.transform; 
+    el.style.transform = 'none';
+    
+    const wEl = document.getElementById('p-scale-width');
+    const w = wEl ? parseInt(wEl.value, 10) : 800; 
+    
+    const hEl = document.getElementById('p-scale-height');
+    const h = hEl ? parseInt(hEl.value, 10) : 1060;
+    document.fonts.ready.then(function() {
+        html2canvas(el, { scale: 3, useCORS: true, width: w, height: h, backgroundColor: null }).then(function(c) {
+            el.style.transform = orig; 
+            const a = document.createElement('a'); 
+            a.download = 'Mersch75_Portrait_Multi.png'; 
+            a.href = c.toDataURL('image/png'); 
+            a.click();
+        });
+    });
+}
+
+function downloadPosterWithFormat(fmt) {
+    const el = document.getElementById('poster');
+    if (!el) return;
+    const wDiv = document.getElementById('wrapper-landscape'); 
+    if (!wDiv) return;
+    
+    const ot = el.style.transform; 
+    const ow = el.style.width;
+    const oh = el.style.height; 
+    const oo = wDiv.style.overflow;
+    
+    el.style.transform = 'none'; 
+    el.style.width = '1600px'; 
+    el.style.height = '838px'; 
+    wDiv.style.overflow = 'visible';
+    document.fonts.ready.then(function() {
+        html2canvas(el, { scale: 3, useCORS: true, width: 1600, height: 838, x: 0, y: 0, scrollX: 0, scrollY: 0, backgroundColor: null }).then(function(c) {
+            el.style.transform = ot; 
+            el.style.width = ow; 
+            el.style.height = oh; 
+            wDiv.style.overflow = oo;
+            
+            if (fmt === 'pdf') {
+                const pdf = new window.jspdf.jsPDF({ orientation: 'landscape', unit: 'px', format: [1600, 838] });
+                pdf.addImage(c.toDataURL('image/png', 1.0), 'PNG', 0, 0, 1600, 838); 
+                pdf.save('Mersch75_Matchday.pdf');
+            } else {
+                const a = document.createElement('a'); 
+                a.download = 'Mersch75_Matchday_4K.' + (fmt === 'jpeg' ? 'jpg' : 'png'); 
+                a.href = c.toDataURL('image/' + fmt, 1.0); 
+                a.click();
+            }
+        });
+    });
+}
+
+(function() {
+    function qs(sel, root) { return (root || document).querySelector(sel); }
+    function qsa(sel, root) { return Array.from((root || document).querySelectorAll(sel)); }
+
+    function safeCall(fn) { try { fn(); } catch (e) { console.error(e); } }
+
+    window.toggleTeam = function(teamId, on) {
+        const block = document.getElementById('ctrl-' + teamId);
+        if (!block) return;
+        const inputs = qsa('input, select, textarea, button', block);
+        for (let i = 0; i < inputs.length; i++) {
+            const el = inputs[i];
+            if (el.classList && el.classList.contains('trigger-toggle')) continue;
+            if (el.classList && el.classList.contains('trigger-photo-toggle')) continue;
+            if (el.classList && el.classList.contains('trigger-photo-file')) continue;
+            el.disabled = !on;
+        }
+        const pt = qs('.trigger-photo-toggle[data-team="' + teamId + '"]', block);
+        if (pt && pt.checked) {
+            block.style.opacity = '1';
+        } else {
+            block.style.opacity = on ? '1' : '0.35';
+        }
+    };
+
+    window.updateAllPreviews = function() {
+        safeCall(function() { updateLandscapePreview(); });
+        safeCall(function() { updatePortraitPreview(); });
+    };
+
+    window.scalePoster = function() {
+        const landWrap = document.getElementById('wrapper-landscape');
+        const poster = document.getElementById('poster');
+        if (landWrap && poster) {
+            const bw = 1600; const bh = 838; const w = landWrap.clientWidth || bw;
+            const scale = Math.min(1, w / bw);
+            poster.style.transform = 'scale(' + scale + ')';
+            landWrap.style.height = Math.round(bh * scale) + 'px';
+        }
+
+        const portWrap = document.getElementById('wrapper-portrait');
+        const portPoster = document.getElementById('poster-portrait');
+        if (portWrap && portPoster) {
+            const wEl = document.getElementById('p-scale-width');
+            const hEl = document.getElementById('p-scale-height');
+            const bw = wEl ? parseInt(wEl.value, 10) : 800;
+            const bh = hEl ? parseInt(hEl.value, 10) : 1060;
+            const w = portWrap.clientWidth || bw;
+            const scale = Math.min(1, w / bw);
+            portPoster.style.transform = 'scale(' + scale + ')';
+            portPoster.style.width = bw + 'px';
+            portWrap.style.height = Math.round(bh * scale) + 'px';
+            portWrap.style.width = Math.round(bw * scale) + 'px';
+        }
+    };
+
+    function wireFormTriggers() {
+        qsa('.trigger-toggle').forEach(function(cb) {
+            cb.addEventListener('change', function() {
+                const t = cb.getAttribute('data-team');
+                if (!t) return;
+                toggleTeam(t, cb.checked);
+                updateAllPreviews(); scalePoster();
+            });
+        });
+
+        qsa('.trigger-photo-file').forEach(function(el) {
+            el.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                const t = el.getAttribute('data-team');
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(evt) {
+                        window.teamPhotos[t] = evt.target.result;
+                        updateAllPreviews();
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    delete window.teamPhotos[t];
+                    updateAllPreviews();
+                }
+            });
+        });
+
+        qsa('.trigger-photo-toggle').forEach(function(el) {
+            el.addEventListener('change', function() {
+                const t = el.getAttribute('data-team');
+                const fileInput = document.querySelector('.trigger-photo-file[data-team="'+t+'"]');
+                if (el.checked) { 
+                    fileInput.style.display = 'block'; 
+                    const landCb = document.getElementById(t + '-land-show');
+                    if (landCb) landCb.checked = true;
+                    const portCb = document.querySelector('.cb-portrait[value="' + t + '"]');
+                    if (portCb) portCb.checked = true;
+                } else { 
+                    fileInput.style.display = 'none'; 
+                }
+                toggleTeam(t, document.querySelector('.trigger-toggle[data-team="' + t + '"]').checked);
+                updateAllPreviews();
+            });
+        });
+
+        qsa('.trigger-autofill').forEach(function(el) {
+            el.addEventListener('change', function() {
+                const t = el.getAttribute('data-team'); if (!t) return; autoFill(t);
+            });
+        });
+
+        qsa('.trigger-view').forEach(function(el) {
+            el.addEventListener('input', function() { updateAllPreviews(); scalePoster(); });
+            el.addEventListener('change', function() { updateAllPreviews(); scalePoster(); });
+        });
+
+        qsa('.trigger-text').forEach(function(el) {
+            el.addEventListener('input', function() { updateAllPreviews(); scalePoster(); });
+        });
+
+        qsa('.cb-portrait').forEach(function(el) {
+            el.addEventListener('change', function() { updatePortraitPreview(); scalePoster(); });
+        });
+
+        qsa('.cb-title').forEach(function(el) {
+            el.addEventListener('change', function() { updatePortraitPreview(); scalePoster(); });
+        });
+
+        qsa('.cb-width').forEach(function(el) {
+            el.addEventListener('change', function() { updatePortraitPreview(); scalePoster(); });
+        });
+    }
+
+    function wireDownloadMenu() {
+        const menuBtn = document.getElementById('btn-dl-menu');
+        const dd = document.getElementById('download-dropdown');
+        if (menuBtn && dd) {
+            menuBtn.addEventListener('click', function(e) { e.preventDefault(); dd.classList.toggle('active'); });
+            qsa('.download-option', dd).forEach(function(opt) {
+                opt.addEventListener('click', function() {
+                    const fmt = opt.getAttribute('data-format'); dd.classList.remove('active');
+                    if (fmt) downloadPosterWithFormat(fmt);
+                });
+            });
+            document.addEventListener('click', function(e) {
+                if (!dd.classList.contains('active')) return;
+                if (e.target === menuBtn || dd.contains(e.target)) return;
+                dd.classList.remove('active');
+            });
+        }
+        const portraitBtn = document.getElementById('btn-dl-portrait-top');
+        if (portraitBtn) {
+            portraitBtn.addEventListener('click', function(e) { e.preventDefault(); downloadPortraitImage(); });
+        }
+    }
+
+    function wireWeekSelector() {
+        const sel = document.getElementById('week-selector');
+        if (!sel) return;
+        sel.addEventListener('change', function() { loadSavedSchedule(); });
+    }
+
+    function wireWeekendButtons() {
+        const currentButton = document.getElementById('btn-weekend-current');
+        const nextButton = document.getElementById('btn-weekend-next');
+
+        if (currentButton) {
+            currentButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                loadWeekendSchedule(0);
+            });
+        }
+
+        if (nextButton) {
+            nextButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                loadWeekendSchedule(1);
+            });
+        }
+    }
+
+    function wireMagicScan() {
+        const btn = document.getElementById('btn-magic-scan');
+        if (!btn) return;
+        btn.addEventListener('click', function(e) { e.preventDefault(); magicScan(); });
+    }
+
+    function wireSwitchButtons() {
+        const landBtn = document.getElementById('btn-switch-landscape');
+        if (landBtn) {
+            landBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const p1 = qs('.trigger-land-pos[data-team="fe"]');
+                const p2 = qs('.trigger-land-pos[data-team="s1"]');
+                if (p1 && p2) {
+                    const v = p1.value; p1.value = p2.value; p2.value = v;
+                    p1.setAttribute('data-current-pos', p1.value); p2.setAttribute('data-current-pos', p2.value);
+                    updateLandscapePreview(); scalePoster();
+                }
+            });
+        }
+
+        const portBtn = document.getElementById('btn-switch-portrait');
+        if (portBtn) {
+            portBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const p1 = qs('.trigger-port-pos[data-team="fe"]');
+                const p2 = qs('.trigger-port-pos[data-team="s1"]');
+                if (p1 && p2) {
+                    const v = p1.value; p1.value = p2.value; p2.value = v;
+                    p1.setAttribute('data-current-pos', p1.value); p2.setAttribute('data-current-pos', p2.value);
+                    updatePortraitPreview(); scalePoster();
+                }
+            });
+        }
+    }
+
+    function init() {
+        safeCall(function() { renderFormBlocks(); });
+        safeCall(function() { renderLandscapeControls(); });
+        safeCall(function() { renderPortraitControls(); });
+
+        for (let i = 0; i < TEAM_CONFIGS.length; i++) {
+            const t = TEAM_CONFIGS[i]; toggleTeam(t.id, true);
+        }
+
+        wireFormTriggers(); wireMagicScan(); wireWeekSelector(); wireWeekendButtons(); wireDownloadMenu(); wireSwitchButtons();
+
+        const ym = document.getElementById('toggle-youth-mode');
+        if (ym) ym.addEventListener('change', function() { updateLandscapePreview(); scalePoster(); });
+
+        updateAllPreviews(); scalePoster();
+        window.addEventListener('resize', function() { scalePoster(); });
+    }
+
+    if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); } 
+    else { init(); }
+    
+    setTimeout(function() {
+        safeCall(function() { updatePortraitPreview(); });
+        safeCall(function() { scalePoster(); });
+    }, 500);
+})();
+</script>
+</body>
+</html>	
