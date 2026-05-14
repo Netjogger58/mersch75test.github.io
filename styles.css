@@ -31,6 +31,10 @@ body {
     font-family: 'Jost', sans-serif;
 }
 
+body.landing-page {
+    background: linear-gradient(180deg, #f2f6fb 0%, #ffffff 220px);
+}
+
 img {
     display: block;
     max-width: 100%;
@@ -82,6 +86,208 @@ h3 {
     margin: 18px auto;
     background: var(--yellow);
     border-radius: 999px;
+}
+
+.site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 14px 18px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(0, 47, 101, 0.08);
+    box-shadow: 0 20px 42px rgba(0, 47, 101, 0.1);
+    backdrop-filter: blur(16px);
+}
+
+.landing-header {
+    position: sticky;
+    top: 14px;
+    z-index: 20;
+    margin-bottom: 18px;
+}
+
+.compact-header {
+    position: relative;
+    top: auto;
+    margin-bottom: 22px;
+}
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+}
+
+.brand-mark {
+    flex: 0 0 62px;
+    width: 62px;
+    height: 62px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.95) url("Media/Header_Logos_media/Logo-Mersch75-50-Joer-3D-Kopie.png") center / 82% no-repeat;
+    box-shadow: 0 10px 28px rgba(0, 47, 101, 0.14);
+    color: transparent;
+    font-size: 0;
+}
+
+.brand-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.brand-copy strong {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.35rem;
+    line-height: 1;
+    color: var(--blue);
+}
+
+.brand-copy span {
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.nav-toggle {
+    display: none;
+    border: 0;
+    border-radius: 999px;
+    padding: 10px 16px;
+    background: var(--blue);
+    color: #ffffff;
+    font: inherit;
+    font-weight: 700;
+}
+
+.site-nav {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.site-nav a {
+    padding: 10px 14px;
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1;
+    transition: background-color 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.site-nav a:hover,
+.site-nav a.is-active {
+    background: var(--blue);
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+.landing-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+    gap: 24px;
+    padding: 40px 34px;
+    background:
+        radial-gradient(circle at top right, rgba(249, 214, 17, 0.24), transparent 28%),
+        linear-gradient(135deg, rgba(232, 237, 244, 0.96) 0%, rgba(255, 255, 255, 0.98) 100%);
+    border: 1px solid rgba(0, 47, 101, 0.08);
+}
+
+.landing-hero-copy h1 {
+    max-width: 10ch;
+    font-size: clamp(3rem, 6vw, 5.8rem);
+    line-height: 0.92;
+    letter-spacing: 0.01em;
+}
+
+.landing-hero-copy .lead {
+    max-width: 62ch;
+}
+
+.hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 28px;
+}
+
+.hero-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0 22px;
+    border-radius: 999px;
+    font-weight: 800;
+    transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+}
+
+.hero-button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+.hero-button-primary {
+    background: var(--blue);
+    color: #ffffff;
+}
+
+.hero-button-secondary {
+    background: rgba(255, 255, 255, 0.8);
+    color: var(--blue);
+    border: 1px solid rgba(0, 47, 101, 0.12);
+}
+
+.landing-hero-panel {
+    padding: 28px;
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.84);
+    border: 1px solid rgba(0, 47, 101, 0.08);
+    box-shadow: 0 18px 34px rgba(0, 47, 101, 0.08);
+}
+
+.hero-link-list {
+    display: grid;
+    gap: 12px;
+}
+
+.hero-link-card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px 18px;
+    border-radius: 22px;
+    background: linear-gradient(180deg, rgba(232, 237, 244, 0.82), rgba(255, 255, 255, 0.98));
+    border: 1px solid rgba(0, 47, 101, 0.08);
+    transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.hero-link-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+.hero-link-card span {
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.hero-link-card strong {
+    font-family: 'Jost', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--blue);
 }
 
 .nav-band {
@@ -439,81 +645,6 @@ h3 {
     margin: 10px 0;
 }
 
-.site-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 18px;
-    padding: 16px 18px;
-    border-radius: 999px;
-    background: var(--blue-soft);
-    border: 1px solid rgba(0, 47, 101, 0.08);
-    margin-bottom: 22px;
-}
-
-.brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.brand-mark {
-    display: grid;
-    place-items: center;
-    width: 50px;
-    height: 50px;
-    border-radius: 18px;
-    background: linear-gradient(180deg, var(--yellow), #ffd900);
-    color: var(--blue);
-    font-family: 'Oswald', sans-serif;
-    font-size: 1.4rem;
-}
-
-.brand-copy {
-    display: flex;
-    flex-direction: column;
-}
-
-.brand-copy strong {
-    font-family: 'Oswald', sans-serif;
-    font-size: 1.2rem;
-}
-
-.brand-copy span {
-    color: var(--muted);
-    font-size: 0.88rem;
-}
-
-.nav-toggle {
-    display: none;
-    border: 0;
-    border-radius: 999px;
-    padding: 10px 14px;
-    background: rgba(255, 255, 255, 0.9);
-    color: var(--blue);
-    font: inherit;
-}
-
-.site-nav {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.site-nav a {
-    padding: 10px 14px;
-    border-radius: 999px;
-    color: var(--muted);
-    font-weight: 600;
-}
-
-.site-nav a:hover,
-.site-nav a.is-active {
-    background: rgba(255, 255, 255, 0.95);
-    color: var(--blue);
-}
-
 .page-main {
     padding-bottom: 18px;
 }
@@ -629,6 +760,14 @@ h3 {
 }
 
 @media (max-width: 1180px) {
+    .landing-hero {
+        grid-template-columns: 1fr;
+    }
+
+    .landing-hero-copy h1 {
+        max-width: none;
+    }
+
     .icon-row {
         display: flex;
         overflow-x: auto;
@@ -688,6 +827,23 @@ h3 {
         width: calc(100% - 24px);
     }
 
+    .landing-hero {
+        padding: 28px 22px;
+        gap: 18px;
+    }
+
+    .landing-hero-copy h1 {
+        font-size: clamp(2.6rem, 10vw, 3.9rem);
+    }
+
+    .hero-actions {
+        gap: 12px;
+    }
+
+    .hero-button {
+        flex: 1 1 220px;
+    }
+
     .spotlight-section {
         min-height: 0;
     }
@@ -706,6 +862,9 @@ h3 {
 
     .site-header {
         flex-wrap: wrap;
+        gap: 14px;
+        border-radius: 28px;
+        position: relative;
     }
 
     .nav-toggle {
@@ -717,6 +876,27 @@ h3 {
         width: 100%;
         flex-direction: column;
         align-items: stretch;
+    }
+
+    .landing-header .site-nav {
+        position: absolute;
+        top: calc(100% + 10px);
+        left: auto;
+        right: 0;
+        width: min(320px, calc(100vw - 36px));
+        padding: 14px;
+        border-radius: 28px;
+        background: rgba(255, 255, 255, 0.96);
+        border: 1px solid rgba(0, 47, 101, 0.08);
+        box-shadow: 0 20px 42px rgba(0, 47, 101, 0.12);
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        gap: 6px;
+        z-index: 25;
+    }
+
+    .landing-header .site-nav a {
+        padding: 14px 16px;
     }
 
     .site-nav.is-open,
