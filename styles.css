@@ -92,6 +92,8 @@ h3 {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
+    z-index: 20;
     gap: 24px;
     padding: 14px 18px;
     border-radius: 999px;
@@ -154,32 +156,143 @@ h3 {
 }
 
 .nav-toggle {
-    display: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 116px;
     border: 0;
     border-radius: 999px;
-    padding: 10px 16px;
+    padding: 12px 18px;
     background: var(--blue);
     color: #ffffff;
     font: inherit;
     font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    box-shadow: 0 16px 32px rgba(0, 47, 101, 0.16);
+    transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+}
+
+.nav-toggle:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 22px 36px rgba(0, 47, 101, 0.2);
 }
 
 .site-nav {
-    display: flex;
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    bottom: 18px;
+    width: min(540px, calc(100vw - 36px));
+    display: block;
+    padding: 22px;
+    border-radius: 34px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(232, 237, 244, 0.98));
+    border: 1px solid rgba(0, 47, 101, 0.08);
+    box-shadow: 0 28px 80px rgba(0, 47, 101, 0.22);
+    backdrop-filter: blur(18px);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(28px);
+    transition: transform 220ms ease, opacity 220ms ease;
+    z-index: 60;
+    overflow: auto;
+}
+
+.site-nav.is-open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(0);
+}
+
+.site-menu-shell {
+    position: relative;
+    display: grid;
+    gap: 18px;
+    min-height: 100%;
+    padding-top: 56px;
+}
+
+.site-menu-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: inline-flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--blue);
+    color: #ffffff;
+    font: inherit;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    box-shadow: 0 16px 32px rgba(0, 47, 101, 0.16);
+}
+
+.site-menu-intro {
+    display: grid;
     gap: 10px;
-    flex-wrap: wrap;
+    padding: 6px 6px 18px;
+    border-bottom: 1px solid rgba(0, 47, 101, 0.1);
+}
+
+.site-menu-kicker {
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.site-menu-intro h2 {
+    font-size: clamp(2.2rem, 4vw, 3.5rem);
+    line-height: 0.9;
+}
+
+.site-menu-intro p:last-child {
+    max-width: 44ch;
+}
+
+.site-menu-primary,
+.site-menu-secondary,
+.site-menu-footer {
+    display: grid;
+    gap: 10px;
+}
+
+.site-menu-primary {
+    grid-auto-rows: minmax(0, auto);
+}
+
+.site-menu-secondary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .site-nav a {
-    padding: 10px 14px;
-    border-radius: 999px;
-    color: var(--muted);
-    font-size: 0.95rem;
-    font-weight: 700;
+    position: relative;
+    display: block;
+    padding: 18px 20px;
+    border-radius: 24px;
+    color: var(--blue);
+    font-size: 1.1rem;
+    font-weight: 800;
     line-height: 1;
-    transition: background-color 180ms ease, color 180ms ease, transform 180ms ease;
+    background: rgba(255, 255, 255, 0.78);
+    border: 1px solid rgba(0, 47, 101, 0.08);
+    transition: background-color 180ms ease, color 180ms ease, transform 180ms ease, border-color 180ms ease;
+}
+
+.site-menu-primary a {
+    min-height: 76px;
+    display: flex;
+    align-items: center;
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(1.5rem, 2vw, 2rem);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
 }
 
 .site-nav a:hover,
@@ -187,6 +300,64 @@ h3 {
     background: var(--blue);
     color: #ffffff;
     transform: translateY(-1px);
+}
+
+.site-menu-secondary a {
+    min-height: 86px;
+    display: flex;
+    align-items: flex-end;
+    font-size: 0.95rem;
+    line-height: 1.2;
+}
+
+.site-menu-footer {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: auto;
+    padding-top: 10px;
+}
+
+.site-menu-cta {
+    display: grid;
+    gap: 8px;
+    min-height: 128px;
+    padding: 18px 20px;
+    border-radius: 28px;
+    background: linear-gradient(180deg, rgba(249, 214, 17, 0.3), rgba(255, 255, 255, 0.88));
+    border: 1px solid rgba(0, 47, 101, 0.08);
+}
+
+.site-menu-cta span {
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.site-menu-cta strong {
+    font-size: 1.35rem;
+    line-height: 1;
+}
+
+.site-menu-backdrop {
+    position: fixed;
+    inset: 0;
+    border: 0;
+    background: rgba(10, 24, 45, 0.38);
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 220ms ease;
+    z-index: 55;
+}
+
+.site-menu-backdrop.is-open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+body.menu-open {
+    overflow: hidden;
 }
 
 .landing-hero {
@@ -1137,49 +1308,32 @@ body.matchday-page {
         width: 140px;
     }
 
+    .site-nav {
+        top: 12px;
+        right: 12px;
+        bottom: 12px;
+        width: min(100vw - 24px, 520px);
+        padding: 18px;
+    }
+
     .site-header {
-        flex-wrap: wrap;
         gap: 14px;
         border-radius: 28px;
         position: relative;
     }
 
-    .nav-toggle {
-        display: inline-flex;
+    .site-menu-secondary,
+    .site-menu-footer {
+        grid-template-columns: 1fr;
     }
 
-    .site-nav {
-        display: none;
-        width: 100%;
-        flex-direction: column;
-        align-items: stretch;
+    .site-menu-primary a {
+        min-height: 68px;
+        font-size: clamp(1.3rem, 6vw, 1.7rem);
     }
 
-    .landing-header .site-nav,
-    .compact-header .site-nav {
-        position: absolute;
-        top: calc(100% + 10px);
-        left: auto;
-        right: 0;
-        width: min(360px, calc(100vw - 36px));
-        padding: 14px;
-        border-radius: 28px;
-        background: rgba(255, 255, 255, 0.96);
-        border: 1px solid rgba(0, 47, 101, 0.08);
-        box-shadow: 0 20px 42px rgba(0, 47, 101, 0.12);
-        justify-content: flex-start;
-        flex-wrap: nowrap;
-        gap: 6px;
-        z-index: 25;
-    }
-
-    .landing-header .site-nav a,
-    .compact-header .site-nav a {
-        padding: 14px 16px;
-    }
-
-    .site-nav.is-open {
-        display: flex;
+    .site-menu-intro h2 {
+        font-size: clamp(2rem, 10vw, 3rem);
     }
 
     .landing-footer {
@@ -1194,6 +1348,15 @@ body.matchday-page {
 }
 
 @media (max-width: 560px) {
+    .site-nav {
+        border-radius: 28px;
+        padding: 16px;
+    }
+
+    .site-menu-intro {
+        padding-bottom: 14px;
+    }
+
     .spotlight-links {
         grid-template-columns: 1fr;
     }
