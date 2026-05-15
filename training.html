@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Training | Mersch75 Handball</title>
-    <meta name="description" content="Training bei Mersch75: Trainingsbereiche, Staff und Einstiegspunkte.">
+    <meta name="description" content="Training bei Mersch75: Trainingsplan, Gruppen, Hallen und Jugendkoordination auf einen Blick.">
     <link rel="stylesheet" href="styles.css?v=20260515a">
 </head>
-<body class="placeholder-page">
+<body class="training-page">
     <div class="site-shell">
         <header class="site-header compact-header">
             <a class="brand" href="index.html">
@@ -31,14 +31,64 @@
                 <a href="contact.html">Contact</a>
             </nav>
         </header>
+
         <main class="page-main">
-            <section class="page-hero">
-                <p class="eyebrow">Training</p>
-                <h1>Trainingsstruktur und Staff kommen als Nächstes aus dem WordPress-Export hierhin.</h1>
-                <p class="lead">Die Seite ist bereits vorbereitet und wird im nächsten Schritt mit Gruppen, Trainingszeiten und Trainerinformationen gefüllt.</p>
+            <section class="page-hero training-hero">
+                <div class="training-hero-copy">
+                    <img class="training-hero-logo" src="Media/Header_Logos_media/Logo-Mersch75-TeamTraining-26092025.png" alt="Team Training Logo">
+                    <div class="training-action-row">
+                        <a class="hero-button hero-button-secondary" href="trainerstaff.html">Trainerstaff</a>
+                        <a class="hero-button hero-button-secondary" href="contact.html">Probetraining ufroen</a>
+                    </div>
+                </div>
             </section>
+
+            <section class="section training-schedule-section" id="schedule">
+                <div class="training-schedule-card">
+                    <button id="btn-schedule-fs" class="training-fullscreen-button" type="button">Trainingsplan im Vollbild öffnen</button>
+                    <div id="schedule-container" class="training-schedule-frame">
+                        <div class="training-schedule-map">
+                            <img src="Media/Training/M75-Hallenzeiten-17.10.2025-Kopie-scaled.png" alt="Trainingsplan 2025-2026">
+                            <div class="training-schedule-hotspots"></div>
+                            <div class="training-schedule-tooltip" id="schedule-tooltip" aria-live="polite"></div>
+                        </div>
+                    </div>
+                    <div class="training-schedule-disclaimer">
+                        <p><strong>JUGEND KOORDINATIOUN:</strong> Ëm de Jugendberäich këmmeren sech de Max Blanc (LUXQF3) an de Louis Van der Weken (LUXQF2Bis).</p>
+                        <p><strong>Info:</strong> <a href="mailto:max.hbm75@gmail.com">max.hbm75@gmail.com</a> <span>|</span> <span>Tel: Max Blanc 661 406 836</span></p>
+                    </div>
+                </div>
+            </section>
+
             <section class="section">
-                <div class="status-note">Der visuelle Rahmen entspricht bereits dem ursprünglichen Farbsystem der WordPress-Seite. Die Inhalte werden jetzt schrittweise aus dem Export übernommen.</div>
+                <div class="training-info-grid">
+                    <article class="training-group-card training-info-card">
+                        <img class="training-info-image" src="Media/Training/HO-rue-des-Pres-Mersch-scaled.png" alt="Hall Omnisports zu Mersch">
+                        <h3>Hall Omnisports</h3>
+                        <div class="training-info-stack">
+                            <strong>21, rue des Prés</strong>
+                            <span>Mersch</span>
+                        </div>
+                    </article>
+
+                    <article class="training-group-card training-info-card">
+                        <img class="training-info-image" src="Media/Training/Krounebierg_2x-scaled.png" alt="Hall Omnisports Krounebierg zu Mersch">
+                        <h3>Hall Omnisports Krounebierg</h3>
+                        <div class="training-info-stack">
+                            <strong>11, rue de la Piscine</strong>
+                            <span>Mersch</span>
+                        </div>
+                    </article>
+
+                    <article class="training-group-card training-info-card">
+                        <img class="training-info-image" src="Media/Training/Salle-des-sports-Ecole-fondamentale.jpg" alt="Sportshal zu Lëntgen">
+                        <h3>Sportshal Lëntgen</h3>
+                        <div class="training-info-stack">
+                            <strong>Rue de l'Ecole a rue de la Gare</strong>
+                            <span>Lëntgen</span>
+                        </div>
+                    </article>
+                </div>
             </section>
 
             <footer class="site-page-footer">
@@ -47,13 +97,14 @@
                         <img src="Media/Logo-Mersch75-50-Joer-3D.png" alt="Mersch75 50 Joer">
                         <div>
                             <strong>Mersch75 Handball</strong>
-                            <p>Training, Matchday, News an Club-Liewen an enger kloerer statescher Struktur fir GitHub Pages.</p>
+                            <p>Handball zu Miersch mat Fokus op Training, Matchday, News a staark Jugendaarbecht.</p>
                         </div>
                     </div>
                     <div>
                         <div class="site-page-footer-links">
                             <a href="matchday.html">Matchday</a>
                             <a href="matchcenter.html">Matchcenter</a>
+                            <a href="trainerstaff.html">Trainerstaff</a>
                             <a href="news.html">News</a>
                             <a href="inside.html">Inside</a>
                             <a href="gallery.html">Galerie</a>
