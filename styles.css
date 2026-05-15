@@ -97,7 +97,7 @@ h3 {
     gap: 24px;
     padding: 14px 18px;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.88);
+    background: #ffde00;
     border: 1px solid rgba(0, 47, 101, 0.08);
     box-shadow: 0 20px 42px rgba(0, 47, 101, 0.1);
     backdrop-filter: blur(16px);
