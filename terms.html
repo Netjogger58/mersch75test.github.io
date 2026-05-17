@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conditions Générales | Mersch75</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f5f8;
+            color: #222;
+        }
+        .ml-test-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+        .ml-flag {
+            font-size: 42px;
+            cursor: pointer;
+            opacity: 0.45;
+            transition: transform 0.2s, opacity 0.2s;
+            border-radius: 6px;
+            padding: 4px;
+        }
+        .ml-flag:hover {
+            transform: scale(1.15);
+            opacity: 1;
+        }
+        .ml-active {
+            opacity: 1;
+            transform: scale(1.15);
+            outline: 3px solid #005eb8;
+            border-radius: 6px;
+        }
+        .ml-flag-picker {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        #ml-display-area {
+            max-width: 850px;
+            border: 1px solid #eee;
+            padding: 40px;
+            line-height: 1.8;
+            font-size: 16px;
+            min-height: 500px;
+            background: #fff;
+            margin: auto;
+            text-align: left;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-radius: 8px;
+        }
+        .terms-image-wrapper {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+        .terms-image-wrapper img {
+            width: 50%;
+            max-width: 50%;
+            height: auto;
+            display: block;
+        }
+        @media (max-width: 760px) {
+            .terms-image-wrapper img {
+                width: 100%;
+                max-width: 100%;
+            }
+            .ml-test-wrapper {
+                padding: 20px 12px;
+            }
+            #ml-display-area {
+                padding: 24px;
+                min-height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="ml-test-wrapper" style="text-align: center;">
+    <div class="terms-image-wrapper">
+        <img src="https://www.mersch75.lu/wp-content/uploads/2026/03/Terms-and-Conditions-1.png" alt="Terms and Conditions">
+    </div>
+
+    <div class="ml-flag-picker">
+        <span class="ml-flag ml-active" onclick="mlFetch('fr')" title="Français">🇫🇷</span>
+        <span class="ml-flag" onclick="mlFetch('lb')" title="Lëtzebuergesch">🇱🇺</span>
+        <span class="ml-flag" onclick="mlFetch('de')" title="Deutsch">🇩🇪</span>
+        <span class="ml-flag" onclick="mlFetch('en')" title="English">🇬🇧</span>
+        <span class="ml-flag" onclick="mlFetch('pt')" title="Português">🇵🇹</span>
+    </div>
+
+    <div id="ml-display-area">
+        <p style="text-align: center;">Chargement... 🇫🇷</p>
+    </div>
+</div>
+
+<script>
+const baseUrl = "./terms/";
+
+async function mlFetch(lang) {
+    const area = document.getElementById('ml-display-area');
+
+    document.querySelectorAll('.ml-flag').forEach(f => f.classList.remove('ml-active'));
+    const activeFlag = document.querySelector(`.ml-flag[onclick="mlFetch('${lang}')"]`);
+    if (activeFlag) activeFlag.classList.add('ml-active');
+
+    try {
+        const response = await fetch(baseUrl + "CG-" + lang + ".html");
+        if (!response.ok) throw new Error('File not found');
+        const text = await response.text();
+        area.innerHTML = text;
+    } catch (error) {
+        area.innerHTML = "<p style='color:red; text-align:center;'>Fehler beim Laden der Datei CG-" + lang + ".html.</p>";
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    mlFetch('fr');
+});
+</script>
+</body>
+</html>

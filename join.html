@@ -53,10 +53,19 @@
                             </div>
                         </div>
 
-                        <form id="registrationForm" class="join-registration-form">
-                            <div id="website-field">
-                                <input type="text" id="honeypot" name="website" autocomplete="off">
-                            </div>
+                        <div id="lu" class="join-lang-text is-active"><strong>Wëllkomm am Veräin!</strong>Super, datt du Loscht hues eist Team ze verstäerken. Fëll w.e.g. de Formulaire aus fir d'intern Umeldung ze starten. Nodeems de Veräin deng Donnéeën kritt huet, gëtt den offizielle Lizenzantrag vum Veräinsresponsabel gestart.</div>
+                        <div id="fr" class="join-lang-text"><strong>Bienvenue au club !</strong>Ravis que vous souhaitiez renforcer notre équipe. Veuillez remplir ce formulaire pour lancer l'inscription interne. Une fois les données reçues, la demande officielle de licence sera initiée par le responsable du club.</div>
+                        <div id="de" class="join-lang-text"><strong>Willkommen im Verein!</strong>Toll, dass du unser Team verstärken möchtest. Bitte fülle das Formular aus, um die interne Anmeldung zu starten. Sobald der Verein deine Daten erhalten hat, wird der offizielle Lizenzantrag vom Vereinsverantwortlichen gestartet.</div>
+                        <div id="en" class="join-lang-text"><strong>Welcome to the club!</strong>Great to have you on board. Please fill out the form to start the internal registration. Once the club receives your data, the official licence request will be initiated by the club manager.</div>
+                        <div id="pt" class="join-lang-text"><strong>Bem-vindo ao clube!</strong>É ótimo que queiras reforçar a nossa equipa. Por favor, preenche o formulário para iniciar o registo interno. Assim que o clube receber os teus dados, o pedido oficial de licença será iniciado pelo responsável do clube.</div>
+
+                        <form id="registrationForm" class="join-registration-form" action="https://api.web3forms.com/submit" method="POST" novalidate>
+                            <input type="hidden" name="access_key" value="15e3cc53-6864-47dd-bfaf-332cb4ca45e5">
+                            <input type="hidden" name="subject" value="Nouvelle inscription Mersch 75">
+                            <input type="hidden" name="from_name" value="Mersch75 E-JOIN-US">
+                            <input type="hidden" id="Langue" name="Langue" value="lu">
+                            <input type="hidden" id="name" name="name" value="">
+                            <input type="hidden" id="email" name="email" value="">
 
                             <div class="join-form-group">
                                 <label id="lbl-nom" for="Nom">NOM(S) SUR CARTE D'IDENTITE *</label>
@@ -100,7 +109,7 @@
                             <div id="parent-section">
                                 <div class="join-form-group join-form-group--compact">
                                     <label id="lbl-parent" for="ParentIsole">PARENT ISOLE / ALLEINERZIEHEND? *</label>
-                                    <select id="ParentIsole">
+                                    <select id="ParentIsole" name="ParentIsole">
                                         <option value="NON">NON (2 Tuteurs)</option>
                                         <option value="OUI">OUI (1 Tuteur)</option>
                                     </select>
@@ -152,7 +161,7 @@
                             </div>
 
                             <div id="u7-section">
-                                <input type="checkbox" id="U7Cert">
+                                <input type="checkbox" id="U7Cert" name="U7Cert" value="Oui">
                                 <label for="U7Cert" id="lbl-u7">U7 : CERTIFICAT MEDICAL D'APTITUDE SPORTIVE OBLIGATOIRE (ETABLI PAR LE MEDECIN TRAITANT).</label>
                             </div>
 
@@ -178,22 +187,22 @@
                             </div>
 
                             <div class="join-checkbox-row">
-                                <input type="checkbox" id="chk1" required>
+                                <input type="checkbox" id="chk1" name="ConditionsGenerales" value="Oui" required>
                                 <label for="chk1" id="lbl-chk1">J'AI LU ET J'ACCEPTE LES CONDITIONS GENERALES.</label>
                             </div>
 
                             <div class="join-checkbox-row">
-                                <input type="checkbox" id="chk2" required>
+                                <input type="checkbox" id="chk2" name="ProtectionDonnees" value="Oui" required>
                                 <label for="chk2" id="lbl-chk2">J'AI LU ET J'ACCEPTE LA PROTECTION DES DONNEES.</label>
                             </div>
 
                             <div class="join-checkbox-row is-emphasis">
-                                <input type="checkbox" id="chk3" required>
+                                <input type="checkbox" id="chk3" name="InfoFLH" value="Oui" required>
                                 <label for="chk3" id="lbl-chk3">INFO: J'AI COMPRIS QUE MA DEMANDE D'AFFILIATION SERA FINALISEE VIA LE PORTAIL DE LA FLH.</label>
                             </div>
 
                             <div class="join-checkbox-row">
-                                <input type="checkbox" id="chk4" required>
+                                <input type="checkbox" id="chk4" name="ConfirmationExactitude" value="Oui" required>
                                 <label for="chk4" id="lbl-chk4">CONFIRMATION: JE CONFIRME L'EXACTITUDE DE MES DONNEES.</label>
                             </div>
 
@@ -241,5 +250,349 @@
     </div>
 
     <script src="script.js"></script>
+    <script>
+    const CGurl = "https://www.mersch75.lu/x2-terms-and-conditions/";
+    const DPurl = "https://www.mersch75.lu/x3-dataprotection/";
+
+    const T = {
+        lu: {
+            nom: "NIMM (WÉI AUM PERSONALAUSWEIS) *", prenom: "VIRNUMM *", dob: "GEBUERTSDATUM (DD.MM.JJJJ) *", mineur: "MANNERJÄREG? *", cat: "FLH KATEGORIE (AUTO)", role: "FUNKTIOUN *", parent: "ELENDERZÉIEND? *", tuteur1: "TUTEUR 1 (NUMM A VIRNUMM) *", tuteur2: "TUTEUR 2 (NUMM A VIRNUMM) *", nat: "NATIONALITÉIT *", cns: "MATRICULE CNS - 5 MANUELL ZIFFEREN *", medico: "MEDICO? *", licence: "LIZENZ? *", club: "FRÉIERE VERÄIN (ODER \"NÉANT\") *", u7: "U7: SPORTMEDIZINESCHT ATTEST OBLIGATORESCH (VUM HAUSARZT).", adresse: "ADRESS (NR., STROOSS, PLZ, UERT) *", email: "EMAIL *", gsm1: "TEL MOBILE / GSM 1 *", gsm2: "TEL MOBILE / GSM 2 (OPTIONAL)", chk1: "ECH HUN GELIES AN AKZEPTÉIEREN D'<a href='" + CGurl + "' target='_blank' rel='noopener'>ALLGEMENG BEDÉNGUNGEN</a>.", chk2: "ECH HUN GELIES AN AKZEPTÉIEREN DE <a href='" + DPurl + "' target='_blank' rel='noopener'>DATESCHUTZ</a>.", chk3: "INFO: ECH HUN VERSTANEN DATT MENG UMELDUNG IWWERT DAT FLH PORTAL OFGESCHLOSS GËTT.", chk4: "BESTÄTEGUNG: ECH CONFIRMÉIEREN D'RICHTEGKEET VUN MENGE DONNÉEËN.", send: "WEIDERLEEDEN", oui: "Jo", non: "Nee", joueur: "Spiller / Spillerin", officiel: "Offiziell(e)", arbitre: "Schiedsriichter(in)", parent_non: "NEE (2 Tuteure)", parent_oui: "Jo (1 Tuteur)"
+        },
+        fr: {
+            nom: "NOM(S) SUR CARTE D'IDENTITÉ *", prenom: "PRÉNOM *", dob: "DATE DE NAISSANCE (JJ.MM.AAAA) *", mineur: "MINEUR? *", cat: "CATÉGORIE FLH (AUTO)", role: "RÔLE / FONCTION *", parent: "PARENT ISOLÉ? *", tuteur1: "TUTEUR 1 (NOM ET PRÉNOM) *", tuteur2: "TUTEUR 2 (NOM ET PRÉNOM) *", nat: "NATIONALITÉ *", cns: "MATRICULE CNS - 5 CHIFFRES MANUELS *", medico: "MEDICO? *", licence: "LICENCE? *", club: "ANCIEN CLUB (OU \"NÉANT\") *", u7: "U7 : CERTIFICAT MÉDICAL D'APTITUDE SPORTIVE OBLIGATOIRE (ÉTABLI PAR LE MÉDECIN TRAITANT).", adresse: "ADRESSE (NO, RUE, CODE POSTAL, LOCALITÉ) *", email: "EMAIL *", gsm1: "TEL MOBILE / GSM 1 *", gsm2: "TEL MOBILE / GSM 2 (OPTIONNEL)", chk1: "J'AI LU ET J'ACCEPTE LES <a href='" + CGurl + "' target='_blank' rel='noopener'>CONDITIONS GÉNÉRALES</a>.", chk2: "J'AI LU ET J'ACCEPTE LA <a href='" + DPurl + "' target='_blank' rel='noopener'>PROTECTION DES DONNÉES</a>.", chk3: "INFO: J'AI COMPRIS QUE MA DEMANDE D'AFFILIATION SERA FINALISÉE VIA LE PORTAIL DE LA FLH.", chk4: "CONFIRMATION: JE CONFIRME L'EXACTITUDE DE MES DONNÉES.", send: "ENVOYER", oui: "Oui", non: "Non", joueur: "Joueur / Joueuse", officiel: "Officiel(le)", arbitre: "Arbitre", parent_non: "NON (2 Tuteurs)", parent_oui: "OUI (1 Tuteur)"
+        },
+        de: {
+            nom: "NAME(N) LAUT PERSONALAUSWEIS *", prenom: "VORNAME *", dob: "GEBURTSDATUM (TT.MM.JJJJ) *", mineur: "MINDERJÄHRIG? *", cat: "FLH KATEGORIE (AUTO)", role: "ROLLE / FUNKTION *", parent: "ALLEINERZIEHEND? *", tuteur1: "ERZIEHUNGSBERECHTIGTER 1 (NAME UND VORNAME) *", tuteur2: "ERZIEHUNGSBERECHTIGTER 2 (NAME UND VORNAME) *", nat: "NATIONALITÄT *", cns: "MATRICULE CNS - 5 MANUELLE ZIFFERN *", medico: "ÄRZTLICHES ATTEST? *", licence: "LIZENZ? *", club: "FRÜHERER VEREIN (ODER \"KEINER\") *", u7: "U7: SPORTÄRZTLICHES ATTEST PFLICHT (VOM HAUSARZT AUSGESTELLT).", adresse: "ADRESSE (NR., STRASSE, PLZ, ORT) *", email: "E-MAIL *", gsm1: "MOBILNUMMER / GSM 1 *", gsm2: "MOBILNUMMER / GSM 2 (OPTIONAL)", chk1: "ICH HABE GELESEN UND AKZEPTIERE DIE <a href='" + CGurl + "' target='_blank' rel='noopener'>ALLGEMEINEN BEDINGUNGEN</a>.", chk2: "ICH HABE GELESEN UND AKZEPTIERE DEN <a href='" + DPurl + "' target='_blank' rel='noopener'>DATENSCHUTZ</a>.", chk3: "INFO: ICH HABE VERSTANDEN, DASS MEIN ANTRAG ÜBER DAS FLH-PORTAL ABGESCHLOSSEN WIRD.", chk4: "BESTÄTIGUNG: ICH BESTÄTIGE DIE RICHTIGKEIT MEINER ANGABEN.", send: "ABSCHICKEN", oui: "Ja", non: "Nein", joueur: "Spieler/in", officiel: "Funktionär/in", arbitre: "Schiedsrichter/in", parent_non: "NEIN (2 Erziehungsberechtigte)", parent_oui: "JA (1 Erziehungsberechtigter)"
+        },
+        en: {
+            nom: "LAST NAME(S) AS ON ID CARD *", prenom: "FIRST NAME *", dob: "DATE OF BIRTH (DD.MM.YYYY) *", mineur: "MINOR? *", cat: "FLH CATEGORY (AUTO)", role: "ROLE / FUNCTION *", parent: "SINGLE PARENT? *", tuteur1: "GUARDIAN 1 (LAST & FIRST NAME) *", tuteur2: "GUARDIAN 2 (LAST & FIRST NAME) *", nat: "NATIONALITY *", cns: "CNS NUMBER - 5 MANUAL DIGITS *", medico: "MEDICAL CERTIFICATE? *", licence: "LICENCE? *", club: "PREVIOUS CLUB (OR \"NONE\") *", u7: "U7: MEDICAL FITNESS CERTIFICATE MANDATORY (ISSUED BY FAMILY DOCTOR).", adresse: "ADDRESS (NO., STREET, POSTCODE, CITY) *", email: "EMAIL *", gsm1: "MOBILE / GSM 1 *", gsm2: "MOBILE / GSM 2 (OPTIONAL)", chk1: "I HAVE READ AND ACCEPT THE <a href='" + CGurl + "' target='_blank' rel='noopener'>GENERAL TERMS AND CONDITIONS</a>.", chk2: "I HAVE READ AND ACCEPT THE <a href='" + DPurl + "' target='_blank' rel='noopener'>DATA PROTECTION POLICY</a>.", chk3: "INFO: I UNDERSTAND THAT MY MEMBERSHIP REQUEST WILL BE FINALISÉD VIA THE FLH PORTAL.", chk4: "CONFIRMATION: I CONFIRM THE ACCURACY OF MY DATA.", send: "SUBMIT", oui: "Yes", non: "No", joueur: "Player", officiel: "Official", arbitre: "Referee", parent_non: "NO (2 Guardians)", parent_oui: "YES (1 Guardian)"
+        },
+        pt: {
+            nom: "APELIDO(S) CONFORME BILHETE DE IDENTIDADE *", prenom: "PRIMEIRO NOME *", dob: "DATA DE NASCIMENTO (DD.MM.AAAA) *", mineur: "MENOR? *", cat: "CATEGORIA FLH (AUTO)", role: "FUNÇÃO *", parent: "PROGENITOR ÚNICO? *", tuteur1: "TUTOR 1 (APELIDO E NOME) *", tuteur2: "TUTOR 2 (APELIDO E NOME) *", nat: "NACIONALIDADE *", cns: "NÚMERO CNS - 5 DÍGITOS MANUAIS *", medico: "ATESTADO MÉDICO? *", licence: "LICENÇA? *", club: "CLUBE ANTERIOR (OU \"NENHUM\") *", u7: "U7: CERTIFICADO MÉDICO DE APTIDÃO DESPORTIVA OBRIGATÓRIO (EMITIDO PELO MÉDICO DE FAMÍLIA).", adresse: "MORADA (Nº, RUA, CÓDIGO POSTAL, LOCALIDADE) *", email: "EMAIL *", gsm1: "TEL MÓVEL / GSM 1 *", gsm2: "TEL MÓVEL / GSM 2 (OPCIONAL)", chk1: "LI E ACEITO OS <a href='" + CGurl + "' target='_blank' rel='noopener'>TERMOS E CONDIÇÕES GERAIS</a>.", chk2: "LI E ACEITO A <a href='" + DPurl + "' target='_blank' rel='noopener'>POLÍTICA DE PROTEÇÃO DE DADOS</a>.", chk3: "INFO: COMPREENDO QUE O MEU PEDIDO DE FILIAÇÃO SERÁ FINALIZADO VIA O PORTAL FLH.", chk4: "CONFIRMAÇÃO: CONFIRMO A EXATIDÃO DOS MEUS DADOS.", send: "ENVIAR", oui: "Sim", non: "Não", joueur: "Jogador/a", officiel: "Oficial", arbitre: "Árbitro/a", parent_non: "NÃO (2 Tutores)", parent_oui: "SIM (1 Tutor)"
+        }
+    };
+
+    let currentLang = 'lu';
+
+    function setRequiredState(isMinor, category) {
+        const tuteur1 = document.getElementById('Tuteur1');
+        const tuteur2 = document.getElementById('Tuteur2');
+        const parentIsole = document.getElementById('ParentIsole');
+        const u7Cert = document.getElementById('U7Cert');
+
+        tuteur1.required = isMinor;
+        tuteur2.required = isMinor && parentIsole.value !== 'OUI';
+        u7Cert.required = category === 'U7';
+
+        document.getElementById('parent-section').style.display = isMinor ? 'block' : 'none';
+        document.getElementById('u7-section').style.display = category === 'U7' ? 'flex' : 'none';
+        document.getElementById('tuteur2-wrap').style.display = parentIsole.value === 'OUI' ? 'none' : 'block';
+
+        if (!isMinor) {
+            tuteur1.value = '';
+            tuteur2.value = '';
+            parentIsole.value = 'NON';
+        }
+
+        if (parentIsole.value === 'OUI') {
+            tuteur2.value = '';
+        }
+    }
+
+    function updateCnsDisplay() {
+        const dob = document.getElementById('DateNaissance').value;
+        const cns = document.getElementById('CNS').value.trim();
+
+        if (dob.length === 10) {
+            const parts = dob.split('.');
+            const formattedDob = parts[2] + '.' + parts[1] + '.' + parts[0];
+            document.getElementById('cns-prefix-display').innerText = 'Format CNS: ' + formattedDob + '.' + (cns !== '' ? cns : 'xxxxx');
+        } else {
+            document.getElementById('cns-prefix-display').innerText = 'Format CNS: yyyy.mm.dd.xxxxx';
+        }
+    }
+
+    function updateLang(lang) {
+        currentLang = lang;
+        const t = T[lang];
+
+        document.querySelectorAll('.join-lang-text').forEach(function(el) { el.classList.remove('is-active'); });
+        const activeText = document.getElementById(lang);
+        if (activeText) activeText.classList.add('is-active');
+
+        document.querySelectorAll('.join-lang-button').forEach(function(el) {
+            const active = el.dataset.lang === lang;
+            el.classList.toggle('is-active', active);
+            el.setAttribute('aria-pressed', active ? 'true' : 'false');
+        });
+
+        document.getElementById('lbl-nom').innerText = t.nom;
+        document.getElementById('lbl-prenom').innerText = t.prenom;
+        document.getElementById('lbl-dob').innerText = t.dob;
+        document.getElementById('lbl-mineur').innerText = t.mineur;
+        document.getElementById('lbl-cat').innerText = t.cat;
+        document.getElementById('lbl-role').innerText = t.role;
+        document.getElementById('lbl-parent').innerText = t.parent;
+        document.getElementById('lbl-tuteur1').innerText = t.tuteur1;
+        document.getElementById('lbl-tuteur2').innerText = t.tuteur2;
+        document.getElementById('lbl-nat').innerText = t.nat;
+        document.getElementById('lbl-cns').innerText = t.cns;
+        document.getElementById('lbl-medico').innerText = t.medico;
+        document.getElementById('lbl-licence').innerText = t.licence;
+        document.getElementById('lbl-club').innerText = t.club;
+        document.getElementById('lbl-u7').innerText = t.u7;
+        document.getElementById('lbl-adresse').innerText = t.adresse;
+        document.getElementById('lbl-email').innerText = t.email;
+        document.getElementById('lbl-gsm1').innerText = t.gsm1;
+        document.getElementById('lbl-gsm2').innerText = t.gsm2;
+        document.getElementById('lbl-chk1').innerHTML = t.chk1;
+        document.getElementById('lbl-chk2').innerHTML = t.chk2;
+        document.getElementById('lbl-chk3').innerText = t.chk3;
+        document.getElementById('lbl-chk4').innerText = t.chk4;
+        document.getElementById('submitBtn').innerText = t.send;
+        document.getElementById('Langue').value = lang;
+
+        const mineur = document.getElementById('Mineur');
+        mineur.options[0].text = t.non;
+        mineur.options[1].text = t.oui;
+
+        const role = document.getElementById('Role');
+        role.options[0].text = t.joueur;
+        role.options[1].text = t.officiel;
+        role.options[2].text = t.arbitre;
+
+        const parent = document.getElementById('ParentIsole');
+        parent.options[0].text = t.parent_non;
+        parent.options[1].text = t.parent_oui;
+    }
+
+    function calcCategorie(dob) {
+        const parts = dob.split('.');
+        if (parts.length !== 3) return;
+
+        const day = parseInt(parts[0], 10);
+        const month = parseInt(parts[1], 10);
+        const year = parseInt(parts[2], 10);
+
+        if (isNaN(day) || isNaN(month) || isNaN(year) || year < 1900 || month < 1 || month > 12 || day < 1 || day > 31) {
+            document.getElementById('cat-section').style.display = 'none';
+            document.getElementById('Categorie').value = '';
+            document.getElementById('Mineur').value = 'NON';
+            setRequiredState(false, '');
+            return;
+        }
+
+        const today = new Date();
+        let age = today.getFullYear() - year;
+
+        if (today.getMonth() + 1 < month || (today.getMonth() + 1 === month && today.getDate() < day)) {
+            age--;
+        }
+
+        let cat = '';
+
+        if (age <= 6) cat = 'U7';
+        else if (age <= 8) cat = 'U9';
+        else if (age <= 10) cat = 'U11';
+        else if (age <= 12) cat = 'U13';
+        else if (age <= 14) cat = 'U15';
+        else if (age <= 16) cat = 'U17';
+        else if (age <= 18) cat = 'U19';
+        else if (age <= 23) cat = 'Espoirs';
+        else if (age <= 40) cat = 'Seniors';
+        else cat = 'Vétérans';
+
+        const isMinor = age < 18;
+
+        document.getElementById('Categorie').value = cat;
+        document.getElementById('cat-display').innerText = cat;
+        document.getElementById('cat-section').style.display = 'block';
+        document.getElementById('Mineur').value = isMinor ? 'OUI' : 'NON';
+
+        setRequiredState(isMinor, cat);
+    }
+
+    document.getElementById('DateNaissance').addEventListener('input', function() {
+        let val = this.value.replace(/\D/g, '').slice(0, 8);
+
+        if (val.length > 2 && val.length <= 4) {
+            val = val.slice(0, 2) + '.' + val.slice(2);
+        } else if (val.length > 4) {
+            val = val.slice(0, 2) + '.' + val.slice(2, 4) + '.' + val.slice(4, 8);
+        }
+
+        this.value = val;
+
+        if (val.length === 10) {
+            calcCategorie(val);
+        } else {
+            document.getElementById('cat-section').style.display = 'none';
+            document.getElementById('Categorie').value = '';
+            document.getElementById('Mineur').value = 'NON';
+            setRequiredState(false, '');
+        }
+
+        updateCnsDisplay();
+    });
+
+    document.getElementById('ParentIsole').addEventListener('change', function() {
+        const isMinor = document.getElementById('Mineur').value === 'OUI';
+        const category = document.getElementById('Categorie').value;
+        setRequiredState(isMinor, category);
+    });
+
+    document.getElementById('CNS').addEventListener('input', function() {
+        this.value = this.value.slice(0, 5);
+        updateCnsDisplay();
+    });
+
+    document.getElementById('registrationForm').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    });
+
+    document.getElementById('registrationForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const form = document.getElementById('registrationForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const originalText = submitBtn.innerText;
+
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+
+        if (document.getElementById('honeypot').value.trim() !== '') {
+            return;
+        }
+
+        submitBtn.innerText = 'Envoi...';
+        submitBtn.disabled = true;
+        submitBtn.style.opacity = '0.7';
+
+        const formData = new FormData(form);
+        const dob = document.getElementById('DateNaissance').value;
+        const cnsManual = document.getElementById('CNS').value.trim();
+        const nom = document.getElementById('Nom').value.trim();
+        const prenom = document.getElementById('Prenom').value.trim();
+        const email = document.getElementById('Email').value.trim();
+
+        formData.set('Mineur', document.getElementById('Mineur').value);
+        formData.set('Categorie', document.getElementById('Categorie').value || document.getElementById('cat-display').innerText);
+        formData.set('Langue', currentLang);
+        formData.set('name', (nom + ' ' + prenom).trim());
+        formData.set('email', email);
+        formData.set('subject', 'Nouvelle inscription Mersch 75 - ' + (nom + ' ' + prenom).trim() + ' - ' + formData.get('Categorie'));
+
+        if (dob.length === 10) {
+            const parts = dob.split('.');
+            formData.set('CNSComplet', parts[2] + '.' + parts[1] + '.' + parts[0] + '.' + cnsManual);
+        }
+
+        if (document.getElementById('ParentIsole').value === 'OUI') {
+            formData.set('Tuteur2', '-');
+        }
+
+        if (!formData.has('U7Cert')) {
+            formData.set('U7Cert', 'Non');
+        }
+
+        const messageLines = [
+            'Nouvelle demande d’inscription interne Mersch 75',
+            '',
+            'Langue: ' + currentLang,
+            'Nom(s): ' + nom,
+            'Prénom: ' + prenom,
+            'Date de naissance: ' + formData.get('DateNaissance'),
+            'Mineur: ' + formData.get('Mineur'),
+            'Catégorie FLH: ' + formData.get('Categorie'),
+            'Rôle / Fonction: ' + formData.get('Role'),
+            'Parent isolé: ' + (formData.get('ParentIsole') || ''),
+            'Tuteur 1: ' + (formData.get('Tuteur1') || ''),
+            'Tuteur 2: ' + (formData.get('Tuteur2') || ''),
+            'Nationalité: ' + formData.get('Nationalite'),
+            'Matricule CNS complet: ' + (formData.get('CNSComplet') || ''),
+            'CNS - 5 chiffres manuels: ' + formData.get('CNS'),
+            'Medico: ' + formData.get('Medico'),
+            'Licence: ' + formData.get('Licence'),
+            'Ancien club: ' + formData.get('AncienClub'),
+            'Certificat U7: ' + formData.get('U7Cert'),
+            'Adresse: ' + formData.get('Adresse'),
+            'Email: ' + email,
+            'GSM 1: ' + formData.get('GSM1'),
+            'GSM 2: ' + (formData.get('GSM2') || ''),
+            'Conditions générales acceptées: ' + formData.get('ConditionsGenerales'),
+            'Protection des données acceptée: ' + formData.get('ProtectionDonnees'),
+            'Information FLH comprise: ' + formData.get('InfoFLH'),
+            'Exactitude confirmée: ' + formData.get('ConfirmationExactitude')
+        ];
+
+        formData.set('message', messageLines.join('\n'));
+
+        fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            body: formData
+        })
+        .then(function(response) {
+            return response.text();
+        })
+        .then(function(text) {
+            let data;
+
+            try {
+                data = JSON.parse(text);
+            } catch (error) {
+                throw new Error('Réponse serveur invalide: ' + text);
+            }
+
+            if (data.success === true || data.status === 'success') {
+                form.style.display = 'none';
+                document.querySelector('.join-lang-selector').style.display = 'none';
+                document.querySelectorAll('.join-lang-text').forEach(function(el) {
+                    el.style.display = 'none';
+                });
+
+                const successBox = document.getElementById('success-box');
+                successBox.style.display = 'block';
+
+                if (successBox.animate) {
+                    successBox.animate(
+                        [
+                            { opacity: 0, transform: 'translateY(20px)' },
+                            { opacity: 1, transform: 'translateY(0)' }
+                        ],
+                        { duration: 400, easing: 'ease-out' }
+                    );
+                }
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                return;
+            }
+
+            alert('Fehler: ' + (data.message || 'Web3Forms konnte die Anfrage nicht senden.'));
+            submitBtn.innerText = originalText;
+            submitBtn.disabled = false;
+            submitBtn.style.opacity = '1';
+        })
+        .catch(function(error) {
+            console.error('Error:', error);
+            alert('Connexion erreur. Réessayez. Technisches Problem.');
+            submitBtn.innerText = originalText;
+            submitBtn.disabled = false;
+            submitBtn.style.opacity = '1';
+        });
+    });
+
+    document.querySelectorAll('.join-lang-button').forEach(function(button) {
+        button.addEventListener('click', function() {
+            updateLang(this.dataset.lang);
+        });
+    });
+
+    updateLang('lu');
+    updateCnsDisplay();
+    </script>
 </body>
 </html>
