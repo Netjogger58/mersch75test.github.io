@@ -36,29 +36,492 @@
         </header>
 
         <main class="page-main">
-            <section class="page-hero">
-                <p class="eyebrow">Contact</p>
-                <h1>Eine Kontaktseite, die Orientierung gibt statt nur ein Formular zu zeigen.</h1>
-                <p class="lead">Im Export ist bereits eine Web3Forms-Anbindung sichtbar. Für GitHub Pages halten wir die Kontaktseite erst einmal robust und einfach erweiterbar.</p>
-            </section>
+            <div class="contact-wrapper">
+                <div class="contact-header">
+                    <img
+                        src="https://www.mersch75.lu/wp-content/uploads/2026/03/Logo-Menu-Mersch75-Contact-2025-1.png"
+                        alt="Contact Mersch75"
+                        class="contact-icon"
+                    >
+                    <div class="contact-header-text">
+                        <h1 class="contact-title">Contact</h1>
+                    </div>
+                </div>
 
-            <section class="section two-column-layout">
-                <article class="panel">
-                    <h2>Direkter Kontakt</h2>
-                    <p><strong>E-Mail</strong><br><a href="mailto:info@mersch75.lu">info@mersch75.lu</a></p>
-                    <p><strong>Telefon</strong><br>288 00 399</p>
-                </article>
-                <article class="panel">
-                    <h2>Für was du schreiben kannst</h2>
-                    <p>Probetraining, allgemeine Vereinsfragen, Partnerschaften, Events und organisatorische Anliegen.</p>
-                </article>
-            </section>
+                <div class="contact-info-row">
+                    <div class="contact-info-card">
+                        <div>
+                            <p class="contact-info-label">E-Mail</p>
+                            <a href="mailto:info@mersch75.lu">info@mersch75.lu</a>
+                        </div>
+                    </div>
 
-            <section class="section panel emphasis-panel">
-                <span class="card-tag">Formular</span>
-                <h2>Nächster Ausbauschritt</h2>
-                <p>Wenn du willst, binden wir hier anschließend wieder ein statisches Formular über einen externen Dienst an, damit GitHub Pages ohne eigenes Backend auskommt.</p>
-            </section>
+                    <div class="contact-info-card">
+                        <div>
+                            <p class="contact-info-label">Telefon</p>
+                            <a href="tel:+35228800399">(+352) 288 00 399</a>
+                        </div>
+                    </div>
+
+                    <div class="contact-info-card">
+                        <div>
+                            <p class="contact-info-label">Adresse</p>
+                            <p>21, rue des Pres<br>L-7561 Mersch</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-main">
+                    <div class="contact-left">
+                        <div class="contact-lang-block">
+                            <span class="contact-flag">LU</span>
+                            <p>Fir mat eis a Kontakt ze kommen, benotz d'Kontaktinformatiounen hei uewen oder d'Kontaktformular. Do kanns du eis och Virschlei, Feedback, Feeler op eiser Homepage oder aner Matdeelungen schécken.</p>
+                        </div>
+
+                        <div class="contact-lang-block">
+                            <span class="contact-flag">FR</span>
+                            <p>Pour nous contacter, utilisez les informations de contact ci-dessus ou le formulaire. Vous pouvez egalement nous faire part de vos suggestions, remarques, erreurs constatees sur notre site ou autres messages.</p>
+                        </div>
+
+                        <div class="contact-lang-block">
+                            <span class="contact-flag">DE</span>
+                            <p>Um mit uns Kontakt aufzunehmen, nutze die Kontaktdaten oben oder das Kontaktformular. Dort kannst du uns auch Vorschlaege, Feedback, Hinweise auf Fehler auf unserer Homepage oder andere Mitteilungen senden.</p>
+                        </div>
+
+                        <div class="contact-lang-block">
+                            <span class="contact-flag">EN</span>
+                            <p>To contact us, use the contact details above or the form. You may also send us suggestions, feedback, error reports, or other messages.</p>
+                        </div>
+
+                        <div class="contact-lang-block">
+                            <span class="contact-flag">PT</span>
+                            <p>Para entrar em contacto connosco, utilize os contactos acima ou o formulario de contacto. Tambem pode enviar-nos sugestoes, comentarios ou outras mensagens.</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-right">
+                        <div class="contact-form-box">
+                            <h2 class="contact-form-title">
+                                <img
+                                    src="https://www.mersch75.lu/wp-content/uploads/2026/03/Logo-Menu-Mersch75-Contact-2025-1.png"
+                                    alt=""
+                                    class="contact-form-icon"
+                                >
+                                Message
+                            </h2>
+
+                            <form id="contactForm" action="https://api.web3forms.com/submit" method="POST">
+                                <input type="hidden" name="access_key" value="15e3cc53-6864-47dd-bfaf-332cb4ca45e5">
+                                <input type="hidden" name="subject" value="[Mersch75] Nouveau message / Neie Message / Neue Nachricht">
+                                <input type="hidden" name="redirect" value="false">
+                                <input type="checkbox" name="botcheck" style="display:none">
+                                <input type="hidden" name="name" id="contactFullName">
+
+                                <div class="contact-frow">
+                                    <div class="contact-fg">
+                                        <label for="contact-firstname">Vorname *</label>
+                                        <input id="contact-firstname" type="text" name="firstname" required placeholder="Prenom / Vorname...">
+                                    </div>
+
+                                    <div class="contact-fg">
+                                        <label for="contact-lastname">Nachname *</label>
+                                        <input id="contact-lastname" type="text" name="lastname" required placeholder="Nom / Nachname...">
+                                    </div>
+                                </div>
+
+                                <div class="contact-frow">
+                                    <div class="contact-fg">
+                                        <label for="contact-email">E-Mail *</label>
+                                        <input id="contact-email" type="email" name="email" required placeholder="email@example.com">
+                                    </div>
+
+                                    <div class="contact-fg">
+                                        <label for="contact-phone">Telefon</label>
+                                        <input id="contact-phone" type="tel" name="phone" placeholder="+352 ...">
+                                    </div>
+                                </div>
+
+                                <div class="contact-fg">
+                                    <label for="contact-subject">Betreff *</label>
+                                    <input id="contact-subject" type="text" name="subject_user" required placeholder="Sujet / Thema...">
+                                </div>
+
+                                <div class="contact-fg">
+                                    <label for="contact-message">Nachricht *</label>
+                                    <textarea id="contact-message" name="message" rows="5" required placeholder="Votre message / Ar Noriicht / Ihre Nachricht..."></textarea>
+                                </div>
+
+                                <button type="submit" class="contact-submit" id="contactSubmitBtn">
+                                    <img
+                                        src="https://www.mersch75.lu/wp-content/uploads/2026/03/Logo-Menu-Mersch75-Contact-2025-1.png"
+                                        alt=""
+                                        class="contact-btn-icon"
+                                    >
+                                    SEND / SCHECKEN / SENDEN
+                                </button>
+
+                                <p class="contact-form-note">
+                                    Mehrsprachige Anfragen si kee Problem.
+                                </p>
+                            </form>
+
+                            <div id="contactSuccess" class="contact-success" style="display:none;">
+                                <div class="contact-success-icon">OK</div>
+                                <h3>Merci / Dankeschon / Thank you!</h3>
+                                <p>LU: Ar Noriicht gouf geschackt. Mir mellen eis esou séier wei meiglech.</p>
+                                <p>FR: Votre message a ete envoye. Nous vous repondrons dans les plus brefs delais.</p>
+                                <p>DE: Ihre Nachricht wurde gesendet. Wir melden uns so schnell wie moglich.</p>
+                                <button type="button" id="contactResetBtn" class="contact-reset-btn">
+                                    Neie Message / Nouveau message / Neue Nachricht
+                                </button>
+                            </div>
+
+                            <div id="contactError" class="contact-error" style="display:none;">
+                                Fehler beim Senden. Bitte versuche es nochmal oder schreib direkt an <a href="mailto:info@mersch75.lu">info@mersch75.lu</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <style>
+                .contact-wrapper {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    padding: 0 20px 60px;
+                }
+
+                .contact-header {
+                    display: flex;
+                    align-items: center;
+                    gap: 30px;
+                    padding: 12px 0 30px;
+                    border-bottom: 3px solid #0073aa;
+                    margin-bottom: 30px;
+                }
+
+                .contact-icon {
+                    width: 110px;
+                    height: 110px;
+                    object-fit: contain;
+                    filter: drop-shadow(0 4px 12px rgba(0, 115, 170, 0.2));
+                }
+
+                .contact-title {
+                    font-size: 52px;
+                    font-weight: 900;
+                    color: #003d6b;
+                    margin: 0 0 8px;
+                    letter-spacing: -1px;
+                }
+
+                .contact-subtitle {
+                    font-size: 14px;
+                    color: #666;
+                    margin: 0;
+                    line-height: 1.6;
+                }
+
+                .contact-info-row {
+                    display: flex;
+                    gap: 15px;
+                    margin-bottom: 35px;
+                    flex-wrap: wrap;
+                }
+
+                .contact-info-card {
+                    flex: 1;
+                    min-width: 200px;
+                    background: #f4f9fd;
+                    border: 2px solid #d0e8f5;
+                    border-radius: 12px;
+                    padding: 18px 22px;
+                    display: flex;
+                    align-items: flex-start;
+                    gap: 15px;
+                }
+
+                .contact-info-icon {
+                    flex-shrink: 0;
+                    min-width: 60px;
+                    font-size: 12px;
+                    font-weight: 800;
+                    letter-spacing: 0.08em;
+                    text-transform: uppercase;
+                    color: #0073aa;
+                }
+
+                .contact-info-label {
+                    font-size: 12px;
+                    font-weight: bold;
+                    color: #0073aa;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                    margin: 0 0 4px;
+                }
+
+                .contact-info-card p {
+                    margin: 0;
+                    font-size: 14px;
+                    color: #444;
+                    line-height: 1.5;
+                }
+
+                .contact-info-card a {
+                    color: #003d6b;
+                    font-weight: bold;
+                    text-decoration: none;
+                    font-size: 14px;
+                }
+
+                .contact-main {
+                    display: flex;
+                    gap: 40px;
+                    align-items: flex-start;
+                }
+
+                .contact-left,
+                .contact-right {
+                    flex: 1;
+                }
+
+                .contact-lang-block {
+                    display: flex;
+                    gap: 15px;
+                    margin-bottom: 20px;
+                    padding-bottom: 20px;
+                    border-bottom: 1px solid #f0f0f0;
+                    align-items: flex-start;
+                }
+
+                .contact-lang-block:last-child {
+                    border-bottom: none;
+                }
+
+                .contact-flag {
+                    font-size: 14px;
+                    font-weight: 800;
+                    letter-spacing: 0.08em;
+                    text-transform: uppercase;
+                    color: #0073aa;
+                    flex-shrink: 0;
+                    margin-top: 2px;
+                }
+
+                .contact-lang-block p {
+                    font-size: 15px;
+                    line-height: 1.7;
+                    color: #444;
+                    margin: 0;
+                }
+
+                .contact-lang-block a {
+                    color: #0073aa;
+                    text-decoration: none;
+                }
+
+                .contact-form-box {
+                    background: #f9f9f9;
+                    border-radius: 16px;
+                    padding: 35px;
+                    border: 2px solid #e0f0fa;
+                    position: sticky;
+                    top: 20px;
+                }
+
+                .contact-form-title {
+                    font-size: 24px;
+                    font-weight: 900;
+                    color: #003d6b;
+                    margin: 0 0 25px;
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                }
+
+                .contact-form-icon {
+                    width: 36px;
+                    height: 36px;
+                    object-fit: contain;
+                }
+
+                .contact-fg {
+                    margin-bottom: 18px;
+                }
+
+                .contact-fg label {
+                    display: block;
+                    font-weight: bold;
+                    font-size: 12px;
+                    color: #555;
+                    margin-bottom: 6px;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                    white-space: nowrap;
+                }
+
+                .contact-fg input,
+                .contact-fg textarea {
+                    width: 100%;
+                    padding: 12px 15px;
+                    border: 1.5px solid #ddd;
+                    border-radius: 8px;
+                    font-size: 15px;
+                    font-family: inherit;
+                    transition: border 0.3s;
+                    background: white;
+                }
+
+                .contact-fg input:focus,
+                .contact-fg textarea:focus {
+                    border-color: #0073aa;
+                    outline: none;
+                    box-shadow: 0 0 0 3px rgba(0, 115, 170, 0.12);
+                }
+
+                .contact-frow {
+                    display: flex;
+                    gap: 15px;
+                }
+
+                .contact-frow .contact-fg {
+                    flex: 1;
+                }
+
+                .contact-submit {
+                    background: #0073aa;
+                    color: white;
+                    border: none;
+                    padding: 16px 30px;
+                    border-radius: 8px;
+                    font-size: 15px;
+                    font-weight: bold;
+                    width: 100%;
+                    cursor: pointer;
+                    transition: background 0.3s;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 12px;
+                    letter-spacing: 0.5px;
+                    margin-top: 5px;
+                }
+
+                .contact-submit:hover {
+                    background: #005f8e;
+                }
+
+                .contact-submit:disabled {
+                    background: #aaa;
+                    cursor: not-allowed;
+                }
+
+                .contact-btn-icon {
+                    width: 28px;
+                    height: 28px;
+                    object-fit: contain;
+                    filter: brightness(0) invert(1);
+                }
+
+                .contact-form-note {
+                    font-size: 12px;
+                    color: #999;
+                    text-align: center;
+                    margin-top: 12px;
+                    margin-bottom: 0;
+                }
+
+                .contact-success {
+                    background: #e8f5e9;
+                    border: 2px solid #a5d6a7;
+                    border-radius: 12px;
+                    padding: 30px 25px;
+                    text-align: center;
+                    margin-top: 10px;
+                }
+
+                .contact-success-icon {
+                    font-size: 28px;
+                    margin-bottom: 15px;
+                    font-weight: 800;
+                    color: #2e7d32;
+                }
+
+                .contact-success h3 {
+                    font-size: 22px;
+                    color: #2e7d32;
+                    margin: 0 0 15px;
+                }
+
+                .contact-success p {
+                    font-size: 14px;
+                    color: #444;
+                    margin: 5px 0;
+                    line-height: 1.6;
+                }
+
+                .contact-reset-btn {
+                    margin-top: 20px;
+                    background: #0073aa;
+                    color: white;
+                    border: none;
+                    padding: 12px 24px;
+                    border-radius: 8px;
+                    font-size: 14px;
+                    font-weight: bold;
+                    cursor: pointer;
+                    transition: background 0.3s;
+                }
+
+                .contact-reset-btn:hover {
+                    background: #005f8e;
+                }
+
+                .contact-error {
+                    background: #fff3e0;
+                    border: 2px solid #ffcc80;
+                    border-radius: 8px;
+                    padding: 15px 20px;
+                    font-size: 14px;
+                    color: #e65100;
+                    margin-top: 15px;
+                    text-align: center;
+                }
+
+                .contact-error a {
+                    color: #0073aa;
+                }
+
+                @media (max-width: 768px) {
+                    .contact-header {
+                        flex-direction: column;
+                        text-align: center;
+                        gap: 15px;
+                    }
+
+                    .contact-title {
+                        font-size: 36px;
+                    }
+
+                    .contact-main {
+                        flex-direction: column;
+                    }
+
+                    .contact-info-row {
+                        flex-direction: column;
+                    }
+
+                    .contact-form-box {
+                        position: static;
+                        padding: 20px;
+                    }
+
+                    .contact-frow {
+                        flex-direction: column;
+                        gap: 0;
+                    }
+                }
+            </style>
 
             <footer class="site-page-footer">
                 <div class="site-page-footer-shell">
@@ -91,6 +554,68 @@
         </main>
     </div>
 
+    <script>
+        (function initializeContactForm() {
+            const form = document.getElementById('contactForm');
+            const submitButton = document.getElementById('contactSubmitBtn');
+            const successBox = document.getElementById('contactSuccess');
+            const errorBox = document.getElementById('contactError');
+            const resetButton = document.getElementById('contactResetBtn');
+            const buttonDefaultHtml = submitButton ? submitButton.innerHTML : '';
+
+            if (!form || !submitButton || !successBox || !errorBox) {
+                return;
+            }
+
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                submitButton.disabled = true;
+                submitButton.textContent = 'Sending...';
+
+                const formData = new FormData(form);
+                const subjectUser = String(formData.get('subject_user') || '').trim();
+                const firstname = String(formData.get('firstname') || '').trim();
+                const lastname = String(formData.get('lastname') || '').trim();
+                const fullName = [firstname, lastname].filter(Boolean).join(' ');
+
+                formData.set('name', fullName);
+                formData.set('subject', '[Mersch75 Contact] ' + subjectUser + ' - ' + fullName);
+
+                try {
+                    const response = await fetch('https://api.web3forms.com/submit', {
+                        method: 'POST',
+                        body: formData,
+                    });
+
+                    const data = await response.json();
+
+                    if (!data.success) {
+                        throw new Error('Send failed');
+                    }
+
+                    form.style.display = 'none';
+                    successBox.style.display = 'block';
+                    errorBox.style.display = 'none';
+                } catch (error) {
+                    errorBox.style.display = 'block';
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = buttonDefaultHtml;
+                }
+            });
+
+            if (resetButton) {
+                resetButton.addEventListener('click', () => {
+                    form.reset();
+                    form.style.display = 'block';
+                    successBox.style.display = 'none';
+                    errorBox.style.display = 'none';
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = buttonDefaultHtml;
+                });
+            }
+        })();
+    </script>
     <script src="script.js"></script>
 </body>
 </html>

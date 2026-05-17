@@ -539,11 +539,46 @@ body.menu-open {
     padding: 28px;
 }
 
+.poster-section-hero {
+    padding: 0;
+}
+
 .poster-shell {
     display: grid;
     grid-template-columns: minmax(300px, 0.7fr) minmax(0, 1.3fr);
     gap: 24px;
     align-items: center;
+}
+
+.poster-shell-hero {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: stretch;
+    gap: 0;
+}
+
+.poster-shell-hero .poster-visual {
+    min-height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.poster-shell-hero .poster-visual img {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    object-fit: contain;
+}
+
+.poster-visual-hero {
+    display: flex;
+    width: 100%;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
 }
 
 .poster-copy {
@@ -1611,6 +1646,10 @@ body.matchday-page {
         align-items: flex-start;
     }
 
+    .poster-shell-hero .poster-visual img {
+        min-height: 0;
+    }
+
     .events-main-link {
         justify-self: stretch;
     }
@@ -1636,6 +1675,10 @@ body.matchday-page {
     .events-overlay,
     .spotlight-layout {
         padding: 22px;
+    }
+
+    .poster-section-hero {
+        padding: 14px;
     }
 
     .landing-hero-copy h1 {
