@@ -36,38 +36,778 @@
         </header>
 
         <main class="page-main">
-            <section class="page-hero">
-                <p class="eyebrow">Inside</p>
-                <h1>Identität, Geschichte und Vereinsleben in einer lesbaren Struktur.</h1>
-                <p class="lead">Diese Seite ersetzt verstreute WordPress-Bausteine durch einen ruhigen redaktionellen Rahmen, den wir später mit Originaltexten und Medien aus dem Export ergänzen.</p>
+            <section class="inside-switcher" aria-label="Inside Untermenü">
+                <div class="inside-switcher-shell">
+                    <p class="inside-switcher-kicker">Untermenü</p>
+                    <div class="inside-switcher-buttons" role="tablist" aria-label="Inside Bereiche">
+                        <button class="inside-switcher-button is-active" type="button" role="tab" aria-selected="true" aria-controls="inside-panel-comite" data-inside-tab="comite">Comité</button>
+                        <button class="inside-switcher-button" type="button" role="tab" aria-selected="false" aria-controls="inside-panel-history" data-inside-tab="history">Historie</button>
+                    </div>
+                </div>
+
+                <style>
+                    .inside-switcher {
+                        padding: 0 0 24px;
+                    }
+
+                    .inside-switcher-shell {
+                        display: flex;
+                        flex-wrap: wrap;
+                        align-items: center;
+                        justify-content: space-between;
+                        gap: 16px;
+                        max-width: 1600px;
+                        margin: 0 auto;
+                    }
+
+                    .inside-switcher-kicker {
+                        margin: 0;
+                        font-size: 0.78rem;
+                        font-weight: 700;
+                        letter-spacing: 0.18em;
+                        text-transform: uppercase;
+                        color: #005eb8;
+                    }
+
+                    .inside-switcher-buttons {
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 12px;
+                    }
+
+                    .inside-switcher-button {
+                        border: 1px solid rgba(0, 47, 101, 0.2);
+                        background: #ffffff;
+                        color: #002f65;
+                        border-radius: 999px;
+                        padding: 12px 22px;
+                        font: inherit;
+                        font-weight: 700;
+                        cursor: pointer;
+                        transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease, transform 160ms ease;
+                    }
+
+                    .inside-switcher-button:hover,
+                    .inside-switcher-button:focus-visible {
+                        border-color: #005eb8;
+                        transform: translateY(-1px);
+                        outline: none;
+                    }
+
+                    .inside-switcher-button.is-active {
+                        background: #002f65;
+                        color: #ffffff;
+                        border-color: #002f65;
+                    }
+
+                    .inside-panel[hidden] {
+                        display: none;
+                    }
+
+                    @media (max-width: 640px) {
+                        .inside-switcher {
+                            padding-bottom: 18px;
+                        }
+
+                        .inside-switcher-shell {
+                            align-items: flex-start;
+                        }
+
+                        .inside-switcher-buttons {
+                            width: 100%;
+                        }
+
+                        .inside-switcher-button {
+                            flex: 1 1 180px;
+                        }
+                    }
+                </style>
             </section>
 
-            <section class="section two-column-layout">
-                <article class="panel">
-                    <h2>Was hier hinein gehört</h2>
-                    <p>Vereinsgeschichte, Comité, Leitbild, Standorte, besondere Projekte und alles, was Mersch75 als Club ausmacht.</p>
-                    <p>Im Export sind bereits Hinweise auf History- und Comité-Inhalte sichtbar. Diese Seite ist die spätere Klammer dafür.</p>
-                </article>
-                <article class="panel emphasis-panel">
-                    <span class="card-tag">Migration Note</span>
-                    <h2>WordPress-Shortcodes werden nicht kopiert.</h2>
-                    <p>Shortcode-basierte Spezialseiten werden statisch neu gedacht. Das reduziert Abhängigkeiten und macht die Seite langfristig wartbar.</p>
-                </article>
+            <!-- Drachentöter / Dragon History Section -->
+            <section class="mersch-history-container inside-panel" id="inside-panel-history" data-inside-panel="history" hidden>
+                <div class="mersch-history-content">
+                    <div class="mersch-history-left">
+                        <img src="Media/Inside/Original-Draach-Mersch.jpg" alt="Original Draach Mersch" class="mersch-draach-img">
+                        <p class="mersch-image-caption">Die schwungvolle Form des von Paul Eyschen entworfenen Drachens symbolisiert das Mäandern der drei Flüsse.</p>
+                        <img src="Media/Inside/CleanShot-2026-02-18-at-17.07.46_2x.png" alt="Daggie Mascot" class="mersch-daggie-img">
+                    </div>
+
+                    <div class="mersch-history-right">
+                        <h2 class="mersch-title">Méchelsplatz in Mersch: Der Drachentöter als Namensgeber</h2>
+                        
+                        <p class="mersch-text">Ein Platz, eine Geschichte: Über die Jahre hat der Méchelsplaz im Zentrum von Mersch viele seiner archäologischen Schätze offenbart.</p>
+                        
+                        <p class="mersch-text">„Er wurde gestürzt, der große Drache, die alte Schlange, die Teufel oder Satan heißt und die ganze Welt verführt; der Drache wurde auf die Erde gestürzt und mit ihm wurden seine Engel hinabgeworfen." (Offenbarung des Johannes)</p>
+                        
+                        <p class="mersch-text">Auch wenn die von Paul Eyschen geschaffene Drachengestalt, die über den Méchelsplaz wacht, nicht „feuerrot, mit sieben Köpfen und zehn Hörnern und mit sieben Diademen auf seinen Köpfen" ist, wie diejenige mit der der Erzengel Michael kämpft, so ist ihr Ursprung dennoch auf den Drachentöter zurückzuführen. Der Heilige Michael ist der Merscher Kirchenpatron und er hat dem Platz im Zentrum der Ortschaft seinen Namen gegeben.</p>
+                        
+                        <p class="mersch-text">Eyschens Bronzedrache ist zum einen der Beschützer von Gewässern, aus seinem schwungvollen Körper entspringen die drei Flüsse Alzette, Eisch und Mamer. Seine sieben Rückenstacheln stehen für die sieben Schlösser im Merschertal. Die anstelle von Kiemen angebrachten Weintrauben beziehen sich auf einen römischen Grabstein, der bei archäologischen Ausgrabungen auf dem Méchelsplaz gefunden wurde. Auf ihm war ein Ungeheuer mit einem Traubenfüllhorn eingemeißelt.</p>
+                        
+                        <p class="mersch-text">Der Boden unter diesem Platz hat bei einer Reihe von Untersuchungen nach und nach seine jahrhunderte-, ja gar jahrtausendealte Geschichte preisgegeben. Zwischen 1851 und 1857, als die alte Pfarrkirche abgetragen wurde, stieß man auf einen Geldschatz von ungefähr 300 Gold- und Silbermünzen aus dem 14. Jahrhundert, zahlreiche Sarkophage aus dem Mittelalter sowie behauene Steine und Inschriften aus der Römerzeit. Bei den Bauarbeiten eines neuen Kioskes 1948 wurden zwei weitere Sarkophage entdeckt und bei der Restaurierung des alten Kirchturmes 1981 Gräber und Fragmente römischer Amphoren. Von 1992 bis 1994 wurden großangelegte Ausgrabungen vom „Service archéologique" des „Musée national d'Histoire et d'Art" unternommen. Dabei wurden mehr als 260 Gräber unter der alten Kirche gefunden.</p>
+                        
+                        <p class="mersch-text mersch-source">Mireille Meyer 22.08.2020 Artikel im Wort</p>
+
+                        <div class="mersch-mascot-explanation">
+                            <p class="mersch-mascot-title">Firwat gesidd dir den Draach Daggie a nach vill aaner Draachen bei eis um Site an am Veräin?</p>
+                            <div class="mersch-kleng-draachen-wrapper">
+                                <img src="Media/Inside/CleanShot-2026-04-12-at-12.33.53@2x.png" alt="Kleng Draachen" class="mersch-kleng-draachen-img">
+                            </div>
+                            <p class="mersch-mascot-text">Fir där Symbolik eng nach méi grouss Wäertschätzung ze ginn, huet sech den Handball Club Mersch75, als Maskottchen den 'Draach Daggie' ausgeduecht.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <style>
+                    * { box-sizing: border-box; }
+
+                    .mersch-history-container {
+                        position: relative;
+                        width: 100%;
+                        max-width: 1600px;
+                        margin: 0 auto;
+                        background-color: #f0f4f8; 
+                        overflow: hidden;
+                        font-family: Arial, sans-serif;
+                        color: #002b5e;
+                        padding: 40px;
+                        border-left: 2px dashed #9fb6d9;
+                        border-right: 2px dashed #9fb6d9;
+                    }
+
+                    .mersch-history-container::before {
+                        content: "";
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background-image: url('Media/Inside/CleanShot-2026-02-18-at-17.07.46_2x.png');
+                        background-size: cover;
+                        background-repeat: no-repeat;
+                        background-position: center;
+                        opacity: 0.15;
+                        z-index: 0;
+                        pointer-events: none;
+                    }
+
+                    .mersch-history-content {
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 50px;
+                        position: relative;
+                        z-index: 1;
+                    }
+
+                    .mersch-history-left {
+                        flex: 1;
+                        min-width: 300px;
+                        max-width: 380px;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 25px;
+                    }
+
+                    .mersch-draach-img {
+                        width: 100%;
+                        height: auto;
+                        border: 1px solid #ddd;
+                        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                    }
+
+                    .mersch-image-caption {
+                        font-weight: bold;
+                        font-size: 15px;
+                        line-height: 1.4;
+                        margin: 0;
+                        color: #000;
+                    }
+
+                    .mersch-daggie-img {
+                        width: 100%;
+                        max-width: 280px;
+                        height: auto;
+                        margin: 20px auto 0 auto;
+                    }
+
+                    .mersch-history-right {
+                        flex: 2;
+                        min-width: 300px;
+                        display: flex;
+                        flex-direction: column;
+                    }
+
+                    .mersch-title {
+                        font-size: 22px;
+                        font-weight: bold;
+                        margin-top: 0;
+                        margin-bottom: 20px;
+                        color: #003366;
+                    }
+
+                    .mersch-text {
+                        font-size: 15px;
+                        line-height: 1.6;
+                        margin-bottom: 15px;
+                        text-align: justify;
+                        color: #003366;
+                    }
+
+                    .mersch-source {
+                        font-weight: bold;
+                        margin-top: -5px;
+                        margin-bottom: 35px;
+                    }
+
+                    .mersch-mascot-explanation {
+                        margin-top: 30px;
+                        padding: 20px;
+                        background: rgba(255, 255, 255, 0.8);
+                        border-left: 4px solid #005eb8;
+                    }
+
+                    .mersch-mascot-title {
+                        font-weight: bold;
+                        font-size: 16px;
+                        color: #003366;
+                        margin: 0 0 15px 0;
+                    }
+
+                    .mersch-kleng-draachen-wrapper {
+                        text-align: center;
+                        margin-bottom: 15px;
+                    }
+
+                    .mersch-kleng-draachen-img {
+                        max-width: 200px;
+                        height: auto;
+                    }
+
+                    .mersch-mascot-text {
+                        font-size: 14px;
+                        line-height: 1.5;
+                        color: #003366;
+                        margin: 0;
+                    }
+
+                    @media (max-width: 768px) {
+                        .mersch-history-container {
+                            padding: 20px;
+                        }
+
+                        .mersch-history-content {
+                            flex-direction: column;
+                            gap: 30px;
+                        }
+
+                        .mersch-history-left {
+                            max-width: 100%;
+                        }
+
+                        .mersch-text {
+                            text-align: left;
+                        }
+                    }
+                </style>
             </section>
 
-            <section class="section stacked-panels">
-                <article class="panel">
-                    <h3>Vereinsgeschichte</h3>
-                    <p>Ein erzählerischer Abschnitt mit Texten, Jahresmarken, Fotos und markanten Stationen des Vereins.</p>
-                </article>
-                <article class="panel">
-                    <h3>Menschen im Club</h3>
-                    <p>Comité, Ehrenamt, Trainerumfeld und Kontaktpunkte werden in klare Rollen statt in verstreute Seitenblöcke gegliedert.</p>
-                </article>
-                <article class="panel">
-                    <h3>Club-Kultur</h3>
-                    <p>Hier entsteht Raum für Werte, Nachwuchsarbeit, Events und das Vereinsgefühl rund um Mersch75.</p>
-                </article>
+            <section class="org-chart-container inside-panel" id="inside-panel-comite" data-inside-panel="comite">
+                <div class="org-wrapper">
+                    <div class="org-header">
+                        <img src="Media/Inside/Logo-Menu-Mersch75-M75-CA-2025.png" alt="M75 Logo Menu" class="header-logo-top">
+                        <div class="header-text">
+                            <h1>Executive & Organisatioun</h1>
+                            <p>
+                                <a href="mailto:info@mersch75.lu">info@mersch75.lu</a> |
+                                <a href="mailto:jugend@mersch75.lu">jugend@mersch75.lu</a> |
+                                <a href="tel:+35228800399">+352 288 00 399</a>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="hierarchy-container">
+                        <div class="level-box-container">
+                            <div class="blue-box title-box">
+                                <span class="role-title">Präsident</span>
+                                <span class="role-name">Jeff Schuster</span>
+                            </div>
+                        </div>
+                        <div class="line-vertical-short"></div>
+
+                        <div class="level-box-container">
+                            <div class="blue-box title-box">
+                                <span class="role-title">Vizepräsident</span>
+                                <span class="role-name">Armand Kremer</span>
+                            </div>
+                        </div>
+                        <div class="line-vertical-short"></div>
+
+                        <div class="level-3-container relative-container">
+                            <div class="line-horizontal-top"></div>
+                            <div class="blue-box title-box">
+                                <span class="role-title">Technesche Sekretär</span>
+                                <span class="role-name">Bernard Metzler</span>
+                            </div>
+                            <div class="blue-box title-box">
+                                <span class="role-title">Administrative Sekretär</span>
+                                <span class="role-name">Virginio Castellano</span>
+                            </div>
+                            <div class="blue-box title-box">
+                                <span class="role-title">Trésorier</span>
+                                <span class="role-name">Ben Bisenius</span>
+                            </div>
+                        </div>
+
+                        <div class="weider-container">
+                            <div class="blue-box title-box weider-box">
+                                <span class="role-title">Weider Memberen</span>
+                                <div class="weider-columns">
+                                    <div class="weider-col">
+                                        <span>Loïc Didelot</span>
+                                        <span>Samantha Fernandez</span>
+                                    </div>
+                                    <div class="weider-col">
+                                        <span>Adrien Deischter</span>
+                                    </div>
+                                    <div class="weider-col">
+                                        <span>Philippe Kremer</span>
+                                        <span>Louis Van der Weken</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="line-vertical-short"></div>
+                        <div class="level-box-container">
+                            <div class="blue-box title-box">
+                                <span class="role-title">Koordinator*in</span>
+                                <span class="role-name">&nbsp;</span>
+                            </div>
+                        </div>
+
+                        <div class="line-vertical-long-to-depts"></div>
+                    </div>
+
+                    <div class="dept-grid-container">
+                        <div class="line-horizontal-depts"></div>
+
+                        <div class="dept-item">
+                            <div class="circle-img-container">
+                                <img src="Media/Inside/Festiviteiten.png" alt="Festivitäten">
+                            </div>
+                            <div class="dept-card">
+                                <div class="dept-title">Festivitéiten</div>
+                                <div class="dept-names">
+                                    <span>Philippe Kremer</span>
+                                    <span>Jeff Schuster</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dept-item">
+                            <div class="circle-img-container">
+                                <img src="Media/Inside/Logo-Buvette.png" alt="Buvette">
+                            </div>
+                            <div class="dept-card">
+                                <div class="dept-title">Buvette</div>
+                                <div class="dept-names">
+                                    <span>Koordinatioun: Philippe</span>
+                                    <span>Personal: Louis</span>
+                                    <span>Entréeskeess: Armand K.</span>
+                                    <span>Mikro: Jeff S.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dept-item">
+                            <div class="circle-img-container">
+                                <img src="Media/Inside/Logo-Buero.png" alt="Büro Admin">
+                            </div>
+                            <div class="dept-card">
+                                <div class="dept-title">Büro / Admin</div>
+                                <div class="dept-names">
+                                    <span>Secrétariat: Virginio Castellano</span>
+                                    <span>Trésorerie: Ben Bisenius</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dept-item">
+                            <div class="circle-img-container">
+                                <img src="Media/Inside/Logo-Mersch75-Internet.png" alt="Kommunikatioun">
+                            </div>
+                            <div class="dept-card">
+                                <div class="dept-title">Kommunikatioun</div>
+                                <div class="dept-names">
+                                    <span>Sponsoring: Armand &amp; Jeff</span>
+                                    <span>Communication: Adrien &amp; Jeff</span>
+                                    <span>Website/Merch: Adrien</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dept-item">
+                            <div class="circle-img-container">
+                                <img src="Media/Inside/Den-Desch.png" alt="Technik Dësch">
+                            </div>
+                            <div class="dept-card">
+                                <div class="dept-title">Technik / Dësch</div>
+                                <div class="dept-names">
+                                    <span>Secrétariat Technique: Bernard Metzler</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dept-item">
+                            <div class="circle-img-container">
+                                <img src="Media/Inside/Logo-Arbittre.png" alt="Arbitrage">
+                            </div>
+                            <div class="dept-card">
+                                <div class="dept-title">Arbitrage</div>
+                                <div class="dept-names">
+                                    <span>Arbitrage: Georges Frieden</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="dept-item">
+                            <div class="circle-img-container">
+                                <img src="Media/Inside/Trainerstaff.png" alt="Trainer staff">
+                            </div>
+                            <div class="dept-card">
+                                <div class="dept-title">Trainer &amp; Supervisors</div>
+                                <div class="dept-names">
+                                    <span>Max Blanc (LUXQF3)</span>
+                                    <span>Anne Bisenius Holm (LUXQF3)</span>
+                                    <span>Louis Van der Weken (LUXQF2Bis)</span>
+                                    <span>Castellano Virginio (LUXQF2)</span>
+                                    <span>Adrien Deischter (LUXQF4)</span>
+                                </div>
+                                <div class="dept-separator"></div>
+                                <div class="dept-material-icon">
+                                    <img src="Media/Inside/Manager-Geraete.png" alt="Material Icon">
+                                </div>
+                                <div class="dept-title small-title">Material</div>
+                                <div class="dept-names">
+                                    <span>Material: Comité</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <style>
+                    .org-chart-container {
+                        font-family: Arial, sans-serif;
+                        background-color: #ffffff;
+                        padding: 40px 0;
+                        display: flex;
+                        justify-content: center;
+                    }
+
+                    .org-wrapper {
+                        background-color: #ffffff;
+                        padding: 40px 0;
+                        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                        border-radius: 8px;
+                        width: 100%;
+                        max-width: 1600px;
+                        overflow-x: auto;
+                    }
+
+                    .org-header {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        margin-bottom: 40px;
+                        gap: 15px;
+                    }
+
+                    .header-logo-top {
+                        height: 120px;
+                        width: auto;
+                    }
+
+                    .header-text {
+                        text-align: center;
+                    }
+
+                    .header-text h1 {
+                        color: #002f65;
+                        font-size: 26px;
+                        margin: 0;
+                        text-transform: uppercase;
+                    }
+
+                    .header-text p {
+                        margin: 5px 0 0;
+                        color: #555;
+                        font-size: 14px;
+                    }
+
+                    .header-text a {
+                        color: #002f65;
+                        text-decoration: none;
+                        font-weight: bold;
+                    }
+
+                    .hierarchy-container {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                    }
+
+                    .level-box-container {
+                        display: flex;
+                        justify-content: center;
+                        z-index: 2;
+                        margin-bottom: 5px;
+                    }
+
+                    .level-3-container {
+                        display: flex;
+                        justify-content: center;
+                        gap: 20px;
+                        margin-top: 20px;
+                        padding: 20px 40px 0;
+                        z-index: 2;
+                        position: relative;
+                    }
+
+                    .blue-box {
+                        background-color: #002f65;
+                        color: #ffffff;
+                        padding: 14px;
+                        border-radius: 5px;
+                        text-align: center;
+                        min-width: 200px;
+                    }
+
+                    .role-title {
+                        display: block;
+                        font-weight: bold;
+                        font-size: 12px;
+                        text-transform: uppercase;
+                        margin-bottom: 4px;
+                    }
+
+                    .role-name {
+                        display: block;
+                        font-size: 13px;
+                    }
+
+                    .line-vertical-short {
+                        width: 2px;
+                        height: 20px;
+                        background-color: #002f65;
+                        margin: 0 auto;
+                    }
+
+                    .relative-container {
+                        position: relative;
+                    }
+
+                    .line-horizontal-top {
+                        position: absolute;
+                        top: 0;
+                        left: 10%;
+                        right: 10%;
+                        height: 2px;
+                        background-color: #002f65;
+                    }
+
+                    .weider-container {
+                        margin-top: 20px;
+                        display: flex;
+                        justify-content: center;
+                        padding: 0 40px 10px;
+                    }
+
+                    .weider-box {
+                        min-width: 620px;
+                    }
+
+                    .weider-columns {
+                        display: flex;
+                        justify-content: space-between;
+                        margin-top: 8px;
+                    }
+
+                    .weider-col {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 4px;
+                        font-size: 13px;
+                        text-align: left;
+                    }
+
+                    .line-vertical-long-to-depts {
+                        width: 2px;
+                        height: 40px;
+                        background-color: #002f65;
+                        margin: 0 auto;
+                    }
+
+                    .dept-grid-container {
+                        display: grid;
+                        grid-template-columns: repeat(7, 1fr);
+                        gap: 15px;
+                        padding: 30px 20px;
+                        position: relative;
+                        align-items: stretch;
+                    }
+
+                    .line-horizontal-depts {
+                        position: absolute;
+                        top: 0;
+                        left: 7%;
+                        right: 7%;
+                        height: 2px;
+                        background-color: #002f65;
+                    }
+
+                    .dept-item {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        width: 100%;
+                    }
+
+                    .circle-img-container {
+                        width: 80px;
+                        height: 80px;
+                        border-radius: 50%;
+                        border: 3px solid #ffde00;
+                        background-color: #fff;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        margin-bottom: 15px;
+                        position: relative;
+                        z-index: 2;
+                    }
+
+                    .circle-img-container::before {
+                        content: "";
+                        position: absolute;
+                        top: -30px;
+                        left: 50%;
+                        width: 2px;
+                        height: 30px;
+                        background-color: #002f65;
+                        transform: translateX(-50%);
+                        z-index: -1;
+                    }
+
+                    .circle-img-container img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        border-radius: 50%;
+                    }
+
+                    .dept-card {
+                        background-color: #fff;
+                        border: 2px solid #002f65;
+                        border-radius: 6px;
+                        padding: 12px 8px;
+                        width: 100%;
+                        height: 100%;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: flex-start;
+                        text-align: center;
+                    }
+
+                    .dept-title {
+                        font-weight: bold;
+                        color: #002f65;
+                        font-size: 11px;
+                        text-transform: uppercase;
+                        margin-bottom: 8px;
+                    }
+
+                    .dept-names {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 3px;
+                        font-size: 11px;
+                        color: #333;
+                    }
+
+                    .dept-separator {
+                        margin: 10px 0;
+                        height: 1px;
+                        background-color: #ccc;
+                    }
+
+                    .small-title {
+                        font-size: 10px;
+                        margin-top: 5px;
+                    }
+
+                    .dept-material-icon {
+                        display: flex;
+                        justify-content: center;
+                        margin-bottom: 5px;
+                    }
+
+                    .dept-material-icon img {
+                        width: 35px;
+                        height: auto;
+                    }
+
+                    @media (max-width: 1200px) {
+                        .dept-grid-container {
+                            grid-template-columns: repeat(3, 1fr);
+                        }
+                    }
+
+                    @media (max-width: 900px) {
+                        .level-3-container {
+                            flex-direction: column;
+                            align-items: center;
+                        }
+
+                        .weider-box {
+                            min-width: 0;
+                            width: 100%;
+                        }
+
+                        .weider-columns {
+                            gap: 20px;
+                        }
+
+                        .dept-grid-container {
+                            grid-template-columns: repeat(2, 1fr);
+                        }
+                    }
+
+                    @media (max-width: 640px) {
+                        .org-wrapper {
+                            padding: 24px 0;
+                        }
+
+                        .blue-box {
+                            min-width: 0;
+                            width: 100%;
+                        }
+
+                        .level-box-container,
+                        .weider-container {
+                            width: calc(100% - 32px);
+                        }
+
+                        .weider-columns {
+                            flex-direction: column;
+                        }
+
+                        .dept-grid-container {
+                            grid-template-columns: 1fr;
+                        }
+                    }
+                </style>
             </section>
 
             <footer class="site-page-footer">
@@ -101,6 +841,45 @@
         </main>
     </div>
 
+    <script>
+        (function initializeInsideTabs() {
+            const tabButtons = Array.from(document.querySelectorAll('[data-inside-tab]'));
+            const panels = Array.from(document.querySelectorAll('[data-inside-panel]'));
+
+            if (!tabButtons.length || !panels.length) {
+                return;
+            }
+
+            const setActivePanel = (panelName, syncHash = true) => {
+                panels.forEach((panel) => {
+                    const isActive = panel.dataset.insidePanel === panelName;
+                    panel.hidden = !isActive;
+                });
+
+                tabButtons.forEach((button) => {
+                    const isActive = button.dataset.insideTab === panelName;
+                    button.classList.toggle('is-active', isActive);
+                    button.setAttribute('aria-selected', String(isActive));
+                });
+
+                if (syncHash) {
+                    const targetHash = '#' + panelName;
+                    if (window.location.hash !== targetHash) {
+                        history.replaceState(null, '', targetHash);
+                    }
+                }
+            };
+
+            tabButtons.forEach((button) => {
+                button.addEventListener('click', () => {
+                    setActivePanel(button.dataset.insideTab || 'comite');
+                });
+            });
+
+            const initialPanel = window.location.hash === '#history' ? 'history' : 'comite';
+            setActivePanel(initialPanel, false);
+        })();
+    </script>
     <script src="script.js"></script>
 </body>
 </html>
