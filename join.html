@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css?v=20260515a">
 </head>
-<body>
+<body class="join-page">
     <div class="site-shell">
         <header class="site-header compact-header">
             <a class="brand" href="index.html">
@@ -36,33 +36,177 @@
         </header>
 
         <main class="page-main">
-            <section class="page-hero">
-                <p class="eyebrow">Join Us</p>
-                <h1>Der Einstieg soll in 30 Sekunden verständlich sein.</h1>
-                <p class="lead">Diese Seite wird zum klaren Einstiegspunkt für Kinder, Jugendliche, Eltern und Erwachsene, die den Weg zu Mersch75 suchen.</p>
+            <section class="page-hero join-hero">
+                <img class="join-hero-logo" src="Media/Header_Logos_media/Logo-Menu-Mersch75-JoinUs-2025.png" alt="Join Us Logo">
             </section>
 
-            <section class="section two-column-layout">
-                <article class="panel">
-                    <h2>Für neue Spieler</h2>
-                    <p>Erster Überblick über Altersklassen, Trainingsrhythmus, Probetraining und die nächsten Schritte nach der Kontaktaufnahme.</p>
-                </article>
-                <article class="panel">
-                    <h2>Für Eltern und Familien</h2>
-                    <p>Klare Infos zu Ansprechpersonen, Hallen, Organisation und typischen Fragen vor dem ersten Training.</p>
-                </article>
-            </section>
+            <section class="section join-form-section" id="registration">
+                <div class="join-form-layout">
+                    <div class="join-form-card">
+                        <div class="join-lang-selector" aria-label="Sprooch auswielen">
+                            <div class="join-lang-picker" role="tablist" aria-label="Sproochen">
+                                <button class="join-lang-button is-active" type="button" data-lang="lu" aria-pressed="true">LU</button>
+                                <button class="join-lang-button" type="button" data-lang="fr" aria-pressed="false">FR</button>
+                                <button class="join-lang-button" type="button" data-lang="de" aria-pressed="false">DE</button>
+                                <button class="join-lang-button" type="button" data-lang="en" aria-pressed="false">EN</button>
+                                <button class="join-lang-button" type="button" data-lang="pt" aria-pressed="false">PT</button>
+                            </div>
+                        </div>
 
-            <section class="section stacked-panels">
-                <article class="panel emphasis-panel">
-                    <span class="card-tag">CTA</span>
-                    <h3>Probetraining anfragen</h3>
-                    <p>Später kann hier ein extern angebundenes Formular oder eine klar strukturierte Mail-Anfrage eingebunden werden.</p>
-                </article>
-                <article class="panel">
-                    <h3>Trainingsinfos</h3>
-                    <p>Trainingszeiten und Gruppen werden nach dem Medien- und Inhaltsabgleich sauber ergänzt.</p>
-                </article>
+                        <form id="registrationForm" class="join-registration-form">
+                            <div id="website-field">
+                                <input type="text" id="honeypot" name="website" autocomplete="off">
+                            </div>
+
+                            <div class="join-form-group">
+                                <label id="lbl-nom" for="Nom">NOM(S) SUR CARTE D'IDENTITE *</label>
+                                <input type="text" id="Nom" name="Nom" autocomplete="family-name" required>
+                            </div>
+
+                            <div class="join-form-group">
+                                <label id="lbl-prenom" for="Prenom">PRENOM *</label>
+                                <input type="text" id="Prenom" name="Prenom" autocomplete="given-name" required>
+                            </div>
+
+                            <div class="join-form-row">
+                                <div class="join-form-group">
+                                    <label id="lbl-dob" for="DateNaissance">DATE DE NAISSANCE (JJ.MM.AAAA) *</label>
+                                    <input type="text" id="DateNaissance" name="DateNaissance" placeholder="01.01.2010" inputmode="numeric" pattern="[0-9]{2}\.[0-9]{2}\.[0-9]{4}" required>
+                                </div>
+                                <div class="join-form-group">
+                                    <label id="lbl-mineur" for="Mineur">MINEUR? *</label>
+                                    <select id="Mineur" disabled>
+                                        <option value="NON">NON</option>
+                                        <option value="OUI">OUI</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div id="cat-section">
+                                <label id="lbl-cat" for="Categorie">CATEGORIE FLH (AUTO)</label>
+                                <strong id="cat-display">-</strong>
+                                <input type="hidden" id="Categorie" name="Categorie" value="">
+                            </div>
+
+                            <div class="join-form-group">
+                                <label id="lbl-role" for="Role">ROLE / FUNKTION *</label>
+                                <select id="Role" name="Role" required>
+                                    <option value="Joueur / Joueuse">Joueur / Joueuse</option>
+                                    <option value="Officiel(le)">Officiel(le)</option>
+                                    <option value="Arbitre">Arbitre</option>
+                                </select>
+                            </div>
+
+                            <div id="parent-section">
+                                <div class="join-form-group join-form-group--compact">
+                                    <label id="lbl-parent" for="ParentIsole">PARENT ISOLE / ALLEINERZIEHEND? *</label>
+                                    <select id="ParentIsole">
+                                        <option value="NON">NON (2 Tuteurs)</option>
+                                        <option value="OUI">OUI (1 Tuteur)</option>
+                                    </select>
+                                </div>
+
+                                <div class="join-form-row">
+                                    <div class="join-form-group">
+                                        <label id="lbl-tuteur1" for="Tuteur1">TUTEUR 1 (NOM ET PRENOM) *</label>
+                                        <input type="text" id="Tuteur1" name="Tuteur1" autocomplete="name">
+                                    </div>
+                                    <div class="join-form-group" id="tuteur2-wrap">
+                                        <label id="lbl-tuteur2" for="Tuteur2">TUTEUR 2 (NOM ET PRENOM) *</label>
+                                        <input type="text" id="Tuteur2" name="Tuteur2" autocomplete="name">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="join-form-group">
+                                <label id="lbl-nat" for="Nationalite">NATIONALITE *</label>
+                                <input type="text" id="Nationalite" name="Nationalite" autocomplete="country-name" required>
+                            </div>
+
+                            <div class="join-form-group">
+                                <label id="lbl-cns" for="CNS">MATRICULE CNS (5 CHIFFRES) *</label>
+                                <input type="text" id="CNS" name="CNS" maxlength="5" inputmode="numeric" pattern="[0-9]{5}" required>
+                                <span id="cns-prefix-display" class="join-helper-text" aria-live="polite"></span>
+                            </div>
+
+                            <div class="join-form-row">
+                                <div class="join-form-group">
+                                    <label id="lbl-medico" for="Medico">MEDICO? *</label>
+                                    <select id="Medico" name="Medico" required>
+                                        <option value="Non">Non</option>
+                                        <option value="Oui">Oui</option>
+                                    </select>
+                                </div>
+                                <div class="join-form-group">
+                                    <label id="lbl-licence" for="Licence">LICENCE? *</label>
+                                    <select id="Licence" name="Licence" required>
+                                        <option value="Non">Non</option>
+                                        <option value="Oui">Oui</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="join-form-group">
+                                <label id="lbl-club" for="AncienClub">ANCIEN CLUB (OU &quot;NEANT&quot;) *</label>
+                                <input type="text" id="AncienClub" name="AncienClub" required>
+                            </div>
+
+                            <div id="u7-section">
+                                <input type="checkbox" id="U7Cert">
+                                <label for="U7Cert" id="lbl-u7">U7 : CERTIFICAT MEDICAL D'APTITUDE SPORTIVE OBLIGATOIRE (ETABLI PAR LE MEDECIN TRAITANT).</label>
+                            </div>
+
+                            <div class="join-form-group">
+                                <label id="lbl-adresse" for="Adresse">ADRESSE (NO, RUE, CODE POSTAL, LOCALITE) *</label>
+                                <input type="text" id="Adresse" name="Adresse" autocomplete="street-address" required>
+                            </div>
+
+                            <div class="join-form-group">
+                                <label id="lbl-email" for="Email">EMAIL *</label>
+                                <input type="email" id="Email" name="Email" autocomplete="email" required>
+                            </div>
+
+                            <div class="join-form-row">
+                                <div class="join-form-group">
+                                    <label id="lbl-gsm1" for="GSM1">TEL MOBILE / GSM 1 *</label>
+                                    <input type="text" id="GSM1" name="GSM1" autocomplete="tel" required>
+                                </div>
+                                <div class="join-form-group">
+                                    <label id="lbl-gsm2" for="GSM2">TEL MOBILE / GSM 2 (OPTIONNEL)</label>
+                                    <input type="text" id="GSM2" name="GSM2" autocomplete="tel">
+                                </div>
+                            </div>
+
+                            <div class="join-checkbox-row">
+                                <input type="checkbox" id="chk1" required>
+                                <label for="chk1" id="lbl-chk1">J'AI LU ET J'ACCEPTE LES CONDITIONS GENERALES.</label>
+                            </div>
+
+                            <div class="join-checkbox-row">
+                                <input type="checkbox" id="chk2" required>
+                                <label for="chk2" id="lbl-chk2">J'AI LU ET J'ACCEPTE LA PROTECTION DES DONNEES.</label>
+                            </div>
+
+                            <div class="join-checkbox-row is-emphasis">
+                                <input type="checkbox" id="chk3" required>
+                                <label for="chk3" id="lbl-chk3">INFO: J'AI COMPRIS QUE MA DEMANDE D'AFFILIATION SERA FINALISEE VIA LE PORTAIL DE LA FLH.</label>
+                            </div>
+
+                            <div class="join-checkbox-row">
+                                <input type="checkbox" id="chk4" required>
+                                <label for="chk4" id="lbl-chk4">CONFIRMATION: JE CONFIRME L'EXACTITUDE DE MES DONNEES.</label>
+                            </div>
+
+                            <button type="submit" id="submitBtn" class="join-submit-button">SEND / ABSCHICKEN</button>
+                        </form>
+
+                        <div id="success-box" aria-live="polite">
+                            <strong>Merci / Danke / Thank you / Obrigado!</strong>
+                            <span>Deng Umeldung gouf erfollegraich iwwermettelt.</span>
+                            <small>Du kriss eng Bestateigung per E-Mail.</small>
+                        </div>
+                    </div>
+                </div>
             </section>
 
             <footer class="site-page-footer">
