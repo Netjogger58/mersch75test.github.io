@@ -66,6 +66,9 @@
                             <input type="hidden" id="Langue" name="Langue" value="lu">
                             <input type="hidden" id="name" name="name" value="">
                             <input type="hidden" id="email" name="email" value="">
+                            <div id="website-field" hidden aria-hidden="true">
+                                <input type="text" id="honeypot" name="website" autocomplete="off" tabindex="-1">
+                            </div>
 
                             <div class="join-form-group">
                                 <label id="lbl-nom" for="Nom">NOM(S) SUR CARTE D'IDENTITE *</label>
@@ -251,6 +254,10 @@
 
     <script src="script.js"></script>
     <script>
+    const MERSCH75_WEB3FORMS_MAIN_KEY = '15e3cc53-6864-47dd-bfaf-332cb4ca45e5';
+    const MERSCH75_WEB3FORMS_MINOR_KEY = 'f748489b-abc6-4e37-bb82-860a82c91f4e';
+    const MERSCH75_LICENSE_LINK = 'https://submit.paperless.io/f/s4zaWnzHBwxcPK8jAkkbjPpVC1giUfr7';
+    const MERSCH75_LICENSE_PASSWORD = 'FIhNvLi26';
     const CGurl = "https://www.mersch75.lu/x2-terms-and-conditions/";
     const DPurl = "https://www.mersch75.lu/x3-dataprotection/";
 
@@ -310,6 +317,127 @@
         } else {
             document.getElementById('cns-prefix-display').innerText = 'Format CNS: yyyy.mm.dd.xxxxx';
         }
+    }
+
+    function getValue(id) {
+        return document.getElementById(id).value.trim();
+    }
+
+    function getCheckedValue(id) {
+        return document.getElementById(id).checked ? 'Oui' : 'Non';
+    }
+
+    function getFullName() {
+        return (getValue('Nom') + ' ' + getValue('Prenom')).trim();
+    }
+
+    function getCategoryValue() {
+        return document.getElementById('Categorie').value || document.getElementById('cat-display').innerText;
+    }
+
+    function getCnsComplete() {
+        const dob = getValue('DateNaissance');
+        const cnsManual = getValue('CNS');
+
+        if (dob.length !== 10) {
+            return '';
+        }
+
+        const parts = dob.split('.');
+        return parts[2] + '.' + parts[1] + '.' + parts[0] + '.' + cnsManual;
+    }
+
+    function getGuardianText() {
+        const guardianOne = getValue('Tuteur1');
+        const guardianTwo = document.getElementById('ParentIsole').value === 'OUI' ? '' : getValue('Tuteur2');
+        const guardians = [guardianOne, guardianTwo].filter(Boolean).join(' / ');
+        return guardians || '-';
+    }
+
+    function buildJoinMessage(includeLicenseLines) {
+        const lines = [];
+
+        if (includeLicenseLines) {
+            lines.push('LIZENZ-LINK: ' + MERSCH75_LICENSE_LINK);
+            lines.push('PASSWORT: ' + MERSCH75_LICENSE_PASSWORD);
+        }
+
+        lines.push('========================================');
+        lines.push('ANTRAGSTELLER: ' + getFullName());
+        lines.push('ROLE / FUNKTION: ' + getValue('Role'));
+        lines.push('CATÉGORIE FLH: ' + getCategoryValue());
+        lines.push('========================================');
+        lines.push('');
+        lines.push('CNS (5 Chiffres): ' + getValue('CNS'));
+        lines.push('GEB.-DATUM: ' + getValue('DateNaissance'));
+        lines.push('----------------------------------------');
+        lines.push('EMAIL: ' + getValue('Email'));
+        lines.push('GSM 1: ' + getValue('GSM1'));
+
+        if (getValue('GSM2')) {
+            lines.push('GSM 2: ' + getValue('GSM2'));
+        }
+
+        lines.push('----------------------------------------');
+        lines.push('ADRESSE: ' + getValue('Adresse'));
+        lines.push('----------------------------------------');
+        lines.push('MINEUR: ' + document.getElementById('Mineur').value);
+
+        if (document.getElementById('Mineur').value === 'OUI') {
+            lines.push('PARENT ISOLÉ: ' + document.getElementById('ParentIsole').value);
+            lines.push('TUTEUR(S): ' + getGuardianText());
+        }
+
+        lines.push('U7: ' + getCheckedValue('U7Cert'));
+        lines.push('CLUB: ' + getValue('AncienClub'));
+        lines.push('MED/LIZ: Med: ' + getValue('Medico') + ' / Liz: ' + getValue('Licence'));
+        lines.push('NATIONALITÉ: ' + getValue('Nationalite'));
+
+        const cnsComplete = getCnsComplete();
+        if (cnsComplete) {
+            lines.push('MATRICULE CNS COMPLET: ' + cnsComplete);
+        }
+
+        lines.push('========================================');
+
+        return lines.join('\n');
+    }
+
+    function createCleanWeb3FormsData(accessKey, subjectPrefix, message) {
+        const category = getCategoryValue();
+        const fullName = getFullName();
+        const formData = new FormData();
+
+        formData.append('access_key', accessKey);
+        formData.append('from_name', 'Mersch75 E-JOIN-US');
+        formData.append('name', fullName);
+        formData.append('email', getValue('Email'));
+        formData.append('subject', subjectPrefix + ' - ' + fullName + ' - ' + category);
+        formData.append('message', message);
+
+        return formData;
+    }
+
+    async function sendToWeb3Forms(formData) {
+        const response = await fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            body: formData
+        });
+
+        const text = await response.text();
+        let data;
+
+        try {
+            data = JSON.parse(text);
+        } catch (error) {
+            throw new Error('Réponse serveur invalide: ' + text);
+        }
+
+        if (data.success === true || data.status === 'success') {
+            return data;
+        }
+
+        throw new Error(data.message || 'Web3Forms konnte die Anfrage nicht senden.');
     }
 
     function updateLang(lang) {
@@ -452,7 +580,7 @@
         }
     });
 
-    document.getElementById('registrationForm').addEventListener('submit', function(e) {
+    document.getElementById('registrationForm').addEventListener('submit', async function(e) {
         e.preventDefault();
 
         const form = document.getElementById('registrationForm');
@@ -472,117 +600,56 @@
         submitBtn.disabled = true;
         submitBtn.style.opacity = '0.7';
 
-        const formData = new FormData(form);
-        const dob = document.getElementById('DateNaissance').value;
-        const cnsManual = document.getElementById('CNS').value.trim();
-        const nom = document.getElementById('Nom').value.trim();
-        const prenom = document.getElementById('Prenom').value.trim();
-        const email = document.getElementById('Email').value.trim();
+        const isMinor = document.getElementById('Mineur').value === 'OUI';
 
-        formData.set('Mineur', document.getElementById('Mineur').value);
-        formData.set('Categorie', document.getElementById('Categorie').value || document.getElementById('cat-display').innerText);
-        formData.set('Langue', currentLang);
-        formData.set('name', (nom + ' ' + prenom).trim());
-        formData.set('email', email);
-        formData.set('subject', 'Nouvelle inscription Mersch 75 - ' + (nom + ' ' + prenom).trim() + ' - ' + formData.get('Categorie'));
+        try {
+            const infoMessage = buildJoinMessage(true);
+            const infoFormData = createCleanWeb3FormsData(
+                MERSCH75_WEB3FORMS_MAIN_KEY,
+                'Nouvelle inscription Mersch 75',
+                infoMessage
+            );
 
-        if (dob.length === 10) {
-            const parts = dob.split('.');
-            formData.set('CNSComplet', parts[2] + '.' + parts[1] + '.' + parts[0] + '.' + cnsManual);
-        }
+            await sendToWeb3Forms(infoFormData);
 
-        if (document.getElementById('ParentIsole').value === 'OUI') {
-            formData.set('Tuteur2', '-');
-        }
+            if (isMinor) {
+                const minorMessage = buildJoinMessage(false);
+                const minorFormData = createCleanWeb3FormsData(
+                    MERSCH75_WEB3FORMS_MINOR_KEY,
+                    'MINEUR - Nouvelle inscription Mersch 75',
+                    minorMessage
+                );
 
-        if (!formData.has('U7Cert')) {
-            formData.set('U7Cert', 'Non');
-        }
-
-        const messageLines = [
-            'Nouvelle demande d’inscription interne Mersch 75',
-            '',
-            'Langue: ' + currentLang,
-            'Nom(s): ' + nom,
-            'Prénom: ' + prenom,
-            'Date de naissance: ' + formData.get('DateNaissance'),
-            'Mineur: ' + formData.get('Mineur'),
-            'Catégorie FLH: ' + formData.get('Categorie'),
-            'Rôle / Fonction: ' + formData.get('Role'),
-            'Parent isolé: ' + (formData.get('ParentIsole') || ''),
-            'Tuteur 1: ' + (formData.get('Tuteur1') || ''),
-            'Tuteur 2: ' + (formData.get('Tuteur2') || ''),
-            'Nationalité: ' + formData.get('Nationalite'),
-            'Matricule CNS complet: ' + (formData.get('CNSComplet') || ''),
-            'CNS - 5 chiffres manuels: ' + formData.get('CNS'),
-            'Medico: ' + formData.get('Medico'),
-            'Licence: ' + formData.get('Licence'),
-            'Ancien club: ' + formData.get('AncienClub'),
-            'Certificat U7: ' + formData.get('U7Cert'),
-            'Adresse: ' + formData.get('Adresse'),
-            'Email: ' + email,
-            'GSM 1: ' + formData.get('GSM1'),
-            'GSM 2: ' + (formData.get('GSM2') || ''),
-            'Conditions générales acceptées: ' + formData.get('ConditionsGenerales'),
-            'Protection des données acceptée: ' + formData.get('ProtectionDonnees'),
-            'Information FLH comprise: ' + formData.get('InfoFLH'),
-            'Exactitude confirmée: ' + formData.get('ConfirmationExactitude')
-        ];
-
-        formData.set('message', messageLines.join('\n'));
-
-        fetch('https://api.web3forms.com/submit', {
-            method: 'POST',
-            body: formData
-        })
-        .then(function(response) {
-            return response.text();
-        })
-        .then(function(text) {
-            let data;
-
-            try {
-                data = JSON.parse(text);
-            } catch (error) {
-                throw new Error('Réponse serveur invalide: ' + text);
+                await sendToWeb3Forms(minorFormData);
             }
 
-            if (data.success === true || data.status === 'success') {
-                form.style.display = 'none';
-                document.querySelector('.join-lang-selector').style.display = 'none';
-                document.querySelectorAll('.join-lang-text').forEach(function(el) {
-                    el.style.display = 'none';
-                });
+            form.style.display = 'none';
+            document.querySelector('.join-lang-selector').style.display = 'none';
+            document.querySelectorAll('.join-lang-text').forEach(function(el) {
+                el.style.display = 'none';
+            });
 
-                const successBox = document.getElementById('success-box');
-                successBox.style.display = 'block';
+            const successBox = document.getElementById('success-box');
+            successBox.style.display = 'block';
 
-                if (successBox.animate) {
-                    successBox.animate(
-                        [
-                            { opacity: 0, transform: 'translateY(20px)' },
-                            { opacity: 1, transform: 'translateY(0)' }
-                        ],
-                        { duration: 400, easing: 'ease-out' }
-                    );
-                }
-
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                return;
+            if (successBox.animate) {
+                successBox.animate(
+                    [
+                        { opacity: 0, transform: 'translateY(20px)' },
+                        { opacity: 1, transform: 'translateY(0)' }
+                    ],
+                    { duration: 400, easing: 'ease-out' }
+                );
             }
 
-            alert('Fehler: ' + (data.message || 'Web3Forms konnte die Anfrage nicht senden.'));
-            submitBtn.innerText = originalText;
-            submitBtn.disabled = false;
-            submitBtn.style.opacity = '1';
-        })
-        .catch(function(error) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } catch (error) {
             console.error('Error:', error);
-            alert('Connexion erreur. Réessayez. Technisches Problem.');
+            alert('Fehler: ' + error.message);
             submitBtn.innerText = originalText;
             submitBtn.disabled = false;
             submitBtn.style.opacity = '1';
-        });
+        }
     });
 
     document.querySelectorAll('.join-lang-button').forEach(function(button) {
