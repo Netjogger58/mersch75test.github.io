@@ -20383,10 +20383,22 @@ function renderFLH(filter) {
 function renderAllGames() {
     // 1. Sichere Sortierung exakt nach deiner Vorgabe!
     const order = ["HERREN 1", "FRAUEN", "U15", "U13", "U11", "U9", "U7"];
+	const normalizeTeamLabel = t => {
+		if (!t) return "";
+
+		const cleaned = t.replace("JUGEND: ", "").replace(" (H-PRO)", "").replace(" (D-PRO)", "").trim();
+		const upper = cleaned.toUpperCase();
+
+		if (upper.includes("U11") && (upper.includes("EPF5-10") || upper.includes("PLACEMENT") || upper.includes("PLATZ 5") || upper.includes("PLATZ 6"))) {
+			return "U11 Elite";
+		}
+
+		return cleaned;
+	};
     
     const getRank = t => {
-        if(!t) return 99;
-        const up = t.toUpperCase();
+		if (!t) return 99;
+		const up = normalizeTeamLabel(t).toUpperCase();
         if (up.includes("HERREN 1")) return 1;
         if (up.includes("FRAUEN")) return 2;
         if (up.includes("U15")) return 3;
@@ -20430,7 +20442,7 @@ function renderAllGames() {
             const scoreDisplay = r.score && r.score !== "-" ? `<span class="score-cell ${scoreCSS(r.score,r.heim)}">${r.score}</span>` : '<span class="tag tag-future" style="font-size:0.6rem;">▶ Kommend</span>';
             
             // Teamnamen bereinigen für die neue "Kategorie"-Spalte
-            let cleanTeam = (r.team || "").replace("JUGEND: ", "").replace(" (H-PRO)", "").replace(" (D-PRO)", "").trim();
+			let cleanTeam = normalizeTeamLabel(r.team || "");
 
             // Blauer Trennbalken, wenn eine neue Mannschaft beginnt
             if (cleanTeam !== currentCat) {

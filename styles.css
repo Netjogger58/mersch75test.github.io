@@ -921,6 +921,29 @@ body.menu-open {
     font-weight: 700;
 }
 
+.footer-social,
+.site-page-footer-social,
+.site-page-footer-service {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.footer-social a,
+.site-page-footer-social a,
+.site-page-footer-service a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.82);
+    border: 1px solid rgba(0, 47, 101, 0.1);
+    color: var(--blue);
+    font-size: 0.88rem;
+    font-weight: 700;
+}
+
 .footer-bottom {
     display: flex;
     flex-wrap: wrap;
@@ -1029,6 +1052,11 @@ body.menu-open {
 
 body.join-page {
     background: linear-gradient(180deg, #f4f7fb 0%, #ffffff 260px);
+}
+
+body.legal-page,
+body.privacy-page {
+    background: linear-gradient(180deg, #f4f7fb 0%, #ffffff 320px);
 }
 
 .join-hero {
@@ -1393,6 +1421,238 @@ body.join-page {
     }
 }
 
+.legal-hero,
+.privacy-hero {
+    padding: 34px 30px 16px;
+}
+
+.legal-hero-panel,
+.privacy-hero-panel {
+    padding: 30px;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(232, 237, 244, 0.9));
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+}
+
+.legal-eyebrow,
+.privacy-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: var(--yellow-soft);
+    color: var(--blue);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.legal-hero-panel h1,
+.privacy-hero-panel h1 {
+    margin: 18px 0 14px;
+    color: var(--blue-dark);
+    font-size: clamp(2.3rem, 6vw, 4.1rem);
+    line-height: 0.98;
+    letter-spacing: -0.04em;
+}
+
+.legal-hero-panel p,
+.privacy-hero-panel p {
+    max-width: 840px;
+    margin: 0;
+    color: var(--muted);
+    font-size: 1.02rem;
+}
+
+.legal-layout,
+.privacy-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(260px, 0.7fr);
+    gap: 20px;
+    padding: 8px 30px 30px;
+    align-items: start;
+}
+
+.legal-content-card,
+.legal-side-card,
+.privacy-content-card,
+.privacy-side-card {
+    padding: 28px;
+    border-radius: var(--radius-md);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(247, 250, 253, 0.92));
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+}
+
+.legal-meta,
+.privacy-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.legal-meta span,
+.privacy-meta span {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(232, 237, 244, 0.86);
+    color: var(--blue);
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.legal-lang-switcher {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 22px;
+}
+
+.legal-lang-switcher button {
+    border: 1px solid rgba(0, 47, 101, 0.12);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    color: var(--blue-dark);
+    padding: 10px 14px;
+    font-size: 0.88rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.legal-lang-switcher button:hover,
+.legal-lang-switcher button.is-active {
+    background: var(--blue);
+    color: #ffffff;
+    box-shadow: 0 10px 24px rgba(10, 78, 163, 0.22);
+    transform: translateY(-1px);
+}
+
+.legal-lang-panel {
+    display: none;
+}
+
+.legal-lang-panel.is-active {
+    display: block;
+}
+
+.legal-section,
+.privacy-section {
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(0, 47, 101, 0.08);
+}
+
+.legal-section:first-of-type,
+.privacy-section:first-of-type {
+    padding-top: 0;
+}
+
+.legal-section:last-child,
+.privacy-section:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+.legal-section h2,
+.privacy-section h2 {
+    margin: 0 0 12px;
+    color: var(--blue-dark);
+    font-size: clamp(1.35rem, 3vw, 1.8rem);
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+}
+
+.legal-section h3,
+.privacy-section h3 {
+    margin: 22px 0 10px;
+    color: var(--blue-dark);
+    font-size: 1.08rem;
+}
+
+.legal-section p,
+.privacy-section p,
+.legal-side-card p,
+.privacy-side-card p {
+    margin: 0 0 12px;
+}
+
+.legal-section ul,
+.privacy-section ul {
+    margin: 10px 0 0;
+    padding-left: 20px;
+}
+
+.legal-section li,
+.privacy-section li {
+    margin: 8px 0;
+    color: var(--muted);
+}
+
+.legal-note,
+.privacy-note {
+    margin-top: 16px;
+    padding: 16px 18px;
+    border-radius: 18px;
+    background: rgba(232, 237, 244, 0.82);
+    border: 1px solid rgba(0, 47, 101, 0.1);
+    color: var(--blue-dark);
+    font-weight: 700;
+}
+
+.legal-side-card h2,
+.privacy-side-card h2 {
+    margin: 0 0 14px;
+    color: var(--blue-dark);
+    font-size: 1.2rem;
+    letter-spacing: -0.02em;
+}
+
+.legal-side-links,
+.privacy-side-links {
+    display: grid;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.legal-side-links a,
+.privacy-side-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 11px 14px;
+    border-radius: 16px;
+    background: rgba(232, 237, 244, 0.9);
+    color: var(--blue);
+    font-weight: 700;
+}
+
+.legal-side-links a::after,
+.privacy-side-links a::after {
+    content: '->';
+    font-size: 0.85rem;
+}
+
+.legal-side-card .legal-imprint,
+.privacy-side-card .legal-imprint {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(0, 47, 101, 0.08);
+}
+
+.legal-side-card .legal-imprint strong,
+.privacy-side-card .legal-imprint strong {
+    color: var(--blue-dark);
+}
+
+.privacy-content-card .privacy-note + .privacy-note {
+    margin-top: 14px;
+}
+
 .site-footer {
     display: flex;
     justify-content: space-between;
@@ -1413,6 +1673,11 @@ body.join-page {
     grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.1fr);
     gap: 20px;
     align-items: center;
+}
+
+.site-page-footer-content {
+    display: grid;
+    gap: 14px;
 }
 
 .site-page-footer-brand {
@@ -1465,6 +1730,14 @@ body.join-page {
 .site-page-footer-meta span,
 .site-page-footer-meta a {
     font-size: 0.9rem;
+}
+
+.site-page-footer-service a {
+    background: rgba(247, 250, 253, 0.95);
+}
+
+.site-page-footer-social a {
+    background: rgba(232, 237, 244, 0.62);
 }
 
 .placeholder-page .status-note {
@@ -1754,6 +2027,10 @@ body.matchday-page {
         align-items: flex-start;
         flex-direction: column;
     }
+
+    .footer-bottom {
+        justify-content: flex-start;
+    }
 }
 
 @media (max-width: 560px) {
@@ -1782,6 +2059,38 @@ body.matchday-page {
 
     .site-page-footer-links {
         gap: 8px;
+    }
+
+    .footer-social,
+    .site-page-footer-social,
+    .site-page-footer-service {
+        gap: 8px;
+    }
+}
+
+@media (max-width: 900px) {
+    .legal-layout,
+    .privacy-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 720px) {
+    .legal-hero,
+    .privacy-hero,
+    .legal-layout,
+    .privacy-layout {
+        padding-left: 22px;
+        padding-right: 22px;
+    }
+
+    .legal-hero-panel,
+    .privacy-hero-panel,
+    .legal-content-card,
+    .legal-side-card,
+    .privacy-content-card,
+    .privacy-side-card {
+        padding: 22px;
     }
 }
 
@@ -2278,6 +2587,57 @@ body.training-page {
     .training-group-card,
     .training-hero-panel {
         padding: 20px;
+    }
+}
+
+body.live-center-page {
+    background: linear-gradient(180deg, #f4f7fb 0%, #ffffff 260px);
+}
+
+.live-center-shell {
+    display: grid;
+    gap: 22px;
+    justify-items: center;
+}
+
+.live-center-shell > * {
+    width: 100%;
+}
+
+body.live-center-page .page-hero {
+    display: grid;
+    gap: 14px;
+    justify-items: center;
+    text-align: center;
+}
+
+body.live-center-page .lead {
+    max-width: 78ch;
+}
+
+.live-center-frame {
+    width: 100%;
+    min-height: 5600px;
+    border: 0;
+    border-radius: 22px;
+    background: #ffffff;
+}
+
+@media (max-width: 1180px) {
+    .live-center-frame {
+        min-height: 6200px;
+    }
+}
+
+@media (max-width: 860px) {
+    .live-center-frame {
+        min-height: 6600px;
+    }
+}
+
+@media (max-width: 560px) {
+    .live-center-frame {
+        min-height: 7000px;
     }
 }
 

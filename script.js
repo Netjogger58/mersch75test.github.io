@@ -1,4 +1,8 @@
-const yearTarget = document.querySelector('#current-year');
+function syncCurrentYear() {
+    document.querySelectorAll('#current-year').forEach((target) => {
+        target.textContent = new Date().getFullYear();
+    });
+}
 
 function initializeSiteMenu() {
     const navToggle = document.querySelector('.nav-toggle');
@@ -413,6 +417,124 @@ function initializeTrainingSchedule() {
     document.addEventListener('msfullscreenchange', syncButton);
 
     syncButton();
+}
+
+function initializeSharedFooters() {
+    const socialLinks = [
+        {
+            href: 'https://www.facebook.com/mersch75',
+            label: 'Facebook'
+        },
+        {
+            href: 'https://www.youtube.com/Netjogger58',
+            label: 'YouTube'
+        },
+        {
+            href: 'https://www.instagram.com/hbmersch75/',
+            label: 'Instagram'
+        }
+    ];
+    const pageLinks = [
+        { href: 'matchday.html', label: 'Matchday' },
+        { href: 'matchcenter.html', label: 'Matchcenter' },
+        { href: 'training.html', label: 'Training' },
+        { href: 'trainerstaff.html', label: 'Trainerstaff' },
+        { href: 'news.html', label: 'News' },
+        { href: 'gallery.html', label: 'Galerie' },
+        { href: 'community.html', label: 'Community' },
+        { href: 'links.html', label: 'Links' },
+        { href: 'inside.html', label: 'Inside' },
+        { href: 'contact.html', label: 'Contact' }
+    ];
+    const landingQuickLinks = [
+        { href: 'matchday.html', label: 'Matchday' },
+        { href: 'matchcenter.html', label: 'Matchcenter' },
+        { href: 'training.html', label: 'Training' },
+        { href: 'join.html', label: 'Join Us' },
+        { href: 'contact.html', label: 'Contact' }
+    ];
+    const serviceLinks = [
+        { href: 'join.html', label: 'Join Us' },
+        { href: 'terms.html', label: 'Terms & Conditions' },
+        { href: 'dataprotection.html', label: 'Data Protection' }
+    ];
+
+    const renderLinkGroup = (links) => links.map(({ href, label }) => {
+        return `<a href="${href}">${label}</a>`;
+    }).join('');
+
+    const renderExternalLinkGroup = (links, className) => links.map(({ href, label }) => {
+        return `<a class="${className}" href="${href}" target="_blank" rel="noreferrer">${label}</a>`;
+    }).join('');
+
+    const pageFooter = document.querySelector('.site-page-footer');
+
+    if (pageFooter) {
+        const brandCopy = pageFooter.querySelector('.site-page-footer-brand p');
+        const shell = pageFooter.querySelector('.site-page-footer-shell');
+        const content = shell && shell.children.length > 1 ? shell.children[1] : null;
+
+        if (brandCopy) {
+            brandCopy.textContent = 'Training, Matchday, News an Club-Liewen an enger kloerer Struktur mat direktem Service-Zougang fir nei Spiller, Familljen a Supporter.';
+        }
+
+        if (content) {
+            content.className = 'site-page-footer-content';
+            content.innerHTML = [
+                `<div class="site-page-footer-links">${renderLinkGroup(pageLinks)}</div>`,
+                `<div class="site-page-footer-service">${renderLinkGroup(serviceLinks)}</div>`,
+                `<div class="site-page-footer-social">${renderExternalLinkGroup(socialLinks, 'site-page-footer-social-link')}</div>`,
+                '<div class="site-page-footer-meta">',
+                '<a href="mailto:info@mersch75.lu">info@mersch75.lu</a>',
+                '<span>Tel.: 288 00 399</span>',
+                '<span>21 rue des Pres · L-7561 Mersch</span>',
+                '<span>RCS: F2345</span>',
+                '<span>BCEELULL: LU730019220008607000</span>',
+                '<span>© <span id="current-year"></span> by Mersch75, Handball Club</span>',
+                '</div>'
+            ].join('');
+        }
+    }
+
+    const landingFooter = document.querySelector('.landing-footer');
+
+    if (landingFooter) {
+        const brandCopy = landingFooter.querySelector('.footer-brand p');
+        const columns = landingFooter.querySelector('.footer-columns');
+        const bottom = landingFooter.querySelector('.footer-bottom');
+
+        if (brandCopy) {
+            brandCopy.textContent = 'Handball zu Miersch mat enger kloerer digitaler Struktur: séier Informatiounen, propper Service-Weeër an en Optrëtt, deen op allen Säiten zesummegehéiert.';
+        }
+
+        if (columns) {
+            columns.innerHTML = [
+                '<div class="footer-column">',
+                '<h3>Schnellzugriff</h3>',
+                `<div class="footer-link-list">${renderLinkGroup(landingQuickLinks)}</div>`,
+                '</div>',
+                '<div class="footer-column">',
+                '<h3>Kontakt</h3>',
+                '<p>21 rue des Pres<br>L-7561 Mersch</p>',
+                '<p><a href="mailto:info@mersch75.lu">info@mersch75.lu</a></p>',
+                '<p>Tel.: 288 00 399</p>',
+                '<p>RCS: F2345<br>BCEELULL: LU730019220008607000</p>',
+                '</div>',
+                '<div class="footer-column">',
+                '<h3>Service</h3>',
+                `<div class="footer-link-list">${renderLinkGroup(serviceLinks)}</div>`,
+                '</div>'
+            ].join('');
+        }
+
+        if (bottom) {
+            bottom.innerHTML = [
+                '<p>RCS: F2345 · BCEELULL: LU730019220008607000</p>',
+                `<div class="footer-social">${renderExternalLinkGroup(socialLinks, 'footer-social-link')}</div>`,
+                '<p>© <span id="current-year"></span> by Mersch75, Handball Club</p>'
+            ].join('');
+        }
+    }
 }
 
 function initializeJoinUsForm() {
@@ -954,7 +1076,5 @@ function initializeJoinUsForm() {
 initializeSiteMenu();
 initializeTrainingSchedule();
 initializeJoinUsForm();
-
-if (yearTarget) {
-    yearTarget.textContent = new Date().getFullYear();
-}
+initializeSharedFooters();
+syncCurrentYear();

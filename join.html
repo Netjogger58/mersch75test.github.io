@@ -66,7 +66,7 @@
                             <input type="hidden" id="Langue" name="Langue" value="lu">
                             <input type="hidden" id="name" name="name" value="">
                             <input type="hidden" id="email" name="email" value="">
-                            <div id="website-field" hidden aria-hidden="true">
+                            <div hidden aria-hidden="true">
                                 <input type="text" id="honeypot" name="website" autocomplete="off" tabindex="-1">
                             </div>
 
@@ -190,23 +190,20 @@
                             </div>
 
                             <div class="join-checkbox-row">
-                                <input type="checkbox" id="chk1" name="ConditionsGenerales" value="Oui" required>
-                                <label for="chk1" id="lbl-chk1">J'AI LU ET J'ACCEPTE LES CONDITIONS GENERALES.</label>
-                            </div>
-
-                            <div class="join-checkbox-row">
-                                <input type="checkbox" id="chk2" name="ProtectionDonnees" value="Oui" required>
-                                <label for="chk2" id="lbl-chk2">J'AI LU ET J'ACCEPTE LA PROTECTION DES DONNEES.</label>
+                                <input type="checkbox" id="LegalConsent" name="LegalConsent" value="Oui" required>
+                                <label for="LegalConsent" id="lbl-legal">
+                                    <span id="legal-prefix">Ech hu gelies an akzeptéieren d' </span><a id="legal-terms-link" href="terms.html" target="_blank" rel="noopener noreferrer">Allgemeng Bedéngungen</a><span id="legal-middle"> an Reglementatioun iwwert den </span><a id="legal-data-link" href="dataprotection.html" target="_blank" rel="noopener noreferrer">Dateschutz</a><span id="legal-suffix">.</span>
+                                </label>
                             </div>
 
                             <div class="join-checkbox-row is-emphasis">
-                                <input type="checkbox" id="chk3" name="InfoFLH" value="Oui" required>
-                                <label for="chk3" id="lbl-chk3">INFO: J'AI COMPRIS QUE MA DEMANDE D'AFFILIATION SERA FINALISEE VIA LE PORTAIL DE LA FLH.</label>
+                                <input type="checkbox" id="FlhPortalConsent" name="FlhPortalConsent" value="Oui" required>
+                                <label for="FlhPortalConsent" id="lbl-flh">Info: Ech hu verstaan dat meng Umeldung mat dësen Daten un d' flh.lu geschéckt ginn fir eng Lizenz auszestellen.</label>
                             </div>
 
                             <div class="join-checkbox-row">
-                                <input type="checkbox" id="chk4" name="ConfirmationExactitude" value="Oui" required>
-                                <label for="chk4" id="lbl-chk4">CONFIRMATION: JE CONFIRME L'EXACTITUDE DE MES DONNEES.</label>
+                                <input type="checkbox" id="AccuracyConsent" name="AccuracyConsent" value="Oui" required>
+                                <label for="AccuracyConsent" id="lbl-accuracy">Bestätegung: Ech confirméiere d'Richtegkeet vun menge Donnéeën.</label>
                             </div>
 
                             <button type="submit" id="submitBtn" class="join-submit-button">SEND / ABSCHICKEN</button>
@@ -255,31 +252,80 @@
     <script src="script.js"></script>
     <script>
     const MERSCH75_WEB3FORMS_MAIN_KEY = '15e3cc53-6864-47dd-bfaf-332cb4ca45e5';
-    const MERSCH75_WEB3FORMS_MINOR_KEY = 'f748489b-abc6-4e37-bb82-860a82c91f4e';
+    const MERSCH75_WEB3FORMS_MAX_KEY = 'f748489b-abc6-4e37-bb82-860a82c91f4e';
     const MERSCH75_LICENSE_LINK = 'https://submit.paperless.io/f/s4zaWnzHBwxcPK8jAkkbjPpVC1giUfr7';
     const MERSCH75_LICENSE_PASSWORD = 'FIhNvLi26';
-    const CGurl = "https://www.mersch75.lu/x2-terms-and-conditions/";
-    const DPurl = "https://www.mersch75.lu/x3-dataprotection/";
-
-    const T = {
+    const MERSCH75_UI_TEXTS = {
         lu: {
-            nom: "NIMM (WÉI AUM PERSONALAUSWEIS) *", prenom: "VIRNUMM *", dob: "GEBUERTSDATUM (DD.MM.JJJJ) *", mineur: "MANNERJÄREG? *", cat: "FLH KATEGORIE (AUTO)", role: "FUNKTIOUN *", parent: "ELENDERZÉIEND? *", tuteur1: "TUTEUR 1 (NUMM A VIRNUMM) *", tuteur2: "TUTEUR 2 (NUMM A VIRNUMM) *", nat: "NATIONALITÉIT *", cns: "MATRICULE CNS - 5 MANUELL ZIFFEREN *", medico: "MEDICO? *", licence: "LIZENZ? *", club: "FRÉIERE VERÄIN (ODER \"NÉANT\") *", u7: "U7: SPORTMEDIZINESCHT ATTEST OBLIGATORESCH (VUM HAUSARZT).", adresse: "ADRESS (NR., STROOSS, PLZ, UERT) *", email: "EMAIL *", gsm1: "TEL MOBILE / GSM 1 *", gsm2: "TEL MOBILE / GSM 2 (OPTIONAL)", chk1: "ECH HUN GELIES AN AKZEPTÉIEREN D'<a href='" + CGurl + "' target='_blank' rel='noopener'>ALLGEMENG BEDÉNGUNGEN</a>.", chk2: "ECH HUN GELIES AN AKZEPTÉIEREN DE <a href='" + DPurl + "' target='_blank' rel='noopener'>DATESCHUTZ</a>.", chk3: "INFO: ECH HUN VERSTANEN DATT MENG UMELDUNG IWWERT DAT FLH PORTAL OFGESCHLOSS GËTT.", chk4: "BESTÄTEGUNG: ECH CONFIRMÉIEREN D'RICHTEGKEET VUN MENGE DONNÉEËN.", send: "WEIDERLEEDEN", oui: "Jo", non: "Nee", joueur: "Spiller / Spillerin", officiel: "Offiziell(e)", arbitre: "Schiedsriichter(in)", parent_non: "NEE (2 Tuteure)", parent_oui: "Jo (1 Tuteur)"
+            nom: 'Numm *', prenom: 'Virnumm *', dob: 'Gebuertsdatum *', mineur: 'Mannerjäreg', cat: 'FLH Kategorie', role: 'Roll / Funktioun *', parent: 'Elengerzéiend *', tuteur1: 'Erzéiungsberechtegten 1 *', tuteur2: 'Erzéiungsberechtegten 2 *', nat: 'Nationalitéit *', cns: 'Matricule CNS *', medico: 'Medico *', licence: 'Lizenz *', club: 'Ale Veräin *', u7: 'U7 medezineschen Zertifikat obligatoresch', adresse: 'Adress *', email: 'E-Mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Schécken', sending: 'Gëtt geschéckt...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Deng Umeldung gouf erfollegräich iwwermëttelt.', successNote: 'Du kriss eng Bestätegung per E-Mail.', oui: 'JO', non: 'NEE', joueur: 'Spiller / Spillerin', officiel: 'Offiziell Persoun', arbitre: 'Arbitter', parent_non: 'NEE (2 Erzéiungsberechtegter)', parent_oui: 'JO (1 Erzéiungsberechtegten)', legalRequired: 'Liest an akzeptéiert w.e.g. déi allgemeng Bedéngungen an den Dateschutz.', flhRequired: 'Bestätegt w.e.g. d\'Iwwermëttlung un flh.lu fir d\'Lizenz.', accuracyRequired: 'Bestätegt w.e.g. d\'Richtegkeet vun den Donnéeën.'
         },
         fr: {
-            nom: "NOM(S) SUR CARTE D'IDENTITÉ *", prenom: "PRÉNOM *", dob: "DATE DE NAISSANCE (JJ.MM.AAAA) *", mineur: "MINEUR? *", cat: "CATÉGORIE FLH (AUTO)", role: "RÔLE / FONCTION *", parent: "PARENT ISOLÉ? *", tuteur1: "TUTEUR 1 (NOM ET PRÉNOM) *", tuteur2: "TUTEUR 2 (NOM ET PRÉNOM) *", nat: "NATIONALITÉ *", cns: "MATRICULE CNS - 5 CHIFFRES MANUELS *", medico: "MEDICO? *", licence: "LICENCE? *", club: "ANCIEN CLUB (OU \"NÉANT\") *", u7: "U7 : CERTIFICAT MÉDICAL D'APTITUDE SPORTIVE OBLIGATOIRE (ÉTABLI PAR LE MÉDECIN TRAITANT).", adresse: "ADRESSE (NO, RUE, CODE POSTAL, LOCALITÉ) *", email: "EMAIL *", gsm1: "TEL MOBILE / GSM 1 *", gsm2: "TEL MOBILE / GSM 2 (OPTIONNEL)", chk1: "J'AI LU ET J'ACCEPTE LES <a href='" + CGurl + "' target='_blank' rel='noopener'>CONDITIONS GÉNÉRALES</a>.", chk2: "J'AI LU ET J'ACCEPTE LA <a href='" + DPurl + "' target='_blank' rel='noopener'>PROTECTION DES DONNÉES</a>.", chk3: "INFO: J'AI COMPRIS QUE MA DEMANDE D'AFFILIATION SERA FINALISÉE VIA LE PORTAIL DE LA FLH.", chk4: "CONFIRMATION: JE CONFIRME L'EXACTITUDE DE MES DONNÉES.", send: "ENVOYER", oui: "Oui", non: "Non", joueur: "Joueur / Joueuse", officiel: "Officiel(le)", arbitre: "Arbitre", parent_non: "NON (2 Tuteurs)", parent_oui: "OUI (1 Tuteur)"
+            nom: 'Nom *', prenom: 'Prénom *', dob: 'Date de naissance *', mineur: 'Mineur', cat: 'Catégorie FLH', role: 'Rôle / Fonction *', parent: 'Parent isolé *', tuteur1: 'Tuteur 1 *', tuteur2: 'Tuteur 2 *', nat: 'Nationalité *', cns: 'Matricule CNS *', medico: 'Médico *', licence: 'Licence *', club: 'Ancien club *', u7: 'U7 certificat médical obligatoire', adresse: 'Adresse *', email: 'E-mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Envoyer', sending: 'Envoi...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Inscription envoyée.', successNote: 'Vous recevrez une confirmation par e-mail.', oui: 'OUI', non: 'NON', joueur: 'Joueur / Joueuse', officiel: 'Officiel(le)', arbitre: 'Arbitre', parent_non: 'NON (2 tuteurs)', parent_oui: 'OUI (1 tuteur)', legalRequired: 'Veuillez lire et accepter les conditions générales et la protection des données.', flhRequired: 'Veuillez confirmer la transmission à flh.lu pour la licence.', accuracyRequired: 'Veuillez confirmer l\'exactitude des données.'
         },
         de: {
-            nom: "NAME(N) LAUT PERSONALAUSWEIS *", prenom: "VORNAME *", dob: "GEBURTSDATUM (TT.MM.JJJJ) *", mineur: "MINDERJÄHRIG? *", cat: "FLH KATEGORIE (AUTO)", role: "ROLLE / FUNKTION *", parent: "ALLEINERZIEHEND? *", tuteur1: "ERZIEHUNGSBERECHTIGTER 1 (NAME UND VORNAME) *", tuteur2: "ERZIEHUNGSBERECHTIGTER 2 (NAME UND VORNAME) *", nat: "NATIONALITÄT *", cns: "MATRICULE CNS - 5 MANUELLE ZIFFERN *", medico: "ÄRZTLICHES ATTEST? *", licence: "LIZENZ? *", club: "FRÜHERER VEREIN (ODER \"KEINER\") *", u7: "U7: SPORTÄRZTLICHES ATTEST PFLICHT (VOM HAUSARZT AUSGESTELLT).", adresse: "ADRESSE (NR., STRASSE, PLZ, ORT) *", email: "E-MAIL *", gsm1: "MOBILNUMMER / GSM 1 *", gsm2: "MOBILNUMMER / GSM 2 (OPTIONAL)", chk1: "ICH HABE GELESEN UND AKZEPTIERE DIE <a href='" + CGurl + "' target='_blank' rel='noopener'>ALLGEMEINEN BEDINGUNGEN</a>.", chk2: "ICH HABE GELESEN UND AKZEPTIERE DEN <a href='" + DPurl + "' target='_blank' rel='noopener'>DATENSCHUTZ</a>.", chk3: "INFO: ICH HABE VERSTANDEN, DASS MEIN ANTRAG ÜBER DAS FLH-PORTAL ABGESCHLOSSEN WIRD.", chk4: "BESTÄTIGUNG: ICH BESTÄTIGE DIE RICHTIGKEIT MEINER ANGABEN.", send: "ABSCHICKEN", oui: "Ja", non: "Nein", joueur: "Spieler/in", officiel: "Funktionär/in", arbitre: "Schiedsrichter/in", parent_non: "NEIN (2 Erziehungsberechtigte)", parent_oui: "JA (1 Erziehungsberechtigter)"
+            nom: 'Name *', prenom: 'Vorname *', dob: 'Geburtsdatum *', mineur: 'Minderjährig', cat: 'FLH Kategorie', role: 'Rolle / Funktion *', parent: 'Alleinerziehend *', tuteur1: 'Erziehungsberechtigter 1 *', tuteur2: 'Erziehungsberechtigter 2 *', nat: 'Nationalität *', cns: 'CNS-Matrikelnummer *', medico: 'Medico *', licence: 'Lizenz *', club: 'Ehemaliger Verein *', u7: 'U7 ärztliches Attest obligatorisch', adresse: 'Adresse *', email: 'E-Mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Senden', sending: 'Senden...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Anmeldung gesendet.', successNote: 'Du erhältst eine Bestätigung per E-Mail.', oui: 'JA', non: 'NEIN', joueur: 'Spieler / Spielerin', officiel: 'Offizielle Person', arbitre: 'Schiedsrichter', parent_non: 'NEIN (2 Erziehungsberechtigte)', parent_oui: 'JA (1 Erziehungsberechtigter)', legalRequired: 'Bitte die allgemeinen Bedingungen und den Datenschutz lesen und akzeptieren.', flhRequired: 'Bitte die Übermittlung an flh.lu für die Lizenz bestätigen.', accuracyRequired: 'Bitte die Richtigkeit der Angaben bestätigen.'
         },
         en: {
-            nom: "LAST NAME(S) AS ON ID CARD *", prenom: "FIRST NAME *", dob: "DATE OF BIRTH (DD.MM.YYYY) *", mineur: "MINOR? *", cat: "FLH CATEGORY (AUTO)", role: "ROLE / FUNCTION *", parent: "SINGLE PARENT? *", tuteur1: "GUARDIAN 1 (LAST & FIRST NAME) *", tuteur2: "GUARDIAN 2 (LAST & FIRST NAME) *", nat: "NATIONALITY *", cns: "CNS NUMBER - 5 MANUAL DIGITS *", medico: "MEDICAL CERTIFICATE? *", licence: "LICENCE? *", club: "PREVIOUS CLUB (OR \"NONE\") *", u7: "U7: MEDICAL FITNESS CERTIFICATE MANDATORY (ISSUED BY FAMILY DOCTOR).", adresse: "ADDRESS (NO., STREET, POSTCODE, CITY) *", email: "EMAIL *", gsm1: "MOBILE / GSM 1 *", gsm2: "MOBILE / GSM 2 (OPTIONAL)", chk1: "I HAVE READ AND ACCEPT THE <a href='" + CGurl + "' target='_blank' rel='noopener'>GENERAL TERMS AND CONDITIONS</a>.", chk2: "I HAVE READ AND ACCEPT THE <a href='" + DPurl + "' target='_blank' rel='noopener'>DATA PROTECTION POLICY</a>.", chk3: "INFO: I UNDERSTAND THAT MY MEMBERSHIP REQUEST WILL BE FINALISÉD VIA THE FLH PORTAL.", chk4: "CONFIRMATION: I CONFIRM THE ACCURACY OF MY DATA.", send: "SUBMIT", oui: "Yes", non: "No", joueur: "Player", officiel: "Official", arbitre: "Referee", parent_non: "NO (2 Guardians)", parent_oui: "YES (1 Guardian)"
+            nom: 'Last name *', prenom: 'First name *', dob: 'Date of birth *', mineur: 'Minor', cat: 'FLH category', role: 'Role / Function *', parent: 'Single parent *', tuteur1: 'Guardian 1 *', tuteur2: 'Guardian 2 *', nat: 'Nationality *', cns: 'CNS number *', medico: 'Medical check *', licence: 'Licence *', club: 'Former club *', u7: 'U7 medical certificate required', adresse: 'Address *', email: 'Email *', gsm1: 'Mobile 1 *', gsm2: 'Mobile 2', send: 'Submit', sending: 'Sending...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Registration sent.', successNote: 'You will receive a confirmation by email.', oui: 'YES', non: 'NO', joueur: 'Player', officiel: 'Official', arbitre: 'Referee', parent_non: 'NO (2 guardians)', parent_oui: 'YES (1 guardian)', legalRequired: 'Please read and accept the terms and conditions and data protection.', flhRequired: 'Please confirm the transfer to flh.lu for the licence.', accuracyRequired: 'Please confirm the accuracy of the data.'
         },
         pt: {
-            nom: "APELIDO(S) CONFORME BILHETE DE IDENTIDADE *", prenom: "PRIMEIRO NOME *", dob: "DATA DE NASCIMENTO (DD.MM.AAAA) *", mineur: "MENOR? *", cat: "CATEGORIA FLH (AUTO)", role: "FUNÇÃO *", parent: "PROGENITOR ÚNICO? *", tuteur1: "TUTOR 1 (APELIDO E NOME) *", tuteur2: "TUTOR 2 (APELIDO E NOME) *", nat: "NACIONALIDADE *", cns: "NÚMERO CNS - 5 DÍGITOS MANUAIS *", medico: "ATESTADO MÉDICO? *", licence: "LICENÇA? *", club: "CLUBE ANTERIOR (OU \"NENHUM\") *", u7: "U7: CERTIFICADO MÉDICO DE APTIDÃO DESPORTIVA OBRIGATÓRIO (EMITIDO PELO MÉDICO DE FAMÍLIA).", adresse: "MORADA (Nº, RUA, CÓDIGO POSTAL, LOCALIDADE) *", email: "EMAIL *", gsm1: "TEL MÓVEL / GSM 1 *", gsm2: "TEL MÓVEL / GSM 2 (OPCIONAL)", chk1: "LI E ACEITO OS <a href='" + CGurl + "' target='_blank' rel='noopener'>TERMOS E CONDIÇÕES GERAIS</a>.", chk2: "LI E ACEITO A <a href='" + DPurl + "' target='_blank' rel='noopener'>POLÍTICA DE PROTEÇÃO DE DADOS</a>.", chk3: "INFO: COMPREENDO QUE O MEU PEDIDO DE FILIAÇÃO SERÁ FINALIZADO VIA O PORTAL FLH.", chk4: "CONFIRMAÇÃO: CONFIRMO A EXATIDÃO DOS MEUS DADOS.", send: "ENVIAR", oui: "Sim", non: "Não", joueur: "Jogador/a", officiel: "Oficial", arbitre: "Árbitro/a", parent_non: "NÃO (2 Tutores)", parent_oui: "SIM (1 Tutor)"
+            nom: 'Apelido *', prenom: 'Nome próprio *', dob: 'Data de nascimento *', mineur: 'Menor', cat: 'Categoria FLH', role: 'Função *', parent: 'Encarregado isolado *', tuteur1: 'Encarregado 1 *', tuteur2: 'Encarregado 2 *', nat: 'Nacionalidade *', cns: 'Número CNS *', medico: 'Exame médico *', licence: 'Licença *', club: 'Clube anterior *', u7: 'U7 certificado médico obrigatório', adresse: 'Morada *', email: 'E-mail *', gsm1: 'Telemóvel 1 *', gsm2: 'Telemóvel 2', send: 'Enviar', sending: 'A enviar...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Inscrição enviada.', successNote: 'Receberá uma confirmação por e-mail.', oui: 'SIM', non: 'NÃO', joueur: 'Jogador / Jogadora', officiel: 'Oficial', arbitre: 'Árbitro', parent_non: 'NÃO (2 encarregados)', parent_oui: 'SIM (1 encarregado)', legalRequired: 'Por favor, leia e aceite os termos e condições e a proteção de dados.', flhRequired: 'Por favor, confirme o envio para flh.lu para a licença.', accuracyRequired: 'Por favor, confirme a exatidão dos dados.'
+        }
+    };
+    const MERSCH75_LEGAL_TEXTS = {
+        lu: {
+            legalPrefix: "Ech hu gelies an akzeptéieren d' ", termsLink: 'Allgemeng Bedéngungen', legalMiddle: ' an Reglementatioun iwwert den ', dataLink: 'Dateschutz', sentenceEnd: '.', flhInfo: "Info: Ech hu verstaan dat meng Umeldung mat dësen Daten un d' flh.lu geschéckt ginn fir eng Lizenz auszestellen.", accuracy: "Bestätegung: Ech confirméiere d'Richtegkeet vun menge Donnéeën."
+        },
+        fr: {
+            legalPrefix: "J'ai lu et j'accepte les ", termsLink: 'conditions générales', legalMiddle: ' et le règlement relatif à la ', dataLink: 'protection des données', sentenceEnd: '.', flhInfo: "Info: J'ai compris que mon inscription sera envoyée avec ces données à flh.lu afin d'établir une licence.", accuracy: "Confirmation: je confirme l'exactitude de mes données."
+        },
+        de: {
+            legalPrefix: 'Ich habe die ', termsLink: 'Allgemeinen Bedingungen', legalMiddle: ' und die Regelung zum ', dataLink: 'Datenschutz', sentenceEnd: ' gelesen und akzeptiert.', flhInfo: 'Info: Ich habe verstanden, dass meine Anmeldung mit diesen Daten an flh.lu gesendet wird, um eine Lizenz auszustellen.', accuracy: 'Bestätigung: Ich bestätige die Richtigkeit meiner Angaben.'
+        },
+        en: {
+            legalPrefix: 'I have read and accept the ', termsLink: 'terms and conditions', legalMiddle: ' and the regulation concerning ', dataLink: 'data protection', sentenceEnd: '.', flhInfo: 'Info: I understand that my registration will be sent with this data to flh.lu in order to issue a licence.', accuracy: 'Confirmation: I confirm the accuracy of my information.'
+        },
+        pt: {
+            legalPrefix: 'Li e aceito os ', termsLink: 'termos e condições gerais', legalMiddle: ' e o regulamento relativo à ', dataLink: 'proteção de dados', sentenceEnd: '.', flhInfo: 'Info: Compreendi que a minha inscrição será enviada com estes dados para flh.lu para emitir uma licença.', accuracy: 'Confirmação: confirmo a exatidão dos meus dados.'
         }
     };
 
     let currentLang = 'lu';
+
+    function getValue(id) {
+        return document.getElementById(id).value.trim();
+    }
+
+    function getCheckedValue(id) {
+        return document.getElementById(id).checked ? 'Oui' : 'Non';
+    }
+
+    function getFullName() {
+        return (getValue('Nom') + ' ' + getValue('Prenom')).trim();
+    }
+
+    function getCategoryValue() {
+        return document.getElementById('Categorie').value || document.getElementById('cat-display').innerText;
+    }
+
+    function getCnsComplete() {
+        const dob = getValue('DateNaissance');
+        const cnsManual = getValue('CNS');
+
+        if (dob.length !== 10) {
+            return '';
+        }
+
+        const parts = dob.split('.');
+        return parts[2] + '.' + parts[1] + '.' + parts[0] + '.' + cnsManual;
+    }
+
+    function getGuardianText() {
+        const guardianOne = getValue('Tuteur1');
+        const guardianTwo = document.getElementById('ParentIsole').value === 'OUI' ? '' : getValue('Tuteur2');
+        const guardians = [guardianOne, guardianTwo].filter(Boolean).join(' / ');
+        return guardians || '-';
+    }
 
     function setRequiredState(isMinor, category) {
         const tuteur1 = document.getElementById('Tuteur1');
@@ -319,59 +365,137 @@
         }
     }
 
-    function getValue(id) {
-        return document.getElementById(id).value.trim();
+    function detectLegalLanguage() {
+        const language = document.getElementById('Langue').value || 'lu';
+        return MERSCH75_LEGAL_TEXTS[language] ? language : 'lu';
     }
 
-    function getCheckedValue(id) {
-        return document.getElementById(id).checked ? 'Oui' : 'Non';
-    }
+    function updateSuccessText(language) {
+        const ui = MERSCH75_UI_TEXTS[language];
+        const successBox = document.getElementById('success-box');
+        const title = successBox.querySelector('strong');
+        const text = successBox.querySelector('span');
+        const note = successBox.querySelector('small');
 
-    function getFullName() {
-        return (getValue('Nom') + ' ' + getValue('Prenom')).trim();
-    }
-
-    function getCategoryValue() {
-        return document.getElementById('Categorie').value || document.getElementById('cat-display').innerText;
-    }
-
-    function getCnsComplete() {
-        const dob = getValue('DateNaissance');
-        const cnsManual = getValue('CNS');
-
-        if (dob.length !== 10) {
-            return '';
+        if (title) {
+            title.innerText = ui.successTitle;
         }
 
-        const parts = dob.split('.');
-        return parts[2] + '.' + parts[1] + '.' + parts[0] + '.' + cnsManual;
+        if (text) {
+            text.innerText = ui.successText;
+        }
+
+        if (note) {
+            note.innerText = ui.successNote;
+        }
     }
 
-    function getGuardianText() {
-        const guardianOne = getValue('Tuteur1');
-        const guardianTwo = document.getElementById('ParentIsole').value === 'OUI' ? '' : getValue('Tuteur2');
-        const guardians = [guardianOne, guardianTwo].filter(Boolean).join(' / ');
-        return guardians || '-';
+    function updateConsentValidationMessages() {
+        const language = detectLegalLanguage();
+        const ui = MERSCH75_UI_TEXTS[language];
+        const validationMessages = {
+            LegalConsent: ui.legalRequired,
+            FlhPortalConsent: ui.flhRequired,
+            AccuracyConsent: ui.accuracyRequired
+        };
+
+        Object.keys(validationMessages).forEach(function(id) {
+            const checkbox = document.getElementById(id);
+
+            if (checkbox) {
+                checkbox.setCustomValidity(checkbox.checked ? '' : validationMessages[id]);
+            }
+        });
     }
 
-    function buildJoinMessage(includeLicenseLines) {
+    function updateLang(lang) {
+        currentLang = MERSCH75_UI_TEXTS[lang] ? lang : 'lu';
+        const ui = MERSCH75_UI_TEXTS[currentLang];
+        const legal = MERSCH75_LEGAL_TEXTS[currentLang];
+
+        document.querySelectorAll('.join-lang-text').forEach(function(el) {
+            el.classList.toggle('is-active', el.id === currentLang);
+        });
+
+        document.querySelectorAll('.join-lang-button').forEach(function(el) {
+            const active = el.dataset.lang === currentLang;
+            el.classList.toggle('is-active', active);
+            el.setAttribute('aria-pressed', active ? 'true' : 'false');
+        });
+
+        document.getElementById('lbl-nom').innerText = ui.nom;
+        document.getElementById('lbl-prenom').innerText = ui.prenom;
+        document.getElementById('lbl-dob').innerText = ui.dob;
+        document.getElementById('lbl-mineur').innerText = ui.mineur;
+        document.getElementById('lbl-cat').innerText = ui.cat;
+        document.getElementById('lbl-role').innerText = ui.role;
+        document.getElementById('lbl-parent').innerText = ui.parent;
+        document.getElementById('lbl-tuteur1').innerText = ui.tuteur1;
+        document.getElementById('lbl-tuteur2').innerText = ui.tuteur2;
+        document.getElementById('lbl-nat').innerText = ui.nat;
+        document.getElementById('lbl-cns').innerText = ui.cns;
+        document.getElementById('lbl-medico').innerText = ui.medico;
+        document.getElementById('lbl-licence').innerText = ui.licence;
+        document.getElementById('lbl-club').innerText = ui.club;
+        document.getElementById('lbl-u7').innerText = ui.u7;
+        document.getElementById('lbl-adresse').innerText = ui.adresse;
+        document.getElementById('lbl-email').innerText = ui.email;
+        document.getElementById('lbl-gsm1').innerText = ui.gsm1;
+        document.getElementById('lbl-gsm2').innerText = ui.gsm2;
+        document.getElementById('lbl-flh').innerText = legal.flhInfo;
+        document.getElementById('lbl-accuracy').innerText = legal.accuracy;
+        document.getElementById('legal-prefix').innerText = legal.legalPrefix;
+        document.getElementById('legal-terms-link').innerText = legal.termsLink;
+        document.getElementById('legal-middle').innerText = legal.legalMiddle;
+        document.getElementById('legal-data-link').innerText = legal.dataLink;
+        document.getElementById('legal-suffix').innerText = legal.sentenceEnd;
+        document.getElementById('submitBtn').innerText = ui.send;
+        document.getElementById('Langue').value = currentLang;
+
+        const mineur = document.getElementById('Mineur');
+        mineur.options[0].text = ui.non;
+        mineur.options[1].text = ui.oui;
+
+        const role = document.getElementById('Role');
+        role.options[0].text = ui.joueur;
+        role.options[1].text = ui.officiel;
+        role.options[2].text = ui.arbitre;
+
+        const parent = document.getElementById('ParentIsole');
+        parent.options[0].text = ui.parent_non;
+        parent.options[1].text = ui.parent_oui;
+
+        updateSuccessText(currentLang);
+        updateConsentValidationMessages();
+    }
+
+    function buildJoinMessage(includeLicenseLines, messageLanguage) {
         const lines = [];
+        const isFrenchMessage = messageLanguage === 'fr';
+        const text = isFrenchMessage ? {
+            licenseLink: 'LIEN LICENCE', password: 'MOT DE PASSE', applicant: 'DEMANDEUR', role: 'ROLE / FONCTION', category: 'CATEGORIE FLH', cnsDigits: 'CNS (5 chiffres)', birthDate: 'DATE DE NAISSANCE', email: 'E-MAIL', address: 'ADRESSE', minor: 'MINEUR', singleParent: 'PARENT ISOLE', guardians: 'TUTEUR(S)', club: 'ANCIEN CLUB', medLicense: 'MED/LIC', nationality: 'NATIONALITE', legalAccepted: 'CONDITIONS GENERALES ET PROTECTION DES DONNEES ACCEPTEES', flhAccepted: 'TRANSMISSION DES DONNEES A FLH.LU POUR LICENCE COMPRISE', accuracyAccepted: 'EXACTITUDE DES DONNEES CONFIRMEE', cnsComplete: 'MATRICULE CNS COMPLET'
+        } : {
+            licenseLink: 'LIZENZ-LINK', password: 'PASSWORT', applicant: 'ANTRAGSTELLER', role: 'ROLLE / FUNKTION', category: 'FLH KATEGORIE', cnsDigits: 'CNS (5 Ziffern)', birthDate: 'GEBURTSDATUM', email: 'E-MAIL', address: 'ADRESSE', minor: 'MINDERJAEHRIG', singleParent: 'ALLEINERZIEHEND', guardians: 'ERZIEHUNGSBERECHTIGTE(R)', club: 'EHEMALIGER VEREIN', medLicense: 'MED/LIZ', nationality: 'NATIONALITAET', legalAccepted: 'ALLGEMEINE BEDINGUNGEN UND DATENSCHUTZ AKZEPTIERT', flhAccepted: 'DATENUEBERMITTLUNG AN FLH.LU FUER LIZENZ VERSTANDEN', accuracyAccepted: 'RICHTIGKEIT DER ANGABEN BESTAETIGT', cnsComplete: 'MATRICULE CNS KOMPLETT'
+        };
 
         if (includeLicenseLines) {
-            lines.push('LIZENZ-LINK: ' + MERSCH75_LICENSE_LINK);
-            lines.push('PASSWORT: ' + MERSCH75_LICENSE_PASSWORD);
+            lines.push('========================================');
+            lines.push(text.licenseLink + ': ' + MERSCH75_LICENSE_LINK);
+            lines.push(text.password + ': ' + MERSCH75_LICENSE_PASSWORD);
+            lines.push('========================================');
+            lines.push('');
         }
 
         lines.push('========================================');
-        lines.push('ANTRAGSTELLER: ' + getFullName());
-        lines.push('ROLE / FUNKTION: ' + getValue('Role'));
-        lines.push('CATÉGORIE FLH: ' + getCategoryValue());
+        lines.push(text.applicant + ': ' + getFullName());
+        lines.push(text.role + ': ' + getValue('Role'));
+        lines.push(text.category + ': ' + getCategoryValue());
         lines.push('========================================');
         lines.push('');
-        lines.push('CNS (5 Chiffres): ' + getValue('CNS'));
-        lines.push('GEB.-DATUM: ' + getValue('DateNaissance'));
+        lines.push(text.cnsDigits + ': ' + getValue('CNS'));
+        lines.push(text.birthDate + ': ' + getValue('DateNaissance'));
         lines.push('----------------------------------------');
-        lines.push('EMAIL: ' + getValue('Email'));
+        lines.push(text.email + ': ' + getValue('Email'));
         lines.push('GSM 1: ' + getValue('GSM1'));
 
         if (getValue('GSM2')) {
@@ -379,27 +503,30 @@
         }
 
         lines.push('----------------------------------------');
-        lines.push('ADRESSE: ' + getValue('Adresse'));
+        lines.push(text.address + ': ' + getValue('Adresse'));
         lines.push('----------------------------------------');
-        lines.push('MINEUR: ' + document.getElementById('Mineur').value);
+        lines.push(text.minor + ': ' + document.getElementById('Mineur').value);
 
         if (document.getElementById('Mineur').value === 'OUI') {
-            lines.push('PARENT ISOLÉ: ' + document.getElementById('ParentIsole').value);
-            lines.push('TUTEUR(S): ' + getGuardianText());
+            lines.push(text.singleParent + ': ' + document.getElementById('ParentIsole').value);
+            lines.push(text.guardians + ': ' + getGuardianText());
         }
 
         lines.push('U7: ' + getCheckedValue('U7Cert'));
-        lines.push('CLUB: ' + getValue('AncienClub'));
-        lines.push('MED/LIZ: Med: ' + getValue('Medico') + ' / Liz: ' + getValue('Licence'));
-        lines.push('NATIONALITÉ: ' + getValue('Nationalite'));
+        lines.push(text.club + ': ' + getValue('AncienClub'));
+        lines.push(text.medLicense + ': Med: ' + getValue('Medico') + ' / Liz: ' + getValue('Licence'));
+        lines.push(text.nationality + ': ' + getValue('Nationalite'));
+        lines.push(text.legalAccepted + ': ' + getCheckedValue('LegalConsent'));
+        lines.push(text.flhAccepted + ': ' + getCheckedValue('FlhPortalConsent'));
+        lines.push(text.accuracyAccepted + ': ' + getCheckedValue('AccuracyConsent'));
 
         const cnsComplete = getCnsComplete();
+
         if (cnsComplete) {
-            lines.push('MATRICULE CNS COMPLET: ' + cnsComplete);
+            lines.push(text.cnsComplete + ': ' + cnsComplete);
         }
 
         lines.push('========================================');
-
         return lines.join('\n');
     }
 
@@ -424,14 +551,7 @@
             body: formData
         });
 
-        const text = await response.text();
-        let data;
-
-        try {
-            data = JSON.parse(text);
-        } catch (error) {
-            throw new Error('Réponse serveur invalide: ' + text);
-        }
+        const data = await response.json();
 
         if (data.success === true || data.status === 'success') {
             return data;
@@ -440,72 +560,21 @@
         throw new Error(data.message || 'Web3Forms konnte die Anfrage nicht senden.');
     }
 
-    function updateLang(lang) {
-        currentLang = lang;
-        const t = T[lang];
-
-        document.querySelectorAll('.join-lang-text').forEach(function(el) { el.classList.remove('is-active'); });
-        const activeText = document.getElementById(lang);
-        if (activeText) activeText.classList.add('is-active');
-
-        document.querySelectorAll('.join-lang-button').forEach(function(el) {
-            const active = el.dataset.lang === lang;
-            el.classList.toggle('is-active', active);
-            el.setAttribute('aria-pressed', active ? 'true' : 'false');
-        });
-
-        document.getElementById('lbl-nom').innerText = t.nom;
-        document.getElementById('lbl-prenom').innerText = t.prenom;
-        document.getElementById('lbl-dob').innerText = t.dob;
-        document.getElementById('lbl-mineur').innerText = t.mineur;
-        document.getElementById('lbl-cat').innerText = t.cat;
-        document.getElementById('lbl-role').innerText = t.role;
-        document.getElementById('lbl-parent').innerText = t.parent;
-        document.getElementById('lbl-tuteur1').innerText = t.tuteur1;
-        document.getElementById('lbl-tuteur2').innerText = t.tuteur2;
-        document.getElementById('lbl-nat').innerText = t.nat;
-        document.getElementById('lbl-cns').innerText = t.cns;
-        document.getElementById('lbl-medico').innerText = t.medico;
-        document.getElementById('lbl-licence').innerText = t.licence;
-        document.getElementById('lbl-club').innerText = t.club;
-        document.getElementById('lbl-u7').innerText = t.u7;
-        document.getElementById('lbl-adresse').innerText = t.adresse;
-        document.getElementById('lbl-email').innerText = t.email;
-        document.getElementById('lbl-gsm1').innerText = t.gsm1;
-        document.getElementById('lbl-gsm2').innerText = t.gsm2;
-        document.getElementById('lbl-chk1').innerHTML = t.chk1;
-        document.getElementById('lbl-chk2').innerHTML = t.chk2;
-        document.getElementById('lbl-chk3').innerText = t.chk3;
-        document.getElementById('lbl-chk4').innerText = t.chk4;
-        document.getElementById('submitBtn').innerText = t.send;
-        document.getElementById('Langue').value = lang;
-
-        const mineur = document.getElementById('Mineur');
-        mineur.options[0].text = t.non;
-        mineur.options[1].text = t.oui;
-
-        const role = document.getElementById('Role');
-        role.options[0].text = t.joueur;
-        role.options[1].text = t.officiel;
-        role.options[2].text = t.arbitre;
-
-        const parent = document.getElementById('ParentIsole');
-        parent.options[0].text = t.parent_non;
-        parent.options[1].text = t.parent_oui;
-    }
-
     function calcCategorie(dob) {
         const parts = dob.split('.');
-        if (parts.length !== 3) return;
+
+        if (parts.length !== 3) {
+            return;
+        }
 
         const day = parseInt(parts[0], 10);
         const month = parseInt(parts[1], 10);
         const year = parseInt(parts[2], 10);
 
         if (isNaN(day) || isNaN(month) || isNaN(year) || year < 1900 || month < 1 || month > 12 || day < 1 || day > 31) {
-            document.getElementById('cat-section').style.display = 'none';
             document.getElementById('Categorie').value = '';
             document.getElementById('Mineur').value = 'NON';
+            document.getElementById('cat-display').innerText = '-';
             setRequiredState(false, '');
             return;
         }
@@ -528,15 +597,13 @@
         else if (age <= 18) cat = 'U19';
         else if (age <= 23) cat = 'Espoirs';
         else if (age <= 40) cat = 'Seniors';
-        else cat = 'Vétérans';
+        else cat = 'Veterans';
 
         const isMinor = age < 18;
 
         document.getElementById('Categorie').value = cat;
         document.getElementById('cat-display').innerText = cat;
-        document.getElementById('cat-section').style.display = 'block';
         document.getElementById('Mineur').value = isMinor ? 'OUI' : 'NON';
-
         setRequiredState(isMinor, cat);
     }
 
@@ -554,9 +621,9 @@
         if (val.length === 10) {
             calcCategorie(val);
         } else {
-            document.getElementById('cat-section').style.display = 'none';
             document.getElementById('Categorie').value = '';
             document.getElementById('Mineur').value = 'NON';
+            document.getElementById('cat-display').innerText = '-';
             setRequiredState(false, '');
         }
 
@@ -574,18 +641,28 @@
         updateCnsDisplay();
     });
 
+    ['LegalConsent', 'FlhPortalConsent', 'AccuracyConsent'].forEach(function(id) {
+        const checkbox = document.getElementById(id);
+
+        if (checkbox) {
+            checkbox.addEventListener('change', updateConsentValidationMessages);
+        }
+    });
+
     document.getElementById('registrationForm').addEventListener('keydown', function(event) {
         if (event.key === 'Enter') {
             event.preventDefault();
         }
     });
 
-    document.getElementById('registrationForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
+    document.getElementById('registrationForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
 
         const form = document.getElementById('registrationForm');
         const submitBtn = document.getElementById('submitBtn');
         const originalText = submitBtn.innerText;
+
+        updateConsentValidationMessages();
 
         if (!form.checkValidity()) {
             form.reportValidity();
@@ -596,32 +673,23 @@
             return;
         }
 
-        submitBtn.innerText = 'Envoi...';
         submitBtn.disabled = true;
-        submitBtn.style.opacity = '0.7';
+        submitBtn.innerText = MERSCH75_UI_TEXTS[detectLegalLanguage()].sending;
 
         const isMinor = document.getElementById('Mineur').value === 'OUI';
 
         try {
-            const infoMessage = buildJoinMessage(true);
-            const infoFormData = createCleanWeb3FormsData(
+            await sendToWeb3Forms(createCleanWeb3FormsData(
                 MERSCH75_WEB3FORMS_MAIN_KEY,
                 'Nouvelle inscription Mersch 75',
-                infoMessage
-            );
+                buildJoinMessage(true, 'fr')
+            ));
 
-            await sendToWeb3Forms(infoFormData);
-
-            if (isMinor) {
-                const minorMessage = buildJoinMessage(false);
-                const minorFormData = createCleanWeb3FormsData(
-                    MERSCH75_WEB3FORMS_MINOR_KEY,
-                    'MINEUR - Nouvelle inscription Mersch 75',
-                    minorMessage
-                );
-
-                await sendToWeb3Forms(minorFormData);
-            }
+            await sendToWeb3Forms(createCleanWeb3FormsData(
+                MERSCH75_WEB3FORMS_MAX_KEY,
+                (isMinor ? 'MINDERJAEHRIG - ' : '') + 'Neue Anmeldung Mersch 75',
+                buildJoinMessage(false, 'de')
+            ));
 
             form.style.display = 'none';
             document.querySelector('.join-lang-selector').style.display = 'none';
@@ -644,11 +712,9 @@
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
         } catch (error) {
-            console.error('Error:', error);
             alert('Fehler: ' + error.message);
-            submitBtn.innerText = originalText;
             submitBtn.disabled = false;
-            submitBtn.style.opacity = '1';
+            submitBtn.innerText = originalText;
         }
     });
 
@@ -660,6 +726,7 @@
 
     updateLang('lu');
     updateCnsDisplay();
+    updateConsentValidationMessages();
     </script>
 </body>
 </html>
