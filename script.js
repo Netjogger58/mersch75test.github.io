@@ -21,7 +21,8 @@ function initializeSiteMenu() {
         { href: 'trainerstaff.html', label: 'Trainerstaff', primary: true },
         { href: 'news.html', label: 'News', primary: true },
         { href: 'join.html', label: 'Join Us', primary: true },
-        { href: 'inside.html', label: 'Inside', primary: true },
+        { href: 'comite.html', label: 'Comité', primary: true },
+        { href: 'historie.html', label: 'Historie', primary: true },
         { href: 'gallery.html', label: 'Galerie', primary: false },
         { href: 'community.html', label: 'Community', primary: false },
         { href: 'links.html', label: 'Links', primary: false },
@@ -443,7 +444,8 @@ function initializeSharedFooters() {
         { href: 'gallery.html', label: 'Galerie' },
         { href: 'community.html', label: 'Community' },
         { href: 'links.html', label: 'Links' },
-        { href: 'inside.html', label: 'Inside' },
+        { href: 'comite.html', label: 'Comité' },
+        { href: 'historie.html', label: 'Historie' },
         { href: 'contact.html', label: 'Contact' }
     ];
     const landingQuickLinks = [
@@ -455,6 +457,7 @@ function initializeSharedFooters() {
     ];
     const serviceLinks = [
         { href: 'join.html', label: 'Join Us' },
+        { href: 'impressum.html', label: 'Impressum' },
         { href: 'terms.html', label: 'Terms & Conditions' },
         { href: 'dataprotection.html', label: 'Data Protection' }
     ];
@@ -470,29 +473,9 @@ function initializeSharedFooters() {
     const pageFooter = document.querySelector('.site-page-footer');
 
     if (pageFooter) {
-        const brandCopy = pageFooter.querySelector('.site-page-footer-brand p');
-        const shell = pageFooter.querySelector('.site-page-footer-shell');
-        const content = shell && shell.children.length > 1 ? shell.children[1] : null;
-
-        if (brandCopy) {
-            brandCopy.textContent = 'Training, Matchday, News an Club-Liewen an enger kloerer Struktur mat direktem Service-Zougang fir nei Spiller, Familljen a Supporter.';
-        }
-
-        if (content) {
-            content.className = 'site-page-footer-content';
-            content.innerHTML = [
-                `<div class="site-page-footer-links">${renderLinkGroup(pageLinks)}</div>`,
-                `<div class="site-page-footer-service">${renderLinkGroup(serviceLinks)}</div>`,
-                `<div class="site-page-footer-social">${renderExternalLinkGroup(socialLinks, 'site-page-footer-social-link')}</div>`,
-                '<div class="site-page-footer-meta">',
-                '<a href="mailto:info@mersch75.lu">info@mersch75.lu</a>',
-                '<span>Tel.: 288 00 399</span>',
-                '<span>21 rue des Pres · L-7561 Mersch</span>',
-                '<span>RCS: F2345</span>',
-                '<span>BCEELULL: LU730019220008607000</span>',
-                '<span>© <span id="current-year"></span> by Mersch75, Handball Club</span>',
-                '</div>'
-            ].join('');
+        const yearEl = pageFooter.querySelector('#current-year');
+        if (yearEl) {
+            yearEl.textContent = new Date().getFullYear();
         }
     }
 
