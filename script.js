@@ -15,27 +15,18 @@ function initializeSiteMenu() {
     const labelDefault = 'Menü';
     const currentPath = window.location.pathname.split('/').pop() || 'index.html';
     const navItems = [
-        { href: 'matchcenter.html', label: 'Matchcenter', primary: true },
-        { href: 'matchday.html', label: 'Matchday', primary: true },
+        { href: 'index.html', label: 'Startseite', primary: true },
+        { href: 'live-center.html', label: 'Spielplan', primary: true },
         { href: 'training.html', label: 'Training', primary: true },
         { href: 'trainerstaff.html', label: 'Trainerstaff', primary: true },
         { href: 'news.html', label: 'News', primary: true },
         { href: 'join.html', label: 'Join Us', primary: true },
         { href: 'comite.html', label: 'Comité', primary: true },
-        { href: 'historie.html', label: 'Historie', primary: true },
         { href: 'gallery.html', label: 'Galerie', primary: false },
-        { href: 'community.html', label: 'Community', primary: false },
+        { href: 'historie.html', label: 'Historie', primary: false },
         { href: 'links.html', label: 'Links', primary: false },
         { href: 'contact.html', label: 'Contact', primary: false }
     ];
-
-    const intro = document.createElement('div');
-    intro.className = 'site-menu-intro';
-    intro.innerHTML = [
-        '<p class="site-menu-kicker">Navigation</p>',
-        '<h2>Alles Wichtegt fir Mersch75 op enger Plaz.</h2>',
-        '<p>Matchday, Matchcenter, Training, Trainerstaff a Club-Liewen ginn hei wéi an engem richtege Menü-Hub gebündelt, amplaz als klassesch Header-Leescht.</p>'
-    ].join('');
 
     const primaryGroup = document.createElement('div');
     primaryGroup.className = 'site-menu-primary';
@@ -59,16 +50,6 @@ function initializeSiteMenu() {
 
     const footer = document.createElement('div');
     footer.className = 'site-menu-footer';
-    footer.innerHTML = [
-        '<a class="site-menu-cta" href="matchday.html">',
-        '<span>Live Fokus</span>',
-        '<strong>Aktueller Spieltag</strong>',
-        '</a>',
-        '<a class="site-menu-cta" href="join.html">',
-        '<span>Club</span>',
-        '<strong>Mitmachen & Kontakt</strong>',
-        '</a>'
-    ].join('');
 
     const closeButton = document.createElement('button');
     closeButton.type = 'button';
@@ -78,7 +59,7 @@ function initializeSiteMenu() {
 
     const shell = document.createElement('div');
     shell.className = 'site-menu-shell';
-    shell.append(closeButton, intro, primaryGroup, secondaryGroup, footer);
+    shell.append(closeButton, primaryGroup, secondaryGroup, footer);
 
     siteNav.innerHTML = '';
     siteNav.append(shell);

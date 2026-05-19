@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mersch75 Handball</title>
     <meta name="description" content="Mersch75 Handball: Vereinsübersicht, Matchcenter, Training, News, Galerie und Mitmachen.">
-    <link rel="stylesheet" href="styles.css?v=20260515a">
+    <link rel="stylesheet" href="styles.css?v=20260519d">
+    <script src="js/generator-gate.js?v=20260519c" defer></script>
 </head>
 <body class="landing-page">
     <div class="landing-wrapper">
@@ -22,9 +23,8 @@
                 <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menü</button>
 
                 <nav class="site-nav" id="site-nav">
+                    <a href="index.html">Startseite</a>
                     <a href="training.html">Training</a>
-                    <a href="matchcenter.html">Matchcenter</a>
-                    <a href="matchday.html">Matchday</a>
                     <a href="join.html">Join Us</a>
                     <a href="news.html">News</a>
                     <a href="inside.html">Inside</a>
@@ -37,83 +37,36 @@
 
             <section class="poster-section poster-section-hero section-frame">
                 <div class="poster-shell poster-shell-hero">
-                    <a class="poster-visual poster-visual-hero" href="matchday.html">
-                        <img src="Media/Hauptseite/MatchPoster%20240526.jpg" alt="Mersch75 Matchposter vom 24.05.2026">
+                    <div class="poster-visual poster-visual-hero">
+                        <picture>
+                            <source media="(max-width: 767px)" srcset="Media/Hauptseite/current-matchposter-portrait.jpg">
+                            <img src="Media/Hauptseite/current-matchposter.jpg" alt="Mersch75 Matchposter">
+                        </picture>
+                    </div>
+                </div>
+                <div class="poster-actions" id="poster-actions">
+                    <a class="poster-action" href="Media/Hauptseite/current-matchposter.jpg" download="Mersch75-Matchposter.jpg" title="Landscape herunterladen">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20h14v-2H5v2zm7-18L5.33 8.67l1.42 1.42L11 5.83V16h2V5.83l4.25 4.26 1.42-1.42L12 2z"/></svg>
+                        Landscape
                     </a>
+                    <a class="poster-action" href="Media/Hauptseite/current-matchposter-portrait.jpg" download="Mersch75-Matchposter-Portrait.jpg" title="Portrait herunterladen">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20h14v-2H5v2zm7-18L5.33 8.67l1.42 1.42L11 5.83V16h2V5.83l4.25 4.26 1.42-1.42L12 2z"/></svg>
+                        Portrait
+                    </a>
+                    <button type="button" class="poster-action poster-action-primary" id="poster-share-btn" title="Poster teilen">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92S19.61 16.08 18 16.08z"/></svg>
+                        Teilen
+                    </button>
                 </div>
             </section>
 
-            <div class="separator"></div>
-
-            <section class="landing-hero section-frame">
-                <div class="landing-hero-copy">
-                    <p class="eyebrow">Mersch75 Handball</p>
-                    <h1>Handball zu Miersch. Klar, schnell und zesumme staark.</h1>
-                    <p class="lead">Alles Wichtige auf einen Blick: Training, Matchcenter, News und das Vereinsleben von Mersch75 in einem klaren, zeitgemäßen Auftritt mit starker Bildsprache.</p>
-                    <div class="hero-actions">
-                        <a class="hero-button hero-button-primary" href="matchcenter.html">Zum Matchcenter</a>
-                        <a class="hero-button hero-button-secondary" href="join.html">Mitmachen</a>
-                    </div>
-                </div>
-
-                <aside class="landing-hero-panel" aria-label="Schnellzugriff">
-                    <p class="eyebrow">Schnellzugriff</p>
-                    <div class="hero-link-list">
-                        <a class="hero-link-card" href="training.html">
-                            <span>Training</span>
-                            <strong>Staff, Hallen und Einstieg</strong>
-                        </a>
-                        <a class="hero-link-card" href="news.html">
-                            <span>News</span>
-                            <strong>Aktuelles und Vereinsupdates</strong>
-                        </a>
-                        <a class="hero-link-card" href="inside.html">
-                            <span>Inside</span>
-                            <strong>Geschichte, Menschen, Club-Kultur</strong>
-                        </a>
-                    </div>
-                </aside>
-            </section>
-
-            <div class="separator"></div>
-
-            <section class="spotlight-section section-frame">
-                <div class="section-heading section-heading-inline">
-                    <div>
-                        <p class="eyebrow">Club Highlights</p>
-                        <h2>Sport, Staff a Visibilitéit op ee Bléck.</h2>
-                    </div>
-                    <p>Galerie, Ligae a Staff-Bereicher bleiwen visuell präsent, kréien awer eng méi roueg Struktur an däitlech méi Liesbarkeet.</p>
-                </div>
-
-                <div class="spotlight-layout">
-                    <div class="spotlight-links">
-                        <a class="spotlight-link spotlight-link-large" href="gallery.html">
-                            <span class="spotlight-kicker">Galerie</span>
-                            <img src="Media/Logo-Menu-Mersch75-Galerie-Fotos-SBO-Videos-2025-1.png" alt="Galerie">
-                        </a>
-                        <a class="spotlight-link spotlight-link-small" href="https://www.flh.lu/playoffs/#/league?ogId=95&lId=154121&allGames=1" target="_blank" rel="noreferrer">
-                            <span class="spotlight-kicker">Fraen</span>
-                            <img src="Media/Logo-Menu-Mersch75-AxaLeague-WoMen-new-1.png" alt="Axa League Women">
-                        </a>
-                        <a class="spotlight-link spotlight-link-small" href="https://www.flh.lu/playoffs/#/league?ogId=95&lId=153709&allGames=1" target="_blank" rel="noreferrer">
-                            <span class="spotlight-kicker">Hären</span>
-                            <img src="Media/Logo-Menu-Mersch75-AxaLeague-Men-new-1.png" alt="Axa League Men">
-                        </a>
-                        <a class="spotlight-link spotlight-link-large" href="training.html">
-                            <span class="spotlight-kicker">Staff</span>
-                            <img src="Media/Logo-Trainerstaff-AppleStyle-2025-1.png" alt="Trainerstaff">
-                        </a>
-                    </div>
-
-                    <div class="spotlight-stage">
-                        <div class="spotlight-stage-copy">
-                            <span class="score-label">Club-Fokus</span>
-                            <h2>De Ball bleift am Zentrum. D'Entrée ronderëm gëtt just méi kloer.</h2>
-                            <p>Déi markant Mersch75-Bildwelt bleift erhale, mee d'Nëtzlechkeet kënnt no vir: séier erakommen, séier verstoen, séier bei déi richteg Rubrik.</p>
-                        </div>
-                        <img src="Media/de-Ball-reduced-Kopie.png" alt="De Ball">
-                    </div>
+            <section class="ball-jump section-frame">
+                <a class="ball-jump-link" href="live-center.html" aria-label="Zum Spielplan">
+                    <img src="Media/de-Ball-reduced-Kopie.png" alt="Mersch75 Handball">
+                </a>
+                <div class="ball-jump-actions">
+                    <a class="ball-jump-label" href="live-center.html">Zum Spielplan</a>
+                    <a class="ball-jump-label" href="news.html">Zu den News</a>
                 </div>
             </section>
 
@@ -145,13 +98,19 @@
             <div class="separator"></div>
 
             <section class="info-section section-frame">
-                <p class="eyebrow">Netzwierk</p>
                 <h2>National an international Infos</h2>
-                <p class="lead">Déi wichtegst Verbänn a Plattforme ginn net méi einfach nëmmen als Logo-Rei gewisen, mee als kloer Ressource-Zon fir Spiller, Elteren a Supporter.</p>
                 <div class="info-links-grid">
                     <a href="http://flh.lu" target="_blank" rel="noreferrer">
                         <img src="Media/LOGO-FLH-zu-4x-hochskalieren-zu-4x-hochskalieren-scaled.png" alt="FLH">
                         <span>FLH</span>
+                    </a>
+                    <a href="https://www.flh.lu/playoffs/#/league?ogId=95&lId=154121&allGames=1" target="_blank" rel="noreferrer">
+                        <img src="Media/Logo-Menu-Mersch75-AxaLeague-WoMen-new-1.png" alt="Axa League Women">
+                        <span>AXA League Fraen</span>
+                    </a>
+                    <a href="https://www.flh.lu/playoffs/#/league?ogId=95&lId=153709&allGames=1" target="_blank" rel="noreferrer">
+                        <img src="Media/Logo-Menu-Mersch75-AxaLeague-Men-new-1.png" alt="Axa League Men">
+                        <span>AXA League Hären</span>
                     </a>
                     <a href="https://www.ihf.info/" target="_blank" rel="noreferrer">
                         <img src="Media/Copy-of-Logo-IHF-Applestyle.png" alt="IHF">
@@ -171,10 +130,42 @@
             <div class="separator"></div>
 
             <section class="sponsors-section section-frame">
-                <p class="eyebrow">Partner</p>
-                <h2>Äer finanziell Hëllef<br>bedeit d'Realisatioun vun eise Visiounen</h2>
-                <p class="lead">D'Partner kréien eng méi roueg, méi wäertig Bün. D'Visibilitéit bleift grouss, mee net méi wéi eng schwéier Print-Fläch op enger digitaler Säit.</p>
-                <img src="Media/Sponsorslescht-all-Breifpabeier-ouni-adresse-13022026.jpg" alt="Sponsorenübersicht">
+                <h2>Eis Sponsoren</h2>
+                <div class="sponsors-grid">
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/Boissons-Heintz.png" alt="Boissons Heintz"></div>
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/brand-naturata-new.png" alt="Naturata"></div>
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/brasseriedeluxembourg_logo-480x127-1.jpg" alt="Brasserie de Luxembourg"></div>
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/Dolcevita-06122020.png" alt="Dolce Vita"></div>
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/Electro-Center.png" alt="Electro Center"></div>
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/Equidem.png" alt="Equidem"></div>
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/Erasmy-2.png" alt="Erasmy"></div>
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/EWA.png" alt="EWA"></div>
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/Houseconcept-1.jpg" alt="House Concept"></div>
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/IFA.png" alt="IFA"></div>
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/Intersport-logo.png" alt="Intersport"></div>
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/Kaiser-Systems.png" alt="Kaiser Systems"></div>
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/logo-La-Fontana-retina.png" alt="La Fontana"></div>
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/Mako-Logo.png" alt="Mako"></div>
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/MansfeldImmobiliere-laang-new.png" alt="Mansfeld Immobilière"></div>
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/Mixvoip-logo-RGB.png" alt="Mixvoip"></div>
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/Opti-vue-1.png" alt="Opti-Vue"></div>
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/Ostergaards.png" alt="Ostergaards"></div>
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/PetersSports.png" alt="Peters Sports"></div>
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/Raiffeisen.png" alt="Raiffeisen"></div>
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/REIFF-MASUTT.png" alt="Reiff Masutt"></div>
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/Rives-de-lAlzette.png" alt="Rives de l'Alzette"></div>
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/Rollingertec.jpg" alt="Rollingertec"></div>
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/SafetyConcept-new-2025.png" alt="Safety Concept"></div>
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/Sales-Lentz-20211-scaled.png" alt="Sales-Lentz"></div>
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/Schilling.png" alt="Schilling"></div>
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/Solid.jpg" alt="Solid"></div>
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/Spuerkeess.png" alt="Spuerkeess"></div>
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/Taxx-Logo-with-brand-normal-horizontal_transparent-1-scaled.jpg" alt="Taxx"></div>
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/Vigilzone.png" alt="Vigilzone"></div>
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/Viktor-SARL.png" alt="Viktor SARL"></div>
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/Vitrerie-de-Mersch-new.png" alt="Vitrerie de Mersch"></div>
+                    <div class="sponsor-tile"><img src="Media/Sponsoring/Yamas.png" alt="Yamas"></div>
+                </div>
             </section>
 
             <div class="separator"></div>
@@ -193,8 +184,6 @@
                         <div class="footer-column">
                             <h3>Schnellzugriff</h3>
                             <div class="footer-link-list">
-                                <a href="matchday.html">Aktueller Spieltag</a>
-                                <a href="matchcenter.html">Matchcenter</a>
                                 <a href="training.html">Training</a>
                                 <a href="trainerstaff.html">Trainerstaff</a>
                                 <a href="gallery.html">Galerie</a>
@@ -224,12 +213,82 @@
                 <div class="footer-bottom">
                     <p>RCS: F2345 · BCEELULL: LU730019220008607000</p>
                     <p>Impressum a Datenschutz ginn als nächst statesch Servicessäiten ergänzt.</p>
-                    <p>© <span id="current-year"></span> by Mersch75 Handball</p>
+                    <p>© <span id="current-year"></span> by Mersch75 Handball &middot; <a class="admin-link" href="generator.html">Admin Login</a></p>
                 </div>
             </footer>
         </main>
     </div>
 
     <script src="script.js"></script>
+    <script>
+    (function () {
+        var btn = document.getElementById('poster-share-btn');
+        if (!btn) return;
+        var landscapeUrl = new URL('Media/Hauptseite/current-matchposter.jpg', window.location.href).toString();
+        var portraitUrl  = new URL('Media/Hauptseite/current-matchposter-portrait.jpg', window.location.href).toString();
+        var pageUrl      = window.location.origin + window.location.pathname;
+        var shareTitle   = 'Mersch75 Matchposter';
+        var shareText    = 'De Mersch75-Matchposter fir dest Weekend.';
+
+        function openShareMenu(ev) {
+            ev && ev.preventDefault();
+            var existing = document.getElementById('share-menu'); if (existing) { existing.remove(); return; }
+            var rect = btn.getBoundingClientRect();
+            var menu = document.createElement('div');
+            menu.id = 'share-menu';
+            menu.className = 'share-menu';
+            var enc = encodeURIComponent;
+            var msg = shareText + ' ' + pageUrl;
+            menu.innerHTML = ''
+                + '<a target="_blank" rel="noopener" href="https://wa.me/?text=' + enc(msg) + '">WhatsApp</a>'
+                + '<a target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u=' + enc(pageUrl) + '">Facebook</a>'
+                + '<a target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text=' + enc(shareText) + '&url=' + enc(pageUrl) + '">X / Twitter</a>'
+                + '<a target="_blank" rel="noopener" href="mailto:?subject=' + enc(shareTitle) + '&body=' + enc(msg) + '">E-Mail</a>'
+                + '<button type="button" data-act="copy">Link kopieren</button>'
+                + '<a target="_blank" rel="noopener" href="' + landscapeUrl + '" download>Bild fuer Insta speichern</a>'
+                + '<small>Instagram: Bild speichern, dann in der Insta-App posten.</small>';
+            document.body.appendChild(menu);
+            var top = window.scrollY + rect.bottom + 8;
+            var left = Math.max(8, window.scrollX + rect.left);
+            menu.style.top = top + 'px';
+            menu.style.left = left + 'px';
+            menu.querySelector('[data-act="copy"]').addEventListener('click', function () {
+                try { navigator.clipboard.writeText(pageUrl); this.textContent = 'Kopiert ✓'; }
+                catch (e) { this.textContent = 'Kopieren fehlgeschlagen'; }
+            });
+            setTimeout(function () {
+                document.addEventListener('click', function close(e) {
+                    if (menu.contains(e.target) || e.target === btn) return;
+                    menu.remove(); document.removeEventListener('click', close);
+                });
+            }, 50);
+        }
+
+        async function nativeShare(ev) {
+            ev && ev.preventDefault();
+            if (!navigator.share) { openShareMenu(); return; }
+            try {
+                if (navigator.canShare) {
+                    try {
+                        var resp = await fetch(landscapeUrl, { cache: 'no-store' });
+                        var blob = await resp.blob();
+                        var file = new File([blob], 'Mersch75-Matchposter.jpg', { type: blob.type || 'image/jpeg' });
+                        if (navigator.canShare({ files: [file] })) {
+                            await navigator.share({ files: [file], title: shareTitle, text: shareText });
+                            return;
+                        }
+                    } catch (e) { /* fall through to URL share */ }
+                }
+                await navigator.share({ title: shareTitle, text: shareText, url: pageUrl });
+            } catch (err) {
+                if (err && err.name !== 'AbortError') openShareMenu();
+            }
+        }
+
+        btn.addEventListener('click', function (ev) {
+            if (navigator.share) nativeShare(ev); else openShareMenu(ev);
+        });
+    })();
+    </script>
 </body>
 </html>

@@ -111,6 +111,10 @@
 #m75-lc-wrapper .context-note { display: none; margin: 0 0 18px; padding: 14px 16px; border-radius: 14px; background: rgba(0, 94, 184, 0.07); border: 1px solid rgba(0, 94, 184, 0.12); color: var(--mersch-dark); font-size: 0.86rem; line-height: 1.5; }
 #m75-lc-wrapper .context-note strong { color: var(--mersch-blue); }
 #m75-lc-wrapper .static-view { display: none; padding: 16px; overflow-x: auto; width: 100%; }
+#m75-lc-wrapper .all-games-filter { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 0 12px; }
+#m75-lc-wrapper .agf-btn { padding: 6px 12px; border-radius: 999px; border: 1px solid #d6dde7; background: #fff; color: #002f65; font-size: 0.78rem; font-weight: 600; cursor: pointer; transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease; }
+#m75-lc-wrapper .agf-btn:hover { background: #f0f5fc; }
+#m75-lc-wrapper .agf-btn.active { background: #002f65; color: #ffde00; border-color: #002f65; }
 #m75-lc-wrapper .static-view table { width: 100%; border-collapse: collapse; font-size: clamp(0.7rem, 1.8vw, 0.86rem); }
 #m75-lc-wrapper .static-view th { background: #f0f0f0; padding: 8px 10px; text-align: left; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: #666; white-space: nowrap; border-bottom: 2px solid #ddd; }
 #m75-lc-wrapper .static-view td { padding: 8px 10px; border-bottom: 1px solid #eee; vertical-align: middle; }
@@ -157,10 +161,6 @@
     </div>
 
     <div class="main-wrapper">
-        <div class="header">
-            <h1 style="margin:0;">Live-Center</h1>
-        </div>
-
         <div class="toggle-wrapper"><div class="toggle-container" id="categoryMenu"></div></div>
         <div id="teamMenu"></div>
         <div class="context-note" id="activeEntryNote"></div>
@@ -172,6 +172,7 @@
             </div>
 
             <div class="static-view" id="staticView">
+                <div id="allGamesFilter" class="all-games-filter" style="display:none;"></div>
                 <table id="staticTable" style="display:none;">
                     <thead id="staticHead"></thead>
                     <tbody id="staticBody"></tbody>
@@ -535,6 +536,11 @@ return `${m.getFullYear()}-${String(m.getMonth()+1).padStart(2,"0")}-${String(m.
 }
 
 const NAV = {
+    "Alle Spiele": {
+        "section-all": { "Kompletter Saison-Spielplan": {
+            "Gesamttabelle": { t:"allgames" }
+        }}
+    },
     "Wochenübersicht": {
         "section-all": { "Übersicht": {
             "Alle Spiele": { t:"iframe", url:`https://www.flh.lu/playoffs/rencontres-weekend-semaine-courante#/club?ogId=95&wId=${getMondayISO()}&cId=2739`, note: weeklyClubOnlyHints ? `Zusätzliche M75-Hinweise aus FLH: ${weeklyClubOnlyHints}` : "" }
@@ -599,11 +605,6 @@ const NAV = {
             "M75 Events (beendet)": { "M75 Events": { t:"m75" } },
             "FLH Events (beendet)": { "FLH Events": { t:"flh", filter:"past" } }
         }
-    },
-    "Alle Spiele": {
-        "section-all": { "Kompletter Saison-Spielplan": {
-            "Gesamttabelle": { t:"allgames" }
-        }}
     }
 };
 
@@ -721,7 +722,41 @@ if (up.includes("POKAL: U13")) return 13;
 return 99;
 };
 
-const sortedGames = [...allGamesData].sort((a, b) => {
+// Build category list from the data
+const allCats = [];
+const catSeen = {};
+[...allGamesData].forEach(r => {
+    const c = normalizeTeamLabel(r.team || "");
+    if (c && !catSeen[c]) { catSeen[c] = true; allCats.push(c); }
+});
+allCats.sort((a, b) => getRank(a) - getRank(b));
+
+// Build filter bar UI
+const filterEl = document.getElementById('allGamesFilter');
+if (filterEl) {
+    const active = window.__allGamesFilter || 'all';
+    let bar = '<button type="button" class="agf-btn' + (active === 'all' ? ' active' : '') + '" data-cat="all">Alle Kategorien</button>';
+    allCats.forEach(c => {
+        bar += '<button type="button" class="agf-btn' + (active === c ? ' active' : '') + '" data-cat="' + c.replace(/"/g, '&quot;') + '">' + c + '</button>';
+    });
+    filterEl.innerHTML = bar;
+    filterEl.style.display = 'flex';
+    Array.from(filterEl.querySelectorAll('.agf-btn')).forEach(btn => {
+        btn.onclick = () => {
+            window.__allGamesFilter = btn.getAttribute('data-cat');
+            const result = renderAllGames();
+            document.getElementById("staticHead").innerHTML = result.head;
+            document.getElementById("staticBody").innerHTML = result.rows;
+        };
+    });
+}
+
+const filter = window.__allGamesFilter || 'all';
+const filteredData = filter === 'all'
+    ? allGamesData
+    : allGamesData.filter(r => normalizeTeamLabel(r.team || "") === filter);
+
+const sortedGames = [...filteredData].sort((a, b) => {
 const rankA = getRank(a.team);
 const rankB = getRank(b.team);
 if (rankA !== rankB) return rankA - rankB; 
@@ -804,6 +839,11 @@ document.getElementById("staticView").style.display       = "block";
 
 const tbl   = document.getElementById("staticTable");
 const empty = document.getElementById("emptyState");
+const filterEl = document.getElementById("allGamesFilter");
+if (filterEl && entry.t !== "allgames") {
+    filterEl.style.display = "none";
+    filterEl.innerHTML = "";
+}
 
 if (entry.t === "empty") {
 tbl.style.display   = "none";
