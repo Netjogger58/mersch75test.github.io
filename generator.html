@@ -145,7 +145,7 @@
 
 #m75-gen-wrapper .portrait-section { display: flex; flex-direction: row; flex-wrap: wrap; align-items: flex-start; justify-content: center; gap: 40px; width: 100%; max-width: 1600px; margin: 0 auto; box-sizing: border-box; }
 #m75-gen-wrapper .portrait-left-col { flex: 0 0 auto; display: flex; justify-content: center; align-items: flex-start; min-width: 800px; max-width: 100%; overflow: auto; }
-#m75-gen-wrapper #wrapper-portrait { flex: 0 0 auto; background: #e0e0e0; position: relative; overflow: visible; border-radius: 12px; display: block; box-shadow: 0 10px 30px rgba(0, 0, 0, .2); min-height: 1060px; min-width: 800px; max-width: 100%; }
+#m75-gen-wrapper #wrapper-portrait { flex: 0 0 auto; background: #e0e0e0; position: relative; overflow: visible; border-radius: 12px; display: block; box-shadow: 0 10px 30px rgba(0, 0, 0, .2); min-height: 1180px; min-width: 800px; max-width: 100%; }
 
 #m75-gen-wrapper .portrait-controls { flex: 0 0 580px; max-width: 100%; background: #fffdf0; border: 2px solid var(--primary-yellow); padding: 25px; border-radius: 16px; display: flex; flex-direction: column; gap: 20px; box-sizing: border-box; box-shadow: 0 10px 40px rgba(0, 0, 0, .06); }
 #m75-gen-wrapper .portrait-controls-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 15px; flex-wrap: wrap; margin-bottom: 5px; }
@@ -753,7 +753,7 @@ function renderPortraitControls() {
     html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><label class="team-main-cb" style="color:var(--secondary-blue);cursor:default;margin:0;">🎚️ Kopfzeile &amp; Poster</label><button type="button" class="btn-reset" onclick="resetHeaderSettings()">🔄 Reset</button></div>';
     html += '<div class="team-slider-wrap" style="margin-top:10px;border-top:none;">';
     html += '<div class="slider-row"><span class="sl-lbl">Poster B.</span><input type="range" id="p-scale-width" min="650" max="1200" value="800" oninput="this.nextElementSibling.innerText=this.value;updatePortraitPreview();"><span class="sl-val">800</span></div>';
-    html += '<div class="slider-row"><span class="sl-lbl">Poster H.</span><input type="range" id="p-scale-height" min="866" max="2000" value="1060" oninput="this.nextElementSibling.innerText=this.value;updatePortraitPreview();"><span class="sl-val">1060</span></div>';
+    html += '<div class="slider-row"><span class="sl-lbl">Poster H.</span><input type="range" id="p-scale-height" min="866" max="2000" value="1180" oninput="this.nextElementSibling.innerText=this.value;updatePortraitPreview();"><span class="sl-val">1180</span></div>';
     html += '<div class="slider-row"><span class="sl-lbl">50 J.</span> <input type="range" id="p-scale-50years" min="40" max="150" value="100" oninput="this.nextElementSibling.innerText=this.value;updatePortraitPreview();"><span class="sl-val">100</span></div>';
     html += '<div class="slider-row"><span class="sl-lbl">MixVoip</span><input type="range" id="p-scale-mixvoip" min="100" max="400" value="280" oninput="this.nextElementSibling.innerText=this.value;updatePortraitPreview();"><span class="sl-val">280</span></div>';
     html += '<div class="slider-row"><span class="sl-lbl">Matchd.</span><input type="range" id="p-scale-matchday" min="40" max="250" value="130" oninput="this.nextElementSibling.innerText=this.value;updatePortraitPreview();"><span class="sl-val">130</span></div>';
@@ -1206,6 +1206,8 @@ function updateLandscapePreview() {
         lowTier = allActive.filter(t => getAssignedPos(t.id) > 2);
     }
 
+    const regularSelectionCount = topTier.length + lowTier.length;
+
     if (ht) {
         tTop = 110;
         const youthStartY = 330; const rowHeight = 140; const colOffset1 = 8; const colOffset2 = 183; const colOffset3 = 328;
@@ -1245,6 +1247,20 @@ function updateLandscapePreview() {
                 renderLandscapeGame(lowTier[i].id, ySlots[i], cont, lowTier[i].hasGame);
             }
         } else {
+            if (regularSelectionCount === 3) {
+                const equalSlots = [
+                    { type: 'big', top: 350, left: 36 },
+                    { type: 'big', top: 350, left: 570 },
+                    { type: 'big', top: 350, left: 1104 }
+                ];
+                const equalGames = topTier.concat(lowTier);
+                for (let i = 0; i < equalGames.length; i++) {
+                    renderLandscapeGame(equalGames[i].id, equalSlots[i], cont, equalGames[i].hasGame);
+                }
+                lowTier = [];
+                topTier = [];
+            }
+
             let baseLeft = 1142 + 33 - 130;
             
             if (topTier.length === 2) {
@@ -1587,7 +1603,7 @@ function updatePortraitPreview() {
     const w = wEl ? parseInt(wEl.value, 10) : 800; 
     
     const hEl = document.getElementById('p-scale-height');
-    const h = hEl ? parseInt(hEl.value, 10) : 1060;
+    const h = hEl ? parseInt(hEl.value, 10) : 1180;
     
     const pp = document.getElementById('poster-portrait');
     if (pp) {
@@ -1784,7 +1800,11 @@ function updatePortraitPreview() {
         const gb = document.createElement('div');
         gb.className = 'p-game-block';
         
-        if (widthVal === "33") {
+        const equalPortraitStack = ap.length === 3;
+
+        if (equalPortraitStack) {
+            gb.style.width = '100%'; gb.style.padding = '0 15px';
+        } else if (widthVal === "33") {
             gb.style.width = '33.33%'; gb.style.padding = '0 5px';
         } else if (widthVal === "50") {
             gb.style.width = '50%'; gb.style.padding = '0 15px';
@@ -1810,7 +1830,7 @@ function downloadPortraitImage() {
     const w = wEl ? parseInt(wEl.value, 10) : 800; 
     
     const hEl = document.getElementById('p-scale-height');
-    const h = hEl ? parseInt(hEl.value, 10) : 1060;
+    const h = hEl ? parseInt(hEl.value, 10) : 1180;
     document.fonts.ready.then(function() {
         html2canvas(el, { scale: 3, useCORS: true, width: w, height: h, backgroundColor: null }).then(function(c) {
             el.style.transform = orig; 
@@ -1833,7 +1853,7 @@ function renderPortraitDataUrl() {
         var wEl = document.getElementById('p-scale-width');
         var w = wEl ? parseInt(wEl.value, 10) : 800;
         var hEl = document.getElementById('p-scale-height');
-        var h = hEl ? parseInt(hEl.value, 10) : 1060;
+        var h = hEl ? parseInt(hEl.value, 10) : 1180;
         document.fonts.ready.then(function () {
             html2canvas(el, { scale: 2, useCORS: true, width: w, height: h, backgroundColor: null }).then(function (c) {
                 el.style.transform = origT;
@@ -2140,7 +2160,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const wEl = document.getElementById('p-scale-width');
             const hEl = document.getElementById('p-scale-height');
             const bw = wEl ? parseInt(wEl.value, 10) : 800;
-            const bh = hEl ? parseInt(hEl.value, 10) : 1060;
+            const bh = hEl ? parseInt(hEl.value, 10) : 1180;
             const w = portWrap.clientWidth || bw;
             const scale = Math.min(1, w / bw);
             portPoster.style.transform = 'scale(' + scale + ')';
