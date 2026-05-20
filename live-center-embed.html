@@ -185,6 +185,7 @@
         </div>
     </div>
 </div>
+<script src="js/flh-live-sync.js?v=20260520a"></script>
 <script>
 const viewConfig = {
     "Wochenübersicht": { h: 2500, top: -560, content: 4200, width: 1360, offsetX: 0 },
@@ -449,6 +450,44 @@ const flhData = [
 { kat:"U18G", datum:"02.11.25 15:30", ort:"Coque",   heim:"Lëtzebuerg",     gast:"Nordmazedonien", score:"17:25", bem:"Quali EHF U18", future:false },
 { kat:"HO",   datum:"02.11.25 18:30", ort:"Coque",   heim:"Lëtzebuerg",     gast:"Lettland",       score:"33:34", bem:"Quali WM 27", future:false },
 
+{ kat:"FE", datum:"02.05.26 20:15", ort:"Käerjeng", heim:"HB Käerjeng", gast:"HB Dudelange", score:"20:24", bem:"AXA League Fraen | HB Dudelange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3459741" },
+{ kat:"FE", datum:"09.05.26 18:00", ort:"Dudelange", heim:"HB Dudelange", gast:"HB Käerjeng", score:"24:28", bem:"AXA League Fraen | HB Dudelange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3470121" },
+{ kat:"FE", datum:"16.05.26 18:00", ort:"Käerjeng", heim:"HB Käerjeng", gast:"HB Dudelange", score:"28:29", bem:"AXA League Fraen | HB Dudelange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3478471" },
+{ kat:"FE", datum:"02.05.26 18:00", ort:"Differdange", heim:"Red Boys Diff", gast:"HB Museldall", score:"34:31", bem:"AXA League Fraen | HB Dudelange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3459061" },
+{ kat:"FE", datum:"09.05.26 18:00", ort:"Museldall", heim:"HB Museldall", gast:"Red Boys Diff", score:"40:34", bem:"AXA League Fraen | HB Dudelange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3470081" },
+{ kat:"FE", datum:"15.05.26 20:30", ort:"Differdange", heim:"Red Boys Diff", gast:"HB Museldall", score:"38:31", bem:"AXA League Fraen | HB Dudelange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3476036" },
+
+{ kat:"HO", datum:"21.02.26 20:15", ort:"Käerjeng", heim:"HB Käerjeng", gast:"Red Boys Diff", score:"30:38", bem:"AXA League Hären | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3332116" },
+{ kat:"HO", datum:"21.02.26 20:15", ort:"Berchem", heim:"HC Berchem", gast:"HB Dudelange", score:"38:37", bem:"AXA League Hären | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3332186" },
+{ kat:"HO", datum:"21.02.26 20:15", ort:"Luxembourg", heim:"HC Standard", gast:"Handball Esch", score:"30:34", bem:"AXA League Hären | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3332176" },
+{ kat:"HO", datum:"28.02.26 20:15", ort:"Berchem", heim:"HC Berchem", gast:"HB Käerjeng", score:"33:38", bem:"AXA League Hären | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3350411" },
+{ kat:"HO", datum:"28.02.26 20:15", ort:"Esch", heim:"Handball Esch", gast:"HB Dudelange", score:"31:41", bem:"AXA League Hären | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3350416" },
+{ kat:"HO", datum:"01.03.26 16:00", ort:"Differdange", heim:"Red Boys Diff", gast:"HC Standard", score:"33:20", bem:"AXA League Hären | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3357166" },
+{ kat:"HO", datum:"07.03.26 20:15", ort:"Dudelange", heim:"HB Dudelange", gast:"HB Käerjeng", score:"48:30", bem:"AXA League Hären | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3368401" },
+{ kat:"HO", datum:"07.03.26 20:15", ort:"Differdange", heim:"Red Boys Diff", gast:"Handball Esch", score:"32:28", bem:"AXA League Hären | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3368486" },
+{ kat:"HO", datum:"07.03.26 20:15", ort:"Luxembourg", heim:"HC Standard", gast:"HC Berchem", score:"22:26", bem:"AXA League Hären | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3368426" },
+{ kat:"HO", datum:"14.03.26 20:15", ort:"Käerjeng", heim:"HB Käerjeng", gast:"Handball Esch", score:"33:28", bem:"AXA League Hären | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3386731" },
+{ kat:"HO", datum:"14.03.26 20:15", ort:"Berchem", heim:"HC Berchem", gast:"Red Boys Diff", score:"43:39", bem:"AXA League Hären | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3386751" },
+{ kat:"HO", datum:"14.03.26 20:15", ort:"Luxembourg", heim:"HC Standard", gast:"HB Dudelange", score:"25:42", bem:"AXA League Hären | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3386716" },
+{ kat:"HO", datum:"28.03.26 20:15", ort:"Käerjeng", heim:"HB Käerjeng", gast:"HC Standard", score:"34:33", bem:"AXA League Hären | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3416731" },
+{ kat:"HO", datum:"28.03.26 20:15", ort:"Dudelange", heim:"HB Dudelange", gast:"Red Boys Diff", score:"30:30", bem:"AXA League Hären | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3416726" },
+{ kat:"HO", datum:"28.03.26 20:15", ort:"Esch", heim:"Handball Esch", gast:"HC Berchem", score:"27:26", bem:"AXA League Hären | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3416741" },
+{ kat:"HO", datum:"18.04.26 20:15", ort:"Dudelange", heim:"HB Dudelange", gast:"HC Berchem", score:"29:32", bem:"AXA League Hären | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3430941" },
+{ kat:"HO", datum:"18.04.26 20:15", ort:"Differdange", heim:"Red Boys Diff", gast:"HB Käerjeng", score:"47:25", bem:"AXA League Hären | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3430876" },
+{ kat:"HO", datum:"18.04.26 20:15", ort:"Esch", heim:"Handball Esch", gast:"HC Standard", score:"31:25", bem:"AXA League Hären | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3430931" },
+{ kat:"HO", datum:"02.05.26 18:00", ort:"Käerjeng", heim:"HB Käerjeng", gast:"HC Berchem", score:"16:32", bem:"AXA League Hären | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3458936" },
+{ kat:"HO", datum:"02.05.26 18:00", ort:"Dudelange", heim:"HB Dudelange", gast:"Handball Esch", score:"42:32", bem:"AXA League Hären | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3458946" },
+{ kat:"HO", datum:"02.05.26 20:15", ort:"Luxembourg", heim:"HC Standard", gast:"Red Boys Diff", score:"25:32", bem:"AXA League Hären | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3459736" },
+{ kat:"HO", datum:"08.05.26 20:30", ort:"Esch", heim:"Handball Esch", gast:"Red Boys Diff", score:"31:36", bem:"AXA League Hären | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3465506" },
+{ kat:"HO", datum:"09.05.26 20:15", ort:"Käerjeng", heim:"HB Käerjeng", gast:"HB Dudelange", score:"30:43", bem:"AXA League Hären | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3470321" },
+{ kat:"HO", datum:"09.05.26 20:15", ort:"Berchem", heim:"HC Berchem", gast:"HC Standard", score:"29:27", bem:"AXA League Hären | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3470331" },
+{ kat:"HO", datum:"16.05.26 20:15", ort:"Dudelange", heim:"HB Dudelange", gast:"HC Standard", score:"48:40", bem:"AXA League Hären | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3478501" },
+{ kat:"HO", datum:"16.05.26 20:15", ort:"Differdange", heim:"Red Boys Diff", gast:"HC Berchem", score:"34:38", bem:"AXA League Hären | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3478521" },
+{ kat:"HO", datum:"16.05.26 20:15", ort:"Esch", heim:"Handball Esch", gast:"HB Käerjeng", score:"39:32", bem:"AXA League Hären | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3478516" },
+{ kat:"HO", datum:"23.05.26 20:15", ort:"Berchem", heim:"HC Berchem", gast:"Handball Esch", score:"", bem:"AXA League Hären | Red Boys Differdange Meister", future:true },
+{ kat:"HO", datum:"23.05.26 20:15", ort:"Differdange", heim:"Red Boys Diff", gast:"HB Dudelange", score:"", bem:"AXA League Hären | Red Boys Differdange Meister", future:true },
+{ kat:"HO", datum:"23.05.26 20:15", ort:"Luxembourg", heim:"HC Standard", gast:"HB Käerjeng", score:"", bem:"AXA League Hären | Red Boys Differdange Meister", future:true },
+
 { kat:"U9M", datum:"19.04.26 10:00", ort:"Pétange",   heim:"U9 Tournoi 10", gast:"—", score:"", bem:"Mersch75, Käerjeng, Standard, Dudelange, Leideleng", future:true, nr:"290122" },
 { kat:"U9M", datum:"03.05.26 10:00", ort:"Red Boys Diff",  heim:"U9 Tournoi 11", gast:"—", score:"", bem:"RB HBK M75 HBE HBCS HCB HBP", future:true, nr:"29421121" },
 { kat:"U9M", datum:"17.05.26 10:00", ort:"Käerjeng",  heim:"U9 Tournoi 12", gast:"—", score:"", bem:"Mersch75, Museldall, Dudelange, Standard, HBCS", future:true, nr:"29421111" },
@@ -541,6 +580,32 @@ const NAV = {
             "Gesamttabelle": { t:"allgames" }
         }}
     },
+
+    let activeLiveCenterEntry = null;
+    let activeLiveCenterMode = '';
+    let liveCenterRefreshPromise = null;
+
+    function refreshLiveCenterScheduleData(forceRefresh) {
+    if (!window.MerschFlhSync) return Promise.resolve(false);
+    if (!forceRefresh && liveCenterRefreshPromise) return liveCenterRefreshPromise;
+
+    liveCenterRefreshPromise = window.MerschFlhSync.fetchAllGames().then(function(livePayload) {
+    if (Array.isArray(livePayload.games) && livePayload.games.length) {
+    allGamesData = window.MerschFlhSync.mergeLiveSeasonGames(allGamesData, livePayload);
+    if (activeLiveCenterMode === 'static' && activeLiveCenterEntry && activeLiveCenterEntry.t === 'allgames') {
+    showStatic(activeLiveCenterEntry);
+    }
+    return true;
+    }
+    return false;
+    }).catch(function() {
+    return false;
+    }).finally(function() {
+    liveCenterRefreshPromise = null;
+    });
+
+    return liveCenterRefreshPromise;
+    }
     "Wochenübersicht": {
         "section-all": { "Übersicht": {
             "Alle Spiele": { t:"iframe", url:`https://www.flh.lu/playoffs/rencontres-weekend-semaine-courante#/club?ogId=95&wId=${getMondayISO()}&cId=2739`, note: weeklyClubOnlyHints ? `Zusätzliche M75-Hinweise aus FLH: ${weeklyClubOnlyHints}` : "" }
@@ -814,6 +879,8 @@ rows: rows
 }
 
 function showIframe(entry, cat) {
+activeLiveCenterEntry = entry;
+activeLiveCenterMode = 'iframe';
 const cfg = typeof viewConfig !== 'undefined' ? (viewConfig[cat] || viewConfig["Wochenübersicht"]) : { h: 1800, top: -560, content: 3000 };
 document.getElementById("staticView").style.display       = "none";
 document.getElementById("cropperContainer").style.display = "block";
@@ -844,6 +911,8 @@ note.style.display = "block";
 }
 
 function showStatic(entry) {
+activeLiveCenterEntry = entry;
+activeLiveCenterMode = 'static';
 document.getElementById("cropperContainer").style.display = "none";
 document.getElementById("staticView").style.display       = "block";
 
@@ -923,6 +992,7 @@ btn.onclick = () => switchCat(cat, btn);
 nav.appendChild(btn);
 });
 buildMenu(Object.keys(NAV)[0]);
+refreshLiveCenterScheduleData(false);
 
 }
 

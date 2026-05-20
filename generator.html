@@ -22,6 +22,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="js/generator-gate.js?v=20260519c" defer></script>
 <script src="js/generator-publish.js?v=20260519c" defer></script>
+<script src="js/flh-live-sync.js?v=20260520a" defer></script>
 
 <style>
 :root {
@@ -505,7 +506,7 @@ const hallCodes = {
     "290091": "op Flor | L-6751 Grevenmacher", "290224": "3 au Village | B-6717 Attert", "290032": "rue Claude Monnet | L-4368 Belval"
 };
 
-const allGamesData = [
+let allGamesData = [
     { team: "HERREN 1 (H-PRO)", datum: "10.05.26 20:00", heim: "HB Petange", gast: "Mersch75", score: "", sbo: "", rtl: "" },
     { team: "HERREN 1 (H-PRO)", datum: "16.05.26 20:15", heim: "Esp Rumelange", gast: "Mersch75", score: "", sbo: "", rtl: "" },
     { team: "HERREN 1 (H-PRO)", datum: "23.05.26 20:15", heim: "Mersch75", gast: "HBC Schifflange", score: "", sbo: "", rtl: "" },
@@ -652,6 +653,48 @@ const allGamesData = [
     { team: "JUGEND: U11 Espoirs", datum: "17.05.26 10:00", heim: "Mersch75", gast: "Tournoi", score: "-", bem: "M75/HBD/CHEV/HBP/HCST", sbo: "", rtl: "" },
     { team: "JUGEND: U11 Espoirs", datum: "14.06.26 10:00", heim: "Mersch75", gast: "Tournoi", score: "-", bem: "M75/HUL/HBM/CHEV", sbo: "", rtl: "" }
 ];
+
+let generatorDataRefreshPromise = null;
+let generatorDataRefreshedAt = 0;
+
+function applyGeneratorLiveGames(livePayload) {
+    if (!window.MerschFlhSync || !livePayload || !Array.isArray(livePayload.games) || !livePayload.games.length) return false;
+    allGamesData = window.MerschFlhSync.mergeLiveSeasonGames(allGamesData, livePayload);
+    generatorDataRefreshedAt = Date.now();
+    return true;
+}
+
+function refreshGeneratorScheduleData(forceRefresh) {
+    if (!window.MerschFlhSync) return Promise.resolve(false);
+    if (!forceRefresh && generatorDataRefreshPromise) return generatorDataRefreshPromise;
+
+    generatorDataRefreshPromise = window.MerschFlhSync.fetchAllGames(function(message) {
+        setWeekendStatus(message, false);
+    }).then(function(livePayload) {
+        const updated = applyGeneratorLiveGames(livePayload);
+        if (updated) {
+            const errorSuffix = livePayload.errors.length ? ' Einige FLH-Ligen waren nicht erreichbar.' : '';
+            setWeekendStatus('Spielplan wurde beim Oeffnen auf den aktuellen FLH-Stand gebracht.' + errorSuffix, false);
+        } else if (livePayload.errors.length) {
+            setWeekendStatus('Live-Aktualisierung fehlgeschlagen. Es wird die lokale Saisonliste verwendet.', true);
+        }
+        return updated;
+    }).catch(function() {
+        setWeekendStatus('Live-Aktualisierung fehlgeschlagen. Es wird die lokale Saisonliste verwendet.', true);
+        return false;
+    }).finally(function() {
+        generatorDataRefreshPromise = null;
+    });
+
+    return generatorDataRefreshPromise;
+}
+
+function ensureGeneratorScheduleDataFresh() {
+    const maxAgeMs = 5 * 60 * 1000;
+    if (generatorDataRefreshPromise) return generatorDataRefreshPromise;
+    if (Date.now() - generatorDataRefreshedAt < maxAgeMs) return Promise.resolve(true);
+    return refreshGeneratorScheduleData(false);
+}
 </script>
 <script>
 function renderFormBlocks() {
@@ -862,7 +905,8 @@ function formatDate(dateStr, timeStr) {
     return '<span style="font-family: \'Barlow\', sans-serif !important; font-style: normal !important; font-weight: 800 !important;">' + days[d.getDay()] + ' - ' + p[2] + '.' + p[1] + '.' + p[0] + ' - ' + t + '</span>';
 }
 
-function loadSavedSchedule() {
+async function loadSavedSchedule() {
+    await ensureGeneratorScheduleDataFresh();
     const sel = document.getElementById('week-selector'); if (!sel) return; const v = sel.value; if (!v) return;
     const text = sel.options[sel.selectedIndex].text; const parts = text.split('-'); if(parts.length !== 2) { sel.value = ""; return; }
     const cleanDate = function(dStr) { let s = dStr.trim(); if(s.charAt(s.length - 1) === '.') { s = s.slice(0, -1); } return s; };
@@ -959,7 +1003,8 @@ function getWeekendRange(offsetWeeks) {
     return { start: friday, end: sunday };
 }
 
-function loadWeekendSchedule(offsetWeeks) {
+async function loadWeekendSchedule(offsetWeeks) {
+    await ensureGeneratorScheduleDataFresh();
     const range = getWeekendRange(offsetWeeks || 0);
     const uniqueKeys = new Set();
     const filteredGames = (typeof allGamesData !== 'undefined' ? allGamesData : []).filter(function(game) {
@@ -2343,6 +2388,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (ym) ym.addEventListener('change', function() { updateLandscapePreview(); scalePoster(); });
 
         updateAllPreviews(); scalePoster();
+        refreshGeneratorScheduleData(false);
         window.addEventListener('resize', function() { scalePoster(); });
     }
 
