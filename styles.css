@@ -940,6 +940,10 @@ body.menu-open {
     padding: 2px 0;
 }
 
+.sponsor-mark-sprite {
+    padding: 0;
+}
+
 .sponsor-mark img {
     max-width: 100%;
     width: auto;
@@ -957,6 +961,86 @@ body.menu-open {
 
 .sponsor-mark-secondary img {
     max-height: 38px;
+}
+
+.sponsor-sprite {
+    display: block;
+    width: var(--sprite-w);
+    height: var(--sprite-h);
+    background-image: url('Media/Sponsoring/Sponsorslescht-all-Breifpabeier-ouni-adresse-13022026.png');
+    background-repeat: no-repeat;
+    background-size: 2500px 729px;
+    background-position: var(--sprite-x) var(--sprite-y);
+}
+
+.sprite-lafontana {
+    --sprite-w: 110px;
+    --sprite-h: 74px;
+    --sprite-x: -350px;
+    --sprite-y: -424px;
+}
+
+.sprite-materiaux {
+    --sprite-w: 150px;
+    --sprite-h: 70px;
+    --sprite-x: -528px;
+    --sprite-y: -422px;
+}
+
+.sprite-rinnen {
+    --sprite-w: 128px;
+    --sprite-h: 68px;
+    --sprite-x: -793px;
+    --sprite-y: -428px;
+}
+
+.sprite-pundel {
+    --sprite-w: 125px;
+    --sprite-h: 72px;
+    --sprite-x: -1270px;
+    --sprite-y: -420px;
+}
+
+.sprite-grandaudition {
+    --sprite-w: 185px;
+    --sprite-h: 60px;
+    --sprite-x: -1498px;
+    --sprite-y: -434px;
+}
+
+.sprite-jeannotbourg {
+    --sprite-w: 155px;
+    --sprite-h: 70px;
+    --sprite-x: -1818px;
+    --sprite-y: -420px;
+}
+
+.sprite-coft {
+    --sprite-w: 95px;
+    --sprite-h: 62px;
+    --sprite-x: -2102px;
+    --sprite-y: -432px;
+}
+
+.sprite-raccou {
+    --sprite-w: 145px;
+    --sprite-h: 60px;
+    --sprite-x: -216px;
+    --sprite-y: -536px;
+}
+
+.sprite-refill {
+    --sprite-w: 78px;
+    --sprite-h: 58px;
+    --sprite-x: -1188px;
+    --sprite-y: -536px;
+}
+
+.sprite-orangepartner {
+    --sprite-w: 106px;
+    --sprite-h: 62px;
+    --sprite-x: -2178px;
+    --sprite-y: -536px;
 }
 
 @media (max-width: 1180px) {
