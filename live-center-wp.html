@@ -673,6 +673,8 @@ let data = filter==="future" ? flhData.filter(r=>r.future)
    : filter==="past"   ? flhData.filter(r=>!r.future)
    : [...flhData];
 
+data = data.filter(r => r.kat !== 'U9M');
+
 data.sort((a, b) => parseDateStr(a.datum) - parseDateStr(b.datum));
 
 return {
