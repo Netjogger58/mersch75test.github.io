@@ -705,6 +705,13 @@ if (up.includes("U11") && (up.includes("EPF5-10") || up.includes("PLACEMENT") ||
 return cleaned;
 };
 
+const getTeamGroupKey = t => {
+const clean = normalizeTeamLabel(t);
+const up = clean.toUpperCase();
+if (up.includes("U13M-P3") || up.includes("U13M-PE")) return "U13M-COMBINED";
+return clean;
+};
+
 const getRank = t => {
 if(!t) return 99;
 const up = normalizeTeamLabel(t).toUpperCase();
@@ -771,9 +778,10 @@ let currentCat = "";
 sortedGames.forEach(r => {
 try {
 let cleanTeam = normalizeTeamLabel(r.team || "");
-if (cleanTeam !== currentCat) {
+let groupKey = getTeamGroupKey(r.team || "");
+if (groupKey !== currentCat) {
 rows += `<tr><td colspan="8" class="team-divider">${cleanTeam}</td></tr>`;
-currentCat = cleanTeam;
+currentCat = groupKey;
 }
 
 let scoreDisplay = "";
