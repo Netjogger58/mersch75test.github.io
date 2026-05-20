@@ -574,38 +574,38 @@ m.setDate(t.getDate() + (d === 0 ? -6 : 1 - d));
 return `${m.getFullYear()}-${String(m.getMonth()+1).padStart(2,"0")}-${String(m.getDate()).padStart(2,"0")}`;
 }
 
+let activeLiveCenterEntry = null;
+let activeLiveCenterMode = '';
+let liveCenterRefreshPromise = null;
+
+function refreshLiveCenterScheduleData(forceRefresh) {
+if (!window.MerschFlhSync) return Promise.resolve(false);
+if (!forceRefresh && liveCenterRefreshPromise) return liveCenterRefreshPromise;
+
+liveCenterRefreshPromise = window.MerschFlhSync.fetchAllGames().then(function(livePayload) {
+if (Array.isArray(livePayload.games) && livePayload.games.length) {
+allGamesData = window.MerschFlhSync.mergeLiveSeasonGames(allGamesData, livePayload);
+if (activeLiveCenterMode === 'static' && activeLiveCenterEntry && activeLiveCenterEntry.t === 'allgames') {
+showStatic(activeLiveCenterEntry);
+}
+return true;
+}
+return false;
+}).catch(function() {
+return false;
+}).finally(function() {
+liveCenterRefreshPromise = null;
+});
+
+return liveCenterRefreshPromise;
+}
+
 const NAV = {
     "Alle Spiele": {
         "section-all": { "Kompletter Saison-Spielplan": {
             "Gesamttabelle": { t:"allgames" }
         }}
     },
-
-    let activeLiveCenterEntry = null;
-    let activeLiveCenterMode = '';
-    let liveCenterRefreshPromise = null;
-
-    function refreshLiveCenterScheduleData(forceRefresh) {
-    if (!window.MerschFlhSync) return Promise.resolve(false);
-    if (!forceRefresh && liveCenterRefreshPromise) return liveCenterRefreshPromise;
-
-    liveCenterRefreshPromise = window.MerschFlhSync.fetchAllGames().then(function(livePayload) {
-    if (Array.isArray(livePayload.games) && livePayload.games.length) {
-    allGamesData = window.MerschFlhSync.mergeLiveSeasonGames(allGamesData, livePayload);
-    if (activeLiveCenterMode === 'static' && activeLiveCenterEntry && activeLiveCenterEntry.t === 'allgames') {
-    showStatic(activeLiveCenterEntry);
-    }
-    return true;
-    }
-    return false;
-    }).catch(function() {
-    return false;
-    }).finally(function() {
-    liveCenterRefreshPromise = null;
-    });
-
-    return liveCenterRefreshPromise;
-    }
     "Wochenübersicht": {
         "section-all": { "Übersicht": {
             "Alle Spiele": { t:"iframe", url:`https://www.flh.lu/playoffs/rencontres-weekend-semaine-courante#/club?ogId=95&wId=${getMondayISO()}&cId=2739`, note: weeklyClubOnlyHints ? `Zusätzliche M75-Hinweise aus FLH: ${weeklyClubOnlyHints}` : "" }
