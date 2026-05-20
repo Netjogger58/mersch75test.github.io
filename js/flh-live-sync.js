@@ -29,6 +29,13 @@
         return String(value == null ? '' : value).trim();
     }
 
+    function getSboLink(rawValue) {
+        const raw = trimValue(rawValue);
+        const numericId = parseInt(raw, 10);
+        if (!raw || !isFinite(numericId) || numericId <= 0) return '';
+        return 'https://spo.handball4all.de/misc/sboPublicReports.php?sGID=' + raw;
+    }
+
     function extractGames(block) {
         if (!block) return [];
         if (Array.isArray(block)) return block;
@@ -70,7 +77,7 @@
     function buildMergeKey(game) {
         if (!game) return '';
 
-        const sbo = trimValue(game.sbo);
+        const sbo = getSboLink(game.sbo.replace(/^.*sGID=/, '')) || trimValue(game.sbo);
         if (sbo) return 'sbo|' + sbo;
 
         const number = trimValue(game.nr);
@@ -158,7 +165,7 @@
             gast: trimValue(rawGame.gGuestTeam),
             score: mapScore(rawGame),
             bem: mapComment(rawGame),
-            sbo: trimValue(rawGame.sGID) ? 'https://spo.handball4all.de/misc/sboPublicReports.php?sGID=' + trimValue(rawGame.sGID) : '',
+            sbo: getSboLink(rawGame.sGID),
             rtl: '',
             nr: trimValue(rawGame.gNo),
             halle: trimValue(rawGame.gGymnasiumNo)
