@@ -889,21 +889,25 @@ body.menu-open {
 
 .sponsor-showcase {
     display: grid;
-    gap: 28px;
+    gap: 18px;
     margin-top: 32px;
 }
 
 .sponsor-tier-primary {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 18px 24px;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 16px 18px;
+}
+
+.sponsor-tier-primary-secondary {
+    margin-top: -8px;
 }
 
 .sponsor-tier-secondary {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 18px 26px;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 14px 18px;
+    align-items: center;
 }
 
 .sponsor-mark {
@@ -913,13 +917,17 @@ body.menu-open {
 }
 
 .sponsor-mark-primary {
-    min-height: 120px;
-    padding: 18px;
+    min-height: 126px;
+    padding: 14px 18px;
     border-radius: var(--radius-md);
     background: #ffffff;
     border: 1px solid rgba(0, 47, 101, 0.08);
     box-shadow: 0 4px 12px rgba(0, 47, 101, 0.06);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.sponsor-mark-primary-compact {
+    min-height: 108px;
 }
 
 .sponsor-mark-primary:hover {
@@ -928,8 +936,8 @@ body.menu-open {
 }
 
 .sponsor-mark-secondary {
-    min-height: 42px;
-    padding: 4px 0;
+    min-height: 46px;
+    padding: 2px 0;
 }
 
 .sponsor-mark img {
@@ -943,8 +951,32 @@ body.menu-open {
     max-height: 82px;
 }
 
+.sponsor-mark-primary-compact img {
+    max-height: 70px;
+}
+
 .sponsor-mark-secondary img {
-    max-height: 40px;
+    max-height: 38px;
+}
+
+@media (max-width: 1180px) {
+    .sponsor-tier-primary {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .sponsor-tier-secondary {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 760px) {
+    .sponsor-tier-primary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .sponsor-tier-secondary {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
 }
 
 .landing-footer {
