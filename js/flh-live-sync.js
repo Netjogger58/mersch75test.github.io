@@ -57,6 +57,58 @@
         return unique;
     }
 
+    function normalizeClubName(value) {
+        return trimValue(value)
+            .toUpperCase()
+            .replace(/HBC\s+SCHIFFL(ANGE|\.)?/g, 'HBC SCHIFFLANGE')
+            .replace(/HB\s+PETANGE/g, 'HB PETANGE')
+            .replace(/BIELES\/P[ÉE]TANGE/g, 'BIELES PETANGE')
+            .replace(/[^A-Z0-9]+/g, ' ')
+            .trim();
+    }
+
+    function buildMergeKey(game) {
+        if (!game) return '';
+
+        const sbo = trimValue(game.sbo);
+        if (sbo) return 'sbo|' + sbo;
+
+        const number = trimValue(game.nr);
+        if (number) return 'nr|' + number;
+
+        return [
+            'fallback',
+            trimValue(game.team),
+            trimValue(game.datum),
+            normalizeClubName(game.heim),
+            normalizeClubName(game.gast)
+        ].join('|');
+    }
+
+    function mergeGameDetails(baseGame, incomingGame) {
+        const base = baseGame || {};
+        const incoming = incomingGame || {};
+        const merged = Object.assign({}, base);
+        const fields = ['team', 'datum', 'heim', 'gast', 'score', 'bem', 'sbo', 'rtl', 'nr', 'halle', 'yt'];
+
+        for (let index = 0; index < fields.length; index++) {
+            const field = fields[index];
+            const incomingValue = trimValue(incoming[field]);
+            const baseValue = trimValue(base[field]);
+            if (incomingValue && !baseValue) {
+                merged[field] = incoming[field];
+            }
+        }
+
+        if (trimValue(incoming.score)) merged.score = incoming.score;
+        if (trimValue(incoming.bem) && !trimValue(base.bem)) merged.bem = incoming.bem;
+        if (trimValue(incoming.sbo)) merged.sbo = incoming.sbo;
+        if (!trimValue(merged.rtl) && trimValue(incoming.rtl)) merged.rtl = incoming.rtl;
+        if (!trimValue(merged.yt) && trimValue(incoming.yt)) merged.yt = incoming.yt;
+
+        return merged;
+    }
+
     function mapScore(game) {
         const homeGoals = trimValue(game.gHomeGoals);
         const guestGoals = trimValue(game.gGuestGoals);
@@ -149,11 +201,20 @@
 
     function mergeLiveSeasonGames(staticGames, livePayload) {
         const liveGames = livePayload && Array.isArray(livePayload.games) ? livePayload.games : [];
-        const replaceLabels = new Set(livePayload && Array.isArray(livePayload.replaceLabels) ? livePayload.replaceLabels : []);
-        const preservedGames = (Array.isArray(staticGames) ? staticGames : []).filter(function(game) {
-            return !replaceLabels.has(trimValue(game && game.team));
+        const preservedGames = Array.isArray(staticGames) ? staticGames : [];
+
+        const mergedByKey = new Map();
+        preservedGames.concat(liveGames).forEach(function(game) {
+            const key = buildMergeKey(game);
+            if (!key) return;
+            if (!mergedByKey.has(key)) {
+                mergedByKey.set(key, Object.assign({}, game));
+                return;
+            }
+            mergedByKey.set(key, mergeGameDetails(mergedByKey.get(key), game));
         });
-        return preservedGames.concat(liveGames);
+
+        return Array.from(mergedByKey.values());
     }
 
     window.MerschFlhSync = {
