@@ -8,9 +8,9 @@
         { key: 'u15', cl: '156341', label: 'JUGEND: U15G' },
         { key: 'u13pe', cl: '152106', label: 'JUGEND: U13M-PE' },
         { key: 'u11el', cl: '152529', label: 'JUGEND: U11 Elite', replaces: ['JUGEND: U11 Elite', 'JUGEND: U11M-EL', 'JUGEND: U11M-EPF5-10'] },
-        { key: 'u11es', cl: '153409', label: 'JUGEND: U11 Espoirs', replaces: ['JUGEND: U11 Espoirs', 'JUGEND: U11M-ES'] },
-        { key: 'u9', cl: '151356', label: 'JUGEND: U9M' },
-        { key: 'u7', cl: '152096', label: 'JUGEND: U7M' }
+        { key: 'u11es', cl: '153409', label: 'JUGEND: U11 Espoirs', replaces: ['JUGEND: U11 Espoirs', 'JUGEND: U11M-ES'], allowCommentMatch: true },
+        { key: 'u9', cl: '151356', label: 'JUGEND: U9M', allowCommentMatch: true },
+        { key: 'u7', cl: '152096', label: 'JUGEND: U7M', allowCommentMatch: true }
     ];
 
     function buildUrl(config) {
@@ -89,7 +89,7 @@
         const base = baseGame || {};
         const incoming = incomingGame || {};
         const merged = Object.assign({}, base);
-        const fields = ['team', 'datum', 'heim', 'gast', 'score', 'bem', 'sbo', 'rtl', 'nr', 'halle', 'yt'];
+        const fields = ['team', 'rtl', 'yt'];
 
         for (let index = 0; index < fields.length; index++) {
             const field = fields[index];
@@ -100,8 +100,13 @@
             }
         }
 
+        if (trimValue(incoming.datum)) merged.datum = incoming.datum;
+        if (trimValue(incoming.heim)) merged.heim = incoming.heim;
+        if (trimValue(incoming.gast)) merged.gast = incoming.gast;
+        if (trimValue(incoming.nr)) merged.nr = incoming.nr;
+        if (trimValue(incoming.halle)) merged.halle = incoming.halle;
         if (trimValue(incoming.score)) merged.score = incoming.score;
-        if (trimValue(incoming.bem) && !trimValue(base.bem)) merged.bem = incoming.bem;
+        if (trimValue(incoming.bem)) merged.bem = incoming.bem;
         if (trimValue(incoming.sbo)) merged.sbo = incoming.sbo;
         if (!trimValue(merged.rtl) && trimValue(incoming.rtl)) merged.rtl = incoming.rtl;
         if (!trimValue(merged.yt) && trimValue(incoming.yt)) merged.yt = incoming.yt;
@@ -123,14 +128,26 @@
         return groupText && groupText !== '-' ? groupText : '';
     }
 
-    function isRelevantGame(game) {
-        const text = [
+    function hasClubReference(text) {
+        const upperText = trimValue(text).toUpperCase();
+        return upperText.indexOf('MERSCH') !== -1 || upperText.indexOf('M75') !== -1;
+    }
+
+    function isRelevantGame(config, game) {
+        const directText = [
             trimValue(game.gHomeTeam),
-            trimValue(game.gGuestTeam),
+            trimValue(game.gGuestTeam)
+        ].join(' ');
+
+        if (hasClubReference(directText)) return true;
+        if (!config || !config.allowCommentMatch) return false;
+
+        const metaText = [
             trimValue(game.gComment),
             trimValue(game.gGroupsortTxt)
-        ].join(' ').toUpperCase();
-        return text.indexOf('MERSCH') !== -1 || text.indexOf('M75') !== -1;
+        ].join(' ');
+
+        return hasClubReference(metaText);
     }
 
     function mapGame(config, rawGame) {
@@ -158,7 +175,7 @@
         const combined = extractGames(content.actualGames).concat(extractGames(content.futureGames));
         return dedupeGames(
             combined
-                .filter(isRelevantGame)
+                .filter(function(game) { return isRelevantGame(config, game); })
                 .map(function(game) { return mapGame(config, game); })
                 .filter(function(game) { return game.datum && game.heim; })
         );
