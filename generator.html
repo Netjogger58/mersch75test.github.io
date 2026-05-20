@@ -416,6 +416,23 @@ const badgeLabels = {
     'u11MEL': 'U11', 'u11MES': 'U11', 'u9M': 'U9', 'u7M': 'U7'
 };
 
+const DEFAULT_TEAM_POSITIONS = {
+    fe: 1,
+    s1: 2,
+    u15: 3,
+    u13pe: 4,
+    u13p3: 5,
+    u11MEL: 6,
+    s2: 7,
+    u11MES: 8,
+    u9M: 9,
+    u7M: 10
+};
+
+function getDefaultTeamPosition(teamId, fallbackPosition) {
+    return DEFAULT_TEAM_POSITIONS[teamId] || fallbackPosition;
+}
+
 const teams = {
     "-": "", 
     "Spielfrei": "Media/M75_realistesche-3D-Ball-op-Mooss-1-2.png", 
@@ -474,7 +491,7 @@ const teams = {
 const aliases = {
     "HBD": "HB Dudelange", "HBCS": "HBC Schifflange", "CHEV": "CHEV Diekirch", "RBD": "Red Boys Differdange",
     "HBK": "HB Käerjeng", "HBP": "HB Pétange", "HCST": "HC Standard", "HCB": "HC Berchem", "HBM": "HB Museldall", "HBL": "HB Leideleng",
-    "HB PETANGE": "HB Pétange", "HB PEITENG": "HB Pétange"
+    "HB PETANGE": "HB Pétange", "HB PEITENG": "HB Pétange", "HBC SCHIFFL.": "HBC Schifflange", "HBC SCHIFFL": "HBC Schifflange"
 };
 
 const addresses = {
@@ -734,13 +751,14 @@ function renderLandscapeControls() {
     const grid = document.getElementById('landscape-settings-grid');
     if (!grid) return;
     let html = '';
+    const maxPosition = TEAM_CONFIGS.length;
     for (let index = 0; index < TEAM_CONFIGS.length; index++) {
         const team = TEAM_CONFIGS[index];
-        const lp = index + 1; 
+        const lp = getDefaultTeamPosition(team.id, index + 1);
         let defaultLogoScale = 100, defaultTitleScale = 100, defaultTextScale = 100;
         let mainHtml = '';
         mainHtml += '<div class="options-row" style="justify-content:space-between; margin-top:8px;">';
-        mainHtml += '<label title="Position">Pos: <input type="number" class="team-order trigger-land-pos" id="' + team.id + '-land-pos" data-team="' + team.id + '" data-current-pos="' + lp + '" value="' + lp + '" min="1" max="9" oninput="handleLandOrderChange(this)"></label>';
+        mainHtml += '<label title="Position">Pos: <input type="number" class="team-order trigger-land-pos" id="' + team.id + '-land-pos" data-team="' + team.id + '" data-current-pos="' + lp + '" value="' + lp + '" min="1" max="' + maxPosition + '" oninput="handleLandOrderChange(this)"></label>';
         mainHtml += '<button type="button" class="btn-reset" onclick="resetLandTeamSettings(\'' + team.id + '\')">🔄 Reset</button>';
         mainHtml += '</div>';
         mainHtml += '<div style="margin-top:8px;"><input type="text" id="' + team.id + '-land-title" class="trigger-view trigger-text" value="' + team.defaultTitle + '" placeholder="Titel" style="width:100%;font-size:11px;padding:6px;border:1px solid var(--border-gray);border-radius:4px;"></div>';
@@ -772,9 +790,11 @@ function renderPortraitControls() {
     const selector = document.getElementById('portrait-team-selector');
     if (!selector) return;
     let html = '';
+    const maxPosition = TEAM_CONFIGS.length;
     for (let i = 0; i < TEAM_CONFIGS.length; i++) {
         const team = TEAM_CONFIGS[i];
         const chk = 'checked';
+        const defaultPos = getDefaultTeamPosition(team.id, i + 1);
         html += '<div class="portrait-team-item">';
         html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">';
         html += '<label class="team-main-cb" style="margin:0;"><input type="checkbox" class="cb-portrait" value="' + team.id + '" ' + chk + '> ' + team.title + '</label>';
@@ -783,7 +803,7 @@ function renderPortraitControls() {
         html += '<div class="options-row">';
         html += '<label><input type="checkbox" class="cb-title" value="' + team.id + '" checked> Titel</label>';
         html += '<label>Breite: <select class="cb-width" data-team="' + team.id + '" onchange="handleWidthToggle(this)" style="padding:2px; font-size:11px; margin-left:4px; width:auto;"><option value="100">100%</option><option value="50">50%</option><option value="33">33%</option></select></label>';
-        html += '<label>Pos: <input type="number" class="team-order trigger-port-pos" data-team="' + team.id + '" data-current-pos="' + (i + 1) + '" value="' + (i + 1) + '" min="1" max="9" oninput="handlePortraitOrderChange(this)"></label>';
+        html += '<label>Pos: <input type="number" class="team-order trigger-port-pos" data-team="' + team.id + '" data-current-pos="' + defaultPos + '" value="' + defaultPos + '" min="1" max="' + maxPosition + '" oninput="handlePortraitOrderChange(this)"></label>';
         html += '</div>';
         html += '<div class="team-slider-wrap">';
         html += '<div class="slider-row"><span class="sl-lbl">Logo</span><input type="range" class="team-scale-logo" data-team="' + team.id + '" min="30" max="250" value="140" oninput="this.nextElementSibling.innerText=this.value; updatePortraitPreview();"><span class="sl-val">140</span></div>';
@@ -807,7 +827,8 @@ function renderPortraitControls() {
 function handleLandOrderChange(el) {
     const all = Array.from(document.querySelectorAll('.trigger-land-pos'));
     let n = parseInt(el.value); let o = parseInt(el.getAttribute('data-current-pos'));
-    if (isNaN(n) || n < 1) n = 1; if (n > 9) n = 9; el.value = n; if (n === o) return;
+    const maxPosition = TEAM_CONFIGS.length;
+    if (isNaN(n) || n < 1) n = 1; if (n > maxPosition) n = maxPosition; el.value = n; if (n === o) return;
     for (let i = 0; i < all.length; i++) {
         const x = all[i]; if (x === el) continue;
         let p = parseInt(x.getAttribute('data-current-pos'));
@@ -820,7 +841,8 @@ function handleLandOrderChange(el) {
 function handlePortraitOrderChange(el) {
     const all = Array.from(document.querySelectorAll('.trigger-port-pos'));
     let n = parseInt(el.value); let o = parseInt(el.getAttribute('data-current-pos'));
-    if (isNaN(n) || n < 1) n = 1; if (n > 9) n = 9; el.value = n; if (n === o) return;
+    const maxPosition = TEAM_CONFIGS.length;
+    if (isNaN(n) || n < 1) n = 1; if (n > maxPosition) n = maxPosition; el.value = n; if (n === o) return;
     for (let i = 0; i < all.length; i++) {
         const x = all[i]; if (x === el) continue;
         let p = parseInt(x.getAttribute('data-current-pos'));
