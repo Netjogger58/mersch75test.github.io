@@ -6,6 +6,8 @@
  * gehalten — Soft-Lock-Prinzip wie generator-gate.js.
  *
  * Konfiguration:
+ *   - localStorage[m75-publish-mode] : 'github' oder 'proxy'
+ *   - localStorage[m75-proxy-url]    : HTTPS-Endpoint fuer sicheren Publish
  *   - localStorage[m75-gh-token]  : Personal Access Token (Fine-grained, Scope
  *                                    nur dieses Repo + Contents: Read & Write)
  *   - localStorage[m75-gh-owner]  : GitHub-User/Org    (Default: aus URL geraten)
@@ -18,12 +20,15 @@
  */
 (function () {
     var KEYS = {
+        mode:   'm75-publish-mode',
+        proxyUrl: 'm75-proxy-url',
         token:  'm75-gh-token',
         owner:  'm75-gh-owner',
         repo:   'm75-gh-repo',
         branch: 'm75-gh-branch'
     };
     var DEFAULTS = {
+        mode: 'github',
         owner:  'netjogger58',
         repo:   'mersch75test.github.io',
         branch: 'main',
@@ -37,6 +42,8 @@
 
     function getConfig() {
         return {
+            mode:   lsGet(KEYS.mode) || DEFAULTS.mode,
+            proxyUrl: lsGet(KEYS.proxyUrl),
             token:  lsGet(KEYS.token),
             owner:  lsGet(KEYS.owner)  || DEFAULTS.owner,
             repo:   lsGet(KEYS.repo)   || DEFAULTS.repo,
@@ -45,6 +52,8 @@
     }
 
     function setConfig(cfg) {
+        if (typeof cfg.mode === 'string') { cfg.mode ? lsSet(KEYS.mode, cfg.mode) : lsDel(KEYS.mode); }
+        if (typeof cfg.proxyUrl === 'string') { cfg.proxyUrl ? lsSet(KEYS.proxyUrl, cfg.proxyUrl) : lsDel(KEYS.proxyUrl); }
         if (typeof cfg.token  === 'string') { cfg.token  ? lsSet(KEYS.token,  cfg.token)  : lsDel(KEYS.token); }
         if (typeof cfg.owner  === 'string') { cfg.owner  ? lsSet(KEYS.owner,  cfg.owner)  : lsDel(KEYS.owner); }
         if (typeof cfg.repo   === 'string') { cfg.repo   ? lsSet(KEYS.repo,   cfg.repo)   : lsDel(KEYS.repo); }
@@ -52,10 +61,26 @@
     }
 
     function clearAll() {
+        lsDel(KEYS.mode); lsDel(KEYS.proxyUrl);
         lsDel(KEYS.token); lsDel(KEYS.owner); lsDel(KEYS.repo); lsDel(KEYS.branch);
     }
 
     function hasToken() { return !!lsGet(KEYS.token); }
+    function hasProxy() { return !!lsGet(KEYS.proxyUrl); }
+    function canPublish() {
+        var cfg = getConfig();
+        return cfg.mode === 'proxy' ? !!cfg.proxyUrl : !!cfg.token;
+    }
+
+    function validateProxyUrl(proxyUrl) {
+        try {
+            var parsed = new URL(proxyUrl);
+            if (parsed.protocol !== 'https:') throw new Error('Proxy-URL muss mit https:// beginnen.');
+            return parsed.toString();
+        } catch (err) {
+            throw new Error('Ungueltige Proxy-URL. Bitte eine vollstaendige https-Adresse eintragen.');
+        }
+    }
 
     function apiUrl(cfg, path) {
         return 'https://api.github.com/repos/' + encodeURIComponent(cfg.owner)
@@ -112,6 +137,25 @@
         });
     }
 
+    function testPublishTarget(cfg) {
+        cfg = cfg || getConfig();
+        if (cfg.mode === 'proxy') {
+            try {
+                return Promise.resolve({
+                    mode: 'proxy',
+                    target: validateProxyUrl(cfg.proxyUrl),
+                    note: 'Proxy-Endpoint sieht syntaktisch gueltig aus.'
+                });
+            } catch (err) {
+                return Promise.reject(err);
+            }
+        }
+        return testToken(cfg).then(function(info) {
+            info.mode = 'github';
+            return info;
+        });
+    }
+
     function dataUrlToBase64(dataUrl) {
         var i = String(dataUrl || '').indexOf(',');
         return i >= 0 ? dataUrl.substring(i + 1) : '';
@@ -124,6 +168,42 @@
             +  String(d.getFullYear()).slice(-2);
     }
 
+    function publishViaProxy(cfg, b64L, b64P, ds, onProgress) {
+        var proxyUrl = validateProxyUrl(cfg.proxyUrl);
+        var notify = function (s) { if (typeof onProgress === 'function') onProgress(s); };
+        notify('Proxy: Poster an sicheren Endpoint senden...');
+        return fetch(proxyUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                stamp: ds,
+                landscapeBase64: b64L,
+                portraitBase64: b64P,
+                targets: {
+                    landscape: DEFAULTS.targetPath,
+                    portrait: DEFAULTS.targetPathPortrait,
+                    archiveLandscape: 'Media/Hauptseite/archive/matchposter-' + ds + '.jpg',
+                    archivePortrait: 'Media/Hauptseite/archive/matchposter-' + ds + '-portrait.jpg'
+                }
+            })
+        }).then(function (r) {
+            if (!r.ok) return r.text().then(function (t) { throw new Error('Proxy-Publish fehlgeschlagen (' + r.status + '): ' + t); });
+            return r.json().catch(function () { return {}; });
+        }).then(function (payload) {
+            notify('Proxy: Veroeffentlicht. GitHub Pages baut in ~30s neu.');
+            return {
+                stamp: ds,
+                mode: 'proxy',
+                target: DEFAULTS.targetPath,
+                targetPortrait: b64P ? DEFAULTS.targetPathPortrait : null,
+                response: payload
+            };
+        });
+    }
+
     // Hauptfunktion: veroeffentlicht das Poster (Landscape) + optional Portrait
     // + Archiv-Kopien.
     // landscapeDataUrl: "data:image/jpeg;base64,..." (Pflicht)
@@ -132,11 +212,15 @@
     // onProgress: function(stepLabel) — UI-Update
     function publishPoster(landscapeDataUrl, portraitDataUrl, stamp, onProgress) {
         var cfg = getConfig();
-        if (!cfg.token) return Promise.reject(new Error('Kein Token gesetzt. Bitte zuerst in den Generator-Einstellungen eintragen.'));
         var b64L = dataUrlToBase64(landscapeDataUrl);
         if (!b64L) return Promise.reject(new Error('Kein gueltiges Landscape-Bild zum Veroeffentlichen.'));
         var b64P = portraitDataUrl ? dataUrlToBase64(portraitDataUrl) : null;
         var ds = stamp || dateStamp();
+        if (cfg.mode === 'proxy') {
+            if (!cfg.proxyUrl) return Promise.reject(new Error('Kein Proxy-Endpoint gesetzt. Bitte zuerst in den Generator-Einstellungen eintragen.'));
+            return publishViaProxy(cfg, b64L, b64P, ds, onProgress);
+        }
+        if (!cfg.token) return Promise.reject(new Error('Kein Token gesetzt. Bitte zuerst in den Generator-Einstellungen eintragen.'));
         var archiveL = 'Media/Hauptseite/archive/matchposter-' + ds + '.jpg';
         var archiveP = 'Media/Hauptseite/archive/matchposter-' + ds + '-portrait.jpg';
         var msg = 'Matchposter ' + ds + ' (Generator)';
@@ -175,7 +259,10 @@
         setConfig:   setConfig,
         clearAll:    clearAll,
         hasToken:    hasToken,
+        hasProxy:    hasProxy,
+        canPublish:  canPublish,
         testToken:   testToken,
+        testTarget:  testPublishTarget,
         publish:     publishPoster,
         dateStamp:   dateStamp,
         DEFAULTS:    DEFAULTS
