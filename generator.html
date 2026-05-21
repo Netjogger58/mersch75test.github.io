@@ -2065,7 +2065,13 @@ function openPublishSettingsModal() {
         + '<div class="gen-modal-card" style="max-width:520px;">'
         +   '<button type="button" class="gen-modal-close" aria-label="Schliessen">&times;</button>'
         +   '<h2>Veroeffentlichungs-Einstellungen</h2>'
-        +   '<p class="gen-modal-lead">Hier hinterlegst du einmalig deinen GitHub-Token. Danach kannst du Poster mit einem Klick auf die Homepage veroeffentlichen.</p>'
+        +   '<p class="gen-modal-lead">Du kannst entweder den bestehenden GitHub-Token-Pfad nutzen oder einen sicheren Proxy-Endpoint hinterlegen, der das eigentliche Secret serverseitig haelt.</p>'
+        +   '<label class="gen-modal-label">Publish-Modus<select class="gen-modal-input" id="pst-mode"><option value="github"' + (cfg.mode === 'proxy' ? '' : ' selected') + '>Direkt via GitHub-Token</option><option value="proxy"' + (cfg.mode === 'proxy' ? ' selected' : '') + '>Sicherer Proxy-Endpoint</option></select></label>'
+        +   '<div id="pst-proxy-fields" style="margin-top:8px;">'
+        +     '<label class="gen-modal-label" style="margin:0;">Proxy-URL<input type="url" class="gen-modal-input" id="pst-proxy-url" value="' + (cfg.proxyUrl || '') + '" placeholder="https://publish.example.com/mersch75/poster"></label>'
+        +     '<p style="margin:8px 0 0;font-size:0.82rem;color:#555;line-height:1.45;">Empfohlen fuer echte Sicherheit: der Browser sendet nur das Poster an einen geschuetzten HTTPS-Endpoint. Das GitHub-Secret bleibt dabei ausserhalb des Browsers.</p>'
+        +   '</div>'
+        +   '<div id="pst-github-fields">'
         +   '<details style="margin:0 0 14px;font-size:0.86rem;color:#444;">'
         +     '<summary style="cursor:pointer;font-weight:700;color:var(--primary-blue);">Wie bekomme ich einen Token?</summary>'
         +     '<ol style="padding-left:18px;line-height:1.5;margin:8px 0 0;">'
@@ -2075,13 +2081,14 @@ function openPublishSettingsModal() {
         +       '<li>Ablaufdatum waehlen (z.B. 90 Tage) und Token kopieren.</li>'
         +     '</ol>'
         +   '</details>'
-        +   '<form class="gen-modal-form" id="publish-settings-form">'
-        +     '<label class="gen-modal-label">GitHub Token<input type="password" class="gen-modal-input" id="pst-token" autocomplete="off" value="' + (cfg.token || '') + '" placeholder="github_pat_..."></label>'
         +     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;">'
         +       '<label class="gen-modal-label" style="margin:0;">Owner<input type="text" class="gen-modal-input" id="pst-owner" value="' + cfg.owner + '"></label>'
         +       '<label class="gen-modal-label" style="margin:0;">Branch<input type="text" class="gen-modal-input" id="pst-branch" value="' + cfg.branch + '"></label>'
         +     '</div>'
         +     '<label class="gen-modal-label" style="margin-top:8px;">Repository<input type="text" class="gen-modal-input" id="pst-repo" value="' + cfg.repo + '"></label>'
+        +     '<label class="gen-modal-label">GitHub Token<input type="password" class="gen-modal-input" id="pst-token" autocomplete="off" value="' + (cfg.token || '') + '" placeholder="github_pat_..."></label>'
+        +   '</div>'
+        +   '<form class="gen-modal-form" id="publish-settings-form">'
         +     '<div id="pst-status" style="font-size:0.85rem;min-height:20px;margin-top:8px;color:#444;"></div>'
         +     '<div class="gen-modal-actions" style="flex-wrap:wrap;gap:8px;">'
         +       '<button type="button" class="gen-modal-cancel" id="pst-clear">Token loeschen</button>'
@@ -2095,46 +2102,73 @@ function openPublishSettingsModal() {
     var $ = function (s) { return modal.querySelector(s); };
     var status = $('#pst-status');
     var setStatus = function (msg, ok) { status.style.color = ok === true ? '#1a7f37' : (ok === false ? '#c0392b' : '#444'); status.textContent = msg || ''; };
-    var readForm = function () { return { token: $('#pst-token').value.trim(), owner: $('#pst-owner').value.trim(), repo: $('#pst-repo').value.trim(), branch: $('#pst-branch').value.trim() }; };
+    var readForm = function () {
+        return {
+            mode: $('#pst-mode').value,
+            proxyUrl: $('#pst-proxy-url').value.trim(),
+            token: $('#pst-token').value.trim(),
+            owner: $('#pst-owner').value.trim(),
+            repo: $('#pst-repo').value.trim(),
+            branch: $('#pst-branch').value.trim()
+        };
+    };
+    var syncModeUi = function () {
+        var mode = $('#pst-mode').value;
+        $('#pst-proxy-fields').style.display = mode === 'proxy' ? '' : 'none';
+        $('#pst-github-fields').style.display = mode === 'proxy' ? 'none' : '';
+        $('#pst-clear').textContent = mode === 'proxy' ? 'Endpoint loeschen' : 'Token loeschen';
+    };
 
     $('.gen-modal-close').addEventListener('click', close);
     modal.addEventListener('click', function (ev) { if (ev.target === modal) close(); });
+    $('#pst-mode').addEventListener('change', syncModeUi);
     $('#pst-clear').addEventListener('click', function () {
-        if (!confirm('Token + Repo-Einstellungen wirklich loeschen?')) return;
+        if (!confirm('Publish-Einstellungen wirklich loeschen?')) return;
         window.MerschPublish.clearAll();
-        $('#pst-token').value = ''; setStatus('Geloescht.', true);
+        $('#pst-token').value = '';
+        $('#pst-proxy-url').value = '';
+        $('#pst-mode').value = 'github';
+        syncModeUi();
+        setStatus('Geloescht.', true);
         updatePublishOptionVisibility();
     });
     $('#pst-test').addEventListener('click', function () {
         var f = readForm();
-        if (!f.token) { setStatus('Bitte zuerst Token eintragen.', false); return; }
-        setStatus('Pruefe Token...');
-        window.MerschPublish.testToken(f).then(function (info) {
+        if (f.mode === 'proxy' && !f.proxyUrl) { setStatus('Bitte zuerst eine Proxy-URL eintragen.', false); return; }
+        if (f.mode !== 'proxy' && !f.token) { setStatus('Bitte zuerst Token eintragen.', false); return; }
+        setStatus(f.mode === 'proxy' ? 'Pruefe Proxy-Konfiguration...' : 'Pruefe Token...');
+        window.MerschPublish.testTarget(f).then(function (info) {
+            if (info.mode === 'proxy') {
+                setStatus('OK: Proxy-Endpoint gespeichert: ' + info.target, true);
+                return;
+            }
             setStatus('OK: angemeldet als ' + info.user + ', Repo ' + info.repo + ' erreichbar.', true);
         }).catch(function (err) { setStatus(err.message || String(err), false); });
     });
     $('#publish-settings-form').addEventListener('submit', function (ev) {
         ev.preventDefault();
         var f = readForm();
-        if (!f.token) { setStatus('Bitte Token eintragen oder Modal schliessen.', false); return; }
+        if (f.mode === 'proxy' && !f.proxyUrl) { setStatus('Bitte Proxy-URL eintragen oder Modus wechseln.', false); return; }
+        if (f.mode !== 'proxy' && !f.token) { setStatus('Bitte Token eintragen oder Modus wechseln.', false); return; }
         window.MerschPublish.setConfig(f);
         setStatus('Gespeichert.', true);
         updatePublishOptionVisibility();
         setTimeout(close, 600);
     });
+    syncModeUi();
     setTimeout(function () { $('#pst-token').focus(); }, 50);
 }
 
 function updatePublishOptionVisibility() {
     var opt = document.getElementById('download-option-publish');
     if (!opt) return;
-    var ok = window.MerschPublish && window.MerschPublish.hasToken();
+    var ok = window.MerschPublish && window.MerschPublish.canPublish();
     opt.style.display = ok ? '' : 'none';
 }
 
 function publishCurrentPoster(landscapeDataUrl, portraitDataUrl, stamp) {
-    if (!window.MerschPublish || !window.MerschPublish.hasToken()) {
-        alert('Bitte zuerst in den Generator-Einstellungen einen GitHub-Token hinterlegen.');
+    if (!window.MerschPublish || !window.MerschPublish.canPublish()) {
+        alert('Bitte zuerst in den Generator-Einstellungen entweder einen GitHub-Token oder einen Proxy-Endpoint hinterlegen.');
         openPublishSettingsModal();
         return;
     }
@@ -2167,7 +2201,8 @@ function publishCurrentPoster(landscapeDataUrl, portraitDataUrl, stamp) {
         btn.addEventListener('click', function () { modal.remove(); });
     };
     window.MerschPublish.publish(landscapeDataUrl, portraitDataUrl, stamp, function (step) { msg.textContent = step; }).then(function (res) {
-        done('Fertig! Poster ' + res.stamp + ' wird in ~30s live sein (GitHub Pages baut neu).', true);
+        var modeLabel = res.mode === 'proxy' ? 'Proxy' : 'GitHub';
+        done('Fertig! Poster ' + res.stamp + ' wurde via ' + modeLabel + ' angestossen und wird in ~30s live sein.', true);
     }).catch(function (err) {
         var hint = (err && err.message) || String(err);
         if (/401|403/.test(hint)) hint += '\n\nTipp: Token in den Einstellungen pruefen (Repo + Contents: Read and write).';
