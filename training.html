@@ -3,20 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Training | Mersch75 Handball</title>
-    <meta name="description" content="Training bei Mersch75: Trainingsplan, Gruppen, Hallen und Jugendkoordination auf einen Blick.">
+    <title data-i18n="trainingPageTitle">Training | Mersch75 Handball</title>
+    <meta name="description" content="Training bei Mersch75: Trainingsplan, Gruppen, Hallen und Jugendkoordination auf einen Blick." data-i18n-attr="content:trainingPageDescription">
     <link rel="stylesheet" href="styles.css?v=20260519d">
 </head>
 <body class="training-page">
     <div class="site-shell">
         <header class="site-header compact-header">
-            <a class="brand" href="index.html">
+            <a class="brand" href="index.html" data-i18n-attr="aria-label:brandHomeAria">
                 <span class="brand-mark">75</span>
                 <span class="brand-copy">
                     <strong>Mersch75 Handball</strong>
-                    <span>Zesumme Staark</span>
+                    <span data-i18n="brandTagline">Zesumme staark</span>
                 </span>
             </a>
+
+            <nav class="site-language-switcher legal-lang-switcher" aria-label="Sprache auswählen">
+                <button type="button" class="is-active" data-site-lang-button="lb" aria-pressed="true"><span class="lang-flag flag-lu" aria-hidden="true"></span><span>LU</span></button>
+                <button type="button" data-site-lang-button="fr" aria-pressed="false"><span class="lang-flag flag-fr" aria-hidden="true"></span><span>FR</span></button>
+                <button type="button" data-site-lang-button="de" aria-pressed="false"><span class="lang-flag flag-de" aria-hidden="true"></span><span>DE</span></button>
+                <button type="button" data-site-lang-button="en" aria-pressed="false"><span class="lang-flag flag-en" aria-hidden="true"></span><span>EN</span></button>
+                <button type="button" data-site-lang-button="pt" aria-pressed="false"><span class="lang-flag flag-pt" aria-hidden="true"></span><span>PT</span></button>
+            </nav>
+
             <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menü</button>
             <nav class="site-nav" id="site-nav">
                 <a href="index.html">Startseite</a>
@@ -35,17 +44,17 @@
         <main class="page-main">
             <section class="page-hero training-hero">
                 <div class="training-hero-copy">
-                    <img class="training-hero-logo" src="Media/Header_Logos_media/Logo-Mersch75-TeamTraining-26092025.png" alt="Team Training Logo">
+                    <img class="training-hero-logo" src="Media/Header_Logos_media/Logo-Mersch75-TeamTraining-26092025.png" alt="Team Training Logo" data-i18n-attr="alt:trainingHeroLogoAlt">
                     <div class="training-action-row">
-                        <a class="hero-button hero-button-secondary" href="trainerstaff.html">Trainerstaff</a>
-                        <a class="hero-button hero-button-secondary" href="contact.html">Probetraining ufroen</a>
+                        <a class="hero-button hero-button-secondary" href="trainerstaff.html" data-i18n="trainingTrainerstaff">Trainerteam</a>
+                        <a class="hero-button hero-button-secondary" href="contact.html" data-i18n="trainingTrialRequest">Probetraining ufroen</a>
                     </div>
                 </div>
             </section>
 
             <section class="section training-schedule-section" id="schedule">
                 <div class="training-schedule-card">
-                    <button id="btn-schedule-fs" class="training-fullscreen-button" type="button">Trainingsplan im Vollbild öffnen</button>
+                    <button id="btn-schedule-fs" class="training-fullscreen-button" type="button" data-i18n="trainingScheduleOpen">Trainingsplan im Vollbild öffnen</button>
                     <div id="schedule-container" class="training-schedule-frame">
                         <div class="training-schedule-map">
                             <img src="Media/Training/M75-Hallenzeiten-17.10.2025-Kopie-scaled.png" alt="Trainingsplan 2025-2026">
@@ -54,8 +63,8 @@
                         </div>
                     </div>
                     <div class="training-schedule-disclaimer">
-                        <p><strong>JUGEND KOORDINATIOUN:</strong> Ëm de Jugendberäich këmmeren sech de Max Blanc (LUXQF3) an de Louis Van der Weken (LUXQF2Bis).</p>
-                        <p><strong>Info:</strong> <a href="mailto:max.hbm75@gmail.com">max.hbm75@gmail.com</a> <span>|</span> <span>Tel: Max Blanc 661 406 836</span></p>
+                        <p><strong data-i18n="trainingYouthCoord">JUGENDKOORDINATIOUN:</strong> <span data-i18n="trainingYouthCoordBody">Fir de Jugendberäich si de Max Blanc (LUXQF3) an de Louis Van der Weken (LUXQF2Bis) zoustänneg.</span></p>
+                        <p><strong data-i18n="trainingInfoLabel">Info:</strong> <a href="mailto:max.hbm75@gmail.com">max.hbm75@gmail.com</a> <span>|</span> <span data-i18n="trainingPhoneLabel">Tel.: Max Blanc 661 406 836</span></p>
                     </div>
                 </div>
             </section>
@@ -150,6 +159,6 @@
             </footer>
         </main>
     </div>
-    <script src="script.js?v=20260519a"></script>
+    <script src="script.js?v=20260521c"></script>
 </body>
 </html>

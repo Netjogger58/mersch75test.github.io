@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mersch75 Handball</title>
-    <meta name="description" content="Mersch75 Handball: Vereinsübersicht, Matchcenter, Training, News, Galerie und Mitmachen.">
+    <title data-i18n="pageTitle">Mersch75 Handball</title>
+    <meta name="description" content="Mersch75 Handball: Vereinsübersicht, Matchcenter, Training, News, Galerie und Mitmachen." data-i18n-attr="content:pageDescription">
     <link rel="stylesheet" href="styles.css?v=20260519d">
     <script src="js/generator-gate.js?v=20260519c" defer></script>
 </head>
@@ -12,13 +12,21 @@
     <div class="landing-wrapper">
         <main>
             <header class="site-header landing-header">
-                <a class="brand" href="index.html" aria-label="Mersch75 Startseite">
+                <a class="brand" href="index.html" aria-label="Mersch75 Startseite" data-i18n-attr="aria-label:brandHomeAria">
                     <span class="brand-mark">75</span>
                     <span class="brand-copy">
                         <strong>Mersch75 Handball</strong>
-                        <span>Zesumme Staark</span>
+                        <span data-i18n="brandTagline">Zesumme Staark</span>
                     </span>
                 </a>
+
+                <nav class="site-language-switcher legal-lang-switcher" aria-label="Sprache auswählen">
+                    <button type="button" class="is-active" data-site-lang-button="lb" aria-pressed="true"><span class="lang-flag flag-lu" aria-hidden="true"></span><span>LU</span></button>
+                    <button type="button" data-site-lang-button="fr" aria-pressed="false"><span class="lang-flag flag-fr" aria-hidden="true"></span><span>FR</span></button>
+                    <button type="button" data-site-lang-button="de" aria-pressed="false"><span class="lang-flag flag-de" aria-hidden="true"></span><span>DE</span></button>
+                    <button type="button" data-site-lang-button="en" aria-pressed="false"><span class="lang-flag flag-en" aria-hidden="true"></span><span>EN</span></button>
+                    <button type="button" data-site-lang-button="pt" aria-pressed="false"><span class="lang-flag flag-pt" aria-hidden="true"></span><span>PT</span></button>
+                </nav>
 
                 <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menü</button>
 
@@ -40,33 +48,33 @@
                     <div class="poster-visual poster-visual-hero">
                         <picture>
                             <source media="(max-width: 767px)" srcset="Media/Hauptseite/current-matchposter-portrait.jpg">
-                            <img src="Media/Hauptseite/current-matchposter.jpg" alt="Mersch75 Matchposter">
+                            <img src="Media/Hauptseite/current-matchposter.jpg" alt="Mersch75 Matchposter" data-i18n-attr="alt:posterAlt">
                         </picture>
                     </div>
                 </div>
                 <div class="poster-actions" id="poster-actions">
-                    <a class="poster-action" href="Media/Hauptseite/current-matchposter.jpg" download="Mersch75-Matchposter.jpg" title="Landscape herunterladen">
+                    <a class="poster-action" href="Media/Hauptseite/current-matchposter.jpg" download="Mersch75-Matchposter.jpg" title="Landscape herunterladen" data-i18n-attr="title:posterLandscapeTitle">
                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20h14v-2H5v2zm7-18L5.33 8.67l1.42 1.42L11 5.83V16h2V5.83l4.25 4.26 1.42-1.42L12 2z"/></svg>
-                        Landscape
+                        <span data-i18n="posterLandscapeLabel">Landscape</span>
                     </a>
-                    <a class="poster-action" href="Media/Hauptseite/current-matchposter-portrait.jpg" download="Mersch75-Matchposter-Portrait.jpg" title="Portrait herunterladen">
+                    <a class="poster-action" href="Media/Hauptseite/current-matchposter-portrait.jpg" download="Mersch75-Matchposter-Portrait.jpg" title="Portrait herunterladen" data-i18n-attr="title:posterPortraitTitle">
                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20h14v-2H5v2zm7-18L5.33 8.67l1.42 1.42L11 5.83V16h2V5.83l4.25 4.26 1.42-1.42L12 2z"/></svg>
-                        Portrait
+                        <span data-i18n="posterPortraitLabel">Portrait</span>
                     </a>
-                    <button type="button" class="poster-action poster-action-primary" id="poster-share-btn" title="Poster teilen">
+                    <button type="button" class="poster-action poster-action-primary" id="poster-share-btn" title="Poster teilen" data-i18n-attr="title:posterShareTitle">
                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92S19.61 16.08 18 16.08z"/></svg>
-                        Teilen
+                        <span data-i18n="posterShareLabel">Teilen</span>
                     </button>
                 </div>
             </section>
 
             <section class="ball-jump section-frame">
-                <a class="ball-jump-link" href="live-center.html" aria-label="Zum Spielplan">
+                <a class="ball-jump-link" href="live-center.html" aria-label="Zum Spielplan" data-i18n-attr="aria-label:ballJumpAria">
                     <img src="Media/de-Ball-reduced-Kopie.png" alt="Mersch75 Handball">
                 </a>
                 <div class="ball-jump-actions">
-                    <a class="ball-jump-label" href="live-center.html">Zum Spielplan</a>
-                    <a class="ball-jump-label" href="news.html">Zu den News</a>
+                    <a class="ball-jump-label" href="live-center.html" data-i18n="ballJumpSchedule">Zum Spielplan</a>
+                    <a class="ball-jump-label" href="news.html" data-i18n="ballJumpNews">Zu den News</a>
                 </div>
             </section>
 
@@ -76,21 +84,21 @@
                 <img class="events-background" src="Media/handball2-klein.jpg" alt="Handball Hintergrund">
                 <div class="events-overlay">
                     <div class="events-copy">
-                        <p class="eyebrow">Events & Nachwuchs</p>
-                        <h2>Weekends, Aktivitéiten a Startpunkter fir nei Spiller.</h2>
-                        <p>Dës Fläch gëtt méi wéi eng Grafik: si verbënnt Event-Kommunikatioun, Einstieg an d'Verinsliewen an engem kloeren Call-to-Action.</p>
+                        <p class="eyebrow" data-i18n="eventsEyebrow">Events & Nachwuchs</p>
+                        <h2 data-i18n="eventsTitle">Weekends, Aktivitéiten a Startpunkter fir nei Spiller.</h2>
+                        <p data-i18n="eventsBody">Dës Fläch gëtt méi wéi eng Grafik: si verbënnt Event-Kommunikatioun, Einstieg an d'Verinsliewen an engem kloeren Call-to-Action.</p>
                         <div class="events-pill-row">
-                            <span class="events-pill">U4 & Nachwuchs</span>
-                            <span class="events-pill">Join Us</span>
-                            <span class="events-pill">Community</span>
+                            <span class="events-pill" data-i18n="eventsPillYouth">U4 & Nachwuchs</span>
+                            <span class="events-pill" data-i18n="eventsPillJoin">Join Us</span>
+                            <span class="events-pill" data-i18n="eventsPillCommunity">Community</span>
                         </div>
                         <div class="inline-action-row">
-                            <a class="hero-button hero-button-primary" href="join.html">Mitmachen</a>
-                            <a class="hero-button hero-button-secondary" href="community.html">Zesumme Staark</a>
+                            <a class="hero-button hero-button-primary" href="join.html" data-i18n="eventsPrimary">Mitmachen</a>
+                            <a class="hero-button hero-button-secondary" href="community.html" data-i18n="eventsSecondary">Zesumme Staark</a>
                         </div>
                     </div>
                     <a class="events-main-link" href="join.html">
-                        <img src="Media/U4-scaled.png" alt="U4 Events">
+                        <img src="Media/U4-scaled.png" alt="U4 Events" data-i18n-attr="alt:eventsImageAlt">
                     </a>
                 </div>
             </section>
@@ -98,21 +106,21 @@
             <div class="separator"></div>
 
             <section class="info-section section-frame">
-                <h2>National an international Infos</h2>
+                <h2 data-i18n="infoTitle">National an international Infos</h2>
                 <div class="info-links-grid">
                     <a href="http://flh.lu" target="_blank" rel="noreferrer">
                         <img src="Media/LOGO-FLH-zu-4x-hochskalieren-zu-4x-hochskalieren-scaled.png" alt="FLH">
                         <span>FLH</span>
                     </a>
-                    <div class="info-link-card info-link-card-combo" aria-label="AXA League Links">
+                    <div class="info-link-card info-link-card-combo" aria-label="AXA League Links" data-i18n-attr="aria-label:infoAxaAria">
                         <div class="info-link-combo-links">
                             <a href="https://www.flh.lu/playoffs/#/league?ogId=95&lId=158566&allGames=0" target="_blank" rel="noreferrer">
                                 <img src="Media/Logo-Menu-Mersch75-AxaLeague-WoMen-new-1.png" alt="Axa League Women">
-                                <span>AXA League Fraen</span>
+                                <span data-i18n="infoWomen">AXA League Fraen</span>
                             </a>
                             <a href="https://www.flh.lu/playoffs/#/league?ogId=95&lId=153709&allGames=1" target="_blank" rel="noreferrer">
                                 <img src="Media/Logo-Menu-Mersch75-AxaLeague-Men-new-1.png" alt="Axa League Men">
-                                <span>AXA League Hären</span>
+                                <span data-i18n="infoMen">AXA League Hären</span>
                             </a>
                         </div>
                     </div>
@@ -134,8 +142,8 @@
             <div class="separator"></div>
 
             <section class="sponsors-section section-frame">
-                <h2>Eis Sponsoren</h2>
-                <img src="Media/Sponsoring/Sponsorslescht-all-Breifpabeier-ouni-adresse-13022026.png" alt="Mersch75 Sponsoren">
+                <h2 data-i18n="sponsorsTitle">Eis Sponsoren</h2>
+                <img src="Media/Sponsoring/Sponsorslescht-all-Breifpabeier-ouni-adresse-13022026.png" alt="Mersch75 Sponsoren" data-i18n-attr="alt:sponsorsAlt">
             </section>
 
             <div class="separator"></div>
@@ -147,21 +155,21 @@
                             <img class="footer-emblem" src="Media/Logo-Mersch75-50-Joer-3D.png" alt="Mersch75 3D Logo">
                             <img class="footer-wordmark" src="Media/Logo-Mersch75-Schrift-mat-Ball-And-Handball-Club-Fusszeile-1.png" alt="Mersch75 Logo">
                         </div>
-                        <p>Handball zu Miersch mat engem méi kloeren digitalen Optrëtt: séier Informatiounen, méi rouegt Layout an eng Struktur, déi fir GitHub Pages gebaut ass an net fir e Plugin-Sammelsurium.</p>
+                        <p data-i18n="footerBrandBody">Handball zu Miersch mat engem méi kloeren digitalen Optrëtt: séier Informatiounen, méi rouegt Layout an eng Struktur, déi fir GitHub Pages gebaut ass an net fir e Plugin-Sammelsurium.</p>
                     </div>
 
                     <div class="footer-columns">
                         <div class="footer-column">
-                            <h3>Schnellzugriff</h3>
+                            <h3 data-i18n="footerQuick">Schnellzugriff</h3>
                             <div class="footer-link-list">
-                                <a href="training.html">Training</a>
-                                <a href="trainerstaff.html">Trainerstaff</a>
-                                <a href="gallery.html">Galerie</a>
+                                <a href="training.html" data-i18n="navTraining">Training</a>
+                                <a href="trainerstaff.html" data-i18n="footerTrainerstaff">Trainerstaff</a>
+                                <a href="gallery.html" data-i18n="navGallery">Galerie</a>
                             </div>
                         </div>
 
                         <div class="footer-column">
-                            <h3>Kontakt</h3>
+                            <h3 data-i18n="footerContact">Kontakt</h3>
                             <p>21, rue des Prés<br>L-7561 Mersch</p>
                             <p>B.P. 75<br>L-7501 Mersch</p>
                             <p><a href="mailto:info@mersch75.lu">info@mersch75.lu</a></p>
@@ -169,12 +177,12 @@
                         </div>
 
                         <div class="footer-column">
-                            <h3>Verein</h3>
+                            <h3 data-i18n="footerClub">Verein</h3>
                             <div class="footer-link-list">
-                                <a href="join.html">Join Us</a>
-                                <a href="community.html">Zesumme Staark</a>
+                                <a href="join.html" data-i18n="navJoin">Join Us</a>
+                                <a href="community.html" data-i18n="eventsSecondary">Zesumme Staark</a>
                                 <a href="inside.html">Inside</a>
-                                <a href="links.html">Useful Links</a>
+                                <a href="links.html" data-i18n="footerUsefulLinks">Useful Links</a>
                             </div>
                         </div>
                     </div>
@@ -182,8 +190,8 @@
 
                 <div class="footer-bottom">
                     <p>RCS: F2345 · BCEELULL: LU730019220008607000</p>
-                    <p>Impressum a Datenschutz ginn als nächst statesch Servicessäiten ergänzt.</p>
-                    <p>© <span id="current-year"></span> by Mersch75 Handball &middot; <a class="admin-link" href="generator.html">Admin Login</a></p>
+                    <p data-i18n="footerLegalHint">Impressum a Datenschutz ginn als nächst statesch Servicessäiten ergänzt.</p>
+                    <p>© <span id="current-year"></span> by Mersch75 Handball &middot; <a class="admin-link" href="generator.html" data-i18n="footerAdmin">Admin Login</a></p>
                 </div>
             </footer>
         </main>
@@ -197,8 +205,70 @@
         var landscapeUrl = new URL('Media/Hauptseite/current-matchposter.jpg', window.location.href).toString();
         var portraitUrl  = new URL('Media/Hauptseite/current-matchposter-portrait.jpg', window.location.href).toString();
         var pageUrl      = window.location.origin + window.location.pathname;
-        var shareTitle   = 'Mersch75 Matchposter';
-        var shareText    = 'De Mersch75-Matchposter fir dest Weekend.';
+        var shareTexts = {
+            lb: {
+                title: 'Mersch75 Matchposter',
+                text: 'De Mersch75-Matchposter fir dest Weekend.',
+                email: 'E-Mail',
+                copy: 'Link kopéieren',
+                copyOk: 'Kopéiert ✓',
+                copyFail: 'Kopéieren feelgeschloen',
+                save: 'Bild fir Insta späicheren',
+                hint: 'Instagram: Bild späicheren, duerno an der App posten.'
+            },
+            fr: {
+                title: 'Affiche du match Mersch75',
+                text: 'L\'affiche du match Mersch75 pour ce week-end.',
+                email: 'E-mail',
+                copy: 'Copier le lien',
+                copyOk: 'Copié ✓',
+                copyFail: 'Copie impossible',
+                save: 'Enregistrer l\'image pour Insta',
+                hint: 'Instagram : enregistrez l\'image puis publiez-la dans l\'application.'
+            },
+            de: {
+                title: 'Mersch75 Matchposter',
+                text: 'Das Mersch75-Matchposter für dieses Wochenende.',
+                email: 'E-Mail',
+                copy: 'Link kopieren',
+                copyOk: 'Kopiert ✓',
+                copyFail: 'Kopieren fehlgeschlagen',
+                save: 'Bild für Insta speichern',
+                hint: 'Instagram: Bild speichern, dann in der App posten.'
+            },
+            en: {
+                title: 'Mersch75 match poster',
+                text: 'The Mersch75 match poster for this weekend.',
+                email: 'Email',
+                copy: 'Copy link',
+                copyOk: 'Copied ✓',
+                copyFail: 'Copy failed',
+                save: 'Save image for Insta',
+                hint: 'Instagram: save the image, then post it in the app.'
+            },
+            pt: {
+                title: 'Cartaz do jogo Mersch75',
+                text: 'O cartaz do jogo Mersch75 para este fim de semana.',
+                email: 'E-mail',
+                copy: 'Copiar ligação',
+                copyOk: 'Copiado ✓',
+                copyFail: 'Falha ao copiar',
+                save: 'Guardar imagem para Insta',
+                hint: 'Instagram: guarde a imagem e depois publique-a na aplicação.'
+            }
+        };
+
+        function getLanguage() {
+            if (window.Mersch75I18n && typeof window.Mersch75I18n.getLanguage === 'function') {
+                return window.Mersch75I18n.getLanguage();
+            }
+
+            return 'lb';
+        }
+
+        function getShareCopy() {
+            return shareTexts[getLanguage()] || shareTexts.lb;
+        }
 
         function openShareMenu(ev) {
             ev && ev.preventDefault();
@@ -208,23 +278,26 @@
             menu.id = 'share-menu';
             menu.className = 'share-menu';
             var enc = encodeURIComponent;
+            var shareCopy = getShareCopy();
+            var shareTitle = shareCopy.title;
+            var shareText = shareCopy.text;
             var msg = shareText + ' ' + pageUrl;
             menu.innerHTML = ''
                 + '<a target="_blank" rel="noopener" href="https://wa.me/?text=' + enc(msg) + '">WhatsApp</a>'
                 + '<a target="_blank" rel="noopener" href="https://www.facebook.com/sharer/sharer.php?u=' + enc(pageUrl) + '">Facebook</a>'
                 + '<a target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text=' + enc(shareText) + '&url=' + enc(pageUrl) + '">X / Twitter</a>'
-                + '<a target="_blank" rel="noopener" href="mailto:?subject=' + enc(shareTitle) + '&body=' + enc(msg) + '">E-Mail</a>'
-                + '<button type="button" data-act="copy">Link kopieren</button>'
-                + '<a target="_blank" rel="noopener" href="' + landscapeUrl + '" download>Bild fuer Insta speichern</a>'
-                + '<small>Instagram: Bild speichern, dann in der Insta-App posten.</small>';
+                + '<a target="_blank" rel="noopener" href="mailto:?subject=' + enc(shareTitle) + '&body=' + enc(msg) + '">' + shareCopy.email + '</a>'
+                + '<button type="button" data-act="copy">' + shareCopy.copy + '</button>'
+                + '<a target="_blank" rel="noopener" href="' + landscapeUrl + '" download>' + shareCopy.save + '</a>'
+                + '<small>' + shareCopy.hint + '</small>';
             document.body.appendChild(menu);
             var top = window.scrollY + rect.bottom + 8;
             var left = Math.max(8, window.scrollX + rect.left);
             menu.style.top = top + 'px';
             menu.style.left = left + 'px';
             menu.querySelector('[data-act="copy"]').addEventListener('click', function () {
-                try { navigator.clipboard.writeText(pageUrl); this.textContent = 'Kopiert ✓'; }
-                catch (e) { this.textContent = 'Kopieren fehlgeschlagen'; }
+                try { navigator.clipboard.writeText(pageUrl); this.textContent = shareCopy.copyOk; }
+                catch (e) { this.textContent = shareCopy.copyFail; }
             });
             setTimeout(function () {
                 document.addEventListener('click', function close(e) {
@@ -237,6 +310,9 @@
         async function nativeShare(ev) {
             ev && ev.preventDefault();
             if (!navigator.share) { openShareMenu(); return; }
+            var shareCopy = getShareCopy();
+            var shareTitle = shareCopy.title;
+            var shareText = shareCopy.text;
             try {
                 if (navigator.canShare) {
                     try {
