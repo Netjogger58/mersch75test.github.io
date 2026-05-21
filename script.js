@@ -4,6 +4,501 @@ function syncCurrentYear() {
     });
 }
 
+function initializeSiteLanguage() {
+    const languageButtons = Array.from(document.querySelectorAll('[data-site-lang-button]'));
+    const storageKey = 'mersch75-language';
+    const fallbackLanguage = 'lb';
+    const supportedLanguages = ['lb', 'fr', 'de', 'en', 'pt'];
+    const textTargets = Array.from(document.querySelectorAll('[data-i18n]'));
+    const attributeTargets = Array.from(document.querySelectorAll('[data-i18n-attr]'));
+
+    const translations = {
+        lb: {
+            pageTitle: 'Mersch75 Handball',
+            pageDescription: 'Mersch75 Handball: Veräinsiwwerbléck, Spillplang, Training, News, Galerie a Matmaachen.',
+            brandHomeAria: 'Mersch75 Startsäit',
+            brandTagline: 'Zesumme staark',
+            trainingPageTitle: 'Training | Mersch75 Handball',
+            trainingPageDescription: 'Training beim Mersch75: Trainingsplang, Gruppen, Halen a Jugendkoordinatioun op ee Bléck.',
+            trainingHeroLogoAlt: 'Team Training Logo',
+            trainingTrainerstaff: 'Trainerteam',
+            trainingTrialRequest: 'Probetraining ufroen',
+            trainingScheduleOpen: 'Trainingsplang am Vollbild opmaachen',
+            trainingScheduleClose: 'Vollbild zoumaachen',
+            trainingYouthCoord: 'JUGENDKOORDINATIOUN:',
+            trainingYouthCoordBody: 'Fir de Jugendberäich si de Max Blanc (LUXQF3) an de Louis Van der Weken (LUXQF2Bis) zoustänneg.',
+            trainingInfoLabel: 'Info:',
+            trainingPhoneLabel: 'Tel.: Max Blanc 661 406 836',
+            navMenu: 'Menü',
+            navClose: 'Menü zoumaachen',
+            navHome: 'Startsäit',
+            navLiveCenter: 'Spillplang',
+            navTraining: 'Training',
+            navTrainerstaff: 'Trainerteam',
+            navNews: 'News',
+            navJoin: 'Join Us',
+            navComite: 'Comité',
+            navGallery: 'Galerie',
+            navHistory: 'Geschicht',
+            navLinks: 'Links',
+            navContact: 'Kontakt',
+            posterAlt: 'Mersch75 Matchposter',
+            posterLandscapeTitle: 'Querformat eroflueden',
+            posterPortraitTitle: 'Portraitformat eroflueden',
+            posterShareTitle: 'Poster deelen',
+            posterLandscapeLabel: 'Querformat',
+            posterPortraitLabel: 'Portraitformat',
+            posterShareLabel: 'Deelen',
+            ballJumpAria: 'Zum Spillplang',
+            ballJumpSchedule: 'Zum Spillplang',
+            ballJumpNews: 'Bei d\'Noriichten',
+            eventsEyebrow: 'Evenementer & Jugend',
+            eventsTitle: 'Weekender, Aktivitéiten an Ulafplaze fir nei Spiller.',
+            eventsBody: 'Dës Rubrik verbënnt d\'Kommunikatioun vun Evenementer, den Entrée an d\'Veräinsliewen an e kloeren Opruff zum Handelen.',
+            eventsPillYouth: 'U4 & Jugend',
+            eventsPillJoin: 'Join Us',
+            eventsPillCommunity: 'Communautéit',
+            eventsPrimary: 'Matmaachen',
+            eventsSecondary: 'Zesumme staark',
+            eventsImageAlt: 'U4 Events',
+            infoTitle: 'National an international Informatiounen',
+            infoAxaAria: 'AXA League Links',
+            infoWomen: 'AXA League Fraen',
+            infoMen: 'AXA League Hären',
+            sponsorsTitle: 'Eis Sponsoren',
+            sponsorsAlt: 'Mersch75 Sponsoren',
+            footerBrandBody: 'Handball zu Miersch mat engem méi kloeren digitalen Optrëtt: séier Informatiounen, e méi rouegt Layout an eng Struktur, déi fir GitHub Pages gebaut ass.',
+            footerQuick: 'Schnellzougrëff',
+            footerContact: 'Kontakt',
+            footerClub: 'Veräin',
+            footerTrainerstaff: 'Trainerteam',
+            footerUsefulLinks: 'Nëtzlech Linken',
+            footerLegalHint: 'Impressum an Dateschutz kommen als nächst statesch Servicessäiten derbäi.',
+            footerAdmin: 'Admin Login'
+        },
+        fr: {
+            pageTitle: 'Mersch75 Handball',
+            pageDescription: 'Mersch75 Handball : aperçu du club, calendrier, entraînement, actualités, galerie et participation.',
+            brandHomeAria: 'Accueil Mersch75',
+            brandTagline: 'Ensemble plus forts',
+            trainingPageTitle: 'Entraînement | Mersch75 Handball',
+            trainingPageDescription: 'Entraînement au Mersch75 : planning, groupes, salles et coordination des jeunes en un coup d\'oeil.',
+            trainingHeroLogoAlt: 'Logo team training',
+            trainingTrainerstaff: 'Encadrement',
+            trainingTrialRequest: 'Demander un entraînement d\'essai',
+            trainingScheduleOpen: 'Ouvrir le planning en plein écran',
+            trainingScheduleClose: 'Fermer le plein écran',
+            trainingYouthCoord: 'COORDINATION JEUNES:',
+            trainingYouthCoordBody: 'Le secteur des jeunes est coordonné par Max Blanc (LUXQF3) et Louis Van der Weken (LUXQF2Bis).',
+            trainingInfoLabel: 'Info :',
+            trainingPhoneLabel: 'Tél. : Max Blanc 661 406 836',
+            navMenu: 'Menu',
+            navClose: 'Fermer le menu',
+            navHome: 'Accueil',
+            navLiveCenter: 'Calendrier',
+            navTraining: 'Entraînement',
+            navTrainerstaff: 'Encadrement',
+            navNews: 'Actualités',
+            navJoin: 'Join Us',
+            navComite: 'Comité',
+            navGallery: 'Galerie',
+            navHistory: 'Historique',
+            navLinks: 'Liens',
+            navContact: 'Contact',
+            posterAlt: 'Affiche du match Mersch75',
+            posterLandscapeTitle: 'Télécharger en paysage',
+            posterPortraitTitle: 'Télécharger en portrait',
+            posterShareTitle: 'Partager l\'affiche',
+            posterLandscapeLabel: 'Paysage',
+            posterPortraitLabel: 'Portrait',
+            posterShareLabel: 'Partager',
+            ballJumpAria: 'Vers le calendrier',
+            ballJumpSchedule: 'Vers le calendrier',
+            ballJumpNews: 'Vers les actualités',
+            eventsEyebrow: 'Événements & relève',
+            eventsTitle: 'Week-ends, activités et points d\'entrée pour les nouveaux joueurs.',
+            eventsBody: 'Cette zone relie la communication des événements, l\'entrée dans la vie du club et un appel à l\'action clair.',
+            eventsPillYouth: 'U4 & relève',
+            eventsPillJoin: 'Join Us',
+            eventsPillCommunity: 'Communauté',
+            eventsPrimary: 'Participer',
+            eventsSecondary: 'Ensemble plus forts',
+            eventsImageAlt: 'Événements U4',
+            infoTitle: 'Infos nationales et internationales',
+            infoAxaAria: 'Liens AXA League',
+            infoWomen: 'AXA League Femmes',
+            infoMen: 'AXA League Hommes',
+            sponsorsTitle: 'Nos sponsors',
+            sponsorsAlt: 'Sponsors Mersch75',
+            footerBrandBody: 'Le handball à Mersch avec une présence numérique plus claire : informations rapides, mise en page plus calme et structure pensée pour GitHub Pages.',
+            footerQuick: 'Accès rapide',
+            footerContact: 'Contact',
+            footerClub: 'Club',
+            footerTrainerstaff: 'Encadrement',
+            footerUsefulLinks: 'Liens utiles',
+            footerLegalHint: 'Mentions légales et protection des données seront ajoutées comme pages de service statiques.',
+            footerAdmin: 'Connexion admin'
+        },
+        de: {
+            pageTitle: 'Mersch75 Handball',
+            pageDescription: 'Mersch75 Handball: Vereinsübersicht, Spielplan, Training, News, Galerie und Mitmachen.',
+            brandHomeAria: 'Mersch75 Startseite',
+            brandTagline: 'Zusammen stark',
+            trainingPageTitle: 'Training | Mersch75 Handball',
+            trainingPageDescription: 'Training bei Mersch75: Trainingsplan, Gruppen, Hallen und Jugendkoordination auf einen Blick.',
+            trainingHeroLogoAlt: 'Team-Training Logo',
+            trainingTrainerstaff: 'Trainerstaff',
+            trainingTrialRequest: 'Probetraining anfragen',
+            trainingScheduleOpen: 'Trainingsplan im Vollbild öffnen',
+            trainingScheduleClose: 'Vollbild schließen',
+            trainingYouthCoord: 'JUGENDKOORDINATION:',
+            trainingYouthCoordBody: 'Für den Jugendbereich sind Max Blanc (LUXQF3) und Louis Van der Weken (LUXQF2Bis) zuständig.',
+            trainingInfoLabel: 'Info:',
+            trainingPhoneLabel: 'Tel.: Max Blanc 661 406 836',
+            navMenu: 'Menü',
+            navClose: 'Menü schließen',
+            navHome: 'Startseite',
+            navLiveCenter: 'Spielplan',
+            navTraining: 'Training',
+            navTrainerstaff: 'Trainerstaff',
+            navNews: 'News',
+            navJoin: 'Join Us',
+            navComite: 'Comité',
+            navGallery: 'Galerie',
+            navHistory: 'Historie',
+            navLinks: 'Links',
+            navContact: 'Kontakt',
+            posterAlt: 'Mersch75 Matchposter',
+            posterLandscapeTitle: 'Landscape herunterladen',
+            posterPortraitTitle: 'Portrait herunterladen',
+            posterShareTitle: 'Poster teilen',
+            posterLandscapeLabel: 'Landscape',
+            posterPortraitLabel: 'Portrait',
+            posterShareLabel: 'Teilen',
+            ballJumpAria: 'Zum Spielplan',
+            ballJumpSchedule: 'Zum Spielplan',
+            ballJumpNews: 'Zu den News',
+            eventsEyebrow: 'Events & Nachwuchs',
+            eventsTitle: 'Wochenenden, Aktivitäten und Einstiegspunkte für neue Spieler.',
+            eventsBody: 'Diese Fläche verbindet Event-Kommunikation, Einstieg ins Vereinsleben und einen klaren Call-to-Action.',
+            eventsPillYouth: 'U4 & Nachwuchs',
+            eventsPillJoin: 'Join Us',
+            eventsPillCommunity: 'Community',
+            eventsPrimary: 'Mitmachen',
+            eventsSecondary: 'Zusammen stark',
+            eventsImageAlt: 'U4 Events',
+            infoTitle: 'Nationale und internationale Infos',
+            infoAxaAria: 'AXA League Links',
+            infoWomen: 'AXA League Frauen',
+            infoMen: 'AXA League Herren',
+            sponsorsTitle: 'Unsere Sponsoren',
+            sponsorsAlt: 'Mersch75 Sponsoren',
+            footerBrandBody: 'Handball in Mersch mit einem klareren digitalen Auftritt: schnelle Informationen, ruhigeres Layout und eine Struktur, die für GitHub Pages gebaut ist.',
+            footerQuick: 'Schnellzugriff',
+            footerContact: 'Kontakt',
+            footerClub: 'Verein',
+            footerTrainerstaff: 'Trainerstaff',
+            footerUsefulLinks: 'Nützliche Links',
+            footerLegalHint: 'Impressum und Datenschutz werden als nächste statische Service-Seiten ergänzt.',
+            footerAdmin: 'Admin Login'
+        },
+        en: {
+            pageTitle: 'Mersch75 Handball',
+            pageDescription: 'Mersch75 Handball: club overview, schedule, training, news, gallery and joining information.',
+            brandHomeAria: 'Mersch75 home',
+            brandTagline: 'Stronger together',
+            trainingPageTitle: 'Training | Mersch75 Handball',
+            trainingPageDescription: 'Training at Mersch75: schedule, groups, halls and youth coordination at a glance.',
+            trainingHeroLogoAlt: 'Team training logo',
+            trainingTrainerstaff: 'Coaching Staff',
+            trainingTrialRequest: 'Request a trial session',
+            trainingScheduleOpen: 'Open training schedule fullscreen',
+            trainingScheduleClose: 'Close fullscreen',
+            trainingYouthCoord: 'YOUTH COORDINATION:',
+            trainingYouthCoordBody: 'Max Blanc (LUXQF3) and Louis Van der Weken (LUXQF2Bis) are responsible for the youth section.',
+            trainingInfoLabel: 'Info:',
+            trainingPhoneLabel: 'Phone: Max Blanc 661 406 836',
+            navMenu: 'Menu',
+            navClose: 'Close menu',
+            navHome: 'Home',
+            navLiveCenter: 'Schedule',
+            navTraining: 'Training',
+            navTrainerstaff: 'Coaching Staff',
+            navNews: 'News',
+            navJoin: 'Join Us',
+            navComite: 'Committee',
+            navGallery: 'Gallery',
+            navHistory: 'History',
+            navLinks: 'Links',
+            navContact: 'Contact',
+            posterAlt: 'Mersch75 match poster',
+            posterLandscapeTitle: 'Download landscape version',
+            posterPortraitTitle: 'Download portrait version',
+            posterShareTitle: 'Share poster',
+            posterLandscapeLabel: 'Landscape',
+            posterPortraitLabel: 'Portrait',
+            posterShareLabel: 'Share',
+            ballJumpAria: 'Go to schedule',
+            ballJumpSchedule: 'Go to schedule',
+            ballJumpNews: 'Go to news',
+            eventsEyebrow: 'Events & youth',
+            eventsTitle: 'Weekends, activities and entry points for new players.',
+            eventsBody: 'This section ties event communication, club onboarding and a clear call to action together.',
+            eventsPillYouth: 'U4 & youth',
+            eventsPillJoin: 'Join Us',
+            eventsPillCommunity: 'Community',
+            eventsPrimary: 'Join in',
+            eventsSecondary: 'Stronger together',
+            eventsImageAlt: 'U4 events',
+            infoTitle: 'National and international info',
+            infoAxaAria: 'AXA League links',
+            infoWomen: 'AXA League Women',
+            infoMen: 'AXA League Men',
+            sponsorsTitle: 'Our sponsors',
+            sponsorsAlt: 'Mersch75 sponsors',
+            footerBrandBody: 'Handball in Mersch with a clearer digital presence: quick information, calmer layout and a structure built for GitHub Pages.',
+            footerQuick: 'Quick access',
+            footerContact: 'Contact',
+            footerClub: 'Club',
+            footerTrainerstaff: 'Coaching Staff',
+            footerUsefulLinks: 'Useful links',
+            footerLegalHint: 'Legal notice and data protection will be added next as static service pages.',
+            footerAdmin: 'Admin Login'
+        },
+        pt: {
+            pageTitle: 'Mersch75 Handball',
+            pageDescription: 'Mersch75 Handball: visão geral do clube, calendário, treino, notícias, galeria e participação.',
+            brandHomeAria: 'Página inicial Mersch75',
+            brandTagline: 'Mais fortes juntos',
+            trainingPageTitle: 'Treino | Mersch75 Handball',
+            trainingPageDescription: 'Treino no Mersch75: horários, grupos, pavilhões e coordenação jovem num relance.',
+            trainingHeroLogoAlt: 'Logótipo team training',
+            trainingTrainerstaff: 'Equipa técnica',
+            trainingTrialRequest: 'Pedir treino experimental',
+            trainingScheduleOpen: 'Abrir plano de treino em ecrã inteiro',
+            trainingScheduleClose: 'Fechar ecrã inteiro',
+            trainingYouthCoord: 'COORDENAÇÃO JOVEM:',
+            trainingYouthCoordBody: 'Max Blanc (LUXQF3) e Louis Van der Weken (LUXQF2Bis) são responsáveis pela secção jovem.',
+            trainingInfoLabel: 'Info:',
+            trainingPhoneLabel: 'Tel.: Max Blanc 661 406 836',
+            navMenu: 'Menu',
+            navClose: 'Fechar menu',
+            navHome: 'Início',
+            navLiveCenter: 'Calendário',
+            navTraining: 'Treino',
+            navTrainerstaff: 'Equipa técnica',
+            navNews: 'Notícias',
+            navJoin: 'Join Us',
+            navComite: 'Comité',
+            navGallery: 'Galeria',
+            navHistory: 'História',
+            navLinks: 'Links',
+            navContact: 'Contacto',
+            posterAlt: 'Cartaz do jogo Mersch75',
+            posterLandscapeTitle: 'Transferir em paisagem',
+            posterPortraitTitle: 'Transferir em retrato',
+            posterShareTitle: 'Partilhar cartaz',
+            posterLandscapeLabel: 'Paisagem',
+            posterPortraitLabel: 'Retrato',
+            posterShareLabel: 'Partilhar',
+            ballJumpAria: 'Ir para o calendário',
+            ballJumpSchedule: 'Ir para o calendário',
+            ballJumpNews: 'Ir para as notícias',
+            eventsEyebrow: 'Eventos & formação',
+            eventsTitle: 'Fins de semana, atividades e pontos de entrada para novos jogadores.',
+            eventsBody: 'Esta área liga a comunicação dos eventos, a entrada na vida do clube e um apelo à ação claro.',
+            eventsPillYouth: 'U4 & formação',
+            eventsPillJoin: 'Join Us',
+            eventsPillCommunity: 'Comunidade',
+            eventsPrimary: 'Participar',
+            eventsSecondary: 'Mais fortes juntos',
+            eventsImageAlt: 'Eventos U4',
+            infoTitle: 'Informações nacionais e internacionais',
+            infoAxaAria: 'Ligações AXA League',
+            infoWomen: 'AXA League Feminina',
+            infoMen: 'AXA League Masculina',
+            sponsorsTitle: 'Os nossos patrocinadores',
+            sponsorsAlt: 'Patrocinadores Mersch75',
+            footerBrandBody: 'Andebol em Mersch com uma presença digital mais clara: informação rápida, layout mais calmo e uma estrutura pensada para GitHub Pages.',
+            footerQuick: 'Acesso rápido',
+            footerContact: 'Contacto',
+            footerClub: 'Clube',
+            footerTrainerstaff: 'Equipa técnica',
+            footerUsefulLinks: 'Links úteis',
+            footerLegalHint: 'Aviso legal e proteção de dados serão adicionados em seguida como páginas estáticas de serviço.',
+            footerAdmin: 'Admin Login'
+        }
+    };
+
+    const resolveLanguage = (lang) => {
+        return supportedLanguages.includes(lang) ? lang : fallbackLanguage;
+    };
+
+    const getTranslation = (lang, key) => {
+        const resolvedLanguage = resolveLanguage(lang);
+        return (translations[resolvedLanguage] && translations[resolvedLanguage][key])
+            || (translations[fallbackLanguage] && translations[fallbackLanguage][key])
+            || '';
+    };
+
+    const applyLanguage = (lang) => {
+        const resolvedLanguage = resolveLanguage(lang);
+
+        document.documentElement.lang = resolvedLanguage === 'lb' ? 'lb' : resolvedLanguage;
+        document.body.dataset.siteLanguage = resolvedLanguage;
+
+        textTargets.forEach((target) => {
+            const key = target.dataset.i18n;
+            const value = getTranslation(resolvedLanguage, key);
+
+            if (value) {
+                target.textContent = value;
+            }
+        });
+
+        attributeTargets.forEach((target) => {
+            const bindings = (target.dataset.i18nAttr || '').split(';');
+
+            bindings.forEach((binding) => {
+                const parts = binding.split(':');
+                const attributeName = parts[0] ? parts[0].trim() : '';
+                const key = parts[1] ? parts[1].trim() : '';
+                const value = getTranslation(resolvedLanguage, key);
+
+                if (attributeName && key && value) {
+                    target.setAttribute(attributeName, value);
+                }
+            });
+        });
+
+        languageButtons.forEach((button) => {
+            const isActive = button.dataset.siteLangButton === resolvedLanguage;
+            button.classList.toggle('is-active', isActive);
+            button.setAttribute('aria-pressed', String(isActive));
+        });
+
+        window.localStorage.setItem(storageKey, resolvedLanguage);
+        document.dispatchEvent(new CustomEvent('mersch75:languagechange', {
+            detail: { language: resolvedLanguage, t: (key) => getTranslation(resolvedLanguage, key) }
+        }));
+    };
+
+    const initialLanguage = resolveLanguage(window.localStorage.getItem(storageKey) || fallbackLanguage);
+
+    languageButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+            applyLanguage(button.dataset.siteLangButton);
+        });
+    });
+
+    window.Mersch75I18n = {
+        getLanguage() {
+            return resolveLanguage(window.localStorage.getItem(storageKey) || fallbackLanguage);
+        },
+        setLanguage: applyLanguage,
+        t(key) {
+            return getTranslation(this.getLanguage(), key);
+        }
+    };
+
+    applyLanguage(initialLanguage);
+}
+
+function initializeLanguageSelectionHint() {
+    const storageKey = 'mersch75-language-hint-dismissed';
+    const switcher = document.querySelector('.site-language-switcher, .legal-lang-switcher');
+
+    if (!switcher) {
+        return;
+    }
+
+    try {
+        if (window.localStorage.getItem(storageKey) === 'true') {
+            return;
+        }
+    } catch (error) {
+        /* ignore storage access issues */
+    }
+
+    const hintTexts = {
+        lb: 'Wielt hei Är Sprooch.',
+        fr: 'Choisissez votre langue ici.',
+        de: 'Wählen Sie hier Ihre Sprache.',
+        en: 'Choose your language here.',
+        pt: 'Escolha aqui o seu idioma.'
+    };
+
+    const dismissTexts = {
+        lb: 'Verstanen',
+        fr: 'Compris',
+        de: 'Verstanden',
+        en: 'Got it',
+        pt: 'Percebi'
+    };
+
+    const resolveLanguage = () => {
+        if (window.Mersch75I18n && typeof window.Mersch75I18n.getLanguage === 'function') {
+            return window.Mersch75I18n.getLanguage();
+        }
+
+        const activeButton = switcher.querySelector('.is-active');
+        if (activeButton && activeButton.dataset.siteLangButton) {
+            return activeButton.dataset.siteLangButton;
+        }
+
+        if (activeButton && activeButton.dataset.legalLangButton) {
+            return activeButton.dataset.legalLangButton;
+        }
+
+        if (activeButton && activeButton.dataset.privacyLangButton) {
+            return activeButton.dataset.privacyLangButton;
+        }
+
+        return 'lb';
+    };
+
+    const hint = document.createElement('div');
+    hint.className = 'language-selection-hint';
+    hint.setAttribute('role', 'status');
+    hint.innerHTML = [
+        '<span class="language-selection-hint-copy"></span>',
+        '<button type="button" class="language-selection-hint-close"></button>'
+    ].join('');
+
+    const copy = hint.querySelector('.language-selection-hint-copy');
+    const close = hint.querySelector('.language-selection-hint-close');
+
+    const updateHintText = () => {
+        const language = resolveLanguage();
+        copy.textContent = hintTexts[language] || hintTexts.lb;
+        close.textContent = dismissTexts[language] || dismissTexts.lb;
+    };
+
+    const dismiss = () => {
+        hint.remove();
+
+        try {
+            window.localStorage.setItem(storageKey, 'true');
+        } catch (error) {
+            /* ignore storage access issues */
+        }
+    };
+
+    updateHintText();
+    close.addEventListener('click', dismiss);
+
+    switcher.insertAdjacentElement('afterend', hint);
+
+    switcher.querySelectorAll('button').forEach((button) => {
+        button.addEventListener('click', () => {
+            updateHintText();
+            dismiss();
+        }, { once: true });
+    });
+
+    document.addEventListener('mersch75:languagechange', updateHintText);
+}
+
 function initializeSiteMenu() {
     const navToggle = document.querySelector('.nav-toggle');
     const siteNav = document.querySelector('.site-nav');
@@ -12,20 +507,28 @@ function initializeSiteMenu() {
         return;
     }
 
-    const labelDefault = 'Menü';
+    const getI18nText = (key, fallback) => {
+        if (window.Mersch75I18n && typeof window.Mersch75I18n.t === 'function') {
+            return window.Mersch75I18n.t(key) || fallback;
+        }
+
+        return fallback;
+    };
+
+    const labelDefault = getI18nText('navMenu', 'Menü');
     const currentPath = window.location.pathname.split('/').pop() || 'index.html';
     const navItems = [
-        { href: 'index.html', label: 'Startseite', primary: true },
-        { href: 'live-center.html', label: 'Spielplan', primary: true },
-        { href: 'training.html', label: 'Training', primary: true },
-        { href: 'trainerstaff.html', label: 'Trainerstaff', primary: true },
-        { href: 'news.html', label: 'News', primary: true },
-        { href: 'join.html', label: 'Join Us', primary: true },
-        { href: 'comite.html', label: 'Comité', primary: true },
-        { href: 'gallery.html', label: 'Galerie', primary: false },
-        { href: 'historie.html', label: 'Historie', primary: false },
-        { href: 'links.html', label: 'Links', primary: false },
-        { href: 'contact.html', label: 'Contact', primary: false }
+        { href: 'index.html', labelKey: 'navHome', fallback: 'Startseite', primary: true },
+        { href: 'live-center.html', labelKey: 'navLiveCenter', fallback: 'Spielplan', primary: true },
+        { href: 'training.html', labelKey: 'navTraining', fallback: 'Training', primary: true },
+        { href: 'trainerstaff.html', labelKey: 'navTrainerstaff', fallback: 'Trainerstaff', primary: true },
+        { href: 'news.html', labelKey: 'navNews', fallback: 'News', primary: true },
+        { href: 'join.html', labelKey: 'navJoin', fallback: 'Join Us', primary: true },
+        { href: 'comite.html', labelKey: 'navComite', fallback: 'Comité', primary: true },
+        { href: 'gallery.html', labelKey: 'navGallery', fallback: 'Galerie', primary: false },
+        { href: 'historie.html', labelKey: 'navHistory', fallback: 'Historie', primary: false },
+        { href: 'links.html', labelKey: 'navLinks', fallback: 'Links', primary: false },
+        { href: 'contact.html', labelKey: 'navContact', fallback: 'Contact', primary: false }
     ];
 
     const primaryGroup = document.createElement('div');
@@ -34,12 +537,12 @@ function initializeSiteMenu() {
     const secondaryGroup = document.createElement('div');
     secondaryGroup.className = 'site-menu-secondary';
 
-    navItems.forEach(({ href, label, primary }) => {
+    navItems.forEach(({ href, labelKey, fallback, primary }) => {
         const link = document.createElement('a');
         const targetGroup = primary ? primaryGroup : secondaryGroup;
 
         link.href = href;
-        link.textContent = label;
+        link.textContent = getI18nText(labelKey, fallback);
 
         if (currentPath === href) {
             link.classList.add('is-active');
@@ -54,7 +557,7 @@ function initializeSiteMenu() {
     const closeButton = document.createElement('button');
     closeButton.type = 'button';
     closeButton.className = 'site-menu-close';
-    closeButton.setAttribute('aria-label', 'Menü schließen');
+    closeButton.setAttribute('aria-label', getI18nText('navClose', 'Menü schließen'));
     closeButton.textContent = 'X';
 
     const shell = document.createElement('div');
@@ -68,7 +571,7 @@ function initializeSiteMenu() {
     const backdrop = document.createElement('button');
     backdrop.type = 'button';
     backdrop.className = 'site-menu-backdrop';
-    backdrop.setAttribute('aria-label', 'Menü schließen');
+    backdrop.setAttribute('aria-label', getI18nText('navClose', 'Menü schließen'));
     document.body.append(backdrop);
 
     const closeMenu = () => {
@@ -109,6 +612,32 @@ function initializeSiteMenu() {
             closeMenu();
         }
     });
+
+    document.addEventListener('mersch75:languagechange', (event) => {
+        const language = event && event.detail ? event.detail.language : null;
+        const translator = event && event.detail ? event.detail.t : null;
+
+        navToggle.textContent = (translator && translator('navMenu')) || getI18nText('navMenu', 'Menü');
+        closeButton.setAttribute('aria-label', (translator && translator('navClose')) || getI18nText('navClose', 'Menü schließen'));
+        backdrop.setAttribute('aria-label', (translator && translator('navClose')) || getI18nText('navClose', 'Menü schließen'));
+
+        siteNav.querySelectorAll('a').forEach((link, index) => {
+            const item = navItems[index];
+
+            if (!item) {
+                return;
+            }
+
+            const text = translator ? translator(item.labelKey) : getI18nText(item.labelKey, item.fallback);
+            if (text) {
+                link.textContent = text;
+            }
+        });
+
+        if (language) {
+            document.documentElement.lang = language === 'lb' ? 'lb' : language;
+        }
+    });
 }
 
 function initializeTrainingSchedule() {
@@ -121,15 +650,99 @@ function initializeTrainingSchedule() {
         return;
     }
 
-    const hotspotGroups = [
+    const getI18nText = (key, fallback) => {
+        if (window.Mersch75I18n && typeof window.Mersch75I18n.t === 'function') {
+            return window.Mersch75I18n.t(key) || fallback;
+        }
+
+        return fallback;
+    };
+
+    const scheduleTranslations = {
+        lb: {
+            showSuffix: 'weisen',
+            trainerPrefix: 'TRAINER',
+            days: { mon: 'Méindes', tue: 'Dënschdes', wed: 'Mëttwochs', thu: 'Donneschdes', fri: 'Freides', sat: 'Samschdes' },
+            groups: {
+                u4: { label: 'Kidssports U4', title: 'Kidssports U4' },
+                u7: { label: 'U7', title: 'U7' },
+                u9: { label: 'U9', title: 'U9' },
+                u11: { label: 'U11', title: 'U11' },
+                u13u15: { label: 'U13 + U15', title: 'U13 & U15' },
+                filles: { label: 'Filles', title: 'Filles U9 / U11 / U13' },
+                fraen: { label: 'Fraen', title: 'Fraen' },
+                haeren: { label: 'Hären S1 / S2 / U21 - U17', title: 'Hären S1 / S2 / U21 - U17' }
+            }
+        },
+        fr: {
+            showSuffix: 'afficher',
+            trainerPrefix: 'ENTRAÎNEURS',
+            days: { mon: 'Lundi', tue: 'Mardi', wed: 'Mercredi', thu: 'Jeudi', fri: 'Vendredi', sat: 'Samedi' },
+            groups: {
+                u4: { label: 'Kidssports U4', title: 'Kidssports U4' },
+                u7: { label: 'U7', title: 'U7' },
+                u9: { label: 'U9', title: 'U9' },
+                u11: { label: 'U11', title: 'U11' },
+                u13u15: { label: 'U13 + U15', title: 'U13 & U15' },
+                filles: { label: 'Filles', title: 'Groupe Filles U9 / U11 / U13' },
+                fraen: { label: 'Dames', title: 'Dames' },
+                haeren: { label: 'Hommes S1 / S2 / U21 - U17', title: 'Hommes S1 / S2 / U21 - U17' }
+            }
+        },
+        de: {
+            showSuffix: 'anzeigen',
+            trainerPrefix: 'TRAINER',
+            days: { mon: 'Montag', tue: 'Dienstag', wed: 'Mittwoch', thu: 'Donnerstag', fri: 'Freitag', sat: 'Samstag' },
+            groups: {
+                u4: { label: 'Kidssports U4', title: 'Kidssports U4' },
+                u7: { label: 'U7', title: 'U7' },
+                u9: { label: 'U9', title: 'U9' },
+                u11: { label: 'U11', title: 'U11' },
+                u13u15: { label: 'U13 + U15', title: 'U13 & U15' },
+                filles: { label: 'Mädchen', title: 'Mädchengruppe U9 / U11 / U13' },
+                fraen: { label: 'Frauen', title: 'Frauen' },
+                haeren: { label: 'Herren S1 / S2 / U21 - U17', title: 'Herren S1 / S2 / U21 - U17' }
+            }
+        },
+        en: {
+            showSuffix: 'show',
+            trainerPrefix: 'COACHES',
+            days: { mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday', thu: 'Thursday', fri: 'Friday', sat: 'Saturday' },
+            groups: {
+                u4: { label: 'Kidssports U4', title: 'Kidssports U4' },
+                u7: { label: 'U7', title: 'U7' },
+                u9: { label: 'U9', title: 'U9' },
+                u11: { label: 'U11', title: 'U11' },
+                u13u15: { label: 'U13 + U15', title: 'U13 & U15' },
+                filles: { label: 'Girls', title: 'Girls Group U9 / U11 / U13' },
+                fraen: { label: 'Women', title: 'Women' },
+                haeren: { label: 'Men S1 / S2 / U21 - U17', title: 'Men S1 / S2 / U21 - U17' }
+            }
+        },
+        pt: {
+            showSuffix: 'mostrar',
+            trainerPrefix: 'TREINADORES',
+            days: { mon: 'Segunda-feira', tue: 'Terça-feira', wed: 'Quarta-feira', thu: 'Quinta-feira', fri: 'Sexta-feira', sat: 'Sábado' },
+            groups: {
+                u4: { label: 'Kidssports U4', title: 'Kidssports U4' },
+                u7: { label: 'U7', title: 'U7' },
+                u9: { label: 'U9', title: 'U9' },
+                u11: { label: 'U11', title: 'U11' },
+                u13u15: { label: 'U13 + U15', title: 'U13 & U15' },
+                filles: { label: 'Raparigas', title: 'Grupo Feminino U9 / U11 / U13' },
+                fraen: { label: 'Seniores femininas', title: 'Seniores femininas' },
+                haeren: { label: 'Seniores masculinos S1 / S2 / U21 - U17', title: 'Seniores masculinos S1 / S2 / U21 - U17' }
+            }
+        }
+    };
+
+    const hotspotGroupBase = [
         {
             group: 'u4',
-            label: 'Kidssports U4',
-            title: 'Kidssports U4',
-            trainers: 'TRAINER Grégory Redavid, Christophe Kremer, Marc Jungels, Max Blanc (LUXQF3)',
+            trainers: 'Grégory Redavid, Christophe Kremer, Marc Jungels, Max Blanc (LUXQF3)',
             slots: [
-                { day: 'Mëttwochs', time: '16:30 - 17:30', location: 'Omnisports, 21, rue des Prés, Mersch' },
-                { day: 'Samschdes', time: '10:00 - 11:00', location: "SportHal, 4, rue de l'Ecole, Lëntgen" }
+                { dayKey: 'wed', time: '16:30 - 17:30', location: 'Omnisports, 21, rue des Prés, Mersch' },
+                { dayKey: 'sat', time: '10:00 - 11:00', location: "Sportshal Lëntgen, 4, rue de l'Ecole, Lëntgen" }
             ],
             areas: [
                 { left: 43.1, top: 47.3, width: 11.4, height: 8.4 },
@@ -138,12 +751,10 @@ function initializeTrainingSchedule() {
         },
         {
             group: 'u7',
-            label: 'U7',
-            title: 'U7',
-            trainers: 'TRAINER Max Blanc (LUXQF3), Anne Holm (LUXQF3)',
+            trainers: 'Max Blanc (LUXQF3), Anne Holm (LUXQF3)',
             slots: [
-                { day: 'Dënschdes', time: '17:30 - 18:30', location: 'Sportshal Lëntgen, 50, rue de la Gare' },
-                { day: 'Freides', time: '16:30 - 17:30', location: 'Hall Omnisports Krounebierg, 11, rue de la Piscine, Mersch' }
+                { dayKey: 'tue', time: '17:30 - 18:30', location: 'Sportshal Lëntgen, 50, rue de la Gare' },
+                { dayKey: 'fri', time: '16:30 - 17:30', location: 'Hall Omnisports Krounebierg, 11, rue de la Piscine, Mersch' }
             ],
             areas: [
                 { left: 20.2, top: 55.6, width: 10.8, height: 8.1 },
@@ -152,12 +763,10 @@ function initializeTrainingSchedule() {
         },
         {
             group: 'u9',
-            label: 'U9',
-            title: 'U9',
-            trainers: 'TRAINER Max Blanc (LUXQF3), Louis Van der Weken (LUXQF2Bis)',
+            trainers: 'Max Blanc (LUXQF3), Louis Van der Weken (LUXQF2Bis)',
             slots: [
-                { day: 'Dënschdes', time: '17:30 - 19:00', location: 'Hall Omnisports Krounebierg, 11, rue de la Piscine, Mersch' },
-                { day: 'Donneschdes', time: '17:30 - 19:00', location: 'Hall Omnisports Krounebierg, 11, rue de la Piscine, Mersch' }
+                { dayKey: 'tue', time: '17:30 - 19:00', location: 'Hall Omnisports Krounebierg, 11, rue de la Piscine, Mersch' },
+                { dayKey: 'thu', time: '17:30 - 19:00', location: 'Hall Omnisports Krounebierg, 11, rue de la Piscine, Mersch' }
             ],
             areas: [
                 { left: 32.3, top: 55.6, width: 10.8, height: 12.2 },
@@ -166,12 +775,10 @@ function initializeTrainingSchedule() {
         },
         {
             group: 'u11',
-            label: 'U11',
-            title: 'U11',
-            trainers: 'TRAINER Max Blanc (LUXQF3), Elie Schuster',
+            trainers: 'Max Blanc (LUXQF3), Elie Schuster',
             slots: [
-                { day: 'Mëttwochs', time: '17:30 - 19:00', location: 'Hall Omnisports, 21, rue des Prés, Mersch' },
-                { day: 'Freides', time: '17:30 - 19:00', location: 'Hall Omnisports Krounebierg, 11, rue de la Piscine, Mersch' }
+                { dayKey: 'wed', time: '17:30 - 19:00', location: 'Hall Omnisports, 21, rue des Prés, Mersch' },
+                { dayKey: 'fri', time: '17:30 - 19:00', location: 'Hall Omnisports Krounebierg, 11, rue de la Piscine, Mersch' }
             ],
             areas: [
                 { left: 43.1, top: 55.7, width: 11.4, height: 12.3 },
@@ -180,13 +787,11 @@ function initializeTrainingSchedule() {
         },
         {
             group: 'u13u15',
-            label: 'U13 + U15',
-            title: 'U13 & U15',
-            trainers: 'TRAINER Max Blanc (LUXQF3), Mathis Derneden',
+            trainers: 'Max Blanc (LUXQF3), Mathis Derneden',
             slots: [
-                { day: 'Méindes', time: '17:30 - 19:00', location: 'Hall Omnisports, 21, rue des Prés, Mersch' },
-                { day: 'Mëttwochs', time: '18:30 - 20:00', location: 'Hall Omnisports, 21, rue des Prés, Mersch' },
-                { day: 'Freides', time: '19:00 - 20:30', location: 'Hall Omnisports Krounebierg, 11, rue de la Piscine, Mersch' }
+                { dayKey: 'mon', time: '17:30 - 19:00', location: 'Hall Omnisports, 21, rue des Prés, Mersch' },
+                { dayKey: 'wed', time: '18:30 - 20:00', location: 'Hall Omnisports, 21, rue des Prés, Mersch' },
+                { dayKey: 'fri', time: '19:00 - 20:30', location: 'Hall Omnisports Krounebierg, 11, rue de la Piscine, Mersch' }
             ],
             areas: [
                 { left: 10.1, top: 55.6, width: 11.3, height: 12.2 },
@@ -196,11 +801,9 @@ function initializeTrainingSchedule() {
         },
         {
             group: 'filles',
-            label: 'Filles',
-            title: 'Groupe Filles U9 / U11 / U13',
-            trainers: 'TRAINER Anne Bisenius Holm (LUXQF3), Katarzyna Pietrasik',
+            trainers: 'Anne Bisenius Holm (LUXQF3), Katarzyna Pietrasik',
             slots: [
-                { day: 'Freides', time: '17:30 - 19:00', location: 'Hall Omnisports, 21, rue des Prés, Mersch' }
+                { dayKey: 'fri', time: '17:30 - 19:00', location: 'Hall Omnisports, 21, rue des Prés, Mersch' }
             ],
             areas: [
                 { left: 65.3, top: 55.6, width: 10.8, height: 12.4 }
@@ -208,12 +811,10 @@ function initializeTrainingSchedule() {
         },
         {
             group: 'fraen',
-            label: 'Fraen',
-            title: 'Fraen',
-            trainers: 'TRAINER Katarzyna Pietrasik',
+            trainers: 'Katarzyna Pietrasik',
             slots: [
-                { day: 'Méindes', time: '19:00 - 20:30', location: 'Hall Omnisports, 21, rue des Prés, Mersch' },
-                { day: 'Freides', time: '19:00 - 20:30', location: 'Hall Omnisports, 21, rue des Prés, Mersch' }
+                { dayKey: 'mon', time: '19:00 - 20:30', location: 'Hall Omnisports, 21, rue des Prés, Mersch' },
+                { dayKey: 'fri', time: '19:00 - 20:30', location: 'Hall Omnisports, 21, rue des Prés, Mersch' }
             ],
             areas: [
                 { left: 10.1, top: 67.9, width: 11.3, height: 12.2 },
@@ -222,13 +823,11 @@ function initializeTrainingSchedule() {
         },
         {
             group: 'haeren',
-            label: 'Hären S1 / S2 / U21 - U17',
-            title: 'Hären S1 / S2 / U21 - U17',
-            trainers: 'TRAINER Laurent Metzler',
+            trainers: 'Laurent Metzler',
             slots: [
-                { day: 'Méindes', time: '20:30 - 21:30', location: 'Hall Omnisports, 21, rue des Prés, Mersch' },
-                { day: 'Mëttwochs', time: '20:30 - 21:30', location: 'Hall Omnisports, 21, rue des Prés, Mersch' },
-                { day: 'Freides', time: '20:30 - 21:30', location: 'Hall Omnisports Krounebierg, 11, rue de la Piscine, Mersch' }
+                { dayKey: 'mon', time: '20:30 - 21:30', location: 'Hall Omnisports, 21, rue des Prés, Mersch' },
+                { dayKey: 'wed', time: '20:30 - 21:30', location: 'Hall Omnisports, 21, rue des Prés, Mersch' },
+                { dayKey: 'fri', time: '20:30 - 21:30', location: 'Hall Omnisports Krounebierg, 11, rue de la Piscine, Mersch' }
             ],
             areas: [
                 { left: 10.1, top: 80.2, width: 11.3, height: 8.5 },
@@ -237,6 +836,40 @@ function initializeTrainingSchedule() {
             ]
         }
     ];
+
+    let currentOpenGroup = null;
+
+    const getScheduleLanguage = () => {
+        if (window.Mersch75I18n && typeof window.Mersch75I18n.getLanguage === 'function') {
+            return window.Mersch75I18n.getLanguage();
+        }
+
+        return 'lb';
+    };
+
+    const getLocalizedGroups = () => {
+        const lang = scheduleTranslations[getScheduleLanguage()] ? getScheduleLanguage() : 'lb';
+        const translation = scheduleTranslations[lang];
+
+        return hotspotGroupBase.map((group) => {
+            const translatedGroup = translation.groups[group.group] || scheduleTranslations.lb.groups[group.group];
+
+            return {
+                group: group.group,
+                label: translatedGroup.label,
+                title: translatedGroup.title,
+                trainers: `${translation.trainerPrefix} ${group.trainers}`,
+                slots: group.slots.map((slot) => ({
+                    day: translation.days[slot.dayKey] || scheduleTranslations.lb.days[slot.dayKey],
+                    time: slot.time,
+                    location: slot.location
+                })),
+                areas: group.areas
+            };
+        });
+    };
+
+    let hotspotGroups = getLocalizedGroups();
 
     const hotspotsByGroup = new Map();
 
@@ -257,6 +890,8 @@ function initializeTrainingSchedule() {
         if (!groupInfo) {
             return;
         }
+
+        currentOpenGroup = group;
 
         resetScheduleHover();
 
@@ -288,7 +923,14 @@ function initializeTrainingSchedule() {
         tooltip.classList.add('is-visible');
     };
 
-    if (hotspotLayer && tooltip && hotspotGroups.length) {
+    const renderHotspots = () => {
+        if (!hotspotLayer || !tooltip || !hotspotGroups.length) {
+            return;
+        }
+
+        hotspotLayer.innerHTML = '';
+        hotspotsByGroup.clear();
+
         hotspotGroups.forEach(({ group, label, areas }) => {
             const groupHotspots = [];
 
@@ -297,7 +939,7 @@ function initializeTrainingSchedule() {
 
                 hotspot.type = 'button';
                 hotspot.className = 'training-schedule-hotspot';
-                hotspot.setAttribute('aria-label', `${label} anzeigen`);
+                hotspot.setAttribute('aria-label', `${label} ${scheduleTranslations[getScheduleLanguage()]?.showSuffix || scheduleTranslations.lb.showSuffix}`);
                 hotspot.dataset.group = group;
                 hotspot.style.left = `${area.left}%`;
                 hotspot.style.top = `${area.top}%`;
@@ -326,7 +968,9 @@ function initializeTrainingSchedule() {
         });
 
         scheduleContainer.addEventListener('mouseleave', resetScheduleHover);
-    }
+    };
+
+    renderHotspots();
 
     const getFullscreenElement = () => (
         document.fullscreenElement ||
@@ -337,8 +981,8 @@ function initializeTrainingSchedule() {
     const syncButton = () => {
         const isActive = Boolean(getFullscreenElement());
         fullscreenButton.textContent = isActive
-            ? 'Vollbild schließen'
-            : 'Trainingsplan im Vollbild öffnen';
+            ? getI18nText('trainingScheduleClose', 'Vollbild schließen')
+            : getI18nText('trainingScheduleOpen', 'Trainingsplan im Vollbild öffnen');
         fullscreenButton.classList.toggle('is-active', isActive);
     };
 
@@ -397,6 +1041,15 @@ function initializeTrainingSchedule() {
     document.addEventListener('fullscreenchange', syncButton);
     document.addEventListener('webkitfullscreenchange', syncButton);
     document.addEventListener('msfullscreenchange', syncButton);
+    document.addEventListener('mersch75:languagechange', () => {
+        hotspotGroups = getLocalizedGroups();
+        renderHotspots();
+        syncButton();
+
+        if (currentOpenGroup) {
+            showGroupInfo(currentOpenGroup);
+        }
+    });
 
     syncButton();
 }
@@ -463,6 +1116,16 @@ function initializeSharedFooters() {
     const landingFooter = document.querySelector('.landing-footer');
 
     if (landingFooter) {
+        if (landingFooter.querySelector('[data-i18n], [data-i18n-attr]')) {
+            const yearEls = landingFooter.querySelectorAll('#current-year');
+
+            yearEls.forEach((yearEl) => {
+                yearEl.textContent = new Date().getFullYear();
+            });
+
+            return;
+        }
+
         const brandCopy = landingFooter.querySelector('.footer-brand p');
         const columns = landingFooter.querySelector('.footer-columns');
         const bottom = landingFooter.querySelector('.footer-bottom');
@@ -1037,6 +1700,8 @@ function initializeJoinUsForm() {
     syncU7Requirement('');
 }
 
+initializeSiteLanguage();
+initializeLanguageSelectionHint();
 initializeSiteMenu();
 initializeTrainingSchedule();
 initializeJoinUsForm();

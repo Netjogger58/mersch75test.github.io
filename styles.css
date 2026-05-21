@@ -1757,6 +1757,51 @@ body.privacy-page {
     margin-bottom: 22px;
 }
 
+.language-selection-hint {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin: -6px 0 22px;
+    padding: 12px 14px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(249, 214, 17, 0.2), rgba(232, 237, 244, 0.92));
+    border: 1px solid rgba(0, 47, 101, 0.12);
+    color: var(--blue);
+    box-shadow: 0 12px 30px rgba(0, 47, 101, 0.08);
+}
+
+.language-selection-hint-copy {
+    font-size: 0.92rem;
+    font-weight: 700;
+}
+
+.language-selection-hint-close {
+    border: 0;
+    border-radius: 999px;
+    padding: 8px 12px;
+    background: var(--blue);
+    color: #ffffff;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.site-language-switcher {
+    margin: 0 auto;
+    justify-content: center;
+}
+
+.landing-header .site-language-switcher {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin-bottom: 0;
+}
+
+.landing-header .site-language-switcher button {
+    padding: 9px 12px;
+}
+
 .legal-lang-switcher button {
     display: inline-flex;
     align-items: center;
@@ -2546,6 +2591,21 @@ body.matchday-page {
     .site-menu-secondary,
     .site-menu-footer {
         grid-template-columns: 1fr;
+    }
+
+    .landing-header {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .landing-header .brand {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .landing-header .site-language-switcher {
+        order: 3;
+        width: 100%;
     }
 
     .site-menu-primary a {
