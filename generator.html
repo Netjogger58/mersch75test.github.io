@@ -1229,6 +1229,63 @@ function getAssignedPos(prefix) {
     return el ? parseInt(el.value, 10) : 99;
 }
 
+function teamHasUploadedPhoto(prefix) {
+    const photoToggle = document.querySelector('.trigger-photo-toggle[data-team="' + prefix + '"]');
+    return !!(photoToggle && photoToggle.checked && window.teamPhotos[prefix]);
+}
+
+function teamHasConfiguredGame(prefix) {
+    const playToggle = document.querySelector('.trigger-toggle[data-team="' + prefix + '"]');
+    if (!playToggle || !playToggle.checked) return false;
+
+    const oppEl = document.getElementById(prefix + '-opp');
+    const dateEl = document.getElementById(prefix + '-date');
+    const timeEl = document.getElementById(prefix + '-time');
+    const locEl = document.getElementById(prefix + '-loc');
+
+    const opponent = oppEl ? oppEl.value : '';
+    const hasOpponent = opponent && opponent !== '-';
+    const hasDate = !!(dateEl && dateEl.value);
+    const hasTime = !!(timeEl && timeEl.value);
+    const hasLocation = !!(locEl && locEl.value);
+
+    return !!(hasOpponent || hasDate || hasTime || hasLocation);
+}
+
+function buildLandscapePhotoOnlyAssignments(activeTeams) {
+    const available = new Set(activeTeams.filter(function(team) {
+        return teamHasUploadedPhoto(team.id);
+    }).map(function(team) {
+        return team.id;
+    }));
+
+    const hasH2 = available.has('s2');
+    const assignments = [];
+
+    function assign(teamId, slot) {
+        if (!available.has(teamId)) return;
+        assignments.push({ id: teamId, hasGame: false, slot: slot });
+    }
+
+    assign('u13pe', { type: 'photoTop', top: 215, left: 105, width: 320, height: 135 });
+    assign('u11MEL', { type: 'photoTop', top: 215, left: 639, width: 320, height: 135 });
+    if (hasH2) {
+        assign('u15', { type: 'photoTop', top: 215, left: 1173, width: 320, height: 135 });
+    } else {
+        assign('u11MES', { type: 'photoTop', top: 215, left: 1173, width: 320, height: 135 });
+    }
+
+    assign('fe', { type: 'big', top: 385, left: 36 });
+    assign('s1', { type: 'big', top: 385, left: 570 });
+    if (hasH2) {
+        assign('s2', { type: 'big', top: 385, left: 1104 });
+    } else {
+        assign('u15', { type: 'big', top: 385, left: 1104 });
+    }
+
+    return assignments.slice(0, 6);
+}
+
 function updateLandscapePreview() {
     const smLEl = document.getElementById('l-scale-mixvoip-l'); const smL = smLEl ? smLEl.value : 280;
     const sdEl = document.getElementById('l-scale-matchday'); const sd = sdEl ? sdEl.value : 90; 
@@ -1238,7 +1295,7 @@ function updateLandscapePreview() {
     const imgMixL = document.querySelector('.mixvoip-left img'); if (imgMixL) imgMixL.style.width = smL + 'px';
     const imgMixR = document.querySelector('.mixvoip-right img'); if (imgMixR) imgMixR.style.width = smR + 'px';
     const imgMatch = document.querySelector('.matchday-text img'); if (imgMatch) imgMatch.style.height = sd + 'px';
-    const layer50 = document.querySelector('.layer-50years'); if (layer50) { layer50.style.width = s50 + 'px'; layer50.style.height = s50 + 'px'; }
+    const layer50 = document.querySelector('.layer-50years'); if (layer50) { layer50.style.width = s50 + 'px'; layer50.style.height = s50 + 'px'; layer50.style.display = 'flex'; }
     
     const cont = document.getElementById('l-dynamic-main'); if (!cont) return;
     cont.innerHTML = '';
@@ -1250,8 +1307,9 @@ function updateLandscapePreview() {
         const p = TEAM_CONFIGS[i].id;
         const show = document.getElementById(p + '-land-show');
         if (show && show.checked) {
-            const cb = document.querySelector('.trigger-toggle[data-team="' + p + '"]');
-            const hasGame = cb && cb.checked;
+            const hasPhoto = teamHasUploadedPhoto(p);
+            const hasGame = teamHasConfiguredGame(p);
+            if (!hasPhoto && !hasGame) continue;
             if (p === 'u11MES' || p === 'u9M' || p === 'u7M') {
                 at.push({ id: p, hasGame: hasGame });
             } else {
@@ -1264,6 +1322,25 @@ function updateLandscapePreview() {
         return getAssignedPos(a.id) - getAssignedPos(b.id);
     };
     allActive.sort(sortFn); at.sort(sortFn);
+
+    const photoOnlyMode = allActive.length > 0 && at.length === 0 && allActive.every(function(team) {
+        return teamHasUploadedPhoto(team.id) && !team.hasGame;
+    });
+
+    if (photoOnlyMode) {
+        if (layer50) layer50.style.display = 'none';
+        cont.innerHTML += '<div class="abs" style="top:48px;left:430px;width:120px;height:120px;display:flex;align-items:center;justify-content:center;z-index:5;"><img src="Media/Logos FLH Eq/Logo-Mersch75-50-Joer-3D.png" crossorigin="anonymous" alt="50 Joer" style="max-width:100%;max-height:100%;object-fit:contain;"></div>';
+        cont.innerHTML += '<div class="abs" style="top:48px;left:1048px;width:120px;height:120px;display:flex;align-items:center;justify-content:center;z-index:5;"><img src="Media/Logos FLH Eq/Logo-Mersch75-50-Joer-3D.png" crossorigin="anonymous" alt="50 Joer" style="max-width:100%;max-height:100%;object-fit:contain;"></div>';
+
+        const photoAssignments = buildLandscapePhotoOnlyAssignments(allActive);
+        for (let i = 0; i < photoAssignments.length; i++) {
+            renderLandscapeGame(photoAssignments[i].id, photoAssignments[i].slot, cont, false);
+        }
+
+        const tcPhotoOnly = document.getElementById('l-dynamic-tournoi');
+        if (tcPhotoOnly) tcPhotoOnly.innerHTML = '';
+        return;
+    }
     
     let tTop = 130; let tLeft = 1142; const ht = (at.length > 0);
     
@@ -1507,6 +1584,9 @@ function renderLandscapeGame(prefix, sl, cont, hasGame) {
         if (sl.type === 'big') {
             pW = 458; pH = 260; pTop = sl.top + 95; pLeft = sl.left;
             titleHtml = ts ? '<div class="abs text-blue" style="top:' + sl.top + 'px;left:' + sl.left + 'px;width:458px;height:80px;font-size:' + (37 * sclTi) + 'px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;line-height:1.1;display:flex;align-items:flex-end;justify-content:center;text-align:center;pointer-events:auto;color:var(--primary-blue);">' + ts + '</div>' : '';
+        } else if (sl.type === 'photoTop') {
+            pW = sl.width || 320; pH = sl.height || 135; pTop = sl.top + 30; pLeft = sl.left;
+            titleHtml = ts ? '<div class="abs text-blue" style="top:' + sl.top + 'px;left:' + sl.left + 'px;width:' + pW + 'px;height:24px;font-size:' + (18 * sclTi) + 'px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;line-height:1;display:flex;align-items:flex-end;justify-content:center;text-align:center;pointer-events:auto;color:var(--primary-blue);">' + ts + '</div>' : '';
         } else if (sl.type === 'youth3col') {
             pW = 420; pH = 100; pTop = sl.top; pLeft = sl.left + (sl.col1 || 0);
             const titleWidth = (sl.col3 || 320) + 100;
