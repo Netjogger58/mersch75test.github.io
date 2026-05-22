@@ -87,6 +87,9 @@
 
 #m75-gen-wrapper .toggle-label { font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 5px; color: var(--secondary-blue); text-transform: none; }
 #m75-gen-wrapper .toggle-label input { width: auto; margin: 0; }
+#m75-gen-wrapper .photo-upload-wrap { display: none; align-items: center; gap: 8px; width: 100%; }
+#m75-gen-wrapper .photo-upload-btn { border: 1px solid var(--secondary-blue); background: #fff; color: var(--secondary-blue); border-radius: 6px; padding: 7px 10px; font-size: 11px; font-weight: 800; white-space: nowrap; }
+#m75-gen-wrapper .photo-upload-name { font-size: 11px; color: var(--text-gray); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 #m75-gen-wrapper select.category-select { font-weight: bold; background: white; cursor: pointer; }
 
 #m75-gen-wrapper .download-menu-wrapper { position: relative; flex: 1; min-width: 250px; }
@@ -730,7 +733,7 @@ function renderFormBlocks() {
         
         html += '<div class="row" style="background:#f0f8ff; padding:5px; border-radius:4px; margin-bottom:10px;">';
         html += '<div class="col" style="flex:1;"><label class="toggle-label" style="margin:0;"><input type="checkbox" class="trigger-photo-toggle" data-team="' + team.id + '"> Foto anstatt Spiel?</label></div>';
-        html += '<div class="col" style="flex:1;"><input type="file" accept="image/*" class="trigger-photo-file" data-team="' + team.id + '" style="display:none; font-size:10px; width:100%;"></div></div>';
+        html += '<div class="col" style="flex:1;"><div class="photo-upload-wrap" data-team="' + team.id + '"><button type="button" class="photo-upload-btn" data-team="' + team.id + '">Foto hochladen</button><span class="photo-upload-name" data-team="' + team.id + '">Kein Foto gewählt</span><input type="file" accept="image/*" class="trigger-photo-file" data-team="' + team.id + '" style="display:none;"></div></div></div>';
 
         html += '<div class="row">';
         html += '<div class="col"><select id="' + team.id + '-home" class="trigger-autofill" data-team="' + team.id + '"><option value="home1">Heim (Halle 1)</option><option value="home2">Heim (Krounebierg)</option><option value="away">Auswärts</option></select></div>';
@@ -2222,6 +2225,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function safeCall(fn) { try { fn(); } catch (e) { console.error(e); } }
 
+    function setPhotoUploadUi(teamId, enabled, fileName) {
+        const wrap = qs('.photo-upload-wrap[data-team="' + teamId + '"]');
+        const label = qs('.photo-upload-name[data-team="' + teamId + '"]');
+        if (wrap) wrap.style.display = enabled ? 'flex' : 'none';
+        if (label) label.textContent = fileName || 'Kein Foto gewählt';
+    }
+
     window.toggleTeam = function(teamId, on) {
         const block = document.getElementById('ctrl-' + teamId);
         if (!block) return;
@@ -2287,6 +2297,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const file = e.target.files[0];
                 const t = el.getAttribute('data-team');
                 if (file) {
+                    setPhotoUploadUi(t, true, file.name);
                     const reader = new FileReader();
                     reader.onload = function(evt) {
                         window.teamPhotos[t] = evt.target.result;
@@ -2295,8 +2306,17 @@ document.addEventListener('DOMContentLoaded', function () {
                     reader.readAsDataURL(file);
                 } else {
                     delete window.teamPhotos[t];
+                    setPhotoUploadUi(t, true, 'Kein Foto gewählt');
                     updateAllPreviews();
                 }
+            });
+        });
+
+        qsa('.photo-upload-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                const t = btn.getAttribute('data-team');
+                const fileInput = document.querySelector('.trigger-photo-file[data-team="' + t + '"]');
+                if (fileInput) fileInput.click();
             });
         });
 
@@ -2305,13 +2325,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 const t = el.getAttribute('data-team');
                 const fileInput = document.querySelector('.trigger-photo-file[data-team="'+t+'"]');
                 if (el.checked) { 
-                    fileInput.style.display = 'block'; 
+                    setPhotoUploadUi(t, true, fileInput && fileInput.files && fileInput.files[0] ? fileInput.files[0].name : undefined);
                     const landCb = document.getElementById(t + '-land-show');
                     if (landCb) landCb.checked = true;
                     const portCb = document.querySelector('.cb-portrait[value="' + t + '"]');
                     if (portCb) portCb.checked = true;
+                    if (fileInput && !window.teamPhotos[t]) fileInput.click();
                 } else { 
-                    fileInput.style.display = 'none'; 
+                    if (fileInput) fileInput.value = '';
+                    delete window.teamPhotos[t];
+                    setPhotoUploadUi(t, false);
                 }
                 toggleTeam(t, document.querySelector('.trigger-toggle[data-team="' + t + '"]').checked);
                 updateAllPreviews();
