@@ -994,62 +994,60 @@ function renderStandingsPanel() {
     const standings = window.__liveStandings || {};
     const activeCat = window.__allGamesFilter || 'all';
 
+    function renderOneTable(cat) {
+        if (STANDINGS_NO_TABLE[cat]) {
+            return '<h3>Tabell – ' + cat + '</h3><div class="standings-empty">Fir dës Altersklass féiert d\u2019FLH keng offiziell Tabell (Spillfest-Format).</div>';
+        }
+        const flhLabel = STANDINGS_LABEL_MAP[cat];
+        if (!flhLabel) {
+            return '<h3>Tabell – ' + cat + '</h3><div class="standings-empty">Fir dës Kategorie ass keng offiziell Tabell verfügbar.</div>';
+        }
+        const rows = standings[flhLabel];
+        if (!rows || !rows.length) {
+            return '<h3>Tabell – ' + cat + '</h3><div class="standings-empty">Tabell gëtt geluede vun der FLH... oder ass nach net publizéiert.</div>';
+        }
+        let html = '<h3>Tabell – ' + cat + '</h3>';
+        html += '<p class="standings-meta">Quell: FLH (handball4all) · live aktualiséiert</p>';
+        html += '<table><thead><tr>';
+        html += '<th class="s-place">#</th>';
+        html += '<th class="s-team">Equipe</th>';
+        html += '<th title="Spiller">Sp</th>';
+        html += '<th title="Gewonnen">G</th>';
+        html += '<th title="Remis">U</th>';
+        html += '<th title="Verluer">V</th>';
+        html += '<th title="Goaler">Goaler</th>';
+        html += '<th title="Diff.">+/-</th>';
+        html += '<th title="Punkten">Pkt</th>';
+        html += '</tr></thead><tbody>';
+        rows.forEach((r, idx) => {
+            const place = r.place || (idx + 1);
+            const diff = (r.goalsFor || 0) - (r.goalsAgainst || 0);
+            const diffStr = (diff > 0 ? '+' : '') + diff;
+            const isM75 = isMerschTeamName(r.team);
+            html += '<tr' + (isM75 ? ' class="is-m75"' : '') + '>';
+            html += '<td class="s-place">' + place + '</td>';
+            html += '<td class="s-team">' + r.team + '</td>';
+            html += '<td>' + r.played + '</td>';
+            html += '<td>' + r.won + '</td>';
+            html += '<td>' + r.drawn + '</td>';
+            html += '<td>' + r.lost + '</td>';
+            html += '<td>' + r.goalsFor + ':' + r.goalsAgainst + '</td>';
+            html += '<td>' + diffStr + '</td>';
+            html += '<td class="s-points">' + (r.points || (r.pointsPlus + ':' + r.pointsMinus)) + '</td>';
+            html += '</tr>';
+        });
+        html += '</tbody></table>';
+        return html;
+    }
+
     if (activeCat === 'all') {
-        panel.innerHTML = '<h3>Tabell</h3><div class="standings-empty">Wielt eng Kategorie iwwen, fir d\u2019Tabell ze gesinn.</div>';
+        // Bei "Alle Kategorien" alle verfügbaren Tabellen untereinander zeigen
+        const all = Object.keys(STANDINGS_LABEL_MAP);
+        panel.innerHTML = all.map(renderOneTable).join('<div style="height:18px;"></div>');
         return;
     }
 
-    if (STANDINGS_NO_TABLE[activeCat]) {
-        panel.innerHTML = '<h3>Tabell – ' + activeCat + '</h3><div class="standings-empty">Fir dës Altersklass féiert d\u2019FLH keng offiziell Tabell (Spillfest-Format).</div>';
-        return;
-    }
-
-    const flhLabel = STANDINGS_LABEL_MAP[activeCat];
-    if (!flhLabel) {
-        panel.innerHTML = '<h3>Tabell – ' + activeCat + '</h3><div class="standings-empty">Fir dës Kategorie ass keng offiziell Tabell verfügbar.</div>';
-        return;
-    }
-
-    const rows = standings[flhLabel];
-    if (!rows || !rows.length) {
-        panel.innerHTML = '<h3>Tabell – ' + activeCat + '</h3><div class="standings-empty">Tabell gëtt geluede vun der FLH... oder ass nach net publizéiert.</div>';
-        return;
-    }
-
-    let html = '<h3>Tabell – ' + activeCat + '</h3>';
-    html += '<p class="standings-meta">Quell: FLH (handball4all) · live aktualiséiert</p>';
-    html += '<table><thead><tr>';
-    html += '<th class="s-place">#</th>';
-    html += '<th class="s-team">Equipe</th>';
-    html += '<th title="Spiller">Sp</th>';
-    html += '<th title="Gewonnen">G</th>';
-    html += '<th title="Remis">U</th>';
-    html += '<th title="Verluer">V</th>';
-    html += '<th title="Goaler">Goaler</th>';
-    html += '<th title="Diff.">+/-</th>';
-    html += '<th title="Punkten">Pkt</th>';
-    html += '</tr></thead><tbody>';
-
-    rows.forEach((r, idx) => {
-        const place = r.place || (idx + 1);
-        const diff = (r.goalsFor || 0) - (r.goalsAgainst || 0);
-        const diffStr = (diff > 0 ? '+' : '') + diff;
-        const isM75 = isMerschTeamName(r.team);
-        html += '<tr' + (isM75 ? ' class="is-m75"' : '') + '>';
-        html += '<td class="s-place">' + place + '</td>';
-        html += '<td class="s-team">' + r.team + '</td>';
-        html += '<td>' + r.played + '</td>';
-        html += '<td>' + r.won + '</td>';
-        html += '<td>' + r.drawn + '</td>';
-        html += '<td>' + r.lost + '</td>';
-        html += '<td>' + r.goalsFor + ':' + r.goalsAgainst + '</td>';
-        html += '<td>' + diffStr + '</td>';
-        html += '<td class="s-points">' + (r.points || (r.pointsPlus + ':' + r.pointsMinus)) + '</td>';
-        html += '</tr>';
-    });
-
-    html += '</tbody></table>';
-    panel.innerHTML = html;
+    panel.innerHTML = renderOneTable(activeCat);
 }
 
 function renderAllGames() {
