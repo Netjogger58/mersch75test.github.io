@@ -4,6 +4,33 @@ function syncCurrentYear() {
     });
 }
 
+function ensureSiteLanguageSwitcher() {
+    // Wenn die Seite bereits einen Sprachumschalter mitbringt, nichts tun.
+    if (document.querySelector('.site-language-switcher')) return;
+
+    const header = document.querySelector('.site-header');
+    if (!header) return;
+
+    const navToggle = header.querySelector('.nav-toggle');
+
+    const nav = document.createElement('nav');
+    nav.className = 'site-language-switcher legal-lang-switcher';
+    nav.setAttribute('aria-label', 'Sprache auswählen');
+    nav.innerHTML = [
+        '<button type="button" class="is-active" data-site-lang-button="lb" aria-pressed="true"><span class="lang-flag flag-lu" aria-hidden="true"></span><span>LU</span></button>',
+        '<button type="button" data-site-lang-button="fr" aria-pressed="false"><span class="lang-flag flag-fr" aria-hidden="true"></span><span>FR</span></button>',
+        '<button type="button" data-site-lang-button="de" aria-pressed="false"><span class="lang-flag flag-de" aria-hidden="true"></span><span>DE</span></button>',
+        '<button type="button" data-site-lang-button="en" aria-pressed="false"><span class="lang-flag flag-en" aria-hidden="true"></span><span>EN</span></button>',
+        '<button type="button" data-site-lang-button="pt" aria-pressed="false"><span class="lang-flag flag-pt" aria-hidden="true"></span><span>PT</span></button>'
+    ].join('');
+
+    if (navToggle) {
+        header.insertBefore(nav, navToggle);
+    } else {
+        header.append(nav);
+    }
+}
+
 function initializeSiteLanguage() {
     const languageButtons = Array.from(document.querySelectorAll('[data-site-lang-button]'));
     const storageKey = 'mersch75-language';
@@ -40,7 +67,8 @@ function initializeSiteLanguage() {
             navComite: 'Comité',
             navGallery: 'Galerie',
             navHistory: 'Geschicht',
-            navLinks: 'Links',
+            navLinks: 'Nëtzlech Linken',
+            navHallenkarte: 'Hallekaart',
             navContact: 'Kontakt',
             posterAlt: 'Mersch75 Matchposter',
             posterLandscapeTitle: 'Querformat eroflueden',
@@ -103,7 +131,8 @@ function initializeSiteLanguage() {
             navComite: 'Comité',
             navGallery: 'Galerie',
             navHistory: 'Historique',
-            navLinks: 'Liens',
+            navLinks: 'Liens utiles',
+            navHallenkarte: 'Carte des salles',
             navContact: 'Contact',
             posterAlt: 'Affiche du match Mersch75',
             posterLandscapeTitle: 'Télécharger en paysage',
@@ -166,7 +195,8 @@ function initializeSiteLanguage() {
             navComite: 'Comité',
             navGallery: 'Galerie',
             navHistory: 'Historie',
-            navLinks: 'Links',
+            navLinks: 'Nützliche Links',
+            navHallenkarte: 'Hallenkarte',
             navContact: 'Kontakt',
             posterAlt: 'Mersch75 Matchposter',
             posterLandscapeTitle: 'Landscape herunterladen',
@@ -229,7 +259,8 @@ function initializeSiteLanguage() {
             navComite: 'Committee',
             navGallery: 'Gallery',
             navHistory: 'History',
-            navLinks: 'Links',
+            navLinks: 'Useful Links',
+            navHallenkarte: 'Venue Map',
             navContact: 'Contact',
             posterAlt: 'Mersch75 match poster',
             posterLandscapeTitle: 'Download landscape version',
@@ -261,7 +292,7 @@ function initializeSiteLanguage() {
             footerContact: 'Contact',
             footerClub: 'Club',
             footerTrainerstaff: 'Coaching Staff',
-            footerUsefulLinks: 'Useful links',
+            footerUsefulLinks: 'Useful Links',
             footerLegalHint: 'Legal notice and data protection will be added next as static service pages.',
             footerAdmin: 'Admin Login'
         },
@@ -292,7 +323,8 @@ function initializeSiteLanguage() {
             navComite: 'Comité',
             navGallery: 'Galeria',
             navHistory: 'História',
-            navLinks: 'Links',
+            navLinks: 'Links úteis',
+            navHallenkarte: 'Mapa dos pavilhões',
             navContact: 'Contacto',
             posterAlt: 'Cartaz do jogo Mersch75',
             posterLandscapeTitle: 'Transferir em paisagem',
@@ -526,8 +558,10 @@ function initializeSiteMenu() {
         { href: 'join.html', labelKey: 'navJoin', fallback: 'Join Us', primary: true },
         { href: 'comite.html', labelKey: 'navComite', fallback: 'Comité', primary: true },
         { href: 'gallery.html', labelKey: 'navGallery', fallback: 'Galerie', primary: false },
+        { href: 'memories.html', labelKey: 'navMemories', fallback: 'Memories', primary: false },
         { href: 'historie.html', labelKey: 'navHistory', fallback: 'Historie', primary: false },
-        { href: 'links.html', labelKey: 'navLinks', fallback: 'Links', primary: false },
+        { href: 'links.html', labelKey: 'navLinks', fallback: 'Useful Links', primary: false },
+        { href: 'hallenkarte.html', labelKey: 'navHallenkarte', fallback: 'Hallenkarte', primary: false },
         { href: 'contact.html', labelKey: 'navContact', fallback: 'Contact', primary: false }
     ];
 
@@ -553,6 +587,39 @@ function initializeSiteMenu() {
 
     const footer = document.createElement('div');
     footer.className = 'site-menu-footer';
+
+    // Sprachumschalter (nur auf Smartphones sichtbar) als Klon in das Burger-Menü übernehmen.
+    const headerSwitcher = document.querySelector('.site-language-switcher');
+    if (headerSwitcher) {
+        const menuLangWrap = document.createElement('div');
+        menuLangWrap.className = 'site-menu-language';
+
+        const menuSwitcher = headerSwitcher.cloneNode(true);
+        menuSwitcher.classList.add('site-menu-language-switcher');
+        menuSwitcher.removeAttribute('id');
+
+        menuSwitcher.querySelectorAll('[data-site-lang-button]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const lang = btn.dataset.siteLangButton;
+                if (window.Mersch75I18n && typeof window.Mersch75I18n.setLanguage === 'function') {
+                    window.Mersch75I18n.setLanguage(lang);
+                }
+            });
+        });
+
+        document.addEventListener('mersch75:languagechange', (event) => {
+            const lang = event && event.detail ? event.detail.language : null;
+            if (!lang) return;
+            menuSwitcher.querySelectorAll('[data-site-lang-button]').forEach((btn) => {
+                const isActive = btn.dataset.siteLangButton === lang;
+                btn.classList.toggle('is-active', isActive);
+                btn.setAttribute('aria-pressed', String(isActive));
+            });
+        });
+
+        menuLangWrap.append(menuSwitcher);
+        footer.append(menuLangWrap);
+    }
 
     const closeButton = document.createElement('button');
     closeButton.type = 'button';
@@ -1077,7 +1144,8 @@ function initializeSharedFooters() {
         { href: 'news.html', label: 'News' },
         { href: 'gallery.html', label: 'Galerie' },
         { href: 'community.html', label: 'Community' },
-        { href: 'links.html', label: 'Links' },
+        { href: 'links.html', label: 'Useful Links' },
+        { href: 'hallenkarte.html', label: 'Hallenkarte' },
         { href: 'comite.html', label: 'Comité' },
         { href: 'historie.html', label: 'Historie' },
         { href: 'contact.html', label: 'Contact' }
@@ -1700,8 +1768,9 @@ function initializeJoinUsForm() {
     syncU7Requirement('');
 }
 
+ensureSiteLanguageSwitcher();
 initializeSiteLanguage();
-initializeLanguageSelectionHint();
+// initializeLanguageSelectionHint();  // Hinweisbanner "Wielt hei Är Sprooch." deaktiviert – Sprachumschalter ist dezent in der Kopfzeile sichtbar.
 initializeSiteMenu();
 initializeTrainingSchedule();
 initializeJoinUsForm();

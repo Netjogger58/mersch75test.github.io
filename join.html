@@ -28,7 +28,9 @@
                 <a href="inside.html">Inside</a>
                 <a class="is-active" href="join.html">Join Us</a>
                 <a href="gallery.html">Galerie</a>
-                <a href="links.html">Links</a>
+                <a href="memories.html">Memories</a>
+                <a href="links.html">Useful Links</a>
+                <a href="hallenkarte.html">Hallenkarte</a>
                 <a href="community.html">Community</a>
                 <a href="contact.html">Contact</a>
             </nav>
@@ -168,8 +170,19 @@
                             </div>
 
                             <div class="join-form-group">
-                                <label id="lbl-adresse" for="Adresse">ADRESSE (NO, RUE, CODE POSTAL, LOCALITE) *</label>
-                                <input type="text" id="Adresse" name="Adresse" autocomplete="street-address" required>
+                                <label id="lbl-strasse" for="Strasse">STRASSE *</label>
+                                <input type="text" id="Strasse" name="Strasse" autocomplete="street-address" required>
+                            </div>
+
+                            <div class="join-form-row">
+                                <div class="join-form-group">
+                                    <label id="lbl-postcode" for="Postcode">POSTCODE *</label>
+                                    <input type="text" id="Postcode" name="Postcode" autocomplete="postal-code" required>
+                                </div>
+                                <div class="join-form-group">
+                                    <label id="lbl-ortschaft" for="Ortschaft">ORTSCHAFT *</label>
+                                    <input type="text" id="Ortschaft" name="Ortschaft" autocomplete="address-level2" required>
+                                </div>
                             </div>
 
                             <div class="join-form-group">
@@ -212,6 +225,10 @@
                             <strong>Merci / Danke / Thank you / Obrigado!</strong>
                             <span>Deng Umeldung gouf erfollegraich iwwermettelt.</span>
                             <small>Du kriss eng Bestateigung per E-Mail.</small>
+                            <a id="welcomeMappLink" class="join-welcome-link" href="wellkomm-mapp.html" target="_blank" rel="noopener"
+                               style="display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding:14px 26px;background:linear-gradient(135deg,#fffdf0 0%,#fff6c2 100%);border:2px solid #f9d611;border-radius:999px;color:#002b5c;font-weight:700;text-decoration:none;font-size:1.05rem;box-shadow:0 8px 18px rgba(249,214,17,0.25);">
+                                📖 Wëllkomm-Mapp opmaachen / öffnen / open / abrir
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -223,26 +240,55 @@
                         <img src="Media/Logos FLH Eq/Logo-Mersch75-50-Joer-3D.png" alt="Mersch75 50 Joer">
                         <div>
                             <strong>Mersch75 Handball</strong>
-                            <p>Training, Matchday, News an Club-Liewen an enger kloerer statescher Struktur fir GitHub Pages.</p>
+                            <div class="site-page-footer-social" aria-label="Social Media">
+                                <a href="https://www.facebook.com/mersch75" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5 3.66 9.15 8.44 9.94v-7.03H7.9v-2.91h2.54V9.84c0-2.52 1.49-3.91 3.78-3.91 1.09 0 2.24.2 2.24.2v2.47h-1.26c-1.24 0-1.63.78-1.63 1.57v1.89h2.77l-.44 2.91h-2.33V22c4.78-.79 8.44-4.94 8.44-9.94z"/></svg><span class="visually-hidden">Facebook</span></a>
+                                <a href="https://www.youtube.com/Netjogger58" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M23.5 6.2a3.02 3.02 0 0 0-2.13-2.14C19.46 3.5 12 3.5 12 3.5s-7.46 0-9.37.56A3.02 3.02 0 0 0 .5 6.2C0 8.12 0 12 0 12s0 3.88.5 5.8a3.02 3.02 0 0 0 2.13 2.14c1.91.56 9.37.56 9.37.56s7.46 0 9.37-.56a3.02 3.02 0 0 0 2.13-2.14C24 15.88 24 12 24 12s0-3.88-.5-5.8zM9.6 15.57V8.43L15.82 12 9.6 15.57z"/></svg><span class="visually-hidden">YouTube</span></a>
+                                <a href="https://www.instagram.com/hbmersch75/" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2.2c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.42.56.22.96.48 1.38.9.42.42.68.82.9 1.38.17.42.37 1.06.42 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.42 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.17-1.06.37-2.23.42-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.42a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.17-.42-.37-1.06-.42-2.23C2.21 15.58 2.2 15.2 2.2 12s.01-3.58.07-4.85c.05-1.17.25-1.8.42-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.17 1.06-.37 2.23-.42C8.42 2.21 8.8 2.2 12 2.2zm0 2.16c-3.15 0-3.5.01-4.74.07-1.07.05-1.65.23-2.04.38-.51.2-.88.44-1.27.83-.39.39-.63.76-.83 1.27-.15.39-.33.97-.38 2.04-.06 1.24-.07 1.59-.07 4.74s.01 3.5.07 4.74c.05 1.07.23 1.65.38 2.04.2.51.44.88.83 1.27.39.39.76.63 1.27.83.39.15.97.33 2.04.38 1.24.06 1.59.07 4.74.07s3.5-.01 4.74-.07c1.07-.05 1.65-.23 2.04-.38.51-.2.88-.44 1.27-.83.39-.39.63-.76.83-1.27.15-.39.33-.97.38-2.04.06-1.24.07-1.59.07-4.74s-.01-3.5-.07-4.74c-.05-1.07-.23-1.65-.38-2.04a3.42 3.42 0 0 0-.83-1.27 3.42 3.42 0 0 0-1.27-.83c-.39-.15-.97-.33-2.04-.38C15.5 4.37 15.15 4.36 12 4.36zm0 3.68a3.96 3.96 0 1 1 0 7.92 3.96 3.96 0 0 1 0-7.92zm0 6.53a2.57 2.57 0 1 0 0-5.14 2.57 2.57 0 0 0 0 5.14zm5.04-6.69a.93.93 0 1 1-1.86 0 .93.93 0 0 1 1.86 0z"/></svg><span class="visually-hidden">Instagram</span></a>
+                            </div>                        </div>
+                    </div>
+                    <div class="site-page-footer-cols">
+                        <div class="site-page-footer-col">
+                            <h4>Sport</h4>
+                            <div class="site-page-footer-links">
+                                <a href="index.html">Startseite</a>
+                                <a href="training.html">Training</a>
+                                <a href="trainerstaff.html">Trainerstaff</a>
+                                <a href="news.html">News</a>
+                            </div>
+                        </div>
+                        <div class="site-page-footer-col">
+                            <h4>Veräin</h4>
+                            <div class="site-page-footer-links">
+                                <a href="gallery.html">Galerie</a>
+                                <a href="memories.html">Memories</a>
+                                <a href="links.html">Useful Links</a>
+                                <a href="hallenkarte.html">Hallenkarte</a>
+                                <a href="comite.html">Comité</a>
+                                <a href="historie.html">Historie</a>
+                            </div>
+                        </div>
+                        <div class="site-page-footer-col">
+                            <h4>Service</h4>
+                            <div class="site-page-footer-links">
+                                <a href="join.html">Join Us</a>
+                                <a href="contact.html">Contact</a>
+                                <a href="impressum.html">Impressum</a>
+                                <a href="terms.html">Terms &amp; Conditions</a>
+                                <a href="dataprotection.html">Data Protection</a>
+                            </div>
+                        </div>
+                        <div class="site-page-footer-col">
+                            <h4>Kontakt</h4>
+                            <div class="site-page-footer-links">
+                                <a href="mailto:info@mersch75.lu">info@mersch75.lu</a>
+                                <a href="tel:+35228800399">Tél. : 288 00 399</a>
+                                <span>21, rue des Prés · L-7561 Mersch</span>
+                            </div>
                         </div>
                     </div>
-                    <div>
-                        <div class="site-page-footer-links">
-                            <a href="index.html">Startseite</a>
-                            <a href="training.html">Training</a>
-                            <a href="trainerstaff.html">Trainerstaff</a>
-                            <a href="news.html">News</a>
-                            <a href="inside.html">Inside</a>
-                            <a href="contact.html">Contact</a>
-                        </div>
-                        <div class="site-page-footer-meta">
-                            <a href="mailto:info@mersch75.lu">info@mersch75.lu</a>
-                            <span>288 00 399</span>
-                            <span>21, rue des Prés · L-7561 Mersch</span>
-                            <span>B.P. 75 · L-7501 Mersch</span>
-                            <span>RCS: F2345 · BCEELULL: LU730019220008607000</span>
-                            <span>© <span id="current-year"></span> Mersch75 Handball</span> <a class="admin-link" href="generator.html">Admin Login</a>
-                        </div>
+                    <div class="site-page-footer-bottom">
+                        <span class="site-page-footer-legal">RCS: F2345 · BCEELULL: LU730019220008607000</span>
+                        <span>&#169; <span id="current-year"></span> Mersch75 Handball</span> <a class="admin-link" href="generator.html">Admin Login</a>
                     </div>
                 </div>
             </footer>
@@ -257,19 +303,19 @@
     const MERSCH75_LICENSE_PASSWORD = 'FIhNvLi26';
     const MERSCH75_UI_TEXTS = {
         lu: {
-            nom: 'Numm *', prenom: 'Virnumm *', dob: 'Gebuertsdatum *', mineur: 'Mannerjäreg', cat: 'FLH Kategorie', role: 'Roll / Funktioun *', parent: 'Elengerzéiend *', tuteur1: 'Erzéiungsberechtegten 1 *', tuteur2: 'Erzéiungsberechtegten 2 *', nat: 'Nationalitéit *', cns: 'Matricule CNS *', medico: 'Medico *', licence: 'Lizenz *', club: 'Ale Veräin *', u7: 'U7 medezineschen Zertifikat obligatoresch', adresse: 'Adress *', email: 'E-Mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Schécken', sending: 'Gëtt geschéckt...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Deng Umeldung gouf erfollegräich iwwermëttelt.', successNote: 'Du kriss eng Bestätegung per E-Mail.', oui: 'JO', non: 'NEE', joueur: 'Spiller / Spillerin', officiel: 'Offiziell Persoun', arbitre: 'Arbitter', parent_non: 'NEE (2 Erzéiungsberechtegter)', parent_oui: 'JO (1 Erzéiungsberechtegten)', legalRequired: 'Liest an akzeptéiert w.e.g. déi allgemeng Bedéngungen an den Dateschutz.', flhRequired: 'Bestätegt w.e.g. d\'Iwwermëttlung un flh.lu fir d\'Lizenz.', accuracyRequired: 'Bestätegt w.e.g. d\'Richtegkeet vun den Donnéeën.'
+            nom: 'Numm *', prenom: 'Virnumm *', dob: 'Gebuertsdatum *', mineur: 'Mannerjäreg', cat: 'FLH Kategorie', role: 'Roll / Funktioun *', parent: 'Elengerzéiend *', tuteur1: 'Erzéiungsberechtegten 1 *', tuteur2: 'Erzéiungsberechtegten 2 *', nat: 'Nationalitéit *', cns: 'Matricule CNS *', medico: 'Medico *', licence: 'Lizenz *', club: 'Ale Veräin *', u7: 'U7 medezineschen Zertifikat obligatoresch', strasse: 'Strooss *', postcode: 'Postcode *', ortschaft: 'Uertschaft *', email: 'E-Mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Schécken', sending: 'Gëtt geschéckt...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Deng Umeldung gouf erfollegräich iwwermëttelt.', successNote: 'Du kriss eng Bestätegung per E-Mail.', oui: 'JO', non: 'NEE', joueur: 'Spiller / Spillerin', officiel: 'Offiziell Persoun', arbitre: 'Arbitter', parent_non: 'NEE (2 Erzéiungsberechtegter)', parent_oui: 'JO (1 Erzéiungsberechtegten)', legalRequired: 'Liest an akzeptéiert w.e.g. déi allgemeng Bedéngungen an den Dateschutz.', flhRequired: 'Bestätegt w.e.g. d\'Iwwermëttlung un flh.lu fir d\'Lizenz.', accuracyRequired: 'Bestätegt w.e.g. d\'Richtegkeet vun den Donnéeën.'
         },
         fr: {
-            nom: 'Nom *', prenom: 'Prénom *', dob: 'Date de naissance *', mineur: 'Mineur', cat: 'Catégorie FLH', role: 'Rôle / Fonction *', parent: 'Parent isolé *', tuteur1: 'Tuteur 1 *', tuteur2: 'Tuteur 2 *', nat: 'Nationalité *', cns: 'Matricule CNS *', medico: 'Médico *', licence: 'Licence *', club: 'Ancien club *', u7: 'U7 certificat médical obligatoire', adresse: 'Adresse *', email: 'E-mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Envoyer', sending: 'Envoi...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Inscription envoyée.', successNote: 'Vous recevrez une confirmation par e-mail.', oui: 'OUI', non: 'NON', joueur: 'Joueur / Joueuse', officiel: 'Officiel(le)', arbitre: 'Arbitre', parent_non: 'NON (2 tuteurs)', parent_oui: 'OUI (1 tuteur)', legalRequired: 'Veuillez lire et accepter les conditions générales et la protection des données.', flhRequired: 'Veuillez confirmer la transmission à flh.lu pour la licence.', accuracyRequired: 'Veuillez confirmer l\'exactitude des données.'
+            nom: 'Nom *', prenom: 'Prénom *', dob: 'Date de naissance *', mineur: 'Mineur', cat: 'Catégorie FLH', role: 'Rôle / Fonction *', parent: 'Parent isolé *', tuteur1: 'Tuteur 1 *', tuteur2: 'Tuteur 2 *', nat: 'Nationalité *', cns: 'Matricule CNS *', medico: 'Médico *', licence: 'Licence *', club: 'Ancien club *', u7: 'U7 certificat médical obligatoire', strasse: 'Rue *', postcode: 'Code postal *', ortschaft: 'Localité *', email: 'E-mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Envoyer', sending: 'Envoi...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Inscription envoyée.', successNote: 'Vous recevrez une confirmation par e-mail.', oui: 'OUI', non: 'NON', joueur: 'Joueur / Joueuse', officiel: 'Officiel(le)', arbitre: 'Arbitre', parent_non: 'NON (2 tuteurs)', parent_oui: 'OUI (1 tuteur)', legalRequired: 'Veuillez lire et accepter les conditions générales et la protection des données.', flhRequired: 'Veuillez confirmer la transmission à flh.lu pour la licence.', accuracyRequired: 'Veuillez confirmer l\'exactitude des données.'
         },
         de: {
-            nom: 'Name *', prenom: 'Vorname *', dob: 'Geburtsdatum *', mineur: 'Minderjährig', cat: 'FLH Kategorie', role: 'Rolle / Funktion *', parent: 'Alleinerziehend *', tuteur1: 'Erziehungsberechtigter 1 *', tuteur2: 'Erziehungsberechtigter 2 *', nat: 'Nationalität *', cns: 'CNS-Matrikelnummer *', medico: 'Medico *', licence: 'Lizenz *', club: 'Ehemaliger Verein *', u7: 'U7 ärztliches Attest obligatorisch', adresse: 'Adresse *', email: 'E-Mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Senden', sending: 'Senden...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Anmeldung gesendet.', successNote: 'Du erhältst eine Bestätigung per E-Mail.', oui: 'JA', non: 'NEIN', joueur: 'Spieler / Spielerin', officiel: 'Offizielle Person', arbitre: 'Schiedsrichter', parent_non: 'NEIN (2 Erziehungsberechtigte)', parent_oui: 'JA (1 Erziehungsberechtigter)', legalRequired: 'Bitte die allgemeinen Bedingungen und den Datenschutz lesen und akzeptieren.', flhRequired: 'Bitte die Übermittlung an flh.lu für die Lizenz bestätigen.', accuracyRequired: 'Bitte die Richtigkeit der Angaben bestätigen.'
+            nom: 'Name *', prenom: 'Vorname *', dob: 'Geburtsdatum *', mineur: 'Minderjährig', cat: 'FLH Kategorie', role: 'Rolle / Funktion *', parent: 'Alleinerziehend *', tuteur1: 'Erziehungsberechtigter 1 *', tuteur2: 'Erziehungsberechtigter 2 *', nat: 'Nationalität *', cns: 'CNS-Matrikelnummer *', medico: 'Medico *', licence: 'Lizenz *', club: 'Ehemaliger Verein *', u7: 'U7 ärztliches Attest obligatorisch', strasse: 'Straße *', postcode: 'Postleitzahl *', ortschaft: 'Ortschaft *', email: 'E-Mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Senden', sending: 'Senden...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Anmeldung gesendet.', successNote: 'Du erhältst eine Bestätigung per E-Mail.', oui: 'JA', non: 'NEIN', joueur: 'Spieler / Spielerin', officiel: 'Offizielle Person', arbitre: 'Schiedsrichter', parent_non: 'NEIN (2 Erziehungsberechtigte)', parent_oui: 'JA (1 Erziehungsberechtigter)', legalRequired: 'Bitte die allgemeinen Bedingungen und den Datenschutz lesen und akzeptieren.', flhRequired: 'Bitte die Übermittlung an flh.lu für die Lizenz bestätigen.', accuracyRequired: 'Bitte die Richtigkeit der Angaben bestätigen.'
         },
         en: {
-            nom: 'Last name *', prenom: 'First name *', dob: 'Date of birth *', mineur: 'Minor', cat: 'FLH category', role: 'Role / Function *', parent: 'Single parent *', tuteur1: 'Guardian 1 *', tuteur2: 'Guardian 2 *', nat: 'Nationality *', cns: 'CNS number *', medico: 'Medical check *', licence: 'Licence *', club: 'Former club *', u7: 'U7 medical certificate required', adresse: 'Address *', email: 'Email *', gsm1: 'Mobile 1 *', gsm2: 'Mobile 2', send: 'Submit', sending: 'Sending...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Registration sent.', successNote: 'You will receive a confirmation by email.', oui: 'YES', non: 'NO', joueur: 'Player', officiel: 'Official', arbitre: 'Referee', parent_non: 'NO (2 guardians)', parent_oui: 'YES (1 guardian)', legalRequired: 'Please read and accept the terms and conditions and data protection.', flhRequired: 'Please confirm the transfer to flh.lu for the licence.', accuracyRequired: 'Please confirm the accuracy of the data.'
+            nom: 'Last name *', prenom: 'First name *', dob: 'Date of birth *', mineur: 'Minor', cat: 'FLH category', role: 'Role / Function *', parent: 'Single parent *', tuteur1: 'Guardian 1 *', tuteur2: 'Guardian 2 *', nat: 'Nationality *', cns: 'CNS number *', medico: 'Medical check *', licence: 'Licence *', club: 'Former club *', u7: 'U7 medical certificate required', strasse: 'Street *', postcode: 'Postcode *', ortschaft: 'City *', email: 'Email *', gsm1: 'Mobile 1 *', gsm2: 'Mobile 2', send: 'Submit', sending: 'Sending...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Registration sent.', successNote: 'You will receive a confirmation by email.', oui: 'YES', non: 'NO', joueur: 'Player', officiel: 'Official', arbitre: 'Referee', parent_non: 'NO (2 guardians)', parent_oui: 'YES (1 guardian)', legalRequired: 'Please read and accept the terms and conditions and data protection.', flhRequired: 'Please confirm the transfer to flh.lu for the licence.', accuracyRequired: 'Please confirm the accuracy of the data.'
         },
         pt: {
-            nom: 'Apelido *', prenom: 'Nome próprio *', dob: 'Data de nascimento *', mineur: 'Menor', cat: 'Categoria FLH', role: 'Função *', parent: 'Encarregado isolado *', tuteur1: 'Encarregado 1 *', tuteur2: 'Encarregado 2 *', nat: 'Nacionalidade *', cns: 'Número CNS *', medico: 'Exame médico *', licence: 'Licença *', club: 'Clube anterior *', u7: 'U7 certificado médico obrigatório', adresse: 'Morada *', email: 'E-mail *', gsm1: 'Telemóvel 1 *', gsm2: 'Telemóvel 2', send: 'Enviar', sending: 'A enviar...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Inscrição enviada.', successNote: 'Receberá uma confirmação por e-mail.', oui: 'SIM', non: 'NÃO', joueur: 'Jogador / Jogadora', officiel: 'Oficial', arbitre: 'Árbitro', parent_non: 'NÃO (2 encarregados)', parent_oui: 'SIM (1 encarregado)', legalRequired: 'Por favor, leia e aceite os termos e condições e a proteção de dados.', flhRequired: 'Por favor, confirme o envio para flh.lu para a licença.', accuracyRequired: 'Por favor, confirme a exatidão dos dados.'
+            nom: 'Apelido *', prenom: 'Nome próprio *', dob: 'Data de nascimento *', mineur: 'Menor', cat: 'Categoria FLH', role: 'Função *', parent: 'Encarregado isolado *', tuteur1: 'Encarregado 1 *', tuteur2: 'Encarregado 2 *', nat: 'Nacionalidade *', cns: 'Número CNS *', medico: 'Exame médico *', licence: 'Licença *', club: 'Clube anterior *', u7: 'U7 certificado médico obrigatório', strasse: 'Rua *', postcode: 'Código postal *', ortschaft: 'Localidade *', email: 'E-mail *', gsm1: 'Telemóvel 1 *', gsm2: 'Telemóvel 2', send: 'Enviar', sending: 'A enviar...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Inscrição enviada.', successNote: 'Receberá uma confirmação por e-mail.', oui: 'SIM', non: 'NÃO', joueur: 'Jogador / Jogadora', officiel: 'Oficial', arbitre: 'Árbitro', parent_non: 'NÃO (2 encarregados)', parent_oui: 'SIM (1 encarregado)', legalRequired: 'Por favor, leia e aceite os termos e condições e a proteção de dados.', flhRequired: 'Por favor, confirme o envio para flh.lu para a licença.', accuracyRequired: 'Por favor, confirme a exatidão dos dados.'
         }
     };
     const MERSCH75_LEGAL_TEXTS = {
@@ -438,7 +484,9 @@
         document.getElementById('lbl-licence').innerText = ui.licence;
         document.getElementById('lbl-club').innerText = ui.club;
         document.getElementById('lbl-u7').innerText = ui.u7;
-        document.getElementById('lbl-adresse').innerText = ui.adresse;
+        document.getElementById('lbl-strasse').innerText = ui.strasse;
+        document.getElementById('lbl-postcode').innerText = ui.postcode;
+        document.getElementById('lbl-ortschaft').innerText = ui.ortschaft;
         document.getElementById('lbl-email').innerText = ui.email;
         document.getElementById('lbl-gsm1').innerText = ui.gsm1;
         document.getElementById('lbl-gsm2').innerText = ui.gsm2;
@@ -473,12 +521,13 @@
         const lines = [];
         const isFrenchMessage = messageLanguage === 'fr';
         const text = isFrenchMessage ? {
-            licenseLink: 'LIEN LICENCE', password: 'MOT DE PASSE', applicant: 'DEMANDEUR', role: 'ROLE / FONCTION', category: 'CATEGORIE FLH', cnsDigits: 'CNS (5 chiffres)', birthDate: 'DATE DE NAISSANCE', email: 'E-MAIL', address: 'ADRESSE', minor: 'MINEUR', singleParent: 'PARENT ISOLE', guardians: 'TUTEUR(S)', club: 'ANCIEN CLUB', medLicense: 'MED/LIC', nationality: 'NATIONALITE', legalAccepted: 'CONDITIONS GENERALES ET PROTECTION DES DONNEES ACCEPTEES', flhAccepted: 'TRANSMISSION DES DONNEES A FLH.LU POUR LICENCE COMPRISE', accuracyAccepted: 'EXACTITUDE DES DONNEES CONFIRMEE', cnsComplete: 'MATRICULE CNS COMPLET'
+            licenseLink: 'LIEN LICENCE', password: 'CODE ACCES', applicant: 'DEMANDEUR', role: 'ROLE / FONCTION', category: 'CATEGORIE FLH', cnsDigits: 'CNS (5 chiffres)', birthDate: 'DATE DE NAISSANCE', email: 'E-MAIL', street: 'RUE', zip: 'CODE POSTAL', city: 'LOCALITE', minor: 'MINEUR', singleParent: 'PARENT ISOLE', guardians: 'TUTEUR(S)', club: 'ANCIEN CLUB', medLicense: 'MED/LIC', nationality: 'NATIONALITE', legalAccepted: 'CONDITIONS GENERALES ET PROTECTION DES DONNEES ACCEPTEES', flhAccepted: 'TRANSMISSION DES DONNEES A FLH.LU POUR LICENCE COMPRISE', accuracyAccepted: 'EXACTITUDE DES DONNEES CONFIRMEE', cnsComplete: 'MATRICULE CNS COMPLET'
         } : {
-            licenseLink: 'LIZENZ-LINK', password: 'PASSWORT', applicant: 'ANTRAGSTELLER', role: 'ROLLE / FUNKTION', category: 'FLH KATEGORIE', cnsDigits: 'CNS (5 Ziffern)', birthDate: 'GEBURTSDATUM', email: 'E-MAIL', address: 'ADRESSE', minor: 'MINDERJAEHRIG', singleParent: 'ALLEINERZIEHEND', guardians: 'ERZIEHUNGSBERECHTIGTE(R)', club: 'EHEMALIGER VEREIN', medLicense: 'MED/LIZ', nationality: 'NATIONALITAET', legalAccepted: 'ALLGEMEINE BEDINGUNGEN UND DATENSCHUTZ AKZEPTIERT', flhAccepted: 'DATENUEBERMITTLUNG AN FLH.LU FUER LIZENZ VERSTANDEN', accuracyAccepted: 'RICHTIGKEIT DER ANGABEN BESTAETIGT', cnsComplete: 'MATRICULE CNS KOMPLETT'
+            licenseLink: 'LIZENZ-LINK', password: 'ZUGANGSCODE', applicant: 'ANTRAGSTELLER', role: 'ROLLE / FUNKTION', category: 'FLH KATEGORIE', cnsDigits: 'CNS (5 Ziffern)', birthDate: 'GEBURTSDATUM', email: 'E-MAIL', street: 'STRASSE', zip: 'POSTLEITZAHL', city: 'ORTSCHAFT', minor: 'MINDERJAEHRIG', singleParent: 'ALLEINERZIEHEND', guardians: 'ERZIEHUNGSBERECHTIGTE(R)', club: 'EHEMALIGER VEREIN', medLicense: 'MED/LIZ', nationality: 'NATIONALITAET', legalAccepted: 'ALLGEMEINE BEDINGUNGEN UND DATENSCHUTZ AKZEPTIERT', flhAccepted: 'DATENUEBERMITTLUNG AN FLH.LU FUER LIZENZ VERSTANDEN', accuracyAccepted: 'RICHTIGKEIT DER ANGABEN BESTAETIGT', cnsComplete: 'MATRICULE CNS KOMPLETT'
         };
 
-        if (includeLicenseLines) {
+        // Lizenz-Link nur in der französischen Mail (geht an FLH), nicht in der internen deutschen Kopie.
+        if (includeLicenseLines && isFrenchMessage) {
             lines.push('========================================');
             lines.push(text.licenseLink + ': ' + MERSCH75_LICENSE_LINK);
             lines.push(text.password + ': ' + MERSCH75_LICENSE_PASSWORD);
@@ -503,7 +552,9 @@
         }
 
         lines.push('----------------------------------------');
-        lines.push(text.address + ': ' + getValue('Adresse'));
+        lines.push(text.street + ': ' + getValue('Strasse'));
+        lines.push(text.zip + ': ' + getValue('Postcode'));
+        lines.push(text.city + ': ' + getValue('Ortschaft'));
         lines.push('----------------------------------------');
         lines.push(text.minor + ': ' + document.getElementById('Mineur').value);
 
@@ -535,12 +586,16 @@
         const fullName = getFullName();
         const formData = new FormData();
 
+        const email = getValue('Email');
         formData.append('access_key', accessKey);
         formData.append('from_name', 'Mersch75 E-JOIN-US');
         formData.append('name', fullName);
-        formData.append('email', getValue('Email'));
+        formData.append('email', email);
+        formData.append('replyto', email);
         formData.append('subject', subjectPrefix + ' - ' + fullName + ' - ' + category);
         formData.append('message', message);
+        // Web3Forms-Botcheck (leer = Mensch, verhindert Akismet-False-Positives)
+        formData.append('botcheck', '');
 
         return formData;
     }
@@ -677,14 +732,20 @@
         submitBtn.innerText = MERSCH75_UI_TEXTS[detectLegalLanguage()].sending;
 
         const isMinor = document.getElementById('Mineur').value === 'OUI';
+        const delay = function(ms) { return new Promise(function(res) { setTimeout(res, ms); }); };
 
         try {
+            // E-Mail 1: Französisch an Hauptschlüssel (inkl. Lizenz-Link für FLH)
             await sendToWeb3Forms(createCleanWeb3FormsData(
                 MERSCH75_WEB3FORMS_MAIN_KEY,
                 'Nouvelle inscription Mersch 75',
                 buildJoinMessage(true, 'fr')
             ));
 
+            // Sicherheits-Pause zur Umgehung von Web3Forms Anti-Spam-Filtern
+            await delay(3500);
+
+            // E-Mail 2: Deutsch an Sekundärschlüssel (interne Kopie, ohne Lizenz-Link)
             await sendToWeb3Forms(createCleanWeb3FormsData(
                 MERSCH75_WEB3FORMS_MAX_KEY,
                 (isMinor ? 'MINDERJAEHRIG - ' : '') + 'Neue Anmeldung Mersch 75',
@@ -699,6 +760,20 @@
 
             const successBox = document.getElementById('success-box');
             successBox.style.display = 'block';
+
+            // Personalisierter Link zur Wëllkomm-Mapp (Vorname + Sprache aus dem Formular)
+            try {
+                const welcomeLink = document.getElementById('welcomeMappLink');
+                if (welcomeLink) {
+                    const firstName = (document.getElementById('Prenom').value || '').trim();
+                    const langMap = { lu: 'lb', fr: 'fr', de: 'de', en: 'en', pt: 'pt' };
+                    const mappLang = langMap[currentLang] || 'lb';
+                    const params = new URLSearchParams();
+                    if (firstName) params.set('name', firstName);
+                    params.set('lang', mappLang);
+                    welcomeLink.href = 'wellkomm-mapp.html?' + params.toString();
+                }
+            } catch (_) { /* non-fatal */ }
 
             if (successBox.animate) {
                 successBox.animate(

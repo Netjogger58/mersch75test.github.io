@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hallenkarte | Mersch75 Handball</title>
+    <meta name="description" content="Interaktive Karte aller Hallen und Spielorte aus dem Mersch75-Spielplan in Luxemburg und Belgien.">
+    <link rel="stylesheet" href="styles.css?v=20260519d">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+</head>
+<body class="placeholder-page">
+    <div class="site-shell">
+        <header class="site-header compact-header">
+            <a class="brand" href="index.html">
+                <span class="brand-mark">75</span>
+                <span class="brand-copy">
+                    <strong>Mersch75 Handball</strong>
+                    <span>Zesumme Staark</span>
+                </span>
+            </a>
+            <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menü</button>
+            <nav class="site-nav" id="site-nav">
+                <a href="index.html">Startseite</a>
+                <a href="training.html">Training</a>
+                <a href="news.html">News</a>
+                <a href="inside.html">Inside</a>
+                <a href="gallery.html">Galerie</a>
+                <a href="memories.html">Memories</a>
+                <a href="links.html">Useful Links</a>
+                <a class="is-active" href="hallenkarte.html">Hallenkarte</a>
+                <a href="community.html">Community</a>
+                <a href="join.html">Join Us</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+        </header>
+
+        <main class="page-main">
+            <section class="m75-hall-map" aria-label="Mersch75 Hallenkarte Luxemburg und Umgebung">
+                <style>
+                    .m75-hall-map {
+                        --m75-blue: #005eb8;
+                        --m75-blue-dark: #07346e;
+                        --m75-yellow: #f9d611;
+                        --m75-red: #d9222a;
+                        --m75-text: #1d1d1f;
+                        --m75-muted: #6e6e73;
+                        --m75-border: rgba(0, 94, 184, 0.16);
+                        --m75-soft: #f5f8ff;
+                        max-width: 1180px;
+                        margin: 0 auto;
+                        padding: 28px 14px;
+                        color: var(--m75-text);
+                        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                    }
+
+                    .m75-hall-map * {
+                        box-sizing: border-box;
+                    }
+
+                    .m75-map-shell {
+                        overflow: hidden;
+                        border: 1px solid var(--m75-border);
+                        border-radius: 28px;
+                        background: linear-gradient(145deg, #ffffff 0%, #eef5ff 100%);
+                        box-shadow: 0 22px 60px rgba(7, 52, 110, 0.12);
+                    }
+
+                    .m75-map-header {
+                        padding: clamp(24px, 4vw, 42px);
+                        background:
+                            radial-gradient(circle at top left, rgba(217, 34, 42, 0.10), transparent 30%),
+                            radial-gradient(circle at bottom right, rgba(0, 94, 184, 0.16), transparent 34%);
+                    }
+
+                    .m75-map-kicker {
+                        display: inline-flex;
+                        margin-bottom: 12px;
+                        padding: 7px 12px;
+                        border-radius: 999px;
+                        background: rgba(255, 255, 255, 0.78);
+                        color: var(--m75-blue-dark);
+                        font-size: 13px;
+                        font-weight: 900;
+                        letter-spacing: 0.08em;
+                        text-transform: uppercase;
+                    }
+
+                    .m75-map-header h2 {
+                        margin: 0;
+                        color: var(--m75-blue-dark);
+                        font-size: clamp(30px, 5vw, 54px);
+                        line-height: 1;
+                        letter-spacing: -0.05em;
+                    }
+
+                    .m75-map-header h2 span {
+                        color: var(--m75-red);
+                    }
+
+                    .m75-map-header p {
+                        max-width: 850px;
+                        margin: 16px 0 0;
+                        color: var(--m75-muted);
+                        font-size: clamp(16px, 2vw, 19px);
+                        line-height: 1.55;
+                    }
+
+                    .m75-map-toolbar {
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 10px;
+                        padding: 18px;
+                        border-top: 1px solid var(--m75-border);
+                        border-bottom: 1px solid var(--m75-border);
+                        background: rgba(255, 255, 255, 0.82);
+                    }
+
+                    .m75-map-filter {
+                        border: 1px solid rgba(0, 94, 184, 0.18);
+                        border-radius: 999px;
+                        background: #ffffff;
+                        color: var(--m75-blue-dark);
+                        padding: 9px 14px;
+                        font: inherit;
+                        font-size: 14px;
+                        font-weight: 850;
+                        cursor: pointer;
+                        transition: 0.18s ease;
+                    }
+
+                    .m75-map-filter:hover,
+                    .m75-map-filter.active {
+                        background: var(--m75-blue);
+                        color: #ffffff;
+                        border-color: var(--m75-blue);
+                    }
+
+                    #m75LuxHallMap {
+                        width: 100%;
+                        height: min(78vh, 760px);
+                        min-height: 540px;
+                        background: #dfeaf5;
+                        z-index: 1;
+                    }
+
+                    .m75-pin {
+                        position: relative;
+                        width: 38px;
+                        height: 50px;
+                        filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.25));
+                    }
+
+                    .m75-pin-shape {
+                        width: 38px;
+                        height: 38px;
+                        border-radius: 50% 50% 50% 0;
+                        transform: rotate(-45deg);
+                        background: conic-gradient(from 40deg, #34a853 0 28%, #4285f4 28% 53%, #ea4335 53% 75%, #fbbc05 75% 100%);
+                        border: 2px solid #ffffff;
+                    }
+
+                    .m75-pin-shape::after {
+                        content: "";
+                        position: absolute;
+                        inset: 9px;
+                        border-radius: 999px;
+                        background: #ffffff;
+                    }
+
+                    .m75-pin.mersch .m75-pin-shape {
+                        background: conic-gradient(from 40deg, var(--m75-yellow) 0 28%, var(--m75-blue) 28% 60%, var(--m75-red) 60% 100%);
+                    }
+
+                    .m75-pin.belgium .m75-pin-shape {
+                        background: conic-gradient(from 40deg, #111111 0 33%, #f9d611 33% 66%, #d9222a 66% 100%);
+                    }
+
+                    .m75-popup {
+                        width: 260px;
+                        max-width: 70vw;
+                    }
+
+                    .m75-popup-visual {
+                        display: grid;
+                        place-items: center;
+                        min-height: 132px;
+                        margin-bottom: 12px;
+                        border-radius: 16px;
+                        background: linear-gradient(135deg, #f7f9ff, #ffffff);
+                        border: 1px solid rgba(0, 94, 184, 0.12);
+                        overflow: hidden;
+                    }
+
+                    .m75-popup-visual img {
+                        width: 96px;
+                        height: 96px;
+                        object-fit: contain;
+                        border-radius: 14px;
+                    }
+
+                    .m75-hall-photo {
+                        width: 100% !important;
+                        height: 130px !important;
+                        object-fit: cover !important;
+                        border-radius: 14px;
+                        margin-bottom: 8px;
+                    }
+
+                    .m75-club-logo {
+                        width: 72px !important;
+                        height: 72px !important;
+                        object-fit: contain !important;
+                        background: #ffffff;
+                        padding: 6px;
+                        box-shadow: 0 4px 12px rgba(7, 52, 110, 0.12);
+                    }
+
+                    .m75-photo-note {
+                        display: inline-flex;
+                        margin-top: 8px;
+                        padding: 4px 8px;
+                        border-radius: 999px;
+                        background: rgba(249, 214, 17, 0.25);
+                        color: #7a6100;
+                        font-size: 12px;
+                        font-weight: 900;
+                    }
+
+                    .m75-popup h3 {
+                        margin: 0 0 6px;
+                        color: var(--m75-blue-dark);
+                        font-size: 18px;
+                        line-height: 1.15;
+                    }
+
+                    .m75-popup p {
+                        margin: 0 0 8px;
+                        color: #555;
+                        line-height: 1.35;
+                        font-size: 13px;
+                    }
+
+                    .m75-popup-teams {
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 5px;
+                        margin: 8px 0 12px;
+                    }
+
+                    .m75-popup-contact {
+                        display: grid;
+                        gap: 5px;
+                        margin: 0 0 12px;
+                        font-size: 12px;
+                    }
+
+                    .m75-popup-contact a {
+                        color: var(--m75-blue-dark);
+                        font-weight: 850;
+                        text-decoration: none;
+                        word-break: break-word;
+                    }
+
+                    .m75-popup-contact a:hover {
+                        text-decoration: underline;
+                    }
+
+                    .m75-popup-note {
+                        margin: 0 0 10px;
+                        padding: 8px 10px;
+                        border-radius: 12px;
+                        background: rgba(249, 214, 17, 0.22);
+                        color: #6f5900;
+                        font-size: 12px;
+                        font-weight: 800;
+                        line-height: 1.35;
+                    }
+
+                    .m75-team-pill {
+                        display: inline-flex;
+                        padding: 4px 7px;
+                        border-radius: 999px;
+                        background: #eef5ff;
+                        color: var(--m75-blue-dark);
+                        font-size: 11px;
+                        font-weight: 850;
+                    }
+
+                    .m75-popup-actions {
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 7px;
+                    }
+
+                    .m75-popup-actions a {
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        padding: 7px 10px;
+                        border-radius: 999px;
+                        color: #ffffff;
+                        background: var(--m75-blue);
+                        text-decoration: none;
+                        font-size: 12px;
+                        font-weight: 900;
+                    }
+
+                    .m75-popup-actions a:nth-child(2) {
+                        background: var(--m75-red);
+                    }
+
+                    .m75-hall-list {
+                        display: grid;
+                        grid-template-columns: repeat(3, minmax(0, 1fr));
+                        gap: 12px;
+                        padding: 18px;
+                        background: #ffffff;
+                    }
+
+                    .m75-hall-card {
+                        display: flex;
+                        gap: 10px;
+                        align-items: center;
+                        padding: 12px;
+                        border: 1px solid rgba(0, 94, 184, 0.12);
+                        border-radius: 16px;
+                        background: var(--m75-soft);
+                        cursor: pointer;
+                        transition: 0.18s ease;
+                        text-align: left;
+                        font: inherit;
+                    }
+
+                    .m75-hall-card:hover {
+                        transform: translateY(-2px);
+                        box-shadow: 0 10px 24px rgba(7, 52, 110, 0.12);
+                    }
+
+                    .m75-hall-card img {
+                        width: 42px;
+                        height: 42px;
+                        object-fit: contain;
+                        border-radius: 10px;
+                        background: #ffffff;
+                        padding: 4px;
+                    }
+
+                    .m75-hall-card strong {
+                        display: block;
+                        color: var(--m75-blue-dark);
+                        font-size: 14px;
+                        line-height: 1.15;
+                    }
+
+                    .m75-hall-card span {
+                        display: block;
+                        margin-top: 3px;
+                        color: var(--m75-muted);
+                        font-size: 12px;
+                        line-height: 1.25;
+                    }
+
+                    @media (max-width: 900px) {
+                        .m75-hall-list {
+                            grid-template-columns: repeat(2, minmax(0, 1fr));
+                        }
+                    }
+
+                    @media (max-width: 620px) {
+                        .m75-hall-map {
+                            padding: 18px 8px;
+                        }
+
+                        #m75LuxHallMap {
+                            height: 620px;
+                            min-height: 520px;
+                        }
+
+                        .m75-hall-list {
+                            grid-template-columns: 1fr;
+                        }
+                    }
+                </style>
+
+                <div class="m75-map-shell">
+                    <header class="m75-map-header">
+                        <div class="m75-map-kicker">Mersch75 · Hallen & Auswärtsadressen</div>
+                        <h2>Hallenkarte <span>Luxemburg & Belgien</span></h2>
+                    </header>
+
+                    <div class="m75-map-toolbar" aria-label="Kartenfilter">
+                        <button type="button" class="m75-map-filter active" data-filter="all">Alle Hallen</button>
+                        <button type="button" class="m75-map-filter" data-filter="mersch">Mersch75 Hallen</button>
+                        <button type="button" class="m75-map-filter" data-filter="luxembourg">Luxemburg</button>
+                        <button type="button" class="m75-map-filter" data-filter="belgium">Belgien</button>
+                    </div>
+
+                    <div id="m75LuxHallMap"></div>
+                    <div class="m75-hall-list" id="m75HallList"></div>
+                </div>
+            </section>
+
+            <footer class="site-page-footer">
+                <div class="site-page-footer-shell">
+                    <div class="site-page-footer-brand">
+                        <img src="Media/Logos FLH Eq/Logo-Mersch75-50-Joer-3D.png" alt="Mersch75 50 Joer">
+                        <div>
+                            <strong>Mersch75 Handball</strong>
+                            <div class="site-page-footer-social" aria-label="Social Media">
+                                <a href="https://www.facebook.com/mersch75" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5 3.66 9.15 8.44 9.94v-7.03H7.9v-2.91h2.54V9.84c0-2.52 1.49-3.91 3.78-3.91 1.09 0 2.24.2 2.24.2v2.47h-1.26c-1.24 0-1.63.78-1.63 1.57v1.89h2.77l-.44 2.91h-2.33V22c4.78-.79 8.44-4.94 8.44-9.94z"/></svg><span class="visually-hidden">Facebook</span></a>
+                                <a href="https://www.youtube.com/Netjogger58" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M23.5 6.2a3.02 3.02 0 0 0-2.13-2.14C19.46 3.5 12 3.5 12 3.5s-7.46 0-9.37.56A3.02 3.02 0 0 0 .5 6.2C0 8.12 0 12 0 12s0 3.88.5 5.8a3.02 3.02 0 0 0 2.13 2.14c1.91.56 9.37.56 9.37.56s7.46 0 9.37-.56a3.02 3.02 0 0 0 2.13-2.14C24 15.88 24 12 24 12s0-3.88-.5-5.8zM9.6 15.57V8.43L15.82 12 9.6 15.57z"/></svg><span class="visually-hidden">YouTube</span></a>
+                                <a href="https://www.instagram.com/hbmersch75/" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2.2c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.42.56.22.96.48 1.38.9.42.42.68.82.9 1.38.17.42.37 1.06.42 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.42 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.17-1.06.37-2.23.42-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.42a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.17-.42-.37-1.06-.42-2.23C2.21 15.58 2.2 15.2 2.2 12s.01-3.58.07-4.85c.05-1.17.25-1.8.42-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.17 1.06-.37 2.23-.42C8.42 2.21 8.8 2.2 12 2.2zm0 2.16c-3.15 0-3.5.01-4.74.07-1.07.05-1.65.23-2.04.38-.51.2-.88.44-1.27.83-.39.39-.63.76-.83 1.27-.15.39-.33.97-.38 2.04-.06 1.24-.07 1.59-.07 4.74s.01 3.5.07 4.74c.05 1.07.23 1.65.38 2.04.2.51.44.88.83 1.27.39.39.76.63 1.27.83.39.15.97.33 2.04.38 1.24.06 1.59.07 4.74.07s3.5-.01 4.74-.07c1.07-.05 1.65-.23 2.04-.38.51-.2.88-.44 1.27-.83.39-.39.63-.76.83-1.27.15-.39.33-.97.38-2.04.06-1.24.07-1.59.07-4.74s-.01-3.5-.07-4.74c-.05-1.07-.23-1.65-.38-2.04a3.42 3.42 0 0 0-.83-1.27 3.42 3.42 0 0 0-1.27-.83c-.39-.15-.97-.33-2.04-.38C15.5 4.37 15.15 4.36 12 4.36zm0 3.68a3.96 3.96 0 1 1 0 7.92 3.96 3.96 0 0 1 0-7.92zm0 6.53a2.57 2.57 0 1 0 0-5.14 2.57 2.57 0 0 0 0 5.14zm5.04-6.69a.93.93 0 1 1-1.86 0 .93.93 0 0 1 1.86 0z"/></svg><span class="visually-hidden">Instagram</span></a>
+                            </div>                        </div>
+                    </div>
+                    <div class="site-page-footer-cols">
+                        <div class="site-page-footer-col">
+                            <h4>Sport</h4>
+                            <div class="site-page-footer-links">
+                                <a href="index.html">Startseite</a>
+                                <a href="training.html">Training</a>
+                                <a href="trainerstaff.html">Trainerstaff</a>
+                                <a href="news.html">News</a>
+                            </div>
+                        </div>
+                        <div class="site-page-footer-col">
+                            <h4>Veräin</h4>
+                            <div class="site-page-footer-links">
+                                <a href="gallery.html">Galerie</a>
+                                <a href="memories.html">Memories</a>
+                                <a href="links.html">Useful Links</a>
+                                <a href="hallenkarte.html">Hallenkarte</a>
+                                <a href="comite.html">Comité</a>
+                                <a href="historie.html">Historie</a>
+                            </div>
+                        </div>
+                        <div class="site-page-footer-col">
+                            <h4>Service</h4>
+                            <div class="site-page-footer-links">
+                                <a href="join.html">Join Us</a>
+                                <a href="contact.html">Contact</a>
+                                <a href="impressum.html">Impressum</a>
+                                <a href="terms.html">Terms &amp; Conditions</a>
+                                <a href="dataprotection.html">Data Protection</a>
+                            </div>
+                        </div>
+                        <div class="site-page-footer-col">
+                            <h4>Kontakt</h4>
+                            <div class="site-page-footer-links">
+                                <a href="mailto:info@mersch75.lu">info@mersch75.lu</a>
+                                <a href="tel:+35228800399">Tél. : 288 00 399</a>
+                                <span>21, rue des Prés · L-7561 Mersch</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="site-page-footer-bottom">
+                        <span class="site-page-footer-legal">RCS: F2345 · BCEELULL: LU730019220008607000</span>
+                        <span>&#169; <span id="current-year"></span> Mersch75 Handball</span> <a class="admin-link" href="generator.html">Admin Login</a>
+                    </div>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="script.js"></script>
+    <script>
+        (function() {
+            const defaultLogo = "Media/Logos FLH Eq/Logo-Mersch75-2.jpg";
+            const flhLogo = "Media/LOGO-FLH-zu-4x-hochskalieren-zu-4x-hochskalieren-scaled.png";
+            const halls = [
+                { name: "Hall Omnisports Mersch", address: "21, rue des Prés, L-7561 Mersch", lat: 49.750606, lng: 6.102292, type: "mersch", teams: ["Mersch75", "Spiele", "Training"], logo: defaultLogo, note: "Hauptspielhalle von Mersch75. Spiele werden hauptsächlich hier ausgetragen.", email: "info@mersch75.lu", website: "https://www.mersch75.lu" },
+                { name: "Hall Omnisports Krounebierg", address: "rue de la Piscine, L-7572 Mersch", lat: 49.7587, lng: 6.1018, type: "mersch", teams: ["Mersch75", "Training", "Spiele"], logo: defaultLogo, photo: "Media/Training/Krounebierg_2x-scaled.png", note: "Trainingshalle von Mersch75. Spiele finden manchmal auch hier statt.", email: "info@mersch75.lu", website: "https://www.mersch75.lu" },
+                { name: "Sporthalle Lintgen", address: "Rue de la Gare, L-7448 Lintgen", lat: 49.720917, lng: 6.122515, type: "mersch", teams: ["Mersch75", "Training Erwachsene"], logo: defaultLogo, note: "Trainingshalle für Erwachsene von Mersch75.", email: "info@mersch75.lu", website: "https://www.mersch75.lu" },
+                { name: "Salle des Sports École fondamentale Lintgen", address: "50, rue de la Gare, L-7448 Lintgen", lat: 49.7169, lng: 6.1311, type: "mersch", teams: ["Mersch75", "U4"], logo: defaultLogo, photo: "Media/Training/Salle-des-sports-Ecole-fondamentale.jpg", note: "Trainingshalle für U4.", email: "info@mersch75.lu", website: "https://www.mersch75.lu" },
+                { name: "Hall Leudelange", address: "7, Place des Martyrs, L-3361 Leudelange", lat: 49.566466, lng: 6.062698, type: "luxembourg", teams: ["HB Leideleng"], logo: "Media/Logos FLH Eq/RedSharks-Leideleng-1.jpg", email: "info@hbleideleng.lu", website: "https://www.hbleideleng.lu" },
+                { name: "Hall sportif Diekirch", address: "Rue Joseph Merten, L-9254 Diekirch", lat: 49.863927, lng: 6.165794, type: "luxembourg", teams: ["CHEV Diekirch"], logo: "Media/Logos FLH Eq/CHEV_Logo_CMYK.png", email: "office@chev.lu", website: "https://www.chev.lu" },
+                { name: "Centre Sportif Bim Diederich", address: "46, rue Pierre Hamer, L-4737 Pétange", lat: 49.558456, lng: 5.869603, type: "luxembourg", teams: ["HB Pétange"], logo: "Media/Logos FLH Eq/HBPeiteng-1.jpg", email: "ca@hbpeiteng.lu", website: "https://www.hbpeiteng.com" },
+                { name: "Centre sportif et polyvalent de Rodange", address: "9, rue Joseph Moscardo, L-4840 Rodange", lat: 49.546524, lng: 5.837309, type: "luxembourg", teams: ["HB Pétange 2"], logo: "Media/Logos FLH Eq/HBPeiteng-1.jpg", email: "ca@hbpeiteng.lu", website: "https://www.hbpeiteng.com" },
+                { name: "Hall Rumelange", address: "66, rue des Martyrs, L-3739 Rumelange", lat: 49.456145, lng: 6.029312, type: "luxembourg", teams: ["Esp Rumelange"], logo: "Media/Logos FLH Eq/Esperance-Remeleng-1.jpg", email: "hbremeleng@yahoo.de", website: "https://www.instagram.com/hbrumelange/" },
+                { name: "Hall Schifflange", address: "12, rue du Parc, L-3872 Schifflange", lat: 49.5076, lng: 6.0129, type: "luxembourg", teams: ["HBC Schifflange"], logo: "Media/Logos FLH Eq/HBC-Schifflange-1001-1.jpg", email: "info@hbcs.lu", website: "https://www.hbcs.lu" },
+                { name: "Hall Omnisports Redange", address: "20, rue Seitert, L-8508 Redange/Attert", lat: 49.768727, lng: 5.897042, type: "luxembourg", teams: ["HC Redange"], logo: "Media/Logos FLH Eq/HC-Reiden-1.jpg", email: "hcatert@email.lu", website: "https://www.hcatert.lu" },
+                { name: "Hall sportif Op Flohr", address: "Op Flohr, L-6751 Grevenmacher", lat: 49.6806, lng: 6.4439, type: "luxembourg", teams: ["HB Museldall"], logo: "Media/Logos FLH Eq/HB-Museldall-1.jpg", email: "info@hbmuseldall.lu", website: "https://www.hbmuseldall.lu" },
+                { name: "Centre sportif René Hartmann", address: "2, rue René Hartmann, L-3425 Dudelange", lat: 49.484406, lng: 6.089559, type: "luxembourg", teams: ["HB Dudelange"], logo: "Media/Logos FLH Eq/Logo-HBD-1.jpg", email: "contact@hbd.lu", website: "https://www.hbd.lu" },
+                { name: "Hall Oberkorn", address: "av. Parc des Sports, L-4671 Oberkorn", lat: 49.5119, lng: 5.8983, type: "luxembourg", teams: ["Red Boys Differdange"], logo: "Media/Logos FLH Eq/RedBoys-1.jpg", email: "info@handballredboys.lu", website: "https://www.handball.lu/redboys" },
+                { name: "Hall Niederkorn", address: "100, rue JB Scharlé, L-4666 Niederkorn", lat: 49.5362, lng: 5.8942, type: "luxembourg", teams: ["Red Boys Differdange"], logo: "Media/Logos FLH Eq/RedBoys-1.jpg", email: "info@handballredboys.lu", website: "https://www.handball.lu/redboys" },
+                { name: "Hall Differdange / Fousbann", address: "2, place des Alliés, L-4508 Differdange", lat: 49.5222, lng: 5.8906, type: "luxembourg", teams: ["Red Boys Differdange"], logo: "Media/Logos FLH Eq/RedBoys-1.jpg", email: "info@handballredboys.lu", website: "https://www.handball.lu/redboys" },
+                { name: "Käerjenger Dribbel", address: "54E, avenue de Luxembourg, L-4950 Bascharage", lat: 49.562795, lng: 5.904595, type: "luxembourg", teams: ["HB Käerjeng", "Käerjeng/Esch"], logo: "Media/Logos FLH Eq/EntenteKaerjengEsch-1.jpg", email: "office@hbk.lu", website: "https://www.hbk.lu" },
+                { name: "Kannercampus Belval", address: "Place Marcelle-Lentz-Cornette, Belval", lat: 49.506694, lng: 5.935262, type: "luxembourg", teams: ["HB Bieles", "HB Bieles/Pétange"], logo: "Media/Logos FLH Eq/Handball-Bieles-1.jpg", email: "info@handball-bieles.lu", website: "https://www.handball-bieles.lu" },
+                { name: "Hall Omnisports Bonnevoie", address: "42, rue Jean-François Gangler, L-1613 Luxembourg", lat: 49.596420, lng: 6.145797, type: "luxembourg", teams: ["HC Standard"], logo: "Media/Logos FLH Eq/HC-Standard-1.jpg", email: "hc.standard@pt.lu", website: "https://www.hcstandard.lu" },
+                { name: "Hall Omnisports Crauthem", address: "Rue Alexandre Schintgen, L-3330 Crauthem", lat: 49.537959, lng: 6.146589, type: "luxembourg", teams: ["HC Berchem"], logo: "Media/Logos FLH Eq/HC-Berchem-1.jpg", email: "hcberchem@hcberchem.lu", website: "https://www.hcberchem.lu" },
+                { name: "Centre Omnisports Henri Schmitz", address: "34, Boulevard Hubert Clément, L-4064 Esch-sur-Alzette", lat: 49.5034, lng: 5.9763, type: "luxembourg", teams: ["HB Esch", "Handball Esch"], logo: "Media/Logos FLH Eq/HB-Esch-1.jpg", email: "info@handballesch.lu", website: "https://www.handballesch.lu" },
+                { name: "Fédération Luxembourgeoise de Handball Asbl (F.L.H.)", address: "Maison des Sports Josy Barthel, 3, route d'Arlon, L-8009 Strassen", lat: 49.616374, lng: 6.094697, type: "luxembourg", teams: ["F.L.H.", "Maison des Sports"], logo: flhLogo, email: "mail@flh.lu", website: "https://www.flh.lu" },
+                { name: "Hall sportif communal Um Bruch", address: "3, Au Village, B-6717 Tontelange, Attert, Belgique", lat: 49.721411, lng: 5.802139, type: "belgium", teams: ["HBC Attert (B)"], logo: "Media/Logos FLH Eq/HBC-Attert-1-scaled.jpg", email: "handballclub.attert@gmail.com", website: "https://www.facebook.com/handballclub.arlon" }
+            ];
+
+            const map = L.map("m75LuxHallMap", { scrollWheelZoom: false }).setView([49.68, 6.05], 9);
+            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                maxZoom: 19,
+                attribution: "&copy; OpenStreetMap"
+            }).addTo(map);
+
+            const bounds = L.latLngBounds([]);
+            const markerLayer = L.layerGroup().addTo(map);
+            const markerByIndex = new Map();
+            const list = document.getElementById("m75HallList");
+
+            function iconFor(hall) {
+                const cls = hall.type === "mersch" ? "mersch" : hall.type === "belgium" ? "belgium" : "";
+                return L.divIcon({
+                    className: "",
+                    html: '<div class="m75-pin ' + cls + '"><div class="m75-pin-shape"></div></div>',
+                    iconSize: [38, 50],
+                    iconAnchor: [19, 50],
+                    popupAnchor: [0, -48]
+                });
+            }
+
+            function mapsUrl(address) {
+                return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(address);
+            }
+
+            function routeUrl(address) {
+                return "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(address);
+            }
+
+            function escapeHtml(str) {
+                return String(str).replace(/[&<>"']/g, function(c) {
+                    return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+                });
+            }
+
+            function popupHtml(hall) {
+                const teams = hall.teams.map(function(team) { return '<span class="m75-team-pill">' + escapeHtml(team) + '</span>'; }).join("");
+                const contact = '<div class="m75-popup-contact">' +
+                    (hall.email ? '<a href="mailto:' + encodeURIComponent(hall.email) + '">✉ ' + escapeHtml(hall.email) + '</a>' : '') +
+                    (hall.website ? '<a href="' + encodeURI(hall.website) + '" target="_blank" rel="noopener">🌐 Website</a>' : '') +
+                    '</div>';
+                const note = hall.note ? '<div class="m75-popup-note">' + escapeHtml(hall.note) + '</div>' : '';
+                const visual = hall.photo
+                    ? '<div class="m75-popup-visual"><div><img class="m75-hall-photo" src="' + encodeURI(hall.photo) + '" alt="' + escapeHtml(hall.name) + '" loading="lazy"><br><img class="m75-club-logo" src="' + encodeURI(hall.logo) + '" alt="' + escapeHtml(hall.teams[0]) + ' Logo" loading="lazy"></div></div>'
+                    : '<div class="m75-popup-visual"><div><img class="m75-club-logo" src="' + encodeURI(hall.logo) + '" alt="' + escapeHtml(hall.teams[0]) + ' Logo" loading="lazy"><br><span class="m75-photo-note">Hallenfoto folgt</span></div></div>';
+                return '<div class="m75-popup">' +
+                    visual +
+                    '<h3>' + escapeHtml(hall.name) + '</h3>' +
+                    '<p>' + escapeHtml(hall.address) + '</p>' +
+                    '<div class="m75-popup-teams">' + teams + '</div>' +
+                    note +
+                    contact +
+                    '<div class="m75-popup-actions"><a href="' + routeUrl(hall.address) + '" target="_blank" rel="noopener">Route planen</a><a href="' + mapsUrl(hall.address) + '" target="_blank" rel="noopener">Google Maps</a></div>' +
+                    '</div>';
+            }
+
+            function render(filter) {
+                markerLayer.clearLayers();
+                list.innerHTML = "";
+                markerByIndex.clear();
+                const visibleBounds = L.latLngBounds([]);
+
+                halls.forEach(function(hall, index) {
+                    if (filter !== "all" && hall.type !== filter) return;
+
+                    const marker = L.marker([hall.lat, hall.lng], { icon: iconFor(hall) }).bindPopup(popupHtml(hall));
+                    marker.addTo(markerLayer);
+                    markerByIndex.set(index, marker);
+                    visibleBounds.extend([hall.lat, hall.lng]);
+                    bounds.extend([hall.lat, hall.lng]);
+
+                    const card = document.createElement("button");
+                    card.type = "button";
+                    card.className = "m75-hall-card";
+                    card.innerHTML = '<img src="' + encodeURI(hall.logo) + '" alt="' + escapeHtml(hall.teams[0]) + ' Logo" loading="lazy"><span><strong>' + escapeHtml(hall.name) + '</strong><span>' + escapeHtml(hall.address) + '</span></span>';
+                    card.addEventListener("click", function() {
+                        map.setView([hall.lat, hall.lng], 14);
+                        marker.openPopup();
+                    });
+                    list.appendChild(card);
+                });
+
+                if (visibleBounds.isValid()) {
+                    map.fitBounds(visibleBounds.pad(0.12));
+                }
+            }
+
+            // Scroll-Wheel-Zoom nur aktivieren, wenn die Karte fokussiert/angeklickt ist
+            map.on("focus click", function() { map.scrollWheelZoom.enable(); });
+            map.on("blur mouseout", function() { map.scrollWheelZoom.disable(); });
+
+            document.querySelectorAll(".m75-map-filter").forEach(function(button) {
+                button.addEventListener("click", function() {
+                    document.querySelectorAll(".m75-map-filter").forEach(function(item) {
+                        item.classList.remove("active");
+                    });
+                    button.classList.add("active");
+                    render(button.getAttribute("data-filter"));
+                });
+            });
+
+            render("all");
+        })();
+    </script>
+</body>
+</html>
