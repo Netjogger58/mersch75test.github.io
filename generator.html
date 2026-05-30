@@ -21,7 +21,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="js/generator-gate.js?v=20260519c" defer></script>
-<script src="js/generator-publish.js?v=20260519c" defer></script>
 <script src="js/flh-live-sync.js?v=20260520a" defer></script>
 
 <style>
@@ -194,10 +193,6 @@
     <div class="controls" style="margin:20px;">
         <h2 style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
             <span>Matchday Generator</span>
-            <button type="button" id="btn-gen-settings" title="Veroeffentlichungs-Einstellungen" style="border:1px solid var(--border-gray);background:#fff;color:var(--primary-blue);font-size:13px;font-weight:700;border-radius:6px;padding:6px 12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;">
-                <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" style="fill:currentColor;"><path d="M19.43 12.98a7.97 7.97 0 0 0 .07-1c0-.34-.03-.67-.07-1l2.11-1.65a.5.5 0 0 0 .12-.64l-2-3.46a.5.5 0 0 0-.61-.22l-2.49 1a7.65 7.65 0 0 0-1.73-1l-.38-2.65A.5.5 0 0 0 14 2h-4a.5.5 0 0 0-.5.42l-.38 2.65a7.65 7.65 0 0 0-1.73 1l-2.49-1a.5.5 0 0 0-.61.22l-2 3.46a.5.5 0 0 0 .12.64L4.52 11c-.04.33-.07.66-.07 1s.03.67.07 1l-2.11 1.65a.5.5 0 0 0-.12.64l2 3.46c.14.24.43.32.61.22l2.49-1c.52.4 1.1.73 1.73 1l.38 2.65c.04.24.25.42.5.42h4c.25 0 .46-.18.5-.42l.38-2.65c.63-.27 1.21-.6 1.73-1l2.49 1c.18.1.47.02.61-.22l2-3.46a.5.5 0 0 0-.12-.64l-2.11-1.65zM12 15.5A3.5 3.5 0 1 1 12 8.5a3.5 3.5 0 0 1 0 7z"/></svg>
-                Einstellungen
-            </button>
         </h2>
         <div class="magic-box">
             <h3>✨ Magischer Scanner</h3>
@@ -311,7 +306,6 @@
                         <div class="download-option" data-format="jpeg">📷 JPEG 4K Qualität</div>
                         <div class="download-option" data-format="pdf">📄 PDF Druck-optimiert</div>
                         <div class="download-option" data-format="home" style="border-top:2px solid var(--primary-blue);background:#fffbea;color:var(--primary-blue);">🏠 Auf Homepage übernehmen</div>
-                        <div class="download-option" data-format="publish" id="download-option-publish" style="background:linear-gradient(90deg,#ffde00,#ffb800);color:var(--primary-blue);font-weight:900;">🚀 Direkt veröffentlichen</div>
                     </div>
                 </div>
             </div>
@@ -819,7 +813,8 @@ function renderPortraitControls() {
     html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><label class="team-main-cb" style="color:var(--secondary-blue);cursor:default;margin:0;">🎚️ Kopfzeile &amp; Poster</label><button type="button" class="btn-reset" onclick="resetHeaderSettings()">🔄 Reset</button></div>';
     html += '<div class="team-slider-wrap" style="margin-top:10px;border-top:none;">';
     html += '<div class="slider-row"><span class="sl-lbl">Poster B.</span><input type="range" id="p-scale-width" min="650" max="1200" value="800" oninput="this.nextElementSibling.innerText=this.value;updatePortraitPreview();"><span class="sl-val">800</span></div>';
-    html += '<div class="slider-row"><span class="sl-lbl">Poster H.</span><input type="range" id="p-scale-height" min="866" max="2000" value="1180" oninput="this.nextElementSibling.innerText=this.value;updatePortraitPreview();"><span class="sl-val">1180</span></div>';
+    html += '<div class="slider-row"><span class="sl-lbl">Poster H.</span><input type="range" id="p-scale-height" min="866" max="2500" value="1180" oninput="this.nextElementSibling.innerText=this.value;var af=document.getElementById(\'p-autofit-height\');if(af)af.checked=false;updatePortraitPreview();"><span class="sl-val">1180</span></div>';
+    html += '<div class="slider-row" style="justify-content:flex-start;gap:8px;"><label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--primary-blue);cursor:pointer;"><input type="checkbox" id="p-autofit-height" checked onchange="updatePortraitPreview();"> Höhe autom. an Teams anpassen</label></div>';
     html += '<div class="slider-row"><span class="sl-lbl">50 J.</span> <input type="range" id="p-scale-50years" min="40" max="150" value="100" oninput="this.nextElementSibling.innerText=this.value;updatePortraitPreview();"><span class="sl-val">100</span></div>';
     html += '<div class="slider-row"><span class="sl-lbl">MixVoip</span><input type="range" id="p-scale-mixvoip" min="100" max="400" value="280" oninput="this.nextElementSibling.innerText=this.value;updatePortraitPreview();"><span class="sl-val">280</span></div>';
     html += '<div class="slider-row"><span class="sl-lbl">Matchd.</span><input type="range" id="p-scale-matchday" min="40" max="250" value="130" oninput="this.nextElementSibling.innerText=this.value;updatePortraitPreview();"><span class="sl-val">130</span></div>';
@@ -1967,7 +1962,54 @@ function updatePortraitPreview() {
         cont.appendChild(gb);
     }
     
+    autoFitPortraitHeight();
     scalePoster();
+
+    // Falls Team-Fotos/Logos noch laden, Höhe nach dem Laden erneut anpassen.
+    const afEl = document.getElementById('p-autofit-height');
+    if (afEl && afEl.checked) {
+        const imgs = cont.querySelectorAll('img');
+        for (let i = 0; i < imgs.length; i++) {
+            const im = imgs[i];
+            if (!im.complete) {
+                im.addEventListener('load', function() { autoFitPortraitHeight(); scalePoster(); }, { once: true });
+                im.addEventListener('error', function() { autoFitPortraitHeight(); scalePoster(); }, { once: true });
+            }
+        }
+    }
+}
+
+function autoFitPortraitHeight() {
+    const afEl = document.getElementById('p-autofit-height');
+    if (!afEl || !afEl.checked) return;
+    const pp = document.getElementById('poster-portrait');
+    const hEl = document.getElementById('p-scale-height');
+    if (!pp || !hEl) return;
+
+    // Temporär die Höhe freigeben, damit das Layout seine natürliche Höhe melden kann.
+    const prevH = pp.style.height;
+    const prevMinH = pp.style.minHeight;
+    const prevTransform = pp.style.transform;
+    pp.style.transform = 'none';
+    pp.style.height = 'auto';
+    pp.style.minHeight = '0';
+
+    // 30px Sicherheitsabstand, damit nichts angeschnitten wird.
+    const natural = pp.scrollHeight + 30;
+
+    const min = parseInt(hEl.min, 10) || 866;
+    const max = parseInt(hEl.max, 10) || 2500;
+    const clamped = Math.max(min, Math.min(max, natural));
+
+    hEl.value = clamped;
+    const valSpan = hEl.nextElementSibling;
+    if (valSpan) valSpan.innerText = clamped;
+
+    pp.style.height = clamped + 'px';
+    pp.style.minHeight = clamped + 'px';
+    pp.style.transform = prevTransform;
+    // prevH/prevMinH werden bewusst verworfen — neue Werte sind maßgeblich.
+    void prevH; void prevMinH;
 }
 
 function downloadPortraitImage() {
@@ -2039,23 +2081,22 @@ function downloadPosterWithFormat(fmt) {
                 const pdf = new window.jspdf.jsPDF({ orientation: 'landscape', unit: 'px', format: [1600, 838] });
                 pdf.addImage(c.toDataURL('image/png', 1.0), 'PNG', 0, 0, 1600, 838); 
                 pdf.save('Mersch75_Matchday.pdf');
-            } else if (fmt === 'home') {
-                const stamp = pickPosterDateStamp();
-                const fname = 'MatchPoster ' + stamp + '.jpg';
-                const dataUrl = c.toDataURL('image/jpeg', 0.95);
-                const a = document.createElement('a');
-                a.download = fname;
-                a.href = dataUrl;
-                a.click();
-                openHomepageHandoffModal(fname);
-            } else if (fmt === 'publish') {
+            } else if (fmt === 'home' || fmt === 'publish') {
+                // Lokaler Publish-Flow: Landscape + Portrait mit den exakten
+                // Dateinamen erzeugen, die index.html referenziert. Der User
+                // muss sie nur noch nach Media/Hauptseite/ ziehen (ersetzen)
+                // und committen + pushen.
                 const stamp = pickPosterDateStamp();
                 const landscapeUrl = c.toDataURL('image/jpeg', 0.95);
+                triggerDownload(landscapeUrl, 'current-matchposter.jpg');
                 renderPortraitDataUrl().then(function (portraitUrl) {
-                    publishCurrentPoster(landscapeUrl, portraitUrl, stamp);
+                    setTimeout(function () {
+                        triggerDownload(portraitUrl, 'current-matchposter-portrait.jpg');
+                        openHomepageHandoffModal(stamp, true);
+                    }, 400);
                 }).catch(function (err) {
-                    console.warn('Portrait-Render fehlgeschlagen, publiziere nur Landscape:', err);
-                    publishCurrentPoster(landscapeUrl, null, stamp);
+                    console.warn('Portrait-Render fehlgeschlagen, nur Landscape geladen:', err);
+                    openHomepageHandoffModal(stamp, false);
                 });
             } else {
                 const a = document.createElement('a'); 
@@ -2088,11 +2129,22 @@ function pickPosterDateStamp() {
 
 // Zeigt eine Schritt-fuer-Schritt-Anleitung zum manuellen Uebernehmen des
 // gerade heruntergeladenen Posters auf die Homepage.
-function openHomepageHandoffModal(fname) {
+function triggerDownload(dataUrl, filename) {
+    var a = document.createElement('a');
+    a.download = filename;
+    a.href = dataUrl;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () { try { document.body.removeChild(a); } catch (e) {} }, 100);
+}
+
+function openHomepageHandoffModal(stamp, hasPortrait) {
     var existing = document.getElementById('home-handoff-modal');
     if (existing) existing.remove();
-    var encoded = fname.replace(/ /g, '%20');
-    var snippet = '<img src="Media/Hauptseite/' + encoded + '" alt="Mersch75 Matchposter">';
+    var files = hasPortrait
+        ? '<code>current-matchposter.jpg</code> + <code>current-matchposter-portrait.jpg</code>'
+        : '<code>current-matchposter.jpg</code>';
+    var gitMsg = 'Matchposter ' + stamp;
     var modal = document.createElement('div');
     modal.id = 'home-handoff-modal';
     modal.className = 'gen-modal';
@@ -2101,18 +2153,16 @@ function openHomepageHandoffModal(fname) {
     modal.innerHTML = ''
         + '<div class="gen-modal-card" style="max-width:560px;">'
         +   '<button type="button" class="gen-modal-close" aria-label="Schliessen">&times;</button>'
-        +   '<h2>Poster auf die Homepage</h2>'
-        +   '<p class="gen-modal-lead">Datei <strong>' + fname + '</strong> wurde heruntergeladen. Drei Schritte zum Veroeffentlichen:</p>'
+        +   '<h2>Poster auf d\'Homepage</h2>'
+        +   '<p class="gen-modal-lead">' + files + ' goufen erofgeluede. Just 2 Schrëtt:</p>'
         +   '<ol style="padding-left:20px;font-size:0.92rem;line-height:1.55;color:#333;margin:0 0 14px;">'
-        +     '<li>Datei nach <code>Media/Hauptseite/</code> verschieben (vorhandene <em>MatchPoster …</em>-Datei kann bleiben, wird vom neuen img-Tag ueberschrieben).</li>'
-        +     '<li>In <code>index.html</code> den <code>&lt;img&gt;</code>-Tag im <code>poster-section-hero</code> ersetzen durch:</li>'
+        +     '<li>Datei(en) an <code>Media/Hauptseite/</code> ofsetzen — bestehend Datei <strong>iwwerschreiwen</strong> (gläiche Numm).</li>'
+        +     '<li>Commit + Push:</li>'
         +   '</ol>'
-        +   '<pre style="background:#0f172a;color:#ffde00;padding:12px;border-radius:8px;font-size:11.5px;overflow-x:auto;margin:0 0 8px;"><code id="home-handoff-snippet">' + snippet.replace(/</g, '&lt;') + '</code></pre>'
-        +   '<button type="button" class="gen-modal-cancel" id="home-handoff-copy" style="margin-bottom:14px;">In Zwischenablage kopieren</button>'
-        +   '<ol start="3" style="padding-left:20px;font-size:0.92rem;line-height:1.55;color:#333;margin:0;">'
-        +     '<li>Aenderungen committen und pushen (<code>git add … &amp;&amp; git commit -m "Matchposter ' + fname + '" &amp;&amp; git push</code>).</li>'
-        +   '</ol>'
-        +   '<div class="gen-modal-actions"><button type="button" class="gen-modal-submit" id="home-handoff-ok">Verstanden</button></div>'
+        +   '<pre style="background:#0f172a;color:#ffde00;padding:12px;border-radius:8px;font-size:11.5px;overflow-x:auto;margin:0 0 8px;"><code id="home-handoff-cmd">git add Media/Hauptseite/current-matchposter*.jpg &amp;&amp; git commit -m "' + gitMsg + '" &amp;&amp; git push</code></pre>'
+        +   '<button type="button" class="gen-modal-cancel" id="home-handoff-copy" style="margin-bottom:14px;">Befehl kopéieren</button>'
+        +   '<p style="font-size:0.85rem;color:#555;margin:0;">D\'<code>index.html</code> verlinkt schonn op dës Dateinimm — keng weider Ännerung néideg.</p>'
+        +   '<div class="gen-modal-actions"><button type="button" class="gen-modal-submit" id="home-handoff-ok">Verstanen</button></div>'
         + '</div>';
     document.body.appendChild(modal);
     var close = function () { modal.remove(); };
@@ -2120,184 +2170,20 @@ function openHomepageHandoffModal(fname) {
     modal.querySelector('#home-handoff-ok').addEventListener('click', close);
     modal.addEventListener('click', function (ev) { if (ev.target === modal) close(); });
     modal.querySelector('#home-handoff-copy').addEventListener('click', function () {
-        var text = snippet;
-        try { navigator.clipboard.writeText(text).then(function () {
-            this.innerText = 'Kopiert ✓';
-        }.bind(this)); } catch (e) {
+        var text = modal.querySelector('#home-handoff-cmd').textContent;
+        var self = this;
+        try { navigator.clipboard.writeText(text).then(function () { self.innerText = 'Kopéiert ✓'; }); } catch (e) {
             try {
                 var ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select();
                 document.execCommand('copy'); document.body.removeChild(ta);
-                this.innerText = 'Kopiert ✓';
+                self.innerText = 'Kopéiert ✓';
             } catch (e2) {}
         }
     });
 }
 
-// === Phase 4b: 1-Klick-Veroeffentlichung via GitHub Contents API ===========
-function openPublishSettingsModal() {
-    if (!window.MerschPublish) { alert('Publish-Modul nicht geladen.'); return; }
-    var existing = document.getElementById('publish-settings-modal');
-    if (existing) existing.remove();
-    var cfg = window.MerschPublish.getConfig();
-    var modal = document.createElement('div');
-    modal.id = 'publish-settings-modal';
-    modal.className = 'gen-modal';
-    modal.setAttribute('role', 'dialog');
-    modal.setAttribute('aria-modal', 'true');
-    modal.innerHTML = ''
-        + '<div class="gen-modal-card" style="max-width:520px;">'
-        +   '<button type="button" class="gen-modal-close" aria-label="Schliessen">&times;</button>'
-        +   '<h2>Veroeffentlichungs-Einstellungen</h2>'
-        +   '<p class="gen-modal-lead">Du kannst entweder den bestehenden GitHub-Token-Pfad nutzen oder einen sicheren Proxy-Endpoint hinterlegen, der das eigentliche Secret serverseitig haelt.</p>'
-        +   '<label class="gen-modal-label">Publish-Modus<select class="gen-modal-input" id="pst-mode"><option value="github"' + (cfg.mode === 'proxy' ? '' : ' selected') + '>Direkt via GitHub-Token</option><option value="proxy"' + (cfg.mode === 'proxy' ? ' selected' : '') + '>Sicherer Proxy-Endpoint</option></select></label>'
-        +   '<div id="pst-proxy-fields" style="margin-top:8px;">'
-        +     '<label class="gen-modal-label" style="margin:0;">Proxy-URL<input type="url" class="gen-modal-input" id="pst-proxy-url" value="' + (cfg.proxyUrl || '') + '" placeholder="https://publish.example.com/mersch75/poster"></label>'
-        +     '<p style="margin:8px 0 0;font-size:0.82rem;color:#555;line-height:1.45;">Empfohlen fuer echte Sicherheit: der Browser sendet nur das Poster an einen geschuetzten HTTPS-Endpoint. Das GitHub-Secret bleibt dabei ausserhalb des Browsers.</p>'
-        +   '</div>'
-        +   '<div id="pst-github-fields">'
-        +   '<details style="margin:0 0 14px;font-size:0.86rem;color:#444;">'
-        +     '<summary style="cursor:pointer;font-weight:700;color:var(--primary-blue);">Wie bekomme ich einen Token?</summary>'
-        +     '<ol style="padding-left:18px;line-height:1.5;margin:8px 0 0;">'
-        +       '<li><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Fine-grained PAT erstellen</a> (eingeloggt als Repo-Besitzer).</li>'
-        +       '<li><strong>Repository access</strong> &rarr; <em>Only select repositories</em> &rarr; <em>mersch75test.github.io</em>.</li>'
-        +       '<li><strong>Permissions</strong> &rarr; <em>Contents: Read and write</em>.</li>'
-        +       '<li>Ablaufdatum waehlen (z.B. 90 Tage) und Token kopieren.</li>'
-        +     '</ol>'
-        +   '</details>'
-        +     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;">'
-        +       '<label class="gen-modal-label" style="margin:0;">Owner<input type="text" class="gen-modal-input" id="pst-owner" value="' + cfg.owner + '"></label>'
-        +       '<label class="gen-modal-label" style="margin:0;">Branch<input type="text" class="gen-modal-input" id="pst-branch" value="' + cfg.branch + '"></label>'
-        +     '</div>'
-        +     '<label class="gen-modal-label" style="margin-top:8px;">Repository<input type="text" class="gen-modal-input" id="pst-repo" value="' + cfg.repo + '"></label>'
-        +     '<label class="gen-modal-label">GitHub Token<input type="password" class="gen-modal-input" id="pst-token" autocomplete="off" value="' + (cfg.token || '') + '" placeholder="github_pat_..."></label>'
-        +   '</div>'
-        +   '<form class="gen-modal-form" id="publish-settings-form">'
-        +     '<div id="pst-status" style="font-size:0.85rem;min-height:20px;margin-top:8px;color:#444;"></div>'
-        +     '<div class="gen-modal-actions" style="flex-wrap:wrap;gap:8px;">'
-        +       '<button type="button" class="gen-modal-cancel" id="pst-clear">Token loeschen</button>'
-        +       '<button type="button" class="gen-modal-cancel" id="pst-test">Token testen</button>'
-        +       '<button type="submit" class="gen-modal-submit">Speichern</button>'
-        +     '</div>'
-        +   '</form>'
-        + '</div>';
-    document.body.appendChild(modal);
-    var close = function () { modal.remove(); };
-    var $ = function (s) { return modal.querySelector(s); };
-    var status = $('#pst-status');
-    var setStatus = function (msg, ok) { status.style.color = ok === true ? '#1a7f37' : (ok === false ? '#c0392b' : '#444'); status.textContent = msg || ''; };
-    var readForm = function () {
-        return {
-            mode: $('#pst-mode').value,
-            proxyUrl: $('#pst-proxy-url').value.trim(),
-            token: $('#pst-token').value.trim(),
-            owner: $('#pst-owner').value.trim(),
-            repo: $('#pst-repo').value.trim(),
-            branch: $('#pst-branch').value.trim()
-        };
-    };
-    var syncModeUi = function () {
-        var mode = $('#pst-mode').value;
-        $('#pst-proxy-fields').style.display = mode === 'proxy' ? '' : 'none';
-        $('#pst-github-fields').style.display = mode === 'proxy' ? 'none' : '';
-        $('#pst-clear').textContent = mode === 'proxy' ? 'Endpoint loeschen' : 'Token loeschen';
-    };
-
-    $('.gen-modal-close').addEventListener('click', close);
-    modal.addEventListener('click', function (ev) { if (ev.target === modal) close(); });
-    $('#pst-mode').addEventListener('change', syncModeUi);
-    $('#pst-clear').addEventListener('click', function () {
-        if (!confirm('Publish-Einstellungen wirklich loeschen?')) return;
-        window.MerschPublish.clearAll();
-        $('#pst-token').value = '';
-        $('#pst-proxy-url').value = '';
-        $('#pst-mode').value = 'github';
-        syncModeUi();
-        setStatus('Geloescht.', true);
-        updatePublishOptionVisibility();
-    });
-    $('#pst-test').addEventListener('click', function () {
-        var f = readForm();
-        if (f.mode === 'proxy' && !f.proxyUrl) { setStatus('Bitte zuerst eine Proxy-URL eintragen.', false); return; }
-        if (f.mode !== 'proxy' && !f.token) { setStatus('Bitte zuerst Token eintragen.', false); return; }
-        setStatus(f.mode === 'proxy' ? 'Pruefe Proxy-Konfiguration...' : 'Pruefe Token...');
-        window.MerschPublish.testTarget(f).then(function (info) {
-            if (info.mode === 'proxy') {
-                setStatus('OK: Proxy-Endpoint gespeichert: ' + info.target, true);
-                return;
-            }
-            setStatus('OK: angemeldet als ' + info.user + ', Repo ' + info.repo + ' erreichbar.', true);
-        }).catch(function (err) { setStatus(err.message || String(err), false); });
-    });
-    $('#publish-settings-form').addEventListener('submit', function (ev) {
-        ev.preventDefault();
-        var f = readForm();
-        if (f.mode === 'proxy' && !f.proxyUrl) { setStatus('Bitte Proxy-URL eintragen oder Modus wechseln.', false); return; }
-        if (f.mode !== 'proxy' && !f.token) { setStatus('Bitte Token eintragen oder Modus wechseln.', false); return; }
-        window.MerschPublish.setConfig(f);
-        setStatus('Gespeichert.', true);
-        updatePublishOptionVisibility();
-        setTimeout(close, 600);
-    });
-    syncModeUi();
-    setTimeout(function () { $('#pst-token').focus(); }, 50);
-}
-
-function updatePublishOptionVisibility() {
-    var opt = document.getElementById('download-option-publish');
-    if (!opt) return;
-    var ok = window.MerschPublish && window.MerschPublish.canPublish();
-    opt.style.display = ok ? '' : 'none';
-}
-
-function publishCurrentPoster(landscapeDataUrl, portraitDataUrl, stamp) {
-    if (!window.MerschPublish || !window.MerschPublish.canPublish()) {
-        alert('Bitte zuerst in den Generator-Einstellungen entweder einen GitHub-Token oder einen Proxy-Endpoint hinterlegen.');
-        openPublishSettingsModal();
-        return;
-    }
-    var existing = document.getElementById('publish-progress-modal');
-    if (existing) existing.remove();
-    var modal = document.createElement('div');
-    modal.id = 'publish-progress-modal';
-    modal.className = 'gen-modal';
-    modal.setAttribute('role', 'dialog');
-    modal.setAttribute('aria-modal', 'true');
-    modal.innerHTML = ''
-        + '<div class="gen-modal-card" style="max-width:460px;">'
-        +   '<h2>Poster veroeffentlichen</h2>'
-        +   '<p class="gen-modal-lead" id="pub-progress-msg">Vorbereitung...</p>'
-        +   '<div id="pub-progress-actions" style="display:none;">'
-        +     '<div class="gen-modal-actions">'
-        +       '<a class="gen-modal-cancel" href="https://mersch75test.github.io/" target="_blank" rel="noopener">Live-Seite oeffnen</a>'
-        +       '<button type="button" class="gen-modal-submit" id="pub-progress-close">Schliessen</button>'
-        +     '</div>'
-        +   '</div>'
-        + '</div>';
-    document.body.appendChild(modal);
-    var msg = modal.querySelector('#pub-progress-msg');
-    var actions = modal.querySelector('#pub-progress-actions');
-    var done = function (text, ok) {
-        msg.textContent = text;
-        msg.style.color = ok ? '#1a7f37' : '#c0392b';
-        actions.style.display = '';
-        var btn = modal.querySelector('#pub-progress-close');
-        btn.addEventListener('click', function () { modal.remove(); });
-    };
-    window.MerschPublish.publish(landscapeDataUrl, portraitDataUrl, stamp, function (step) { msg.textContent = step; }).then(function (res) {
-        var modeLabel = res.mode === 'proxy' ? 'Proxy' : 'GitHub';
-        done('Fertig! Poster ' + res.stamp + ' wurde via ' + modeLabel + ' angestossen und wird in ~30s live sein.', true);
-    }).catch(function (err) {
-        var hint = (err && err.message) || String(err);
-        if (/401|403/.test(hint)) hint += '\n\nTipp: Token in den Einstellungen pruefen (Repo + Contents: Read and write).';
-        done('Fehler: ' + hint, false);
-    });
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-    var btn = document.getElementById('btn-gen-settings');
-    if (btn) btn.addEventListener('click', function (e) { e.preventDefault(); openPublishSettingsModal(); });
-    setTimeout(updatePublishOptionVisibility, 0);
-});
+// === Phase 4b entfernt: Veroeffentlichung laeuft jetzt rein lokal ueber den
+// 'Auf Homepage uebernehmen'-Modus (Datei downloaden + manueller git push). ==
 
 (function() {
     function qs(sel, root) { return (root || document).querySelector(sel); }

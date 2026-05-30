@@ -28,7 +28,9 @@
                 <a href="historie.html">Historie</a>
                 <a href="news.html">News</a>
                 <a href="gallery.html">Galerie</a>
-                <a href="links.html">Links</a>
+                <a href="memories.html">Memories</a>
+                <a href="links.html">Useful Links</a>
+                <a href="hallenkarte.html">Hallenkarte</a>
                 <a href="join.html">Join Us</a>
                 <a href="community.html">Community</a>
                 <a href="contact.html">Contact</a>
@@ -37,10 +39,15 @@
 
         <main class="page-main">
             <section class="page-hero staff-hero comite-hero">
-                <img class="staff-hero-logo" src="Media/Inside/Logo-Menu-Mersch75-M75-CA-2025.png" alt="Comité Mersch75 Logo">
+                <div class="comite-hero-logo-wrap">
+                    <img class="staff-hero-logo" src="Media/Inside/Logo-Menu-Mersch75-M75-CA-2025.png" alt="Comité Mersch75 Logo">
+                    <a class="statuten-badge" href="https://www.mersch75.lu/wp-content/uploads/2026/04/Statuten_Mersch75-Handball-Club.pdf" target="_blank" rel="noopener" title="Statuten Mersch75 Handball Club (PDF)">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="16" height="16"><path fill="currentColor" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 7V3.5L18.5 9H13z"/></svg>
+                        <span>Statuten<br><small>PDF</small></span>
+                    </a>
+                </div>
                 <div class="comite-hero-text">
                     <h1>Comité &amp; Departementer</h1>
-                    <p class="org-lead">Executive, Sekretariat an operationell Departementer vum Mersch75 Handball op ee Bléck.</p>
                     <div class="org-contact-pills">
                         <a href="mailto:info@mersch75.lu">info@mersch75.lu</a>
                         <a href="mailto:jugend@mersch75.lu">jugend@mersch75.lu</a>
@@ -52,7 +59,7 @@
             <section class="org-chart-container inside-panel" id="inside-panel-comite" data-inside-panel="comite">
                 <div class="org-wrapper">
                     <div class="hierarchy-container">
-                        <div class="org-tier">
+                        <div class="org-tier org-tier--president">
                             <div class="org-card org-card--lead">
                                 <span class="role-title">Präsident</span>
                                 <span class="role-name">Jeff Schuster</span>
@@ -250,6 +257,55 @@
                         text-align: center;
                     }
 
+                    .comite-hero-logo-wrap {
+                        position: relative;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                    .comite-hero-logo-wrap .staff-hero-logo {
+                        display: block;
+                    }
+                    .statuten-badge {
+                        position: absolute;
+                        right: -8px;
+                        bottom: -8px;
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 8px;
+                        padding: 9px 14px;
+                        border-radius: 14px;
+                        background: linear-gradient(135deg, #0d2f8f 0%, #1a47c4 100%);
+                        color: #ffde00;
+                        font-family: 'Outfit', 'Space Grotesk', system-ui, sans-serif;
+                        font-size: 0.78rem;
+                        font-weight: 800;
+                        line-height: 1.05;
+                        letter-spacing: 0.02em;
+                        text-decoration: none;
+                        box-shadow: 0 6px 18px rgba(13, 47, 143, 0.32), 0 2px 4px rgba(0, 0, 0, 0.08);
+                        transition: transform 0.18s ease, box-shadow 0.18s ease;
+                    }
+                    .statuten-badge small {
+                        display: block;
+                        font-size: 0.62rem;
+                        font-weight: 700;
+                        opacity: 0.85;
+                        letter-spacing: 0.08em;
+                    }
+                    .statuten-badge:hover {
+                        transform: translateY(-2px) scale(1.03);
+                        box-shadow: 0 10px 24px rgba(13, 47, 143, 0.4), 0 2px 6px rgba(0, 0, 0, 0.1);
+                    }
+                    @media (max-width: 520px) {
+                        .statuten-badge {
+                            right: -4px;
+                            bottom: -12px;
+                            padding: 7px 11px;
+                            font-size: 0.72rem;
+                        }
+                    }
+
                     .comite-hero-text {
                         max-width: 640px;
                         display: flex;
@@ -428,6 +484,46 @@
                         font-size: 1.1rem;
                     }
 
+                    .org-tier--president {
+                        display: flex;
+                        align-items: stretch;
+                        justify-content: center;
+                        gap: 18px;
+                        flex-wrap: wrap;
+                    }
+
+                    .org-card--welcome-mapp {
+                        background: linear-gradient(135deg, #fffdf0 0%, #fff6c2 100%);
+                        color: var(--org-blue-700);
+                        border: 2px solid var(--org-gold);
+                        border-top: 4px solid var(--org-gold);
+                        text-decoration: none;
+                        padding: 22px 28px;
+                        min-width: 260px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        box-shadow: var(--org-shadow-sm);
+                    }
+
+                    .org-card--welcome-mapp::after {
+                        background: radial-gradient(180px 80px at 0% 0%, rgba(0, 43, 92, 0.06), transparent 70%);
+                    }
+
+                    .org-card--welcome-mapp:hover {
+                        transform: translateY(-2px);
+                        box-shadow: var(--org-shadow-lg);
+                    }
+
+                    .org-card--welcome-mapp .role-title {
+                        color: var(--org-blue-700);
+                    }
+
+                    .org-card--welcome-mapp .role-name {
+                        font-size: 0.95rem;
+                        font-weight: 600;
+                    }
+
                     .org-card--coord {
                         background: #ffffff;
                         color: var(--org-blue-700);
@@ -502,20 +598,21 @@
                     .weider-columns {
                         display: grid;
                         grid-template-columns: repeat(3, minmax(0, 1fr));
-                        gap: 12px 24px;
-                        margin-top: 12px;
-                        padding: 12px 18px 4px;
-                        background: rgba(255, 255, 255, 0.06);
-                        border-radius: 10px;
+                        gap: 6px 24px;
+                        margin-top: 0;
+                        padding: 0;
+                        background: transparent;
+                        border-radius: 0;
                     }
 
                     .weider-col {
                         display: flex;
                         flex-direction: column;
                         gap: 4px;
-                        font-size: 0.9rem;
-                        font-weight: 500;
-                        text-align: left;
+                        font-size: 0.98rem;
+                        font-weight: 600;
+                        letter-spacing: 0.01em;
+                        text-align: center;
                         color: #ffffff;
                     }
 
@@ -762,13 +859,17 @@
                         <img src="Media/Logos FLH Eq/Logo-Mersch75-50-Joer-3D.png" alt="Mersch75 50 Joer">
                         <div>
                             <strong>Mersch75 Handball</strong>
-                            <p>Training, Matchday, News an Club-Liewen an enger kloerer Struktur mat direktem Service-Zougang fir nei Spiller, Familljen a Supporter.</p>
-                        </div>
+                            <div class="site-page-footer-social" aria-label="Social Media">
+                                <a href="https://www.facebook.com/mersch75" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5 3.66 9.15 8.44 9.94v-7.03H7.9v-2.91h2.54V9.84c0-2.52 1.49-3.91 3.78-3.91 1.09 0 2.24.2 2.24.2v2.47h-1.26c-1.24 0-1.63.78-1.63 1.57v1.89h2.77l-.44 2.91h-2.33V22c4.78-.79 8.44-4.94 8.44-9.94z"/></svg><span class="visually-hidden">Facebook</span></a>
+                                <a href="https://www.youtube.com/Netjogger58" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M23.5 6.2a3.02 3.02 0 0 0-2.13-2.14C19.46 3.5 12 3.5 12 3.5s-7.46 0-9.37.56A3.02 3.02 0 0 0 .5 6.2C0 8.12 0 12 0 12s0 3.88.5 5.8a3.02 3.02 0 0 0 2.13 2.14c1.91.56 9.37.56 9.37.56s7.46 0 9.37-.56a3.02 3.02 0 0 0 2.13-2.14C24 15.88 24 12 24 12s0-3.88-.5-5.8zM9.6 15.57V8.43L15.82 12 9.6 15.57z"/></svg><span class="visually-hidden">YouTube</span></a>
+                                <a href="https://www.instagram.com/hbmersch75/" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2.2c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.42.56.22.96.48 1.38.9.42.42.68.82.9 1.38.17.42.37 1.06.42 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.42 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.17-1.06.37-2.23.42-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.42a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.17-.42-.37-1.06-.42-2.23C2.21 15.58 2.2 15.2 2.2 12s.01-3.58.07-4.85c.05-1.17.25-1.8.42-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.17 1.06-.37 2.23-.42C8.42 2.21 8.8 2.2 12 2.2zm0 2.16c-3.15 0-3.5.01-4.74.07-1.07.05-1.65.23-2.04.38-.51.2-.88.44-1.27.83-.39.39-.63.76-.83 1.27-.15.39-.33.97-.38 2.04-.06 1.24-.07 1.59-.07 4.74s.01 3.5.07 4.74c.05 1.07.23 1.65.38 2.04.2.51.44.88.83 1.27.39.39.76.63 1.27.83.39.15.97.33 2.04.38 1.24.06 1.59.07 4.74.07s3.5-.01 4.74-.07c1.07-.05 1.65-.23 2.04-.38.51-.2.88-.44 1.27-.83.39-.39.63-.76.83-1.27.15-.39.33-.97.38-2.04.06-1.24.07-1.59.07-4.74s-.01-3.5-.07-4.74c-.05-1.07-.23-1.65-.38-2.04a3.42 3.42 0 0 0-.83-1.27 3.42 3.42 0 0 0-1.27-.83c-.39-.15-.97-.33-2.04-.38C15.5 4.37 15.15 4.36 12 4.36zm0 3.68a3.96 3.96 0 1 1 0 7.92 3.96 3.96 0 0 1 0-7.92zm0 6.53a2.57 2.57 0 1 0 0-5.14 2.57 2.57 0 0 0 0 5.14zm5.04-6.69a.93.93 0 1 1-1.86 0 .93.93 0 0 1 1.86 0z"/></svg><span class="visually-hidden">Instagram</span></a>
+                            </div>                        </div>
                     </div>
                     <div class="site-page-footer-cols">
                         <div class="site-page-footer-col">
                             <h4>Sport</h4>
                             <div class="site-page-footer-links">
+                                <a href="index.html">Startseite</a>
                                 <a href="training.html">Training</a>
                                 <a href="trainerstaff.html">Trainerstaff</a>
                                 <a href="news.html">News</a>
@@ -778,7 +879,9 @@
                             <h4>Veräin</h4>
                             <div class="site-page-footer-links">
                                 <a href="gallery.html">Galerie</a>
-                                <a href="links.html">Links</a>
+                                <a href="memories.html">Memories</a>
+                                <a href="links.html">Useful Links</a>
+                                <a href="hallenkarte.html">Hallenkarte</a>
                                 <a href="comite.html">Comité</a>
                                 <a href="historie.html">Historie</a>
                             </div>
@@ -787,6 +890,7 @@
                             <h4>Service</h4>
                             <div class="site-page-footer-links">
                                 <a href="join.html">Join Us</a>
+                                <a href="contact.html">Contact</a>
                                 <a href="impressum.html">Impressum</a>
                                 <a href="terms.html">Terms &amp; Conditions</a>
                                 <a href="dataprotection.html">Data Protection</a>
@@ -796,20 +900,14 @@
                             <h4>Kontakt</h4>
                             <div class="site-page-footer-links">
                                 <a href="mailto:info@mersch75.lu">info@mersch75.lu</a>
-                                <a href="tel:+35228800399">Tél. 288 00 399</a>
+                                <a href="tel:+35228800399">Tél. : 288 00 399</a>
                                 <span>21, rue des Prés · L-7561 Mersch</span>
-                                <span>B.P. 75 · L-7501 Mersch</span>
                             </div>
                         </div>
                     </div>
                     <div class="site-page-footer-bottom">
                         <span class="site-page-footer-legal">RCS: F2345 · BCEELULL: LU730019220008607000</span>
                         <span>&#169; <span id="current-year"></span> Mersch75 Handball</span> <a class="admin-link" href="generator.html">Admin Login</a>
-                        <div class="site-page-footer-social" aria-label="Social Media">
-                            <a href="https://www.facebook.com/mersch75" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5 3.66 9.15 8.44 9.94v-7.03H7.9v-2.91h2.54V9.84c0-2.52 1.49-3.91 3.78-3.91 1.09 0 2.24.2 2.24.2v2.47h-1.26c-1.24 0-1.63.78-1.63 1.57v1.89h2.77l-.44 2.91h-2.33V22c4.78-.79 8.44-4.94 8.44-9.94z"/></svg><span class="visually-hidden">Facebook</span></a>
-                            <a href="https://www.youtube.com/Netjogger58" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M23.5 6.2a3.02 3.02 0 0 0-2.13-2.14C19.46 3.5 12 3.5 12 3.5s-7.46 0-9.37.56A3.02 3.02 0 0 0 .5 6.2C0 8.12 0 12 0 12s0 3.88.5 5.8a3.02 3.02 0 0 0 2.13 2.14c1.91.56 9.37.56 9.37.56s7.46 0 9.37-.56a3.02 3.02 0 0 0 2.13-2.14C24 15.88 24 12 24 12s0-3.88-.5-5.8zM9.6 15.57V8.43L15.82 12 9.6 15.57z"/></svg><span class="visually-hidden">YouTube</span></a>
-                            <a href="https://www.instagram.com/hbmersch75/" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2.2c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.42.56.22.96.48 1.38.9.42.42.68.82.9 1.38.17.42.37 1.06.42 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.42 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.17-1.06.37-2.23.42-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.42a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.17-.42-.37-1.06-.42-2.23C2.21 15.58 2.2 15.2 2.2 12s.01-3.58.07-4.85c.05-1.17.25-1.8.42-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.17 1.06-.37 2.23-.42C8.42 2.21 8.8 2.2 12 2.2zm0 2.16c-3.15 0-3.5.01-4.74.07-1.07.05-1.65.23-2.04.38-.51.2-.88.44-1.27.83-.39.39-.63.76-.83 1.27-.15.39-.33.97-.38 2.04-.06 1.24-.07 1.59-.07 4.74s.01 3.5.07 4.74c.05 1.07.23 1.65.38 2.04.2.51.44.88.83 1.27.39.39.76.63 1.27.83.39.15.97.33 2.04.38 1.24.06 1.59.07 4.74.07s3.5-.01 4.74-.07c1.07-.05 1.65-.23 2.04-.38.51-.2.88-.44 1.27-.83.39-.39.63-.76.83-1.27.15-.39.33-.97.38-2.04.06-1.24.07-1.59.07-4.74s-.01-3.5-.07-4.74c-.05-1.07-.23-1.65-.38-2.04a3.42 3.42 0 0 0-.83-1.27 3.42 3.42 0 0 0-1.27-.83c-.39-.15-.97-.33-2.04-.38C15.5 4.37 15.15 4.36 12 4.36zm0 3.68a3.96 3.96 0 1 1 0 7.92 3.96 3.96 0 0 1 0-7.92zm0 6.53a2.57 2.57 0 1 0 0-5.14 2.57 2.57 0 0 0 0 5.14zm5.04-6.69a.93.93 0 1 1-1.86 0 .93.93 0 0 1 1.86 0z"/></svg><span class="visually-hidden">Instagram</span></a>
-                        </div>
                     </div>
                 </div>
             </footer>
