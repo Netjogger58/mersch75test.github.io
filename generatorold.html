@@ -331,10 +331,8 @@
                             <img class="img-50" src="Media/Logos FLH Eq/Logo-Mersch75-50-Joer-3D.png" crossorigin="anonymous" alt="50">
                         </div>
                         
-                        <div class="p-matchday-banner" style="display:flex;align-items:center;justify-content:center;gap:12px;">
-                            <img class="img-matchday-logo-left" src="Media/Sponsoring/Mixvoip.png" crossorigin="anonymous" alt="Mixvoip" style="height:auto;object-fit:contain;">
+                        <div class="p-matchday-banner">
                             <img src="Media/Matchday2.png" crossorigin="anonymous" alt="Matchday">
-                            <img class="img-matchday-logo-right" src="Media/Sponsoring/Mixvoip.png" crossorigin="anonymous" alt="Mixvoip" style="height:auto;object-fit:contain;">
                         </div>
                     </div>
                     
@@ -741,21 +739,6 @@ function renderFormBlocks() {
         html += '<div class="col"><label>Kategorie</label><select id="' + team.id + '-type" class="category-select trigger-view">' + typeOpts + '</select></div>';
         html += '</div>';
         html += '<input type="text" id="' + team.id + '-loc" class="trigger-view trigger-text" placeholder="Adresse">';
-        html += '<div style="margin-top:8px;">';
-        html += '<button type="button" onclick="toggleExtraGame(\'' + team.id + '\')" style="background:none;border:1px dashed var(--secondary-blue);color:var(--secondary-blue);border-radius:4px;padding:4px 10px;font-size:11px;font-weight:800;cursor:pointer;width:100%;">+ Englische Woche (2. Spiel)</button>';
-        html += '</div>';
-        html += '<div id="extra-' + team.id + '" style="display:none;margin-top:8px;background:#f0f8ff;border:1px solid #b3d4ff;border-radius:6px;padding:8px;">';
-        html += '<div style="font-size:10px;font-weight:800;color:var(--secondary-blue);margin-bottom:6px;text-transform:uppercase;">2. Spiel (Englische Woche)</div>';
-        html += '<div class="row">';
-        html += '<div class="col"><select id="' + team.id + '-home2" class="trigger-autofill2" data-team="' + team.id + '"><option value="home1">Heim (Halle 1)</option><option value="home2">Heim (Krounebierg)</option><option value="away">Auswärts</option></select></div>';
-        html += '<div class="col"><select id="' + team.id + '-opp2" class="trigger-autofill2" data-team="' + team.id + '">' + teamOpts + '</select></div>';
-        html += '</div>';
-        html += '<div class="row">';
-        html += '<div class="col"><label>Datum</label><input type="date" id="' + team.id + '-date2"></div>';
-        html += '<div class="col"><label>Uhrzeit</label><input type="time" id="' + team.id + '-time2"></div>';
-        html += '</div>';
-        html += '<input type="text" id="' + team.id + '-loc2" placeholder="Adresse" style="width:100%;padding:8px;border:1px solid var(--border-gray);border-radius:4px;font-size:13px;margin-top:4px;">';
-        html += '</div>';
         html += '</div>';
     }
     grid.innerHTML = html;
@@ -1202,28 +1185,6 @@ function magicScan() {
 
             activateTeamCheckboxes(p); toggleTeam(p, true); autoFill(p, true);
 
-            // Zweites Spiel: falls schon ein Spiel für diese Mannschaft geladen wurde,
-            // wird das nächste Spiel derselben Mannschaft in Slot 2 eingetragen.
-            if (document.getElementById(p + '-date') && document.getElementById(p + '-date').value) {
-                const d2El = document.getElementById(p + '-date2');
-                const t2El = document.getElementById(p + '-time2');
-                const o2El = document.getElementById(p + '-opp2');
-                const h2El = document.getElementById(p + '-home2');
-                if (d2El && !d2El.value && dm) {
-                    const extraBox = document.getElementById('extra-' + p);
-                    if (extraBox && extraBox.style.display === 'none') {
-                        extraBox.style.display = 'block';
-                    }
-                    let yr2 = dm[3]; if (yr2.length === 2) yr2 = '20' + yr2;
-                    d2El.value = yr2 + '-' + dm[2].padStart(2,'0') + '-' + dm[1].padStart(2,'0');
-                    if (tm && t2El) t2El.value = tm[1].padStart(2,'0') + ':' + tm[2];
-                    if (opp && o2El) o2El.value = opp;
-                    if (h2El) h2El.value = document.getElementById(p + '-home').value;
-                    const l2El = document.getElementById(p + '-loc2');
-                    if (l2El) l2El.value = document.getElementById(p + '-loc') ? document.getElementById(p + '-loc').value : '';
-                }
-            }
-
             const lEl = document.getElementById(p + '-loc');
             if (lEl && typeof hallCodes !== 'undefined') {
                 for (let code in hallCodes) { if (line.indexOf(code) !== -1) { lEl.value = hallCodes[code]; break; } }
@@ -1237,20 +1198,6 @@ function magicScan() {
         for (let i = 0; i < lines.length; i++) { if (lines[i].trim().length > 0) { hadData = true; break; } }
         if (hadData) { const txtArea = document.getElementById('magic-text'); if (txtArea) txtArea.value = ""; } 
     }, 150);
-}
-
-function toggleExtraGame(teamId) {
-    const box = document.getElementById('extra-' + teamId);
-    if (!box) return;
-    const isOpen = box.style.display !== 'none';
-    box.style.display = isOpen ? 'none' : 'block';
-    if (isOpen) {
-        const d2 = document.getElementById(teamId + '-date2'); if (d2) d2.value = '';
-        const t2 = document.getElementById(teamId + '-time2'); if (t2) t2.value = '';
-        const o2 = document.getElementById(teamId + '-opp2'); if (o2) o2.value = '-';
-        const l2 = document.getElementById(teamId + '-loc2'); if (l2) l2.value = '';
-    }
-    updateAllPreviews();
 }
 
 function autoFill(prefix, skipPreview) {
@@ -1860,18 +1807,8 @@ function updatePortraitPreview() {
     const im = document.querySelector('.p-header-top .img-mixvoip');
     if (im) im.style.width = sm + 'px';
     
-    const id = document.querySelector('.p-matchday-banner img:not(.img-matchday-logo-left):not(.img-matchday-logo-right)'); 
+    const id = document.querySelector('.p-matchday-banner img'); 
     if (id) id.style.height = sd + 'px';
-    const logoML = document.querySelector('.img-matchday-logo-left');
-    const logoMR = document.querySelector('.img-matchday-logo-right');
-    const h1Extra = document.getElementById('extra-s1');
-    const h2Extra = document.getElementById('extra-s2');
-    const h1Has2 = !!(h1Extra && h1Extra.style.display !== 'none' && document.getElementById('s1-date2') && document.getElementById('s1-date2').value);
-    const h2Has2 = !!(h2Extra && h2Extra.style.display !== 'none' && document.getElementById('s2-date2') && document.getElementById('s2-date2').value);
-    const showSideLogos = h1Has2 || h2Has2;
-    const logoSide = Math.round(parseInt(sd, 10) * 0.85);
-    if (logoML) { logoML.style.height = logoSide + 'px'; logoML.style.display = showSideLogos ? 'block' : 'none'; }
-    if (logoMR) { logoMR.style.height = logoSide + 'px'; logoMR.style.display = showSideLogos ? 'block' : 'none'; }
     const cont = document.getElementById('p-dynamic-container'); 
     if (!cont) return;
     cont.innerHTML = '';
@@ -1967,9 +1904,6 @@ function updatePortraitPreview() {
         const locEl = document.getElementById(prefix + '-loc');
         const locVal = locEl ? locEl.value : "";
         
-        const bs = sl * 0.8;
-        const bf = bs * 0.45;
-
         if (hasGame && (dv || locVal)) {
             const ds = dv ? formatDate(dv, tv2) : ""; 
             let ls = "";
@@ -1980,44 +1914,9 @@ function updatePortraitPreview() {
             }
             ih2 = '<div class="p-game-info" style="font-family:\'Barlow\',sans-serif;font-size:' + sx + 'px;"><span class="date" style="font-weight:800;color:var(--primary-blue);">' + ds + '</span><br><span style="font-weight:600;color:#444;">' + ls + '</span></div>';
         }
-
-        const date2El = document.getElementById(prefix + '-date2');
-        const time2El = document.getElementById(prefix + '-time2');
-        const opp2El = document.getElementById(prefix + '-opp2');
-        const home2El = document.getElementById(prefix + '-home2');
-        const loc2El = document.getElementById(prefix + '-loc2');
-        const dv2 = date2El ? date2El.value : '';
-        const tv2b = time2El ? time2El.value : '';
-        const opp2 = opp2El ? opp2El.value : '-';
-        const ih2b_home = home2El ? (home2El.value.indexOf('home') === 0) : true;
-        const loc2Val = loc2El ? loc2El.value : '';
-        let ih2b = '';
-        const extraVisible = document.getElementById('extra-' + prefix);
-        const hasGame2 = !!(extraVisible && extraVisible.style.display !== 'none' && dv2 && opp2 && opp2 !== '-');
-        if (hasGame2) {
-            const ds2 = formatDate(dv2, tv2b);
-            let ls2 = '';
-            if (loc2Val) {
-                const p2 = loc2Val.split('|');
-                for (let k = 0; k < p2.length; k++) { p2[k] = p2[k].trim(); }
-                ls2 = p2.join('<br>');
-            }
-            const ol2 = (typeof teams !== 'undefined' && teams[opp2]) ? teams[opp2] : CONFIG.ballLogo;
-            const ml2 = (prefix === 'fe') ? CONFIG.merschFELogo : CONFIG.merschLogo;
-            const l1b = ih2b_home ? ml2 : ol2;
-            const l2b = ih2b_home ? ol2 : ml2;
-            const typeEl2 = document.getElementById(prefix + '-type');
-            let tv2c = typeEl2 ? typeEl2.value : 'Season Games';
-            tv2c += (teamSuffixes[prefix] || '');
-            ih2b = '<div style="margin-top:8px;padding-top:8px;border-top:2px dashed var(--primary-yellow);width:100%;">';
-            ih2b += '<div class="p-game-matchup" style="margin-top:4px;">';
-            ih2b += '<div class="p-logo-box" style="width:' + (sl*0.7) + 'px;height:' + (sl*0.7) + 'px;"><img src="' + l1b + '" crossorigin="anonymous"></div>';
-            ih2b += '<div class="p-badge" style="width:' + (bs*0.7) + 'px;height:' + (bs*0.7) + 'px;"><div class="sub" style="font-size:' + (bf*0.25*0.7) + 'px;">' + tv2c + '</div><div class="main" style="font-size:' + (bf*0.7) + 'px;">' + mb + '</div></div>';
-            ih2b += '<div class="p-logo-box" style="width:' + (sl*0.7) + 'px;height:' + (sl*0.7) + 'px;"><img src="' + l2b + '" crossorigin="anonymous"></div>';
-            ih2b += '</div>';
-            ih2b += '<div class="p-game-info" style="font-family:\'Barlow\',sans-serif;font-size:' + (sx*0.9) + 'px;"><span class="date" style="font-weight:800;color:var(--primary-blue);">' + ds2 + '</span><br><span style="font-weight:600;color:#444;">' + ls2 + '</span></div>';
-            ih2b += '</div>';
-        }
+        
+        const bs = sl * 0.8;
+        const bf = bs * 0.45;
         
         const photoToggle = document.querySelector('.trigger-photo-toggle[data-team="' + prefix + '"]');
         const showPhoto = photoToggle && photoToggle.checked && window.teamPhotos[prefix];
@@ -2059,7 +1958,7 @@ function updatePortraitPreview() {
         }
         
         const mt = !stt ? 'margin-top:10px;' : '';
-        gb.innerHTML = titleHtmlStr + '<div class="p-game-matchup" style="' + mt + '">' + lh + '</div>' + (showPhoto ? '' : ih2) + (showPhoto ? '' : ih2b);
+        gb.innerHTML = titleHtmlStr + '<div class="p-game-matchup" style="' + mt + '">' + lh + '</div>' + (showPhoto ? '' : ih2);
         cont.appendChild(gb);
     }
     
@@ -2411,21 +2310,6 @@ function openHomepageHandoffModal(stamp, hasPortrait) {
         qsa('.trigger-autofill').forEach(function(el) {
             el.addEventListener('change', function() {
                 const t = el.getAttribute('data-team'); if (!t) return; autoFill(t);
-            });
-        });
-
-        qsa('.trigger-autofill2').forEach(function(el) {
-            el.addEventListener('change', function() {
-                const t = el.getAttribute('data-team'); if (!t) return;
-                const hs2 = document.getElementById(t + '-home2');
-                const o2 = document.getElementById(t + '-opp2');
-                const l2 = document.getElementById(t + '-loc2');
-                if (!hs2 || !o2 || !l2) return;
-                const ih2 = hs2.value.indexOf('home') === 0;
-                const opp2 = o2.value;
-                if (ih2) { l2.value = (hs2.value === 'home2') ? CONFIG.address2 : CONFIG.address1; }
-                else { l2.value = (typeof addresses !== 'undefined' && addresses[opp2]) ? addresses[opp2] : ''; }
-                updateAllPreviews();
             });
         });
 
