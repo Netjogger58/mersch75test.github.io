@@ -398,40 +398,26 @@ function sortAndInjectEnglischeWoche(games, weekStart, weekEnd) {
         const dt = parseGameDateValue(g);
         return dt && dt >= weekStart && dt <= weekEnd;
     });
-    // U13-Spiele in dieser Woche
-    const u13Games = weekGames.filter(g => g.team && g.team.toUpperCase().includes('U13'));
-    // Nur für U13: mehrere Spiele (englische Woche)
-    let filtered = weekGames.filter(g => {
-        const team = (g.team || '').toUpperCase();
-        // Bei U15/U11/U9 immer nur das erste Spiel nehmen
-        if (team.includes('U15')) {
-            return weekGames.findIndex(x => (x.team || '').toUpperCase().includes('U15')) === weekGames.indexOf(g);
-        }
-        if (team.includes('U11')) {
-            return weekGames.findIndex(x => (x.team || '').toUpperCase().includes('U11')) === weekGames.indexOf(g);
-        }
-        if (team.includes('U9')) {
-            return weekGames.findIndex(x => (x.team || '').toUpperCase().includes('U9')) === weekGames.indexOf(g);
-        }
-        // Bei U13 alle Spiele zulassen
-        return !team.includes('U15') && !team.includes('U11') && !team.includes('U9');
-    });
-
-    // Englische Woche NUR für U13: mehrere Spiele einsortieren
-    if (u13Games.length > 1) {
-        u13Games.sort((a, b) => parseGameDateValue(a) - parseGameDateValue(b));
-        // Entferne U13-Spiele aus filtered
-        let filteredNoU13 = filtered.filter(g => !(g.team && g.team.toUpperCase().includes('U13')));
-        // Füge U13-Spiele an gewünschte Position ein (nach U15)
-        let result = [];
-        let u15idx = filteredNoU13.findIndex(g => g.team && g.team.toUpperCase().includes('U15'));
-        if (u15idx === -1) u15idx = 0;
-        for (let i = 0; i <= u15idx && i < filteredNoU13.length; i++) result.push(filteredNoU13[i]);
-        result = result.concat(u13Games);
-        for (let i = u15idx + 1; i < filteredNoU13.length; i++) result.push(filteredNoU13[i]);
-        return result;
+    // Gruppiere Spiele nach Team
+    const teamMap = {};
+    for (const g of weekGames) {
+        const key = (g.team || '').toUpperCase();
+        if (!teamMap[key]) teamMap[key] = [];
+        teamMap[key].push(g);
     }
-    return filtered;
+    // Für Teams mit mehreren Spielen: alle anzeigen (englische Woche), sonst nur das eine
+    let result = [];
+    for (const team in teamMap) {
+        const gamesArr = teamMap[team];
+        if (gamesArr.length > 1) {
+            // Sortiere nach Datum
+            gamesArr.sort((a, b) => parseGameDateValue(a) - parseGameDateValue(b));
+            result = result.concat(gamesArr);
+        } else {
+            result.push(gamesArr[0]);
+        }
+    }
+    return result;
 }
 
 window.teamPhotos = {};
@@ -2043,13 +2029,49 @@ function updatePortraitPreview() {
         const cb = document.querySelector('.trigger-toggle[data-team="' + p + '"]');
         ap.push({ id: p, hasGame: cb && cb.checked });
     }
-    
+
+    // Filterlogik wie sortAndInjectEnglischeWoche
+    // Hole aktuelle Woche
+    let sel = document.getElementById('week-selector');
+    let weekStart = null, weekEnd = null;
+    if (sel && sel.value) {
+        let text = sel.options[sel.selectedIndex].text;
+        let parts = text.split('-');
+        const cleanDate = function(dStr) { let s = dStr.trim(); if(s.charAt(s.length - 1) === '.') { s = s.slice(0, -1); } return s; };
+        let startStr = cleanDate(parts[0]); let endStr = cleanDate(parts[1]); let p2 = endStr.split('.'); let yearStr = "";
+        if (p2.length === 3) { yearStr = p2[2]; }
+        let p1 = startStr.split('.'); if (p1.length >= 2) { if (p1.length === 2 || !p1[2] || p1[2] === "") { startStr = p1[0] + "." + p1[1] + "." + yearStr; } }
+        const parseD = function(s) { const p = s.split('.'); if (p.length < 3 || !p[2]) return 0; let yr = parseInt(p[2], 10); if (yr < 100) yr += 2000; return new Date(yr, parseInt(p[1], 10)-1, parseInt(p[0], 10)).getTime(); };
+        weekStart = new Date(parseD(startStr));
+        weekEnd = new Date(parseD(endStr) + 86399999);
+    }
+    let filteredGames = allGamesData;
+    if (weekStart && weekEnd) {
+        filteredGames = allGamesData.filter(g => {
+            const dt = parseGameDateValue(g);
+            return dt && dt >= weekStart && dt <= weekEnd;
+        });
+    }
+    // Gruppiere Spiele nach Team, für alle Teams mit mehreren Spielen: alle anzeigen
+    const teamMap = {};
+    for (const g of filteredGames) {
+        const key = getNormalizedGeneratorTeamKey(g.team);
+        if (!teamMap[key]) teamMap[key] = [];
+        teamMap[key].push(g);
+    }
+    let gamesByTeam = {};
+    for (let i = 0; i < ap.length; i++) {
+        const tid = ap[i].id;
+        const arr = teamMap[tid] || [];
+        gamesByTeam[tid] = arr;
+    }
+
     if (ap.length === 0) { 
         cont.innerHTML = '<h2 style="color:#002f65;text-align:center;width:100%;">Bitte wählen Sie<br>Teams aus.</h2>';
         scalePoster(); 
         return; 
     }
-    
+
     ap.sort(function(a, b) { 
         const posAEl = document.querySelector('.trigger-port-pos[data-team="' + a.id + '"]');
         const posBEl = document.querySelector('.trigger-port-pos[data-team="' + b.id + '"]');
