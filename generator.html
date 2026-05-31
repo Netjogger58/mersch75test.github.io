@@ -1003,40 +1003,27 @@ async function loadSavedSchedule() {
         const jugendOrder = [
             g => g.team && g.team.toUpperCase().includes('U15'),
             g => g.team && g.team.toUpperCase().includes('U13'),
-            g => g.team && g.team.toUpperCase().includes('U13'),
             g => g.team && g.team.toUpperCase().includes('U11') && g.team.toUpperCase().includes('EL'),
             g => g.team && g.team.toUpperCase().includes('TOURNOI')
         ];
-        let used = new Set();
         let ordered = [];
+        let usedIdx = new Set();
         for (let f = 0; f < jugendOrder.length; f++) {
-            let found = weekGames.filter((g, idx) => !used.has(idx) && jugendOrder[f](g));
+            let found = weekGames
+                .map((g, idx) => ({ g, idx }))
+                .filter(({ g, idx }) => !usedIdx.has(idx) && jugendOrder[f](g));
             if (found.length > 0) {
-                // Für U13 beide Spiele einzeln einsortieren
-                if (f === 1 || f === 2) {
-                    if (found.length > 1) {
-                        found.sort((a, b) => parseGameDateValue(a) - parseGameDateValue(b));
-                        let idx = f - 1;
-                        if (found[idx]) {
-                            let origIdx = weekGames.indexOf(found[idx]);
-                            if (origIdx !== -1) used.add(origIdx);
-                            ordered.push(found[idx]);
-                        }
-                    } else if (found.length === 1 && f === 1) {
-                        let origIdx = weekGames.indexOf(found[0]);
-                        if (origIdx !== -1) used.add(origIdx);
-                        ordered.push(found[0]);
-                    }
-                } else {
-                    let origIdx = weekGames.indexOf(found[0]);
-                    if (origIdx !== -1) used.add(origIdx);
-                    ordered.push(found[0]);
+                // Sortiere nach Datum
+                found.sort((a, b) => parseGameDateValue(a.g) - parseGameDateValue(b.g));
+                for (const { g, idx } of found) {
+                    ordered.push(g);
+                    usedIdx.add(idx);
                 }
             }
         }
         // Rest anhängen
         for (let i = 0; i < weekGames.length; i++) {
-            if (!used.has(i)) ordered.push(weekGames[i]);
+            if (!usedIdx.has(i)) ordered.push(weekGames[i]);
         }
         // Export
         for (let i = 0; i < ordered.length; i++) {
