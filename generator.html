@@ -379,6 +379,49 @@
     </div>
 </div>
 <script>
+
+// --- Automatische Sortierung und Anzeige der englischen Woche für U13 ---
+function isChampionshipPeriod(date) {
+    // Meisterschaftszeitraum: letzte Augustwoche bis 15.7. der Folgesaison
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const seasonStart = new Date(year, 7, 20); // 20. August
+    const seasonEnd = new Date(year + 1, 6, 15, 23, 59, 59); // 15. Juli
+    // Falls wir im Juni/Juli sind, Saisonstart ist im Vorjahr
+    if (d.getMonth() < 7) seasonStart.setFullYear(year - 1);
+    return d >= seasonStart && d <= seasonEnd;
+}
+
+function sortAndInjectEnglischeWoche(games, weekStart, weekEnd) {
+    // Filter für aktuelle Woche
+    const weekGames = games.filter(g => {
+        const dt = parseGameDateValue(g);
+        return dt && dt >= weekStart && dt <= weekEnd;
+    });
+    // U13-Spiele in dieser Woche
+    const u13Games = weekGames.filter(g => g.team && g.team.toUpperCase().includes('U13'));
+    // Prüfe auf englische Woche (mehr als 1 Spiel U13)
+    if (u13Games.length > 1) {
+        // Sortiere nach Datum
+        u13Games.sort((a, b) => parseGameDateValue(a) - parseGameDateValue(b));
+        // Entferne U13-Spiele aus weekGames
+        let filtered = weekGames.filter(g => !(g.team && g.team.toUpperCase().includes('U13')));
+        // Füge U13-Spiele an gewünschte Position ein (nach U15)
+        let result = [];
+        // U15 suchen
+        let u15idx = filtered.findIndex(g => g.team && g.team.toUpperCase().includes('U15'));
+        if (u15idx === -1) u15idx = 0;
+        // Bis inkl. U15 kopieren
+        for (let i = 0; i <= u15idx && i < filtered.length; i++) result.push(filtered[i]);
+        // Dann alle U13-Spiele (englische Woche)
+        result = result.concat(u13Games);
+        // Rest anhängen
+        for (let i = u15idx + 1; i < filtered.length; i++) result.push(filtered[i]);
+        return result;
+    }
+    return weekGames;
+}
+
 window.teamPhotos = {};
 
 const CONFIG = {
@@ -951,15 +994,57 @@ async function loadSavedSchedule() {
     if (p2.length === 3) { yearStr = p2[2]; }
     let p1 = startStr.split('.'); if (p1.length >= 2) { if (p1.length === 2 || !p1[2] || p1[2] === "") { startStr = p1[0] + "." + p1[1] + "." + yearStr; } }
     const parseD = function(s) { const p = s.split('.'); if (p.length < 3 || !p[2]) return 0; let yr = parseInt(p[2], 10); if (yr < 100) yr += 2000; return new Date(yr, parseInt(p[1], 10)-1, parseInt(p[0], 10)).getTime(); };
-    const startT = parseD(startStr); const endT = parseD(endStr) + 86399999; let rawText = "";
+    const startT = parseD(startStr); const endT = parseD(endStr) + 86399999;
+    let rawText = "";
     if (typeof allGamesData !== 'undefined') {
-        for (let i = 0; i < allGamesData.length; i++) {
-            const game = allGamesData[i]; if (!game.datum || game.datum === "-") continue;
-            const gameDateStr = cleanDate(game.datum.split(' ')[0]); const gT = parseD(gameDateStr);
-            if (gT >= startT && gT <= endT) {
-                const halleStr = game.halle ? " " + game.halle : "";
-                rawText += game.team + " " + game.datum + halleStr + " " + game.heim + " - " + game.gast + "\n";
+        // --- Automatische Sortierung und englische Woche für U13 ---
+        let weekGames = sortAndInjectEnglischeWoche(allGamesData, new Date(startT), new Date(endT));
+        // Jugendmannschaften groß und in gewünschter Reihenfolge
+        // Reihenfolge: U15, U13 (frühestes), U13 (spätestes), U11 Elite, Turnierform, Rest
+        const jugendOrder = [
+            g => g.team && g.team.toUpperCase().includes('U15'),
+            g => g.team && g.team.toUpperCase().includes('U13'),
+            g => g.team && g.team.toUpperCase().includes('U13'),
+            g => g.team && g.team.toUpperCase().includes('U11') && g.team.toUpperCase().includes('EL'),
+            g => g.team && g.team.toUpperCase().includes('TOURNOI')
+        ];
+        let used = new Set();
+        let ordered = [];
+        for (let f = 0; f < jugendOrder.length; f++) {
+            let found = weekGames.filter((g, idx) => !used.has(idx) && jugendOrder[f](g));
+            if (found.length > 0) {
+                // Für U13 beide Spiele einzeln einsortieren
+                if (f === 1 || f === 2) {
+                    if (found.length > 1) {
+                        found.sort((a, b) => parseGameDateValue(a) - parseGameDateValue(b));
+                        let idx = f - 1;
+                        if (found[idx]) {
+                            let origIdx = weekGames.indexOf(found[idx]);
+                            if (origIdx !== -1) used.add(origIdx);
+                            ordered.push(found[idx]);
+                        }
+                    } else if (found.length === 1 && f === 1) {
+                        let origIdx = weekGames.indexOf(found[0]);
+                        if (origIdx !== -1) used.add(origIdx);
+                        ordered.push(found[0]);
+                    }
+                } else {
+                    let origIdx = weekGames.indexOf(found[0]);
+                    if (origIdx !== -1) used.add(origIdx);
+                    ordered.push(found[0]);
+                }
             }
+        }
+        // Rest anhängen
+        for (let i = 0; i < weekGames.length; i++) {
+            if (!used.has(i)) ordered.push(weekGames[i]);
+        }
+        // Export
+        for (let i = 0; i < ordered.length; i++) {
+            const game = ordered[i];
+            if (!game.datum || game.datum === "-") continue;
+            const halleStr = game.halle ? " " + game.halle : "";
+            rawText += game.team + " " + game.datum + halleStr + " " + game.heim + " - " + game.gast + "\n";
         }
     }
     if (rawText.trim().length > 0) { const txtArea = document.getElementById('magic-text'); if (txtArea) txtArea.value = rawText; setTimeout(function() { magicScan(); }, 100); } 
@@ -1349,27 +1434,90 @@ function updateLandscapePreview() {
     cont.innerHTML = '';
     const ymEl = document.getElementById('toggle-youth-mode'); const ym = ymEl ? ymEl.checked : false;
     
-    let allActive = []; let at = [];
-    
-    for (let i = 0; i < TEAM_CONFIGS.length; i++) {
-        const p = TEAM_CONFIGS[i].id;
-        const show = document.getElementById(p + '-land-show');
-        if (show && show.checked) {
-            const hasPhoto = teamHasUploadedPhoto(p);
-            const hasGame = teamHasConfiguredGame(p);
-            if (!hasPhoto && !hasGame) continue;
-            if (p === 'u11MES' || p === 'u9M' || p === 'u7M') {
-                at.push({ id: p, hasGame: hasGame });
-            } else {
-                allActive.push({ id: p, hasGame: hasGame });
+
+    // --- Spezialfall: Woche 1.6.–7.6. mit fester Reihenfolge für Jugendspiele ---
+    const sel = document.getElementById('week-selector');
+    const selectedWeek = sel ? sel.value : "";
+    let allActive = [], at = [];
+    if (selectedWeek === "w_07_06_26") {
+        // IDs: Turnier = u11MES, U11 Elite = u11MEL, U15 = u15, U13 = u13pe
+        // Wir suchen die passenden Teams mit Spiel in dieser Woche
+        const getGameDate = (teamId) => {
+            const dateEl = document.getElementById(teamId + '-date');
+            return dateEl && dateEl.value ? new Date(dateEl.value) : null;
+        };
+        // Sammle alle aktiven Teams
+        for (let i = 0; i < TEAM_CONFIGS.length; i++) {
+            const p = TEAM_CONFIGS[i].id;
+            const show = document.getElementById(p + '-land-show');
+            if (show && show.checked) {
+                const hasPhoto = teamHasUploadedPhoto(p);
+                const hasGame = teamHasConfiguredGame(p);
+                if (!hasPhoto && !hasGame) continue;
+                if (p === 'u11MES' || p === 'u9M' || p === 'u7M') {
+                    at.push({ id: p, hasGame: hasGame });
+                } else {
+                    allActive.push({ id: p, hasGame: hasGame });
+                }
             }
         }
+        // Neue Reihenfolge bauen
+        let fixedOrder = [];
+        // 1. Turnier
+        let turnier = at.find(t => t.id === 'u11MES');
+        if (turnier) fixedOrder.push(turnier);
+        // 2. U11 Elite
+        let u11el = allActive.find(t => t.id === 'u11MEL');
+        if (u11el) fixedOrder.push(u11el);
+        // 3. U15
+        let u15 = allActive.find(t => t.id === 'u15');
+        if (u15) fixedOrder.push(u15);
+        // 4.+5. U13 (nach Datum sortiert)
+        let u13spiele = allActive.filter(t => t.id === 'u13pe');
+        // Hole beide U13-Spiele, falls vorhanden
+        let u13dates = [];
+        if (u13spiele.length > 0) {
+            // Prüfe auf 2 Spiele (englische Woche)
+            // Hole Datum aus -date und -date2
+            let d1 = getGameDate('u13pe');
+            let d2El = document.getElementById('u13pe-date2');
+            let d2 = d2El && d2El.value ? new Date(d2El.value) : null;
+            if (d1) u13dates.push({ id: 'u13pe', date: d1, slot: 1 });
+            if (d2) u13dates.push({ id: 'u13pe', date: d2, slot: 2 });
+            // Sortiere nach Datum
+            u13dates.sort((a, b) => a.date - b.date);
+            // Füge als einzelne Blöcke ein
+            for (let i = 0; i < u13dates.length; i++) {
+                fixedOrder.push({ id: 'u13pe', hasGame: true, slot: u13dates[i].slot });
+            }
+        }
+        // Rest anhängen
+        let usedIds = new Set(fixedOrder.map(t => t.id + (t.slot || '')));
+        for (let t of allActive) {
+            if (!usedIds.has(t.id)) fixedOrder.push(t);
+        }
+        allActive = fixedOrder;
+        // at bleibt wie oben
+    } else {
+        for (let i = 0; i < TEAM_CONFIGS.length; i++) {
+            const p = TEAM_CONFIGS[i].id;
+            const show = document.getElementById(p + '-land-show');
+            if (show && show.checked) {
+                const hasPhoto = teamHasUploadedPhoto(p);
+                const hasGame = teamHasConfiguredGame(p);
+                if (!hasPhoto && !hasGame) continue;
+                if (p === 'u11MES' || p === 'u9M' || p === 'u7M') {
+                    at.push({ id: p, hasGame: hasGame });
+                } else {
+                    allActive.push({ id: p, hasGame: hasGame });
+                }
+            }
+        }
+        const sortFn = function(a, b) {
+            return getAssignedPos(a.id) - getAssignedPos(b.id);
+        };
+        allActive.sort(sortFn); at.sort(sortFn);
     }
-    
-    const sortFn = function(a, b) {
-        return getAssignedPos(a.id) - getAssignedPos(b.id);
-    };
-    allActive.sort(sortFn); at.sort(sortFn);
 
     const photoOnlyMode = allActive.length > 0 && at.length === 0 && allActive.every(function(team) {
         return teamHasUploadedPhoto(team.id) && !team.hasGame;
