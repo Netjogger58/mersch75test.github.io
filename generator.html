@@ -400,26 +400,38 @@ function sortAndInjectEnglischeWoche(games, weekStart, weekEnd) {
     });
     // U13-Spiele in dieser Woche
     const u13Games = weekGames.filter(g => g.team && g.team.toUpperCase().includes('U13'));
-    // Prüfe auf englische Woche (mehr als 1 Spiel U13)
+    // Nur für U13: mehrere Spiele (englische Woche)
+    let filtered = weekGames.filter(g => {
+        const team = (g.team || '').toUpperCase();
+        // Bei U15/U11/U9 immer nur das erste Spiel nehmen
+        if (team.includes('U15')) {
+            return weekGames.findIndex(x => (x.team || '').toUpperCase().includes('U15')) === weekGames.indexOf(g);
+        }
+        if (team.includes('U11')) {
+            return weekGames.findIndex(x => (x.team || '').toUpperCase().includes('U11')) === weekGames.indexOf(g);
+        }
+        if (team.includes('U9')) {
+            return weekGames.findIndex(x => (x.team || '').toUpperCase().includes('U9')) === weekGames.indexOf(g);
+        }
+        // Bei U13 alle Spiele zulassen
+        return !team.includes('U15') && !team.includes('U11') && !team.includes('U9');
+    });
+
+    // Englische Woche NUR für U13: mehrere Spiele einsortieren
     if (u13Games.length > 1) {
-        // Sortiere nach Datum
         u13Games.sort((a, b) => parseGameDateValue(a) - parseGameDateValue(b));
-        // Entferne U13-Spiele aus weekGames
-        let filtered = weekGames.filter(g => !(g.team && g.team.toUpperCase().includes('U13')));
+        // Entferne U13-Spiele aus filtered
+        let filteredNoU13 = filtered.filter(g => !(g.team && g.team.toUpperCase().includes('U13')));
         // Füge U13-Spiele an gewünschte Position ein (nach U15)
         let result = [];
-        // U15 suchen
-        let u15idx = filtered.findIndex(g => g.team && g.team.toUpperCase().includes('U15'));
+        let u15idx = filteredNoU13.findIndex(g => g.team && g.team.toUpperCase().includes('U15'));
         if (u15idx === -1) u15idx = 0;
-        // Bis inkl. U15 kopieren
-        for (let i = 0; i <= u15idx && i < filtered.length; i++) result.push(filtered[i]);
-        // Dann alle U13-Spiele (englische Woche)
+        for (let i = 0; i <= u15idx && i < filteredNoU13.length; i++) result.push(filteredNoU13[i]);
         result = result.concat(u13Games);
-        // Rest anhängen
-        for (let i = u15idx + 1; i < filtered.length; i++) result.push(filtered[i]);
+        for (let i = u15idx + 1; i < filteredNoU13.length; i++) result.push(filteredNoU13[i]);
         return result;
     }
-    return weekGames;
+    return filtered;
 }
 
 window.teamPhotos = {};
