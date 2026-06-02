@@ -1222,7 +1222,7 @@ function magicScan() {
             const portCb = document.querySelector('.cb-portrait[value="' + t.id + '"]'); 
             if (portCb && !isPhotoActive) portCb.checked = false;
             
-            toggleTeam(t.id, false); 
+            window.toggleTeam(t.id, false); 
         } catch(e) {}
     }
 
@@ -1257,7 +1257,7 @@ function magicScan() {
                 const oppEl = document.getElementById(p + '-opp'); if (oppEl) oppEl.value = "Spielfrei"; 
                 const homeEl = document.getElementById(p + '-home'); if (homeEl) homeEl.value = "away";
                 const locEl = document.getElementById(p + '-loc'); if (locEl) locEl.value = ""; 
-                activateTeamCheckboxes(p); toggleTeam(p, true); autoFill(p, true); continue;
+                activateTeamCheckboxes(p); window.toggleTeam(p, true); autoFill(p, true); continue;
             }
             
             const ti = document.getElementById(p + '-type');
@@ -1312,7 +1312,7 @@ function magicScan() {
                 else if (mIdx !== -1) { hEl.value = "home1"; } else { hEl.value = "home1"; }
             }
 
-            activateTeamCheckboxes(p); toggleTeam(p, true); autoFill(p, true);
+            activateTeamCheckboxes(p); window.toggleTeam(p, true); autoFill(p, true);
 
             // Zweites Spiel: falls schon ein Spiel für diese Mannschaft geladen wurde,
             // wird das nächste Spiel derselben Mannschaft in Slot 2 eingetragen.
@@ -1350,7 +1350,7 @@ function magicScan() {
     }
     
     setTimeout(function() { 
-        updateAllPreviews(); scalePoster(); 
+        window.updateAllPreviews(); scalePoster(); 
         let hadData = false;
         for (let i = 0; i < lines.length; i++) { if (lines[i].trim().length > 0) { hadData = true; break; } }
         if (hadData) { const txtArea = document.getElementById('magic-text'); if (txtArea) txtArea.value = ""; } 
@@ -1374,7 +1374,7 @@ function toggleExtraGame(teamId) {
         const base = n1 ? parseInt(n1.value, 10) : 1;
         n2.value = String((!isNaN(base) && base > 0) ? base + 1 : 2);
     }
-    updateAllPreviews();
+    window.updateAllPreviews();
 }
 
 function autoFill(prefix, skipPreview) {
@@ -1391,8 +1391,56 @@ function autoFill(prefix, skipPreview) {
                 else { locEl.value = (typeof addresses !== 'undefined' && addresses[opp]) ? addresses[opp] : ""; }
             }
         }
-        if (skipPreview !== true) { updateAllPreviews(); }
+        if (skipPreview !== true) { window.updateAllPreviews(); }
     } catch(e) { console.error("AutoFill Fehler:", e); }
+}
+
+function toggleTeam(teamId, on) {
+    const block = document.getElementById('ctrl-' + teamId);
+    if (!block) return;
+    const inputs = Array.from(block.querySelectorAll('input, select, textarea, button'));
+    for (let i = 0; i < inputs.length; i++) {
+        const el = inputs[i];
+        if (el.classList && el.classList.contains('trigger-toggle')) continue;
+        if (el.classList && el.classList.contains('trigger-photo-toggle')) continue;
+        if (el.classList && el.classList.contains('trigger-photo-file')) continue;
+        el.disabled = !on;
+    }
+    const pt = block.querySelector('.trigger-photo-toggle[data-team="' + teamId + '"]');
+    if (pt && pt.checked) {
+        block.style.opacity = '1';
+    } else {
+        block.style.opacity = on ? '1' : '0.35';
+    }
+}
+
+function updateAllPreviews() {
+    try { if (typeof updateLandscapePreview === 'function') updateLandscapePreview(); } catch (e) { console.error(e); }
+    try { if (typeof updatePortraitPreview === 'function') updatePortraitPreview(); } catch (e) { console.error(e); }
+}
+
+function scalePoster() {
+    const landWrap = document.getElementById('wrapper-landscape');
+    const poster = document.getElementById('poster');
+    if (landWrap && poster) {
+        const bw = 1600;
+        const bh = 838;
+        const w = landWrap.clientWidth || bw;
+        const scale = Math.min(1, w / bw);
+        poster.style.transform = 'scale(' + scale + ')';
+        landWrap.style.height = Math.round(bh * scale) + 'px';
+    }
+
+    const portWrap = document.getElementById('wrapper-portrait');
+    const posterPort = document.getElementById('poster-portrait');
+    if (portWrap && posterPort) {
+        const bw = parseInt(posterPort.getAttribute('data-base-width') || '800', 10);
+        const bh = parseInt(posterPort.getAttribute('data-base-height') || '1180', 10);
+        const w = portWrap.clientWidth || bw;
+        const scale = Math.min(1, w / bw);
+        posterPort.style.transform = 'scale(' + scale + ')';
+        portWrap.style.height = Math.round(bh * scale) + 'px';
+    }
 }
 </script>
 <script>
@@ -1556,19 +1604,20 @@ function updateLandscapePreview() {
         const tcSpecial = document.getElementById('l-dynamic-tournoi');
         if (tcSpecial) tcSpecial.innerHTML = '';
 
-        // Vertikale Hierarchie wie vorgesehen:
-        // Turnier (oben) -> U11 Elite -> rechter U13-Block (darunter)
+        // Vertikale Hierarchie wie im Referenzlayout:
+        // Turnier (oben) -> U13 (mitte) -> U11 Elite (unten rechts)
         const stackedLeft = 1104;
         const tournamentTop = 70;
-        const u11Top = 205;
+        const u13Top = 205;
+        const u11Top = 350;
 
         renderLandscapeGame({ id: 'u15', gameSlot: 1 }, { type: 'big', top: 350, left: 36 }, cont, teamHasConfiguredGame('u15'));
         renderLandscapeGame({ id: 'u13pe', gameSlot: 1 }, { type: 'big', top: 350, left: 570 }, cont, true);
-        renderLandscapeGame({ id: 'u13pe', gameSlot: 2 }, { type: 'big', top: 350, left: 1104 }, cont, true);
+        renderLandscapeGame({ id: 'u13pe', gameSlot: 2 }, { type: 'big', top: u13Top, left: stackedLeft }, cont, true);
 
         const u11Active = document.getElementById('u11MEL-land-show') && document.getElementById('u11MEL-land-show').checked;
         if (u11Active) {
-            renderLandscapeGame({ id: 'u11MEL', gameSlot: 1 }, { type: 'small', top: u11Top, left: stackedLeft }, cont, teamHasConfiguredGame('u11MEL'));
+            renderLandscapeGame({ id: 'u11MEL', gameSlot: 1 }, { type: 'big', top: u11Top, left: stackedLeft }, cont, teamHasConfiguredGame('u11MEL'));
         }
 
         const tournamentPriority = ['u11MES', 'u9M', 'u7M'];
@@ -2591,6 +2640,14 @@ function openHomepageHandoffModal(stamp, hasPortrait) {
             landWrap.style.height = Math.round(bh * scale) + 'px';
         }
 
+
+    const toggleTeam = function(teamId, on) {
+        return window.toggleTeam(teamId, on);
+    };
+
+    const updateAllPreviews = function() {
+        return window.updateAllPreviews();
+    };
         const portWrap = document.getElementById('wrapper-portrait');
         const portPoster = document.getElementById('poster-portrait');
         if (portWrap && portPoster) {
@@ -2612,8 +2669,8 @@ function openHomepageHandoffModal(stamp, hasPortrait) {
             cb.addEventListener('change', function() {
                 const t = cb.getAttribute('data-team');
                 if (!t) return;
-                toggleTeam(t, cb.checked);
-                updateAllPreviews(); scalePoster();
+                window.toggleTeam(t, cb.checked);
+                window.updateAllPreviews(); scalePoster();
             });
         });
 
@@ -2626,13 +2683,13 @@ function openHomepageHandoffModal(stamp, hasPortrait) {
                     const reader = new FileReader();
                     reader.onload = function(evt) {
                         window.teamPhotos[t] = evt.target.result;
-                        updateAllPreviews();
+                        window.updateAllPreviews();
                     };
                     reader.readAsDataURL(file);
                 } else {
                     delete window.teamPhotos[t];
                     setPhotoUploadUi(t, true, 'Kein Foto gewählt');
-                    updateAllPreviews();
+                    window.updateAllPreviews();
                 }
             });
         });
@@ -2661,8 +2718,8 @@ function openHomepageHandoffModal(stamp, hasPortrait) {
                     delete window.teamPhotos[t];
                     setPhotoUploadUi(t, false);
                 }
-                toggleTeam(t, document.querySelector('.trigger-toggle[data-team="' + t + '"]').checked);
-                updateAllPreviews();
+                window.toggleTeam(t, document.querySelector('.trigger-toggle[data-team="' + t + '"]').checked);
+                window.updateAllPreviews();
             });
         });
 
@@ -2683,17 +2740,17 @@ function openHomepageHandoffModal(stamp, hasPortrait) {
                 const opp2 = o2.value;
                 if (ih2) { l2.value = (hs2.value === 'home2') ? CONFIG.address2 : CONFIG.address1; }
                 else { l2.value = (typeof addresses !== 'undefined' && addresses[opp2]) ? addresses[opp2] : ''; }
-                updateAllPreviews();
+                window.updateAllPreviews();
             });
         });
 
         qsa('.trigger-view').forEach(function(el) {
-            el.addEventListener('input', function() { updateAllPreviews(); scalePoster(); });
-            el.addEventListener('change', function() { updateAllPreviews(); scalePoster(); });
+            el.addEventListener('input', function() { window.updateAllPreviews(); scalePoster(); });
+            el.addEventListener('change', function() { window.updateAllPreviews(); scalePoster(); });
         });
 
         qsa('.trigger-text').forEach(function(el) {
-            el.addEventListener('input', function() { updateAllPreviews(); scalePoster(); });
+            el.addEventListener('input', function() { window.updateAllPreviews(); scalePoster(); });
         });
 
         qsa('.cb-portrait').forEach(function(el) {
@@ -2799,7 +2856,7 @@ function openHomepageHandoffModal(stamp, hasPortrait) {
         safeCall(function() { renderPortraitControls(); });
 
         for (let i = 0; i < TEAM_CONFIGS.length; i++) {
-            const t = TEAM_CONFIGS[i]; toggleTeam(t.id, true);
+            const t = TEAM_CONFIGS[i]; window.toggleTeam(t.id, true);
         }
 
         wireFormTriggers(); wireMagicScan(); wireWeekSelector(); wireWeekendButtons(); wireDownloadMenu(); wireSwitchButtons();
@@ -2807,7 +2864,7 @@ function openHomepageHandoffModal(stamp, hasPortrait) {
         const ym = document.getElementById('toggle-youth-mode');
         if (ym) ym.addEventListener('change', function() { updateLandscapePreview(); scalePoster(); });
 
-        updateAllPreviews(); scalePoster();
+        window.updateAllPreviews(); scalePoster();
         refreshGeneratorScheduleData(false);
         window.addEventListener('resize', function() { scalePoster(); });
     }
@@ -2819,6 +2876,64 @@ function openHomepageHandoffModal(stamp, hasPortrait) {
         safeCall(function() { updatePortraitPreview(); });
         safeCall(function() { scalePoster(); });
     }, 500);
+})();
+</script>
+<script>
+(function () {
+    function bootFallback() {
+        if (window.__generatorFallbackBootstrapped) return;
+        window.__generatorFallbackBootstrapped = true;
+
+        const grid = document.getElementById('dynamic-form-grid');
+        if (grid && grid.children.length === 0) {
+            if (typeof renderFormBlocks === 'function') renderFormBlocks();
+            if (typeof renderLandscapeControls === 'function') renderLandscapeControls();
+            if (typeof renderPortraitControls === 'function') renderPortraitControls();
+        }
+
+        const weekSelector = document.getElementById('week-selector');
+        if (weekSelector && !weekSelector.dataset.fallbackBound) {
+            weekSelector.dataset.fallbackBound = '1';
+            weekSelector.addEventListener('change', function () { loadSavedSchedule(); });
+        }
+
+        const currentButton = document.getElementById('btn-weekend-current');
+        if (currentButton && !currentButton.dataset.fallbackBound) {
+            currentButton.dataset.fallbackBound = '1';
+            currentButton.addEventListener('click', function (e) {
+                e.preventDefault();
+                loadWeekendSchedule(0);
+            });
+        }
+
+        const nextButton = document.getElementById('btn-weekend-next');
+        if (nextButton && !nextButton.dataset.fallbackBound) {
+            nextButton.dataset.fallbackBound = '1';
+            nextButton.addEventListener('click', function (e) {
+                e.preventDefault();
+                loadWeekendSchedule(1);
+            });
+        }
+
+        const scanButton = document.getElementById('btn-magic-scan');
+        if (scanButton && !scanButton.dataset.fallbackBound) {
+            scanButton.dataset.fallbackBound = '1';
+            scanButton.addEventListener('click', function (e) {
+                e.preventDefault();
+                magicScan();
+            });
+        }
+
+        if (typeof updateAllPreviews === 'function') updateAllPreviews();
+        if (typeof scalePoster === 'function') scalePoster();
+        if (typeof refreshGeneratorScheduleData === 'function') refreshGeneratorScheduleData(false);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', bootFallback);
+    } else {
+        bootFallback();
+    }
 })();
 </script>
 </body>
