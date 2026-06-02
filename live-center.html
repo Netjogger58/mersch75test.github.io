@@ -1069,7 +1069,7 @@ if (filterEl) {
             const result = renderAllGames();
             document.getElementById("staticHead").innerHTML = result.head;
             document.getElementById("staticBody").innerHTML = result.rows;
-            applyTabellViewMode();
+            window.applyTabellViewMode();
             renderStandingsPanel();
         };
     });
@@ -1097,18 +1097,18 @@ if (statusEl) {
             const result = renderAllGames();
             document.getElementById("staticHead").innerHTML = result.head;
             document.getElementById("staticBody").innerHTML = result.rows;
-            applyTabellViewMode();
+            window.applyTabellViewMode();
             renderStandingsPanel();
         };
     });
 }
 
 // Hides games table when 'tabell' status filter is active
-function applyTabellViewMode() {
+window.applyTabellViewMode = function applyTabellViewMode() {
     const tbl = document.getElementById('staticTable');
     const isTabell = (window.__allGamesStatusFilter || 'future') === 'tabell';
     if (tbl) tbl.style.display = isTabell ? 'none' : 'table';
-}
+};
 
 const filter = window.__allGamesFilter || 'all';
 const statusFilter = window.__allGamesStatusFilter || 'future';
@@ -1253,7 +1253,7 @@ empty.style.display = "none";
 
 if (entry.t === "allgames") {
     renderStandingsPanel();
-    applyTabellViewMode();
+    window.applyTabellViewMode();
 } else {
     const sp = document.getElementById("standingsPanel");
     if (sp) { sp.style.display = "none"; sp.innerHTML = ""; }
