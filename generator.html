@@ -563,6 +563,42 @@ const hallCodes = {
     "290091": "op Flor | L-6751 Grevenmacher", "290224": "3 au Village | B-6717 Attert", "290032": "rue Claude Monnet | L-4368 Belval"
 };
 
+function isMerschLocation(locationValue) {
+    const text = String(locationValue || '').toLowerCase();
+    if (!text) return false;
+    return text.indexOf('mersch') !== -1 || text.indexOf('7561') !== -1 || text.indexOf('7572') !== -1;
+}
+
+function resolveHostLogoFromLocation(locationValue) {
+    const target = String(locationValue || '').trim().toLowerCase();
+    if (!target) return '';
+    const keys = Object.keys(addresses || {});
+    for (let i = 0; i < keys.length; i++) {
+        const team = keys[i];
+        const address = String(addresses[team] || '').trim().toLowerCase();
+        if (!address) continue;
+        if (target === address || target.indexOf(address) !== -1 || address.indexOf(target) !== -1) {
+            if (teams[team]) return teams[team];
+        }
+    }
+    return '';
+}
+
+function resolveTournamentPrimaryLogo(prefix, opponent, isHome, locationValue, defaultMerschLogo) {
+    if (!prefix || (prefix !== 'u11MES' && prefix !== 'u9M' && prefix !== 'u7M')) {
+        return defaultMerschLogo;
+    }
+    if (isHome || isMerschLocation(locationValue)) {
+        return defaultMerschLogo;
+    }
+    const hostFromLocation = resolveHostLogoFromLocation(locationValue);
+    if (hostFromLocation) return hostFromLocation;
+    if (opponent && opponent !== '-' && opponent !== 'Spielfrei' && teams[opponent]) {
+        return teams[opponent];
+    }
+    return CONFIG.ballLogo;
+}
+
 let allGamesData = [
     { team: "HERREN 1 (H-PRO)", datum: "10.05.26 20:00", heim: "HB Petange", gast: "Mersch75", score: "", sbo: "", rtl: "" },
     { team: "HERREN 1 (H-PRO)", datum: "16.05.26 20:15", heim: "Esp Rumelange", gast: "Mersch75", score: "", sbo: "", rtl: "" },
@@ -781,6 +817,7 @@ function renderFormBlocks() {
         html += '<div class="col"><label>Datum</label><input type="date" id="' + team.id + '-date" class="trigger-view"></div>';
         html += '<div class="col"><label>Uhrzeit</label><input type="time" id="' + team.id + '-time" class="trigger-view"></div>';
         html += '<div class="col"><label>Kategorie</label><select id="' + team.id + '-type" class="category-select trigger-view">' + typeOpts + '</select></div>';
+        html += '<div class="col"><label>Spiel-Nr.</label><input type="number" id="' + team.id + '-num1" class="trigger-view" min="1" max="99" value="1"></div>';
         html += '</div>';
         html += '<input type="text" id="' + team.id + '-loc" class="trigger-view trigger-text" placeholder="Adresse">';
         html += '<div style="margin-top:8px;">';
@@ -793,10 +830,11 @@ function renderFormBlocks() {
         html += '<div class="col"><select id="' + team.id + '-opp2" class="trigger-autofill2" data-team="' + team.id + '">' + teamOpts + '</select></div>';
         html += '</div>';
         html += '<div class="row">';
-        html += '<div class="col"><label>Datum</label><input type="date" id="' + team.id + '-date2"></div>';
-        html += '<div class="col"><label>Uhrzeit</label><input type="time" id="' + team.id + '-time2"></div>';
+        html += '<div class="col"><label>Datum</label><input type="date" id="' + team.id + '-date2" class="trigger-view"></div>';
+        html += '<div class="col"><label>Uhrzeit</label><input type="time" id="' + team.id + '-time2" class="trigger-view"></div>';
+        html += '<div class="col"><label>Spiel-Nr.</label><input type="number" id="' + team.id + '-num2" class="trigger-view" min="1" max="99" value="2"></div>';
         html += '</div>';
-        html += '<input type="text" id="' + team.id + '-loc2" placeholder="Adresse" style="width:100%;padding:8px;border:1px solid var(--border-gray);border-radius:4px;font-size:13px;margin-top:4px;">';
+        html += '<input type="text" id="' + team.id + '-loc2" class="trigger-view" placeholder="Adresse" style="width:100%;padding:8px;border:1px solid var(--border-gray);border-radius:4px;font-size:13px;margin-top:4px;">';
         html += '</div>';
         html += '</div>';
     }
@@ -1205,6 +1243,9 @@ function magicScan() {
             else if (ul.indexOf("H-AXA") !== -1 || ul.indexOf("MÄNNER") !== -1 || ul.indexOf("HOMMES") !== -1 || ul.indexOf("H-SEN") !== -1 || ul.indexOf("H-C-LN") !== -1 || ul.indexOf("H-PRO") !== -1) p = 's1';
             
             if (!p) continue;
+
+            const primaryDateEl = document.getElementById(p + '-date');
+            const hadPrimaryDateBeforeLine = !!(primaryDateEl && primaryDateEl.value);
             
             const activateTeamCheckboxes = (teamPrefix) => {
                 const mainCb = document.querySelector('.trigger-toggle[data-team="' + teamPrefix + '"]'); if (mainCb) mainCb.checked = true;
@@ -1275,7 +1316,7 @@ function magicScan() {
 
             // Zweites Spiel: falls schon ein Spiel für diese Mannschaft geladen wurde,
             // wird das nächste Spiel derselben Mannschaft in Slot 2 eingetragen.
-            if (document.getElementById(p + '-date') && document.getElementById(p + '-date').value) {
+            if (hadPrimaryDateBeforeLine) {
                 const d2El = document.getElementById(p + '-date2');
                 const t2El = document.getElementById(p + '-time2');
                 const o2El = document.getElementById(p + '-opp2');
@@ -1290,6 +1331,12 @@ function magicScan() {
                     if (tm && t2El) t2El.value = tm[1].padStart(2,'0') + ':' + tm[2];
                     if (opp && o2El) o2El.value = opp;
                     if (h2El) h2El.value = document.getElementById(p + '-home').value;
+                    const n1El = document.getElementById(p + '-num1');
+                    const n2El = document.getElementById(p + '-num2');
+                    if (n2El) {
+                        const n1 = n1El ? parseInt(n1El.value, 10) : 1;
+                        n2El.value = String((!isNaN(n1) && n1 > 0) ? n1 + 1 : 2);
+                    }
                     const l2El = document.getElementById(p + '-loc2');
                     if (l2El) l2El.value = document.getElementById(p + '-loc') ? document.getElementById(p + '-loc').value : '';
                 }
@@ -1315,11 +1362,17 @@ function toggleExtraGame(teamId) {
     if (!box) return;
     const isOpen = box.style.display !== 'none';
     box.style.display = isOpen ? 'none' : 'block';
+    const n1 = document.getElementById(teamId + '-num1');
+    const n2 = document.getElementById(teamId + '-num2');
     if (isOpen) {
         const d2 = document.getElementById(teamId + '-date2'); if (d2) d2.value = '';
         const t2 = document.getElementById(teamId + '-time2'); if (t2) t2.value = '';
         const o2 = document.getElementById(teamId + '-opp2'); if (o2) o2.value = '-';
         const l2 = document.getElementById(teamId + '-loc2'); if (l2) l2.value = '';
+        if (n2) n2.value = '2';
+    } else if (n2) {
+        const base = n1 ? parseInt(n1.value, 10) : 1;
+        n2.value = String((!isNaN(base) && base > 0) ? base + 1 : 2);
     }
     updateAllPreviews();
 }
@@ -1346,6 +1399,33 @@ function autoFill(prefix, skipPreview) {
 function getAssignedPos(prefix) {
     const el = document.getElementById(prefix + '-land-pos');
     return el ? parseInt(el.value, 10) : 99;
+}
+
+function getGameFieldValue(prefix, fieldBase, slot) {
+    const suffix = slot === 2 ? '2' : '';
+    const primaryId = prefix + '-' + fieldBase + suffix;
+    const fallbackId = prefix + '-' + fieldBase;
+    const primaryEl = document.getElementById(primaryId);
+    if (primaryEl && primaryEl.value) return primaryEl.value;
+    if (suffix) {
+        const fallbackEl = document.getElementById(fallbackId);
+        return fallbackEl ? fallbackEl.value : '';
+    }
+    return primaryEl ? primaryEl.value : '';
+}
+
+function getGameNumber(prefix, slot) {
+    const raw = getGameFieldValue(prefix, slot === 2 ? 'num2' : 'num1', 1);
+    const parsed = parseInt(raw, 10);
+    if (!isNaN(parsed) && parsed > 0) return parsed;
+    return slot === 2 ? 2 : 1;
+}
+
+function hasSecondGameConfigured(prefix) {
+    const extraBox = document.getElementById('extra-' + prefix);
+    if (!extraBox || extraBox.style.display === 'none') return false;
+    const date2 = document.getElementById(prefix + '-date2');
+    return !!(date2 && date2.value);
 }
 
 function teamHasUploadedPhoto(prefix) {
@@ -1421,89 +1501,28 @@ function updateLandscapePreview() {
     const ymEl = document.getElementById('toggle-youth-mode'); const ym = ymEl ? ymEl.checked : false;
     
 
-    // --- Spezialfall: Woche 1.6.–7.6. mit fester Reihenfolge für Jugendspiele ---
     const sel = document.getElementById('week-selector');
-    const selectedWeek = sel ? sel.value : "";
+    const selectedWeek = sel ? sel.value : '';
     let allActive = [], at = [];
-    if (selectedWeek === "w_07_06_26") {
-        // IDs: Turnier = u11MES, U11 Elite = u11MEL, U15 = u15, U13 = u13pe
-        // Wir suchen die passenden Teams mit Spiel in dieser Woche
-        const getGameDate = (teamId) => {
-            const dateEl = document.getElementById(teamId + '-date');
-            return dateEl && dateEl.value ? new Date(dateEl.value) : null;
-        };
-        // Sammle alle aktiven Teams
-        for (let i = 0; i < TEAM_CONFIGS.length; i++) {
-            const p = TEAM_CONFIGS[i].id;
-            const show = document.getElementById(p + '-land-show');
-            if (show && show.checked) {
-                const hasPhoto = teamHasUploadedPhoto(p);
-                const hasGame = teamHasConfiguredGame(p);
-                if (!hasPhoto && !hasGame) continue;
-                if (p === 'u11MES' || p === 'u9M' || p === 'u7M') {
-                    at.push({ id: p, hasGame: hasGame });
-                } else {
-                    allActive.push({ id: p, hasGame: hasGame });
-                }
+    for (let i = 0; i < TEAM_CONFIGS.length; i++) {
+        const p = TEAM_CONFIGS[i].id;
+        const show = document.getElementById(p + '-land-show');
+        if (show && show.checked) {
+            const hasPhoto = teamHasUploadedPhoto(p);
+            const hasGame = teamHasConfiguredGame(p);
+            if (!hasPhoto && !hasGame) continue;
+            if (p === 'u11MES' || p === 'u9M' || p === 'u7M') {
+                at.push({ id: p, hasGame: hasGame });
+            } else {
+                allActive.push({ id: p, hasGame: hasGame });
             }
         }
-        // Neue Reihenfolge bauen
-        let fixedOrder = [];
-        // 1. Turnier
-        let turnier = at.find(t => t.id === 'u11MES');
-        if (turnier) fixedOrder.push(turnier);
-        // 2. U11 Elite
-        let u11el = allActive.find(t => t.id === 'u11MEL');
-        if (u11el) fixedOrder.push(u11el);
-        // 3. U15
-        let u15 = allActive.find(t => t.id === 'u15');
-        if (u15) fixedOrder.push(u15);
-        // 4.+5. U13 (nach Datum sortiert)
-        let u13spiele = allActive.filter(t => t.id === 'u13pe');
-        // Hole beide U13-Spiele, falls vorhanden
-        let u13dates = [];
-        if (u13spiele.length > 0) {
-            // Prüfe auf 2 Spiele (englische Woche)
-            // Hole Datum aus -date und -date2
-            let d1 = getGameDate('u13pe');
-            let d2El = document.getElementById('u13pe-date2');
-            let d2 = d2El && d2El.value ? new Date(d2El.value) : null;
-            if (d1) u13dates.push({ id: 'u13pe', date: d1, slot: 1 });
-            if (d2) u13dates.push({ id: 'u13pe', date: d2, slot: 2 });
-            // Sortiere nach Datum
-            u13dates.sort((a, b) => a.date - b.date);
-            // Füge als einzelne Blöcke ein
-            for (let i = 0; i < u13dates.length; i++) {
-                fixedOrder.push({ id: 'u13pe', hasGame: true, slot: u13dates[i].slot });
-            }
-        }
-        // Rest anhängen
-        let usedIds = new Set(fixedOrder.map(t => t.id + (t.slot || '')));
-        for (let t of allActive) {
-            if (!usedIds.has(t.id)) fixedOrder.push(t);
-        }
-        allActive = fixedOrder;
-        // at bleibt wie oben
-    } else {
-        for (let i = 0; i < TEAM_CONFIGS.length; i++) {
-            const p = TEAM_CONFIGS[i].id;
-            const show = document.getElementById(p + '-land-show');
-            if (show && show.checked) {
-                const hasPhoto = teamHasUploadedPhoto(p);
-                const hasGame = teamHasConfiguredGame(p);
-                if (!hasPhoto && !hasGame) continue;
-                if (p === 'u11MES' || p === 'u9M' || p === 'u7M') {
-                    at.push({ id: p, hasGame: hasGame });
-                } else {
-                    allActive.push({ id: p, hasGame: hasGame });
-                }
-            }
-        }
-        const sortFn = function(a, b) {
-            return getAssignedPos(a.id) - getAssignedPos(b.id);
-        };
-        allActive.sort(sortFn); at.sort(sortFn);
     }
+    const sortFn = function(a, b) {
+        return getAssignedPos(a.id) - getAssignedPos(b.id);
+    };
+    allActive.sort(sortFn);
+    at.sort(sortFn);
 
     const photoOnlyMode = allActive.length > 0 && at.length === 0 && allActive.every(function(team) {
         return teamHasUploadedPhoto(team.id) && !team.hasGame;
@@ -1521,6 +1540,50 @@ function updateLandscapePreview() {
 
         const tcPhotoOnly = document.getElementById('l-dynamic-tournoi');
         if (tcPhotoOnly) tcPhotoOnly.innerHTML = '';
+        return;
+    }
+
+    const hasU13Game1 = !!getGameFieldValue('u13pe', 'date', 1);
+    const hasU13Game2 = hasSecondGameConfigured('u13pe');
+    const isEnglishWeekYouthMode =
+        selectedWeek === 'w_07_06_26' &&
+        hasU13Game1 &&
+        hasU13Game2 &&
+        document.getElementById('u15-land-show') &&
+        document.getElementById('u15-land-show').checked;
+
+    if (isEnglishWeekYouthMode) {
+        const tcSpecial = document.getElementById('l-dynamic-tournoi');
+        if (tcSpecial) tcSpecial.innerHTML = '';
+
+        // Vertikale Hierarchie wie vorgesehen:
+        // Turnier (oben) -> U11 Elite -> rechter U13-Block (darunter)
+        const stackedLeft = 1104;
+        const tournamentTop = 70;
+        const u11Top = 205;
+
+        renderLandscapeGame({ id: 'u15', gameSlot: 1 }, { type: 'big', top: 350, left: 36 }, cont, teamHasConfiguredGame('u15'));
+        renderLandscapeGame({ id: 'u13pe', gameSlot: 1 }, { type: 'big', top: 350, left: 570 }, cont, true);
+        renderLandscapeGame({ id: 'u13pe', gameSlot: 2 }, { type: 'big', top: 350, left: 1104 }, cont, true);
+
+        const u11Active = document.getElementById('u11MEL-land-show') && document.getElementById('u11MEL-land-show').checked;
+        if (u11Active) {
+            renderLandscapeGame({ id: 'u11MEL', gameSlot: 1 }, { type: 'small', top: u11Top, left: stackedLeft }, cont, teamHasConfiguredGame('u11MEL'));
+        }
+
+        const tournamentPriority = ['u11MES', 'u9M', 'u7M'];
+        let tournamentTeam = null;
+        for (let i = 0; i < tournamentPriority.length; i++) {
+            const id = tournamentPriority[i];
+            const showEl = document.getElementById(id + '-land-show');
+            if (showEl && showEl.checked) {
+                tournamentTeam = id;
+                break;
+            }
+        }
+        if (tournamentTeam) {
+            renderLandscapeGame({ id: tournamentTeam, gameSlot: 1 }, { type: 'small', top: tournamentTop, left: stackedLeft }, cont, teamHasConfiguredGame(tournamentTeam));
+        }
         return;
     }
     
@@ -1667,6 +1730,8 @@ function updateLandscapePreview() {
                     var cp = col.id;
                     var typeEl = document.getElementById(cp + '-type');
                     var tv = (typeEl ? typeEl.value : "Tournoi") + (teamSuffixes[cp] || '');
+                    var tGameNo = getGameNumber(cp, 1);
+                    if (col.active && tGameNo) tv += ' #' + tGameNo;
                     var mb = badgeLabels[cp] || cp.replace('esp', '').toUpperCase();
                     var csclLEl = document.querySelector('.land-scale-logo[data-team="' + cp + '"]');
                     var csclL = (csclLEl ? parseInt(csclLEl.value, 10) : 100) / 100;
@@ -1684,13 +1749,11 @@ function updateLandscapePreview() {
                         th += '<div class="abs text-blue" style="top:' + (csl.top - 7) + 'px;left:' + (csl.left - 50) + 'px;width:150px;text-align:center;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;font-size:12px;">' + (document.getElementById(cp + '-land-title').value) + '</div>';
                     } else if (col.active) {
                         th += '<div class="abs badge" style="top:' + csl.top + 'px;left:' + csl.left + 'px;width:50px;height:28px;border-radius:6px;transform: scale(' + csclL + '); transform-origin: top center;"><div class="sub" style="font-size:6px;">' + tv + '</div><div class="main" style="font-size:15px;font-weight:900;font-style:italic;">' + mb + '</div></div>';
-                        var cOppEl = document.getElementById(cp + '-opp');
-                        var cOpp = cOppEl ? cOppEl.value : "-";
-                        var cHomeEl = document.getElementById(cp + '-home');
-                        var cIh = cHomeEl ? (cHomeEl.value.indexOf('home') === 0) : true;
-                        var cOl = (typeof teams !== 'undefined' && teams[cOpp]) ? teams[cOpp] : CONFIG.ballLogo;
-                        var cl1 = cIh ? CONFIG.merschLogo : cOl;
-                        if (cOpp === "-" || cOpp === "Spielfrei") cl1 = CONFIG.merschLogo;
+                        var cOpp = getGameFieldValue(cp, 'opp', 1) || '-';
+                        var cHome = getGameFieldValue(cp, 'home', 1) || 'home1';
+                        var cIh = cHome.indexOf('home') === 0;
+                        var cLocVal = getGameFieldValue(cp, 'loc', 1) || '';
+                        var cl1 = resolveTournamentPrimaryLogo(cp, cOpp, cIh, cLocVal, CONFIG.merschLogo);
                         th += '<div class="abs logo-box" style="top:' + (csl.top + 32) + 'px;left:' + csl.left + 'px;width:50px;height:50px;border-radius:8px;padding:4px; transform: scale(' + csclL + '); transform-origin: top center;"><img src="' + cl1 + '" crossorigin="anonymous"></div>';
                         var ctxh = '';
                         var cDateEl = document.getElementById(cp + '-date');
@@ -1726,16 +1789,24 @@ function updateLandscapePreview() {
     }
 }
 
-function renderLandscapeGame(prefix, sl, cont, hasGame) {
-    const oppEl = document.getElementById(prefix + '-opp');
-    const opp = oppEl ? oppEl.value : "-"; 
-    
-    const homeEl = document.getElementById(prefix + '-home');
-    const ih = homeEl ? (homeEl.value.indexOf('home') === 0) : true;
-    
+function renderLandscapeGame(teamRef, sl, cont, hasGame) {
+    const teamData = (typeof teamRef === 'string')
+        ? { id: teamRef, gameSlot: 1 }
+        : { id: teamRef.id, gameSlot: teamRef.gameSlot || 1 };
+    const prefix = teamData.id;
+    const gameSlot = teamData.gameSlot;
+
+    const opp = getGameFieldValue(prefix, 'opp', gameSlot) || '-';
+    const homeValue = getGameFieldValue(prefix, 'home', gameSlot) || 'home1';
+    const ih = homeValue.indexOf('home') === 0;
+
     const typeEl = document.getElementById(prefix + '-type');
-    let tv = typeEl ? typeEl.value : "Season Games";
-    tv += (teamSuffixes[prefix] || ''); 
+    let tv = typeEl ? typeEl.value : 'Season Games';
+    tv += (teamSuffixes[prefix] || '');
+    const gameNo = getGameNumber(prefix, gameSlot);
+    if (hasGame && gameNo) {
+        tv += ' #' + gameNo;
+    }
 
     const mb = badgeLabels[prefix] || prefix.replace('esp', '').toUpperCase(); 
     const ml = (prefix === 'fe') ? CONFIG.merschFELogo : CONFIG.merschLogo;
@@ -1836,24 +1907,31 @@ function renderLandscapeGame(prefix, sl, cont, hasGame) {
     } 
 
     const ol = (typeof teams !== 'undefined' && teams[opp]) ? teams[opp] : CONFIG.ballLogo;
-    const dateEl = document.getElementById(prefix + '-date');
-    const dv = dateEl ? dateEl.value : ""; 
+    const dv = getGameFieldValue(prefix, 'date', gameSlot);
+    const tv2 = getGameFieldValue(prefix, 'time', gameSlot);
     
-    const timeEl = document.getElementById(prefix + '-time');
-    const tv2 = timeEl ? timeEl.value : ""; 
-    
+    const isTournamentTeam = (prefix === 'u11MES' || prefix === 'u9M' || prefix === 'u7M');
     let l1, l2, th = '';
-    if (opp === "-" || opp === "Spielfrei") { 
-        l1 = ml; l2 = CONFIG.ballLogo; 
-    } else { 
-        l1 = ih ? ml : ol; l2 = ih ? ol : ml;
+    if (isTournamentTeam) {
+        l1 = resolveTournamentPrimaryLogo(prefix, opp, ih, locVal, ml);
+        if (opp === '-' || opp === 'Spielfrei' || opp === 'Tournoi') {
+            l2 = CONFIG.ballLogo;
+        } else {
+            l2 = ih ? ol : ml;
+        }
+    } else if (opp === "-" || opp === "Spielfrei") {
+        l1 = ml;
+        l2 = CONFIG.ballLogo;
+    } else {
+        l1 = ih ? ml : ol;
+        l2 = ih ? ol : ml;
     }
     
     const ds = dv ? formatDate(dv, tv2) : "";
     let ls = "";
-    const locEl = document.getElementById(prefix + '-loc');
-    if (dv && locEl && locEl.value) {
-        const parts = locEl.value.split('|');
+    const locVal = getGameFieldValue(prefix, 'loc', gameSlot);
+    if (dv && locVal) {
+        const parts = locVal.split('|');
         for(let k = 0; k < parts.length; k++) { parts[k] = parts[k].trim(); }
         ls = parts.join('<br>');
     }
@@ -2088,6 +2166,10 @@ function updatePortraitPreview() {
         let tv = typeEl ? typeEl.value : "Season Games";
         const suffix = teamSuffixes[prefix] || '';
         tv += suffix;
+        const gameNo1 = getGameNumber(prefix, 1);
+        if (hasGame && gameNo1) {
+            tv += ' #' + gameNo1;
+        }
 
         const mb = badgeLabels[prefix] || prefix.replace('esp', '').toUpperCase();
         let mainContent = mb;
@@ -2163,22 +2245,28 @@ function updatePortraitPreview() {
         const loc2Val = loc2El ? loc2El.value : '';
         let ih2b = '';
         const extraVisible = document.getElementById('extra-' + prefix);
-        const hasGame2 = !!(extraVisible && extraVisible.style.display !== 'none' && dv2 && opp2 && opp2 !== '-');
+        const hasGame2 = !!(extraVisible && extraVisible.style.display !== 'none' && dv2);
         if (hasGame2) {
             const ds2 = formatDate(dv2, tv2b);
             let ls2 = '';
-            if (loc2Val) {
+            l1 = resolveTournamentPrimaryLogo(prefix, opp, ih, locVal, CONFIG.merschLogo); l2 = "";
                 const p2 = loc2Val.split('|');
                 for (let k = 0; k < p2.length; k++) { p2[k] = p2[k].trim(); }
                 ls2 = p2.join('<br>');
             }
             const ol2 = (typeof teams !== 'undefined' && teams[opp2]) ? teams[opp2] : CONFIG.ballLogo;
             const ml2 = (prefix === 'fe') ? CONFIG.merschFELogo : CONFIG.merschLogo;
-            const l1b = ih2b_home ? ml2 : ol2;
+            const l1b = itour
+                ? resolveTournamentPrimaryLogo(prefix, opp2, ih2b_home, loc2Val, ml2)
+                : (ih2b_home ? ml2 : ol2);
             const l2b = ih2b_home ? ol2 : ml2;
             const typeEl2 = document.getElementById(prefix + '-type');
             let tv2c = typeEl2 ? typeEl2.value : 'Season Games';
             tv2c += (teamSuffixes[prefix] || '');
+            const gameNo2 = getGameNumber(prefix, 2);
+            if (gameNo2) {
+                tv2c += ' #' + gameNo2;
+            }
             ih2b = '<div style="margin-top:8px;padding-top:8px;border-top:2px dashed var(--primary-yellow);width:100%;">';
             ih2b += '<div class="p-game-matchup" style="margin-top:4px;">';
             ih2b += '<div class="p-logo-box" style="width:' + (sl*0.7) + 'px;height:' + (sl*0.7) + 'px;"><img src="' + l1b + '" crossorigin="anonymous"></div>';
