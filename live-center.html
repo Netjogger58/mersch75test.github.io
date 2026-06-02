@@ -798,6 +798,39 @@ return isNaN(time) ? 9999999999999 : time;
 } catch(e) { return 9999999999999; }
 };
 
+function normalizeGameKeyValue(value) {
+    return String(value || '').replace(/\s+/g, ' ').trim().toLowerCase();
+}
+
+function getGameRowKey(row) {
+    const teamKey = normalizeGameKeyValue(row.team || row.kat || '');
+    const dateKey = normalizeGameKeyValue(row.datum || '');
+    if (teamKey.includes('u11 espoir') || teamKey.includes('u9m') || teamKey.includes('u7m')) {
+        return [teamKey, dateKey].join('|');
+    }
+    return [
+        teamKey,
+        dateKey,
+        normalizeGameKeyValue(row.ort || ''),
+        normalizeGameKeyValue(row.heim || ''),
+        normalizeGameKeyValue(row.gast || ''),
+        normalizeGameKeyValue(row.score || '')
+    ].join('|');
+}
+
+function dedupeGameRows(rows) {
+    const seen = new Set();
+    const uniqueRows = [];
+    for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
+        const key = getGameRowKey(row);
+        if (seen.has(key)) continue;
+        seen.add(key);
+        uniqueRows.push(row);
+    }
+    return uniqueRows;
+}
+
 function scoreCSS(score, heim) {
 if (!score || score === "-") return "";
 if (!heim) return ""; 
@@ -897,11 +930,12 @@ function renderTournamentInfo(entry) {
 
 function renderFLH(filter) {
 if (typeof flhData === 'undefined') return { head: "", rows: "" };
+const sourceData = dedupeGameRows(flhData);
 let data;
-if (filter === "future")            data = flhData.filter(r => r.future);
-else if (filter === "past")         data = flhData.filter(r => !r.future);
-else if (filter === "nationalteam") data = flhData.filter(r => /Quali/i.test(r.bem || ""));
-else                                data = [...flhData];
+if (filter === "future")            data = sourceData.filter(r => r.future);
+else if (filter === "past")         data = sourceData.filter(r => !r.future);
+else if (filter === "nationalteam") data = sourceData.filter(r => /Quali/i.test(r.bem || ""));
+else                                data = [...sourceData];
 
 if (filter !== "nationalteam") data = data.filter(r => r.kat !== 'U9M');
 
@@ -1011,6 +1045,7 @@ function renderStandingsPanel() {
 
 function renderAllGames() {
 if (typeof allGamesData === 'undefined') return { head: "", rows: "" };
+const sourceData = dedupeGameRows(allGamesData);
 
 const normalizeTeamLabel = t => {
 if(!t) return "";
@@ -1047,7 +1082,7 @@ return 99;
 // Build category list from the data
 const allCats = [];
 const catSeen = {};
-[...allGamesData].forEach(r => {
+sourceData.forEach(r => {
     const c = normalizeTeamLabel(r.team || "");
     if (c && !catSeen[c]) { catSeen[c] = true; allCats.push(c); }
 });
@@ -1119,8 +1154,8 @@ const isFutureGame = (r) => {
     return t >= todayStart;
 };
 const categoryFiltered = filter === 'all'
-    ? allGamesData
-    : allGamesData.filter(r => normalizeTeamLabel(r.team || "") === filter);
+    ? sourceData
+    : sourceData.filter(r => normalizeTeamLabel(r.team || "") === filter);
 const filteredData = statusFilter === 'future'
     ? categoryFiltered.filter(isFutureGame)
     : statusFilter === 'past'
