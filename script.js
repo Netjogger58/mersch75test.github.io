@@ -1907,13 +1907,15 @@ function initializeNewsCarousel() {
 
     function goTo(target) {
         index = (target + slides.length) % slides.length;
-        track.style.transform = `translateX(-${index * 100}%)`;
+        const offset = slides[index].offsetLeft - slides[0].offsetLeft;
+        track.style.transform = `translateX(-${offset}px)`;
         dots.forEach((dot, i) => {
             const active = i === index;
             dot.classList.toggle('is-active', active);
             dot.setAttribute('aria-selected', active ? 'true' : 'false');
         });
         slides.forEach((slide, i) => {
+            slide.classList.toggle('is-current', i === index);
             slide.setAttribute('aria-hidden', i === index ? 'false' : 'true');
         });
     }
@@ -1998,6 +2000,12 @@ function initializeNewsCarousel() {
         touchStartX = null;
         restartAutoplay();
     }, { passive: true });
+
+    let resizeTimer = null;
+    window.addEventListener('resize', () => {
+        if (resizeTimer) window.clearTimeout(resizeTimer);
+        resizeTimer = window.setTimeout(() => goTo(index), 150);
+    });
 
     goTo(0);
     startAutoplay();
