@@ -20,8 +20,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Ro
 h1.page-title{font-size:clamp(1.5rem,4vw,2.3rem);font-weight:900;text-align:center;margin-bottom:6px;letter-spacing:0}
 .page-sub{text-align:center;color:#888;font-size:.88rem;margin-bottom:40px}
 h2.sec-head{font-size:clamp(1.35rem,2.5vw,2.05rem);font-weight:900;margin:26px 0 14px;display:flex;align-items:center;gap:10px;letter-spacing:0}
-h2.sec-head::before{content:'';display:inline-block;width:6px;height:1.1em;background:var(--tc,#005eb8);border-radius:3px}
-h3.sub-head{font-size:.78rem;font-weight:900;margin:26px 0 12px;color:var(--tc,#005eb8);text-transform:uppercase;letter-spacing:0}
+h2.sec-head::before{content:'';display:inline-block;width:6px;height:1.1em;background:var(--tc,#002f65);border-radius:3px}
+h3.sub-head{font-size:.78rem;font-weight:900;margin:26px 0 12px;color:var(--tc,#002f65);text-transform:uppercase;letter-spacing:0}
 .card{background:var(--panel);border-radius:8px;box-shadow:0 20px 55px rgba(0,0,0,.10);overflow:hidden;margin-bottom:36px;border:1px solid rgba(255,255,255,.8);backdrop-filter:blur(20px)}
 .card-body{padding:26px}
 .sum-bar{display:grid;grid-template-columns:repeat(7,minmax(110px,1fr));gap:1px;background:var(--line);border-bottom:1px solid var(--line)}
@@ -58,10 +58,6 @@ table.m75t tr:hover td{background:#fafafa}
 .win{color:#1f7a3a}.draw{color:#b85f00}.loss{color:#b42318}
 .badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:.62rem;font-weight:800}
 .b-win{background:#e8f5ec;color:#1f7a3a}.b-draw{background:#fff4df;color:#b85f00}.b-loss{background:#ffeceb;color:#b42318}
-.bar-wrap{display:flex;align-items:center;gap:7px;min-width:92px}
-.bar-bg{flex:1;background:#ececf0;border-radius:999px;height:6px;overflow:hidden}
-.bar-fill{height:6px;border-radius:999px;background:linear-gradient(90deg,var(--tc),#69a7ff)}
-.bar-val{font-weight:800;font-size:.73rem;min-width:30px;text-align:right;color:#6e6e73}
 .analysis{background:linear-gradient(135deg,rgba(0,94,184,.10),rgba(255,255,255,.96));border:1px solid rgba(0,94,184,.16);border-radius:8px;padding:22px 24px;line-height:1.55;font-size:1rem;color:#303034;margin:18px 0 6px}
 .analysis h3{font-size:clamp(1.35rem,2.4vw,2rem);line-height:1.1;color:var(--ink);margin:0 0 12px;font-weight:900;letter-spacing:0}
 .analysis p{margin:0;max-width:980px}
@@ -77,7 +73,7 @@ table.m75t tr:hover td{background:#fafafa}
 .player-goals{display:block;margin-top:10px;font-size:1.65rem;line-height:1;font-weight:900;color:var(--tc);font-variant-numeric:tabular-nums}
 .player-goals span{font-size:.72rem;color:var(--muted);text-transform:uppercase;font-weight:900}
 .lnk-sbo,.lnk-rtl,.flh-link{display:inline-flex;align-items:center;padding:3px 9px;border-radius:6px;font-size:.65rem;font-weight:800;text-decoration:none;border:1px solid transparent;white-space:nowrap}
-.lnk-sbo{background:#e8f1ff;color:#005eb8;border-color:#bad6ff}.lnk-sbo:hover{background:#005eb8;color:#fff}
+.lnk-sbo{background:#e8f1ff;color:#002f65;border-color:#bad6ff}.lnk-sbo:hover{background:#002f65;color:#fff}
 .lnk-rtl{background:#fff1df;color:#b85f00;border-color:#ffd3a1}.lnk-rtl:hover{background:#b85f00;color:#fff}
 .flh-link{background:#edf7ef;color:#1f7a3a;border-color:#bfe3c8;margin-left:8px}.flh-link:hover{background:#1f7a3a;color:#fff}
 .lnk-miss{color:#b8b8bd;font-size:.7rem}
@@ -89,15 +85,8 @@ table.m75t tr:hover td{background:#fafafa}
 @media (min-width:1200px){body{padding-top:46px}.stat-page{max-width:1280px}.hero-title{font-size:5.6rem}}
 @media print{body{background:#fff;padding:0}.stat-hero,.card{box-shadow:none;break-inside:avoid}.tbl-wrap{break-inside:avoid}}
 </style>
-<div class="stat-page" style="--tc:#005eb8"><header class="stat-hero">
-  <div>
-    <div class="hero-kicker">Mersch75 Statistics</div>
-    <h1 class="hero-title">Herren 1<br>Saison 2025/26</h1>
-    <p class="hero-lead">Klare Leistungsdaten, kompakte Saisonbewertung und tabellarische Details für Webseite, Präsentation und Leinwand.</p>
-  </div>
-  <img class="hero-logo" src="header-men-transparent.png" alt="Mersch75 Herren">
-</header><h2 class="sec-head" style="--tc:#005eb8;">Herren 1 - Saison 2025/26</h2>
-<section class="card" style="--tc:#005eb8;">
+<div class="stat-page" style="--tc:#002f65"><h2 class="sec-head" style="--tc:#002f65;">Herren 1</h2>
+<section class="card" style="--tc:#002f65;">
   <div class="sum-bar">
     <div class="sum-item"><span class="sum-val">20</span><span class="sum-lbl">Spiele</span></div>
     <div class="sum-item s-win"><span class="sum-val">8</span><span class="sum-lbl">Siege</span></div>
@@ -135,27 +124,27 @@ table.m75t tr:hover td{background:#fafafa}
 
     <h3 class="sub-head">🏆 Torschützenliste</h3>
     <div class="tbl-wrap"><table class="m75t">
-      <thead><tr><th>Spieler/in</th><th class="num">Tore</th><th>Anteil</th><th>7m (T/V · Quote)</th><th>Strafen</th></tr></thead>
-      <tbody><tr><td class="td-name">Charles Epps</td><td class="num td-goals">159</td><td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:100%"></div></div><span class="bar-val">100%</span></div></td><td>1/2 <span class="pct-mid">(50%)</span></td><td><span class="pen-2min">⏱3×</span><span class="pen-yellow">🟡1×</span></td></tr>
-<tr><td class="td-name">Alex Diedenhofen</td><td class="num td-goals">76</td><td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:47%"></div></div><span class="bar-val">47%</span></div></td><td>—</td><td>—</td></tr>
-<tr><td class="td-name">Mathis Derneden</td><td class="num td-goals">62</td><td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:38%"></div></div><span class="bar-val">38%</span></div></td><td>7/11 <span class="pct-mid">(63%)</span></td><td><span class="pen-2min">⏱1×</span><span class="pen-yellow">🟡1×</span></td></tr>
-<tr><td class="td-name">Mirza Hadrovic</td><td class="num td-goals">53</td><td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:33%"></div></div><span class="bar-val">33%</span></div></td><td>1/1 <span class="pct-good">(100%)</span></td><td><span class="pen-2min">⏱5×</span></td></tr>
-<tr><td class="td-name">Thomas Epps</td><td class="num td-goals">49</td><td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:30%"></div></div><span class="bar-val">30%</span></div></td><td>0/1 <span class="pct-bad">(0%)</span></td><td><span class="pen-2min">⏱3×</span><span class="pen-yellow">🟡1×</span></td></tr>
-<tr><td class="td-name">Rafael NUNES FRAGA</td><td class="num td-goals">47</td><td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:29%"></div></div><span class="bar-val">29%</span></div></td><td>6/8 <span class="pct-good">(75%)</span></td><td><span class="pen-2min">⏱2×</span></td></tr>
-<tr><td class="td-name">Renato Dos Santos</td><td class="num td-goals">47</td><td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:29%"></div></div><span class="bar-val">29%</span></div></td><td>2/2 <span class="pct-good">(100%)</span></td><td><span class="pen-2min">⏱6×</span><span class="pen-yellow">🟡1×</span></td></tr>
-<tr><td class="td-name">Jordan PIRES</td><td class="num td-goals">21</td><td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:13%"></div></div><span class="bar-val">13%</span></div></td><td>—</td><td>—</td></tr>
-<tr><td class="td-name">Andy FRISCH</td><td class="num td-goals">15</td><td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:9%"></div></div><span class="bar-val">9%</span></div></td><td>—</td><td><span class="pen-2min">⏱1×</span><span class="pen-yellow">🟡2×</span></td></tr>
-<tr><td class="td-name">Mathis Ansay</td><td class="num td-goals">15</td><td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:9%"></div></div><span class="bar-val">9%</span></div></td><td>2/2 <span class="pct-good">(100%)</span></td><td>—</td></tr>
-<tr><td class="td-name">Clement BERTHEZENE</td><td class="num td-goals">12</td><td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:7%"></div></div><span class="bar-val">7%</span></div></td><td>1/2 <span class="pct-mid">(50%)</span></td><td><span class="pen-2min">⏱1×</span></td></tr>
-<tr><td class="td-name">Steven Mering</td><td class="num td-goals">12</td><td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:7%"></div></div><span class="bar-val">7%</span></div></td><td>—</td><td><span class="pen-2min">⏱2×</span></td></tr>
-<tr><td class="td-name">Fabio FORTES AMADOR</td><td class="num td-goals">10</td><td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:6%"></div></div><span class="bar-val">6%</span></div></td><td>—</td><td><span class="pen-2min">⏱1×</span></td></tr>
-<tr><td class="td-name">Eric Faber</td><td class="num td-goals">7</td><td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:4%"></div></div><span class="bar-val">4%</span></div></td><td>—</td><td><span class="pen-2min">⏱1×</span></td></tr>
-<tr><td class="td-name">Joao MATOS</td><td class="num td-goals">5</td><td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:3%"></div></div><span class="bar-val">3%</span></div></td><td>—</td><td><span class="pen-2min">⏱2×</span></td></tr>
-<tr><td class="td-name">Jean-Luc GREISCHER</td><td class="num td-goals">4</td><td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:2%"></div></div><span class="bar-val">2%</span></div></td><td>—</td><td><span class="pen-2min">⏱2×</span></td></tr>
-<tr><td class="td-name">Luka Ansay</td><td class="num td-goals">4</td><td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:2%"></div></div><span class="bar-val">2%</span></div></td><td>—</td><td>—</td></tr>
-<tr><td class="td-name">Dylan Da Silva Leite</td><td class="num td-goals">1</td><td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:0%"></div></div><span class="bar-val">0%</span></div></td><td>—</td><td>—</td></tr>
-<tr><td class="td-name">Tun Wellens</td><td class="num td-goals">1</td><td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:0%"></div></div><span class="bar-val">0%</span></div></td><td>—</td><td>—</td></tr>
-<tr><td class="td-name">Mark Ruef</td><td class="num td-goals">1</td><td><div class="bar-wrap"><div class="bar-bg"><div class="bar-fill" style="width:0%"></div></div><span class="bar-val">0%</span></div></td><td>0/1 <span class="pct-bad">(0%)</span></td><td>—</td></tr></tbody>
+      <thead><tr><th>Spieler/in</th><th class="num">Tore</th><th>7m (T/V · Quote)</th><th>Strafen</th></tr></thead>
+      <tbody><tr><td class="td-name">Charles Epps</td><td class="num td-goals">159</td><td>1/2 <span class="pct-mid">(50%)</span></td><td><span class="pen-2min">⏱3×</span><span class="pen-yellow">🟡1×</span></td></tr>
+<tr><td class="td-name">Alex Diedenhofen</td><td class="num td-goals">76</td><td>—</td><td>—</td></tr>
+<tr><td class="td-name">Mathis Derneden</td><td class="num td-goals">62</td><td>7/11 <span class="pct-mid">(63%)</span></td><td><span class="pen-2min">⏱1×</span><span class="pen-yellow">🟡1×</span></td></tr>
+<tr><td class="td-name">Mirza Hadrovic</td><td class="num td-goals">53</td><td>1/1 <span class="pct-good">(100%)</span></td><td><span class="pen-2min">⏱5×</span></td></tr>
+<tr><td class="td-name">Thomas Epps</td><td class="num td-goals">49</td><td>0/1 <span class="pct-bad">(0%)</span></td><td><span class="pen-2min">⏱3×</span><span class="pen-yellow">🟡1×</span></td></tr>
+<tr><td class="td-name">Rafael NUNES FRAGA</td><td class="num td-goals">47</td><td>6/8 <span class="pct-good">(75%)</span></td><td><span class="pen-2min">⏱2×</span></td></tr>
+<tr><td class="td-name">Renato Dos Santos</td><td class="num td-goals">47</td><td>2/2 <span class="pct-good">(100%)</span></td><td><span class="pen-2min">⏱6×</span><span class="pen-yellow">🟡1×</span></td></tr>
+<tr><td class="td-name">Jordan PIRES</td><td class="num td-goals">21</td><td>—</td><td>—</td></tr>
+<tr><td class="td-name">Andy FRISCH</td><td class="num td-goals">15</td><td>—</td><td><span class="pen-2min">⏱1×</span><span class="pen-yellow">🟡2×</span></td></tr>
+<tr><td class="td-name">Mathis Ansay</td><td class="num td-goals">15</td><td>2/2 <span class="pct-good">(100%)</span></td><td>—</td></tr>
+<tr><td class="td-name">Clement BERTHEZENE</td><td class="num td-goals">12</td><td>1/2 <span class="pct-mid">(50%)</span></td><td><span class="pen-2min">⏱1×</span></td></tr>
+<tr><td class="td-name">Steven Mering</td><td class="num td-goals">12</td><td>—</td><td><span class="pen-2min">⏱2×</span></td></tr>
+<tr><td class="td-name">Fabio FORTES AMADOR</td><td class="num td-goals">10</td><td>—</td><td><span class="pen-2min">⏱1×</span></td></tr>
+<tr><td class="td-name">Eric Faber</td><td class="num td-goals">7</td><td>—</td><td><span class="pen-2min">⏱1×</span></td></tr>
+<tr><td class="td-name">Joao MATOS</td><td class="num td-goals">5</td><td>—</td><td><span class="pen-2min">⏱2×</span></td></tr>
+<tr><td class="td-name">Jean-Luc GREISCHER</td><td class="num td-goals">4</td><td>—</td><td><span class="pen-2min">⏱2×</span></td></tr>
+<tr><td class="td-name">Luka Ansay</td><td class="num td-goals">4</td><td>—</td><td>—</td></tr>
+<tr><td class="td-name">Dylan Da Silva Leite</td><td class="num td-goals">1</td><td>—</td><td>—</td></tr>
+<tr><td class="td-name">Tun Wellens</td><td class="num td-goals">1</td><td>—</td><td>—</td></tr>
+<tr><td class="td-name">Mark Ruef</td><td class="num td-goals">1</td><td>0/1 <span class="pct-bad">(0%)</span></td><td>—</td></tr></tbody>
     </table></div>
 
     <h3 class="sub-head">🟡 Strafenliste</h3>

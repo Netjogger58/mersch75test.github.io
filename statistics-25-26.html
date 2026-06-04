@@ -48,32 +48,176 @@
         <main class="page-main">
             <section class="page-hero stats2526-hero">
                 <div class="stats2526-hero-inner">
-                    <p class="stats2526-eyebrow">Mersch75 Performance Hub</p>
-                    <h1>Statistik 25/26</h1>
-                    <p>Alle Teamzahlen der Saison 2025/2026 ohne Einbettung. Herren und Damen kannst du direkt als eigene Seite aufrufen.</p>
+                    <h1>SAISONSTATISTIK 2025/2026</h1>
                     <div class="stats2526-head-logos" aria-hidden="true">
                         <img class="stats2526-head-logo is-active" id="stats2526-logo-men" src="Media/Statistik/header-men-transparent.png" alt="">
-                        <img class="stats2526-head-logo is-active" id="stats2526-logo-women" src="Media/Statistik/header-women-transparent.png" alt="">
+                        <img class="stats2526-head-logo" id="stats2526-logo-women" src="Media/Statistik/header-women-transparent.png" alt="">
                     </div>
                 </div>
             </section>
 
             <section class="section stats2526-section">
                 <div class="stats2526-panel">
-                    <div class="stats2526-link-grid">
-                        <article class="stats2526-link-card">
-                            <h2>Herren Statistik</h2>
-                            <p>Komplette Saisonstatistik 2025/2026 der Herrenmannschaft.</p>
-                            <a href="Statistics%20Men.html" target="_blank" rel="noopener noreferrer">Herren Statistik öffnen</a>
-                        </article>
-                        <article class="stats2526-link-card">
-                            <h2>Damen Statistik</h2>
-                            <p>Komplette Saisonstatistik 2025/2026 der Damenmannschaft.</p>
-                            <a href="Statistics%20women.html" target="_blank" rel="noopener noreferrer">Damen Statistik öffnen</a>
-                        </article>
+                    <div class="stats2526-switch" role="tablist" aria-label="Statistik Kategorie wählen">
+                        <button type="button" class="stats2526-switch-btn is-active" role="tab" aria-selected="true" aria-controls="stats2526-embed" data-stats-target="Statistics%20Men.html" data-stats-team="men">Herren</button>
+                        <button type="button" class="stats2526-switch-btn" role="tab" aria-selected="false" aria-controls="stats2526-embed" data-stats-target="Statistics%20women.html" data-stats-team="women">Frauen</button>
                     </div>
+                    <div class="stats2526-embed" id="stats2526-embed" aria-live="polite"></div>
                 </div>
             </section>
+
+            <script>
+                (function () {
+                    var buttons = document.querySelectorAll('.stats2526-switch-btn');
+                    var embed = document.getElementById('stats2526-embed');
+                    var logoMen = document.getElementById('stats2526-logo-men');
+                    var logoWomen = document.getElementById('stats2526-logo-women');
+                    var scope = '.stats2526-embed';
+                    var cache = {};
+
+                    // Zusatz-Styles: Schrift/Farben an Mersch75 angleichen, Zebra, Sticky-Header,
+                    // farbige Ergebnis-Zellen und Text-Badges statt Emojis
+                    var ENHANCE_CSS =
+                        scope + ',' + scope + ' *{font-family:\'Jost\',sans-serif}' +
+                        scope + ' .sec-head,' + scope + ' .sub-head,' + scope + ' .player-name,' +
+                        scope + ' .player-goals,' + scope + ' .season-fact strong,' + scope + ' .analysis h3{font-family:\'Oswald\',sans-serif}' +
+                        scope + ' table.m75t tbody tr:nth-child(even) td{background:rgba(0,47,101,.035)}' +
+                        scope + ' table.m75t tbody tr.mersch td{background:linear-gradient(90deg,rgba(0,47,101,.12),rgba(255,255,255,.96))}' +
+                        scope + ' table.m75t th{position:sticky;top:0;z-index:2}' +
+                        scope + ' td.td-score.win{background:rgba(31,122,58,.12)}' +
+                        scope + ' td.td-score.draw{background:rgba(184,95,0,.12)}' +
+                        scope + ' td.td-score.loss{background:rgba(180,35,24,.10)}' +
+                        scope + ' .card,' + scope + ' .tbl-wrap,' + scope + ' .flh-tbl-box{border-radius:16px}' +
+                        scope + ' .m75-tag{display:inline-block;padding:2px 9px;border-radius:999px;font-size:.62rem;font-weight:800;letter-spacing:.02em;white-space:nowrap}' +
+                        scope + ' .m75-home{background:#e8f1ff;color:#002f65}' +
+                        scope + ' .m75-away{background:#f3eafe;color:#5e3abf}' +
+                        '@media (min-width:861px){' + scope + ' .tbl-wrap{overflow:visible}}';
+
+                    // Emojis durch saubere Text-Badges ersetzen bzw. entfernen
+                    function cleanEmojis(htmlStr) {
+                        return htmlStr
+                            .replace(/\uD83C\uDFE0/g, '<span class="m75-tag m75-home">Heim</span>')   // 🏠
+                            .replace(/\u2708\uFE0F?/g, '<span class="m75-tag m75-away">Ausw.</span>') // ✈️
+                            .replace(/\uD83D\uDCC4\s*/g, '')   // 📄
+                            .replace(/\u25B6\s*/g, '')         // ▶
+                            .replace(/\uD83C\uDFC6\s*/g, '')   // 🏆
+                            .replace(/\uD83D\uDD17\s*/g, '')   // 🔗
+                            .replace(/\u23F1\s*/g, '')         // ⏱
+                            .replace(/\uD83D\uDFE1\s*/g, '');  // 🟡
+                    }
+
+                    // Spalte anhand des Spaltenkopfs entfernen (z. B. doppelte "Ergebnis"-Spalte)
+                    function removeColumnByHeader(root, headerText) {
+                        root.querySelectorAll('table').forEach(function (tbl) {
+                            var ths = tbl.querySelectorAll('thead th');
+                            var idx = -1;
+                            ths.forEach(function (th, i) {
+                                if (th.textContent.trim() === headerText) idx = i;
+                            });
+                            if (idx < 0) return;
+                            ths[idx].remove();
+                            tbl.querySelectorAll('tbody tr').forEach(function (tr) {
+                                if (tr.children[idx]) tr.children[idx].remove();
+                            });
+                        });
+                    }
+
+                    // Begrenzt alle CSS-Regeln der Statistik-Seite auf den Embed-Container
+                    function scopeSelector(sel) {
+                        sel = sel.trim();
+                        if (!sel) return sel;
+                        if (sel === '*' || sel === 'html' || sel === 'body' || sel === ':root') {
+                            return sel === '*' ? scope + ' *' : scope;
+                        }
+                        if (sel.indexOf('body') === 0) {
+                            return scope + sel.slice(4);
+                        }
+                        return scope + ' ' + sel;
+                    }
+
+                    function scopeRules(css) {
+                        var out = '';
+                        var depth = 0, start = 0;
+                        for (var i = 0; i < css.length; i++) {
+                            var c = css[i];
+                            if (c === '{') depth++;
+                            else if (c === '}') {
+                                depth--;
+                                if (depth === 0) {
+                                    out += scopeRule(css.slice(start, i + 1));
+                                    start = i + 1;
+                                }
+                            }
+                        }
+                        return out;
+                    }
+
+                    function scopeRule(rule) {
+                        rule = rule.trim();
+                        if (!rule) return '';
+                        var open = rule.indexOf('{');
+                        if (open === -1) return rule;
+                        var prelude = rule.slice(0, open).trim();
+                        var body = rule.slice(open + 1, rule.lastIndexOf('}'));
+                        if (prelude.charAt(0) === '@') {
+                            if (/^@(media|supports)/i.test(prelude)) {
+                                return prelude + '{' + scopeRules(body) + '}';
+                            }
+                            return rule; // @keyframes, @font-face etc. unverändert
+                        }
+                        var selectors = prelude.split(',').map(scopeSelector).join(',');
+                        return selectors + '{' + body + '}';
+                    }
+
+                    function render(team, target) {
+                        if (cache[target]) {
+                            embed.innerHTML = cache[target];
+                            return;
+                        }
+                        embed.innerHTML = '<p class="stats2526-loading">Statistik wird geladen …</p>';
+                        fetch(target)
+                            .then(function (r) {
+                                if (!r.ok) throw new Error('HTTP ' + r.status);
+                                return r.text();
+                            })
+                            .then(function (html) {
+                                var doc = new DOMParser().parseFromString(html, 'text/html');
+                                var styleEl = doc.querySelector('style');
+                                var page = doc.querySelector('.stat-page');
+                                if (!page) throw new Error('Kein Inhalt gefunden');
+                                page.innerHTML = cleanEmojis(page.innerHTML);
+                                var scopedCss = styleEl ? scopeRules(styleEl.textContent) : '';
+                                embed.innerHTML = '<style>' + scopedCss + ENHANCE_CSS + '</style>' + page.outerHTML;
+                                removeColumnByHeader(embed, 'Ergebnis');
+                                cache[target] = embed.innerHTML;
+                            })
+                            .catch(function (err) {
+                                embed.innerHTML = '<p class="stats2526-loading">Statistik konnte nicht geladen werden (' +
+                                    err.message + '). <a href="' + target + '" target="_blank" rel="noopener">In neuem Tab öffnen</a></p>';
+                            });
+                    }
+
+                    function activate(btn) {
+                        buttons.forEach(function (b) {
+                            var active = b === btn;
+                            b.classList.toggle('is-active', active);
+                            b.setAttribute('aria-selected', active ? 'true' : 'false');
+                        });
+                        var team = btn.getAttribute('data-stats-team');
+                        if (logoMen) logoMen.classList.toggle('is-active', team === 'men');
+                        if (logoWomen) logoWomen.classList.toggle('is-active', team === 'women');
+                        render(team, btn.getAttribute('data-stats-target'));
+                    }
+
+                    buttons.forEach(function (btn) {
+                        btn.addEventListener('click', function () { activate(btn); });
+                    });
+
+                    // Startansicht: Herren
+                    var initial = document.querySelector('.stats2526-switch-btn.is-active') || buttons[0];
+                    if (initial) activate(initial);
+                })();
+            </script>
 
             <footer class="site-page-footer">
                 <div class="site-page-footer-shell">
