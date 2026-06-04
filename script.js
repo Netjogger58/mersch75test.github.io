@@ -90,6 +90,24 @@ function initializeSiteLanguage() {
             eventsPrimary: 'Matmaachen',
             eventsSecondary: 'Zesumme staark',
             eventsImageAlt: 'U4 Events',
+            newsKicker: 'News',
+            newsHeading: 'Aktuelles vum Mersch75',
+            newsStatsEyebrow: 'Saisonstatistik 25/26',
+            newsStatsTitle: 'Statistiken vu Hären a Fraen op enger Plaz.',
+            newsStatsBody: 'D\'Saisonstatistik 2025/2026 ass live: Tabellen, Resultater an Torschützenlëschten fir Hären a Fraen – iwwersiichtlech an aktuell.',
+            newsStatsPillMen: 'Hären',
+            newsStatsPillWomen: 'Fraen',
+            newsStatsPillLive: 'Live',
+            newsStatsCta: 'Statistik kucken',
+            newsStatsImageAlt: 'Saisonstatistik',
+            newsSiteEyebrow: 'Neie Look',
+            newsSiteTitle: 'D\'Websäit erstrahlt an engem neie Liicht.',
+            newsSiteBody: 'Frësch Optik, méi kloer Struktur a séier Navigatioun: déi nei Mersch75-Säit bréngt Spillplang, Statistiken an Infoen iwwersiichtlech zesummen.',
+            newsSitePillDesign: 'Neit Design',
+            newsSitePillFast: 'Méi séier',
+            newsSitePillClear: 'Méi kloer',
+            newsSiteCta: 'Entdecken',
+            newsSiteImageAlt: 'Mersch75',
             infoTitle: 'National an international Informatiounen',
             infoAxaAria: 'AXA League Links',
             infoWomen: 'AXA League Fraen',
@@ -155,6 +173,24 @@ function initializeSiteLanguage() {
             eventsPrimary: 'Participer',
             eventsSecondary: 'Ensemble plus forts',
             eventsImageAlt: 'Événements U4',
+            newsKicker: 'Actualités',
+            newsHeading: 'L\'actualité du Mersch75',
+            newsStatsEyebrow: 'Statistiques de saison 25/26',
+            newsStatsTitle: 'Les statistiques hommes et femmes au même endroit.',
+            newsStatsBody: 'Les statistiques de la saison 2025/2026 sont en ligne : classements, résultats et meilleurs buteurs pour les hommes et les femmes – clairs et à jour.',
+            newsStatsPillMen: 'Hommes',
+            newsStatsPillWomen: 'Femmes',
+            newsStatsPillLive: 'Live',
+            newsStatsCta: 'Voir les statistiques',
+            newsStatsImageAlt: 'Statistiques de saison',
+            newsSiteEyebrow: 'Nouveau look',
+            newsSiteTitle: 'Le site rayonne sous un nouveau jour.',
+            newsSiteBody: 'Nouveau design, structure plus claire et navigation rapide : le nouveau site Mersch75 réunit calendrier, statistiques et infos en un coup d\'oeil.',
+            newsSitePillDesign: 'Nouveau design',
+            newsSitePillFast: 'Plus rapide',
+            newsSitePillClear: 'Plus clair',
+            newsSiteCta: 'Découvrir',
+            newsSiteImageAlt: 'Mersch75',
             infoTitle: 'Infos nationales et internationales',
             infoAxaAria: 'Liens AXA League',
             infoWomen: 'AXA League Femmes',
@@ -220,6 +256,24 @@ function initializeSiteLanguage() {
             eventsPrimary: 'Mitmachen',
             eventsSecondary: 'Zusammen stark',
             eventsImageAlt: 'U4 Events',
+            newsKicker: 'News',
+            newsHeading: 'Aktuelles vom Mersch75',
+            newsStatsEyebrow: 'Saisonstatistik 25/26',
+            newsStatsTitle: 'Statistiken von Herren und Frauen an einem Ort.',
+            newsStatsBody: 'Die Saisonstatistik 2025/2026 ist live: Tabellen, Ergebnisse und Torschützenlisten für Herren und Frauen – übersichtlich und aktuell.',
+            newsStatsPillMen: 'Herren',
+            newsStatsPillWomen: 'Frauen',
+            newsStatsPillLive: 'Live',
+            newsStatsCta: 'Statistik ansehen',
+            newsStatsImageAlt: 'Saisonstatistik',
+            newsSiteEyebrow: 'Neuer Look',
+            newsSiteTitle: 'Die Website erstrahlt in neuem Licht.',
+            newsSiteBody: 'Frische Optik, klarere Struktur und schnelle Navigation: Die neue Mersch75-Seite bringt Spielplan, Statistiken und Infos übersichtlich zusammen.',
+            newsSitePillDesign: 'Neues Design',
+            newsSitePillFast: 'Schneller',
+            newsSitePillClear: 'Klarer',
+            newsSiteCta: 'Entdecken',
+            newsSiteImageAlt: 'Mersch75',
             infoTitle: 'Nationale und internationale Infos',
             infoAxaAria: 'AXA League Links',
             infoWomen: 'AXA League Frauen',
@@ -285,6 +339,24 @@ function initializeSiteLanguage() {
             eventsPrimary: 'Join in',
             eventsSecondary: 'Stronger together',
             eventsImageAlt: 'U4 events',
+            newsKicker: 'News',
+            newsHeading: 'Latest from Mersch75',
+            newsStatsEyebrow: 'Season stats 25/26',
+            newsStatsTitle: 'Men\'s and women\'s stats in one place.',
+            newsStatsBody: 'The 2025/2026 season statistics are live: tables, results and top scorers for men and women – clear and up to date.',
+            newsStatsPillMen: 'Men',
+            newsStatsPillWomen: 'Women',
+            newsStatsPillLive: 'Live',
+            newsStatsCta: 'View statistics',
+            newsStatsImageAlt: 'Season statistics',
+            newsSiteEyebrow: 'New look',
+            newsSiteTitle: 'The website shines in a new light.',
+            newsSiteBody: 'Fresh design, clearer structure and fast navigation: the new Mersch75 site brings schedule, statistics and info together at a glance.',
+            newsSitePillDesign: 'New design',
+            newsSitePillFast: 'Faster',
+            newsSitePillClear: 'Clearer',
+            newsSiteCta: 'Explore',
+            newsSiteImageAlt: 'Mersch75',
             infoTitle: 'National and international info',
             infoAxaAria: 'AXA League links',
             infoWomen: 'AXA League Women',
@@ -350,6 +422,24 @@ function initializeSiteLanguage() {
             eventsPrimary: 'Participar',
             eventsSecondary: 'Mais fortes juntos',
             eventsImageAlt: 'Eventos U4',
+            newsKicker: 'Notícias',
+            newsHeading: 'Novidades do Mersch75',
+            newsStatsEyebrow: 'Estatísticas da época 25/26',
+            newsStatsTitle: 'Estatísticas de homens e mulheres num só lugar.',
+            newsStatsBody: 'As estatísticas da época 2025/2026 estão online: classificações, resultados e melhores marcadores para homens e mulheres – claras e atualizadas.',
+            newsStatsPillMen: 'Homens',
+            newsStatsPillWomen: 'Mulheres',
+            newsStatsPillLive: 'Live',
+            newsStatsCta: 'Ver estatísticas',
+            newsStatsImageAlt: 'Estatísticas da época',
+            newsSiteEyebrow: 'Novo visual',
+            newsSiteTitle: 'O site brilha sob uma nova luz.',
+            newsSiteBody: 'Novo design, estrutura mais clara e navegação rápida: o novo site Mersch75 reúne calendário, estatísticas e informações de forma clara.',
+            newsSitePillDesign: 'Novo design',
+            newsSitePillFast: 'Mais rápido',
+            newsSitePillClear: 'Mais claro',
+            newsSiteCta: 'Descobrir',
+            newsSiteImageAlt: 'Mersch75',
             infoTitle: 'Informações nacionais e internacionais',
             infoAxaAria: 'Ligações AXA League',
             infoWomen: 'AXA League Feminina',
@@ -1775,6 +1865,144 @@ function initializeJoinUsForm() {
     syncU7Requirement('');
 }
 
+function initializeNewsCarousel() {
+    const carousel = document.querySelector('[data-news-carousel]');
+    if (!carousel) return;
+
+    const track = carousel.querySelector('[data-news-track]');
+    const slides = Array.from(carousel.querySelectorAll('[data-news-slide]'));
+    const prevButton = carousel.querySelector('[data-news-prev]');
+    const nextButton = carousel.querySelector('[data-news-next]');
+    const dotsContainer = carousel.querySelector('[data-news-dots]');
+    if (!track || slides.length === 0) return;
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const allowAutoplay = !reduceMotion && slides.length > 1;
+
+    // Bilder ausserhalb des ersten Slides erst bei Bedarf laden.
+    slides.forEach((slide, i) => {
+        if (i === 0) return;
+        slide.querySelectorAll('img').forEach((img) => {
+            if (!img.getAttribute('loading')) img.setAttribute('loading', 'lazy');
+        });
+    });
+
+    let index = 0;
+    let autoplayTimer = null;
+    const autoplayDelay = 7000;
+
+    const dots = slides.map((_, i) => {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'news-dot';
+        dot.setAttribute('role', 'tab');
+        dot.setAttribute('aria-label', `News ${i + 1}`);
+        dot.addEventListener('click', () => {
+            goTo(i);
+            restartAutoplay();
+        });
+        if (dotsContainer) dotsContainer.append(dot);
+        return dot;
+    });
+
+    function goTo(target) {
+        index = (target + slides.length) % slides.length;
+        track.style.transform = `translateX(-${index * 100}%)`;
+        dots.forEach((dot, i) => {
+            const active = i === index;
+            dot.classList.toggle('is-active', active);
+            dot.setAttribute('aria-selected', active ? 'true' : 'false');
+        });
+        slides.forEach((slide, i) => {
+            slide.setAttribute('aria-hidden', i === index ? 'false' : 'true');
+        });
+    }
+
+    function next() {
+        goTo(index + 1);
+    }
+
+    function prev() {
+        goTo(index - 1);
+    }
+
+    function startAutoplay() {
+        if (!allowAutoplay) return;
+        carousel.classList.add('is-autoplaying');
+        autoplayTimer = window.setInterval(next, autoplayDelay);
+    }
+
+    function stopAutoplay() {
+        carousel.classList.remove('is-autoplaying');
+        if (autoplayTimer) {
+            window.clearInterval(autoplayTimer);
+            autoplayTimer = null;
+        }
+    }
+
+    function restartAutoplay() {
+        stopAutoplay();
+        startAutoplay();
+    }
+
+    if (nextButton) {
+        nextButton.addEventListener('click', () => {
+            next();
+            restartAutoplay();
+        });
+    }
+
+    if (prevButton) {
+        prevButton.addEventListener('click', () => {
+            prev();
+            restartAutoplay();
+        });
+    }
+
+    carousel.addEventListener('mouseenter', stopAutoplay);
+    carousel.addEventListener('mouseleave', startAutoplay);
+    carousel.addEventListener('focusin', stopAutoplay);
+    carousel.addEventListener('focusout', (event) => {
+        if (!carousel.contains(event.relatedTarget)) startAutoplay();
+    });
+
+    // Tastatur-Navigation
+    carousel.setAttribute('tabindex', '0');
+    carousel.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowRight') {
+            event.preventDefault();
+            next();
+            restartAutoplay();
+        } else if (event.key === 'ArrowLeft') {
+            event.preventDefault();
+            prev();
+            restartAutoplay();
+        }
+    });
+
+    let touchStartX = null;
+    track.addEventListener('touchstart', (event) => {
+        touchStartX = event.touches[0].clientX;
+        stopAutoplay();
+    }, { passive: true });
+    track.addEventListener('touchend', (event) => {
+        if (touchStartX === null) return;
+        const delta = event.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(delta) > 40) {
+            if (delta < 0) {
+                next();
+            } else {
+                prev();
+            }
+        }
+        touchStartX = null;
+        restartAutoplay();
+    }, { passive: true });
+
+    goTo(0);
+    startAutoplay();
+}
+
 ensureSiteLanguageSwitcher();
 initializeSiteLanguage();
 // initializeLanguageSelectionHint();  // Hinweisbanner "Wielt hei Är Sprooch." deaktiviert – Sprachumschalter ist dezent in der Kopfzeile sichtbar.
@@ -1782,4 +2010,5 @@ initializeSiteMenu();
 initializeTrainingSchedule();
 initializeJoinUsForm();
 initializeSharedFooters();
+initializeNewsCarousel();
 syncCurrentYear();

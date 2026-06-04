@@ -789,6 +789,161 @@ body.menu-open {
     object-fit: contain;
 }
 
+/* ---- News carousel ---- */
+.news-carousel {
+    position: relative;
+}
+
+.page-main > .news-carousel {
+    margin: 24px 0 36px;
+}
+
+.news-carousel-head {
+    padding: 30px 36px 0;
+}
+
+.news-carousel-head .eyebrow {
+    margin-bottom: 6px;
+}
+
+.news-carousel-head h2 {
+    color: var(--blue);
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    line-height: 1;
+    margin: 0;
+}
+
+.news-carousel-viewport {
+    overflow: hidden;
+}
+
+.news-carousel-track {
+    display: flex;
+    will-change: transform;
+    transition: transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.news-carousel-track .news-slide {
+    flex: 0 0 100%;
+    width: 100%;
+    min-width: 100%;
+    min-height: 340px;
+    border-radius: 0;
+}
+
+.news-carousel-track .events-overlay {
+    padding: 22px 36px;
+}
+
+.news-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 4;
+    width: 52px;
+    height: 52px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.92);
+    color: var(--blue);
+    font-size: 1.8rem;
+    line-height: 1;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 8px 22px rgba(0, 47, 101, 0.18);
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.news-arrow:hover {
+    background: var(--yellow);
+    color: var(--blue);
+}
+
+.news-arrow:active {
+    transform: translateY(-50%) scale(0.94);
+}
+
+.news-arrow-prev {
+    left: 18px;
+}
+
+.news-arrow-next {
+    right: 18px;
+}
+
+.news-dots {
+    position: absolute;
+    left: 50%;
+    bottom: 20px;
+    transform: translateX(-50%);
+    z-index: 4;
+    display: flex;
+    gap: 10px;
+}
+
+.news-dot {
+    width: 11px;
+    height: 11px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: rgba(0, 47, 101, 0.28);
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.news-dot:hover {
+    background: rgba(0, 47, 101, 0.5);
+}
+
+.news-dot.is-active {
+    background: var(--blue);
+    transform: scale(1.25);
+}
+
+.news-carousel:focus-visible {
+    outline: 3px solid var(--blue);
+    outline-offset: 3px;
+}
+
+.news-carousel::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 4px;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: left center;
+    background: var(--yellow);
+    z-index: 4;
+    pointer-events: none;
+    opacity: 0;
+}
+
+.news-carousel.is-autoplaying::after {
+    opacity: 1;
+    animation: news-progress 7s linear infinite;
+}
+
+@keyframes news-progress {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .news-carousel-track {
+        transition: none;
+    }
+
+    .news-carousel::after {
+        display: none;
+    }
+}
+
 .info-section,
 .sponsors-section {
     padding: 40px 34px 46px;
@@ -2674,6 +2829,28 @@ body.matchday-page {
 
     .events-section {
         min-height: 460px;
+    }
+
+    .news-carousel-track .news-slide {
+        min-height: 320px;
+    }
+
+    .news-carousel-head {
+        padding: 22px 22px 0;
+    }
+
+    .news-arrow {
+        width: 42px;
+        height: 42px;
+        font-size: 1.5rem;
+    }
+
+    .news-arrow-prev {
+        left: 10px;
+    }
+
+    .news-arrow-next {
+        right: 10px;
     }
 
     .events-side {
