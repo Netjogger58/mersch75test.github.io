@@ -222,6 +222,7 @@
 #m75-lc-wrapper .static-view tr:hover td { background: #fafafa; }
 
 #m75-lc-wrapper .team-divider { background: var(--mersch-blue) !important; color: white !important; font-weight: 900; text-align: center; letter-spacing: 1px; padding: 12px 10px !important; font-size: 0.85rem; }
+#m75-lc-wrapper .phase-divider { background: #eef2f7 !important; color: var(--mersch-blue) !important; font-weight: 700; text-align: center; letter-spacing: .5px; padding: 6px 10px !important; font-size: 0.68rem; border-top: 2px dashed var(--mersch-blue); border-bottom: 1px solid #d4dcea; text-transform: uppercase; }
 
 #m75-lc-wrapper .score-cell { font-weight: 700; text-align: center; white-space: nowrap; font-variant-numeric: tabular-nums; }
 #m75-lc-wrapper .win  { color: #2e7d32; }
@@ -272,9 +273,10 @@
         <a class="brand" href="index.html">
             <span class="brand-mark">75</span>
             <span class="brand-copy">
-                <strong>Mersch75 Handball</strong>
+                <strong>Mersch75 Handball Club</strong>
                 <span>Zesumme Staark</span>
             </span>
+            <img class="brand-logo-img" src="Media/Header_Logos_media/Logo-Menu-Applestyle-Mersch75-Zesumme-Staark.png" alt="Mersch75 Zesumme Staark" width="56" height="56">
         </a>
         <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menü</button>
         <nav class="site-nav" id="site-nav">
@@ -438,11 +440,11 @@ let allGamesData = [
     { team: "JUGEND: U13M-PE", datum: "02.05.26 10:30", heim: "Mersch75", gast: "HB Dudelange 2",  score: "49:22", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3454511", rtl: "", nr: "29503043" },
     { team: "JUGEND: U13M-PE", datum: "08.05.26 18:00", heim: "Mersch75", gast: "HBC Schifflange", score: "30:19", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3465391", rtl: "", nr: "29503046" },
     { team: "JUGEND: U13M-PE", datum: "16.05.26 10:30", heim: "Mersch75", gast: "HC Standard 2", score: "25:28", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3476156", rtl: "", nr: "29503049" },
-    { team: "JUGEND: U13M-PE", datum: "23.05.26 15:00", heim: "HB Pétange", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29503009" },
+    { team: "JUGEND: U13M-PE", datum: "05.06.26 15:30", heim: "HB Pétange", gast: "Mersch75", score: "", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3484116", rtl: "", nr: "29503009" },
     { team: "JUGEND: U13M-PE", datum: "06.06.26 10:30", heim: "Mersch75", gast: "HB Esch", score: "", sbo: "", rtl: "", nr: "29503052" },
 
     { team: "JUGEND: U11 Elite", datum: "11.01.26 10:00", heim: "Mersch75", gast: "Handball Esch", score: "24:15", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3259137", rtl: "" },
-    { team: "JUGEND: U11 Elite", datum: "25.01.26 14:00", heim: "HBC Schifflange", gast: "Mersch75", score: "31:23", sbo: "", rtl: "" },
+    { team: "JUGEND: U11 Elite", datum: "25.01.26 14:00", heim: "HBC Schifflange", gast: "Mersch75", score: "31:23", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3288729", rtl: "" },
     { team: "JUGEND: U11 Elite", datum: "01.02.26 14:00", heim: "Mersch75", gast: "HC Berchem", score: "23:26", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3302965", rtl: "" },
     { team: "JUGEND: U11 Elite", datum: "08.02.26 10:00", heim: "Red Boys", gast: "Mersch75", score: "16:26", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3313481", rtl: "" },
     { team: "JUGEND: U11 Elite", datum: "01.03.26 14:00", heim: "Handball Esch", gast: "Mersch75", score: "17:25", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3354461", rtl: "" },
@@ -566,10 +568,10 @@ allGamesData = mergeGameData(allGamesData, missingGames);
 const coupeData = [
 { kat:"H-C-LN",  datum:"05.10.25 18:00", heim:"Mersch75",      gast:"HB Esch",       score:"25:47", bem:"", sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3108476", rtl:"https://play.rtl.lu/live-arena/11730" },
 { kat:"D-C-LN",  datum:"05.10.25 16:00", heim:"CHEV Diekirch", gast:"Mersch75",       score:"27:10", bem:"Arrêté avant la fin", sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3107036", rtl:"https://play.rtl.lu/live-arena/11733" },
-{ kat:"U13M-C",  datum:"19.10.25 14:00", heim:"Mersch75",      gast:"CHEV Diekirch",  score:"34:14", bem:"Match Inversé" },
-{ kat:"U13M-C",  datum:"09.01.26 18:00", heim:"Mersch75",      gast:"HC Berchem 2",   score:"33:24", bem:"" },
-{ kat:"U15G-C",  datum:"11.01.26 14:00", heim:"Mersch75",      gast:"Käerjeng/Esch",  score:"22:43", bem:"" },
-{ kat:"U13M-C",  datum:"21.03.26 14:00", heim:"HC Berchem",    gast:"Mersch75",       score:"32:19", bem:"" },
+{ kat:"U13M-C",  datum:"19.10.25 14:00", heim:"Mersch75",      gast:"CHEV Diekirch",  score:"34:14", bem:"Match Inversé", sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3129666", rtl:"https://youtu.be/Gb4C9R3kBLE" },
+{ kat:"U13M-C",  datum:"09.01.26 18:00", heim:"Mersch75",      gast:"HC Berchem 2",   score:"33:24", bem:"", sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3255841", rtl:"https://youtu.be/gFucY2QNDMc" },
+{ kat:"U15G-C",  datum:"11.01.26 14:00", heim:"Mersch75",      gast:"Käerjeng/Esch",  score:"22:43", bem:"", sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3261221", rtl:"https://youtu.be/FZ0tyKA2i9w" },
+{ kat:"U13M-C",  datum:"21.03.26 14:00", heim:"HC Berchem",    gast:"Mersch75",       score:"32:19", bem:"", sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3399046", rtl:"https://youtu.be/nU0uoUfu66M" },
 ];
 
 const m75Data = [
@@ -850,7 +852,7 @@ return `<tr>
 <td><strong>${r.heim}</strong></td>
 <td>${r.gast}</td>
 <td class="score-cell ${scoreCSS(r.score,r.heim)}">${r.score}</td>
-${sboCell("")}${rtlCell("")}
+${sboCell(r.sbo)}${rtlCell(r.rtl)}
 <td class="col-bem">${r.bem}</td>
 </tr>`;
 }).join("") : ""
@@ -1169,8 +1171,24 @@ if (rankA !== rankB) return rankA - rankB;
 return parseDateStr(b.datum) - parseDateStr(a.datum); 
 });
 
+// Erste Match vun der Placement-Ronn / Gruppephase pro Equipe.
+// Spiller virun dësem Datum gehéieren zum Championnat, duerno zur (anerer) Gruppephase.
+const PHASE_CUTOFF = {
+"MÄNNER": "01.03.26",
+"FRAUEN": "01.02.26",
+"U15G":   "19.04.26"
+};
+const getPhase = (label, datum) => {
+const cutoff = PHASE_CUTOFF[(label || "").toUpperCase()];
+if (!cutoff) return "";
+const t = parseDateStr(datum), c = parseDateStr(cutoff);
+if (!t || !c || t >= 9999999999000) return "";
+return t >= c ? "playoff" : "champ";
+};
+
 let rows = "";
 let currentCat = "";
+let currentPhase = "";
 
 sortedGames.forEach(r => {
 try {
@@ -1179,7 +1197,14 @@ let groupKey = getTeamGroupKey(r.team || "");
 if (groupKey !== currentCat) {
 rows += `<tr><td colspan="8" class="team-divider">${cleanTeam}</td></tr>`;
 currentCat = groupKey;
+currentPhase = "";
 }
+
+const phase = getPhase(cleanTeam, r.datum);
+if (phase === "champ" && currentPhase === "playoff") {
+rows += `<tr><td colspan="8" class="phase-divider">⬆ Placement-Ronn / Gruppephase&nbsp;&nbsp;·&nbsp;&nbsp;Championnat ⬇</td></tr>`;
+}
+if (phase) currentPhase = phase;
 
 let scoreDisplay = "";
 if (r.score && r.score !== "-") {
