@@ -81,11 +81,12 @@ h3 {
 }
 
 .separator {
-    width: min(1000px, calc(100% - 120px));
-    height: 4px;
-    margin: 18px auto;
+    width: 56px;
+    height: 3px;
+    margin: 44px auto;
     background: var(--yellow);
     border-radius: 999px;
+    opacity: 0.85;
 }
 
 .site-header {
@@ -823,6 +824,7 @@ body.menu-open {
 
 .news-carousel-viewport {
     overflow: hidden;
+    position: relative;
 }
 
 .news-carousel-track {
@@ -841,6 +843,30 @@ body.menu-open {
 
 .news-carousel-track .events-overlay {
     padding: 22px 36px;
+}
+
+/* Karussell kompakter halten: keine erzwungene 720px-Höhe, kleinere Abstände,
+   und das grosse Bild deckeln, damit die News-Box nicht so hoch gezogen wird. */
+.news-carousel-track .events-section {
+    min-height: 0;
+}
+
+.news-carousel-track .news-slide .events-overlay {
+    gap: 24px;
+    padding: 24px 36px;
+    align-items: center;
+}
+
+.news-carousel-track .events-pill-row {
+    margin-top: 14px;
+}
+
+.news-carousel-track .events-main-link {
+    width: min(440px, 100%);
+}
+
+.news-carousel-track .events-main-link img {
+    max-height: 280px;
 }
 
 .news-arrow {
@@ -2793,7 +2819,8 @@ body.matchday-page {
     }
 
     .separator {
-        width: calc(100% - 24px);
+        width: 48px;
+        margin: 34px auto;
     }
 
     .landing-hero {
