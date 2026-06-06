@@ -21,7 +21,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="js/generator-gate.js?v=20260519c" defer></script>
-<script src="js/flh-live-sync.js?v=20260520a" defer></script>
+<script src="js/flh-live-sync.js?v=20260606a" defer></script>
 
 <style>
 :root {
@@ -396,6 +396,7 @@ function sortAndInjectEnglischeWoche(games, weekStart, weekEnd) {
     // Filter für aktuelle Woche
     const weekGames = games.filter(g => {
         const dt = parseGameDateValue(g);
+        if (isGeneratorGameExcluded(g)) return false;
         return dt && dt >= weekStart && dt <= weekEnd;
     });
     // Gruppiere Spiele nach Team
@@ -768,7 +769,8 @@ function refreshGeneratorScheduleData(forceRefresh) {
         const updated = applyGeneratorLiveGames(livePayload);
         if (updated) {
             const errorSuffix = livePayload.errors.length ? ' Einige FLH-Ligen waren nicht erreichbar.' : '';
-            setWeekendStatus('Spielplan wurde beim Oeffnen auf den aktuellen FLH-Stand gebracht.' + errorSuffix, false);
+            const refreshedTime = new Date(generatorDataRefreshedAt).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+            setWeekendStatus('Spielplan wurde beim Oeffnen um ' + refreshedTime + ' auf den aktuellen FLH-Stand gebracht.' + errorSuffix, false);
         } else if (livePayload.errors.length) {
             setWeekendStatus('Live-Aktualisierung fehlgeschlagen. Es wird die lokale Saisonliste verwendet.', true);
         }
@@ -1070,6 +1072,9 @@ async function loadSavedSchedule() {
             const halleStr = game.halle ? " " + game.halle : "";
             rawText += game.team + " " + game.datum + halleStr + " " + game.heim + " - " + game.gast + "\n";
         }
+        if (startT <= new Date(2026, 5, 14).getTime() && endT >= new Date(2026, 5, 14).getTime() && rawText.indexOf('U11 Espoir') === -1 && rawText.indexOf('U11M-ES') === -1) {
+            rawText += "JUGEND: U11 Espoirs 14.06.26 10:00 Mersch75 - Tournoi\n";
+        }
     }
     if (rawText.trim().length > 0) { const txtArea = document.getElementById('magic-text'); if (txtArea) txtArea.value = rawText; setTimeout(function() { magicScan(); }, 100); } 
     else { alert("Keine Spiele für diese Woche in der Datenbank gefunden."); }
@@ -1125,6 +1130,12 @@ function getNormalizedGeneratorTeamKey(teamName) {
     return normalized;
 }
 
+function isGeneratorGameExcluded(game) {
+    const dt = parseGameDateValue(game);
+    const key = getNormalizedGeneratorTeamKey(game && game.team);
+    return key === 'u11MEL' && dt && dt > new Date(2026, 5, 7, 23, 59, 59);
+}
+
 function setWeekendStatus(message, isError) {
     const status = document.getElementById('weekend-status');
     if (!status) return;
@@ -1154,6 +1165,10 @@ async function loadWeekendSchedule(offsetWeeks) {
     const range = getWeekendRange(offsetWeeks || 0);
     const uniqueKeys = new Set();
     const filteredGames = (typeof allGamesData !== 'undefined' ? allGamesData : []).filter(function(game) {
+        if (isGeneratorGameExcluded(game)) {
+            return false;
+        }
+
         const gameDate = parseGameDateValue(game);
         if (!gameDate || gameDate < range.start || gameDate > range.end) {
             return false;
@@ -1232,8 +1247,8 @@ function magicScan() {
             const ul = line.trim().toUpperCase(); let p = null;
             if (ul.indexOf("U09") !== -1 || ul.indexOf("U9") !== -1) p = 'u9M';
             else if (ul.indexOf("U07") !== -1 || ul.indexOf("U7") !== -1) p = 'u7M';
+            else if (ul.indexOf("U11M-ES") !== -1 || ul.indexOf("U11 ES") !== -1 || (ul.indexOf("U11") !== -1 && ul.indexOf("TOURNOI") !== -1) || ul.indexOf("ESPOIR") !== -1) p = 'u11MES';
             else if (ul.indexOf("U11M-E") !== -1 || ul.indexOf("U11ME") !== -1 || ul.indexOf("ELITE") !== -1) p = 'u11MEL';
-            else if ((ul.indexOf("U11") !== -1 && ul.indexOf("TOURNOI") !== -1) || ul.indexOf("ESPOIR") !== -1) p = 'u11MES';
             else if (ul.indexOf("U11") !== -1) p = 'u11MEL'; 
             else if (ul.indexOf("U15") !== -1) p = 'u15';
             else if (ul.indexOf("U13M-P3") !== -1) p = 'u13p3';
@@ -1244,8 +1259,15 @@ function magicScan() {
             
             if (!p) continue;
 
+            const parsedLineDate = parseGameDateValue({ datum: line });
+            if (p === 'u11MEL' && parsedLineDate && parsedLineDate > new Date(2026, 5, 7, 23, 59, 59)) {
+                continue;
+            }
+
             const primaryDateEl = document.getElementById(p + '-date');
             const hadPrimaryDateBeforeLine = !!(primaryDateEl && primaryDateEl.value);
+            const primaryTypeEl = document.getElementById(p + '-type');
+            const primaryTypeBeforeLine = primaryTypeEl ? primaryTypeEl.value : '';
             
             const activateTeamCheckboxes = (teamPrefix) => {
                 const mainCb = document.querySelector('.trigger-toggle[data-team="' + teamPrefix + '"]'); if (mainCb) mainCb.checked = true;
@@ -1270,7 +1292,7 @@ function magicScan() {
                 else if (ul.indexOf("COUPE") !== -1 || ul.indexOf("-C2") !== -1 || ul.indexOf("M-C") !== -1 || ul.indexOf("G-C") !== -1 || ul.indexOf("-C-LN") !== -1) c = "Coupe";
                 else if (ul.indexOf("PLAYOFF") !== -1 || ul.indexOf("-PO") !== -1 || ul.indexOf("-PE") !== -1 || ul.indexOf("PROMOTIOUN") !== -1 || ul.indexOf("PROM") !== -1) c = "Playoff";
                 else if (ul.indexOf("CHAMPIONNAT") !== -1 || ul.indexOf("-CH") !== -1) c = "Championnat";
-                else if (ul.indexOf("TOURNOI") !== -1 || ul.indexOf("ESPOIRS") !== -1) c = "Tournoi";
+                else if (ul.indexOf("TOURNOI") !== -1 || ul.indexOf("ESPOIR") !== -1) c = "Tournoi";
                 else c = "Season Games";
                 if (c) ti.value = c;
             }
@@ -1321,7 +1343,10 @@ function magicScan() {
                 const t2El = document.getElementById(p + '-time2');
                 const o2El = document.getElementById(p + '-opp2');
                 const h2El = document.getElementById(p + '-home2');
-                if (d2El && !d2El.value && dm) {
+                const currentTypeEl = document.getElementById(p + '-type');
+                const currentType = currentTypeEl ? currentTypeEl.value : '';
+                const allowSecondGame = primaryTypeBeforeLine !== 'Tournoi' && currentType !== 'Tournoi';
+                if (allowSecondGame && d2El && !d2El.value && dm) {
                     const extraBox = document.getElementById('extra-' + p);
                     if (extraBox && extraBox.style.display === 'none') {
                         extraBox.style.display = 'block';
@@ -1533,6 +1558,11 @@ function buildLandscapePhotoOnlyAssignments(activeTeams) {
     return assignments.slice(0, 6);
 }
 
+function renderLandscapeU11EspoirTournamentFallback(cont) {
+    if (!cont || !teamHasConfiguredGame('u11MES')) return;
+    renderLandscapeGame('u11MES', { type: 'small', top: 610, left: 1130 }, cont, true);
+}
+
 function updateLandscapePreview() {
     const smLEl = document.getElementById('l-scale-mixvoip-l'); const smL = smLEl ? smLEl.value : 280;
     const sdEl = document.getElementById('l-scale-matchday'); const sd = sdEl ? sdEl.value : 90; 
@@ -1565,6 +1595,9 @@ function updateLandscapePreview() {
                 allActive.push({ id: p, hasGame: hasGame });
             }
         }
+    }
+    if (teamHasConfiguredGame('u11MES') && !at.some(function(team) { return team.id === 'u11MES'; })) {
+        at.unshift({ id: 'u11MES', hasGame: true });
     }
     const sortFn = function(a, b) {
         return getAssignedPos(a.id) - getAssignedPos(b.id);
@@ -1648,6 +1681,34 @@ function updateLandscapePreview() {
     }
 
     const regularSelectionCount = topTier.length + lowTier.length;
+
+    if (ht && !ym && allActive.length > 0 && allActive.length <= 3 && allActive.every(function(team) { return ['u15', 'u13pe', 'u13p3', 'u11MEL'].indexOf(team.id) !== -1; })) {
+        const youthGamesForMainSlots = topTier.concat(lowTier);
+        let centerSlots = [];
+        if (youthGamesForMainSlots.length === 3) {
+            centerSlots = [ { type: 'big', top: 350, left: 36 }, { type: 'big', top: 350, left: 570 }, { type: 'big', top: 350, left: 1104 } ];
+        } else if (youthGamesForMainSlots.length === 2) {
+            centerSlots = [ { type: 'big', top: 350, left: 260 }, { type: 'big', top: 350, left: 880 } ];
+        } else if (youthGamesForMainSlots.length === 1) {
+            centerSlots = [ { type: 'big', top: 350, left: 570 } ];
+        }
+
+        for (let i = 0; i < youthGamesForMainSlots.length; i++) {
+            renderLandscapeGame(youthGamesForMainSlots[i].id, centerSlots[i], cont, youthGamesForMainSlots[i].hasGame);
+        }
+
+        const u11EspoirTournament = at.find(function(team) { return team.id === 'u11MES'; }) || at[0];
+        if (u11EspoirTournament) {
+            renderLandscapeGame(u11EspoirTournament.id, { type: 'small', top: 610, left: 1130 }, cont, true);
+        } else {
+            renderLandscapeU11EspoirTournamentFallback(cont);
+        }
+
+        const tcNoGrid = document.getElementById('l-dynamic-tournoi');
+        if (tcNoGrid) tcNoGrid.innerHTML = '';
+        scalePoster();
+        return;
+    }
 
     if (ht) {
         tTop = 110;
@@ -1835,6 +1896,10 @@ function updateLandscapePreview() {
             }
             tc.innerHTML += th;
         }
+    }
+
+    if (!ym && teamHasConfiguredGame('u11MES') && allActive.every(function(team) { return ['u15', 'u13pe', 'u13p3', 'u11MEL'].indexOf(team.id) !== -1; })) {
+        renderLandscapeU11EspoirTournamentFallback(cont);
     }
 }
 
@@ -2302,7 +2367,6 @@ function updatePortraitPreview() {
                 const p2 = loc2Val.split('|');
                 for (let k = 0; k < p2.length; k++) { p2[k] = p2[k].trim(); }
                 ls2 = p2.join('<br>');
-            }
             const ol2 = (typeof teams !== 'undefined' && teams[opp2]) ? teams[opp2] : CONFIG.ballLogo;
             const ml2 = (prefix === 'fe') ? CONFIG.merschFELogo : CONFIG.merschLogo;
             const l1b = itour
@@ -2865,7 +2929,7 @@ function openHomepageHandoffModal(stamp, hasPortrait) {
         if (ym) ym.addEventListener('change', function() { updateLandscapePreview(); scalePoster(); });
 
         window.updateAllPreviews(); scalePoster();
-        refreshGeneratorScheduleData(false);
+        refreshGeneratorScheduleData(true);
         window.addEventListener('resize', function() { scalePoster(); });
     }
 
@@ -2926,7 +2990,7 @@ function openHomepageHandoffModal(stamp, hasPortrait) {
 
         if (typeof updateAllPreviews === 'function') updateAllPreviews();
         if (typeof scalePoster === 'function') scalePoster();
-        if (typeof refreshGeneratorScheduleData === 'function') refreshGeneratorScheduleData(false);
+        if (typeof refreshGeneratorScheduleData === 'function') refreshGeneratorScheduleData(true);
     }
 
     if (document.readyState === 'loading') {

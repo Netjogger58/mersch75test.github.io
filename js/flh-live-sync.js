@@ -172,6 +172,22 @@
         };
     }
 
+    function parseLuxDateTime(value) {
+        const parts = trimValue(value).split(' ');
+        const dateParts = (parts[0] || '').split('.');
+        if (dateParts.length !== 3) return null;
+        let year = parseInt(dateParts[2], 10);
+        if (year < 100) year += 2000;
+        return new Date(year, parseInt(dateParts[1], 10) - 1, parseInt(dateParts[0], 10));
+    }
+
+    function isExcludedLiveGame(config, game) {
+        if (!config || config.key !== 'u11el') return false;
+        const date = parseLuxDateTime(game && game.datum);
+        if (!date) return false;
+        return date > new Date(2026, 5, 7, 23, 59, 59);
+    }
+
     async function fetchCompetitionGames(config) {
         const response = await fetch(buildUrl(config), { cache: 'no-store' });
         if (!response.ok) throw new Error('FLH ' + config.label + ' HTTP ' + response.status);
@@ -184,6 +200,7 @@
             combined
                 .filter(function(game) { return isRelevantGame(config, game); })
                 .map(function(game) { return mapGame(config, game); })
+                .filter(function(game) { return !isExcludedLiveGame(config, game); })
                 .filter(function(game) { return game.datum && game.heim; })
         );
         const standings = extractGames(content.score).map(mapStandingRow).filter(function(row) { return row.team; });
