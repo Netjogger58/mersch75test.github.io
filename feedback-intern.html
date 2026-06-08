@@ -98,7 +98,13 @@
 
             function allRows() {
                 const stored = readJson(ratingsKey, {});
-                return config.categories.map((category) => Object.assign(emptyBucket(category), stored[category.id] || {}));
+                const knownIds = new Set(config.categories.map((category) => category.id));
+                const configuredRows = config.categories.map((category) => Object.assign(emptyBucket(category), stored[category.id] || {}));
+                const automaticRows = Object.keys(stored)
+                    .filter((id) => !knownIds.has(id))
+                    .map((id) => stored[id]);
+
+                return configuredRows.concat(automaticRows);
             }
 
             function formatDate(history) {
