@@ -3067,11 +3067,15 @@ body.matchday-page {
     }
 
     .landing-header .site-language-switcher {
-        display: none;
+        display: inline-flex;
+        order: 3;
+        width: auto;
     }
 
     .site-header .site-language-switcher {
-        display: none;
+        display: inline-flex;
+        order: 3;
+        width: auto;
     }
 
     .site-menu-language {
@@ -4048,6 +4052,28 @@ body.stats2526-page {
     background: var(--blue);
     color: #ffde00;
     border-color: var(--blue);
+}
+
+.stats2526-photo-only {
+    display: grid;
+    gap: 18px;
+    text-align: center;
+}
+
+.stats2526-photo-only img {
+    display: block;
+    width: 100%;
+    max-height: 620px;
+    object-fit: contain;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.stats2526-photo-only p {
+    max-width: 760px;
+    margin: 0 auto;
+    color: #ffffff;
+    font-weight: 800;
 }
 
 .stats2526-frame-wrap {
