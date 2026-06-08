@@ -312,11 +312,12 @@ h3 {
 }
 
 .site-menu-secondary a {
-    min-height: 86px;
+    min-height: 68px;
     display: flex;
     align-items: flex-end;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     line-height: 1.2;
+    padding: 14px 16px;
 }
 
 .site-menu-footer {
