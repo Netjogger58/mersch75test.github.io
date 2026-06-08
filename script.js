@@ -1889,7 +1889,7 @@ function initializeNewsCarousel() {
 
     let index = 0;
     let autoplayTimer = null;
-    const autoplayDelay = 7000;
+    const autoplayDelay = 12000;
 
     const dots = slides.map((_, i) => {
         const dot = document.createElement('button');
@@ -1929,7 +1929,7 @@ function initializeNewsCarousel() {
     }
 
     function startAutoplay() {
-        if (!allowAutoplay) return;
+        if (!allowAutoplay || autoplayTimer) return;
         carousel.classList.add('is-autoplaying');
         autoplayTimer = window.setInterval(next, autoplayDelay);
     }
