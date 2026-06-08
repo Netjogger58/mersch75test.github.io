@@ -3,7 +3,7 @@
     const ORG_ID = '95';
     const CURRENT_PERIOD_ID = '137';
     const REQUESTS = [
-        { key: 's1', cl: '153713', label: 'HERREN 1 (H-PRO)' },
+        { key: 's1', cl: '153713', label: 'MÄNNER 1 (H-PRO)' },
         { key: 'fe', cl: '152653', label: 'FRAUEN (D-PRO)' },
         { key: 'u15', cl: '156341', label: 'JUGEND: U15G' },
         { key: 'u13pe', cl: '152106', label: 'JUGEND: U13M-PE' },
