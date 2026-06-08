@@ -64,6 +64,7 @@
                         <button type="button" class="stats2526-switch-btn" role="tab" aria-selected="false" aria-controls="stats2526-embed" data-stats-team="u15" data-stats-photo="Media/Ekippe Fotoen Saison 25-26/M75_U15 Saison 25:26.webp">U15</button>
                         <button type="button" class="stats2526-switch-btn" role="tab" aria-selected="false" aria-controls="stats2526-embed" data-stats-target="Statistics%20U13.html" data-stats-team="u13">U13</button>
                         <button type="button" class="stats2526-switch-btn" role="tab" aria-selected="false" aria-controls="stats2526-embed" data-stats-target="Statistics%20U11.html" data-stats-team="u11">U11</button>
+                        <button type="button" class="stats2526-switch-btn" role="tab" aria-selected="false" aria-controls="stats2526-embed" data-stats-team="kids">Kids</button>
                     </div>
                     <div class="stats2526-embed" id="stats2526-embed" aria-live="polite"></div>
                 </div>
@@ -94,6 +95,10 @@
                         u11: {
                             src: 'Media/Ekippe Fotoen Saison 25-26/M75_U11 Saison 25:26.webp',
                             alt: 'U11 Mersch75'
+                        },
+                        kids: {
+                            src: 'Media/Ekippe Fotoen Saison 25-26/M75_U11 Espoir Saison 25:26.webp',
+                            alt: 'Kids Mersch75'
                         }
                     };
                     var scope = '.stats2526-embed';
@@ -432,6 +437,15 @@
                         if (!target && team === 'u15') {
                             var txt = statsText[lang] || statsText.lb;
                             embed.innerHTML = '<div class="stats2526-photo-only"><img src="Media/Ekippe Fotoen Saison 25-26/M75_U15 Saison 25:26.webp" alt="U15 Mersch75"><p>' + txt.u15Text + '</p></div>';
+                            return;
+                        }
+                        if (!target && team === 'kids') {
+                            embed.innerHTML = '<div class="stats2526-kids-grid">' +
+                                '<article><img src="Media/Ekippe Fotoen Saison 25-26/M75_U11 Espoir Saison 25:26.webp" alt="U11 Espoir Mersch75"><h3>U11 Espoir</h3></article>' +
+                                '<article><img src="Media/Logos FLH Eq/Logo-Mersch75-50-Joer-3D.png" alt="U9 Mersch75"><h3>U9</h3></article>' +
+                                '<article><img src="Media/Logos FLH Eq/Logo-Mersch75-50-Joer-3D.png" alt="U7 Mersch75"><h3>U7</h3></article>' +
+                                '<article><img src="Media/Ekippe Fotoen Saison 25-26/M75_U4_Saison 25:26.webp" alt="U4 Mersch75"><h3>U4</h3></article>' +
+                                '</div>';
                             return;
                         }
                         var cacheKey = target + '::' + lang;
