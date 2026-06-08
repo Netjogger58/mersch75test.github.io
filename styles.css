@@ -4432,6 +4432,172 @@ body[data-gen-unlocked="1"] .poster-edit-overlay { display: inline-flex; }
     opacity: 1;
     text-decoration: underline;
 }
+
+.feedback-widget {
+    position: fixed;
+    right: 14px;
+    bottom: 14px;
+    z-index: 9997;
+    display: grid;
+    gap: 4px;
+    width: min(210px, calc(100vw - 28px));
+    padding: 10px;
+    border: 1px solid rgba(0, 47, 101, 0.16);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.88);
+    box-shadow: 0 18px 38px rgba(0, 26, 56, 0.16);
+    color: #002f65;
+    font-size: 0.78rem;
+    opacity: 0.52;
+    backdrop-filter: blur(12px);
+    transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.feedback-widget:hover,
+.feedback-widget:focus-within {
+    opacity: 1;
+    transform: translateY(-2px);
+}
+
+.feedback-widget strong {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.feedback-widget span,
+.feedback-widget small {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.feedback-widget-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.feedback-widget-actions button {
+    flex: 1;
+    min-height: 34px;
+    border: 1px solid rgba(0, 47, 101, 0.12);
+    border-radius: 999px;
+    background: #f4f8fd;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.feedback-widget-actions button:hover,
+.feedback-widget-actions button.is-selected {
+    background: #ffde00;
+    border-color: #ffde00;
+}
+
+.feedback-admin-main {
+    display: grid;
+    gap: 24px;
+}
+
+.feedback-admin-hero {
+    text-align: left;
+}
+
+.feedback-admin-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.feedback-admin-toolbar button,
+.feedback-import-label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 10px 16px;
+    border: 0;
+    border-radius: 999px;
+    background: #002f65;
+    color: #ffffff;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.feedback-admin-toolbar input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+.feedback-admin-summary {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.feedback-admin-summary article {
+    padding: 18px;
+    border-radius: 18px;
+    background: #ffffff;
+    box-shadow: 0 16px 34px rgba(0, 47, 101, 0.1);
+}
+
+.feedback-admin-summary strong {
+    display: block;
+    color: #002f65;
+    font-family: 'Oswald', sans-serif;
+    font-size: 2rem;
+}
+
+.feedback-admin-table-wrap {
+    overflow-x: auto;
+}
+
+.feedback-admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    border-radius: 18px;
+    overflow: hidden;
+}
+
+.feedback-admin-table th,
+.feedback-admin-table td {
+    padding: 12px;
+    border-bottom: 1px solid rgba(0, 47, 101, 0.08);
+    text-align: left;
+}
+
+.feedback-admin-table th {
+    background: #002f65;
+    color: #ffffff;
+}
+
+.feedback-admin-table small {
+    display: block;
+    color: #6d7784;
+}
+
+.feedback-admin-table .is-archived {
+    opacity: 0.64;
+}
+
+@media (max-width: 700px) {
+    .feedback-widget {
+        right: 10px;
+        bottom: 10px;
+        width: 168px;
+    }
+
+    .feedback-widget span {
+        display: none;
+    }
+
+    .feedback-admin-summary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
 /* Phase 4e: Spielplan-Liste (matchcenter.html) */
 .spielplan-list {
     display: flex;

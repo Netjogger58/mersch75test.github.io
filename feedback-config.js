@@ -1,0 +1,31 @@
+window.Mersch75FeedbackConfig = {
+    storageKey: 'mersch75-feedback-ratings-v1',
+    voteStorageKey: 'mersch75-feedback-user-votes-v1',
+    categories: [
+        { id: 'home', title: 'Startseite', group: 'Allgemein', status: 'active', paths: ['/', '/index.html'] },
+        { id: 'news', title: 'News Übersicht', group: 'News', status: 'active', paths: ['/news.html'] },
+        { id: 'news-statistik-2526', title: 'News Statistik 25/26', group: 'News', status: 'active', paths: ['/index.html#news-statistik'] },
+        { id: 'stats-men-h1', title: 'Statistik H1 Männer', group: 'Statistik 25/26', status: 'active', paths: ['/statistics-25-26.html#men'] },
+        { id: 'stats-women-fe', title: 'Statistik FE Frauen', group: 'Statistik 25/26', status: 'active', paths: ['/statistics-25-26.html#women'] },
+        { id: 'stats-u15', title: 'Statistik U15', group: 'Statistik 25/26', status: 'active', paths: ['/statistics-25-26.html#u15'] },
+        { id: 'stats-u13', title: 'Statistik U13', group: 'Statistik 25/26', status: 'active', paths: ['/statistics-25-26.html#u13'] },
+        { id: 'stats-u11-elite', title: 'Statistik U11 Elite', group: 'Statistik 25/26', status: 'active', paths: ['/statistics-25-26.html#u11'] },
+        { id: 'stats-kids', title: 'Kids: U11 Espoir, U9, U7, U4', group: 'Statistik 25/26', status: 'active', paths: ['/statistics-25-26.html#kids'] },
+        { id: 'stats-u11-espoir', title: 'U11 Espoir', group: 'Statistik 25/26', status: 'active' },
+        { id: 'stats-u9', title: 'U9', group: 'Statistik 25/26', status: 'active' },
+        { id: 'stats-u7', title: 'U7', group: 'Statistik 25/26', status: 'active' },
+        { id: 'stats-u4', title: 'U4', group: 'Statistik 25/26', status: 'active' },
+        { id: 'training', title: 'Training', group: 'Verein', status: 'active', paths: ['/training.html'] },
+        { id: 'trainerstaff', title: 'Trainerstaff', group: 'Verein', status: 'active', paths: ['/trainerstaff.html'] },
+        { id: 'join-us', title: 'Join Us', group: 'Verein', status: 'active', paths: ['/join.html'] },
+        { id: 'zesumme-staark', title: 'Zesumme Staark', group: 'Verein', status: 'active', paths: ['/zesumme-staark.html'] },
+        { id: 'sponsors', title: 'Sponsoren', group: 'Verein', status: 'active', paths: ['/inside.html#sponsoren'] },
+        { id: 'gallery', title: 'Galerie', group: 'Medien', status: 'active', paths: ['/gallery.html'] },
+        { id: 'memories', title: 'Memories', group: 'Medien', status: 'active', paths: ['/memories.html'] },
+        { id: 'community', title: 'Community', group: 'Verein', status: 'active', paths: ['/community.html'] },
+        { id: 'contact', title: 'Kontakt', group: 'Service', status: 'active', paths: ['/contact.html'] },
+        { id: 'hallenkarte', title: 'Hallenkarte', group: 'Service', status: 'active', paths: ['/hallenkarte.html'] },
+        { id: 'links', title: 'Useful Links', group: 'Service', status: 'active', paths: ['/links.html'] },
+        { id: 'archive-placeholder', title: 'Archivierte / ersetzte Bereiche', group: 'Archiv', status: 'archived' }
+    ]
+};
