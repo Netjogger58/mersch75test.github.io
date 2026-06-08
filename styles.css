@@ -837,7 +837,7 @@ body.menu-open {
     flex: 0 0 100%;
     width: 100%;
     min-width: 100%;
-    min-height: 340px;
+    min-height: 380px;
     border-radius: 0;
 }
 
@@ -853,8 +853,18 @@ body.menu-open {
 
 .news-carousel-track .news-slide .events-overlay {
     gap: 24px;
-    padding: 24px 36px;
+    padding: 34px 36px;
     align-items: center;
+}
+
+.news-carousel-track .events-copy {
+    padding: 24px 22px;
+}
+
+.news-carousel-track .events-copy h2 {
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
 }
 
 .news-carousel-track .events-pill-row {
