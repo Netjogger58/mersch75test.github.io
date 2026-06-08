@@ -3985,27 +3985,23 @@ body.stats2526-page {
 }
 
 .stats2526-head-logos {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
-    margin-top: 6px;
-    align-items: end;
+    display: flex;
+    justify-content: center;
+    margin-top: 18px;
 }
 
 .stats2526-head-logo {
     width: 100%;
-    max-width: 420px;
-    justify-self: center;
-    height: auto;
-    opacity: 0.46;
-    transform: scale(0.98);
-    transition: opacity 180ms ease, transform 180ms ease;
-    filter: drop-shadow(0 8px 16px rgba(0, 47, 101, 0.18));
+    max-width: 760px;
+    max-height: 430px;
+    object-fit: contain;
+    border-radius: 28px;
+    background: rgba(255, 255, 255, 0.72);
+    box-shadow: 0 24px 50px rgba(0, 47, 101, 0.2);
 }
 
 .stats2526-head-logo.is-active {
-    opacity: 1;
-    transform: scale(1);
+    display: block;
 }
 
 .stats2526-panel {
@@ -4117,24 +4113,14 @@ body.stats2526-page {
         border-radius: 0;
     }
 
-    /* Auf dem Handy nur das aktive Logo gross zeigen, statt zwei gestauchte nebeneinander */
     .stats2526-head-logos {
-        grid-template-columns: 1fr;
-        gap: 0;
+        margin-top: 14px;
     }
 
     .stats2526-head-logo {
-        grid-column: 1;
-        grid-row: 1;
-        max-width: 300px;
-        opacity: 0;
-        transform: scale(0.98);
-        pointer-events: none;
-    }
-
-    .stats2526-head-logo.is-active {
-        opacity: 1;
-        transform: scale(1);
+        max-width: 100%;
+        max-height: 300px;
+        border-radius: 20px;
     }
 
     .stats2526-switch {
