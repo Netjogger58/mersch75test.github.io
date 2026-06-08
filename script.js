@@ -37,6 +37,7 @@ function initializeSiteLanguage() {
     const fallbackLanguage = 'lb';
     const supportedLanguages = ['lb', 'fr', 'de', 'en', 'pt'];
     const textTargets = Array.from(document.querySelectorAll('[data-i18n]'));
+    const htmlTargets = Array.from(document.querySelectorAll('[data-i18n-html]'));
     const attributeTargets = Array.from(document.querySelectorAll('[data-i18n-attr]'));
 
     const translations = {
@@ -45,6 +46,14 @@ function initializeSiteLanguage() {
             pageDescription: 'Mersch75 Handball: Veräinsiwwerbléck, Spillplang, Training, News, Galerie a Matmaachen.',
             brandHomeAria: 'Mersch75 Startsäit',
             brandTagline: 'Zesumme staark',
+            compassEyebrow: 'Zesumme Staark',
+            compassTitle: 'ZESUMME STAARK – Eise Kompass',
+            compassBody: '<h2>Wien mir sinn</h2><p>Den Handball Club Mersch75 ass zënter 1975 eng fest Gréisst am Lëtzebuerger Sport. Zënter 2023 setze mir zu 100% op eis eege Jugend an eis lokal Identitéit.</p><h2>Eis DNA: S.T.A.A.R.K.</h2><ul><li><strong>Solidaritéit</strong> – Ee fir all, all fir een.</li><li><strong>Toleranz</strong> – Villfalt ass eis Stäerkt.</li><li><strong>Akzeptanz</strong> – Jiddereen ass wëllkomm.</li><li><strong>Anescht</strong> – Perséinlechkeet gëtt gefërdert.</li><li><strong>Respekt</strong> – Fairplay ass Gesetz.</li><li><strong>Kommunikatioun</strong> – Mir schwätze mateneen, net iwwereneen.</li></ul><h2>Firwat Mersch75?</h2><p>Mir sinn eng Erliewensschoul. Mir investéieren an d’Ausbildung vun eise Kanner an an nohaltegen Erfolleg mat Spiller aus eiser eegener Rei.</p><p>#ZesummeStaark #HBMersch75 #MatHäerzaSéil</p>',
+            compassBackHome: 'Zréck op d\'Homepage',
+            newsRefEyebrow: 'FLH · Cycle inférieur',
+            newsRefTitle: 'Jonk Schiedsrichter: Aschreiwunge sinn op',
+            newsRefBody: 'D\'Formatioun fir jonk Schiedsrichter am FLH Cycle inférieur ass online. Eng flott Geleeënheet fir déi nächst Generatioun, Verantwortung ze iwwerhuelen.',
+            newsRefCta: 'Info & Aschreiwung',
             trainingPageTitle: 'Training | Mersch75 Handball',
             trainingPageDescription: 'Training beim Mersch75: Trainingsplang, Gruppen, Halen a Jugendkoordinatioun op ee Bléck.',
             trainingHeroLogoAlt: 'Team Training Logo',
@@ -107,7 +116,7 @@ function initializeSiteLanguage() {
             newsU11Body: 'Eis U11 Elite huet och um Enn vun der Saison nach eemol gewisen, wat an der Ekipp stécht. Am Duell ëm Plaz 5 géint HC Standard konnt Mersch75 béid Matcher gewannen: doheem mat 23:16 an auswäerts mat 22:18. Eng flott Belounung fir eng engagéiert Saison an e staarke Schlussakkord fir eis jonk Mierscher. 💛💙',
             newsStatsEyebrow: 'Saisonstatistik 25/26',
             newsStatsTitle: 'STATISTIKEN VUN EISEN EKIPPEN OP ENGER PLAZ',
-            newsStatsBody: 'D\'Saisonstatistik 2025/2026 ass live: Tabellen, Resultater an Torschützenlëschten fir Männer a Fraen – iwwersiichtlech an aktuell.',
+            newsStatsBody: 'D\'Saisonstatistik 2025/2026 ass live: Tabellen, Resultater an Torschützenlëschten fir Männer, Fraen, U15, U13 an U11 – iwwersiichtlech an aktuell.',
             newsStatsPillMen: 'Männer',
             newsStatsPillWomen: 'Fraen',
             newsStatsPillLive: 'Live',
@@ -141,6 +150,14 @@ function initializeSiteLanguage() {
             pageDescription: 'Mersch75 Handball : aperçu du club, calendrier, entraînement, actualités, galerie et participation.',
             brandHomeAria: 'Accueil Mersch75',
             brandTagline: 'Ensemble plus forts',
+            compassEyebrow: 'Zesumme Staark',
+            compassTitle: 'ZESUMME STAARK – Notre boussole',
+            compassBody: '<h2>Qui sommes-nous ?</h2><p>Le Handball Club Mersch75 est une référence du sport luxembourgeois depuis 1975. Depuis 2023, nous misons à 100% sur notre jeunesse et notre identité locale.</p><h2>Notre ADN : S.T.A.A.R.K.</h2><ul><li><strong>Solidarité</strong> – Un pour tous, tous pour un.</li><li><strong>Tolérance</strong> – La diversité est notre force.</li><li><strong>Acceptation</strong> – Tout le monde est bienvenu.</li><li><strong>Différence</strong> – La personnalité est encouragée.</li><li><strong>Respect</strong> – Le fair-play est la règle.</li><li><strong>Communication</strong> – Nous parlons ensemble, pas les uns sur les autres.</li></ul><h2>Pourquoi Mersch75 ?</h2><p>Nous sommes une école de vie. Nous investissons dans la formation de nos enfants et dans un succès durable avec des joueurs issus de nos propres rangs.</p><p>#ZesummeStaark #HBMersch75 #MatHäerzaSéil</p>',
+            compassBackHome: 'Retour à l\'accueil',
+            newsRefEyebrow: 'FLH · Cycle inférieur',
+            newsRefTitle: 'Jeunes arbitres : inscriptions ouvertes',
+            newsRefBody: 'La formation pour jeunes arbitres du FLH Cycle inférieur est en ligne. Une belle occasion pour la prochaine génération de prendre des responsabilités.',
+            newsRefCta: 'Infos & inscription',
             trainingPageTitle: 'Entraînement | Mersch75 Handball',
             trainingPageDescription: 'Entraînement au Mersch75 : planning, groupes, salles et coordination des jeunes en un coup d\'oeil.',
             trainingHeroLogoAlt: 'Logo team training',
@@ -203,7 +220,7 @@ function initializeSiteLanguage() {
             newsU11Body: 'Nos U11 Elite ont encore montré en fin de saison tout le potentiel de cette équipe. Dans le duel pour la 5e place contre HC Standard, Mersch75 a remporté les deux matchs : 23:16 à domicile et 22:18 à l\'extérieur. Une belle récompense pour une saison engagée et une très belle conclusion pour nos jeunes de Mersch. 💛💙',
             newsStatsEyebrow: 'Statistiques de saison 25/26',
             newsStatsTitle: 'STATISTIQUES DE NOS ÉQUIPES AU MÊME ENDROIT',
-            newsStatsBody: 'Les statistiques de la saison 2025/2026 sont en ligne : classements, résultats et meilleurs buteurs pour les hommes et les femmes – clairs et à jour.',
+            newsStatsBody: 'Les statistiques de la saison 2025/2026 sont en ligne : classements, résultats et meilleurs buteurs pour les hommes, les femmes, U15, U13 et U11 – clairs et à jour.',
             newsStatsPillMen: 'Hommes',
             newsStatsPillWomen: 'Femmes',
             newsStatsPillLive: 'Live',
@@ -237,6 +254,14 @@ function initializeSiteLanguage() {
             pageDescription: 'Mersch75 Handball: Vereinsübersicht, Spielplan, Training, News, Galerie und Mitmachen.',
             brandHomeAria: 'Mersch75 Startseite',
             brandTagline: 'Zusammen stark',
+            compassEyebrow: 'Zesumme Staark',
+            compassTitle: 'ZESUMME STAARK – Unser Kompass',
+            compassBody: '<h2>Wer wir sind</h2><p>Der Handball Club Mersch75 ist seit 1975 eine feste Größe im Luxemburger Sport. Seit 2023 setzen wir zu 100% auf unsere eigene Jugend und unsere lokale Identität.</p><h2>Unsere DNA: S.T.A.A.R.K.</h2><ul><li><strong>Solidarität</strong> – Einer für alle, alle für einen.</li><li><strong>Toleranz</strong> – Vielfalt ist unsere Stärke.</li><li><strong>Akzeptanz</strong> – Jeder ist willkommen.</li><li><strong>Anders</strong> – Persönlichkeit wird gefördert.</li><li><strong>Respekt</strong> – Fairplay ist Gesetz.</li><li><strong>Kommunikation</strong> – Wir reden miteinander, nicht übereinander.</li></ul><h2>Warum Mersch75?</h2><p>Wir sind eine Erlebnisschule. Wir investieren in die Ausbildung unserer Kinder und in nachhaltigen Erfolg mit Spielern aus den eigenen Reihen.</p><p>#ZesummeStaark #HBMersch75 #MatHäerzaSéil</p>',
+            compassBackHome: 'Zurück zur Homepage',
+            newsRefEyebrow: 'FLH · Cycle inférieur',
+            newsRefTitle: 'Junge Schiedsrichter: Anmeldungen offen',
+            newsRefBody: 'Die Ausbildung für junge Schiedsrichter im FLH Cycle inférieur ist online. Eine gute Gelegenheit für die nächste Generation, Verantwortung zu übernehmen.',
+            newsRefCta: 'Info & Anmeldung',
             trainingPageTitle: 'Training | Mersch75 Handball',
             trainingPageDescription: 'Training bei Mersch75: Trainingsplan, Gruppen, Hallen und Jugendkoordination auf einen Blick.',
             trainingHeroLogoAlt: 'Team-Training Logo',
@@ -299,7 +324,7 @@ function initializeSiteLanguage() {
             newsU11Body: 'Unsere U11 Elite hat auch am Ende der Saison noch einmal gezeigt, was in dieser Mannschaft steckt. Im Duell um Platz 5 gegen HC Standard konnte Mersch75 beide Spiele gewinnen: zuhause mit 23:16 und auswärts mit 22:18. Eine schöne Belohnung für eine engagierte Saison und ein starker Schlussakkord für unsere jungen Merscher. 💛💙',
             newsStatsEyebrow: 'Saisonstatistik 25/26',
             newsStatsTitle: 'STATISTIKEN UNSERER TEAMS AN EINEM ORT',
-            newsStatsBody: 'Die Saisonstatistik 2025/2026 ist live: Tabellen, Ergebnisse und Torschützenlisten für Männer und Frauen – übersichtlich und aktuell.',
+            newsStatsBody: 'Die Saisonstatistik 2025/2026 ist live: Tabellen, Ergebnisse und Torschützenlisten für Männer, Frauen, U15, U13 und U11 – übersichtlich und aktuell.',
             newsStatsPillMen: 'Männer',
             newsStatsPillWomen: 'Frauen',
             newsStatsPillLive: 'Live',
@@ -333,6 +358,14 @@ function initializeSiteLanguage() {
             pageDescription: 'Mersch75 Handball: club overview, schedule, training, news, gallery and joining information.',
             brandHomeAria: 'Mersch75 home',
             brandTagline: 'Stronger together',
+            compassEyebrow: 'Zesumme Staark',
+            compassTitle: 'ZESUMME STAARK – Our compass',
+            compassBody: '<h2>Who we are</h2><p>Handball Club Mersch75 has been part of Luxembourg sport since 1975. Since 2023, we focus fully on our own youth and our local identity.</p><h2>Our DNA: S.T.A.A.R.K.</h2><ul><li><strong>Solidarity</strong> – One for all, all for one.</li><li><strong>Tolerance</strong> – Diversity is our strength.</li><li><strong>Acceptance</strong> – Everyone is welcome.</li><li><strong>Different</strong> – Personality is encouraged.</li><li><strong>Respect</strong> – Fair play is the rule.</li><li><strong>Communication</strong> – We talk with each other, not about each other.</li></ul><h2>Why Mersch75?</h2><p>We are more than a sports club. We invest in the education of our children and in sustainable success with players from our own ranks.</p><p>#ZesummeStaark #HBMersch75 #MatHäerzaSéil</p>',
+            compassBackHome: 'Back to homepage',
+            newsRefEyebrow: 'FLH · Lower cycle',
+            newsRefTitle: 'Young referees: registration is open',
+            newsRefBody: 'The FLH lower-cycle training for young referees is online. A great opportunity for the next generation to take responsibility.',
+            newsRefCta: 'Info & registration',
             trainingPageTitle: 'Training | Mersch75 Handball',
             trainingPageDescription: 'Training at Mersch75: schedule, groups, halls and youth coordination at a glance.',
             trainingHeroLogoAlt: 'Team training logo',
@@ -395,7 +428,7 @@ function initializeSiteLanguage() {
             newsU11Body: 'Our U11 Elite once again showed at the end of the season what this team is capable of. In the duel for 5th place against HC Standard, Mersch75 won both matches: 23:16 at home and 22:18 away. A fine reward for a committed season and a strong final note for our young Mersch players. 💛💙',
             newsStatsEyebrow: 'Season stats 25/26',
             newsStatsTitle: 'STATS FOR OUR TEAMS IN ONE PLACE',
-            newsStatsBody: 'The 2025/2026 season statistics are live: tables, results and top scorers for men and women – clear and up to date.',
+            newsStatsBody: 'The 2025/2026 season statistics are live: tables, results and top scorers for men, women, U15, U13 and U11 – clear and up to date.',
             newsStatsPillMen: 'Men',
             newsStatsPillWomen: 'Women',
             newsStatsPillLive: 'Live',
@@ -429,6 +462,14 @@ function initializeSiteLanguage() {
             pageDescription: 'Mersch75 Handball: visão geral do clube, calendário, treino, notícias, galeria e participação.',
             brandHomeAria: 'Página inicial Mersch75',
             brandTagline: 'Mais fortes juntos',
+            compassEyebrow: 'Zesumme Staark',
+            compassTitle: 'ZESUMME STAARK – A nossa bússola',
+            compassBody: '<h2>Quem somos</h2><p>O Handball Club Mersch75 faz parte do desporto luxemburguês desde 1975. Desde 2023 apostamos a 100% na nossa juventude e na nossa identidade local.</p><h2>O nosso ADN: S.T.A.A.R.K.</h2><ul><li><strong>Solidariedade</strong> – Um por todos, todos por um.</li><li><strong>Tolerância</strong> – A diversidade é a nossa força.</li><li><strong>Aceitação</strong> – Todos são bem-vindos.</li><li><strong>Diferente</strong> – A personalidade é incentivada.</li><li><strong>Respeito</strong> – Fair-play é regra.</li><li><strong>Comunicação</strong> – Falamos uns com os outros, não uns sobre os outros.</li></ul><h2>Porquê Mersch75?</h2><p>Somos mais do que um clube desportivo. Investimos na formação das nossas crianças e no sucesso sustentável com jogadores da nossa própria formação.</p><p>#ZesummeStaark #HBMersch75 #MatHäerzaSéil</p>',
+            compassBackHome: 'Voltar à página inicial',
+            newsRefEyebrow: 'FLH · Ciclo inferior',
+            newsRefTitle: 'Jovens árbitros: inscrições abertas',
+            newsRefBody: 'A formação para jovens árbitros do FLH Ciclo inferior está online. Uma boa oportunidade para a próxima geração assumir responsabilidade.',
+            newsRefCta: 'Info & inscrição',
             trainingPageTitle: 'Treino | Mersch75 Handball',
             trainingPageDescription: 'Treino no Mersch75: horários, grupos, pavilhões e coordenação jovem num relance.',
             trainingHeroLogoAlt: 'Logótipo team training',
@@ -491,7 +532,7 @@ function initializeSiteLanguage() {
             newsU11Body: 'A nossa U11 Elite voltou a mostrar no fim da época todo o potencial desta equipa. No duelo pelo 5.º lugar contra o HC Standard, o Mersch75 venceu os dois jogos: 23:16 em casa e 22:18 fora. Uma bela recompensa por uma época empenhada e um final forte para os nossos jovens de Mersch. 💛💙',
             newsStatsEyebrow: 'Estatísticas da época 25/26',
             newsStatsTitle: 'ESTATÍSTICAS DAS NOSSAS EQUIPAS NUM SÓ LUGAR',
-            newsStatsBody: 'As estatísticas da época 2025/2026 estão online: classificações, resultados e melhores marcadores para homens e mulheres – claras e atualizadas.',
+            newsStatsBody: 'As estatísticas da época 2025/2026 estão online: classificações, resultados e melhores marcadores para homens, mulheres, U15, U13 e U11 – claras e atualizadas.',
             newsStatsPillMen: 'Homens',
             newsStatsPillWomen: 'Mulheres',
             newsStatsPillLive: 'Live',
@@ -545,6 +586,15 @@ function initializeSiteLanguage() {
 
             if (value) {
                 target.textContent = value;
+            }
+        });
+
+        htmlTargets.forEach((target) => {
+            const key = target.dataset.i18nHtml;
+            const value = getTranslation(resolvedLanguage, key);
+
+            if (value) {
+                target.innerHTML = value;
             }
         });
 
