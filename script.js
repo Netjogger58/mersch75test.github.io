@@ -93,7 +93,7 @@ function initializeSiteLanguage() {
             newsKicker: 'News',
             newsHeading: 'Aktuelles vum Mersch75',
             newsStatsEyebrow: 'Saisonstatistik 25/26',
-            newsStatsTitle: 'Statistiken vu Hären a Fraen op enger Plaz.',
+            newsStatsTitle: 'STATISTIKEN VUN EISEN EKIPPEN OP ENGER PLAZ',
             newsStatsBody: 'D\'Saisonstatistik 2025/2026 ass live: Tabellen, Resultater an Torschützenlëschten fir Hären a Fraen – iwwersiichtlech an aktuell.',
             newsStatsPillMen: 'Hären',
             newsStatsPillWomen: 'Fraen',
