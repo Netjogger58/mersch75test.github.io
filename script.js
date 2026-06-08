@@ -7,7 +7,7 @@ function syncCurrentYear() {
 function initializeFeedbackSystem() {
     if (window.Mersch75FeedbackConfig || document.body.classList.contains('feedback-admin-page')) return;
 
-    const version = '20260608a';
+    const version = '20260608b';
     const configScript = document.createElement('script');
     configScript.src = 'feedback-config.js?v=' + version;
     configScript.onload = () => {

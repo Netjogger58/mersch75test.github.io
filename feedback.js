@@ -28,10 +28,25 @@
         localStorage.setItem(key, JSON.stringify(value));
     }
 
-    function normalizedPath() {
-        return window.location.pathname.replace(/\/[^/]*$/, function (match) {
-            return match || '/';
-        });
+    function makeAutomaticCategory() {
+        const path = window.location.pathname || '/';
+        const hash = window.location.hash || '';
+        const rawTitle = document.querySelector('h1') ? document.querySelector('h1').textContent.trim() : document.title.trim();
+        const title = rawTitle || path.replace(/^\//, '') || 'Startseite';
+        const idBase = (path + hash)
+            .replace(/^\//, '')
+            .replace(/\.html/i, '')
+            .replace(/[^a-z0-9]+/gi, '-')
+            .replace(/^-+|-+$/g, '')
+            .toLowerCase();
+
+        return {
+            id: 'auto-' + (idBase || 'home'),
+            title: title,
+            group: 'Automatisch',
+            status: 'active',
+            paths: [path + hash]
+        };
     }
 
     function currentPathWithHash() {
@@ -51,7 +66,7 @@
         const path = window.location.pathname || '/';
         return config.categories.find((category) => Array.isArray(category.paths) && category.paths.includes(pathHash)) ||
             config.categories.find((category) => Array.isArray(category.paths) && category.paths.includes(path)) ||
-            config.categories.find((category) => category.id === 'home');
+            makeAutomaticCategory();
     }
 
     function ensureRatingBucket(ratings, category) {
