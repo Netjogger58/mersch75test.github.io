@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bewertungen intern | Mersch75</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="stylesheet" href="styles.css?v=20260519d">
+</head>
+<body class="page feedback-admin-page">
+    <div class="site-page-wrapper">
+        <header class="site-header page-header">
+            <a class="brand" href="index.html" aria-label="Mersch75 Startseite">
+                <span class="brand-mark">75</span>
+                <span class="brand-copy">
+                    <strong>Mersch75 Handball Club</strong>
+                    <span>Intern Bewäertungen</span>
+                </span>
+                <img class="brand-logo-img" src="Media/Header_Logos_media/Logo-Menu-Applestyle-Mersch75-Zesumme-Staark.png" alt="Mersch75 Zesumme Staark" width="56" height="56">
+            </a>
+            <nav class="site-nav">
+                <a href="index.html">Startseite</a>
+                <a href="generator.html">Admin</a>
+            </nav>
+        </header>
+
+        <main class="page-main feedback-admin-main">
+            <section class="page-hero feedback-admin-hero">
+                <p class="eyebrow">Intern</p>
+                <h1>Bewertungen</h1>
+                <p>Lokale Auswertung der Daumen-Bewertungen. Exportierte JSON-Dateien können hier importiert und zusammengeführt werden.</p>
+            </section>
+
+            <section class="section feedback-admin-toolbar">
+                <button type="button" id="feedback-export">JSON exportieren</button>
+                <label class="feedback-import-label" for="feedback-import">JSON importieren</label>
+                <input type="file" id="feedback-import" accept="application/json,.json" multiple>
+                <button type="button" id="feedback-clear">Lokale Bewertungen löschen</button>
+            </section>
+
+            <section class="section feedback-admin-summary" id="feedback-summary"></section>
+            <section class="section feedback-admin-table-wrap">
+                <table class="feedback-admin-table">
+                    <thead>
+                        <tr>
+                            <th>Bereich</th>
+                            <th>Gruppe</th>
+                            <th>Status</th>
+                            <th>👍</th>
+                            <th>↔️</th>
+                            <th>👎</th>
+                            <th>Gesamt</th>
+                            <th>Letzte Bewertung</th>
+                        </tr>
+                    </thead>
+                    <tbody id="feedback-table-body"></tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+
+    <script src="feedback-config.js?v=20260608a"></script>
+    <script>
+        (function () {
+            const config = window.Mersch75FeedbackConfig;
+            const ratingsKey = config.storageKey;
+            const tableBody = document.getElementById('feedback-table-body');
+            const summary = document.getElementById('feedback-summary');
+            const exportButton = document.getElementById('feedback-export');
+            const importInput = document.getElementById('feedback-import');
+            const clearButton = document.getElementById('feedback-clear');
+
+            function readJson(key, fallback) {
+                try {
+                    return JSON.parse(localStorage.getItem(key)) || fallback;
+                } catch (error) {
+                    return fallback;
+                }
+            }
+
+            function writeJson(key, value) {
+                localStorage.setItem(key, JSON.stringify(value));
+            }
+
+            function emptyBucket(category) {
+                return {
+                    id: category.id,
+                    title: category.title,
+                    group: category.group,
+                    status: category.status,
+                    up: 0,
+                    neutral: 0,
+                    down: 0,
+                    total: 0,
+                    history: []
+                };
+            }
+
+            function allRows() {
+                const stored = readJson(ratingsKey, {});
+                return config.categories.map((category) => Object.assign(emptyBucket(category), stored[category.id] || {}));
+            }
+
+            function formatDate(history) {
+                if (!Array.isArray(history) || history.length === 0) return '—';
+                const last = history[history.length - 1];
+                if (!last.timestamp) return '—';
+                return new Date(last.timestamp).toLocaleString('de-LU');
+            }
+
+            function render() {
+                const rows = allRows();
+                const totals = rows.reduce((acc, row) => {
+                    acc.up += row.up || 0;
+                    acc.neutral += row.neutral || 0;
+                    acc.down += row.down || 0;
+                    acc.total += row.total || 0;
+                    return acc;
+                }, { up: 0, neutral: 0, down: 0, total: 0 });
+
+                summary.innerHTML = '<article><strong>' + totals.total + '</strong><span>Bewertungen gesamt</span></article>' +
+                    '<article><strong>' + totals.up + '</strong><span>Daumen hoch</span></article>' +
+                    '<article><strong>' + totals.neutral + '</strong><span>Seitwärts</span></article>' +
+                    '<article><strong>' + totals.down + '</strong><span>Daumen runter</span></article>';
+
+                tableBody.innerHTML = rows.map((row) => '<tr class="' + (row.status === 'archived' ? 'is-archived' : '') + '">' +
+                    '<td><strong>' + row.title + '</strong><small>' + row.id + '</small></td>' +
+                    '<td>' + row.group + '</td>' +
+                    '<td>' + row.status + '</td>' +
+                    '<td>' + (row.up || 0) + '</td>' +
+                    '<td>' + (row.neutral || 0) + '</td>' +
+                    '<td>' + (row.down || 0) + '</td>' +
+                    '<td>' + (row.total || 0) + '</td>' +
+                    '<td>' + formatDate(row.history) + '</td>' +
+                    '</tr>').join('');
+            }
+
+            function mergeImported(imported) {
+                const current = readJson(ratingsKey, {});
+                Object.keys(imported || {}).forEach((id) => {
+                    const source = imported[id];
+                    if (!current[id]) current[id] = source;
+                    else {
+                        current[id].up = (current[id].up || 0) + (source.up || 0);
+                        current[id].neutral = (current[id].neutral || 0) + (source.neutral || 0);
+                        current[id].down = (current[id].down || 0) + (source.down || 0);
+                        current[id].total = current[id].up + current[id].neutral + current[id].down;
+                        current[id].history = (current[id].history || []).concat(source.history || []);
+                    }
+                });
+                writeJson(ratingsKey, current);
+                render();
+            }
+
+            exportButton.addEventListener('click', () => {
+                const data = readJson(ratingsKey, {});
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'mersch75-feedback-' + new Date().toISOString().slice(0, 10) + '.json';
+                link.click();
+                URL.revokeObjectURL(link.href);
+            });
+
+            importInput.addEventListener('change', () => {
+                Array.from(importInput.files || []).forEach((file) => {
+                    const reader = new FileReader();
+                    reader.onload = () => mergeImported(JSON.parse(reader.result));
+                    reader.readAsText(file);
+                });
+                importInput.value = '';
+            });
+
+            clearButton.addEventListener('click', () => {
+                if (!window.confirm('Lokale Bewertungen wirklich löschen?')) return;
+                localStorage.removeItem(ratingsKey);
+                localStorage.removeItem(config.voteStorageKey);
+                render();
+            });
+
+            render();
+        }());
+    </script>
+</body>
+</html>
