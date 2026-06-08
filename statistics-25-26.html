@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Statistik 25/26 | Mersch75 Handball</title>
-    <meta name="description" content="Statistik 2025/2026 von Mersch75 Handball mit Herren- und Damenansicht.">
+    <meta name="description" content="Statistik 2025/2026 von Mersch75 Handball mit Männer-, Frauen- und Jugendansicht.">
     <link rel="stylesheet" href="styles.css?v=20260530b">
 </head>
 <body class="stats2526-page">
@@ -60,8 +60,11 @@
             <section class="section stats2526-section">
                 <div class="stats2526-panel">
                     <div class="stats2526-switch" role="tablist" aria-label="Statistik Kategorie wählen">
-                        <button type="button" class="stats2526-switch-btn is-active" role="tab" aria-selected="true" aria-controls="stats2526-embed" data-stats-target="Statistics%20Men.html" data-stats-team="men">Herren</button>
-                        <button type="button" class="stats2526-switch-btn" role="tab" aria-selected="false" aria-controls="stats2526-embed" data-stats-target="Statistics%20women.html" data-stats-team="women">Frauen</button>
+                        <button type="button" class="stats2526-switch-btn is-active" role="tab" aria-selected="true" aria-controls="stats2526-embed" data-stats-target="Statistics%20Men.html" data-stats-team="men">Männer</button>
+                        <button type="button" class="stats2526-switch-btn" role="tab" aria-selected="false" aria-controls="stats2526-embed" data-stats-target="Statistics%20women.html" data-stats-team="women">Fraen</button>
+                        <button type="button" class="stats2526-switch-btn is-disabled" role="tab" aria-selected="false" aria-controls="stats2526-embed" data-stats-team="u15" disabled>U15</button>
+                        <button type="button" class="stats2526-switch-btn" role="tab" aria-selected="false" aria-controls="stats2526-embed" data-stats-target="Statistics%20U13.html" data-stats-team="u13">U13</button>
+                        <button type="button" class="stats2526-switch-btn" role="tab" aria-selected="false" aria-controls="stats2526-embed" data-stats-target="Statistics%20U11.html" data-stats-team="u11">U11</button>
                     </div>
                     <div class="stats2526-embed" id="stats2526-embed" aria-live="polite"></div>
                 </div>
@@ -75,6 +78,189 @@
                     var logoWomen = document.getElementById('stats2526-logo-women');
                     var scope = '.stats2526-embed';
                     var cache = {};
+                    var statsLangKey = 'mersch75-language';
+                    var youthLongTexts = {};
+                    var statsText = {
+                        lb: {
+                            loading: 'Statistik gëtt gelueden …',
+                            loadError: 'Statistik konnt net geluede ginn',
+                            openNew: 'An engem neien Tab opmaachen',
+                            games: 'Spiller',
+                            wins: 'Victoiren',
+                            draws: 'Gläich',
+                            losses: 'Néierlagen',
+                            goals: 'Torer',
+                            diff: 'Tordiff.',
+                            points: 'Punkten',
+                            rounds: 'Meeschterschaftsronnen - Tabellen',
+                            seasonU13: 'Saisonsfazit U13 Mixte',
+                            seasonU11: 'Saisonsfazit U11 Elite',
+                            topPlayers: 'Top-Spiller/innen vun der Saison',
+                            scorers: 'Torschützenlëscht',
+                            matches: 'Spiller',
+                            player: 'Spiller/in',
+                            seven: '7m (T/V)',
+                            date: 'Datum',
+                            homeAway: 'H/A',
+                            opponent: 'Géigner',
+                            result: 'Resultat',
+                            outcome: 'Resultat',
+                            sbo: 'SBO',
+                            win: 'Victoire',
+                            draw: 'Gläich',
+                            loss: 'Néierlag',
+                            noSbo: 'ouni SBO',
+                            u13Text: 'D’U13 Mixte huet eng ganz staark Saison gespillt an iwwer déi zwou Championnatsronnen eng kloer positiv Entwécklung gewisen. No enger intensiver éischter Ronn an der Poule 3 ass d’Ekipp an der Poule Espoir nach méi stabil opgetrueden. Mat villen däitleche Victoiren, enger positiver Tordifferenz an enger breet verdeelter Offensiv huet Mersch75 bewisen, dass vill Potenzial an dëser Generatioun stécht. Besonnesch staark war d’Kombinatioun aus Tempo, Courage am Ofschloss an enger ëmmer méi kompakter Defense. D’Pokalspiller sinn e flotte Bonus an weisen, dass d’Ekipp och an anere Kompetitiounen Erfarung gesammelt huet. D’Saison däerf een als ganz gelongen an motivéierend fir déi nächst Etapp bewäerten.',
+                            u11Text: 'D’U11 Elite huet eng couragéiert an immens léierräich Saison gespillt. An enger staarker Elite-Ronn ass Mersch75 reegelméisseg op gutt forméiert Géigner getraff an huet sech dobäi net verstoppt. D’Ekipp huet vill Matcher gewonnen, awer och aus de méi schwéiere Partien wichteg Erfarung matgeholl. Besonnesch positiv war, dass d’Kanner vill Tore geschoss hunn an d’Offensiv iwwer verschidde Spiller gedroe gouf. D’Mannschaft huet vill Asaz, Freed um Spill an Zesummenhalt gewisen. Fir eng U11-Elite-Ekipp ass dat eng Saison, op déi de Club houfreg ka sinn.',
+                            note: 'Berücksichtegt goufen nëmme Spiller mat Mersch75. Spiller ouni SBO zielen an der Team-Bilanz, awer net an der Torschützenlëscht.'
+                        },
+                        fr: {
+                            loading: 'Chargement des statistiques …',
+                            loadError: 'Les statistiques n’ont pas pu être chargées',
+                            openNew: 'Ouvrir dans un nouvel onglet',
+                            games: 'Matchs',
+                            wins: 'Victoires',
+                            draws: 'Nuls',
+                            losses: 'Défaites',
+                            goals: 'Buts',
+                            diff: 'Diff.',
+                            points: 'Points',
+                            rounds: 'Tours de championnat - classements',
+                            seasonU13: 'Bilan de saison U13 Mixte',
+                            seasonU11: 'Bilan de saison U11 Elite',
+                            topPlayers: 'Joueuses/joueurs marquants de la saison',
+                            scorers: 'Classement des buteurs',
+                            matches: 'Matchs',
+                            player: 'Joueuse/joueur',
+                            seven: '7m (B/T)',
+                            date: 'Date',
+                            homeAway: 'D/E',
+                            opponent: 'Adversaire',
+                            result: 'Score',
+                            outcome: 'Résultat',
+                            sbo: 'SBO',
+                            win: 'Victoire',
+                            draw: 'Nul',
+                            loss: 'Défaite',
+                            noSbo: 'sans SBO',
+                            u13Text: 'Les U13 Mixte ont réalisé une très belle saison avec une progression nette sur les deux tours de championnat. Après un premier tour intense en Poule 3, l’équipe s’est montrée encore plus stable en Poule Espoir. Avec de nombreuses victoires convaincantes, une différence de buts positive et une attaque bien répartie, Mersch75 a montré le potentiel de cette génération. Les matchs de coupe ont aussi apporté une expérience précieuse. C’est une saison très réussie et encourageante pour la suite.',
+                            u11Text: 'Les U11 Elite ont vécu une saison courageuse et très formatrice. Dans une poule Elite exigeante, Mersch75 a affronté de bonnes équipes sans jamais se cacher. L’équipe a remporté de nombreux matchs et a aussi appris dans les rencontres plus difficiles. Le groupe a montré beaucoup d’engagement, de plaisir de jouer et de cohésion. Pour une équipe U11 Elite, c’est une saison dont le club peut être fier.',
+                            note: 'Seuls les matchs avec Mersch75 sont pris en compte. Les matchs sans SBO comptent dans le bilan d’équipe, mais pas dans le classement individuel des buteurs.'
+                        },
+                        de: {
+                            loading: 'Statistik wird geladen …',
+                            loadError: 'Statistik konnte nicht geladen werden',
+                            openNew: 'In neuem Tab öffnen',
+                            games: 'Spiele',
+                            wins: 'Siege',
+                            draws: 'Unentsch.',
+                            losses: 'Niederlagen',
+                            goals: 'Tore',
+                            diff: 'Tordiff.',
+                            points: 'Punkte',
+                            rounds: 'Meisterschaftsrunden - Tabellen',
+                            seasonU13: 'Saisonfazit U13 Mixte',
+                            seasonU11: 'Saisonfazit U11 Elite',
+                            topPlayers: 'Top-Spieler/innen der Saison',
+                            scorers: 'Torschützenliste',
+                            matches: 'Spiele',
+                            player: 'Spieler/in',
+                            seven: '7m (T/V)',
+                            date: 'Datum',
+                            homeAway: 'H/A',
+                            opponent: 'Gegner',
+                            result: 'Resultat',
+                            outcome: 'Ergebnis',
+                            sbo: 'SBO',
+                            win: 'Sieg',
+                            draw: 'Unentsch.',
+                            loss: 'Niederlage',
+                            noSbo: 'ohne SBO',
+                            u13Text: 'Die U13 Mixte hat eine sehr starke Saison gespielt und über die beiden Meisterschaftsrunden eine klare positive Entwicklung gezeigt. Nach einer intensiven ersten Runde in der Poule 3 trat die Mannschaft in der Poule Espoir noch stabiler auf. Mit vielen deutlichen Siegen, positiver Tordifferenz und breit verteilter Offensive zeigte Mersch75 das Potenzial dieser Generation. Die Pokalspiele waren ein zusätzlicher Bonus und brachten wertvolle Erfahrung. Diese Saison darf man als sehr gelungen und motivierend für die nächste Etappe bewerten.',
+                            u11Text: 'Die U11 Elite spielte eine mutige und sehr lehrreiche Saison. In einer starken Elite-Runde traf Mersch75 regelmäßig auf gut ausgebildete Gegner und versteckte sich dabei nie. Die Mannschaft gewann viele Spiele und nahm auch aus schwierigeren Partien wichtige Erfahrungen mit. Das Team zeigte Einsatz, Spielfreude und Zusammenhalt. Für eine U11-Elite-Mannschaft ist das eine Saison, auf die der Club stolz sein kann.',
+                            note: 'Berücksichtigt wurden nur Spiele mit Mersch75. Spiele ohne SBO zählen in der Team-Bilanz, aber nicht in der Torschützenliste.'
+                        },
+                        en: {
+                            loading: 'Loading statistics …',
+                            loadError: 'Statistics could not be loaded',
+                            openNew: 'Open in a new tab',
+                            games: 'Games',
+                            wins: 'Wins',
+                            draws: 'Draws',
+                            losses: 'Losses',
+                            goals: 'Goals',
+                            diff: 'Goal diff.',
+                            points: 'Points',
+                            rounds: 'Championship rounds - tables',
+                            seasonU13: 'Season review U13 Mixed',
+                            seasonU11: 'Season review U11 Elite',
+                            topPlayers: 'Top players of the season',
+                            scorers: 'Scoring table',
+                            matches: 'Games',
+                            player: 'Player',
+                            seven: '7m (G/A)',
+                            date: 'Date',
+                            homeAway: 'H/A',
+                            opponent: 'Opponent',
+                            result: 'Score',
+                            outcome: 'Result',
+                            sbo: 'SBO',
+                            win: 'Win',
+                            draw: 'Draw',
+                            loss: 'Loss',
+                            noSbo: 'no SBO',
+                            u13Text: 'The U13 Mixed team played a very strong season and showed clear progress across both championship rounds. After an intense first round in Poule 3, the team became even more consistent in Poule Espoir. With many convincing wins, a positive goal difference and a well-balanced attack, Mersch75 showed the potential of this generation. The cup matches were an extra bonus and added valuable experience. Overall, this was a very successful and motivating season for the next step.',
+                            u11Text: 'The U11 Elite team played a brave and very valuable learning season. In a strong elite round, Mersch75 regularly faced well-prepared opponents and never hid. The team won many matches and also learned a lot from the tougher games. The group showed commitment, joy in playing and strong team spirit. For a U11 Elite team, this is a season the club can be proud of.',
+                            note: 'Only matches involving Mersch75 are included. Matches without SBO count in the team record, but not in the individual scoring table.'
+                        },
+                        pt: {
+                            loading: 'A carregar estatísticas …',
+                            loadError: 'Não foi possível carregar as estatísticas',
+                            openNew: 'Abrir num novo separador',
+                            games: 'Jogos',
+                            wins: 'Vitórias',
+                            draws: 'Empates',
+                            losses: 'Derrotas',
+                            goals: 'Golos',
+                            diff: 'Dif.',
+                            points: 'Pontos',
+                            rounds: 'Rondas do campeonato - classificações',
+                            seasonU13: 'Resumo da época U13 Misto',
+                            seasonU11: 'Resumo da época U11 Elite',
+                            topPlayers: 'Jogadores/as em destaque da época',
+                            scorers: 'Lista de marcadores',
+                            matches: 'Jogos',
+                            player: 'Jogador/a',
+                            seven: '7m (G/T)',
+                            date: 'Data',
+                            homeAway: 'C/F',
+                            opponent: 'Adversário',
+                            result: 'Resultado',
+                            outcome: 'Desfecho',
+                            sbo: 'SBO',
+                            win: 'Vitória',
+                            draw: 'Empate',
+                            loss: 'Derrota',
+                            noSbo: 'sem SBO',
+                            u13Text: 'A equipa U13 Mista fez uma época muito forte e mostrou uma evolução clara nas duas rondas do campeonato. Depois de uma primeira fase intensa na Poule 3, a equipa apresentou-se ainda mais estável na Poule Espoir. Com muitas vitórias claras, diferença de golos positiva e um ataque bem distribuído, o Mersch75 mostrou o potencial desta geração. Os jogos da taça foram um bónus importante e trouxeram experiência adicional. Foi uma época muito positiva e motivadora para a próxima etapa.',
+                            u11Text: 'A equipa U11 Elite fez uma época corajosa e muito rica em aprendizagem. Numa ronda Elite exigente, o Mersch75 defrontou regularmente adversários fortes e nunca se escondeu. A equipa ganhou muitos jogos e também retirou experiência dos encontros mais difíceis. O grupo mostrou empenho, alegria de jogar e espírito de equipa. Para uma equipa U11 Elite, é uma época da qual o clube se pode orgulhar.',
+                            note: 'Só foram considerados jogos com o Mersch75. Jogos sem SBO contam para o balanço da equipa, mas não para a lista individual de marcadores.'
+                        }
+                    };
+
+                    fetch('youth-stat-translations.json')
+                        .then(function (r) { return r.ok ? r.json() : {}; })
+                        .then(function (data) {
+                            youthLongTexts = data || {};
+                            Object.keys(youthLongTexts).forEach(function (lang) {
+                                if (!statsText[lang]) return;
+                                if (youthLongTexts[lang].u13Text) statsText[lang].u13Text = youthLongTexts[lang].u13Text;
+                                if (youthLongTexts[lang].u11Text) statsText[lang].u11Text = youthLongTexts[lang].u11Text;
+                            });
+                            var active = document.querySelector('.stats2526-switch-btn.is-active');
+                            if (active) activate(active);
+                        })
+                        .catch(function () {});
 
                     // Zusatz-Styles: Schrift/Farben an Mersch75 angleichen, Zebra, Sticky-Header,
                     // farbige Ergebnis-Zellen und Text-Badges statt Emojis
@@ -170,12 +356,61 @@
                         return selectors + '{' + body + '}';
                     }
 
+                    function currentStatsLang() {
+                        var stored = localStorage.getItem(statsLangKey) || 'lb';
+                        return statsText[stored] ? stored : 'lb';
+                    }
+
+                    function translateYouthStats(team) {
+                        if (team !== 'u13' && team !== 'u11') return;
+                        var txt = statsText[currentStatsLang()] || statsText.lb;
+                        var title = team === 'u13' ? txt.seasonU13 : txt.seasonU11;
+                        var body = team === 'u13' ? txt.u13Text : txt.u11Text;
+                        var labels = [txt.games, txt.wins, txt.draws, txt.losses, txt.goals, txt.diff, txt.points];
+                        embed.querySelectorAll('.sum-lbl').forEach(function (el, i) {
+                            if (labels[i]) el.textContent = labels[i];
+                        });
+                        var heads = embed.querySelectorAll('.sub-head');
+                        if (heads[0]) heads[0].textContent = txt.rounds;
+                        if (heads[1]) heads[1].textContent = txt.topPlayers;
+                        if (heads[2]) heads[2].textContent = txt.scorers;
+                        if (heads[3]) heads[3].textContent = txt.matches;
+                        var analysisTitle = embed.querySelector('.analysis h3');
+                        if (analysisTitle) analysisTitle.textContent = title;
+                        var analysisParagraphs = embed.querySelectorAll('.analysis p');
+                        if (analysisParagraphs[0]) analysisParagraphs[0].textContent = body;
+                        if (analysisParagraphs[1]) {
+                            var links = analysisParagraphs[1].querySelectorAll('a');
+                            analysisParagraphs[1].textContent = txt.note + ' ';
+                            links.forEach(function (link) { analysisParagraphs[1].appendChild(link); analysisParagraphs[1].appendChild(document.createTextNode(' ')); });
+                        }
+                        var scorerHeaders = embed.querySelectorAll('table.m75t')[0]?.querySelectorAll('th') || [];
+                        if (scorerHeaders[0]) scorerHeaders[0].textContent = txt.player;
+                        if (scorerHeaders[1]) scorerHeaders[1].textContent = txt.goals;
+                        if (scorerHeaders[2]) scorerHeaders[2].textContent = txt.seven;
+                        var gameHeaders = embed.querySelectorAll('table.m75t')[1]?.querySelectorAll('th') || [];
+                        [txt.date, txt.homeAway, txt.opponent, txt.result, txt.outcome, txt.sbo].forEach(function (label, i) {
+                            if (gameHeaders[i]) gameHeaders[i].textContent = label;
+                        });
+                        embed.querySelectorAll('.badge').forEach(function (badge) {
+                            if (badge.classList.contains('b-win')) badge.textContent = txt.win;
+                            if (badge.classList.contains('b-draw')) badge.textContent = txt.draw;
+                            if (badge.classList.contains('b-loss')) badge.textContent = txt.loss;
+                        });
+                        embed.querySelectorAll('.lnk-miss').forEach(function (el) {
+                            if (/ohne SBO|ouni SBO|sans SBO|no SBO|sem SBO/i.test(el.textContent)) el.textContent = txt.noSbo;
+                        });
+                    }
+
                     function render(team, target) {
-                        if (cache[target]) {
-                            embed.innerHTML = cache[target];
+                        var lang = currentStatsLang();
+                        var cacheKey = target + '::' + lang;
+                        if (cache[cacheKey]) {
+                            embed.innerHTML = cache[cacheKey];
+                            translateYouthStats(team);
                             return;
                         }
-                        embed.innerHTML = '<p class="stats2526-loading">Statistik wird geladen …</p>';
+                        embed.innerHTML = '<p class="stats2526-loading">' + (statsText[lang] || statsText.lb).loading + '</p>';
                         fetch(target)
                             .then(function (r) {
                                 if (!r.ok) throw new Error('HTTP ' + r.status);
@@ -190,11 +425,14 @@
                                 var scopedCss = styleEl ? scopeRules(styleEl.textContent) : '';
                                 embed.innerHTML = '<style>' + scopedCss + ENHANCE_CSS + '</style>' + page.outerHTML;
                                 removeColumnByHeader(embed, 'Ergebnis');
-                                cache[target] = embed.innerHTML;
+                                removeColumnByHeader(embed, 'Resultat');
+                                translateYouthStats(team);
+                                cache[cacheKey] = embed.innerHTML;
                             })
                             .catch(function (err) {
-                                embed.innerHTML = '<p class="stats2526-loading">Statistik konnte nicht geladen werden (' +
-                                    err.message + '). <a href="' + target + '" target="_blank" rel="noopener">In neuem Tab öffnen</a></p>';
+                                var msg = statsText[lang] || statsText.lb;
+                                embed.innerHTML = '<p class="stats2526-loading">' + msg.loadError + ' (' +
+                                    err.message + '). <a href="' + target + '" target="_blank" rel="noopener">' + msg.openNew + '</a></p>';
                             });
                     }
 
@@ -214,7 +452,16 @@
                         btn.addEventListener('click', function () { activate(btn); });
                     });
 
-                    // Startansicht: Herren
+                    document.querySelectorAll('[data-site-lang-button]').forEach(function (langBtn) {
+                        langBtn.addEventListener('click', function () {
+                            window.setTimeout(function () {
+                                var active = document.querySelector('.stats2526-switch-btn.is-active') || buttons[0];
+                                if (active) activate(active);
+                            }, 0);
+                        });
+                    });
+
+                    // Startansicht: Männer
                     var initial = document.querySelector('.stats2526-switch-btn.is-active') || buttons[0];
                     if (initial) activate(initial);
                 })();
