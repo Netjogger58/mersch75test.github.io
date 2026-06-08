@@ -50,9 +50,8 @@
             <section class="page-hero stats2526-hero">
                 <div class="stats2526-hero-inner">
                     <h1>SAISONSTATISTIK 2025/2026</h1>
-                    <div class="stats2526-head-logos" aria-hidden="true">
-                        <img class="stats2526-head-logo is-active" id="stats2526-logo-men" src="Media/Statistik/header-men-transparent.png" alt="">
-                        <img class="stats2526-head-logo" id="stats2526-logo-women" src="Media/Statistik/header-women-transparent.png" alt="">
+                    <div class="stats2526-head-logos">
+                        <img class="stats2526-head-logo is-active" id="stats2526-team-photo" src="Media/Ekippe Fotoen Saison 25-26/M75_S1_Saison 25:26.webp" alt="Männer Mersch75">
                     </div>
                 </div>
             </section>
@@ -74,8 +73,29 @@
                 (function () {
                     var buttons = document.querySelectorAll('.stats2526-switch-btn');
                     var embed = document.getElementById('stats2526-embed');
-                    var logoMen = document.getElementById('stats2526-logo-men');
-                    var logoWomen = document.getElementById('stats2526-logo-women');
+                    var teamPhoto = document.getElementById('stats2526-team-photo');
+                    var teamPhotos = {
+                        men: {
+                            src: 'Media/Ekippe Fotoen Saison 25-26/M75_S1_Saison 25:26.webp',
+                            alt: 'Männer Mersch75'
+                        },
+                        women: {
+                            src: 'Media/Ekippe Fotoen Saison 25-26/M75_FE Saison 25:26.webp',
+                            alt: 'Fraen Mersch75'
+                        },
+                        u15: {
+                            src: 'Media/Ekippe Fotoen Saison 25-26/M75_U15 Saison 25:26.webp',
+                            alt: 'U15 Mersch75'
+                        },
+                        u13: {
+                            src: 'Media/Ekippe Fotoen Saison 25-26/M75_U13 Saison 25:26.webp',
+                            alt: 'U13 Mersch75'
+                        },
+                        u11: {
+                            src: 'Media/Ekippe Fotoen Saison 25-26/M75_U11 Saison 25:26.webp',
+                            alt: 'U11 Mersch75'
+                        }
+                    };
                     var scope = '.stats2526-embed';
                     var cache = {};
                     var statsLangKey = 'mersch75-language';
@@ -453,8 +473,10 @@
                             b.setAttribute('aria-selected', active ? 'true' : 'false');
                         });
                         var team = btn.getAttribute('data-stats-team');
-                        if (logoMen) logoMen.classList.toggle('is-active', team === 'men');
-                        if (logoWomen) logoWomen.classList.toggle('is-active', team === 'women');
+                        if (teamPhoto && teamPhotos[team]) {
+                            teamPhoto.src = teamPhotos[team].src;
+                            teamPhoto.alt = teamPhotos[team].alt;
+                        }
                         if (team) history.replaceState(null, '', '#' + team);
                         render(team, btn.getAttribute('data-stats-target'));
                     }
