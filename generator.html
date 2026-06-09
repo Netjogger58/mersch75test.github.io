@@ -14,7 +14,7 @@
     } catch (e) { window.location.replace('index.html?gen=lock'); }
 })();
 </script>
-<link rel="stylesheet" href="styles.css?v=20260519d">
+<link rel="stylesheet" href="styles.css?v=20260609b">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,600;0,700;0,800;0,900;1,600;1,700;1,800;1,900&family=Barlow:ital,wght@0,600;0,700;0,800;0,900;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
@@ -809,7 +809,7 @@ function renderFormBlocks() {
         
         html += '<div class="row" style="background:#f0f8ff; padding:5px; border-radius:4px; margin-bottom:10px;">';
         html += '<div class="col" style="flex:1;"><label class="toggle-label" style="margin:0;"><input type="checkbox" class="trigger-photo-toggle" data-team="' + team.id + '"> Foto anstatt Spiel?</label></div>';
-        html += '<div class="col" style="flex:1;"><div class="photo-upload-wrap" data-team="' + team.id + '"><button type="button" class="photo-upload-btn" data-team="' + team.id + '">Foto hochladen</button><span class="photo-upload-name" data-team="' + team.id + '">Kein Foto gewählt</span><input type="file" accept="image/*" class="trigger-photo-file" data-team="' + team.id + '" style="display:none;"></div></div></div>';
+        html += '<div class="col" style="flex:1;"><div class="photo-upload-wrap" data-team="' + team.id + '"><button type="button" class="photo-upload-btn" data-team="' + team.id + '">Foto hochladen</button><span class="photo-upload-name" data-team="' + team.id + '">Kein Foto gewählt</span><input type="file" accept="image/*,.webp" class="trigger-photo-file" data-team="' + team.id + '" style="display:none;"></div></div></div>';
 
         html += '<div class="row">';
         html += '<div class="col"><select id="' + team.id + '-home" class="trigger-autofill" data-team="' + team.id + '"><option value="home1">Heim (Halle 1)</option><option value="home2">Heim (Krounebierg)</option><option value="away">Auswärts</option></select></div>';
