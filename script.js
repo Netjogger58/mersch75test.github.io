@@ -816,8 +816,9 @@ function initializeSiteMenu() {
 
     // Sprachumschalter (nur auf Smartphones sichtbar) als Klon in das Burger-Menü übernehmen.
     const headerSwitcher = document.querySelector('.site-language-switcher');
+    let menuLangWrap = null;
     if (headerSwitcher) {
-        const menuLangWrap = document.createElement('div');
+        menuLangWrap = document.createElement('div');
         menuLangWrap.className = 'site-menu-language';
 
         const menuSwitcher = headerSwitcher.cloneNode(true);
@@ -844,7 +845,6 @@ function initializeSiteMenu() {
         });
 
         menuLangWrap.append(menuSwitcher);
-        footer.append(menuLangWrap);
     }
 
     const closeButton = document.createElement('button');
@@ -855,7 +855,11 @@ function initializeSiteMenu() {
 
     const shell = document.createElement('div');
     shell.className = 'site-menu-shell';
-    shell.append(closeButton, primaryGroup, secondaryGroup, footer);
+    shell.append(closeButton);
+    if (menuLangWrap) {
+        shell.append(menuLangWrap);
+    }
+    shell.append(primaryGroup, secondaryGroup, footer);
 
     siteNav.innerHTML = '';
     siteNav.append(shell);

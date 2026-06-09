@@ -2180,23 +2180,24 @@ body.privacy-page {
 /* Sprachumschalter im Burger-Menü (nur Mobile sichtbar). */
 .site-menu-language {
     display: none;
-    padding-top: 16px;
-    border-top: 1px solid rgba(0, 47, 101, 0.08);
-    margin-top: 4px;
+    padding: 4px 0 8px;
+    border-bottom: 1px solid rgba(0, 47, 101, 0.08);
 }
 
 .site-menu-language-switcher {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px;
+    justify-content: flex-start;
+    gap: 6px;
     margin: 0;
     opacity: 1;
 }
 
 .site-menu-language-switcher button {
-    padding: 8px 12px;
-    font-size: 0.85rem;
+    padding: 6px 9px;
+    font-size: 0.72rem;
+    background: rgba(255, 255, 255, 0.72);
+    border-color: rgba(0, 47, 101, 0.08);
 }
 
 .legal-lang-switcher button {
@@ -3112,11 +3113,7 @@ body.matchday-page {
     }
 
     .site-header .site-language-switcher {
-        display: inline-flex;
-        order: 3;
-        width: auto;
-        max-width: calc(100% - 130px);
-        overflow-x: auto;
+        display: none;
     }
 
     .site-menu-language {
