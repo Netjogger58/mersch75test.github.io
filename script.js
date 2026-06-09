@@ -781,7 +781,7 @@ function initializeSiteMenu() {
         { href: 'news.html', labelKey: 'navNews', fallback: 'News', primary: true },
         { href: 'statistics-25-26.html', labelKey: 'navStatistics', fallback: 'Statistik 25/26', primary: true },
         { href: 'join.html', labelKey: 'navJoin', fallback: 'Join Us', primary: true },
-        { href: 'sponsors.html', labelKey: 'navSponsors', fallback: 'Sponsoren', primary: true },
+        { href: 'nextgen.html', labelKey: 'navNextgen', fallback: 'NEXTGEN', primary: true },
         { href: 'comite.html', labelKey: 'navComite', fallback: 'Comité', primary: true },
         { href: 'gallery.html', labelKey: 'navGallery', fallback: 'Galerie', primary: false },
         { href: 'memories.html', labelKey: 'navMemories', fallback: 'Memories', primary: false },
