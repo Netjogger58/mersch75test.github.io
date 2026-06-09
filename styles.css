@@ -3070,9 +3070,24 @@ body.matchday-page {
     }
 
     .site-header {
+        flex-wrap: wrap;
         gap: 14px;
         border-radius: 28px;
         position: relative;
+    }
+
+    .site-header .brand {
+        flex: 1 1 100%;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .site-header .brand-copy {
+        min-width: 0;
+    }
+
+    .site-header .nav-toggle {
+        margin-left: auto;
     }
 
     .site-menu-secondary,
@@ -3100,6 +3115,8 @@ body.matchday-page {
         display: inline-flex;
         order: 3;
         width: auto;
+        max-width: calc(100% - 130px);
+        overflow-x: auto;
     }
 
     .site-menu-language {
@@ -3149,6 +3166,31 @@ body.matchday-page {
 }
 
 @media (max-width: 560px) {
+    .site-header .brand {
+        gap: 10px;
+    }
+
+    .brand-mark {
+        flex-basis: 52px;
+        width: 52px;
+        height: 52px;
+        border-radius: 16px;
+    }
+
+    .brand-logo-img {
+        width: 48px;
+        height: 48px;
+    }
+
+    .brand-copy strong {
+        font-size: 1.08rem;
+    }
+
+    .brand-copy span {
+        font-size: 0.68rem;
+        letter-spacing: 0.08em;
+    }
+
     .site-nav {
         top: 6px;
         right: 6px;
