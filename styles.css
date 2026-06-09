@@ -2598,7 +2598,12 @@ body.privacy-page {
 .site-page-footer-brand {
     display: flex;
     align-items: center;
-    gap: 16px;
+    justify-content: space-between;
+    gap: 22px;
+}
+
+.site-page-footer-brand > div {
+    display: contents;
 }
 
 .site-page-footer-brand img {
@@ -2609,9 +2614,20 @@ body.privacy-page {
 }
 
 .site-page-footer-brand img.site-page-footer-wordmark {
-    width: min(320px, 70vw);
+    order: 3;
+    width: min(360px, 42vw);
     height: auto;
     max-height: 96px;
+}
+
+.site-page-footer-brand > img:first-child {
+    order: 1;
+}
+
+.site-page-footer-brand .site-page-footer-social {
+    order: 2;
+    margin: 0;
+    justify-content: center;
 }
 
 .site-page-footer-brand strong,
@@ -3153,8 +3169,12 @@ body.matchday-page {
     }
 
     .site-page-footer-brand {
-        align-items: flex-start;
+        align-items: center;
         flex-direction: column;
+    }
+
+    .site-page-footer-brand img.site-page-footer-wordmark {
+        width: min(340px, 90vw);
     }
 
     .footer-bottom {
