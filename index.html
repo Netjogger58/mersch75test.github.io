@@ -213,7 +213,11 @@
                         </article>
 
                         <article class="news-slide events-section" aria-label="News 2" data-news-slide>
-                            <img class="events-background" src="Media/Hauptseite/statistik-fun-background.svg" alt="">
+                            <picture class="events-background events-background-picture">
+                                <source media="(orientation: portrait)" srcset="Media/Hauptseite/statistik-knaller-portrait.png">
+                                <source media="(orientation: landscape)" srcset="Media/Hauptseite/statistik-knaller-ls.png">
+                                <img src="Media/Hauptseite/statistik-knaller-ls.png" alt="">
+                            </picture>
                             <div class="events-overlay">
                                 <div class="events-copy">
                                     <p class="eyebrow" data-i18n="newsStatsEyebrow">Saisonstatistik 25/26</p>
