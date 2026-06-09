@@ -29,6 +29,8 @@ body {
     background: #ffffff;
     color: var(--text);
     font-family: 'Jost', sans-serif;
+    overflow-wrap: break-word;
+    hyphens: auto;
 }
 
 body.landing-page {
@@ -3136,8 +3138,19 @@ body.matchday-page {
 
 @media (max-width: 560px) {
     .site-nav {
+        top: 6px;
+        right: 6px;
+        left: 6px;
+        bottom: auto;
+        width: auto;
+        max-height: calc(100dvh - 12px);
         border-radius: 22px;
         padding: 12px;
+        transform: translateY(-18px);
+    }
+
+    .site-nav.is-open {
+        transform: translateY(0);
     }
 
     .site-menu-intro {
@@ -4752,4 +4765,44 @@ body[data-gen-unlocked="1"] .poster-edit-overlay { display: inline-flex; }
         gap: 10px;
     }
     .spielplan-time { font-size: 0.95rem; }
+}
+
+.stats2526-embed,
+.stats2526-embed .stat-page,
+.stats2526-embed .m75-page {
+    width: 100%;
+    max-width: 1180px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.stats2526-embed .flh-wrap,
+.stats2526-embed .tbl-wrap,
+.stats2526-embed .card,
+.stats2526-embed table {
+    width: 100%;
+}
+
+@media (max-width: 760px) {
+    .stats2526-panel {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .stats2526-embed .flh-wrap {
+        grid-template-columns: 1fr;
+    }
+
+    .stats2526-embed .sum-bar {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .stats2526-embed .tbl-wrap,
+    .stats2526-embed .flh-tbl-box {
+        overflow-x: auto;
+    }
+
+    .stats2526-embed table {
+        min-width: 560px;
+    }
 }
