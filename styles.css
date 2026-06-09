@@ -2607,6 +2607,12 @@ body.privacy-page {
     flex: 0 0 auto;
 }
 
+.site-page-footer-brand img.site-page-footer-wordmark {
+    width: min(320px, 70vw);
+    height: auto;
+    max-height: 96px;
+}
+
 .site-page-footer-brand strong,
 .site-page-footer-links a,
 .site-page-footer-meta a,
