@@ -148,7 +148,7 @@ function initializeSiteLanguage() {
             infoAxaAria: 'AXA League Links',
             infoWomen: 'AXA League Fraen',
             infoMen: 'AXA League Männer',
-            sponsorsTitle: 'Eis Sponsoren',
+            sponsorsTitle: 'D\' finanziell Hëllef vun eise Partner bedeit d\'Realisatioun vun eise Visiounen',
             sponsorsAlt: 'Mersch75 Sponsoren',
             footerBrandBody: 'Handball zu Miersch mat engem méi kloeren digitalen Optrëtt: séier Informatiounen, e méi rouegt Layout an eng Struktur, déi fir GitHub Pages gebaut ass.',
             footerQuick: 'Schnellzougrëff',
