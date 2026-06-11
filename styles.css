@@ -882,12 +882,22 @@ body.menu-open {
 }
 
 .news-carousel-track .news-slide-save-date .events-background {
+    width: min(520px, 82%);
+    height: min(520px, 82%);
+    inset: 50% auto auto 50%;
+    transform: translate(-50%, -50%);
+    object-fit: contain;
     object-position: center center;
+    opacity: 1;
 }
 
 .news-carousel-track .news-slide-save-date .events-copy {
     max-width: 520px;
     text-align: center;
+}
+
+.news-carousel-track .news-slide-save-date {
+    background: linear-gradient(135deg, rgba(0, 47, 101, 0.95), rgba(0, 94, 184, 0.78));
 }
 
 .news-carousel-track .news-slide-u13 .events-overlay,
