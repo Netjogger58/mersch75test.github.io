@@ -882,8 +882,10 @@ body.menu-open {
 }
 
 .news-carousel-track .news-slide-save-date .events-background {
-    width: min(520px, 82%);
-    height: min(520px, 82%);
+    width: auto;
+    max-width: min(520px, 82%);
+    height: 100%;
+    max-height: 100%;
     inset: 50% auto auto 50%;
     transform: translate(-50%, -50%);
     object-fit: contain;
