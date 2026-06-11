@@ -881,6 +881,15 @@ body.menu-open {
     line-height: 1.55;
 }
 
+.news-carousel-track .news-slide-save-date .events-background {
+    object-position: center center;
+}
+
+.news-carousel-track .news-slide-save-date .events-copy {
+    max-width: 520px;
+    text-align: center;
+}
+
 .news-carousel-track .news-slide-u13 .events-overlay,
 .news-carousel-track .news-slide-u11 .events-overlay,
 .news-carousel-track .news-slide-seniors .events-overlay {
