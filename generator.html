@@ -907,7 +907,21 @@ function renderPortraitControls() {
         html += '<div class="slider-row"><span class="sl-lbl">Titel</span><input type="range" class="team-scale-title" data-team="' + team.id + '" min="10" max="60" value="34" oninput="this.nextElementSibling.innerText=this.value; updatePortraitPreview();"><span class="sl-val">34</span></div>';
         html += '<div class="slider-row"><span class="sl-lbl">Text</span><input type="range" class="team-scale-text" data-team="' + team.id + '" min="8" max="40" value="22" oninput="this.nextElementSibling.innerText=this.value; updatePortraitPreview();"><span class="sl-val">22</span></div>';
         html += '<div class="slider-row"><span class="sl-lbl">Foto</span><input type="range" class="team-scale-photo" data-team="' + team.id + '" min="50" max="220" value="100" oninput="this.nextElementSibling.innerText=this.value+\'%\'; updatePortraitPreview();"><span class="sl-val">100%</span></div>';
-        html += '<div class="english-week-settings-note" data-team="' + team.id + '" style="display:none;margin-top:8px;padding:6px;border:1px dashed var(--secondary-blue);border-radius:4px;color:var(--secondary-blue);font-size:11px;font-weight:800;">Englische Woche aktiv: die zweite Partie wird oben im Team-Block über „Englische Woche (1. Spiel)” eingestellt.</div>';
+        html += '</div></div>';
+        html += '<div class="portrait-team-item english-week-portrait-card" data-team="' + team.id + '" style="display:none;background:#f0f8ff;border-color:var(--secondary-blue);">';
+        html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">';
+        html += '<label class="team-main-cb" style="margin:0;color:var(--secondary-blue);"><input type="checkbox" class="cb-portrait-extra" data-team="' + team.id + '" checked> ' + team.title + ' - Englische Woche</label>';
+        html += '</div>';
+        html += '<div class="options-row">';
+        html += '<label><input type="checkbox" class="cb-title-extra" data-team="' + team.id + '" checked> Titel</label>';
+        html += '<label>Breite: <select class="cb-width-extra" data-team="' + team.id + '" onchange="updatePortraitPreview()" style="padding:2px; font-size:11px; margin-left:4px; width:auto;"><option value="100">100%</option><option value="50">50%</option><option value="33">33%</option></select></label>';
+        html += '<label>Pos: <input type="number" class="team-order trigger-port-pos-extra" data-team="' + team.id + '" value="' + (defaultPos + 1) + '" min="1" max="' + (maxPosition + TEAM_CONFIGS.length) + '" oninput="updatePortraitPreview()"></label>';
+        html += '</div>';
+        html += '<div class="team-slider-wrap">';
+        html += '<div class="slider-row"><span class="sl-lbl">Logo</span><input type="range" class="team-scale-logo-extra" data-team="' + team.id + '" min="30" max="250" value="100" oninput="this.nextElementSibling.innerText=this.value; updatePortraitPreview();"><span class="sl-val">100</span></div>';
+        html += '<div class="slider-row"><span class="sl-lbl">Titel</span><input type="range" class="team-scale-title-extra" data-team="' + team.id + '" min="10" max="60" value="24" oninput="this.nextElementSibling.innerText=this.value; updatePortraitPreview();"><span class="sl-val">24</span></div>';
+        html += '<div class="slider-row"><span class="sl-lbl">Text</span><input type="range" class="team-scale-text-extra" data-team="' + team.id + '" min="8" max="40" value="18" oninput="this.nextElementSibling.innerText=this.value; updatePortraitPreview();"><span class="sl-val">18</span></div>';
+        html += '<div class="slider-row"><span class="sl-lbl">Foto</span><input type="range" class="team-scale-photo-extra" data-team="' + team.id + '" min="50" max="220" value="100" oninput="this.nextElementSibling.innerText=this.value+\'%\'; updatePortraitPreview();"><span class="sl-val">100%</span></div>';
         html += '</div></div>';
     }
     html += '<div class="portrait-team-item" style="background:#f0f7ff;border-color:var(--secondary-blue);">';
@@ -2251,11 +2265,11 @@ function updatePortraitPreview() {
     const cont = document.getElementById('p-dynamic-container'); 
     if (!cont) return;
     cont.innerHTML = '';
-    const englishWeekNotes = document.querySelectorAll('.english-week-settings-note');
-    for (let ni = 0; ni < englishWeekNotes.length; ni++) {
-        const note = englishWeekNotes[ni];
-        const noteTeam = note.getAttribute('data-team');
-        note.style.display = hasSecondGameConfigured(noteTeam) ? 'block' : 'none';
+    const englishWeekCards = document.querySelectorAll('.english-week-portrait-card');
+    for (let ni = 0; ni < englishWeekCards.length; ni++) {
+        const card = englishWeekCards[ni];
+        const cardTeam = card.getAttribute('data-team');
+        card.style.display = hasSecondGameConfigured(cardTeam) ? 'block' : 'none';
     }
     
     const cbChecked = document.querySelectorAll('.cb-portrait:checked');
@@ -2263,7 +2277,11 @@ function updatePortraitPreview() {
     for (let i = 0; i < cbChecked.length; i++) {
         const p = cbChecked[i].value;
         const cb = document.querySelector('.trigger-toggle[data-team="' + p + '"]');
-        ap.push({ id: p, hasGame: cb && cb.checked });
+        ap.push({ id: p, slot: 1, hasGame: cb && cb.checked });
+        const extraCb = document.querySelector('.cb-portrait-extra[data-team="' + p + '"]');
+        if (hasSecondGameConfigured(p) && extraCb && extraCb.checked) {
+            ap.push({ id: p, slot: 2, hasGame: cb && cb.checked });
+        }
     }
 
     if (ap.length === 0) { 
@@ -2273,8 +2291,8 @@ function updatePortraitPreview() {
     }
 
     ap.sort(function(a, b) { 
-        const posAEl = document.querySelector('.trigger-port-pos[data-team="' + a.id + '"]');
-        const posBEl = document.querySelector('.trigger-port-pos[data-team="' + b.id + '"]');
+        const posAEl = document.querySelector((a.slot === 2 ? '.trigger-port-pos-extra' : '.trigger-port-pos') + '[data-team="' + a.id + '"]');
+        const posBEl = document.querySelector((b.slot === 2 ? '.trigger-port-pos-extra' : '.trigger-port-pos') + '[data-team="' + b.id + '"]');
         const posA = posAEl ? parseInt(posAEl.value, 10) : 99; 
         const posB = posBEl ? parseInt(posBEl.value, 10) : 99; 
         return posA - posB; 
@@ -2294,13 +2312,15 @@ function updatePortraitPreview() {
     for (let i = 0; i < ap.length; i++) {
         const teamObj = ap[i];
         const prefix = teamObj.id;
+        const slot = teamObj.slot || 1;
+        const isExtraSlot = slot === 2;
         const hasGame = teamObj.hasGame;
         
         const typeEl = document.getElementById(prefix + '-type');
         let tv = typeEl ? typeEl.value : "Season Games";
         const suffix = teamSuffixes[prefix] || '';
         tv += suffix;
-        const gameNo1 = getGameNumber(prefix, 1);
+        const gameNo1 = getGameNumber(prefix, slot);
         if (hasGame && gameNo1) {
             tv += ' #' + gameNo1;
         }
@@ -2308,35 +2328,37 @@ function updatePortraitPreview() {
         const mb = badgeLabels[prefix] || prefix.replace('esp', '').toUpperCase();
         let mainContent = mb;
         
-        const oppEl = document.getElementById(prefix + '-opp');
+        const oppEl = document.getElementById(prefix + (isExtraSlot ? '-opp2' : '-opp'));
         const opp = oppEl ? oppEl.value : "-"; 
         
-        const homeEl = document.getElementById(prefix + '-home');
+        const homeEl = document.getElementById(prefix + (isExtraSlot ? '-home2' : '-home'));
         const ih = homeEl ? (homeEl.value.indexOf('home') === 0) : true;
         let itour = false;
         if (prefix === 'u11MES' || prefix === 'u9M' || prefix === 'u7M') itour = true;
-        const titleCb = document.querySelector('.cb-title[value="' + prefix + '"]');
+        const titleCb = isExtraSlot
+            ? document.querySelector('.cb-title-extra[data-team="' + prefix + '"]')
+            : document.querySelector('.cb-title[value="' + prefix + '"]');
         const stt = titleCb ? titleCb.checked : false;
-        const widthSel = document.querySelector('.cb-width[data-team="' + prefix + '"]');
+        const widthSel = document.querySelector((isExtraSlot ? '.cb-width-extra' : '.cb-width') + '[data-team="' + prefix + '"]');
         const widthVal = widthSel ? widthSel.value : "100";
-        const slEl = document.querySelector('.team-scale-logo[data-team="' + prefix + '"]');
-        const sl = slEl ? parseInt(slEl.value, 10) : 140;
-        const stEl = document.querySelector('.team-scale-title[data-team="' + prefix + '"]');
-        const st = stEl ? parseInt(stEl.value, 10) : 34;
-        const sxEl = document.querySelector('.team-scale-text[data-team="' + prefix + '"]');
-        const sx = sxEl ? parseInt(sxEl.value, 10) : 22;
+        const slEl = document.querySelector((isExtraSlot ? '.team-scale-logo-extra' : '.team-scale-logo') + '[data-team="' + prefix + '"]');
+        const sl = slEl ? parseInt(slEl.value, 10) : (isExtraSlot ? 100 : 140);
+        const stEl = document.querySelector((isExtraSlot ? '.team-scale-title-extra' : '.team-scale-title') + '[data-team="' + prefix + '"]');
+        const st = stEl ? parseInt(stEl.value, 10) : (isExtraSlot ? 24 : 34);
+        const sxEl = document.querySelector((isExtraSlot ? '.team-scale-text-extra' : '.team-scale-text') + '[data-team="' + prefix + '"]');
+        const sx = sxEl ? parseInt(sxEl.value, 10) : (isExtraSlot ? 18 : 22);
 
-        const photoScaleEl = document.querySelector('.team-scale-photo[data-team="' + prefix + '"]');
+        const photoScaleEl = document.querySelector((isExtraSlot ? '.team-scale-photo-extra' : '.team-scale-photo') + '[data-team="' + prefix + '"]');
         let photoScale = photoScaleEl ? parseInt(photoScaleEl.value, 10) : 100;
         if (isNaN(photoScale)) photoScale = 100;
         
         const ml = (prefix === 'fe') ? CONFIG.merschFELogo : CONFIG.merschLogo;
         const ol = (typeof teams !== 'undefined' && teams[opp]) ? teams[opp] : CONFIG.ballLogo;
         
-        const dateEl = document.getElementById(prefix + '-date');
+        const dateEl = document.getElementById(prefix + (isExtraSlot ? '-date2' : '-date'));
         const dv = dateEl ? dateEl.value : ""; 
         
-        const timeEl = document.getElementById(prefix + '-time');
+        const timeEl = document.getElementById(prefix + (isExtraSlot ? '-time2' : '-time'));
         const tv2 = timeEl ? timeEl.value : "";
         
         let l1, l2, ih2 = '';
@@ -2350,7 +2372,7 @@ function updatePortraitPreview() {
             else { l1 = ih ? ml : ol; l2 = ih ? ol : ml; } 
         }
         
-        const locEl = document.getElementById(prefix + '-loc');
+        const locEl = document.getElementById(prefix + (isExtraSlot ? '-loc2' : '-loc'));
         const locVal = locEl ? locEl.value : "";
         
         const bs = sl * 0.8;
@@ -2379,7 +2401,9 @@ function updatePortraitPreview() {
         const loc2Val = loc2El ? loc2El.value : '';
         let ih2b = '';
         const extraVisible = document.getElementById('extra-' + prefix);
-        const hasGame2 = !!(extraVisible && extraVisible.style.display !== 'none' && dv2);
+        const extraPortraitCb = document.querySelector('.cb-portrait-extra[data-team="' + prefix + '"]');
+        const renderExtraAsOwnCard = extraPortraitCb && extraPortraitCb.checked;
+        const hasGame2 = !isExtraSlot && !renderExtraAsOwnCard && !!(extraVisible && extraVisible.style.display !== 'none' && dv2);
         if (hasGame2) {
             const ds2 = formatDate(dv2, tv2b);
             let ls2 = '';
@@ -2431,6 +2455,9 @@ function updatePortraitPreview() {
             customTitle += suffix;
         }
 
+        if (isExtraSlot) {
+            customTitle += ' - Englische Woche';
+        }
         const titleHtmlStr = stt ? '<div class="p-game-title" style="font-size:' + st + 'px;">' + customTitle + '</div>' : '';
         
         const gb = document.createElement('div');
