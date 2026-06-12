@@ -1612,7 +1612,7 @@ function buildLandscapePhotoOnlyAssignments(activeTeams) {
 function renderLandscapeU11EspoirTournamentFallback(cont) {
     const showEl = document.getElementById('u11MES-land-show');
     if (!cont || (showEl && !showEl.checked)) return;
-    renderLandscapeGame({ id: 'u11MES', gameSlot: 1 }, { type: 'small', top: 610, left: 1130 }, cont, teamHasConfiguredGame('u11MES'));
+    renderLandscapeGame({ id: 'u11MES', gameSlot: 1 }, { type: 'big', top: 350, left: 1104 }, cont, teamHasConfiguredGame('u11MES'));
 }
 
 function updateLandscapePreview() {
@@ -1743,7 +1743,7 @@ function updateLandscapePreview() {
             renderLandscapeGame({ id: teamId, gameSlot: 2 }, { type: 'big', top: 350, left: 570 }, cont, true);
             const tournamentTeam = at.find(function(team) { return team.id === 'u11MES'; }) || at[0] || { id: 'u11MES', hasGame: teamHasConfiguredGame('u11MES') };
             if (tournamentTeam) {
-                renderLandscapeGame({ id: tournamentTeam.id, gameSlot: 1 }, { type: 'small', top: 610, left: 1130 }, cont, tournamentTeam.hasGame);
+                renderLandscapeGame({ id: tournamentTeam.id, gameSlot: 1 }, { type: 'big', top: 350, left: 1104 }, cont, tournamentTeam.hasGame);
             } else {
                 renderLandscapeU11EspoirTournamentFallback(cont);
             }
