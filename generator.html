@@ -824,10 +824,10 @@ function renderFormBlocks() {
         html += '</div>';
         html += '<input type="text" id="' + team.id + '-loc" class="trigger-view trigger-text" placeholder="Adresse">';
         html += '<div style="margin-top:8px;">';
-        html += '<button type="button" onclick="toggleExtraGame(\'' + team.id + '\')" style="background:none;border:1px dashed var(--secondary-blue);color:var(--secondary-blue);border-radius:4px;padding:4px 10px;font-size:11px;font-weight:800;cursor:pointer;width:100%;">+ Englische Woche (2. Spiel)</button>';
+        html += '<button type="button" onclick="toggleExtraGame(\'' + team.id + '\')" style="background:none;border:1px dashed var(--secondary-blue);color:var(--secondary-blue);border-radius:4px;padding:4px 10px;font-size:11px;font-weight:800;cursor:pointer;width:100%;">+ Englische Woche (zusätzliches Spiel)</button>';
         html += '</div>';
         html += '<div id="extra-' + team.id + '" style="display:none;margin-top:8px;background:#f0f8ff;border:1px solid #b3d4ff;border-radius:6px;padding:8px;">';
-        html += '<div style="font-size:10px;font-weight:800;color:var(--secondary-blue);margin-bottom:6px;text-transform:uppercase;">2. Spiel (Englische Woche)</div>';
+        html += '<div style="font-size:10px;font-weight:800;color:var(--secondary-blue);margin-bottom:6px;text-transform:uppercase;">Englische Woche (1. Spiel)</div>';
         html += '<div class="row">';
         html += '<div class="col"><select id="' + team.id + '-home2" class="trigger-autofill2" data-team="' + team.id + '"><option value="home1">Heim (Halle 1)</option><option value="home2">Heim (Krounebierg)</option><option value="away">Auswärts</option></select></div>';
         html += '<div class="col"><select id="' + team.id + '-opp2" class="trigger-autofill2" data-team="' + team.id + '">' + teamOpts + '</select></div>';
@@ -907,6 +907,7 @@ function renderPortraitControls() {
         html += '<div class="slider-row"><span class="sl-lbl">Titel</span><input type="range" class="team-scale-title" data-team="' + team.id + '" min="10" max="60" value="34" oninput="this.nextElementSibling.innerText=this.value; updatePortraitPreview();"><span class="sl-val">34</span></div>';
         html += '<div class="slider-row"><span class="sl-lbl">Text</span><input type="range" class="team-scale-text" data-team="' + team.id + '" min="8" max="40" value="22" oninput="this.nextElementSibling.innerText=this.value; updatePortraitPreview();"><span class="sl-val">22</span></div>';
         html += '<div class="slider-row"><span class="sl-lbl">Foto</span><input type="range" class="team-scale-photo" data-team="' + team.id + '" min="50" max="220" value="100" oninput="this.nextElementSibling.innerText=this.value+\'%\'; updatePortraitPreview();"><span class="sl-val">100%</span></div>';
+        html += '<div class="english-week-settings-note" data-team="' + team.id + '" style="display:none;margin-top:8px;padding:6px;border:1px dashed var(--secondary-blue);border-radius:4px;color:var(--secondary-blue);font-size:11px;font-weight:800;">Englische Woche aktiv: die zweite Partie wird oben im Team-Block über „Englische Woche (1. Spiel)” eingestellt.</div>';
         html += '</div></div>';
     }
     html += '<div class="portrait-team-item" style="background:#f0f7ff;border-color:var(--secondary-blue);">';
@@ -1467,7 +1468,6 @@ function toggleTeam(teamId, on) {
 }
 
 function updateAllPreviews() {
-    try { if (typeof renumberActivePosterItems === 'function') renumberActivePosterItems(); } catch (e) { console.error(e); }
     try { if (typeof updateLandscapePreview === 'function') updateLandscapePreview(); } catch (e) { console.error(e); }
     try { if (typeof updatePortraitPreview === 'function') updatePortraitPreview(); } catch (e) { console.error(e); }
 }
@@ -1520,57 +1520,6 @@ function getGameNumber(prefix, slot) {
     const parsed = parseInt(raw, 10);
     if (!isNaN(parsed) && parsed > 0) return parsed;
     return slot === 2 ? 2 : 1;
-}
-
-function getGameDateTimeValue(prefix, slot) {
-    const dateValue = getGameFieldValue(prefix, 'date', slot);
-    if (!dateValue) return Number.MAX_SAFE_INTEGER;
-    const timeValue = getGameFieldValue(prefix, 'time', slot) || '23:59';
-    const dateParts = dateValue.split('-');
-    const timeParts = timeValue.split(':');
-    if (dateParts.length !== 3) return Number.MAX_SAFE_INTEGER;
-    const year = parseInt(dateParts[0], 10);
-    const month = parseInt(dateParts[1], 10) - 1;
-    const day = parseInt(dateParts[2], 10);
-    const hour = parseInt(timeParts[0] || '23', 10);
-    const minute = parseInt(timeParts[1] || '59', 10);
-    const dt = new Date(year, month, day, hour, minute);
-    const value = dt.getTime();
-    return isNaN(value) ? Number.MAX_SAFE_INTEGER : value;
-}
-
-function collectActivePosterItems() {
-    const items = [];
-    for (let i = 0; i < TEAM_CONFIGS.length; i++) {
-        const prefix = TEAM_CONFIGS[i].id;
-        const active = teamHasConfiguredGame(prefix) || teamHasUploadedPhoto(prefix);
-        if (!active) continue;
-        items.push({ prefix: prefix, slot: 1, dateTime: getGameDateTimeValue(prefix, 1), defaultOrder: getDefaultTeamPosition(prefix, i + 1) });
-        if (hasSecondGameConfigured(prefix)) {
-            items.push({ prefix: prefix, slot: 2, dateTime: getGameDateTimeValue(prefix, 2), defaultOrder: getDefaultTeamPosition(prefix, i + 1) + 0.1 });
-        }
-    }
-    items.sort(function(a, b) {
-        if (a.dateTime !== b.dateTime) return a.dateTime - b.dateTime;
-        return a.defaultOrder - b.defaultOrder;
-    });
-    return items;
-}
-
-function renumberActivePosterItems() {
-    if (window.isRenumberingPosterItems) return;
-    window.isRenumberingPosterItems = true;
-    try {
-        const items = collectActivePosterItems();
-        for (let i = 0; i < items.length; i++) {
-            const item = items[i];
-            const id = item.prefix + (item.slot === 2 ? '-num2' : '-num1');
-            const el = document.getElementById(id);
-            if (el) el.value = String(i + 1);
-        }
-    } finally {
-        window.isRenumberingPosterItems = false;
-    }
 }
 
 function hasSecondGameConfigured(prefix) {
@@ -1643,7 +1592,6 @@ function renderLandscapeU11EspoirTournamentFallback(cont) {
 }
 
 function updateLandscapePreview() {
-    try { if (typeof renumberActivePosterItems === 'function') renumberActivePosterItems(); } catch (e) { console.error(e); }
     const smLEl = document.getElementById('l-scale-mixvoip-l'); const smL = smLEl ? smLEl.value : 280;
     const sdEl = document.getElementById('l-scale-matchday'); const sd = sdEl ? sdEl.value : 90; 
     const smREl = document.getElementById('l-scale-mixvoip-r'); const smR = smREl ? smREl.value : 280; 
@@ -1764,11 +1712,12 @@ function updateLandscapePreview() {
 
     if (!ym && allActive.length === 1 && allActive[0].hasGame && hasSecondGameConfigured(allActive[0].id)) {
         const teamId = allActive[0].id;
-        const hasTournament = at.length > 0 || teamHasConfiguredGame('u11MES');
+        const u11MesShow = document.getElementById('u11MES-land-show');
+        const hasTournament = at.length > 0 || (u11MesShow && u11MesShow.checked);
         if (hasTournament) {
             renderLandscapeGame({ id: teamId, gameSlot: 1 }, { type: 'big', top: 350, left: 36 }, cont, true);
             renderLandscapeGame({ id: teamId, gameSlot: 2 }, { type: 'big', top: 350, left: 570 }, cont, true);
-            const tournamentTeam = at.find(function(team) { return team.id === 'u11MES'; }) || at[0];
+            const tournamentTeam = at.find(function(team) { return team.id === 'u11MES'; }) || at[0] || { id: 'u11MES', hasGame: teamHasConfiguredGame('u11MES') };
             if (tournamentTeam) {
                 renderLandscapeGame(tournamentTeam.id, { type: 'small', top: 610, left: 1130 }, cont, true);
             } else {
@@ -2224,7 +2173,6 @@ function renderLandscapeGame(teamRef, sl, cont, hasGame) {
 </script>
 <script>
 function updatePortraitPreview() {
-    try { if (typeof renumberActivePosterItems === 'function') renumberActivePosterItems(); } catch (e) { console.error(e); }
     const wEl = document.getElementById('p-scale-width');
     const w = wEl ? parseInt(wEl.value, 10) : 800; 
     
@@ -2303,6 +2251,12 @@ function updatePortraitPreview() {
     const cont = document.getElementById('p-dynamic-container'); 
     if (!cont) return;
     cont.innerHTML = '';
+    const englishWeekNotes = document.querySelectorAll('.english-week-settings-note');
+    for (let ni = 0; ni < englishWeekNotes.length; ni++) {
+        const note = englishWeekNotes[ni];
+        const noteTeam = note.getAttribute('data-team');
+        note.style.display = hasSecondGameConfigured(noteTeam) ? 'block' : 'none';
+    }
     
     const cbChecked = document.querySelectorAll('.cb-portrait:checked');
     let ap = [];
