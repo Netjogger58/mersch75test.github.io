@@ -4898,3 +4898,27 @@ body[data-gen-unlocked="1"] .poster-edit-overlay { display: inline-flex; }
         min-width: 560px;
     }
 }
+
+@media (max-width: 940px) and (orientation: landscape) {
+    .landing-wrapper {
+        width: 100%;
+        padding-top: 0;
+    }
+
+    .poster-section-hero {
+        padding: 0;
+        border-radius: 0;
+    }
+
+    .poster-visual-hero {
+        border-radius: 0;
+    }
+
+    .poster-shell-hero .poster-visual img {
+        display: block;
+        width: 100%;
+        height: auto;
+        min-height: 0;
+    }
+}
+
