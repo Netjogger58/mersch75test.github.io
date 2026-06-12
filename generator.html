@@ -1467,6 +1467,7 @@ function toggleTeam(teamId, on) {
 }
 
 function updateAllPreviews() {
+    try { if (typeof renumberActivePosterItems === 'function') renumberActivePosterItems(); } catch (e) { console.error(e); }
     try { if (typeof updateLandscapePreview === 'function') updateLandscapePreview(); } catch (e) { console.error(e); }
     try { if (typeof updatePortraitPreview === 'function') updatePortraitPreview(); } catch (e) { console.error(e); }
 }
@@ -1519,6 +1520,57 @@ function getGameNumber(prefix, slot) {
     const parsed = parseInt(raw, 10);
     if (!isNaN(parsed) && parsed > 0) return parsed;
     return slot === 2 ? 2 : 1;
+}
+
+function getGameDateTimeValue(prefix, slot) {
+    const dateValue = getGameFieldValue(prefix, 'date', slot);
+    if (!dateValue) return Number.MAX_SAFE_INTEGER;
+    const timeValue = getGameFieldValue(prefix, 'time', slot) || '23:59';
+    const dateParts = dateValue.split('-');
+    const timeParts = timeValue.split(':');
+    if (dateParts.length !== 3) return Number.MAX_SAFE_INTEGER;
+    const year = parseInt(dateParts[0], 10);
+    const month = parseInt(dateParts[1], 10) - 1;
+    const day = parseInt(dateParts[2], 10);
+    const hour = parseInt(timeParts[0] || '23', 10);
+    const minute = parseInt(timeParts[1] || '59', 10);
+    const dt = new Date(year, month, day, hour, minute);
+    const value = dt.getTime();
+    return isNaN(value) ? Number.MAX_SAFE_INTEGER : value;
+}
+
+function collectActivePosterItems() {
+    const items = [];
+    for (let i = 0; i < TEAM_CONFIGS.length; i++) {
+        const prefix = TEAM_CONFIGS[i].id;
+        const active = teamHasConfiguredGame(prefix) || teamHasUploadedPhoto(prefix);
+        if (!active) continue;
+        items.push({ prefix: prefix, slot: 1, dateTime: getGameDateTimeValue(prefix, 1), defaultOrder: getDefaultTeamPosition(prefix, i + 1) });
+        if (hasSecondGameConfigured(prefix)) {
+            items.push({ prefix: prefix, slot: 2, dateTime: getGameDateTimeValue(prefix, 2), defaultOrder: getDefaultTeamPosition(prefix, i + 1) + 0.1 });
+        }
+    }
+    items.sort(function(a, b) {
+        if (a.dateTime !== b.dateTime) return a.dateTime - b.dateTime;
+        return a.defaultOrder - b.defaultOrder;
+    });
+    return items;
+}
+
+function renumberActivePosterItems() {
+    if (window.isRenumberingPosterItems) return;
+    window.isRenumberingPosterItems = true;
+    try {
+        const items = collectActivePosterItems();
+        for (let i = 0; i < items.length; i++) {
+            const item = items[i];
+            const id = item.prefix + (item.slot === 2 ? '-num2' : '-num1');
+            const el = document.getElementById(id);
+            if (el) el.value = String(i + 1);
+        }
+    } finally {
+        window.isRenumberingPosterItems = false;
+    }
 }
 
 function hasSecondGameConfigured(prefix) {
@@ -1591,6 +1643,7 @@ function renderLandscapeU11EspoirTournamentFallback(cont) {
 }
 
 function updateLandscapePreview() {
+    try { if (typeof renumberActivePosterItems === 'function') renumberActivePosterItems(); } catch (e) { console.error(e); }
     const smLEl = document.getElementById('l-scale-mixvoip-l'); const smL = smLEl ? smLEl.value : 280;
     const sdEl = document.getElementById('l-scale-matchday'); const sd = sdEl ? sdEl.value : 90; 
     const smREl = document.getElementById('l-scale-mixvoip-r'); const smR = smREl ? smREl.value : 280; 
@@ -2171,6 +2224,7 @@ function renderLandscapeGame(teamRef, sl, cont, hasGame) {
 </script>
 <script>
 function updatePortraitPreview() {
+    try { if (typeof renumberActivePosterItems === 'function') renumberActivePosterItems(); } catch (e) { console.error(e); }
     const wEl = document.getElementById('p-scale-width');
     const w = wEl ? parseInt(wEl.value, 10) : 800; 
     
@@ -2375,7 +2429,6 @@ function updatePortraitPreview() {
         if (hasGame2) {
             const ds2 = formatDate(dv2, tv2b);
             let ls2 = '';
-            l1 = resolveTournamentPrimaryLogo(prefix, opp, ih, locVal, CONFIG.merschLogo); l2 = "";
                 const p2 = loc2Val.split('|');
                 for (let k = 0; k < p2.length; k++) { p2[k] = p2[k].trim(); }
                 ls2 = p2.join('<br>');
