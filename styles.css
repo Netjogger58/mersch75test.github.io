@@ -4902,23 +4902,40 @@ body[data-gen-unlocked="1"] .poster-edit-overlay { display: inline-flex; }
 @media (max-width: 940px) and (orientation: landscape) {
     .landing-wrapper {
         width: 100%;
-        padding-top: 0;
+        padding: 0;
+    }
+
+    .landing-header {
+        margin: 8px 8px 10px;
     }
 
     .poster-section-hero {
+        width: 100%;
         padding: 0;
         border-radius: 0;
     }
 
+    .poster-shell-hero,
+    .poster-shell-hero .poster-visual,
+    .poster-shell-hero picture {
+        display: block;
+        width: 100%;
+        height: auto;
+        min-height: 0;
+    }
+
     .poster-visual-hero {
+        aspect-ratio: 16 / 9;
         border-radius: 0;
+        overflow: hidden;
     }
 
     .poster-shell-hero .poster-visual img {
         display: block;
         width: 100%;
-        height: auto;
+        height: 100%;
         min-height: 0;
+        object-fit: contain;
     }
 }
 
