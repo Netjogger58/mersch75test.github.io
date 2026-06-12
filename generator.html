@@ -1711,8 +1711,20 @@ function updateLandscapePreview() {
 
     if (!ym && allActive.length === 1 && allActive[0].hasGame && hasSecondGameConfigured(allActive[0].id)) {
         const teamId = allActive[0].id;
-        renderLandscapeGame({ id: teamId, gameSlot: 1 }, { type: 'big', top: 350, left: 260 }, cont, true);
-        renderLandscapeGame({ id: teamId, gameSlot: 2 }, { type: 'big', top: 350, left: 880 }, cont, true);
+        const hasTournament = at.length > 0 || teamHasConfiguredGame('u11MES');
+        if (hasTournament) {
+            renderLandscapeGame({ id: teamId, gameSlot: 1 }, { type: 'big', top: 350, left: 36 }, cont, true);
+            renderLandscapeGame({ id: teamId, gameSlot: 2 }, { type: 'big', top: 350, left: 570 }, cont, true);
+            const tournamentTeam = at.find(function(team) { return team.id === 'u11MES'; }) || at[0];
+            if (tournamentTeam) {
+                renderLandscapeGame(tournamentTeam.id, { type: 'small', top: 610, left: 1130 }, cont, true);
+            } else {
+                renderLandscapeU11EspoirTournamentFallback(cont);
+            }
+        } else {
+            renderLandscapeGame({ id: teamId, gameSlot: 1 }, { type: 'big', top: 350, left: 260 }, cont, true);
+            renderLandscapeGame({ id: teamId, gameSlot: 2 }, { type: 'big', top: 350, left: 880 }, cont, true);
+        }
         const tcSingleEnglishWeek = document.getElementById('l-dynamic-tournoi');
         if (tcSingleEnglishWeek) tcSingleEnglishWeek.innerHTML = '';
         return;
@@ -2244,42 +2256,6 @@ function updatePortraitPreview() {
         const p = cbChecked[i].value;
         const cb = document.querySelector('.trigger-toggle[data-team="' + p + '"]');
         ap.push({ id: p, hasGame: cb && cb.checked });
-    }
-
-    // Filterlogik wie sortAndInjectEnglischeWoche
-    // Hole aktuelle Woche
-    let sel = document.getElementById('week-selector');
-    let weekStart = null, weekEnd = null;
-    if (sel && sel.value) {
-        let text = sel.options[sel.selectedIndex].text;
-        let parts = text.split('-');
-        const cleanDate = function(dStr) { let s = dStr.trim(); if(s.charAt(s.length - 1) === '.') { s = s.slice(0, -1); } return s; };
-        let startStr = cleanDate(parts[0]); let endStr = cleanDate(parts[1]); let p2 = endStr.split('.'); let yearStr = "";
-        if (p2.length === 3) { yearStr = p2[2]; }
-        let p1 = startStr.split('.'); if (p1.length >= 2) { if (p1.length === 2 || !p1[2] || p1[2] === "") { startStr = p1[0] + "." + p1[1] + "." + yearStr; } }
-        const parseD = function(s) { const p = s.split('.'); if (p.length < 3 || !p[2]) return 0; let yr = parseInt(p[2], 10); if (yr < 100) yr += 2000; return new Date(yr, parseInt(p[1], 10)-1, parseInt(p[0], 10)).getTime(); };
-        weekStart = new Date(parseD(startStr));
-        weekEnd = new Date(parseD(endStr) + 86399999);
-    }
-    let filteredGames = allGamesData;
-    if (weekStart && weekEnd) {
-        filteredGames = allGamesData.filter(g => {
-            const dt = parseGameDateValue(g);
-            return dt && dt >= weekStart && dt <= weekEnd;
-        });
-    }
-    // Gruppiere Spiele nach Team, für alle Teams mit mehreren Spielen: alle anzeigen
-    const teamMap = {};
-    for (const g of filteredGames) {
-        const key = getNormalizedGeneratorTeamKey(g.team);
-        if (!teamMap[key]) teamMap[key] = [];
-        teamMap[key].push(g);
-    }
-    let gamesByTeam = {};
-    for (let i = 0; i < ap.length; i++) {
-        const tid = ap[i].id;
-        const arr = teamMap[tid] || [];
-        gamesByTeam[tid] = arr;
     }
 
     if (ap.length === 0) { 
