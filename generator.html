@@ -1269,6 +1269,14 @@ function magicScan() {
             const hadPrimaryDateBeforeLine = !!(primaryDateEl && primaryDateEl.value);
             const primaryTypeEl = document.getElementById(p + '-type');
             const primaryTypeBeforeLine = primaryTypeEl ? primaryTypeEl.value : '';
+            const primaryValuesBeforeLine = {
+                date: primaryDateEl ? primaryDateEl.value : '',
+                time: document.getElementById(p + '-time') ? document.getElementById(p + '-time').value : '',
+                opp: document.getElementById(p + '-opp') ? document.getElementById(p + '-opp').value : '-',
+                home: document.getElementById(p + '-home') ? document.getElementById(p + '-home').value : 'home1',
+                loc: document.getElementById(p + '-loc') ? document.getElementById(p + '-loc').value : '',
+                type: primaryTypeBeforeLine
+            };
             
             const activateTeamCheckboxes = (teamPrefix) => {
                 const mainCb = document.querySelector('.trigger-toggle[data-team="' + teamPrefix + '"]'); if (mainCb) mainCb.checked = true;
@@ -1335,6 +1343,16 @@ function magicScan() {
                 else if (mIdx !== -1) { hEl.value = "home1"; } else { hEl.value = "home1"; }
             }
 
+            let parsedLocationValue = "";
+            if (typeof hallCodes !== 'undefined') {
+                for (let code in hallCodes) {
+                    if (line.indexOf(code) !== -1) {
+                        parsedLocationValue = hallCodes[code];
+                        break;
+                    }
+                }
+            }
+
             activateTeamCheckboxes(p); window.toggleTeam(p, true); autoFill(p, true);
 
             // Zweites Spiel: falls schon ein Spiel für diese Mannschaft geladen wurde,
@@ -1364,13 +1382,21 @@ function magicScan() {
                         n2El.value = String((!isNaN(n1) && n1 > 0) ? n1 + 1 : 2);
                     }
                     const l2El = document.getElementById(p + '-loc2');
-                    if (l2El) l2El.value = document.getElementById(p + '-loc') ? document.getElementById(p + '-loc').value : '';
+                    if (l2El) l2El.value = parsedLocationValue || (document.getElementById(p + '-loc') ? document.getElementById(p + '-loc').value : '');
                 }
             }
 
             const lEl = document.getElementById(p + '-loc');
             if (lEl && typeof hallCodes !== 'undefined') {
                 for (let code in hallCodes) { if (line.indexOf(code) !== -1) { lEl.value = hallCodes[code]; break; } }
+            }
+            if (hadPrimaryDateBeforeLine) {
+                const d1Restore = document.getElementById(p + '-date'); if (d1Restore) d1Restore.value = primaryValuesBeforeLine.date;
+                const t1Restore = document.getElementById(p + '-time'); if (t1Restore) t1Restore.value = primaryValuesBeforeLine.time;
+                const o1Restore = document.getElementById(p + '-opp'); if (o1Restore) o1Restore.value = primaryValuesBeforeLine.opp;
+                const h1Restore = document.getElementById(p + '-home'); if (h1Restore) h1Restore.value = primaryValuesBeforeLine.home;
+                const l1Restore = document.getElementById(p + '-loc'); if (l1Restore) l1Restore.value = primaryValuesBeforeLine.loc;
+                const typeRestore = document.getElementById(p + '-type'); if (typeRestore) typeRestore.value = primaryValuesBeforeLine.type;
             }
         } catch (err) { console.error("Fehler beim Scannen der Zeile: " + line, err); }
     }
@@ -1682,6 +1708,15 @@ function updateLandscapePreview() {
     }
 
     const regularSelectionCount = topTier.length + lowTier.length;
+
+    if (!ym && allActive.length === 1 && allActive[0].hasGame && hasSecondGameConfigured(allActive[0].id)) {
+        const teamId = allActive[0].id;
+        renderLandscapeGame({ id: teamId, gameSlot: 1 }, { type: 'big', top: 350, left: 260 }, cont, true);
+        renderLandscapeGame({ id: teamId, gameSlot: 2 }, { type: 'big', top: 350, left: 880 }, cont, true);
+        const tcSingleEnglishWeek = document.getElementById('l-dynamic-tournoi');
+        if (tcSingleEnglishWeek) tcSingleEnglishWeek.innerHTML = '';
+        return;
+    }
 
     if (ht && !ym && allActive.length > 0 && allActive.length <= 3 && allActive.every(function(team) { return ['u15', 'u13pe', 'u13p3', 'u11MEL'].indexOf(team.id) !== -1; })) {
         const youthGamesForMainSlots = topTier.concat(lowTier);
