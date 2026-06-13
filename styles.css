@@ -623,7 +623,7 @@ body.menu-open {
 
 .poster-copy h2,
 .events-copy h2 {
-    font-size: clamp(2.2rem, 4vw, 4.2rem);
+    font-size: clamp(1.9rem, 3.2vw, 3.35rem);
     line-height: 0.95;
 }
 
@@ -941,8 +941,8 @@ body.menu-open {
 
 .news-carousel-track .events-copy {
     padding: 24px 26px;
-    width: min(860px, 88%);
-    max-width: 860px;
+    width: min(1040px, 94%);
+    max-width: 1040px;
     background: rgba(0, 47, 101, 0.86);
     border-color: rgba(255, 213, 0, 0.45);
     backdrop-filter: none;
