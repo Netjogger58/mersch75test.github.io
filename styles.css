@@ -30,7 +30,7 @@ body {
     color: var(--text);
     font-family: 'Jost', sans-serif;
     overflow-wrap: break-word;
-    hyphens: auto;
+    hyphens: manual;
 }
 
 body.landing-page {
@@ -69,7 +69,7 @@ h3 {
     letter-spacing: 0.01em;
     overflow-wrap: break-word;
     word-break: normal;
-    hyphens: auto;
+    hyphens: manual;
 }
 
 .landing-page h1,
@@ -80,7 +80,7 @@ h3 {
 .landing-page span {
     overflow-wrap: break-word;
     word-break: normal;
-    hyphens: auto;
+    hyphens: manual;
 }
 
 .landing-wrapper,
@@ -941,8 +941,8 @@ body.menu-open {
 
 .news-carousel-track .events-copy {
     padding: 24px 26px;
-    width: min(720px, 82%);
-    max-width: 720px;
+    width: min(860px, 88%);
+    max-width: 860px;
     background: rgba(0, 47, 101, 0.86);
     border-color: rgba(255, 213, 0, 0.45);
     backdrop-filter: none;
@@ -950,7 +950,7 @@ body.menu-open {
     color: #ffffff;
     text-shadow: none;
     overflow-wrap: break-word;
-    hyphens: auto;
+    hyphens: manual;
 }
 
 .news-carousel-track .events-copy h2 {
@@ -960,14 +960,14 @@ body.menu-open {
     margin-bottom: 10px;
     max-width: 100%;
     overflow-wrap: break-word;
-    hyphens: auto;
+    hyphens: manual;
 }
 
 .news-carousel-track .events-copy .eyebrow,
 .news-carousel-track .events-copy p {
     color: #ffffff;
     overflow-wrap: break-word;
-    hyphens: auto;
+    hyphens: manual;
 }
 
 .news-carousel-track .events-copy .eyebrow {
@@ -4959,7 +4959,7 @@ body[data-gen-unlocked="1"] .poster-edit-overlay { display: inline-flex; }
 
 @media (max-width: 600px) and (orientation: portrait) {
     .landing-hero-copy h1 {
-        font-size: clamp(2.2rem, 13vw, 3.35rem);
+        font-size: clamp(2rem, 11vw, 3rem);
         line-height: 0.98;
     }
 
@@ -4968,7 +4968,7 @@ body[data-gen-unlocked="1"] .poster-edit-overlay { display: inline-flex; }
     .poster-copy h2,
     .spotlight-stage-copy h2,
     .events-copy h2 {
-        font-size: clamp(1.55rem, 8vw, 2.35rem);
+        font-size: clamp(1.38rem, 6.8vw, 2.05rem);
         line-height: 1.08;
     }
 
@@ -4978,7 +4978,7 @@ body[data-gen-unlocked="1"] .poster-edit-overlay { display: inline-flex; }
     .news-carousel-track .events-copy .eyebrow {
         overflow-wrap: break-word;
         word-break: normal;
-        hyphens: auto;
+        hyphens: manual;
     }
 
     .news-carousel-track .news-slide:has(.events-main-link) .events-overlay {
@@ -4988,8 +4988,8 @@ body[data-gen-unlocked="1"] .poster-edit-overlay { display: inline-flex; }
     }
 
     .news-carousel-track .news-slide:has(.events-main-link) .events-copy {
-        width: min(72%, 280px);
-        max-width: 280px;
+        width: min(86%, 340px);
+        max-width: 340px;
         padding: 14px 15px;
         margin-right: auto;
         transform: rotate(-7deg);
@@ -4997,7 +4997,7 @@ body[data-gen-unlocked="1"] .poster-edit-overlay { display: inline-flex; }
     }
 
     .news-carousel-track .news-slide:has(.events-main-link) .events-copy h2 {
-        font-size: clamp(1.15rem, 6.8vw, 1.75rem);
+        font-size: clamp(1.05rem, 5.9vw, 1.55rem);
         line-height: 1.08;
     }
 
@@ -5020,7 +5020,7 @@ body[data-gen-unlocked="1"] .poster-edit-overlay { display: inline-flex; }
 
 @media (min-width: 601px) and (max-width: 980px) {
     .landing-hero-copy h1 {
-        font-size: clamp(2.6rem, 8vw, 4.2rem);
+        font-size: clamp(2.35rem, 6.8vw, 3.65rem);
         line-height: 1;
     }
 
@@ -5029,7 +5029,7 @@ body[data-gen-unlocked="1"] .poster-edit-overlay { display: inline-flex; }
     .poster-copy h2,
     .spotlight-stage-copy h2,
     .events-copy h2 {
-        font-size: clamp(1.85rem, 5.5vw, 3rem);
+        font-size: clamp(1.65rem, 4.8vw, 2.55rem);
         line-height: 1.08;
     }
 }
