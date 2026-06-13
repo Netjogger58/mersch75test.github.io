@@ -330,7 +330,7 @@ h3 {
 .site-menu-pair a {
     min-height: 76px;
     padding: 16px 14px;
-    font-size: clamp(1.12rem, 1.45vw, 1.55rem);
+    font-size: clamp(1.5rem, 2vw, 2rem);
     justify-content: center;
     text-align: center;
 }
