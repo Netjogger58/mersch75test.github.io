@@ -877,18 +877,31 @@ function initializeSiteMenu() {
     const secondaryGroup = document.createElement('div');
     secondaryGroup.className = 'site-menu-secondary';
 
+    const trainingPair = document.createElement('div');
+    trainingPair.className = 'site-menu-pair site-menu-pair-training';
+
     navItems.forEach(({ href, labelKey, fallback, primary }) => {
         const link = document.createElement('a');
-        const targetGroup = primary ? primaryGroup : secondaryGroup;
+        let targetGroup = primary ? primaryGroup : secondaryGroup;
 
         link.href = href;
         link.textContent = getI18nText(labelKey, fallback);
+        link.dataset.labelKey = labelKey;
+        link.dataset.fallback = fallback;
 
         if (currentPath === href) {
             link.classList.add('is-active');
         }
 
+        if (href === 'training.html' || href === 'trainerstaff.html') {
+            targetGroup = trainingPair;
+        }
+
         targetGroup.append(link);
+
+        if (href === 'trainerstaff.html') {
+            primaryGroup.append(trainingPair);
+        }
     });
 
     const footer = document.createElement('div');
@@ -998,14 +1011,10 @@ function initializeSiteMenu() {
         closeButton.setAttribute('aria-label', (translator && translator('navClose')) || getI18nText('navClose', 'Menü schließen'));
         backdrop.setAttribute('aria-label', (translator && translator('navClose')) || getI18nText('navClose', 'Menü schließen'));
 
-        siteNav.querySelectorAll('a').forEach((link, index) => {
-            const item = navItems[index];
-
-            if (!item) {
-                return;
-            }
-
-            const text = translator ? translator(item.labelKey) : getI18nText(item.labelKey, item.fallback);
+        siteNav.querySelectorAll('a[data-label-key]').forEach((link) => {
+            const labelKey = link.dataset.labelKey;
+            const fallback = link.dataset.fallback || '';
+            const text = translator ? translator(labelKey) : getI18nText(labelKey, fallback);
             if (text) {
                 link.textContent = text;
             }
