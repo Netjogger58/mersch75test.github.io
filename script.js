@@ -76,7 +76,7 @@ function initializeSiteLanguage() {
             trainingScheduleOpen: 'Trainingsplang am Vollbild opmaachen',
             trainingScheduleClose: 'Vollbild zoumaachen',
             trainingYouthCoord: 'JUGENDKOORDINATIOUN:',
-            trainingYouthCoordBody: 'Fir de Jugendberäich si de Max Blanc (LUXQF3) an de Louis Van der Weken (LUXQF2Bis) zoustänneg.',
+            trainingYouthCoordBody: 'Fir de Jugendberäich si de Max Blanc (LUXQF4) an de Louis Van der Weken (LUXQF2Bis) zoustänneg.',
             trainingInfoLabel: 'Info:',
             trainingPhoneLabel: 'Tel.: Max Blanc 661 406 836',
             navMenu: 'Menü',
@@ -196,7 +196,7 @@ function initializeSiteLanguage() {
             trainingScheduleOpen: 'Ouvrir le planning en plein écran',
             trainingScheduleClose: 'Fermer le plein écran',
             trainingYouthCoord: 'COORDINATION JEUNES:',
-            trainingYouthCoordBody: 'Le secteur des jeunes est coordonné par Max Blanc (LUXQF3) et Louis Van der Weken (LUXQF2Bis).',
+            trainingYouthCoordBody: 'Le secteur des jeunes est coordonné par Max Blanc (LUXQF4) et Louis Van der Weken (LUXQF2Bis).',
             trainingInfoLabel: 'Info :',
             trainingPhoneLabel: 'Tél. : Max Blanc 661 406 836',
             navMenu: 'Menu',
@@ -316,7 +316,7 @@ function initializeSiteLanguage() {
             trainingScheduleOpen: 'Trainingsplan im Vollbild öffnen',
             trainingScheduleClose: 'Vollbild schließen',
             trainingYouthCoord: 'JUGENDKOORDINATION:',
-            trainingYouthCoordBody: 'Für den Jugendbereich sind Max Blanc (LUXQF3) und Louis Van der Weken (LUXQF2Bis) zuständig.',
+            trainingYouthCoordBody: 'Für den Jugendbereich sind Max Blanc (LUXQF4) und Louis Van der Weken (LUXQF2Bis) zuständig.',
             trainingInfoLabel: 'Info:',
             trainingPhoneLabel: 'Tel.: Max Blanc 661 406 836',
             navMenu: 'Menü',
@@ -436,7 +436,7 @@ function initializeSiteLanguage() {
             trainingScheduleOpen: 'Open training schedule fullscreen',
             trainingScheduleClose: 'Close fullscreen',
             trainingYouthCoord: 'YOUTH COORDINATION:',
-            trainingYouthCoordBody: 'Max Blanc (LUXQF3) and Louis Van der Weken (LUXQF2Bis) are responsible for the youth section.',
+            trainingYouthCoordBody: 'Max Blanc (LUXQF4) and Louis Van der Weken (LUXQF2Bis) are responsible for the youth section.',
             trainingInfoLabel: 'Info:',
             trainingPhoneLabel: 'Phone: Max Blanc 661 406 836',
             navMenu: 'Menu',
@@ -556,7 +556,7 @@ function initializeSiteLanguage() {
             trainingScheduleOpen: 'Abrir plano de treino em ecrã inteiro',
             trainingScheduleClose: 'Fechar ecrã inteiro',
             trainingYouthCoord: 'COORDENAÇÃO JOVEM:',
-            trainingYouthCoordBody: 'Max Blanc (LUXQF3) e Louis Van der Weken (LUXQF2Bis) são responsáveis pela secção jovem.',
+            trainingYouthCoordBody: 'Max Blanc (LUXQF4) e Louis Van der Weken (LUXQF2Bis) são responsáveis pela secção jovem.',
             trainingInfoLabel: 'Info:',
             trainingPhoneLabel: 'Tel.: Max Blanc 661 406 836',
             navMenu: 'Menu',
@@ -1125,7 +1125,7 @@ function initializeTrainingSchedule() {
     const hotspotGroupBase = [
         {
             group: 'u4',
-            trainers: 'Grégory Redavid, Christophe Kremer, Marc Jungels, Max Blanc (LUXQF3)',
+            trainers: 'Grégory Redavid, Christophe Kremer, Marc Jungels, Max Blanc (LUXQF4)',
             slots: [
                 { dayKey: 'wed', time: '16:30 - 17:30', location: 'Omnisports, 21, rue des Prés, Mersch' },
                 { dayKey: 'sat', time: '10:00 - 11:00', location: "Sportshal Lëntgen, 4, rue de l'Ecole, Lëntgen" }
@@ -1137,7 +1137,7 @@ function initializeTrainingSchedule() {
         },
         {
             group: 'u7',
-            trainers: 'Max Blanc (LUXQF3), Anne Holm (LUXQF3)',
+            trainers: 'Max Blanc (LUXQF4), Anne Holm (LUXQF3)',
             slots: [
                 { dayKey: 'tue', time: '17:30 - 18:30', location: 'Sportshal Lëntgen, 50, rue de la Gare' },
                 { dayKey: 'fri', time: '16:30 - 17:30', location: 'Hall Omnisports Krounebierg, 11, rue de la Piscine, Mersch' }
@@ -1149,7 +1149,7 @@ function initializeTrainingSchedule() {
         },
         {
             group: 'u9',
-            trainers: 'Max Blanc (LUXQF3), Louis Van der Weken (LUXQF2Bis)',
+            trainers: 'Max Blanc (LUXQF4), Louis Van der Weken (LUXQF2Bis)',
             slots: [
                 { dayKey: 'tue', time: '17:30 - 19:00', location: 'Hall Omnisports Krounebierg, 11, rue de la Piscine, Mersch' },
                 { dayKey: 'thu', time: '17:30 - 19:00', location: 'Hall Omnisports Krounebierg, 11, rue de la Piscine, Mersch' }
@@ -1161,7 +1161,7 @@ function initializeTrainingSchedule() {
         },
         {
             group: 'u11',
-            trainers: 'Max Blanc (LUXQF3), Elie Schuster',
+            trainers: 'Max Blanc (LUXQF4), Elie Schuster',
             slots: [
                 { dayKey: 'wed', time: '17:30 - 19:00', location: 'Hall Omnisports, 21, rue des Prés, Mersch' },
                 { dayKey: 'fri', time: '17:30 - 19:00', location: 'Hall Omnisports Krounebierg, 11, rue de la Piscine, Mersch' }
@@ -1173,7 +1173,7 @@ function initializeTrainingSchedule() {
         },
         {
             group: 'u13u15',
-            trainers: 'Max Blanc (LUXQF3), Mathis Derneden',
+            trainers: 'Max Blanc (LUXQF4), Mathis Derneden',
             slots: [
                 { dayKey: 'mon', time: '17:30 - 19:00', location: 'Hall Omnisports, 21, rue des Prés, Mersch' },
                 { dayKey: 'wed', time: '18:30 - 20:00', location: 'Hall Omnisports, 21, rue des Prés, Mersch' },
