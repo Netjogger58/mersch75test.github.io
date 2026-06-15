@@ -1719,16 +1719,22 @@ function updateLandscapePreview() {
     allActive.sort(sortFn);
     at.sort(sortFn);
 
-    const photoOnlyMode = allActive.length > 0 && at.length === 0 && allActive.every(function(team) {
+    // Photo-Only Mode: All Teams (allActive + at) hunn just Fotos ouni Spiller
+    const allPhotoTeams = allActive.concat(at).filter(function(team) {
+        return teamHasUploadedPhoto(team.id);
+    });
+    const photoOnlyMode = allPhotoTeams.length > 0 && allPhotoTeams.every(function(team) {
         return teamHasUploadedPhoto(team.id) && !team.hasGame;
     });
 
     if (photoOnlyMode) {
         if (layer50) layer50.style.display = 'none';
-        cont.innerHTML += '<div class="abs" style="top:48px;left:430px;width:120px;height:120px;display:flex;align-items:center;justify-content:center;z-index:5;"><img src="Media/Logos FLH Eq/Logo-Mersch75-50-Joer-3D.png" crossorigin="anonymous" alt="50 Joer" style="max-width:100%;max-height:100%;object-fit:contain;"></div>';
-        cont.innerHTML += '<div class="abs" style="top:48px;left:1048px;width:120px;height:120px;display:flex;align-items:center;justify-content:center;z-index:5;"><img src="Media/Logos FLH Eq/Logo-Mersch75-50-Joer-3D.png" crossorigin="anonymous" alt="50 Joer" style="max-width:100%;max-height:100%;object-fit:contain;"></div>';
+        // 50 Joer Logos tëscht Mixvoip a Matchday (M-Gréisst = 90px)
+        cont.innerHTML += '<div class="abs" style="top:35px;left:320px;width:90px;height:90px;display:flex;align-items:center;justify-content:center;z-index:5;"><img src="Media/Logos FLH Eq/Logo-Mersch75-50-Joer-3D.png" crossorigin="anonymous" alt="50 Joer" style="max-width:100%;max-height:100%;object-fit:contain;"></div>';
+        cont.innerHTML += '<div class="abs" style="top:35px;left:1180px;width:90px;height:90px;display:flex;align-items:center;justify-content:center;z-index:5;"><img src="Media/Logos FLH Eq/Logo-Mersch75-50-Joer-3D.png" crossorigin="anonymous" alt="50 Joer" style="max-width:100%;max-height:100%;object-fit:contain;"></div>';
 
-        const photoAssignments = buildLandscapePhotoOnlyAssignments(allActive);
+        // All Photo-Teams (allActive + at) fir d'6 Fotoen-Layout huelen
+        const photoAssignments = buildLandscapePhotoOnlyAssignments(allPhotoTeams);
         for (let i = 0; i < photoAssignments.length; i++) {
             renderLandscapeGame(photoAssignments[i].id, photoAssignments[i].slot, cont, false);
         }
