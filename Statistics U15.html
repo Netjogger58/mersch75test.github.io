@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Statistics U15 - Mersch75</title></head><body><style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{color-scheme:light;--page:#f5f5f7;--ink:#1d1d1f;--muted:#6e6e73;--line:rgba(0,0,0,.08);--panel:rgba(255,255,255,.86)}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,Arial,sans-serif;background:radial-gradient(circle at 12% 0%,rgba(0,166,214,.16),transparent 30%),linear-gradient(180deg,#fbfbfd 0%,var(--page) 48%,#fff 100%);padding:34px 14px 48px;color:var(--ink);-webkit-font-smoothing:antialiased}
+.m75-page,.stat-page{max-width:1180px;margin:0 auto}
+.stat-hero{display:grid;grid-template-columns:minmax(0,1fr) 132px;gap:28px;align-items:center;margin:0 0 18px;padding:30px;border:1px solid rgba(255,255,255,.75);border-radius:8px;background:linear-gradient(135deg,rgba(255,255,255,.95),rgba(255,255,255,.66));box-shadow:0 24px 70px rgba(0,0,0,.10);backdrop-filter:blur(24px)}
+.hero-kicker{font-size:.78rem;font-weight:800;color:var(--tc);text-transform:uppercase;letter-spacing:0}
+.hero-title{font-size:clamp(2.2rem,6vw,5.2rem);line-height:.98;font-weight:900;letter-spacing:0;margin:8px 0 12px}
+.hero-lead{max-width:780px;font-size:clamp(1rem,2vw,1.35rem);line-height:1.35;color:var(--muted);font-weight:600}
+.hero-logo{width:132px;height:132px;object-fit:contain;filter:drop-shadow(0 16px 24px rgba(0,0,0,.18))}
+h1.page-title{font-size:clamp(1.5rem,4vw,2.3rem);font-weight:900;text-align:center;margin-bottom:6px;letter-spacing:0}
+.page-sub{text-align:center;color:#888;font-size:.88rem;margin-bottom:40px}
+h2.sec-head{font-size:clamp(1.35rem,2.5vw,2.05rem);font-weight:900;margin:26px 0 14px;display:flex;align-items:center;gap:10px;letter-spacing:0}
+h2.sec-head::before{content:'';display:inline-block;width:6px;height:1.1em;background:var(--tc,#00a6d6);border-radius:3px}
+h3.sub-head{font-size:.78rem;font-weight:900;margin:26px 0 12px;color:var(--tc,#00a6d6);text-transform:uppercase;letter-spacing:0}
+.card{background:var(--panel);border-radius:8px;box-shadow:0 20px 55px rgba(0,0,0,.10);overflow:hidden;margin-bottom:36px;border:1px solid rgba(255,255,255,.8);backdrop-filter:blur(20px)}
+.card-body{padding:26px}
+.sum-bar{display:grid;grid-template-columns:repeat(7,minmax(110px,1fr));gap:1px;background:var(--line);border-bottom:1px solid var(--line)}
+.sum-item{padding:17px 10px;text-align:center;background:rgba(255,255,255,.74)}
+.sum-val{display:block;font-size:clamp(1.35rem,2.4vw,2rem);font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:0}
+.sum-lbl{display:block;font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:0;color:var(--muted);margin-top:4px}
+.s-win .sum-val{color:#1f7a3a}.s-draw .sum-val{color:#b85f00}.s-loss .sum-val{color:#b42318}
+.s-pkt{background:var(--tc)}.s-pkt .sum-val,.s-pkt .sum-lbl{color:#fff}
+.flh-wrap{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-bottom:4px}
+.flh-tbl-box{min-width:0;border:1px solid var(--line);border-radius:8px;background:#fff;overflow:hidden}
+.flh-phase-label{font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:0;color:var(--muted);padding:12px 14px;border-bottom:1px solid var(--line)}
+.flh-phase-label span{color:var(--tc);font-size:.85rem}
+table.flht{width:100%;border-collapse:collapse;font-size:.8rem}
+table.flht th{background:#f5f5f7;padding:8px 10px;text-align:right;font-size:.62rem;text-transform:uppercase;letter-spacing:0;color:var(--muted);border-bottom:1px solid var(--line)}
+table.flht th:first-child{text-align:left}
+table.flht td{padding:8px 10px;border-bottom:1px solid rgba(0,0,0,.05);text-align:right}
+table.flht td:first-child{text-align:left}
+table.flht tr:last-child td{border-bottom:0}
+table.flht tr.mersch td{font-weight:900;background:linear-gradient(90deg,rgba(0,166,214,.12),rgba(255,255,255,.96))}
+table.flht tr.mersch td:first-child{color:var(--tc)}
+.pos-medal{display:inline-block;width:22px;height:22px;border-radius:50%;font-size:.68rem;font-weight:900;text-align:center;line-height:22px;margin-right:6px}
+.pos-1{background:#f5c542;color:#4a3500}.pos-2{background:#d5d7dc;color:#3c3c43}.pos-3{background:#bd7b45;color:#fff}.pos-other{background:#ececf0;color:#6e6e73}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:#fff}
+table.m75t{width:100%;border-collapse:collapse;font-size:clamp(.72rem,1.3vw,.86rem)}
+table.m75t th{background:#f5f5f7;padding:9px 11px;text-align:left;font-size:.64rem;text-transform:uppercase;letter-spacing:0;color:var(--muted);white-space:nowrap;border-bottom:1px solid var(--line)}
+table.m75t th.num,table.m75t td.num{text-align:right}
+table.m75t td{padding:9px 11px;border-bottom:1px solid rgba(0,0,0,.05);vertical-align:middle}
+table.m75t tr:last-child td{border-bottom:0}
+table.m75t tr:hover td{background:#fafafa}
+.td-name{font-weight:800}
+.td-goals{font-weight:900;font-variant-numeric:tabular-nums;font-size:1rem;color:var(--tc)}
+.td-date{white-space:nowrap;font-weight:800;color:var(--tc);font-size:.76rem}
+.td-score{font-weight:900;font-variant-numeric:tabular-nums}
+.win{color:#1f7a3a}.draw{color:#b85f00}.loss{color:#b42318}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:.62rem;font-weight:800}
+.b-win{background:#e8f5ec;color:#1f7a3a}.b-draw{background:#fff4df;color:#b85f00}.b-loss{background:#ffeceb;color:#b42318}
+.analysis{background:linear-gradient(135deg,rgba(0,166,214,.10),rgba(255,255,255,.96));border:1px solid rgba(0,166,214,.16);border-radius:8px;padding:22px 24px;line-height:1.55;font-size:1rem;color:#303034;margin:18px 0 6px}
+.analysis h3{font-size:clamp(1.35rem,2.4vw,2rem);line-height:1.1;color:var(--ink);margin:0 0 12px;font-weight:900;letter-spacing:0}
+.analysis p{margin:0;max-width:980px}
+.season-facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:16px}
+.season-fact{border-radius:8px;background:rgba(255,255,255,.78);border:1px solid rgba(0,0,0,.06);padding:13px 14px}
+.season-fact strong{display:block;font-size:1.35rem;line-height:1;font-variant-numeric:tabular-nums;color:var(--tc)}
+.season-fact span{display:block;margin-top:5px;font-size:.72rem;text-transform:uppercase;font-weight:900;color:var(--muted);letter-spacing:0}
+.lnk-sbo,.lnk-rtl,.flh-link{display:inline-flex;align-items:center;padding:3px 9px;border-radius:6px;font-size:.65rem;font-weight:800;text-decoration:none;border:1px solid transparent;white-space:nowrap}
+.lnk-sbo{background:#e8f1ff;color:#00a6d6;border-color:#bad6ff}.lnk-sbo:hover{background:#00a6d6;color:#fff}
+.lnk-rtl{background:#fff1df;color:#b85f00;border-color:#ffd3a1}.lnk-rtl:hover{background:#b85f00;color:#fff}
+.flh-link{background:#edf7ef;color:#1f7a3a;border-color:#bfe3c8;margin-left:8px}.flh-link:hover{background:#1f7a3a;color:#fff}
+.lnk-miss{color:#b8b8bd;font-size:.7rem}
+.pen-2min{display:inline-block;background:#ffeceb;color:#b42318;border-radius:999px;padding:1px 7px;font-size:.62rem;font-weight:800;margin:1px}
+.pen-yellow{display:inline-block;background:#fff4df;color:#b85f00;border-radius:999px;padding:1px 7px;font-size:.62rem;font-weight:800;margin:1px}
+.cup-badge{display:inline-block;background:#f0eafe;color:#5e3abf;border-radius:6px;padding:1px 7px;font-size:.58rem;font-weight:800;margin-right:4px}
+.pct-good{color:#1f7a3a;font-weight:900}.pct-mid{color:#b85f00;font-weight:900}.pct-bad{color:#b42318;font-weight:900}
+@media (max-width:860px){body{padding:18px 10px 34px}.stat-hero{grid-template-columns:1fr;padding:22px}.hero-logo{width:96px;height:96px}.sum-bar{grid-template-columns:repeat(2,minmax(0,1fr))}.flh-wrap,.season-facts{grid-template-columns:1fr}.card-body{padding:18px}}
+@media (min-width:1200px){body{padding-top:46px}.stat-page{max-width:1280px}.hero-title{font-size:5.6rem}}
+@media print{body{background:#fff;padding:0}.stat-hero,.card{box-shadow:none;break-inside:avoid}.tbl-wrap{break-inside:avoid}}
+</style><div class="stat-page" style="--tc:#00a6d6"><h2 class="sec-head" style="--tc:#00a6d6;">U15</h2><section class="card" style="--tc:#00a6d6;"><div class="sum-bar"><div class="sum-item"><span class="sum-val">19</span><span class="sum-lbl">Spiele</span></div><div class="sum-item s-win"><span class="sum-val">10</span><span class="sum-lbl">Siege</span></div><div class="sum-item s-draw"><span class="sum-val">2</span><span class="sum-lbl">Unentsch.</span></div><div class="sum-item s-loss"><span class="sum-val">7</span><span class="sum-lbl">Niederlagen</span></div><div class="sum-item"><span class="sum-val">472:448</span><span class="sum-lbl">Tore</span></div><div class="sum-item"><span class="sum-val">+24</span><span class="sum-lbl">Tordiff.</span></div><div class="sum-item s-pkt"><span class="sum-val">22</span><span class="sum-lbl">Punkte</span></div></div><div class="card-body"><h3 class="sub-head">Meisterschaftsrunden - Tabellen</h3><div class="flh-wrap"><div class="flh-tbl-box"><div class="flh-phase-label"><span>Runde 1</span> U15 - 14 Spiele - Platz 5 <a href="https://www.flh.lu/championnat/#/league?ogId=95&lId=148026&allGames=1" target="_blank" class="flh-link">FLH</a></div><table class="flht"><thead><tr><th>Plaz</th><th>Ekipp</th><th>Sp.</th><th>S</th><th>U</th><th>N</th><th>Tore</th><th>Punkten</th></tr></thead><tbody><tr class="mersch"><td><span class="pos-medal pos-other">5</span></td><td>Mersch75</td><td>14</td><td>6</td><td>2</td><td>6</td><td>352:340</td><td>14:14</td></tr></tbody></table></div><div class="flh-tbl-box"><div class="flh-phase-label"><span>Runde 2</span> U15 - 4 Spiele - Platz 2 <a href="https://www.flh.lu/championnat/#/league?ogId=95&lId=156341&allGames=1" target="_blank" class="flh-link">FLH</a></div><table class="flht"><thead><tr><th>Plaz</th><th>Ekipp</th><th>Sp.</th><th>S</th><th>U</th><th>N</th><th>Tore</th><th>Punkten</th></tr></thead><tbody><tr class="mersch"><td><span class="pos-medal pos-2">2</span></td><td>Mersch75</td><td>4</td><td>3</td><td>0</td><td>1</td><td>105:92</td><td>6:2</td></tr></tbody></table></div><div class="flh-tbl-box"><div class="flh-phase-label"><span>Runde 3</span> Finale vs HB Museldall - Gesamt Platz 7 <a href="https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3488556" target="_blank" class="lnk-sbo">SBO</a></div><table class="flht"><thead><tr><th>Datum</th><th>Géigner</th><th>Resultat</th><th>Outcome</th></tr></thead><tbody><tr class="mersch"><td>Saisonfinale</td><td>HB Museldall</td><td class="td-score win">42:41</td><td><span class="badge b-win">Sieg</span></td></tr></tbody></table></div></div><div class="analysis"><h3>Saisonsfazit U15</h3><p>D'U15 huet eng äusserst spannend Saison mat dräi Phasen geliefert. D'Ekipp setzt sech aus U15- an U13-Spiller zesummen, woubei besonnesch déi jénger U13-Spiller eng enorm Doppelbelastung am Wochenende mat jee 2 Spiller op sech huelen. An der éischter Ronn konnt sech d'Ekipp am Mëttelfeld etabléieren a wichteg Erfarung sammelen. D'zweet Ronn war e klare Schritt no vir: mat Plaz 2 huet d'Mannschaft bewisen, datt se mat de beschte konkuréiere kann. Den Héichpunkt war d'Finale géint HB Museldall, dat mat engem knappe 42:41 gewonne gouf – e Beweis fir den kämpfereschen Teamgeescht. Well et momentan keng U17 zu Mersch75 gëtt, ginn d'erwuesse U15-Spiller schonn am H1-Training integréiert, wat de kontinuierlechen Opbau vun der Jugend a d'Verbindung tëscht de Generatiounen stäerkt. Dës Saison war e wichtegen Etapp fir d'Entwécklung vun der nächster Generatioun.</p><div class="season-facts"><div class="season-fact"><strong>+24</strong><span>Tordifferenz</span></div><div class="season-fact"><strong>19</strong><span>Spiller</span></div><div class="season-fact"><strong>42:41</strong><span>Finalegewinn</span></div></div></div></div></section></div></body></html>
