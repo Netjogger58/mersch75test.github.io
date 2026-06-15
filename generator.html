@@ -1595,6 +1595,21 @@ function teamHasConfiguredGame(prefix) {
     return !!(hasOpponent || hasDate || hasTime || hasLocation);
 }
 
+// Photo-Only Titelen fir Landscape
+const LANDSCAPE_PHOTO_TITLES = {
+    'fe': 'FE Saison 2025/26',
+    's1': 'H1 Saison 2025/26',
+    's2': 'H2 Saison 2025/26',
+    'u15': 'U15 Saison 2025/26',
+    'u13pe': 'U13 Saison 2025/26',
+    'u13p3': 'U13 Saison 2025/26',
+    'u11MEL': 'U11 Elite Saison 2025/26',
+    'u11MES': 'U11 Espoir Saison 2025/26',
+    'u9M': 'U9 Saison 2025/26',
+    'u7M': 'U7 Saison 2025/26',
+    'u4M': 'U4 Saison 2025/26'
+};
+
 function buildLandscapePhotoOnlyAssignments(activeTeams) {
     const availablePhotos = activeTeams.filter(function(team) {
         return teamHasUploadedPhoto(team.id);
@@ -1613,37 +1628,44 @@ function buildLandscapePhotoOnlyAssignments(activeTeams) {
         }
     }
     
-    const available = new Set(selectedTeams);
-    const hasH2 = available.has('s2');
-    const hasU15 = available.has('u15');
     const assignments = [];
-
-    function assign(teamId, slot) {
-        if (!available.has(teamId)) return;
-        assignments.push({ id: teamId, hasGame: false, slot: slot });
-    }
-
-    // Top Rei (3 kleng Fotoen): U13, U11 Elite, an dann U15 oder U11 Espoir
-    assign('u13pe', { type: 'photoTop', top: 215, left: 105, width: 320, height: 135 });
-    assign('u11MEL', { type: 'photoTop', top: 215, left: 639, width: 320, height: 135 });
+    const topSlots = [
+        { type: 'photoTop', top: 215, left: 105, width: 400, height: 200 },
+        { type: 'photoTop', top: 215, left: 550, width: 400, height: 200 },
+        { type: 'photoTop', top: 215, left: 995, width: 400, height: 200 }
+    ];
+    const bottomSlots = [
+        { type: 'big', top: 450, left: 50, width: 500, height: 350 },
+        { type: 'big', top: 450, left: 570, width: 500, height: 350 },
+        { type: 'big', top: 450, left: 1090, width: 500, height: 350 }
+    ];
     
-    // Drëtt Platz uewen: U15 (Priorität) oder U11 Espoir oder U9 oder U7 oder U4
-    if (hasU15) {
-        assign('u15', { type: 'photoTop', top: 215, left: 1173, width: 320, height: 135 });
-    } else {
-        assign('u11MES', { type: 'photoTop', top: 215, left: 1173, width: 320, height: 135 });
-        assign('u9M', { type: 'photoTop', top: 215, left: 1173, width: 320, height: 135 });
-        assign('u7M', { type: 'photoTop', top: 215, left: 1173, width: 320, height: 135 });
-        assign('u4M', { type: 'photoTop', top: 215, left: 1173, width: 320, height: 135 });
+    // Kategoriséieren: Senior (FE, S1, S2) vs Junior (alles aneres)
+    const seniors = selectedTeams.filter(function(id) {
+        return id === 'fe' || id === 's1' || id === 's2';
+    });
+    const juniors = selectedTeams.filter(function(id) {
+        return id !== 'fe' && id !== 's1' && id !== 's2';
+    });
+    
+    // Bottom (grouss Fotoen): Seniors prioritär, soss déi éischt Juniors
+    let bottomTeams = seniors.slice(0, 3);
+    if (bottomTeams.length < 3) {
+        bottomTeams = bottomTeams.concat(juniors.slice(0, 3 - bottomTeams.length));
     }
-
-    // Bottom Rei (3 grouss Fotoen): FE, H1, an dann H2 oder U15
-    assign('fe', { type: 'big', top: 385, left: 36 });
-    assign('s1', { type: 'big', top: 385, left: 570 });
-    if (hasH2) {
-        assign('s2', { type: 'big', top: 385, left: 1104 });
-    } else {
-        assign('u15', { type: 'big', top: 385, left: 1104 });
+    
+    // Top (kleng Fotoen): Restlech Juniors
+    const usedIds = new Set(bottomTeams);
+    const topTeams = juniors.filter(function(id) {
+        return !usedIds.has(id);
+    }).slice(0, 3);
+    
+    // Assignments erstellen
+    for (let i = 0; i < topTeams.length && i < topSlots.length; i++) {
+        assignments.push({ id: topTeams[i], hasGame: false, slot: topSlots[i], photoOnly: true });
+    }
+    for (let i = 0; i < bottomTeams.length && i < bottomSlots.length; i++) {
+        assignments.push({ id: bottomTeams[i], hasGame: false, slot: bottomSlots[i], photoOnly: true });
     }
 
     return assignments;
@@ -2059,27 +2081,32 @@ function renderLandscapeGame(teamRef, sl, cont, hasGame) {
     const showPhoto = photoToggle && photoToggle.checked && window.teamPhotos[prefix];
 
     if (showPhoto) {
+        // Titel fir Photo-Only aus LANDSCAPE_PHOTO_TITLES huelen
+        const photoTitle = (!hasGame && LANDSCAPE_PHOTO_TITLES[prefix]) ? LANDSCAPE_PHOTO_TITLES[prefix] : ts;
         let pW, pH, pTop, pLeft;
         let titleHtml = '';
         
         if (sl.type === 'big') {
-            pW = 458; pH = 260; pTop = sl.top + 95; pLeft = sl.left;
-            titleHtml = ts ? '<div class="abs text-blue" style="top:' + sl.top + 'px;left:' + sl.left + 'px;width:458px;height:80px;font-size:' + (37 * sclTi) + 'px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;line-height:1.1;display:flex;align-items:flex-end;justify-content:center;text-align:center;pointer-events:auto;color:var(--primary-blue);">' + ts + '</div>' : '';
+            // Grouss Fotoen (Männer/Fraen) - méi grouss fir besser Siichtbarkeet
+            pW = sl.width || 480; pH = sl.height || 320; pTop = sl.top; pLeft = sl.left;
+            titleHtml = photoTitle ? '<div class="abs text-blue" style="top:' + (sl.top - 45) + 'px;left:' + sl.left + 'px;width:' + pW + 'px;height:40px;font-size:' + (32 * sclTi) + 'px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;line-height:1;display:flex;align-items:flex-end;justify-content:center;text-align:center;pointer-events:auto;color:var(--primary-blue);">' + photoTitle + '</div>' : '';
         } else if (sl.type === 'photoTop') {
-            pW = sl.width || 320; pH = sl.height || 135; pTop = sl.top + 30; pLeft = sl.left;
-            titleHtml = ts ? '<div class="abs text-blue" style="top:' + sl.top + 'px;left:' + sl.left + 'px;width:' + pW + 'px;height:24px;font-size:' + (18 * sclTi) + 'px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;line-height:1;display:flex;align-items:flex-end;justify-content:center;text-align:center;pointer-events:auto;color:var(--primary-blue);">' + ts + '</div>' : '';
+            // Kleng Fotoen uewen (Jugend)
+            pW = sl.width || 400; pH = sl.height || 200; pTop = sl.top + 30; pLeft = sl.left;
+            titleHtml = photoTitle ? '<div class="abs text-blue" style="top:' + sl.top + 'px;left:' + sl.left + 'px;width:' + pW + 'px;height:28px;font-size:' + (20 * sclTi) + 'px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;line-height:1;display:flex;align-items:flex-end;justify-content:center;text-align:center;pointer-events:auto;color:var(--primary-blue);">' + photoTitle + '</div>' : '';
         } else if (sl.type === 'youth3col') {
             pW = 420; pH = 100; pTop = sl.top; pLeft = sl.left + (sl.col1 || 0);
             const titleWidth = (sl.col3 || 320) + 100;
-            titleHtml = ts ? '<div class="abs text-blue" style="top:' + (sl.top - 32) + 'px;left:' + pLeft + 'px;width:' + titleWidth + 'px;height:25px;font-size:' + (16 * sclTi) + 'px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;line-height:1;display:flex;align-items:flex-end;justify-content:center;text-align:center;pointer-events:auto;color:var(--primary-blue);">' + ts + '</div>' : '';
+            titleHtml = photoTitle ? '<div class="abs text-blue" style="top:' + (sl.top - 32) + 'px;left:' + pLeft + 'px;width:' + titleWidth + 'px;height:25px;font-size:' + (16 * sclTi) + 'px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;line-height:1;display:flex;align-items:flex-end;justify-content:center;text-align:center;pointer-events:auto;color:var(--primary-blue);">' + photoTitle + '</div>' : '';
         } else {
             pW = 320; pH = 80; pTop = sl.top; pLeft = sl.left;
-            titleHtml = ts ? '<div class="abs text-blue" style="top:' + (sl.top - 32) + 'px;left:' + pLeft + 'px;width:' + pW + 'px;height:25px;font-size:' + (18 * sclTi) + 'px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;line-height:1;display:flex;align-items:flex-end;justify-content:center;text-align:center;pointer-events:auto;color:var(--primary-blue);">' + ts + '</div>' : '';
+            titleHtml = photoTitle ? '<div class="abs text-blue" style="top:' + (sl.top - 32) + 'px;left:' + pLeft + 'px;width:' + pW + 'px;height:25px;font-size:' + (18 * sclTi) + 'px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;line-height:1;display:flex;align-items:flex-end;justify-content:center;text-align:center;pointer-events:auto;color:var(--primary-blue);">' + photoTitle + '</div>' : '';
         }
         
+        // object-fit: contain fir datt déi ganz Grupp ze gesinn ass
         let html = '<div class="abs game-layer" style="display:block;">';
         html += titleHtml;
-        html += '<div class="abs" style="top:' + pTop + 'px; left:' + pLeft + 'px; width:' + pW + 'px; height:' + pH + 'px; border-radius:12px; overflow:hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.15);"><img src="' + window.teamPhotos[prefix] + '" style="position:absolute; top:50%; left:50%; width:' + sclPhoto + '%; height:' + sclPhoto + '%; object-fit:cover; transform:translate(-50%,-50%);"></div>';
+        html += '<div class="abs" style="top:' + pTop + 'px; left:' + pLeft + 'px; width:' + pW + 'px; height:' + pH + 'px; border-radius:12px; overflow:hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.15);"><img src="' + window.teamPhotos[prefix] + '" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:contain; object-position:center;"></div>';
         html += '</div>';
         cont.innerHTML += html;
         return;
