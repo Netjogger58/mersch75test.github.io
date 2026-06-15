@@ -457,6 +457,23 @@ const badgeLabels = {
     'u11MEL': 'U11', 'u11MES': 'U11', 'u9M': 'U9', 'u7M': 'U7'
 };
 
+const TEAM_PHOTOS = {
+    'fe':     'Media/Ekippe Fotoen Saison 25-26/M75_FE Saison 25:26.webp',
+    's1':     'Media/Ekippe Fotoen Saison 25-26/M75_S1_Saison 25:26.webp',
+    's2':     'Media/Ekippe Fotoen Saison 25-26/M75_S1_Saison 25:26.webp',
+    'u15':    'Media/Ekippe Fotoen Saison 25-26/M75_U15 Saison 25:26.webp',
+    'u13pe':  'Media/Ekippe Fotoen Saison 25-26/M75_U13 Saison 25:26.webp',
+    'u13p3':  'Media/Ekippe Fotoen Saison 25-26/M75_U13 Saison 25:26.webp',
+    'u11MEL': 'Media/Ekippe Fotoen Saison 25-26/M75_U11 Saison 25:26.webp',
+    'u11MES': 'Media/Ekippe Fotoen Saison 25-26/M75_U11 Espoir Saison 25:26.webp',
+    'u9M':    'Media/Ekippe Fotoen Saison 25-26/M75_U9 Saison 25:26.webp',
+    'u7M':    'Media/Ekippe Fotoen Saison 25-26/M75_U7 Saison 25:26.webp'
+};
+
+function loadTeamPhoto(teamId) {
+    return TEAM_PHOTOS[teamId] || null;
+}
+
 const DEFAULT_TEAM_POSITIONS = {
     fe: 1,
     s1: 2,
@@ -2828,12 +2845,31 @@ function openHomepageHandoffModal(stamp, hasPortrait) {
                 const t = el.getAttribute('data-team');
                 const fileInput = document.querySelector('.trigger-photo-file[data-team="'+t+'"]');
                 if (el.checked) { 
-                    setPhotoUploadUi(t, true, fileInput && fileInput.files && fileInput.files[0] ? fileInput.files[0].name : undefined);
                     const landCb = document.getElementById(t + '-land-show');
                     if (landCb) landCb.checked = true;
                     const portCb = document.querySelector('.cb-portrait[value="' + t + '"]');
                     if (portCb) portCb.checked = true;
-                    if (fileInput && !window.teamPhotos[t]) fileInput.click();
+                    
+                    // Wenn schon manueller Upload vorhanden, verwenden
+                    if (fileInput && fileInput.files && fileInput.files[0]) {
+                        setPhotoUploadUi(t, true, fileInput.files[0].name);
+                        const reader = new FileReader();
+                        reader.onload = function(evt) {
+                            window.teamPhotos[t] = evt.target.result;
+                            window.updateAllPreviews();
+                        };
+                        reader.readAsDataURL(fileInput.files[0]);
+                    } else if (!window.teamPhotos[t]) {
+                        // Automatisch Ekippefoto laden
+                        const teamPhotoUrl = loadTeamPhoto(t);
+                        if (teamPhotoUrl) {
+                            window.teamPhotos[t] = teamPhotoUrl;
+                            setPhotoUploadUi(t, true, 'Ekippefoto (automatisch)');
+                            window.updateAllPreviews();
+                        } else if (fileInput) {
+                            fileInput.click();
+                        }
+                    }
                 } else { 
                     if (fileInput) fileInput.value = '';
                     delete window.teamPhotos[t];
