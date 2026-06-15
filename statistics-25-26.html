@@ -521,8 +521,6 @@
                                 page.innerHTML = cleanEmojis(page.innerHTML);
                                 var scopedCss = styleEl ? scopeRules(styleEl.textContent) : '';
                                 embed.innerHTML = '<style>' + scopedCss + ENHANCE_CSS + '</style>' + page.outerHTML;
-                                removeColumnByHeader(embed, 'Ergebnis');
-                                removeColumnByHeader(embed, 'Resultat');
                                 translateYouthStats(team);
                                 cache[cacheKey] = embed.innerHTML;
                             })
