@@ -448,19 +448,15 @@
                             if (/^(Tore|Buts|Goals|Golos)$/i.test(value)) th.textContent = txt.goals;
                             if (/^(Punkten|Punkte|Points|Pontos)$/i.test(value)) th.textContent = txt.points;
                         });
-                        var tableIndex = 0;
-                        embed.querySelectorAll('table.m75t').forEach(function (table) {
-                            var ths = table.querySelectorAll('th');
-                            if (tableIndex === 0) {
-                                if (ths[0]) ths[0].textContent = txt.player;
-                                if (ths[1]) ths[1].textContent = txt.goals;
-                                if (ths[2]) ths[2].textContent = txt.seven;
-                            } else {
-                                [txt.date, txt.homeAway, txt.opponent, txt.result, txt.outcome, txt.sbo].forEach(function (label, i) {
-                                    if (ths[i]) ths[i].textContent = label;
-                                });
-                            }
-                            tableIndex += 1;
+                        embed.querySelectorAll('table.m75t th').forEach(function (th) {
+                            var value = th.textContent.trim();
+                            if (/^(Spiller\/in|Spieler\/in|Joueuse\/joueur|Player|Jogador\/a)$/i.test(value)) th.textContent = txt.player;
+                            else if (/^(Datum|Date|Data)$/i.test(value)) th.textContent = txt.date;
+                            else if (/^(H\/A|D\/E|C\/F)$/i.test(value)) th.textContent = txt.homeAway;
+                            else if (/^(Géigner|Gegner|Adversaire|Opponent|Adversário)$/i.test(value)) th.textContent = txt.opponent;
+                            else if (/^(Resultat|Score|Resultado)$/i.test(value)) th.textContent = txt.result;
+                            else if (/^(Ergebnis|Desfecho)$/i.test(value)) th.textContent = txt.outcome;
+                            else if (/^(Torer|Goaler|Tore|Buts|Goals|Golos)$/i.test(value)) th.textContent = txt.goals;
                         });
                         embed.querySelectorAll('.badge').forEach(function (badge) {
                             if (badge.classList.contains('b-win')) badge.textContent = txt.win;
