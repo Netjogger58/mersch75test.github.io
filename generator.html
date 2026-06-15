@@ -442,7 +442,8 @@ const TEAM_CONFIGS = [
     { id: "u11MEL", title: "JUGEND: U11M-Elite",  defaultTitle: "Season Games U11",              defaultType: "PlayOff" },
     { id: "u11MES", title: "JUGEND: U11 Espoir", defaultTitle: "--- TOURNOI --- U11", defaultType: "Tournoi" },
     { id: "u9M",     title: "JUGEND: U9M",         defaultTitle: "--- TOURNOI --- U9",          defaultType: "Tournoi" },
-    { id: "u7M",     title: "JUGEND: U7M",         defaultTitle: "--- TOURNOI --- U7",          defaultType: "Tournoi" }
+    { id: "u7M",     title: "JUGEND: U7M",         defaultTitle: "--- TOURNOI --- U7",          defaultType: "Tournoi" },
+    { id: "u4M",     title: "JUGEND: U4M",         defaultTitle: "--- TOURNOI --- U4",          defaultType: "Tournoi" }
 ];
 
 const teamSuffixes = {
@@ -454,7 +455,7 @@ const teamSuffixes = {
 
 const badgeLabels = {
     'fe': 'FE', 's1': 'H1', 's2': 'H2', 'u15': 'U15', 'u13pe': 'U13', 'u13p3': 'U13',
-    'u11MEL': 'U11', 'u11MES': 'U11', 'u9M': 'U9', 'u7M': 'U7'
+    'u11MEL': 'U11', 'u11MES': 'U11', 'u9M': 'U9', 'u7M': 'U7', 'u4M': 'U4'
 };
 
 const TEAM_PHOTOS = {
@@ -467,7 +468,8 @@ const TEAM_PHOTOS = {
     'u11MEL': 'Media/Ekippe Fotoen Saison 25-26/M75_U11 Saison 25:26.webp',
     'u11MES': 'Media/Ekippe Fotoen Saison 25-26/M75_U11 Espoir Saison 25:26.webp',
     'u9M':    'Media/Ekippe Fotoen Saison 25-26/M75_U9 Saison 25:26.webp',
-    'u7M':    'Media/Ekippe Fotoen Saison 25-26/M75_U7 Saison 25:26.webp'
+    'u7M':    'Media/Ekippe Fotoen Saison 25-26/M75_U7 Saison 25:26.webp',
+    'u4M':    'Media/Ekippe Fotoen Saison 25-26/M75_U4_Saison 25:26.webp'
 };
 
 function loadTeamPhoto(teamId) {
@@ -484,7 +486,8 @@ const DEFAULT_TEAM_POSITIONS = {
     s2: 7,
     u11MES: 8,
     u9M: 9,
-    u7M: 10
+    u7M: 10,
+    u4M: 11
 };
 
 function getDefaultTeamPosition(teamId, fallbackPosition) {
@@ -880,7 +883,7 @@ function renderLandscapeControls() {
         mainHtml += '<div class="slider-row"><span class="sl-lbl">Logo</span><input type="range" class="land-scale-logo" data-team="' + team.id + '" min="50" max="200" value="' + defaultLogoScale + '" oninput="this.nextElementSibling.innerText=this.value+\'%\'; updateLandscapePreview();"><span class="sl-val">' + defaultLogoScale + '%</span></div>';
         mainHtml += '<div class="slider-row"><span class="sl-lbl">Titel</span><input type="range" class="land-scale-title" data-team="' + team.id + '" min="50" max="200" value="' + defaultTitleScale + '" oninput="this.nextElementSibling.innerText=this.value+\'%\'; updateLandscapePreview();"><span class="sl-val">' + defaultTitleScale + '%</span></div>';
         mainHtml += '<div class="slider-row"><span class="sl-lbl">Text</span><input type="range" class="land-scale-text" data-team="' + team.id + '" min="50" max="200" value="' + defaultTextScale + '" oninput="this.nextElementSibling.innerText=this.value+\'%\'; updateLandscapePreview();"><span class="sl-val">' + defaultTextScale + '%</span></div>';
-        mainHtml += '<div class="slider-row"><span class="sl-lbl">Foto</span><input type="range" class="land-scale-photo" data-team="' + team.id + '" min="50" max="220" value="100" oninput="this.nextElementSibling.innerText=this.value+\'%\'; updateLandscapePreview();"><span class="sl-val">100%</span></div>';
+        mainHtml += '<div class="slider-row"><span class="sl-lbl">Foto</span><input type="range" class="land-scale-photo" data-team="' + team.id + '" min="50" max="220" value="50" oninput="this.nextElementSibling.innerText=this.value+\'%\'; updateLandscapePreview();"><span class="sl-val">50%</span></div>';
         mainHtml += '</div>';
 
         html += '<div class="portrait-team-item">';
@@ -923,7 +926,7 @@ function renderPortraitControls() {
         html += '<div class="slider-row"><span class="sl-lbl">Logo</span><input type="range" class="team-scale-logo" data-team="' + team.id + '" min="30" max="250" value="140" oninput="this.nextElementSibling.innerText=this.value; updatePortraitPreview();"><span class="sl-val">140</span></div>';
         html += '<div class="slider-row"><span class="sl-lbl">Titel</span><input type="range" class="team-scale-title" data-team="' + team.id + '" min="10" max="60" value="34" oninput="this.nextElementSibling.innerText=this.value; updatePortraitPreview();"><span class="sl-val">34</span></div>';
         html += '<div class="slider-row"><span class="sl-lbl">Text</span><input type="range" class="team-scale-text" data-team="' + team.id + '" min="8" max="40" value="22" oninput="this.nextElementSibling.innerText=this.value; updatePortraitPreview();"><span class="sl-val">22</span></div>';
-        html += '<div class="slider-row"><span class="sl-lbl">Foto</span><input type="range" class="team-scale-photo" data-team="' + team.id + '" min="50" max="220" value="100" oninput="this.nextElementSibling.innerText=this.value+\'%\'; updatePortraitPreview();"><span class="sl-val">100%</span></div>';
+        html += '<div class="slider-row"><span class="sl-lbl">Foto</span><input type="range" class="team-scale-photo" data-team="' + team.id + '" min="50" max="220" value="50" oninput="this.nextElementSibling.innerText=this.value+\'%\'; updatePortraitPreview();"><span class="sl-val">50%</span></div>';
         html += '</div></div>';
         html += '<div class="portrait-team-item english-week-portrait-card" data-team="' + team.id + '" style="display:none;background:#f0f8ff;border-color:var(--secondary-blue);">';
         html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">';
@@ -938,7 +941,7 @@ function renderPortraitControls() {
         html += '<div class="slider-row"><span class="sl-lbl">Logo</span><input type="range" class="team-scale-logo-extra" data-team="' + team.id + '" min="30" max="250" value="100" oninput="this.nextElementSibling.innerText=this.value; updatePortraitPreview();"><span class="sl-val">100</span></div>';
         html += '<div class="slider-row"><span class="sl-lbl">Titel</span><input type="range" class="team-scale-title-extra" data-team="' + team.id + '" min="10" max="60" value="24" oninput="this.nextElementSibling.innerText=this.value; updatePortraitPreview();"><span class="sl-val">24</span></div>';
         html += '<div class="slider-row"><span class="sl-lbl">Text</span><input type="range" class="team-scale-text-extra" data-team="' + team.id + '" min="8" max="40" value="18" oninput="this.nextElementSibling.innerText=this.value; updatePortraitPreview();"><span class="sl-val">18</span></div>';
-        html += '<div class="slider-row"><span class="sl-lbl">Foto</span><input type="range" class="team-scale-photo-extra" data-team="' + team.id + '" min="50" max="220" value="100" oninput="this.nextElementSibling.innerText=this.value+\'%\'; updatePortraitPreview();"><span class="sl-val">100%</span></div>';
+        html += '<div class="slider-row"><span class="sl-lbl">Foto</span><input type="range" class="team-scale-photo-extra" data-team="' + team.id + '" min="50" max="220" value="50" oninput="this.nextElementSibling.innerText=this.value+\'%\'; updatePortraitPreview();"><span class="sl-val">50%</span></div>';
         html += '</div></div>';
     }
     html += '<div class="portrait-team-item" style="background:#f0f7ff;border-color:var(--secondary-blue);">';
@@ -1593,13 +1596,26 @@ function teamHasConfiguredGame(prefix) {
 }
 
 function buildLandscapePhotoOnlyAssignments(activeTeams) {
-    const available = new Set(activeTeams.filter(function(team) {
+    const availablePhotos = activeTeams.filter(function(team) {
         return teamHasUploadedPhoto(team.id);
     }).map(function(team) {
         return team.id;
-    }));
-
+    });
+    
+    // Maximal 6 Fotoen erlaabt - Priorität: FE, S1, S2, U15, U13, U11 Elite, U11 Espoir, U9, U7, U4
+    const priorityOrder = ['fe', 's1', 's2', 'u15', 'u13pe', 'u11MEL', 'u11MES', 'u9M', 'u7M', 'u4M'];
+    const selectedTeams = [];
+    
+    for (let i = 0; i < priorityOrder.length && selectedTeams.length < 6; i++) {
+        const teamId = priorityOrder[i];
+        if (availablePhotos.indexOf(teamId) !== -1) {
+            selectedTeams.push(teamId);
+        }
+    }
+    
+    const available = new Set(selectedTeams);
     const hasH2 = available.has('s2');
+    const hasU15 = available.has('u15');
     const assignments = [];
 
     function assign(teamId, slot) {
@@ -1607,14 +1623,21 @@ function buildLandscapePhotoOnlyAssignments(activeTeams) {
         assignments.push({ id: teamId, hasGame: false, slot: slot });
     }
 
+    // Top Rei (3 kleng Fotoen): U13, U11 Elite, an dann U15 oder U11 Espoir
     assign('u13pe', { type: 'photoTop', top: 215, left: 105, width: 320, height: 135 });
     assign('u11MEL', { type: 'photoTop', top: 215, left: 639, width: 320, height: 135 });
-    if (hasH2) {
+    
+    // Drëtt Platz uewen: U15 (Priorität) oder U11 Espoir oder U9 oder U7 oder U4
+    if (hasU15) {
         assign('u15', { type: 'photoTop', top: 215, left: 1173, width: 320, height: 135 });
     } else {
         assign('u11MES', { type: 'photoTop', top: 215, left: 1173, width: 320, height: 135 });
+        assign('u9M', { type: 'photoTop', top: 215, left: 1173, width: 320, height: 135 });
+        assign('u7M', { type: 'photoTop', top: 215, left: 1173, width: 320, height: 135 });
+        assign('u4M', { type: 'photoTop', top: 215, left: 1173, width: 320, height: 135 });
     }
 
+    // Bottom Rei (3 grouss Fotoen): FE, H1, an dann H2 oder U15
     assign('fe', { type: 'big', top: 385, left: 36 });
     assign('s1', { type: 'big', top: 385, left: 570 });
     if (hasH2) {
@@ -1623,7 +1646,7 @@ function buildLandscapePhotoOnlyAssignments(activeTeams) {
         assign('u15', { type: 'big', top: 385, left: 1104 });
     }
 
-    return assignments.slice(0, 6);
+    return assignments;
 }
 
 function renderLandscapeU11EspoirTournamentFallback(cont) {
@@ -2326,14 +2349,16 @@ function updatePortraitPreview() {
     });
 
     const titles = { 
-        'fe': 'Playoff Promotioun Fraen', 
-        's1': 'AXA League - Playoff Montée Männer', 
-        'u15': 'Season Games U15', 
-        'u13pe': 'Playoff Entscheedung U13', 
-        'u11MEL': 'Season Games U11', 
-        'u11MES': '--- TOURNOI --- U11', 
-        'u9M': '--- TOURNOI --- U9', 
-        'u7M': '--- TOURNOI --- U7' 
+        'fe': 'FE Saison 2025/26', 
+        's1': 'H1 Saison 2025/26', 
+        's2': 'H2 Saison 2025/26',
+        'u15': 'U15 Saison 2025/26', 
+        'u13pe': 'U13 Saison 2025/26', 
+        'u11MEL': 'U11 Elite Saison 2025/26', 
+        'u11MES': 'U11 Espoir Saison 2025/26', 
+        'u9M': 'U9 Saison 2025/26', 
+        'u7M': 'U7 Saison 2025/26',
+        'u4M': 'U4 Saison 2025/26'
     };
 
     for (let i = 0; i < ap.length; i++) {
