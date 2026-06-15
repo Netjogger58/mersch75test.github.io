@@ -885,7 +885,19 @@ body.menu-open {
 }
 
 .news-carousel-track .news-u11-background {
-    object-position: center 8%;
+    object-position: center 14%;
+}
+
+.news-carousel-track .news-u13-background {
+    object-position: center 5%;
+}
+
+.news-carousel-track .news-men-background {
+    object-position: center 22%;
+}
+
+.news-carousel-track .news-women-background {
+    object-position: center 16%;
 }
 
 .news-carousel-track .news-slide-u13 .events-copy,
