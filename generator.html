@@ -2006,7 +2006,7 @@ function updateLandscapePreview() {
                     
                     if (col.active && showPhoto) {
                         th += '<div class="abs" style="top:' + (csl.top + 32) + 'px;left:' + csl.left + 'px;width:50px;height:50px;border-radius:8px;overflow:hidden;box-shadow: 0 5px 15px rgba(0,0,0,0.1); transform: scale(' + csclL + '); transform-origin: top center;"><img src="' + window.teamPhotos[cp] + '" style="position:absolute;top:50%;left:50%;width:' + csclPhoto + '%;height:' + csclPhoto + '%;object-fit:cover;transform:translate(-50%,-50%);"></div>';
-                        th += '<div class="abs text-blue" style="top:' + (csl.top - 7) + 'px;left:' + (csl.left - 50) + 'px;width:150px;text-align:center;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;font-size:12px;">' + (document.getElementById(cp + '-land-title').value) + '</div>';
+                        th += '<div class="abs text-blue" style="top:' + (csl.top - 75) + 'px;left:' + (csl.left - 50) + 'px;width:150px;text-align:center;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;font-size:12px;">' + (document.getElementById(cp + '-land-title').value) + '</div>';
                     } else if (col.active) {
                         th += '<div class="abs badge" style="top:' + csl.top + 'px;left:' + csl.left + 'px;width:50px;height:28px;border-radius:6px;transform: scale(' + csclL + '); transform-origin: top center;"><div class="sub" style="font-size:6px;">' + tv + '</div><div class="main" style="font-size:15px;font-weight:900;font-style:italic;">' + mb + '</div></div>';
                         var cOpp = getGameFieldValue(cp, 'opp', 1) || '-';
