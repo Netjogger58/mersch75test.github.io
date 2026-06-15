@@ -2244,3 +2244,21 @@ initializeSharedFooters();
 initializeNewsCarousel();
 initializeFeedbackSystem();
 syncCurrentYear();
+
+// Passwuert Modal fir Wëllkomm Mapp
+(function() {
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('a[data-password]').forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                var password = link.getAttribute('data-password');
+                var userPass = prompt('Passwuert fir Wëllkomm Mapp:');
+                if (userPass === password) {
+                    window.location.href = link.href;
+                } else if (userPass !== null) {
+                    alert('Falscht Passwuert!');
+                }
+            });
+        });
+    });
+})();
