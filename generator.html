@@ -926,7 +926,7 @@ function renderPortraitControls() {
         html += '<div class="slider-row"><span class="sl-lbl">Logo</span><input type="range" class="team-scale-logo" data-team="' + team.id + '" min="30" max="250" value="140" oninput="this.nextElementSibling.innerText=this.value; updatePortraitPreview();"><span class="sl-val">140</span></div>';
         html += '<div class="slider-row"><span class="sl-lbl">Titel</span><input type="range" class="team-scale-title" data-team="' + team.id + '" min="10" max="60" value="34" oninput="this.nextElementSibling.innerText=this.value; updatePortraitPreview();"><span class="sl-val">34</span></div>';
         html += '<div class="slider-row"><span class="sl-lbl">Text</span><input type="range" class="team-scale-text" data-team="' + team.id + '" min="8" max="40" value="22" oninput="this.nextElementSibling.innerText=this.value; updatePortraitPreview();"><span class="sl-val">22</span></div>';
-        html += '<div class="slider-row"><span class="sl-lbl">Foto</span><input type="range" class="team-scale-photo" data-team="' + team.id + '" min="50" max="220" value="50" oninput="this.nextElementSibling.innerText=this.value+\'%\'; updatePortraitPreview();"><span class="sl-val">50%</span></div>';
+        html += '<div class="slider-row"><span class="sl-lbl">Foto</span><input type="range" class="team-scale-photo" data-team="' + team.id + '" min="30" max="400" value="50" oninput="this.nextElementSibling.innerText=this.value+\'%\'; updatePortraitPreview();"><span class="sl-val">50%</span></div>';
         html += '</div></div>';
         html += '<div class="portrait-team-item english-week-portrait-card" data-team="' + team.id + '" style="display:none;background:#f0f8ff;border-color:var(--secondary-blue);">';
         html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">';
@@ -941,7 +941,7 @@ function renderPortraitControls() {
         html += '<div class="slider-row"><span class="sl-lbl">Logo</span><input type="range" class="team-scale-logo-extra" data-team="' + team.id + '" min="30" max="250" value="100" oninput="this.nextElementSibling.innerText=this.value; updatePortraitPreview();"><span class="sl-val">100</span></div>';
         html += '<div class="slider-row"><span class="sl-lbl">Titel</span><input type="range" class="team-scale-title-extra" data-team="' + team.id + '" min="10" max="60" value="24" oninput="this.nextElementSibling.innerText=this.value; updatePortraitPreview();"><span class="sl-val">24</span></div>';
         html += '<div class="slider-row"><span class="sl-lbl">Text</span><input type="range" class="team-scale-text-extra" data-team="' + team.id + '" min="8" max="40" value="18" oninput="this.nextElementSibling.innerText=this.value; updatePortraitPreview();"><span class="sl-val">18</span></div>';
-        html += '<div class="slider-row"><span class="sl-lbl">Foto</span><input type="range" class="team-scale-photo-extra" data-team="' + team.id + '" min="50" max="220" value="50" oninput="this.nextElementSibling.innerText=this.value+\'%\'; updatePortraitPreview();"><span class="sl-val">50%</span></div>';
+        html += '<div class="slider-row"><span class="sl-lbl">Foto</span><input type="range" class="team-scale-photo-extra" data-team="' + team.id + '" min="30" max="400" value="50" oninput="this.nextElementSibling.innerText=this.value+\'%\'; updatePortraitPreview();"><span class="sl-val">50%</span></div>';
         html += '</div></div>';
     }
     html += '<div class="portrait-team-item" style="background:#f0f7ff;border-color:var(--secondary-blue);">';
@@ -2517,7 +2517,8 @@ function updatePortraitPreview() {
         
         let lh = '';
         if (showPhoto) {
-            lh += '<div style="width:100%; display:flex; justify-content:center; overflow:hidden; border-radius:15px;"><img src="' + window.teamPhotos[prefix] + '" style="width:' + photoScale + '%; max-width:none; height:auto; border-radius:15px; box-shadow: 0 5px 20px rgba(0,0,0,0.15); object-fit:contain;"></div>';
+            // Photo Scale flexibel: max-width:100% fir 50% Layout, awer Skaléierung erlaaben
+            lh += '<div style="width:100%; display:flex; justify-content:center; overflow:visible; border-radius:15px;"><img src="' + window.teamPhotos[prefix] + '" style="width:' + photoScale + '%; max-width:100%; height:auto; border-radius:15px; box-shadow: 0 5px 20px rgba(0,0,0,0.15); object-fit:contain;"></div>';
         } else {
             if (itour) {
                 lh += '<div class="p-logo-box" style="width:' + sl + 'px;height:' + sl + 'px;"><img src="' + l1 + '" crossorigin="anonymous"></div>';
