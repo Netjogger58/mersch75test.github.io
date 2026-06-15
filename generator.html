@@ -116,8 +116,9 @@
 #m75-gen-wrapper .matchday-text { top: 15px; left: 50%; transform: translateX(-50%); font-size: 75px; font-weight: 900; font-style: italic; color: var(--primary-blue); z-index: 3; display: flex; align-items: flex-end; letter-spacing: -2px; }
 #m75-gen-wrapper .matchday-text img { height: 90px; width: auto; object-fit: contain; }
 
-#m75-gen-wrapper .layer-50years { top: 160px; left: 50%; transform: translateX(-50%); width: 170px; height: 170px; background-color: transparent !important; z-index: 4; display: flex; justify-content: center; align-items: center; }
-#m75-gen-wrapper .layer-50years img { max-width: 100%; max-height: 100%; object-fit: contain; }
+#m75-gen-wrapper .layer-50years-left { top: 25px; left: 380px; width: 90px; height: 90px; background-color: transparent !important; z-index: 4; display: flex; justify-content: center; align-items: center; }
+#m75-gen-wrapper .layer-50years-right { top: 25px; left: 1130px; width: 90px; height: 90px; background-color: transparent !important; z-index: 4; display: flex; justify-content: center; align-items: center; }
+#m75-gen-wrapper .layer-50years-left img, #m75-gen-wrapper .layer-50years-right img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
 #m75-gen-wrapper .sponsor-white-field { top: 738px; left: 0; width: 1600px; height: 100px; background: white; z-index: 50; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; box-sizing: border-box; }
 #m75-gen-wrapper .sp-50logo { width: 90px; height: auto; max-height: 80px; object-fit: contain; flex-shrink: 0; }
@@ -266,7 +267,10 @@
                     <img src="Media/Matchday2.png" crossorigin="anonymous" alt="Matchday">
                 </div>
 
-                <div class="abs layer-50years">
+                <div class="abs layer-50years-left">
+                    <img src="Media/Logos FLH Eq/Logo-Mersch75-50-Joer-3D.png" crossorigin="anonymous" alt="50 Joer">
+                </div>
+                <div class="abs layer-50years-right">
                     <img src="Media/Logos FLH Eq/Logo-Mersch75-50-Joer-3D.png" crossorigin="anonymous" alt="50 Joer">
                 </div>
 
@@ -1631,15 +1635,15 @@ function buildLandscapePhotoOnlyAssignments(activeTeams) {
     const assignments = [];
     // Top Rei (Jugend): méi héich, méi grouss, maximal Platz
     const topSlots = [
-        { type: 'photoTop', top: 150, left: 90, width: 450, height: 240 },
-        { type: 'photoTop', top: 150, left: 525, width: 450, height: 240 },
-        { type: 'photoTop', top: 150, left: 960, width: 450, height: 240 }
+        { type: 'photoTop', top: 100, left: 90, width: 420, height: 220 },
+        { type: 'photoTop', top: 100, left: 545, width: 420, height: 220 },
+        { type: 'photoTop', top: 100, left: 1000, width: 420, height: 220 }
     ];
     // Bottom Rei (Seniors): méi héich fir bessere Balance
     const bottomSlots = [
-        { type: 'big', top: 410, left: 50, width: 520, height: 380 },
-        { type: 'big', top: 410, left: 540, width: 520, height: 380 },
-        { type: 'big', top: 410, left: 1030, width: 520, height: 380 }
+        { type: 'big', top: 380, left: 70, width: 480, height: 350 },
+        { type: 'big', top: 380, left: 580, width: 480, height: 350 },
+        { type: 'big', top: 380, left: 1090, width: 480, height: 350 }
     ];
     
     // Kategoriséieren: Senior (FE, S1, S2) vs Junior (alles aneres)
@@ -1688,7 +1692,8 @@ function updateLandscapePreview() {
     const imgMixL = document.querySelector('.mixvoip-left img'); if (imgMixL) imgMixL.style.width = smL + 'px';
     const imgMixR = document.querySelector('.mixvoip-right img'); if (imgMixR) imgMixR.style.width = smR + 'px';
     const imgMatch = document.querySelector('.matchday-text img'); if (imgMatch) imgMatch.style.height = sd + 'px';
-    const layer50 = document.querySelector('.layer-50years'); if (layer50) { layer50.style.width = s50 + 'px'; layer50.style.height = s50 + 'px'; layer50.style.display = 'flex'; }
+    const layer50L = document.querySelector('.layer-50years-left'); if (layer50L) { layer50L.style.width = s50 + 'px'; layer50L.style.height = s50 + 'px'; layer50L.style.display = 'flex'; }
+    const layer50R = document.querySelector('.layer-50years-right'); if (layer50R) { layer50R.style.width = s50 + 'px'; layer50R.style.height = s50 + 'px'; layer50R.style.display = 'flex'; }
     
     const cont = document.getElementById('l-dynamic-main'); if (!cont) return;
     cont.innerHTML = '';
@@ -1730,8 +1735,9 @@ function updateLandscapePreview() {
     });
 
     if (photoOnlyMode) {
-        if (layer50) layer50.style.display = 'none';
-        // 50 Joer Logos tëscht Mixvoip a Matchday
+        if (layer50L) layer50L.style.display = 'none';
+        if (layer50R) layer50R.style.display = 'none';
+        // 50 Joer Logos tëscht Mixvoip a Matchday (am Photo-Only modus dynamesch generéiert)
         cont.innerHTML += '<div class="abs" style="top:15px;left:250px;width:100px;height:100px;display:flex;align-items:center;justify-content:center;z-index:5;"><img src="Media/Logos FLH Eq/Logo-Mersch75-50-Joer-3D.png" crossorigin="anonymous" alt="50 Joer" style="max-width:100%;max-height:100%;object-fit:contain;"></div>';
         cont.innerHTML += '<div class="abs" style="top:15px;left:1250px;width:100px;height:100px;display:flex;align-items:center;justify-content:center;z-index:5;"><img src="Media/Logos FLH Eq/Logo-Mersch75-50-Joer-3D.png" crossorigin="anonymous" alt="50 Joer" style="max-width:100%;max-height:100%;object-fit:contain;"></div>';
 
