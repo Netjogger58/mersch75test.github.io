@@ -116,8 +116,8 @@
 #m75-gen-wrapper .matchday-text { top: 15px; left: 50%; transform: translateX(-50%); font-size: 75px; font-weight: 900; font-style: italic; color: var(--primary-blue); z-index: 3; display: flex; align-items: flex-end; letter-spacing: -2px; }
 #m75-gen-wrapper .matchday-text img { height: 90px; width: auto; object-fit: contain; }
 
-#m75-gen-wrapper .layer-50years-left { top: 25px; left: 380px; width: 90px; height: 90px; background-color: transparent !important; z-index: 4; display: flex; justify-content: center; align-items: center; }
-#m75-gen-wrapper .layer-50years-right { top: 25px; left: 1130px; width: 90px; height: 90px; background-color: transparent !important; z-index: 4; display: flex; justify-content: center; align-items: center; }
+#m75-gen-wrapper .layer-50years-left { top: 25px; left: 380px; width: 90px; height: 90px; background-color: transparent !important; z-index: 6; display: flex; justify-content: center; align-items: center; }
+#m75-gen-wrapper .layer-50years-right { top: 25px; left: 1130px; width: 90px; height: 90px; background-color: transparent !important; z-index: 6; display: flex; justify-content: center; align-items: center; }
 #m75-gen-wrapper .layer-50years-left img, #m75-gen-wrapper .layer-50years-right img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
 #m75-gen-wrapper .sponsor-white-field { top: 738px; left: 0; width: 1600px; height: 100px; background: white; z-index: 50; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; box-sizing: border-box; }
@@ -1635,15 +1635,15 @@ function buildLandscapePhotoOnlyAssignments(activeTeams) {
     const assignments = [];
     // Top Rei (Jugend): méi héich, méi grouss, maximal Platz
     const topSlots = [
-        { type: 'photoTop', top: 100, left: 90, width: 420, height: 220 },
-        { type: 'photoTop', top: 100, left: 545, width: 420, height: 220 },
-        { type: 'photoTop', top: 100, left: 1000, width: 420, height: 220 }
+        { type: 'photoTop', top: 135, left: 90, width: 420, height: 220 },
+        { type: 'photoTop', top: 135, left: 545, width: 420, height: 220 },
+        { type: 'photoTop', top: 135, left: 1000, width: 420, height: 220 }
     ];
     // Bottom Rei (Seniors): méi héich fir bessere Balance
     const bottomSlots = [
-        { type: 'big', top: 380, left: 70, width: 480, height: 350 },
-        { type: 'big', top: 380, left: 580, width: 480, height: 350 },
-        { type: 'big', top: 380, left: 1090, width: 480, height: 350 }
+        { type: 'big', top: 395, left: 70, width: 480, height: 350 },
+        { type: 'big', top: 395, left: 580, width: 480, height: 350 },
+        { type: 'big', top: 395, left: 1090, width: 480, height: 350 }
     ];
     
     // Kategoriséieren: Senior (FE, S1, S2) vs Junior (alles aneres)
