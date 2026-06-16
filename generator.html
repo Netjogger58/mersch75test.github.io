@@ -480,6 +480,10 @@ function loadTeamPhoto(teamId) {
     return TEAM_PHOTOS[teamId] || null;
 }
 
+function getTeamPhotoSource(teamId) {
+    return (window.teamPhotos && window.teamPhotos[teamId]) || loadTeamPhoto(teamId);
+}
+
 const DEFAULT_TEAM_POSITIONS = {
     fe: 1,
     s1: 2,
@@ -1259,7 +1263,7 @@ function magicScan() {
         const t = TEAM_CONFIGS[i];
         try { 
             const pt = document.querySelector('.trigger-photo-toggle[data-team="' + t.id + '"]');
-            const isPhotoActive = pt && pt.checked && window.teamPhotos[t.id];
+            const isPhotoActive = pt && pt.checked && getTeamPhotoSource(t.id);
 
             const oppEl = document.getElementById(t.id + '-opp'); if (oppEl) oppEl.value = "-"; 
             const dateEl = document.getElementById(t.id + '-date'); if (dateEl) dateEl.value = "";
@@ -1578,7 +1582,7 @@ function hasSecondGameConfigured(prefix) {
 
 function teamHasUploadedPhoto(prefix) {
     const photoToggle = document.querySelector('.trigger-photo-toggle[data-team="' + prefix + '"]');
-    return !!(photoToggle && photoToggle.checked && window.teamPhotos[prefix]);
+    return !!(photoToggle && photoToggle.checked && getTeamPhotoSource(prefix));
 }
 
 function teamHasConfiguredGame(prefix) {
@@ -1996,10 +2000,11 @@ function updateLandscapePreview() {
                     if (isNaN(csclPhoto)) csclPhoto = 100;
                     
                     const photoToggle = document.querySelector('.trigger-photo-toggle[data-team="' + cp + '"]');
-                    const showPhoto = photoToggle && photoToggle.checked && window.teamPhotos[cp];
+                    const photoSrc = getTeamPhotoSource(cp);
+                    const showPhoto = photoToggle && photoToggle.checked && photoSrc;
                     
                     if (col.active && showPhoto) {
-                        th += '<div class="abs" style="top:' + (csl.top + 32) + 'px;left:' + csl.left + 'px;width:50px;height:50px;border-radius:8px;overflow:hidden;box-shadow: 0 5px 15px rgba(0,0,0,0.1); transform: scale(' + csclL + '); transform-origin: top center;"><img src="' + window.teamPhotos[cp] + '" style="position:absolute;top:50%;left:50%;width:' + csclPhoto + '%;height:' + csclPhoto + '%;object-fit:cover;transform:translate(-50%,-50%);"></div>';
+                        th += '<div class="abs" style="top:' + (csl.top + 32) + 'px;left:' + csl.left + 'px;width:50px;height:50px;border-radius:8px;overflow:hidden;box-shadow: 0 5px 15px rgba(0,0,0,0.1); transform: scale(' + csclL + '); transform-origin: top center;"><img src="' + photoSrc + '" style="position:absolute;top:50%;left:50%;width:' + csclPhoto + '%;height:' + csclPhoto + '%;object-fit:cover;transform:translate(-50%,-50%);"></div>';
                         th += '<div class="abs text-blue" style="top:' + (csl.top - 75) + 'px;left:' + (csl.left - 50) + 'px;width:150px;text-align:center;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;font-size:12px;">' + (document.getElementById(cp + '-land-title').value) + '</div>';
                     } else if (col.active) {
                         th += '<div class="abs badge" style="top:' + csl.top + 'px;left:' + csl.left + 'px;width:50px;height:28px;border-radius:6px;transform: scale(' + csclL + '); transform-origin: top center;"><div class="sub" style="font-size:6px;">' + tv + '</div><div class="main" style="font-size:15px;font-weight:900;font-style:italic;">' + mb + '</div></div>';
@@ -2086,7 +2091,8 @@ function renderLandscapeGame(teamRef, sl, cont, hasGame) {
     const ts = titleEl ? titleEl.value : "";
 
     const photoToggle = document.querySelector('.trigger-photo-toggle[data-team="' + prefix + '"]');
-    const showPhoto = photoToggle && photoToggle.checked && window.teamPhotos[prefix];
+    const photoSrc = getTeamPhotoSource(prefix);
+    const showPhoto = photoToggle && photoToggle.checked && photoSrc;
 
     if (showPhoto) {
         // Titel fir Photo-Only aus LANDSCAPE_PHOTO_TITLES huelen
@@ -2114,7 +2120,7 @@ function renderLandscapeGame(teamRef, sl, cont, hasGame) {
         // object-fit: contain fir datt déi ganz Grupp ze gesinn ass
         let html = '<div class="abs game-layer" style="display:block;">';
         html += titleHtml;
-        html += '<div class="abs" style="top:' + pTop + 'px; left:' + pLeft + 'px; width:' + pW + 'px; height:' + pH + 'px; border-radius:12px; overflow:hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.15);"><img src="' + window.teamPhotos[prefix] + '" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:contain; object-position:center;"></div>';
+        html += '<div class="abs" style="top:' + pTop + 'px; left:' + pLeft + 'px; width:' + pW + 'px; height:' + pH + 'px; border-radius:12px; overflow:hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.15);"><img src="' + photoSrc + '" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:contain; object-position:center;"></div>';
         html += '</div>';
         cont.innerHTML += html;
         return;
@@ -2521,12 +2527,13 @@ function updatePortraitPreview() {
         }
         
         const photoToggle = document.querySelector('.trigger-photo-toggle[data-team="' + prefix + '"]');
-        const showPhoto = photoToggle && photoToggle.checked && window.teamPhotos[prefix];
+        const photoSrc = getTeamPhotoSource(prefix);
+        const showPhoto = photoToggle && photoToggle.checked && photoSrc;
         
         let lh = '';
         if (showPhoto) {
             // Photo Scale flexibel: max-width:100% fir 50% Layout, awer Skaléierung erlaaben
-            lh += '<div style="width:100%; display:flex; justify-content:center; overflow:visible; border-radius:15px;"><img src="' + window.teamPhotos[prefix] + '" style="width:' + photoScale + '%; max-width:100%; height:auto; border-radius:15px; box-shadow: 0 5px 20px rgba(0,0,0,0.15); object-fit:contain;"></div>';
+            lh += '<div style="width:100%; display:flex; justify-content:center; overflow:visible; border-radius:15px;"><img src="' + photoSrc + '" style="width:' + photoScale + '%; max-width:100%; height:auto; border-radius:15px; box-shadow: 0 5px 20px rgba(0,0,0,0.15); object-fit:contain;"></div>';
         } else {
             if (itour) {
                 lh += '<div class="p-logo-box" style="width:' + sl + 'px;height:' + sl + 'px;"><img src="' + l1 + '" crossorigin="anonymous"></div>';
