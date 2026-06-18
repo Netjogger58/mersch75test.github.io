@@ -199,9 +199,9 @@
                             </div>
                         </div>
 
-                        <div class="dept-item">
+                        <div class="dept-item dept-item-trainerstaff">
                             <div class="circle-img-container">
-                                <img src="Media/Inside/Trainerstaff.png" alt="Trainer staff">
+                                <img src="Media/Inside/Trainerstaffneu.png" alt="Trainer staff">
                             </div>
                             <div class="dept-card">
                                 <div class="dept-title">Trainer &amp; Supervisors</div>
@@ -627,7 +627,7 @@
 
                     .dept-grid-container {
                         display: grid;
-                        grid-template-columns: repeat(7, minmax(0, 1fr));
+                        grid-template-columns: repeat(8, minmax(0, 1fr));
                         gap: 22px;
                         padding: 40px 8px 12px;
                         position: relative;
@@ -649,6 +649,28 @@
                         align-items: center;
                         width: 100%;
                         position: relative;
+                    }
+
+                    .dept-item-trainerstaff {
+                        grid-column: span 2;
+                    }
+
+                    .dept-item-trainerstaff .circle-img-container {
+                        width: 118px;
+                        height: 118px;
+                    }
+
+                    .dept-item-trainerstaff .dept-card {
+                        padding: 22px 18px 18px;
+                    }
+
+                    .dept-item-trainerstaff .dept-title {
+                        font-size: 0.9rem;
+                    }
+
+                    .dept-item-trainerstaff .dept-names {
+                        font-size: 0.95rem;
+                        gap: 6px;
                     }
 
                     .circle-img-container {
@@ -773,6 +795,10 @@
                             gap: 18px;
                         }
 
+                        .dept-item-trainerstaff {
+                            grid-column: span 2;
+                        }
+
                         .line-horizontal-depts {
                             display: none;
                         }
@@ -850,6 +876,10 @@
                         .dept-grid-container {
                             grid-template-columns: 1fr;
                             gap: 28px;
+                        }
+
+                        .dept-item-trainerstaff {
+                            grid-column: auto;
                         }
                     }
                 </style>

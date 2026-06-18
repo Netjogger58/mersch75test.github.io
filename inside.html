@@ -474,9 +474,9 @@
                             </div>
                         </div>
 
-                        <div class="dept-item">
+                        <div class="dept-item dept-item-trainerstaff">
                             <div class="circle-img-container">
-                                <img src="Media/Inside/Trainerstaff.png" alt="Trainer staff">
+                                <img src="Media/Inside/Trainerstaffneu.png" alt="Trainer staff">
                             </div>
                             <div class="dept-card">
                                 <div class="dept-title">Trainer &amp; Supervisors</div>
@@ -678,6 +678,28 @@
                         width: 100%;
                     }
 
+                    .dept-item-trainerstaff {
+                        grid-column: span 2;
+                    }
+
+                    .dept-item-trainerstaff .circle-img-container {
+                        width: 110px;
+                        height: 110px;
+                    }
+
+                    .dept-item-trainerstaff .dept-card {
+                        padding: 16px 12px;
+                    }
+
+                    .dept-item-trainerstaff .dept-title {
+                        font-size: 13px;
+                    }
+
+                    .dept-item-trainerstaff .dept-names {
+                        font-size: 13px;
+                        gap: 5px;
+                    }
+
                     .circle-img-container {
                         width: 80px;
                         height: 80px;
@@ -809,6 +831,10 @@
 
                         .dept-grid-container {
                             grid-template-columns: 1fr;
+                        }
+
+                        .dept-item-trainerstaff {
+                            grid-column: auto;
                         }
                     }
                 </style>
