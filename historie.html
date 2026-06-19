@@ -50,20 +50,25 @@
                     </div>
 
                     <div class="mersch-history-right">
-                        <h2 class="mersch-title">Méchelsplatz in Mersch: Der Drachentöter als Namensgeber</h2>
-                        <img src="Media/History.png" alt="History of the Méchelsplatz in Mersch" class="mersch-history-top-image">
-                        
-                        <p class="mersch-text">Ein Platz, eine Geschichte: Über die Jahre hat der Méchelsplaz im Zentrum von Mersch viele seiner archäologischen Schätze offenbart.</p>
-                        
-                        <p class="mersch-text">„Er wurde gestürzt, der große Drache, die alte Schlange, die Teufel oder Satan heißt und die ganze Welt verführt; der Drache wurde auf die Erde gestürzt und mit ihm wurden seine Engel hinabgeworfen." (Offenbarung des Johannes)</p>
-                        
-                        <p class="mersch-text">Auch wenn die von Paul Eyschen geschaffene Drachengestalt, die über den Méchelsplaz wacht, nicht „feuerrot, mit sieben Köpfen und zehn Hörnern und mit sieben Diademen auf seinen Köpfen" ist, wie diejenige mit der der Erzengel Michael kämpft, so ist ihr Ursprung dennoch auf den Drachentöter zurückzuführen. Der Heilige Michael ist der Merscher Kirchenpatron und er hat dem Platz im Zentrum der Ortschaft seinen Namen gegeben.</p>
-                        
-                        <p class="mersch-text">Eyschens Bronzedrache ist zum einen der Beschützer von Gewässern, aus seinem schwungvollen Körper entspringen die drei Flüsse Alzette, Eisch und Mamer. Seine sieben Rückenstacheln stehen für die sieben Schlösser im Merschertal. Die anstelle von Kiemen angebrachten Weintrauben beziehen sich auf einen römischen Grabstein, der bei archäologischen Ausgrabungen auf dem Méchelsplaz gefunden wurde. Auf ihm war ein Ungeheuer mit einem Traubenfüllhorn eingemeißelt.</p>
-                        
-                        <p class="mersch-text">Der Boden unter diesem Platz hat bei einer Reihe von Untersuchungen nach und nach seine jahrhunderte-, ja gar jahrtausendealte Geschichte preisgegeben. Zwischen 1851 und 1857, als die alte Pfarrkirche abgetragen wurde, stieß man auf einen Geldschatz von ungefähr 300 Gold- und Silbermünzen aus dem 14. Jahrhundert, zahlreiche Sarkophage aus dem Mittelalter sowie behauene Steine und Inschriften aus der Römerzeit. Bei den Bauarbeiten eines neuen Kioskes 1948 wurden zwei weitere Sarkophage entdeckt und bei der Restaurierung des alten Kirchturmes 1981 Gräber und Fragmente römischer Amphoren. Von 1992 bis 1994 wurden großangelegte Ausgrabungen vom „Service archéologique" des „Musée national d'Histoire et d'Art" unternommen. Dabei wurden mehr als 260 Gräber unter der alten Kirche gefunden.</p>
-                        
-                        <p class="mersch-text mersch-source">Mireille Meyer 22.08.2020 Artikel im Wort</p>
+                        <article class="mersch-history-article mersch-history-media-article">
+                            <img src="Media/History.png" alt="History of the Méchelsplatz in Mersch" class="mersch-history-top-image">
+                        </article>
+
+                        <article class="mersch-history-article mersch-history-text-article">
+                            <h2 class="mersch-title">Méchelsplatz in Mersch: Der Drachentöter als Namensgeber</h2>
+
+                            <p class="mersch-text">Ein Platz, eine Geschichte: Über die Jahre hat der Méchelsplaz im Zentrum von Mersch viele seiner archäologischen Schätze offenbart.</p>
+
+                            <p class="mersch-text">„Er wurde gestürzt, der große Drache, die alte Schlange, die Teufel oder Satan heißt und die ganze Welt verführt; der Drache wurde auf die Erde gestürzt und mit ihm wurden seine Engel hinabgeworfen." (Offenbarung des Johannes)</p>
+
+                            <p class="mersch-text">Auch wenn die von Paul Eyschen geschaffene Drachengestalt, die über den Méchelsplaz wacht, nicht „feuerrot, mit sieben Köpfen und zehn Hörnern und mit sieben Diademen auf seinen Köpfen" ist, wie diejenige mit der der Erzengel Michael kämpft, so ist ihr Ursprung dennoch auf den Drachentöter zurückzuführen. Der Heilige Michael ist der Merscher Kirchenpatron und er hat dem Platz im Zentrum der Ortschaft seinen Namen gegeben.</p>
+
+                            <p class="mersch-text">Eyschens Bronzedrache ist zum einen der Beschützer von Gewässern, aus seinem schwungvollen Körper entspringen die drei Flüsse Alzette, Eisch und Mamer. Seine sieben Rückenstacheln stehen für die sieben Schlösser im Merschertal. Die anstelle von Kiemen angebrachten Weintrauben beziehen sich auf einen römischen Grabstein, der bei archäologischen Ausgrabungen auf dem Méchelsplaz gefunden wurde. Auf ihm war ein Ungeheuer mit einem Traubenfüllhorn eingemeißelt.</p>
+
+                            <p class="mersch-text">Der Boden unter diesem Platz hat bei einer Reihe von Untersuchungen nach und nach seine jahrhunderte-, ja gar jahrtausendealte Geschichte preisgegeben. Zwischen 1851 und 1857, als die alte Pfarrkirche abgetragen wurde, stieß man auf einen Geldschatz von ungefähr 300 Gold- und Silbermünzen aus dem 14. Jahrhundert, zahlreiche Sarkophage aus dem Mittelalter sowie behauene Steine und Inschriften aus der Römerzeit. Bei den Bauarbeiten eines neuen Kioskes 1948 wurden zwei weitere Sarkophage entdeckt und bei der Restaurierung des alten Kirchturmes 1981 Gräber und Fragmente römischer Amphoren. Von 1992 bis 1994 wurden großangelegte Ausgrabungen vom „Service archéologique" des „Musée national d'Histoire et d'Art" unternommen. Dabei wurden mehr als 260 Gräber unter der alten Kirche gefunden.</p>
+
+                            <p class="mersch-text mersch-source">Mireille Meyer 22.08.2020 Artikel im Wort</p>
+                        </article>
                     </div>
                 </div>
 
@@ -142,6 +147,12 @@
                     .mersch-history-right {
                         flex: 2;
                         min-width: 300px;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 28px;
+                    }
+
+                    .mersch-history-article {
                         display: flex;
                         flex-direction: column;
                     }
