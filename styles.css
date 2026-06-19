@@ -145,7 +145,7 @@ h3 {
     width: 62px;
     height: 62px;
     border-radius: 20px;
-    background: rgba(255, 255, 255, 0.95) url("Media/Header_Logos_media/Logo-Mersch75-50-Joer-3D-Kopie.png") center / 82% no-repeat;
+    background: rgba(255, 255, 255, 0.95) url("assets/shared/media/Header_Logos_media/Logo-Mersch75-50-Joer-3D-Kopie.png") center / 82% no-repeat;
     box-shadow: 0 10px 28px rgba(0, 47, 101, 0.14);
     color: transparent;
     font-size: 0;
@@ -1309,7 +1309,7 @@ body.menu-open {
     display: block;
     width: var(--sprite-w);
     height: var(--sprite-h);
-    background-image: url('Media/Sponsoring/Sponsorslescht-all-Breifpabeier-ouni-adresse-13022026-2.png');
+    background-image: url('assets/shared/media/Sponsoring/Sponsorslescht-all-Breifpabeier-ouni-adresse-13022026-2.png');
     background-repeat: no-repeat;
     background-size: 2500px 729px;
     background-position: var(--sprite-x) var(--sprite-y);
