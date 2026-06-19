@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Historie | Mersch75 Handball</title>
     <meta name="description" content="Historie Mersch75: Drachentöter, Maskottchen Daggie und die Geschichte des Vereins.">
+    <link rel="icon" type="image/jpeg" href="Media/Logo-History.jpg?v=20260620b">
+    <link rel="shortcut icon" type="image/jpeg" href="Media/Logo-History.jpg?v=20260620b">
+    <link rel="apple-touch-icon" href="Media/Logo-History.jpg?v=20260620b">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -40,6 +43,14 @@
         </header>
 
         <main class="page-main">
+            <section class="page-hero join-hero mersch-history-icon-hero">
+                <img class="mersch-history-icon-image" src="Media/Logo-History.jpg" alt="History Icon">
+            </section>
+
+            <section class="page-hero join-hero mersch-history-hero">
+                <img class="join-hero-logo mersch-history-hero-photo" src="Media/History%20HBM75%20S1%201975.png" alt="Erste Senioren-Mannschaft des HB Mersch75 im Jahr 1975">
+            </section>
+
             <!-- Drachentöter / Dragon History Section -->
             <section class="mersch-history-container inside-panel" id="inside-panel-history" data-inside-panel="history">
                 <article class="mersch-history-article mersch-history-image-article">
@@ -74,6 +85,30 @@
 
                 <style>
                     * { box-sizing: border-box; }
+
+                    .mersch-history-hero {
+                        margin-bottom: 22px;
+                        padding: 36px 24px 28px;
+                    }
+
+                    .mersch-history-icon-hero {
+                        margin-bottom: 14px;
+                        padding: 24px;
+                    }
+
+                    .mersch-history-icon-image {
+                        width: 112px;
+                        height: 112px;
+                        border-radius: 22px;
+                        object-fit: cover;
+                        box-shadow: 0 10px 24px rgba(0, 43, 94, 0.18);
+                    }
+
+                    .mersch-history-hero-photo {
+                        width: min(760px, 92vw);
+                        border-radius: 18px;
+                        box-shadow: 0 14px 30px rgba(0, 43, 94, 0.16);
+                    }
 
                     .mersch-history-container {
                         position: relative;
@@ -180,8 +215,8 @@
                     }
 
                     .mersch-history-top-image {
-                        width: min(100%, 920px);
-                        max-width: 920px;
+                        width: min(100%, 1180px);
+                        max-width: 1180px;
                         display: block;
                         margin: 8px auto 28px;
                         border-radius: 18px;
