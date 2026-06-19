@@ -42,6 +42,10 @@
         <main class="page-main">
             <!-- Drachentöter / Dragon History Section -->
             <section class="mersch-history-container inside-panel" id="inside-panel-history" data-inside-panel="history">
+                <article class="mersch-history-article mersch-history-image-article">
+                    <img src="Media/History.png" alt="History of the Méchelsplatz in Mersch" class="mersch-history-top-image">
+                </article>
+
                 <div class="mersch-history-content">
                     <div class="mersch-history-left">
                         <img src="Media/Inside/Original-Draach-Mersch.jpg" alt="Original Draach Mersch" class="mersch-draach-img">
@@ -50,10 +54,6 @@
                     </div>
 
                     <div class="mersch-history-right">
-                        <article class="mersch-history-article mersch-history-media-article">
-                            <img src="Media/History.png" alt="History of the Méchelsplatz in Mersch" class="mersch-history-top-image">
-                        </article>
-
                         <article class="mersch-history-article mersch-history-text-article">
                             <h2 class="mersch-title">Méchelsplatz in Mersch: Der Drachentöter als Namensgeber</h2>
 
@@ -113,6 +113,12 @@
                         z-index: 1;
                     }
 
+                    .mersch-history-image-article {
+                        position: relative;
+                        z-index: 1;
+                        margin-bottom: 28px;
+                    }
+
                     .mersch-history-left {
                         flex: 1;
                         min-width: 300px;
@@ -155,6 +161,10 @@
                     .mersch-history-article {
                         display: flex;
                         flex-direction: column;
+                    }
+
+                    .mersch-history-text-article {
+                        padding-top: 0;
                     }
 
                     .mersch-title {
