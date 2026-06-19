@@ -6,8 +6,10 @@
         { key: 's1', cl: '153713', label: 'MÄNNER 1 (H-PRO)' },
         { key: 'fe', cl: '152653', label: 'FRAUEN (D-PRO)' },
         { key: 'u15', cl: '156341', label: 'JUGEND: U15G' },
+        { key: 'u15fin', cl: '162361', label: 'JUGEND: U15G' },
         { key: 'u13pe', cl: '152106', label: 'JUGEND: U13M-PE' },
         { key: 'u11el', cl: '152529', label: 'JUGEND: U11 Elite', replaces: ['JUGEND: U11 Elite', 'JUGEND: U11M-EL', 'JUGEND: U11M-EPF5-10'] },
+        { key: 'u11elpf', cl: '158596', label: 'JUGEND: U11 Elite', replaces: ['JUGEND: U11 Elite', 'JUGEND: U11M-EL', 'JUGEND: U11M-EPF5-10'] },
         { key: 'u11es', cl: '153409', label: 'JUGEND: U11 Espoirs', replaces: ['JUGEND: U11 Espoirs', 'JUGEND: U11M-ES'], allowCommentMatch: true },
         { key: 'u9', cl: '151356', label: 'JUGEND: U9M', allowCommentMatch: true },
         { key: 'u7', cl: '152096', label: 'JUGEND: U7M', allowCommentMatch: true }
