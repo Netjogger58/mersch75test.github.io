@@ -1,0 +1,15 @@
+{
+  "filesScanned": 37,
+  "refsFound": 167,
+  "mapped": 166,
+  "unresolved": [
+    {
+      "ref": "Media/Logo-History.jpg?v=20260620b",
+      "decoded": "Media/Logo-History.jpg?v=20260620b",
+      "usedIn": [
+        "historie.html"
+      ]
+    }
+  ],
+  "copiedCount": 166
+}
