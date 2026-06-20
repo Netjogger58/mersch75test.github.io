@@ -565,10 +565,10 @@
                     '</div>';
                 const note = hall.note ? '<div class="m75-popup-note">' + escapeHtml(hall.note) + '</div>' : '';
                 const visual = hall.photo
-                    ? '<div class="m75-popup-visual"><img class="m75-hall-photo" src="' + encodeURI(hall.photo) + '" alt="' + escapeHtml(hall.name) + '" loading="lazy"></div>'
+                    ? '<div class="m75-popup-visual"><img class="m75-hall-photo" src="' + hall.photo + '" alt="' + escapeHtml(hall.name) + '" loading="lazy"></div>'
                     : '<div class="m75-popup-visual"><span class="m75-photo-note">Hallenfoto folgt</span></div>';
                 const titleLogo = hall.logo
-                    ? '<img class="m75-title-logo" src="' + encodeURI(hall.logo) + '" alt="' + escapeHtml(hall.teams[0]) + ' Logo" loading="lazy">'
+                    ? '<img class="m75-title-logo" src="' + hall.logo + '" alt="' + escapeHtml(hall.teams[0]) + ' Logo" loading="lazy">'
                     : '';
                 return '<div class="m75-popup">' +
                     visual +
@@ -599,7 +599,7 @@
                     const card = document.createElement("button");
                     card.type = "button";
                     card.className = "m75-hall-card";
-                    card.innerHTML = '<img src="' + encodeURI(hall.logo) + '" alt="' + escapeHtml(hall.teams[0]) + ' Logo" loading="lazy"><span><strong>' + escapeHtml(hall.name) + '</strong><span>' + escapeHtml(hall.address) + '</span></span>';
+                    card.innerHTML = '<img src="' + hall.logo + '" alt="' + escapeHtml(hall.teams[0]) + ' Logo" loading="lazy"><span><strong>' + escapeHtml(hall.name) + '</strong><span>' + escapeHtml(hall.address) + '</span></span>';
                     card.addEventListener("click", function() {
                         map.setView([hall.lat, hall.lng], 14);
                         marker.openPopup();
