@@ -543,6 +543,38 @@
             loadBoundary('assets/pages/hallenkarte/geo/kanton-mersch.geojson', { color: '#c62828', weight: 3, fill: false, dashArray: '6 6' });
             loadBoundary('assets/pages/hallenkarte/geo/gemeinde-mersch.geojson', { color: '#e65100', weight: 2, fill: false, dashArray: '3 6' });
 
+            // Fallback overlays: use Wikipedia SVGs if GeoJSON files are not present.
+            // These are approximate image overlays covering the Mersch area. If you can provide precise GeoJSONs
+            // place them in assets/pages/hallenkarte/geo/ as kanton-mersch.geojson and gemeinde-mersch.geojson.
+            (function addSvgFallbacks() {
+                const geoBase = 'assets/pages/hallenkarte/geo/';
+                const cantonSvg = 'https://upload.wikimedia.org/wikipedia/commons/e/ec/Canton_Mersch_in_Luxembourg.svg';
+                const communeSvg = 'https://upload.wikimedia.org/wikipedia/commons/0/0b/Localisation_Mersch.svg';
+                // approximate SW/NE bounds for the overlays (adjust if you have better georeferencing)
+                const overlayBounds = [[49.45, 5.7], [49.9, 6.45]];
+
+                // only add image overlays if local geojsons are missing
+                fetch(geoBase + 'kanton-mersch.geojson').then(r => {
+                    if (!r.ok) {
+                        L.imageOverlay(cantonSvg, overlayBounds, {opacity: 0.65, interactive: false}).addTo(boundaryLayer);
+                        console.log('Canton SVG overlay added as fallback');
+                    }
+                }).catch(()=>{
+                    L.imageOverlay(cantonSvg, overlayBounds, {opacity: 0.65, interactive: false}).addTo(boundaryLayer);
+                    console.log('Canton SVG overlay added as fallback (catch)');
+                });
+
+                fetch(geoBase + 'gemeinde-mersch.geojson').then(r => {
+                    if (!r.ok) {
+                        L.imageOverlay(communeSvg, overlayBounds, {opacity: 0.9, interactive: false}).addTo(boundaryLayer);
+                        console.log('Commune SVG overlay added as fallback');
+                    }
+                }).catch(()=>{
+                    L.imageOverlay(communeSvg, overlayBounds, {opacity: 0.9, interactive: false}).addTo(boundaryLayer);
+                    console.log('Commune SVG overlay added as fallback (catch)');
+                });
+            })();
+
             const bounds = L.latLngBounds([]);
             const markerLayer = L.layerGroup().addTo(map);
             const markerByIndex = new Map();
