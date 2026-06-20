@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hallenkarte – Marker-Editor</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: system-ui, sans-serif; background: #0f1923; color: #e8e8e8; min-height: 100vh; }
+
+        header {
+            background: #1a2530;
+            border-bottom: 2px solid #e63329;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        header h1 { font-size: 1.1rem; color: #fff; }
+        header p { font-size: 0.82rem; color: #aaa; margin-top: 2px; }
+
+        .layout { display: flex; height: calc(100vh - 60px); }
+
+        #map { flex: 1; min-width: 0; }
+
+        .sidebar {
+            width: 360px;
+            flex-shrink: 0;
+            background: #1a2530;
+            border-left: 1px solid #2c3e50;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .sidebar-tabs {
+            display: flex;
+            border-bottom: 1px solid #2c3e50;
+        }
+        .sidebar-tabs button {
+            flex: 1;
+            padding: 10px;
+            background: none;
+            border: none;
+            color: #aaa;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+        .sidebar-tabs button.active {
+            color: #fff;
+            border-bottom-color: #e63329;
+        }
+
+        .tab-panel { display: none; flex-direction: column; flex: 1; overflow: hidden; }
+        .tab-panel.active { display: flex; }
+
+        .hall-list { overflow-y: auto; flex: 1; }
+        .hall-item {
+            padding: 10px 14px;
+            border-bottom: 1px solid #2c3e50;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .hall-item:hover { background: #223040; }
+        .hall-item.selected { background: #1e3a50; border-left: 3px solid #e63329; }
+        .hall-item .name { font-size: 0.88rem; font-weight: 600; color: #fff; }
+        .hall-item .coords {
+            font-size: 0.75rem;
+            color: #7ac;
+            font-family: monospace;
+            margin-top: 2px;
+        }
+        .hall-item .changed { color: #f90; }
+
+        .editor-pane {
+            padding: 14px;
+            overflow-y: auto;
+            flex: 1;
+        }
+        .editor-pane h3 { font-size: 0.9rem; color: #fff; margin-bottom: 12px; border-bottom: 1px solid #2c3e50; padding-bottom: 8px; }
+        .field-group { margin-bottom: 12px; }
+        .field-group label { display: block; font-size: 0.75rem; color: #aaa; margin-bottom: 4px; }
+        .field-group input {
+            width: 100%;
+            background: #0f1923;
+            border: 1px solid #2c3e50;
+            color: #fff;
+            padding: 7px 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-family: monospace;
+        }
+        .field-group input:focus { outline: none; border-color: #e63329; }
+
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.82rem;
+            font-weight: 600;
+            transition: opacity 0.15s;
+        }
+        .btn:hover { opacity: 0.85; }
+        .btn-primary { background: #e63329; color: #fff; }
+        .btn-secondary { background: #2c3e50; color: #fff; }
+        .btn-success { background: #27ae60; color: #fff; }
+        .btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+
+        .hint {
+            font-size: 0.75rem;
+            color: #8a9bb0;
+            background: #162030;
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .output-pane { padding: 14px; display: flex; flex-direction: column; flex: 1; overflow: hidden; }
+        .output-pane h3 { font-size: 0.9rem; color: #fff; margin-bottom: 10px; }
+        textarea.code-output {
+            flex: 1;
+            background: #0a1520;
+            border: 1px solid #2c3e50;
+            color: #7fc;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 0.72rem;
+            border-radius: 4px;
+            resize: none;
+            overflow-y: auto;
+        }
+        .status-bar {
+            padding: 6px 14px;
+            font-size: 0.75rem;
+            color: #7ac;
+            background: #162030;
+            border-top: 1px solid #2c3e50;
+        }
+        .status-bar .changed-count { color: #f90; font-weight: bold; }
+
+        .leaflet-drag-cursor { cursor: grab !important; }
+
+        /* custom marker */
+        .ed-pin { width: 26px; height: 26px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 2px solid #fff; }
+        .ed-pin.mersch { background: #e63329; }
+        .ed-pin.luxembourg { background: #3498db; }
+        .ed-pin.belgium { background: #f39c12; }
+        .ed-pin.changed { box-shadow: 0 0 0 3px #f90; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div>
+        <h1>🗺️ Hallenkarte – Marker-Editor</h1>
+        <p>Ziehe die Marker an die richtige Stelle · Änderungen werden unten angezeigt</p>
+    </div>
+</header>
+
+<div class="layout">
+    <div id="map"></div>
+
+    <div class="sidebar">
+        <div class="sidebar-tabs">
+            <button class="active" onclick="showTab('list')">Hallen-Liste</button>
+            <button onclick="showTab('editor')">Koordinaten</button>
+            <button onclick="showTab('output')">Code-Export</button>
+        </div>
+
+        <!-- TAB: Liste -->
+        <div class="tab-panel active" id="tab-list">
+            <div class="hint" style="margin: 8px 10px 0; border-radius: 4px;">
+                🔵 Mersch75 &nbsp;|&nbsp; 🔵 Luxemburg &nbsp;|&nbsp; 🟠 Belgien<br>
+                🟡 = Position wurde geändert
+            </div>
+            <div class="hall-list" id="hallList"></div>
+        </div>
+
+        <!-- TAB: Editor -->
+        <div class="tab-panel" id="tab-editor">
+            <div class="editor-pane" id="editorPane">
+                <div class="hint">Klicke auf einen Marker oder einen Eintrag in der Liste, um ihn zu bearbeiten. Dann die Koordinaten manuell eingeben oder den Marker auf der Karte ziehen.</div>
+                <p style="color:#666; font-size:0.85rem; text-align:center; margin-top: 30px;">← Halle auswählen</p>
+            </div>
+        </div>
+
+        <!-- TAB: Export -->
+        <div class="tab-panel" id="tab-output">
+            <div class="output-pane">
+                <h3>Geänderte Koordinaten (für hallenkarte.html)</h3>
+                <div class="hint">Hier siehst du nur die geänderten Einträge als JavaScript-Code. Kopiere und gib ihn mir, dann aktualisiere ich die Datei.</div>
+                <textarea class="code-output" id="codeOutput" readonly></textarea>
+                <div class="btn-row">
+                    <button class="btn btn-success" onclick="copyCode()">📋 Kopieren</button>
+                    <button class="btn btn-secondary" onclick="generateCode()">🔄 Aktualisieren</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="status-bar" id="statusBar">Bereit · <span class="changed-count" id="changedCount">0</span> Änderungen</div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+const halls = [
+    { name: "Hall Omnisports Mersch", address: "21, rue des Prés, L-7561 Mersch", lat: 49.750606, lng: 6.102292, type: "mersch" },
+    { name: "Hall Omnisports Krounebierg", address: "rue de la Piscine, L-7572 Mersch", lat: 49.7587, lng: 6.1018, type: "mersch" },
+    { name: "Sporthalle Lintgen", address: "50, rue de la Gare, L-7448 Lintgen", lat: 49.721161, lng: 6.121798, type: "mersch" },
+    { name: "Salle des Sports École fondamentale Lintgen", address: "4, rue de l'Ecole, L-7445 Lintgen", lat: 49.7158, lng: 6.1336, type: "mersch" },
+    { name: "Hall Leudelange", address: "7, Place des Martyrs, L-3361 Leudelange", lat: 49.566466, lng: 6.062698, type: "luxembourg" },
+    { name: "Hall sportif Diekirch", address: "Rue Joseph Merten, L-9254 Diekirch", lat: 49.863927, lng: 6.165794, type: "luxembourg" },
+    { name: "Centre Sportif Bim Diederich", address: "46, rue Pierre Hamer, L-4737 Pétange", lat: 49.558456, lng: 5.869603, type: "luxembourg" },
+    { name: "Centre sportif et polyvalent de Rodange", address: "9, rue Joseph Moscardo, L-4840 Rodange", lat: 49.546524, lng: 5.837309, type: "luxembourg" },
+    { name: "Hall Rumelange", address: "66, rue des Martyrs, L-3739 Rumelange", lat: 49.456145, lng: 6.029312, type: "luxembourg" },
+    { name: "Hall Schifflange", address: "12, rue du Parc, L-3872 Schifflange", lat: 49.5076, lng: 6.0129, type: "luxembourg" },
+    { name: "Hall Omnisports Redange", address: "20, rue Seitert, L-8508 Redange/Attert", lat: 49.768727, lng: 5.897042, type: "luxembourg" },
+    { name: "Hall sportif Op Flohr", address: "Op Flohr, L-6751 Grevenmacher", lat: 49.6806, lng: 6.4439, type: "luxembourg" },
+    { name: "Centre sportif René Hartmann", address: "2, rue René Hartmann, L-3425 Dudelange", lat: 49.484406, lng: 6.089559, type: "luxembourg" },
+    { name: "Hall Oberkorn", address: "av. Parc des Sports, L-4671 Oberkorn", lat: 49.5119, lng: 5.8983, type: "luxembourg" },
+    { name: "Hall Niederkorn", address: "100, rue JB Scharlé, L-4666 Niederkorn", lat: 49.5362, lng: 5.8942, type: "luxembourg" },
+    { name: "Hall Differdange / Fousbann", address: "2, place des Alliés, L-4508 Differdange", lat: 49.5222, lng: 5.8906, type: "luxembourg" },
+    { name: "Käerjenger Dribbel", address: "54E, avenue de Luxembourg, L-4950 Bascharage", lat: 49.562795, lng: 5.904595, type: "luxembourg" },
+    { name: "Kannercampus Belval", address: "Place Marcelle-Lentz-Cornette, Belval", lat: 49.506694, lng: 5.935262, type: "luxembourg" },
+    { name: "Hall Omnisports Bonnevoie", address: "42, rue Jean-François Gangler, L-1613 Luxembourg", lat: 49.596420, lng: 6.145797, type: "luxembourg" },
+    { name: "Hall Omnisports Crauthem", address: "Rue Alexandre Schintgen, L-3330 Crauthem", lat: 49.537959, lng: 6.146589, type: "luxembourg" },
+    { name: "Centre Omnisports Henri Schmitz", address: "34, Boulevard Hubert Clément, L-4064 Esch-sur-Alzette", lat: 49.5034, lng: 5.9763, type: "luxembourg" },
+    { name: "Fédération Luxembourgeoise de Handball Asbl (F.L.H.)", address: "Maison des Sports Josy Barthel, 3, route d'Arlon, L-8009 Strassen", lat: 49.616374, lng: 6.094697, type: "luxembourg" },
+    { name: "Hall sportif communal Um Bruch", address: "3, Au Village, B-6717 Tontelange, Attert, Belgique", lat: 49.721411, lng: 5.802139, type: "belgium" }
+];
+
+// Store original and current positions
+const originals = halls.map(h => ({ lat: h.lat, lng: h.lng }));
+const current = halls.map(h => ({ lat: h.lat, lng: h.lng }));
+
+const map = L.map("map", { scrollWheelZoom: true }).setView([49.65, 6.05], 9);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: "© OpenStreetMap"
+}).addTo(map);
+
+const markers = [];
+let selectedIdx = null;
+
+function makeIcon(idx) {
+    const h = halls[idx];
+    const changed = isChanged(idx) ? " changed" : "";
+    return L.divIcon({
+        className: "",
+        html: `<div class="ed-pin ${h.type}${changed}"></div>`,
+        iconSize: [26, 26],
+        iconAnchor: [13, 13],
+        popupAnchor: [0, -16]
+    });
+}
+
+function isChanged(idx) {
+    return Math.abs(current[idx].lat - originals[idx].lat) > 0.000001 ||
+           Math.abs(current[idx].lng - originals[idx].lng) > 0.000001;
+}
+
+function fmt(v) { return v.toFixed(6); }
+
+halls.forEach((h, idx) => {
+    const marker = L.marker([h.lat, h.lng], {
+        draggable: true,
+        icon: makeIcon(idx),
+        title: h.name
+    }).addTo(map);
+
+    marker.bindTooltip(h.name, { direction: "top", offset: [0, -14] });
+
+    marker.on("dragend", function(e) {
+        const pos = e.target.getLatLng();
+        current[idx].lat = pos.lat;
+        current[idx].lng = pos.lng;
+        marker.setIcon(makeIcon(idx));
+        updateListItem(idx);
+        if (selectedIdx === idx) showEditor(idx);
+        updateStatus();
+        generateCode();
+    });
+
+    marker.on("click", function() {
+        selectHall(idx);
+    });
+
+    markers.push(marker);
+});
+
+function selectHall(idx) {
+    selectedIdx = idx;
+    document.querySelectorAll(".hall-item").forEach((el, i) => {
+        el.classList.toggle("selected", i === idx);
+    });
+    map.setView([current[idx].lat, current[idx].lng], Math.max(map.getZoom(), 13));
+    showEditor(idx);
+    showTab("editor");
+}
+
+function showEditor(idx) {
+    const h = halls[idx];
+    document.getElementById("editorPane").innerHTML = `
+        <h3>${h.name}</h3>
+        <p style="font-size:0.75rem;color:#7ac;margin-bottom:12px;">${h.address}</p>
+        <div class="hint">💡 Ziehe den Marker auf der Karte oder gib Koordinaten direkt ein. Du kannst die Koordinaten von Google Maps kopieren (Rechtsklick auf den Ort → Koordinaten).</div>
+        <div class="field-group">
+            <label>Breitengrad (Latitude)</label>
+            <input type="number" id="edLat" step="0.000001" value="${fmt(current[idx].lat)}" oninput="applyCoords(${idx})">
+        </div>
+        <div class="field-group">
+            <label>Längengrad (Longitude)</label>
+            <input type="number" id="edLng" step="0.000001" value="${fmt(current[idx].lng)}" oninput="applyCoords(${idx})">
+        </div>
+        <div class="btn-row">
+            <button class="btn btn-primary" onclick="flyToHall(${idx})">📍 Auf Karte zeigen</button>
+            <button class="btn btn-secondary" onclick="resetHall(${idx})">↩️ Zurücksetzen</button>
+        </div>
+        ${isChanged(idx) ? '<p style="color:#f90;font-size:0.8rem;margin-top:10px;">✏️ Position wurde geändert</p>' : ''}
+    `;
+}
+
+function applyCoords(idx) {
+    const lat = parseFloat(document.getElementById("edLat").value);
+    const lng = parseFloat(document.getElementById("edLng").value);
+    if (isNaN(lat) || isNaN(lng)) return;
+    current[idx].lat = lat;
+    current[idx].lng = lng;
+    markers[idx].setLatLng([lat, lng]);
+    markers[idx].setIcon(makeIcon(idx));
+    updateListItem(idx);
+    updateStatus();
+    generateCode();
+}
+
+function flyToHall(idx) {
+    map.setView([current[idx].lat, current[idx].lng], 16);
+}
+
+function resetHall(idx) {
+    current[idx].lat = originals[idx].lat;
+    current[idx].lng = originals[idx].lng;
+    markers[idx].setLatLng([current[idx].lat, current[idx].lng]);
+    markers[idx].setIcon(makeIcon(idx));
+    updateListItem(idx);
+    showEditor(idx);
+    updateStatus();
+    generateCode();
+}
+
+// Build list
+const listEl = document.getElementById("hallList");
+halls.forEach((h, idx) => {
+    const item = document.createElement("div");
+    item.className = "hall-item";
+    item.id = `hall-item-${idx}`;
+    item.innerHTML = `<div class="name">${h.name}</div><div class="coords" id="coords-${idx}">${fmt(current[idx].lat)}, ${fmt(current[idx].lng)}</div>`;
+    item.onclick = () => selectHall(idx);
+    listEl.appendChild(item);
+});
+
+function updateListItem(idx) {
+    const el = document.getElementById(`coords-${idx}`);
+    if (el) {
+        el.textContent = `${fmt(current[idx].lat)}, ${fmt(current[idx].lng)}`;
+        el.className = "coords" + (isChanged(idx) ? " changed" : "");
+    }
+}
+
+function updateStatus() {
+    const n = current.filter((_, i) => isChanged(i)).length;
+    document.getElementById("changedCount").textContent = n;
+}
+
+function generateCode() {
+    const changed = halls
+        .map((h, i) => ({ h, i }))
+        .filter(({ i }) => isChanged(i));
+
+    if (changed.length === 0) {
+        document.getElementById("codeOutput").value = "// Noch keine Änderungen.";
+        return;
+    }
+
+    const lines = changed.map(({ h, i }) =>
+        `// ${h.name}\n` +
+        `lat: ${fmt(current[i].lat)}, lng: ${fmt(current[i].lng)},`
+    );
+    document.getElementById("codeOutput").value =
+        "// Geänderte Koordinaten – bitte an den Entwickler weitergeben:\n\n" +
+        lines.join("\n\n");
+}
+
+function copyCode() {
+    const ta = document.getElementById("codeOutput");
+    ta.select();
+    navigator.clipboard.writeText(ta.value).then(() => {
+        document.getElementById("statusBar").textContent = "✅ Code in die Zwischenablage kopiert!";
+        setTimeout(updateStatus, 2500);
+    });
+}
+
+function showTab(name) {
+    document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+    document.querySelectorAll(".sidebar-tabs button").forEach(b => b.classList.remove("active"));
+    document.getElementById("tab-" + name).classList.add("active");
+    const tabs = ["list", "editor", "output"];
+    const idx2 = tabs.indexOf(name);
+    document.querySelectorAll(".sidebar-tabs button")[idx2].classList.add("active");
+    if (name === "output") generateCode();
+}
+
+generateCode();
+</script>
+</body>
+</html>
