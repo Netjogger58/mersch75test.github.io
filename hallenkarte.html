@@ -527,6 +527,22 @@
                 attribution: "&copy; OpenStreetMap"
             }).addTo(map);
 
+            // Boundary layers (Kanton / Gemeinde) - try local GeoJSON files (assets/pages/hallenkarte/geo/)
+            const boundaryLayer = L.layerGroup().addTo(map);
+            function loadBoundary(url, style) {
+                fetch(url).then(function(res){
+                    if (!res.ok) throw new Error('not found');
+                    return res.json();
+                }).then(function(geo){
+                    L.geoJSON(geo, { style: style, interactive: false }).addTo(boundaryLayer);
+                }).catch(function(){
+                    // silently ignore missing files
+                });
+            }
+            // local paths (you can upload the GeoJSONs here)
+            loadBoundary('assets/pages/hallenkarte/geo/kanton-mersch.geojson', { color: '#c62828', weight: 3, fill: false, dashArray: '6 6' });
+            loadBoundary('assets/pages/hallenkarte/geo/gemeinde-mersch.geojson', { color: '#e65100', weight: 2, fill: false, dashArray: '3 6' });
+
             const bounds = L.latLngBounds([]);
             const markerLayer = L.layerGroup().addTo(map);
             const markerByIndex = new Map();
