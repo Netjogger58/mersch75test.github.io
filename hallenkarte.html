@@ -543,6 +543,75 @@
             loadBoundary('assets/pages/hallenkarte/geo/kanton-mersch.geojson', { color: '#c62828', weight: 3, fill: false, dashArray: '6 6' });
             loadBoundary('assets/pages/hallenkarte/geo/gemeinde-mersch.geojson', { color: '#e65100', weight: 2, fill: false, dashArray: '3 6' });
 
+            // Optional interactive SVG overlay adjuster: helps align the SVG exactly over the map image.
+            (function svgOverlayAdjuster(){
+                const geoBase = 'assets/pages/hallenkarte/geo/';
+                const svgUrlLocal = geoBase + 'kanton-mersch.svg';
+                const svgUrl = 'https://upload.wikimedia.org/wikipedia/commons/e/ec/Canton_Mersch_in_Luxembourg.svg';
+                const overlayKey = 'merschCantonOverlayBounds';
+
+                // default (broader) bounds — user can fine-tune in-browser
+                const defaultBounds = [[49.35,5.55],[49.95,6.6]];
+                let stored = null;
+                try { stored = JSON.parse(localStorage.getItem(overlayKey)); } catch(e) { stored = null; }
+                const initialBounds = stored || defaultBounds;
+
+                const urlToUse = null; // prefer local if provided - leave null to use remote
+                const overlay = L.imageOverlay(svgUrl, initialBounds, {opacity: 0.65, interactive: false}).addTo(boundaryLayer);
+
+                const ctrl = L.control({position: 'topright'});
+                ctrl.onAdd = function() {
+                    const div = L.DomUtil.create('div', 'overlay-adjuster');
+                    div.style.background = 'white'; div.style.padding = '8px'; div.style.borderRadius = '6px'; div.style.boxShadow = '0 2px 6px rgba(0,0,0,0.18)'; div.style.fontSize = '13px';
+                    div.innerHTML = '<div style="font-weight:700;margin-bottom:6px">Overlay anpassen</div>' +
+                        '<div style="font-size:12px" id="ovBounds">Bounds...</div>' +
+                        '<div style="display:flex;gap:6px;margin-top:6px"><button id="nudgeLeft">◀</button><button id="nudgeRight">▶</button><button id="nudgeUp">▲</button><button id="nudgeDown">▼</button></div>' +
+                        '<div style="display:flex;gap:6px;margin-top:6px"><button id="scaleUp">＋</button><button id="scaleDown">−</button></div>' +
+                        '<div style="display:flex;gap:6px;margin-top:6px"><button id="saveBounds">Save</button><button id="resetBounds">Reset</button></div>';
+                    return div;
+                };
+                ctrl.addTo(map);
+
+                function updateDisplay(){
+                    const b = overlay.getBounds();
+                    const s = '['+b.getSouth().toFixed(6)+','+b.getWest().toFixed(6)+'] — ['+b.getNorth().toFixed(6)+','+b.getEast().toFixed(6)+']';
+                    const el = document.getElementById('ovBounds'); if (el) el.textContent = s;
+                }
+
+                function nudge(dx, dy){
+                    const b = overlay.getBounds();
+                    const sw = [b.getSouth() + dy, b.getWest() + dx];
+                    const ne = [b.getNorth() + dy, b.getEast() + dx];
+                    overlay.setBounds([sw, ne]); updateDisplay();
+                }
+
+                function scale(f){
+                    const b = overlay.getBounds();
+                    const c = b.getCenter();
+                    const sw = [(b.getSouth() - c.lat) * f + c.lat, (b.getWest() - c.lng) * f + c.lng];
+                    const ne = [(b.getNorth() - c.lat) * f + c.lat, (b.getEast() - c.lng) * f + c.lng];
+                    overlay.setBounds([sw, ne]); updateDisplay();
+                }
+
+                // small step values (degrees) — adjust if needed
+                const nudgeStep = 0.005; // ~500m
+                document.getElementById('nudgeLeft').addEventListener('click', function(e){ e.preventDefault(); nudge(-nudgeStep, 0); });
+                document.getElementById('nudgeRight').addEventListener('click', function(e){ e.preventDefault(); nudge(nudgeStep, 0); });
+                document.getElementById('nudgeUp').addEventListener('click', function(e){ e.preventDefault(); nudge(0, nudgeStep); });
+                document.getElementById('nudgeDown').addEventListener('click', function(e){ e.preventDefault(); nudge(0, -nudgeStep); });
+                document.getElementById('scaleUp').addEventListener('click', function(e){ e.preventDefault(); scale(1.05); });
+                document.getElementById('scaleDown').addEventListener('click', function(e){ e.preventDefault(); scale(0.95); });
+
+                document.getElementById('saveBounds').addEventListener('click', function(e){
+                    e.preventDefault(); const b = overlay.getBounds(); const v = [[b.getSouth(), b.getWest()], [b.getNorth(), b.getEast()]]; localStorage.setItem(overlayKey, JSON.stringify(v));
+                    console.log('Saved overlay bounds:', v); alert('Bounds saved to localStorage. Tell me to commit them and I will persist.');
+                });
+
+                document.getElementById('resetBounds').addEventListener('click', function(e){ e.preventDefault(); overlay.setBounds(defaultBounds); localStorage.removeItem(overlayKey); updateDisplay(); });
+
+                updateDisplay();
+            })();
+
             const bounds = L.latLngBounds([]);
             const markerLayer = L.layerGroup().addTo(map);
             const markerByIndex = new Map();
