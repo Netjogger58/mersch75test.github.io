@@ -540,8 +540,8 @@
                 });
             }
             // local paths (you can upload the GeoJSONs here)
-            loadBoundary('assets/pages/hallenkarte/geo/kanton-mersch.geojson', { color: '#c62828', weight: 3, fill: false, dashArray: '6 6' });
-            loadBoundary('assets/pages/hallenkarte/geo/gemeinde-mersch.geojson', { color: '#e65100', weight: 2, fill: false, dashArray: '3 6' });
+            loadBoundary('assets/pages/hallenkarte/geo/kanton-mersch.geojson', { color: '#c62828', weight: 3, fill: true, fillOpacity: 0.07, fillColor: '#c62828', dashArray: '6 6' });
+            loadBoundary('assets/pages/hallenkarte/geo/gemeinde-mersch.geojson', { color: '#e65100', weight: 2, fill: true, fillOpacity: 0.07, fillColor: '#e65100', dashArray: '3 6' });
 
 
             const bounds = L.latLngBounds([]);
