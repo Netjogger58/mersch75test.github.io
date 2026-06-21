@@ -550,53 +550,59 @@
                 const localSvg = geoBase + 'kanton-mersch.svg';
                 const storageKey = 'merschDistortableCorners';
 
-                // load plugin CSS/JS dynamically
-                function loadResource(url, type){
-                    return new Promise((resolve, reject) => {
-                        if (type === 'css'){
-                            const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = url; l.onload = resolve; l.onerror = reject; document.head.appendChild(l);
-                        } else {
-                            const s = document.createElement('script'); s.src = url; s.async = true; s.onload = resolve; s.onerror = reject; document.body.appendChild(s);
-                        }
-                    });
-                }
-
-                // recommended CDN URLs (may be adjusted if you host locally)
                 const cssUrl = 'assets/pages/hallenkarte/vendor/leaflet.distortableimage.css';
                 const jsUrl = 'assets/pages/hallenkarte/vendor/leaflet.distortableimage.js';
 
-                Promise.all([loadResource(cssUrl,'css'), loadResource(jsUrl,'js')]).then(() => {
-                    try {
-                        const Distortable = window.DistortableImage || window.L ? window.L.DistortableImage : null;
-                    } catch(e){ }
+                // load CSS
+                const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = cssUrl; document.head.appendChild(l);
 
-                    // prefer local svg if present on server
-                    fetch(localSvg, {method:'HEAD'}).then(r => {
-                        return r.ok ? localSvg : svgUrl;
-                    }).catch(()=> svgUrl).then(urlToUse => {
-                        // create distortable overlay
+                // load JS, then init overlay
+                const s = document.createElement('script'); s.src = jsUrl; s.async = false;
+                s.onload = function() {
+                    // prefer local svg if present
+                    fetch(localSvg, {method:'HEAD'}).then(r => r.ok ? localSvg : svgUrl).catch(()=> svgUrl).then(urlToUse => {
                         let overlay;
+                        let isDistortable = false;
                         try {
-                            overlay = L.distortableImageOverlay(urlToUse, {opacity: 0.8}).addTo(boundaryLayer);
+                            overlay = L.distortableImageOverlay(urlToUse, {
+                                opacity: 0.75,
+                                selected: false,
+                                mode: 'distort',
+                                crossOrigin: true
+                            }).addTo(boundaryLayer);
+                            isDistortable = true;
                         } catch (err) {
-                            console.warn('Distortable plugin not available or failed, falling back to imageOverlay');
-                            overlay = L.imageOverlay(urlToUse, [[49.35,5.55],[49.95,6.6]], {opacity:0.8}).addTo(boundaryLayer);
+                            console.warn('Distortable plugin failed:', err);
+                            overlay = L.imageOverlay(urlToUse, [[49.35,5.55],[49.95,6.6]], {
+                                opacity: 0.75,
+                                interactive: false
+                            }).addTo(boundaryLayer);
+                            // ensure map stays interactive
+                            overlay.on('add', function(){
+                                if (overlay.getElement()) overlay.getElement().style.pointerEvents = 'none';
+                            });
                         }
 
-                        // if saved corners exist, apply them
+                        // restore saved corners if available
                         const stored = localStorage.getItem(storageKey);
-                        if (stored && overlay.setCorners) {
-                            try { const corners = JSON.parse(stored); overlay.setCorners(corners); } catch(e){}
+                        if (stored && isDistortable && overlay.setCorners) {
+                            try { overlay.setCorners(JSON.parse(stored)); } catch(e){}
                         }
 
-                        // add simple control UI
+                        // UI control
                         const ctrl = L.control({position:'topright'});
                         ctrl.onAdd = function(){
                             const d = L.DomUtil.create('div','distortable-controls');
-                            d.style.background='white'; d.style.padding='8px'; d.style.borderRadius='6px'; d.style.boxShadow='0 2px 6px rgba(0,0,0,0.18)';
+                            d.style.cssText = 'background:white;padding:8px;border-radius:6px;box-shadow:0 2px 6px rgba(0,0,0,0.18);font-family:sans-serif';
                             d.innerHTML = '<div style="font-weight:700;margin-bottom:6px">Overlay bearbeiten</div>'+
-                                '<div style="display:flex;gap:6px"><button id="doEdit">Edit</button><button id="doCancel">Cancel</button><button id="doSave">Save</button></div>'+
-                                '<div style="font-size:12px;margin-top:6px" id="distInfo"></div>';
+                                '<div style="display:flex;gap:6px">'+
+                                '<button id="doEdit" style="padding:4px 10px;cursor:pointer">✏️ Edit</button>'+
+                                '<button id="doCancel" style="padding:4px 10px;cursor:pointer">✗ Cancel</button>'+
+                                '<button id="doSave" style="padding:4px 10px;cursor:pointer">💾 Save</button>'+
+                                '</div>'+
+                                '<div style="font-size:11px;margin-top:6px;color:#555" id="distInfo"></div>';
+                            L.DomEvent.disableClickPropagation(d);
+                            L.DomEvent.disableScrollPropagation(d);
                             return d;
                         };
                         ctrl.addTo(map);
@@ -604,37 +610,35 @@
                         function updateInfo(){
                             const el = document.getElementById('distInfo');
                             if (!el) return;
-                            if (overlay.getCorners) {
+                            if (isDistortable && overlay.getCorners) {
                                 const c = overlay.getCorners();
-                                el.textContent = c.map(p=>p.lat.toFixed(6)+','+p.lng.toFixed(6)).join(' | ');
-                            } else {
-                                el.textContent = 'No corner info';
+                                el.textContent = c.map(p=>p.lat.toFixed(5)+','+p.lng.toFixed(5)).join(' | ');
                             }
                         }
 
                         document.getElementById('doEdit').addEventListener('click', function(){
-                            if (overlay.enableEdit) overlay.enableEdit();
-                            else if (overlay.editing) overlay.editing.enable();
+                            if (!isDistortable) { alert('Distortable-Modus nicht verfügbar.'); return; }
+                            overlay.select(); updateInfo();
                         });
                         document.getElementById('doCancel').addEventListener('click', function(){
-                            if (overlay.disableEdit) overlay.disableEdit();
-                            else if (overlay.editing) overlay.editing.disable();
-                            // revert to stored if any
-                            const s = localStorage.getItem(storageKey); if (s && overlay.setCorners) { try{ overlay.setCorners(JSON.parse(s)); }catch(e){} }
+                            if (overlay.deselect) overlay.deselect();
+                            const stored2 = localStorage.getItem(storageKey);
+                            if (stored2 && overlay.setCorners) { try{ overlay.setCorners(JSON.parse(stored2)); }catch(e){} }
                             updateInfo();
                         });
                         document.getElementById('doSave').addEventListener('click', function(){
-                            if (!overlay.getCorners) { alert('Cannot save: distortable plugin not active.'); return; }
-                            const corners = overlay.getCorners(); localStorage.setItem(storageKey, JSON.stringify(corners)); alert('Corners saved to localStorage. Tell me to persist them and I will commit.'); updateInfo();
+                            if (!isDistortable || !overlay.getCorners) { alert('Keine Ecken verfügbar.'); return; }
+                            const corners = overlay.getCorners();
+                            localStorage.setItem(storageKey, JSON.stringify(corners));
+                            alert('Ecken gespeichert! Sag mir Bescheid, dann committe ich die Werte.');
+                            updateInfo();
                         });
 
-                        // react to changes if plugin emits events
                         if (overlay.on) overlay.on('update', updateInfo);
                         updateInfo();
                     });
-                }).catch(err => {
-                    console.warn('Failed to load distortable plugin:', err);
-                });
+                };
+                document.body.appendChild(s);
             })();
 
             const bounds = L.latLngBounds([]);
