@@ -552,7 +552,7 @@
                 // load saved bounds or use default
                 let b;
                 try { b = JSON.parse(localStorage.getItem(storageKey)); } catch(e){ b = null; }
-                if (!b || b.length !== 4) b = [49.851211, 5.880893, 49.495727, 6.265414]; // [N, W, S, E]
+                if (!b || b.length !== 4) b = [49.851211, 5.880893, 49.495727, 6.265414]; // [N, W, S, E] — from user screenshot 2026-06-21
 
                 const overlay = L.imageOverlay(svgUrl,
                     [[b[0], b[1]], [b[2], b[3]]],
