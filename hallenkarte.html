@@ -543,73 +543,98 @@
             loadBoundary('assets/pages/hallenkarte/geo/kanton-mersch.geojson', { color: '#c62828', weight: 3, fill: false, dashArray: '6 6' });
             loadBoundary('assets/pages/hallenkarte/geo/gemeinde-mersch.geojson', { color: '#e65100', weight: 2, fill: false, dashArray: '3 6' });
 
-            // Optional interactive SVG overlay adjuster: helps align the SVG exactly over the map image.
-            (function svgOverlayAdjuster(){
+            // Distortable SVG overlay (uses Leaflet.DistortableImage plugin when available)
+            (function addDistortableOverlay(){
                 const geoBase = 'assets/pages/hallenkarte/geo/';
-                const svgUrlLocal = geoBase + 'kanton-mersch.svg';
                 const svgUrl = 'https://upload.wikimedia.org/wikipedia/commons/e/ec/Canton_Mersch_in_Luxembourg.svg';
-                const overlayKey = 'merschCantonOverlayBounds';
+                const localSvg = geoBase + 'kanton-mersch.svg';
+                const storageKey = 'merschDistortableCorners';
 
-                // default (broader) bounds — user can fine-tune in-browser
-                const defaultBounds = [[49.35,5.55],[49.95,6.6]];
-                let stored = null;
-                try { stored = JSON.parse(localStorage.getItem(overlayKey)); } catch(e) { stored = null; }
-                const initialBounds = stored || defaultBounds;
-
-                const urlToUse = null; // prefer local if provided - leave null to use remote
-                const overlay = L.imageOverlay(svgUrl, initialBounds, {opacity: 0.65, interactive: false}).addTo(boundaryLayer);
-
-                const ctrl = L.control({position: 'topright'});
-                ctrl.onAdd = function() {
-                    const div = L.DomUtil.create('div', 'overlay-adjuster');
-                    div.style.background = 'white'; div.style.padding = '8px'; div.style.borderRadius = '6px'; div.style.boxShadow = '0 2px 6px rgba(0,0,0,0.18)'; div.style.fontSize = '13px';
-                    div.innerHTML = '<div style="font-weight:700;margin-bottom:6px">Overlay anpassen</div>' +
-                        '<div style="font-size:12px" id="ovBounds">Bounds...</div>' +
-                        '<div style="display:flex;gap:6px;margin-top:6px"><button id="nudgeLeft">◀</button><button id="nudgeRight">▶</button><button id="nudgeUp">▲</button><button id="nudgeDown">▼</button></div>' +
-                        '<div style="display:flex;gap:6px;margin-top:6px"><button id="scaleUp">＋</button><button id="scaleDown">−</button></div>' +
-                        '<div style="display:flex;gap:6px;margin-top:6px"><button id="saveBounds">Save</button><button id="resetBounds">Reset</button></div>';
-                    return div;
-                };
-                ctrl.addTo(map);
-
-                function updateDisplay(){
-                    const b = overlay.getBounds();
-                    const s = '['+b.getSouth().toFixed(6)+','+b.getWest().toFixed(6)+'] — ['+b.getNorth().toFixed(6)+','+b.getEast().toFixed(6)+']';
-                    const el = document.getElementById('ovBounds'); if (el) el.textContent = s;
+                // load plugin CSS/JS dynamically
+                function loadResource(url, type){
+                    return new Promise((resolve, reject) => {
+                        if (type === 'css'){
+                            const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = url; l.onload = resolve; l.onerror = reject; document.head.appendChild(l);
+                        } else {
+                            const s = document.createElement('script'); s.src = url; s.async = true; s.onload = resolve; s.onerror = reject; document.body.appendChild(s);
+                        }
+                    });
                 }
 
-                function nudge(dx, dy){
-                    const b = overlay.getBounds();
-                    const sw = [b.getSouth() + dy, b.getWest() + dx];
-                    const ne = [b.getNorth() + dy, b.getEast() + dx];
-                    overlay.setBounds([sw, ne]); updateDisplay();
-                }
+                // recommended CDN URLs (may be adjusted if you host locally)
+                const cssUrl = 'https://unpkg.com/leaflet-distortableimage@0.13.0/dist/leaflet.distortableimage.css';
+                const jsUrl = 'https://unpkg.com/leaflet-distortableimage@0.13.0/dist/leaflet.distortableimage.js';
 
-                function scale(f){
-                    const b = overlay.getBounds();
-                    const c = b.getCenter();
-                    const sw = [(b.getSouth() - c.lat) * f + c.lat, (b.getWest() - c.lng) * f + c.lng];
-                    const ne = [(b.getNorth() - c.lat) * f + c.lat, (b.getEast() - c.lng) * f + c.lng];
-                    overlay.setBounds([sw, ne]); updateDisplay();
-                }
+                Promise.all([loadResource(cssUrl,'css'), loadResource(jsUrl,'js')]).then(() => {
+                    try {
+                        const Distortable = window.DistortableImage || window.L ? window.L.DistortableImage : null;
+                    } catch(e){ }
 
-                // small step values (degrees) — adjust if needed
-                const nudgeStep = 0.005; // ~500m
-                document.getElementById('nudgeLeft').addEventListener('click', function(e){ e.preventDefault(); nudge(-nudgeStep, 0); });
-                document.getElementById('nudgeRight').addEventListener('click', function(e){ e.preventDefault(); nudge(nudgeStep, 0); });
-                document.getElementById('nudgeUp').addEventListener('click', function(e){ e.preventDefault(); nudge(0, nudgeStep); });
-                document.getElementById('nudgeDown').addEventListener('click', function(e){ e.preventDefault(); nudge(0, -nudgeStep); });
-                document.getElementById('scaleUp').addEventListener('click', function(e){ e.preventDefault(); scale(1.05); });
-                document.getElementById('scaleDown').addEventListener('click', function(e){ e.preventDefault(); scale(0.95); });
+                    // prefer local svg if present on server
+                    fetch(localSvg, {method:'HEAD'}).then(r => {
+                        return r.ok ? localSvg : svgUrl;
+                    }).catch(()=> svgUrl).then(urlToUse => {
+                        // create distortable overlay
+                        let overlay;
+                        try {
+                            overlay = L.distortableImageOverlay(urlToUse, {opacity: 0.8}).addTo(boundaryLayer);
+                        } catch (err) {
+                            console.warn('Distortable plugin not available or failed, falling back to imageOverlay');
+                            overlay = L.imageOverlay(urlToUse, [[49.35,5.55],[49.95,6.6]], {opacity:0.8}).addTo(boundaryLayer);
+                        }
 
-                document.getElementById('saveBounds').addEventListener('click', function(e){
-                    e.preventDefault(); const b = overlay.getBounds(); const v = [[b.getSouth(), b.getWest()], [b.getNorth(), b.getEast()]]; localStorage.setItem(overlayKey, JSON.stringify(v));
-                    console.log('Saved overlay bounds:', v); alert('Bounds saved to localStorage. Tell me to commit them and I will persist.');
+                        // if saved corners exist, apply them
+                        const stored = localStorage.getItem(storageKey);
+                        if (stored && overlay.setCorners) {
+                            try { const corners = JSON.parse(stored); overlay.setCorners(corners); } catch(e){}
+                        }
+
+                        // add simple control UI
+                        const ctrl = L.control({position:'topright'});
+                        ctrl.onAdd = function(){
+                            const d = L.DomUtil.create('div','distortable-controls');
+                            d.style.background='white'; d.style.padding='8px'; d.style.borderRadius='6px'; d.style.boxShadow='0 2px 6px rgba(0,0,0,0.18)';
+                            d.innerHTML = '<div style="font-weight:700;margin-bottom:6px">Overlay bearbeiten</div>'+
+                                '<div style="display:flex;gap:6px"><button id="doEdit">Edit</button><button id="doCancel">Cancel</button><button id="doSave">Save</button></div>'+
+                                '<div style="font-size:12px;margin-top:6px" id="distInfo"></div>';
+                            return d;
+                        };
+                        ctrl.addTo(map);
+
+                        function updateInfo(){
+                            const el = document.getElementById('distInfo');
+                            if (!el) return;
+                            if (overlay.getCorners) {
+                                const c = overlay.getCorners();
+                                el.textContent = c.map(p=>p.lat.toFixed(6)+','+p.lng.toFixed(6)).join(' | ');
+                            } else {
+                                el.textContent = 'No corner info';
+                            }
+                        }
+
+                        document.getElementById('doEdit').addEventListener('click', function(){
+                            if (overlay.enableEdit) overlay.enableEdit();
+                            else if (overlay.editing) overlay.editing.enable();
+                        });
+                        document.getElementById('doCancel').addEventListener('click', function(){
+                            if (overlay.disableEdit) overlay.disableEdit();
+                            else if (overlay.editing) overlay.editing.disable();
+                            // revert to stored if any
+                            const s = localStorage.getItem(storageKey); if (s && overlay.setCorners) { try{ overlay.setCorners(JSON.parse(s)); }catch(e){} }
+                            updateInfo();
+                        });
+                        document.getElementById('doSave').addEventListener('click', function(){
+                            if (!overlay.getCorners) { alert('Cannot save: distortable plugin not active.'); return; }
+                            const corners = overlay.getCorners(); localStorage.setItem(storageKey, JSON.stringify(corners)); alert('Corners saved to localStorage. Tell me to persist them and I will commit.'); updateInfo();
+                        });
+
+                        // react to changes if plugin emits events
+                        if (overlay.on) overlay.on('update', updateInfo);
+                        updateInfo();
+                    });
+                }).catch(err => {
+                    console.warn('Failed to load distortable plugin:', err);
                 });
-
-                document.getElementById('resetBounds').addEventListener('click', function(e){ e.preventDefault(); overlay.setBounds(defaultBounds); localStorage.removeItem(overlayKey); updateDisplay(); });
-
-                updateDisplay();
             })();
 
             const bounds = L.latLngBounds([]);
