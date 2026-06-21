@@ -543,102 +543,117 @@
             loadBoundary('assets/pages/hallenkarte/geo/kanton-mersch.geojson', { color: '#c62828', weight: 3, fill: false, dashArray: '6 6' });
             loadBoundary('assets/pages/hallenkarte/geo/gemeinde-mersch.geojson', { color: '#e65100', weight: 2, fill: false, dashArray: '3 6' });
 
-            // Distortable SVG overlay (uses Leaflet.DistortableImage plugin when available)
-            (function addDistortableOverlay(){
-                const geoBase = 'assets/pages/hallenkarte/geo/';
+            // Simple draggable SVG overlay with 4 corner markers
+            (function addSimpleOverlay(){
                 const svgUrl = 'https://upload.wikimedia.org/wikipedia/commons/e/ec/Canton_Mersch_in_Luxembourg.svg';
-                const localSvg = geoBase + 'kanton-mersch.svg';
-                const storageKey = 'merschDistortableCorners';
+                const storageKey = 'merschOverlayBounds';
+                let editMode = false;
 
-                const cssUrl = 'assets/pages/hallenkarte/vendor/leaflet.distortableimage.css';
-                const jsUrl = 'assets/pages/hallenkarte/vendor/leaflet.distortableimage.js';
+                // load saved bounds or use default
+                let b;
+                try { b = JSON.parse(localStorage.getItem(storageKey)); } catch(e){ b = null; }
+                if (!b || b.length !== 4) b = [49.851211, 5.880893, 49.495727, 6.265414]; // [N, W, S, E]
 
-                // load CSS
-                const l = document.createElement('link'); l.rel = 'stylesheet'; l.href = cssUrl; document.head.appendChild(l);
+                const overlay = L.imageOverlay(svgUrl,
+                    [[b[0], b[1]], [b[2], b[3]]],
+                    {opacity: 0.75, interactive: false}
+                ).addTo(boundaryLayer);
 
-                // load JS, then init overlay
-                const s = document.createElement('script'); s.src = jsUrl; s.async = false;
-                s.onload = function() {
-                    // prefer local svg if present
-                    fetch(localSvg, {method:'HEAD'}).then(r => r.ok ? localSvg : svgUrl).catch(()=> svgUrl).then(urlToUse => {
-                        let overlay;
-                        let isDistortable = false;
-                        try {
-                            overlay = L.distortableImageOverlay(urlToUse, {
-                                opacity: 0.75,
-                                selected: false,
-                                mode: 'distort',
-                                crossOrigin: true
-                            }).addTo(boundaryLayer);
-                            isDistortable = true;
-                        } catch (err) {
-                            console.warn('Distortable plugin failed:', err);
-                            overlay = L.imageOverlay(urlToUse, [[49.35,5.55],[49.95,6.6]], {
-                                opacity: 0.75,
-                                interactive: false
-                            }).addTo(boundaryLayer);
-                            // ensure map stays interactive
-                            overlay.on('add', function(){
-                                if (overlay.getElement()) overlay.getElement().style.pointerEvents = 'none';
-                            });
-                        }
+                // make sure overlay image never blocks map interaction
+                overlay.on('add', function(){
+                    if (overlay.getElement()) overlay.getElement().style.pointerEvents = 'none';
+                });
+                // also set immediately if already added
+                setTimeout(function(){
+                    if (overlay.getElement()) overlay.getElement().style.pointerEvents = 'none';
+                }, 500);
 
-                        // restore saved corners if available
-                        const stored = localStorage.getItem(storageKey);
-                        if (stored && isDistortable && overlay.setCorners) {
-                            try { overlay.setCorners(JSON.parse(stored)); } catch(e){}
-                        }
+                // corner markers (only shown in edit mode)
+                const cornerStyle = {radius:8, color:'#c62828', fillColor:'#fff', fillOpacity:1, weight:2, draggable:true};
+                const markers = [
+                    L.circleMarker([b[0], b[1]], cornerStyle).bindTooltip('NW'),  // NW
+                    L.circleMarker([b[0], b[3]], cornerStyle).bindTooltip('NE'),  // NE
+                    L.circleMarker([b[2], b[1]], cornerStyle).bindTooltip('SW'),  // SW
+                    L.circleMarker([b[2], b[3]], cornerStyle).bindTooltip('SE'),  // SE
+                ];
+                const cornerGroup = L.featureGroup();
 
-                        // UI control
-                        const ctrl = L.control({position:'topright'});
-                        ctrl.onAdd = function(){
-                            const d = L.DomUtil.create('div','distortable-controls');
-                            d.style.cssText = 'background:white;padding:8px;border-radius:6px;box-shadow:0 2px 6px rgba(0,0,0,0.18);font-family:sans-serif';
-                            d.innerHTML = '<div style="font-weight:700;margin-bottom:6px">Overlay bearbeiten</div>'+
-                                '<div style="display:flex;gap:6px">'+
-                                '<button id="doEdit" style="padding:4px 10px;cursor:pointer">✏️ Edit</button>'+
-                                '<button id="doCancel" style="padding:4px 10px;cursor:pointer">✗ Cancel</button>'+
-                                '<button id="doSave" style="padding:4px 10px;cursor:pointer">💾 Save</button>'+
-                                '</div>'+
-                                '<div style="font-size:11px;margin-top:6px;color:#555" id="distInfo"></div>';
-                            L.DomEvent.disableClickPropagation(d);
-                            L.DomEvent.disableScrollPropagation(d);
-                            return d;
-                        };
-                        ctrl.addTo(map);
+                function updateOverlay(){
+                    const nw = markers[0].getLatLng();
+                    const ne = markers[1].getLatLng();
+                    const sw = markers[2].getLatLng();
+                    const N = (nw.lat + ne.lat) / 2;
+                    const S = (sw.lat + markers[3].getLatLng().lat) / 2;
+                    const W = (nw.lng + sw.lng) / 2;
+                    const E = (ne.lng + markers[3].getLatLng().lng) / 2;
+                    overlay.setBounds([[N, W], [S, E]]);
+                }
 
-                        function updateInfo(){
-                            const el = document.getElementById('distInfo');
-                            if (!el) return;
-                            if (isDistortable && overlay.getCorners) {
-                                const c = overlay.getCorners();
-                                el.textContent = c.map(p=>p.lat.toFixed(5)+','+p.lng.toFixed(5)).join(' | ');
-                            }
-                        }
-
-                        document.getElementById('doEdit').addEventListener('click', function(){
-                            if (!isDistortable) { alert('Distortable-Modus nicht verfügbar.'); return; }
-                            overlay.select(); updateInfo();
-                        });
-                        document.getElementById('doCancel').addEventListener('click', function(){
-                            if (overlay.deselect) overlay.deselect();
-                            const stored2 = localStorage.getItem(storageKey);
-                            if (stored2 && overlay.setCorners) { try{ overlay.setCorners(JSON.parse(stored2)); }catch(e){} }
-                            updateInfo();
-                        });
-                        document.getElementById('doSave').addEventListener('click', function(){
-                            if (!isDistortable || !overlay.getCorners) { alert('Keine Ecken verfügbar.'); return; }
-                            const corners = overlay.getCorners();
-                            localStorage.setItem(storageKey, JSON.stringify(corners));
-                            alert('Ecken gespeichert! Sag mir Bescheid, dann committe ich die Werte.');
-                            updateInfo();
-                        });
-
-                        if (overlay.on) overlay.on('update', updateInfo);
-                        updateInfo();
+                // make markers draggable via mousedown + mousemove
+                markers.forEach(function(m, idx){
+                    let dragging = false;
+                    m.on('mousedown touchstart', function(e){
+                        dragging = true;
+                        map.dragging.disable();
+                        L.DomEvent.stopPropagation(e);
                     });
+                    map.on('mousemove touchmove', function(e){
+                        if (!dragging) return;
+                        m.setLatLng(e.latlng);
+                        updateOverlay();
+                    });
+                    map.on('mouseup touchend', function(){
+                        if (dragging){ dragging = false; map.dragging.enable(); }
+                    });
+                });
+
+                // UI
+                const ctrl = L.control({position:'topright'});
+                ctrl.onAdd = function(){
+                    const d = L.DomUtil.create('div','m75-overlay-ctrl');
+                    d.style.cssText='background:white;padding:8px;border-radius:6px;box-shadow:0 2px 6px rgba(0,0,0,.2);font-family:sans-serif;font-size:13px;min-width:140px';
+                    d.innerHTML='<div style="font-weight:700;margin-bottom:6px">Overlay Kanton</div>'+
+                        '<div style="display:flex;gap:5px;flex-wrap:wrap">'+
+                        '<button id="ovEdit" style="padding:4px 8px;cursor:pointer">✏️ Edit</button>'+
+                        '<button id="ovSave" style="padding:4px 8px;cursor:pointer;display:none">💾 Save</button>'+
+                        '<button id="ovCancel" style="padding:4px 8px;cursor:pointer;display:none">✗</button>'+
+                        '</div>';
+                    L.DomEvent.disableClickPropagation(d);
+                    L.DomEvent.disableScrollPropagation(d);
+                    return d;
                 };
-                document.body.appendChild(s);
+                ctrl.addTo(map);
+
+                document.getElementById('ovEdit').addEventListener('click', function(){
+                    editMode = true;
+                    cornerGroup.clearLayers();
+                    markers.forEach(function(m){ cornerGroup.addLayer(m); });
+                    cornerGroup.addTo(map);
+                    document.getElementById('ovEdit').style.display = 'none';
+                    document.getElementById('ovSave').style.display = '';
+                    document.getElementById('ovCancel').style.display = '';
+                });
+                document.getElementById('ovSave').addEventListener('click', function(){
+                    const nw = markers[0].getLatLng();
+                    const se = markers[3].getLatLng();
+                    const sw = markers[2].getLatLng();
+                    const ne = markers[1].getLatLng();
+                    const N = (nw.lat+ne.lat)/2, S = (sw.lat+se.lat)/2;
+                    const W = (nw.lng+sw.lng)/2, E = (ne.lng+se.lng)/2;
+                    localStorage.setItem(storageKey, JSON.stringify([N,W,S,E]));
+                    alert('Gespeichert! Sag mir Bescheid zum Committen.');
+                    map.removeLayer(cornerGroup); editMode = false;
+                    document.getElementById('ovEdit').style.display = '';
+                    document.getElementById('ovSave').style.display = 'none';
+                    document.getElementById('ovCancel').style.display = 'none';
+                });
+                document.getElementById('ovCancel').addEventListener('click', function(){
+                    map.removeLayer(cornerGroup); editMode = false;
+                    map.dragging.enable();
+                    document.getElementById('ovEdit').style.display = '';
+                    document.getElementById('ovSave').style.display = 'none';
+                    document.getElementById('ovCancel').style.display = 'none';
+                });
             })();
 
             const bounds = L.latLngBounds([]);
