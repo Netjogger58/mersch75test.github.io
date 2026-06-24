@@ -9,6 +9,26 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css?v=20260609c">
+    <style>
+        .join-lang-selector { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 16px; }
+        .join-lang-picker { flex: 1 1 auto; }
+        .join-tarif-trigger { display: inline-flex; flex-direction: column; align-items: center; gap: 7px; padding: 9px; border: 1px solid rgba(0,47,101,0.12); border-radius: 18px; background: #fff; cursor: pointer; transition: transform 180ms ease, box-shadow 180ms ease; box-shadow: 0 8px 20px rgba(0,47,101,0.10); }
+        .join-tarif-trigger:hover, .join-tarif-trigger:focus-visible { transform: translateY(-2px) scale(1.02); box-shadow: 0 16px 34px rgba(0,47,101,0.20); outline: none; }
+        .join-tarif-trigger img { width: 220px; max-width: 50vw; aspect-ratio: 1024 / 640; object-fit: cover; border-radius: 12px; display: block; }
+        .join-tarif-trigger-hint { display: inline-flex; align-items: center; gap: 6px; font-weight: 800; font-size: 13px; color: #002f65; letter-spacing: 0.02em; text-align: center; line-height: 1.15; }
+        .join-tarif-trigger-hint::before { content: "💶"; font-size: 15px; }
+        .join-tarif-modal { position: fixed; inset: 0; z-index: 1200; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .join-tarif-modal[hidden] { display: none; }
+        .join-tarif-backdrop { position: absolute; inset: 0; background: rgba(5,17,48,0.62); backdrop-filter: blur(4px); }
+        .join-tarif-dialog { position: relative; z-index: 1; width: min(940px, 96vw); max-height: 92vh; overflow-y: auto; background: #fff; border-radius: 24px; padding: 26px; box-shadow: 0 30px 80px rgba(0,0,0,0.42); }
+        .join-tarif-dialog h2 { margin: 0 0 16px; font-size: clamp(20px, 3vw, 28px); color: #002f65; letter-spacing: -0.02em; }
+        .join-tarif-close { position: absolute; top: 12px; right: 14px; width: 42px; height: 42px; border-radius: 50%; border: none; background: rgba(0,47,101,0.08); color: #002f65; font-size: 26px; line-height: 1; cursor: pointer; transition: background 180ms ease; }
+        .join-tarif-close:hover, .join-tarif-close:focus-visible { background: rgba(0,47,101,0.18); outline: none; }
+        .join-tarif-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 6px 0 18px; }
+        .join-tarif-cards img { width: 100%; border-radius: 14px; box-shadow: 0 10px 24px rgba(0,0,0,0.14); }
+        .join-tarif-prices { width: 100%; border-radius: 14px; border: 1px solid rgba(0,47,101,0.1); display: block; }
+        @media (max-width: 620px) { .join-tarif-cards { grid-template-columns: 1fr; } .join-tarif-dialog { padding: 18px; } }
+    </style>
 </head>
 <body class="join-page">
     <div class="site-shell">
@@ -47,6 +67,10 @@
                 <div class="join-form-layout">
                     <div class="join-form-card">
                         <div class="join-lang-selector" aria-label="Sprooch auswielen">
+                            <button type="button" class="join-tarif-trigger" id="joinTarifTrigger" aria-haspopup="dialog" aria-controls="joinTarifModal" title="Tariffer 2025-2026 weisen">
+                                <img src="assets/shared/media/M75_Memberskaart.png" alt="Memberskaart Mersch75 - Tariffer weisen">
+                                <span class="join-tarif-trigger-hint">Tariffer 2025-2026</span>
+                            </button>
                             <div class="join-lang-picker" role="tablist" aria-label="Sproochen">
                                 <button class="join-lang-button is-active" type="button" data-lang="lu" aria-pressed="true">LU</button>
                                 <button class="join-lang-button" type="button" data-lang="fr" aria-pressed="false">FR</button>
@@ -67,6 +91,7 @@
                             <input type="hidden" name="subject" value="Nouvelle inscription Mersch 75">
                             <input type="hidden" name="from_name" value="Mersch75 E-JOIN-US">
                             <input type="hidden" id="Langue" name="Langue" value="lu">
+                            <input type="hidden" id="CardInternalId" name="CardInternalId" value="">
                             <input type="hidden" id="name" name="name" value="">
                             <input type="hidden" id="email" name="email" value="">
                             <div hidden aria-hidden="true">
@@ -97,6 +122,15 @@
                                 </div>
                             </div>
 
+                            <div class="join-form-group">
+                                <label id="lbl-flh-category-basis" for="FlhCategoryBasis">BASE CATEGORIE FLH *</label>
+                                <select id="FlhCategoryBasis" name="FlhCategoryBasis" required>
+                                    <option value="Garçons - Hommes">Garçons - Hommes</option>
+                                    <option value="Filles - Femmes">Filles - Femmes</option>
+                                </select>
+                                <p class="join-helper-text">Selon FLH Catégories d'Âge 2025-2026.</p>
+                            </div>
+
                             <div id="cat-section">
                                 <label id="lbl-cat" for="Categorie">CATEGORIE FLH (AUTO)</label>
                                 <strong id="cat-display">-</strong>
@@ -110,6 +144,56 @@
                                     <option value="Officiel(le)">Officiel(le)</option>
                                     <option value="Arbitre">Arbitre</option>
                                 </select>
+                            </div>
+
+                            <div class="join-form-group" id="tarif-section">
+                                <label id="lbl-tarif" for="Cotisation">COTISATIOUN 2025-2026 <span class="join-helper-text">(Automatesch virgeschloen op Basis vum Alter — kann ugepasst ginn. Keng Bezuelung)</span></label>
+                                <select id="Cotisation" name="Cotisation">
+                                    <option value="Membre étudiant, jeune joueur < 16 – €100">Membre étudiant / jeune joueur &lt; 16 – €100</option>
+                                    <option value="Membre étudiant, jeune joueur > 16 – €100">Membre étudiant / jeune joueur &gt; 16 – €100</option>
+                                    <option value="Membre Joueur Adulte – €200">Membre Joueur Adulte – €200</option>
+                                    <option value="Membre Famille (2+) – €250">Membre Famille (2+) – €250</option>
+                                    <option value="Membre section loisir (WF4HB/MF4HB) – €50">Membre section loisir (WF4HB/MF4HB) – €50</option>
+                                    <option value="Membre Licence Officiel – €50">Membre Licence Officiel – €50</option>
+                                    <option value="Membre honoraire – €50">Membre honoraire – €50</option>
+                                    <option value="Donateur – €9,99+">Donateur – €9,99+</option>
+                                </select>
+                                <div class="join-checkbox-row" style="margin-top:10px;">
+                                    <input type="checkbox" id="FamilleFlag" name="FamilleFlag" value="Oui">
+                                    <label for="FamilleFlag" id="lbl-famille">Famill-Memberskaart (2+ Persounen) – €250</label>
+                                </div>
+
+                                <div id="family-section" class="join-family-section">
+                                    <div class="join-form-group join-form-group--compact">
+                                        <label for="FamilyMemberCount">Wivill Persounen op der Family Memberskaart? *</label>
+                                        <select id="FamilyMemberCount" name="FamilyMemberCount" disabled>
+                                            <option value="2">2 Persounen</option>
+                                            <option value="3">3 Persounen</option>
+                                            <option value="4">4 Persounen</option>
+                                            <option value="5">5 Persounen</option>
+                                            <option value="6">6 Persounen</option>
+                                            <option value="7">7 Persounen</option>
+                                            <option value="8">8 Persounen</option>
+                                            <option value="9">9 Persounen</option>
+                                            <option value="10">10 Persounen</option>
+                                        </select>
+                                    </div>
+                                    <p class="join-helper-text">Haaptlizenzéierten ass déi Persoun hei am Formulaire. Déi zousätzlech Persoune musse Familljememberen op där selwechter Adress sinn. Elteren/Erzéiungsberechtegten oder weider Spiller kënnen hei fir QR/Lizenz-Virbereedung agedroe ginn.</p>
+                                    <div id="family-members-fields" class="join-family-members-fields"></div>
+                                    <input type="hidden" id="FamilySummary" name="FamilySummary" value="">
+                                    <div class="join-family-card-preview" id="family-card-preview" aria-live="polite">
+                                        <h3>Verso Card QR Preview</h3>
+                                        <div class="join-family-card-verso">
+                                            <img src="assets/shared/media/M75_Memberskaart.png" alt="Memberskaart verso QR Preview">
+                                            <div class="join-family-card-overlay">
+                                                <strong>FAMILL MEMBERSKAART</strong>
+                                                <small id="family-card-id" class="join-family-card-id"></small>
+                                                <div id="family-card-lines" class="join-family-card-lines"></div>
+                                                <div id="family-qr-code" class="join-family-qr-code"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div id="parent-section">
@@ -236,6 +320,18 @@
                 </div>
             </section>
 
+            <div class="join-tarif-modal" id="joinTarifModal" role="dialog" aria-modal="true" aria-labelledby="joinTarifModalTitle" hidden>
+                <div class="join-tarif-backdrop" data-tarif-close></div>
+                <div class="join-tarif-dialog" role="document">
+                    <button type="button" class="join-tarif-close" data-tarif-close aria-label="Zoumaachen">&times;</button>
+                    <h2 id="joinTarifModalTitle">Memberskaart &amp; Tariffer 2025-2026</h2>
+                    <div class="join-tarif-cards">
+                        <img src="assets/shared/media/M75_Memberskaart.png" alt="Memberskaart" loading="lazy">
+                    </div>
+                    <img class="join-tarif-prices" src="assets/pages/join/media/Tariffer%202025-2026.png" alt="Fixation vun den Cotisatiounen 2025-2026" loading="lazy">
+                </div>
+            </div>
+
             <footer class="site-page-footer">
                 <div class="site-page-footer-shell">
                     <div class="site-page-footer-brand">
@@ -301,6 +397,7 @@
     </div>
 
     <script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>
     const MERSCH75_WEB3FORMS_MAIN_KEY = '15e3cc53-6864-47dd-bfaf-332cb4ca45e5';
     const MERSCH75_WEB3FORMS_MAX_KEY = 'f748489b-abc6-4e37-bb82-860a82c91f4e';
@@ -342,6 +439,82 @@
     };
 
     let currentLang = 'lu';
+    let currentAge = null;
+    let currentCotisationAge = null;
+    const flhCategoryRules = {
+        male: [
+            { category: 'Veterans', maxYear: 1990 },
+            { category: 'Seniors', minYear: 1991, maxYear: 2004 },
+            { category: 'U21', minYear: 2005, maxYear: 2008 },
+            { category: 'U17', minYear: 2009, maxYear: 2010 },
+            { category: 'U15', minYear: 2011, maxYear: 2012 },
+            { category: 'U13', minYear: 2013, maxYear: 2014 },
+            { category: 'U11', minYear: 2015, maxYear: 2016 },
+            { category: 'U9', minYear: 2017, maxYear: 2018 },
+            { category: 'U7', minYear: 2019 }
+        ],
+        female: [
+            { category: 'Veterans', maxYear: 1990 },
+            { category: 'Seniors', minYear: 1991, maxYear: 2008 },
+            { category: 'U17', minYear: 2009, maxYear: 2010 },
+            { category: 'U15', minYear: 2011, maxYear: 2012 },
+            { category: 'U13', minYear: 2013, maxYear: 2014 },
+            { category: 'U11', minYear: 2015, maxYear: 2016 },
+            { category: 'U9', minYear: 2017, maxYear: 2018 },
+            { category: 'U7', minYear: 2019 }
+        ]
+    };
+
+    function generateCardInternalId() {
+        const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+        const bytes = new Uint8Array(8);
+
+        if (window.crypto && window.crypto.getRandomValues) {
+            window.crypto.getRandomValues(bytes);
+        } else {
+            for (let i = 0; i < bytes.length; i++) {
+                bytes[i] = Math.floor(Math.random() * 256);
+            }
+        }
+
+        return Array.from(bytes).map(function(value) {
+            return alphabet[value % alphabet.length];
+        }).join('');
+    }
+
+    function ensureCardInternalId() {
+        const input = document.getElementById('CardInternalId');
+
+        if (!input.value) {
+            input.value = generateCardInternalId();
+        }
+
+        return input.value;
+    }
+
+    function suggestTarif() {
+        const select = document.getElementById('Cotisation');
+        if (!select) return;
+        const familleFlag = document.getElementById('FamilleFlag');
+        if (familleFlag && familleFlag.checked) {
+            select.value = 'Membre Famille (2+) – €250';
+            return;
+        }
+        const role = document.getElementById('Role').value;
+        if (role === 'Officiel(le)' || role === 'Arbitre') {
+            select.value = 'Membre Licence Officiel – €50';
+            return;
+        }
+        const category = getCategoryValue();
+        if (!category) return;
+        if (category === 'Seniors' || category === 'Veterans') {
+            select.value = 'Membre Joueur Adulte – €200';
+        } else if (category === 'U17' || category === 'U21') {
+            select.value = 'Membre étudiant, jeune joueur > 16 – €100';
+        } else {
+            select.value = 'Membre étudiant, jeune joueur < 16 – €100';
+        }
+    }
 
     function getValue(id) {
         return document.getElementById(id).value.trim();
@@ -376,6 +549,182 @@
         const guardianTwo = document.getElementById('ParentIsole').value === 'OUI' ? '' : getValue('Tuteur2');
         const guardians = [guardianOne, guardianTwo].filter(Boolean).join(' / ');
         return guardians || '-';
+    }
+
+    function escapeHtml(value) {
+        return String(value).replace(/[&<>"]/g, function(char) {
+            return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[char];
+        });
+    }
+
+    function getFamilyMemberCount() {
+        const count = parseInt(document.getElementById('FamilyMemberCount').value, 10);
+        return isNaN(count) ? 2 : Math.max(2, Math.min(10, count));
+    }
+
+    function renderFamilyMemberFields() {
+        const container = document.getElementById('family-members-fields');
+        const total = getFamilyMemberCount();
+        const blocks = [];
+
+        for (let i = 1; i < total; i++) {
+            blocks.push('<div class="join-family-member-card">' +
+                '<strong>Persoun ' + (i + 1) + '</strong>' +
+                '<div class="join-form-group">' +
+                    '<label for="FamilyMember' + i + 'Name">Numm a Virnumm *</label>' +
+                    '<input type="text" id="FamilyMember' + i + 'Name" name="FamilyMember' + i + 'Name" required>' +
+                '</div>' +
+                '<div class="join-form-row">' +
+                    '<div class="join-form-group">' +
+                        '<label for="FamilyMember' + i + 'Relation">Roll / Relatioun *</label>' +
+                        '<select id="FamilyMember' + i + 'Relation" name="FamilyMember' + i + 'Relation" required>' +
+                            '<option value="Elterendeel / Erzéiungsberechtegten">Elterendeel / Erzéiungsberechtegten</option>' +
+                            '<option value="Kand">Kand</option>' +
+                            '<option value="Partner / Partnerin">Partner / Partnerin</option>' +
+                            '<option value="Familljemember selwecht Adress">Familljemember selwecht Adress</option>' +
+                        '</select>' +
+                    '</div>' +
+                    '<div class="join-form-group">' +
+                        '<label for="FamilyMember' + i + 'License">Lizenz gewënscht?</label>' +
+                        '<select id="FamilyMember' + i + 'License" name="FamilyMember' + i + 'License">' +
+                            '<option value="Nee">Nee / nëmmen QR</option>' +
+                            '<option value="Jo">Jo, Lizenz virbereeden</option>' +
+                        '</select>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="join-form-row">' +
+                    '<div class="join-form-group">' +
+                        '<label for="FamilyMember' + i + 'Dob">Gebuertsdatum fir Lizenz</label>' +
+                        '<input type="text" id="FamilyMember' + i + 'Dob" name="FamilyMember' + i + 'Dob" placeholder="01.01.2010" inputmode="numeric" pattern="[0-9]{2}\\.[0-9]{2}\\.[0-9]{4}">' +
+                    '</div>' +
+                    '<div class="join-form-group">' +
+                        '<label for="FamilyMember' + i + 'Cns">CNS 5 Zifferen</label>' +
+                        '<input type="text" id="FamilyMember' + i + 'Cns" name="FamilyMember' + i + 'Cns" maxlength="5" inputmode="numeric" pattern="[0-9]{5}">' +
+                    '</div>' +
+                '</div>' +
+            '</div>');
+        }
+
+        container.innerHTML = blocks.join('');
+    }
+
+    function getFamilyMembers() {
+        if (getCheckedValue('FamilleFlag') !== 'Oui') {
+            return [];
+        }
+
+        const total = getFamilyMemberCount();
+        const members = [];
+
+        for (let i = 1; i < total; i++) {
+            members.push({
+                name: getValue('FamilyMember' + i + 'Name'),
+                relation: getValue('FamilyMember' + i + 'Relation'),
+                license: getValue('FamilyMember' + i + 'License'),
+                dob: getValue('FamilyMember' + i + 'Dob'),
+                cns: getValue('FamilyMember' + i + 'Cns')
+            });
+        }
+
+        return members;
+    }
+
+    function buildFamilySummary() {
+        if (getCheckedValue('FamilleFlag') !== 'Oui') {
+            return '';
+        }
+
+        const lines = [];
+        const address = [getValue('Strasse'), getValue('Postcode'), getValue('Ortschaft')].filter(Boolean).join(', ');
+        lines.push('FAMILL MEMBERSKAART 2025-2026');
+        lines.push('Card-ID: ' + ensureCardInternalId());
+        lines.push('Total Persounen: ' + getFamilyMemberCount());
+        lines.push('Haaptlizenséierten: ' + (getFullName() || '-'));
+        lines.push('Gebuertsdatum: ' + (getValue('DateNaissance') || '-'));
+        lines.push('CNS: ' + (getValue('CNS') || '-'));
+        lines.push('Roll: ' + getValue('Role'));
+        lines.push('Lizenz: ' + getValue('Licence'));
+        lines.push('Adress: ' + (address || '-'));
+
+        if (document.getElementById('Mineur').value === 'OUI') {
+            lines.push('Elteren/Erzéiungsberechtegten: ' + getGuardianText());
+        }
+
+        getFamilyMembers().forEach(function(member, index) {
+            const memberLine = 'Persoun ' + (index + 2) + ': ' + (member.name || '-') + ' | ' + (member.relation || '-') + ' | Lizenz: ' + (member.license || 'Nee');
+            lines.push(memberLine + (member.dob ? ' | Geb.: ' + member.dob : '') + (member.cns ? ' | CNS: ' + member.cns : ''));
+        });
+
+        return lines.join('\n');
+    }
+
+    function updateFamilyLicenseRequirements() {
+        if (getCheckedValue('FamilleFlag') !== 'Oui') {
+            return;
+        }
+
+        const total = getFamilyMemberCount();
+
+        for (let i = 1; i < total; i++) {
+            const license = document.getElementById('FamilyMember' + i + 'License');
+            const dob = document.getElementById('FamilyMember' + i + 'Dob');
+            const cns = document.getElementById('FamilyMember' + i + 'Cns');
+
+            if (license && dob && cns) {
+                const required = license.value === 'Jo';
+                dob.required = required;
+                cns.required = required;
+            }
+        }
+    }
+
+    function updateFamilySummary() {
+        updateFamilyLicenseRequirements();
+        const summary = buildFamilySummary();
+        const hidden = document.getElementById('FamilySummary');
+        const linesBox = document.getElementById('family-card-lines');
+        const qrBox = document.getElementById('family-qr-code');
+        const cardIdBox = document.getElementById('family-card-id');
+
+        cardIdBox.innerText = summary ? 'Card-ID: ' + ensureCardInternalId() : '';
+        hidden.value = summary;
+        linesBox.innerHTML = summary ? summary.split('\n').map(function(line) { return '<span>' + escapeHtml(line) + '</span>'; }).join('') : '';
+        qrBox.innerHTML = '';
+
+        if (summary && typeof QRCode !== 'undefined') {
+            new QRCode(qrBox, {
+                text: summary,
+                width: 148,
+                height: 148,
+                typeNumber: 16,
+                colorDark: '#002f65',
+                colorLight: '#ffffff',
+                correctLevel: QRCode.CorrectLevel.L
+            });
+        }
+    }
+
+    function updateFamilySection(shouldRender) {
+        const enabled = getCheckedValue('FamilleFlag') === 'Oui';
+        const section = document.getElementById('family-section');
+        const count = document.getElementById('FamilyMemberCount');
+
+        section.style.display = enabled ? 'grid' : 'none';
+        count.disabled = !enabled;
+
+        if (enabled && (shouldRender || !document.getElementById('FamilyMember1Name'))) {
+            renderFamilyMemberFields();
+        }
+
+        if (!enabled) {
+            document.getElementById('family-members-fields').innerHTML = '';
+            document.getElementById('FamilySummary').value = '';
+            document.getElementById('family-card-lines').innerHTML = '';
+            document.getElementById('family-qr-code').innerHTML = '';
+            return;
+        }
+
+        updateFamilySummary();
     }
 
     function setRequiredState(isMinor, category) {
@@ -541,9 +890,22 @@
         }
 
         lines.push('========================================');
+        lines.push('CARD-ID: ' + ensureCardInternalId());
         lines.push(text.applicant + ': ' + getFullName());
         lines.push(text.role + ': ' + getValue('Role'));
+        lines.push('BASE CATEGORIE FLH: ' + getValue('FlhCategoryBasis'));
         lines.push(text.category + ': ' + getCategoryValue());
+        lines.push('COTISATIOUN 2025-2026: ' + getValue('Cotisation') + (getCheckedValue('FamilleFlag') === 'Oui' ? ' (Famill 2+)' : ''));
+
+        const familySummary = buildFamilySummary();
+
+        if (familySummary) {
+            lines.push('----------------------------------------');
+            familySummary.split('\n').forEach(function(line) {
+                lines.push(line);
+            });
+        }
+
         lines.push('========================================');
         lines.push('');
         lines.push(text.cnsDigits + ': ' + getValue('CNS'));
@@ -620,6 +982,28 @@
         throw new Error(data.message || 'Web3Forms konnte die Anfrage nicht senden.');
     }
 
+    function calculateAgeOnDate(day, month, year, referenceDate) {
+        let age = referenceDate.getFullYear() - year;
+
+        if (referenceDate.getMonth() + 1 < month || (referenceDate.getMonth() + 1 === month && referenceDate.getDate() < day)) {
+            age--;
+        }
+
+        return age;
+    }
+
+    function getFlhCategoryByBirthYear(year) {
+        const basis = document.getElementById('FlhCategoryBasis').value === 'Filles - Femmes' ? 'female' : 'male';
+        const rules = flhCategoryRules[basis];
+        const match = rules.find(function(rule) {
+            const minOk = typeof rule.minYear === 'undefined' || year >= rule.minYear;
+            const maxOk = typeof rule.maxYear === 'undefined' || year <= rule.maxYear;
+            return minOk && maxOk;
+        });
+
+        return match ? match.category : '';
+    }
+
     function calcCategorie(dob) {
         const parts = dob.split('.');
 
@@ -635,36 +1019,26 @@
             document.getElementById('Categorie').value = '';
             document.getElementById('Mineur').value = 'NON';
             document.getElementById('cat-display').innerText = '-';
+            currentAge = null;
+            currentCotisationAge = null;
             setRequiredState(false, '');
             return;
         }
 
         const today = new Date();
-        let age = today.getFullYear() - year;
-
-        if (today.getMonth() + 1 < month || (today.getMonth() + 1 === month && today.getDate() < day)) {
-            age--;
-        }
-
-        let cat = '';
-
-        if (age <= 6) cat = 'U7';
-        else if (age <= 8) cat = 'U9';
-        else if (age <= 10) cat = 'U11';
-        else if (age <= 12) cat = 'U13';
-        else if (age <= 14) cat = 'U15';
-        else if (age <= 16) cat = 'U17';
-        else if (age <= 18) cat = 'U19';
-        else if (age <= 23) cat = 'Espoirs';
-        else if (age <= 40) cat = 'Seniors';
-        else cat = 'Veterans';
+        const age = calculateAgeOnDate(day, month, year, today);
+        const cotisationAge = year <= 2008 ? 17 : 15;
+        const cat = getFlhCategoryByBirthYear(year);
 
         const isMinor = age < 18;
 
         document.getElementById('Categorie').value = cat;
         document.getElementById('cat-display').innerText = cat;
         document.getElementById('Mineur').value = isMinor ? 'OUI' : 'NON';
+        currentAge = age;
+        currentCotisationAge = cotisationAge;
         setRequiredState(isMinor, cat);
+        suggestTarif();
     }
 
     document.getElementById('DateNaissance').addEventListener('input', function() {
@@ -684,21 +1058,74 @@
             document.getElementById('Categorie').value = '';
             document.getElementById('Mineur').value = 'NON';
             document.getElementById('cat-display').innerText = '-';
+            currentAge = null;
+            currentCotisationAge = null;
             setRequiredState(false, '');
         }
 
         updateCnsDisplay();
+        updateFamilySummary();
+    });
+
+    document.getElementById('Role').addEventListener('change', function() {
+        suggestTarif();
+        updateFamilySummary();
+    });
+
+    document.getElementById('FlhCategoryBasis').addEventListener('change', function() {
+        const dob = getValue('DateNaissance');
+        if (dob.length === 10) {
+            calcCategorie(dob);
+        }
+        updateFamilySummary();
+    });
+
+    document.getElementById('FamilleFlag').addEventListener('change', function() {
+        suggestTarif();
+        updateFamilySection(true);
+    });
+
+    document.getElementById('FamilyMemberCount').addEventListener('change', function() {
+        updateFamilySection(true);
+    });
+
+    document.getElementById('family-members-fields').addEventListener('input', function(event) {
+        if (event.target.id && event.target.id.indexOf('Dob') !== -1) {
+            let val = event.target.value.replace(/\D/g, '').slice(0, 8);
+
+            if (val.length > 2 && val.length <= 4) {
+                val = val.slice(0, 2) + '.' + val.slice(2);
+            } else if (val.length > 4) {
+                val = val.slice(0, 2) + '.' + val.slice(2, 4) + '.' + val.slice(4, 8);
+            }
+
+            event.target.value = val;
+        }
+
+        if (event.target.id && event.target.id.indexOf('Cns') !== -1) {
+            event.target.value = event.target.value.replace(/\D/g, '').slice(0, 5);
+        }
+
+        updateFamilySummary();
+    });
+    document.getElementById('family-members-fields').addEventListener('change', updateFamilySummary);
+
+    ['Nom', 'Prenom', 'Licence', 'Strasse', 'Postcode', 'Ortschaft', 'Tuteur1', 'Tuteur2'].forEach(function(id) {
+        document.getElementById(id).addEventListener('input', updateFamilySummary);
+        document.getElementById(id).addEventListener('change', updateFamilySummary);
     });
 
     document.getElementById('ParentIsole').addEventListener('change', function() {
         const isMinor = document.getElementById('Mineur').value === 'OUI';
         const category = document.getElementById('Categorie').value;
         setRequiredState(isMinor, category);
+        updateFamilySummary();
     });
 
     document.getElementById('CNS').addEventListener('input', function() {
         this.value = this.value.slice(0, 5);
         updateCnsDisplay();
+        updateFamilySummary();
     });
 
     ['LegalConsent', 'FlhPortalConsent', 'AccuracyConsent'].forEach(function(id) {
@@ -804,9 +1231,37 @@
         });
     });
 
+    ensureCardInternalId();
     updateLang('lu');
     updateCnsDisplay();
+    updateFamilySection(false);
     updateConsentValidationMessages();
+    </script>
+    <script>
+    (function() {
+        const trigger = document.getElementById('joinTarifTrigger');
+        const modal = document.getElementById('joinTarifModal');
+        if (!trigger || !modal) return;
+        const closeEls = modal.querySelectorAll('[data-tarif-close]');
+        let lastFocus = null;
+        function openModal() {
+            lastFocus = document.activeElement;
+            modal.hidden = false;
+            document.body.style.overflow = 'hidden';
+            const closeBtn = modal.querySelector('.join-tarif-close');
+            if (closeBtn) closeBtn.focus();
+        }
+        function closeModal() {
+            modal.hidden = true;
+            document.body.style.overflow = '';
+            if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+        }
+        trigger.addEventListener('click', openModal);
+        closeEls.forEach(function(el) { el.addEventListener('click', closeModal); });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && !modal.hidden) closeModal();
+        });
+    })();
     </script>
 </body>
 </html>

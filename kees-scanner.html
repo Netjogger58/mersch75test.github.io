@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kees Scanner | Mersch75</title>
+    <script>
+    (function () {
+        try {
+            var raw = localStorage.getItem('m75-gen-ok');
+            var ok = raw && parseInt(raw, 10) > Date.now();
+            if (!ok) { window.location.replace('index.html?gen=lock'); }
+        } catch (e) { window.location.replace('index.html?gen=lock'); }
+    })();
+    </script>
+    <link rel="stylesheet" href="styles.css?v=20260609c">
+    <style>
+        body.kees-page { background: linear-gradient(180deg, #f2f6fb 0%, #ffffff 260px); }
+        .kees-shell { width: min(calc(100% - 28px), 1440px); margin: 0 auto; padding: 18px 0 48px; }
+        .kees-header { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 16px 18px; border-radius: 24px; background: #ffde00; box-shadow: 0 18px 40px rgba(0,47,101,0.12); }
+        .kees-brand { display: flex; align-items: center; gap: 12px; font-weight: 900; color: #002f65; }
+        .kees-brand span:first-child { display: grid; place-items: center; width: 54px; height: 54px; border-radius: 16px; background: #fff; font-family: 'Oswald', sans-serif; font-size: 1.3rem; }
+        .kees-nav { display: flex; gap: 10px; flex-wrap: wrap; }
+        .kees-nav a, .kees-nav button, .kees-button { border: 0; border-radius: 999px; padding: 11px 16px; background: #002f65; color: #fff; font: inherit; font-weight: 800; cursor: pointer; text-decoration: none; }
+        .kees-button.alt { background: #f9d611; color: #002f65; border: 1px solid rgba(0,47,101,0.14); }
+        .kees-button.danger { background: #9b1c1c; }
+        .kees-hero { margin: 26px 0; padding: 28px; border-radius: 28px; background: #fff; box-shadow: 0 18px 42px rgba(0,47,101,0.10); }
+        .kees-hero h1 { margin: 0 0 8px; color: #002f65; font-size: clamp(2rem, 5vw, 4rem); }
+        .kees-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(340px, 0.95fr); gap: 18px; align-items: start; }
+        .kees-panel { display: grid; gap: 14px; padding: 20px; border-radius: 24px; background: #fff; box-shadow: 0 18px 42px rgba(0,47,101,0.10); border: 1px solid rgba(0,47,101,0.08); }
+        .kees-panel h2 { margin: 0; color: #002f65; font-size: 1.45rem; }
+        .kees-form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+        .kees-field { display: grid; gap: 6px; }
+        .kees-field label { font-size: 0.75rem; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; color: #47617d; }
+        .kees-field input, .kees-field select, .kees-field textarea { width: 100%; border: 1px solid rgba(0,47,101,0.12); border-radius: 14px; padding: 12px 13px; font: inherit; color: #002f65; background: #fff; }
+        .kees-field textarea { min-height: 120px; resize: vertical; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.86rem; }
+        .kees-video-wrap { position: relative; overflow: hidden; border-radius: 22px; background: #001a38; aspect-ratio: 16 / 10; display: grid; place-items: center; }
+        #qr-video { width: 100%; height: 100%; object-fit: cover; }
+        .kees-camera-state { position: absolute; inset: 0; display: grid; place-items: center; padding: 18px; text-align: center; color: #fff; background: rgba(0,26,56,0.72); font-weight: 800; }
+        .kees-scan-result { display: grid; gap: 8px; padding: 18px; border-radius: 20px; background: #e8edf4; border: 2px solid rgba(0,47,101,0.12); }
+        .kees-scan-result.valid { background: #e8f7ea; border-color: #2f9e44; }
+        .kees-scan-result.duplicate { background: #fff3bf; border-color: #f08c00; }
+        .kees-scan-result.unknown { background: #ffe3e3; border-color: #c92a2a; }
+        .kees-status { font-size: 1.4rem; font-weight: 900; color: #002f65; }
+        .kees-meta { display: flex; flex-wrap: wrap; gap: 8px; }
+        .kees-pill { display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 7px 11px; background: rgba(0,47,101,0.08); color: #002f65; font-size: 0.82rem; font-weight: 800; }
+        .kees-table-wrap { overflow: auto; border: 1px solid rgba(0,47,101,0.08); border-radius: 18px; }
+        .kees-table { width: 100%; border-collapse: collapse; min-width: 860px; }
+        .kees-table th, .kees-table td { padding: 10px 12px; border-bottom: 1px solid rgba(0,47,101,0.08); text-align: left; vertical-align: top; font-size: 0.9rem; }
+        .kees-table th { background: #e8edf4; color: #002f65; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; }
+        .kees-kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+        .kees-kpi { padding: 16px; border-radius: 18px; background: #e8edf4; color: #002f65; }
+        .kees-kpi strong { display: block; font-size: 1.8rem; }
+        .kees-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+        .kees-hidden { display: none !important; }
+        @media (max-width: 980px) { .kees-grid { grid-template-columns: 1fr; } .kees-header { align-items: flex-start; flex-direction: column; } }
+    </style>
+</head>
+<body class="kees-page">
+    <div class="kees-shell">
+        <header class="kees-header">
+            <a class="kees-brand" href="index.html"><span>75</span><span>Mersch75 Kees Scanner</span></a>
+            <nav class="kees-nav">
+                <a href="generator.html">Generator</a>
+                <a href="join.html">Join Us</a>
+                <a href="index.html">Start</a>
+            </nav>
+        </header>
+
+        <main>
+            <section class="kees-hero">
+                <h1>Kees Scanner</h1>
+                <p>Intern Kontroll vun Memberskaarten iwwer déi 8-stelleg Card-ID am QR-Code. D'Member-Datebank an Entrée-Log ginn lokal am Browser gespäichert a kënnen als CSV exportéiert ginn.</p>
+            </section>
+
+            <section class="kees-grid">
+                <div class="kees-panel">
+                    <h2>Scanner</h2>
+                    <div class="kees-form-grid">
+                        <div class="kees-field">
+                            <label for="eventName">Event / Match</label>
+                            <input id="eventName" type="text" placeholder="z.B. Mersch75 vs ...">
+                        </div>
+                        <div class="kees-field">
+                            <label for="entryPoint">Entrée / Kees</label>
+                            <input id="entryPoint" type="text" placeholder="Haaptentrée">
+                        </div>
+                        <div class="kees-field">
+                            <label for="scanType">Klassifikatioun</label>
+                            <select id="scanType">
+                                <option value="Entrée">Entrée</option>
+                                <option value="Kontroll">Kontroll</option>
+                                <option value="VIP / Invite">VIP / Invite</option>
+                                <option value="Caisse">Caisse</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="kees-video-wrap">
+                        <video id="qr-video" muted playsinline></video>
+                        <div id="cameraState" class="kees-camera-state">Kamera nach net gestart.</div>
+                    </div>
+                    <div class="kees-actions">
+                        <button class="kees-button" id="startCamera" type="button">Kamera starten</button>
+                        <button class="kees-button alt" id="stopCamera" type="button">Kamera stoppen</button>
+                    </div>
+                    <div class="kees-field">
+                        <label for="manualScan">Manuell QR/Text/Card-ID scannen</label>
+                        <textarea id="manualScan" placeholder="QR-Inhalt oder 8-stelleg Card-ID hei asetze..."></textarea>
+                    </div>
+                    <div class="kees-actions">
+                        <button class="kees-button" id="manualScanBtn" type="button">Manuell kontrolléieren</button>
+                        <button class="kees-button alt" id="clearManual" type="button">Feld läschen</button>
+                    </div>
+                    <div id="scanResult" class="kees-scan-result">
+                        <div class="kees-status">Bereet fir Scan</div>
+                        <div class="kees-meta"><span class="kees-pill">Nach keng Kontroll gemaach</span></div>
+                    </div>
+                </div>
+
+                <div class="kees-panel">
+                    <h2>Member-Datebank</h2>
+                    <div class="kees-form-grid">
+                        <div class="kees-field">
+                            <label for="memberCardId">Card-ID *</label>
+                            <input id="memberCardId" type="text" maxlength="8" placeholder="AB12CD34">
+                        </div>
+                        <div class="kees-field">
+                            <label for="memberName">Numm *</label>
+                            <input id="memberName" type="text" placeholder="Numm Virnumm">
+                        </div>
+                        <div class="kees-field">
+                            <label for="memberCategory">Kategorie</label>
+                            <input id="memberCategory" type="text" placeholder="Famill, Senior, U17...">
+                        </div>
+                        <div class="kees-field">
+                            <label for="memberStatus">Status</label>
+                            <select id="memberStatus">
+                                <option value="Aktiv">Aktiv</option>
+                                <option value="Blockéiert">Blockéiert</option>
+                                <option value="Net bezuelt">Net bezuelt</option>
+                                <option value="Archiv">Archiv</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="kees-field">
+                        <label for="memberNotes">Notizen / QR Summary</label>
+                        <textarea id="memberNotes" placeholder="Optional: QR Summary, Familljememberen, Lizenzinfo..."></textarea>
+                    </div>
+                    <div class="kees-actions">
+                        <button class="kees-button" id="saveMember" type="button">Member späicheren</button>
+                        <button class="kees-button alt" id="fillFromQr" type="button">Aus QR/Text iwwerhuelen</button>
+                    </div>
+                    <div class="kees-field">
+                        <label for="bulkImport">CSV/QR Import</label>
+                        <textarea id="bulkImport" placeholder="CSV: Card-ID,Numm,Kategorie,Status,Notiz oder QR Summaries mat Card-ID..."></textarea>
+                    </div>
+                    <div class="kees-actions">
+                        <button class="kees-button" id="importMembers" type="button">Importéieren</button>
+                        <button class="kees-button alt" id="exportMembers" type="button">Member CSV Export</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="kees-panel" style="margin-top:18px;">
+                <h2>Statistik & Klassifikatioun</h2>
+                <div class="kees-kpi-grid" id="kpiGrid"></div>
+                <div class="kees-form-grid">
+                    <div class="kees-field">
+                        <label for="filterStatus">Status Filter</label>
+                        <select id="filterStatus"><option value="">All</option><option value="VALID">Valabel</option><option value="DUPLICATE">Duebel</option><option value="UNKNOWN">Onbekannt</option><option value="BLOCKED">Blockéiert</option></select>
+                    </div>
+                    <div class="kees-field">
+                        <label for="filterEvent">Event Filter</label>
+                        <input id="filterEvent" type="text" placeholder="Event sichen">
+                    </div>
+                    <div class="kees-field">
+                        <label for="filterClass">Klassifikatioun Filter</label>
+                        <input id="filterClass" type="text" placeholder="Entrée, Kontroll...">
+                    </div>
+                </div>
+                <div class="kees-actions">
+                    <button class="kees-button alt" id="exportLog" type="button">Entrée Log CSV Export</button>
+                    <button class="kees-button danger" id="clearLog" type="button">Entrée Log läschen</button>
+                </div>
+                <div class="kees-table-wrap">
+                    <table class="kees-table">
+                        <thead><tr><th>Zäit</th><th>Status</th><th>Card-ID</th><th>Numm</th><th>Event</th><th>Klass</th><th>Kees</th><th>Notiz</th></tr></thead>
+                        <tbody id="scanLogBody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="kees-panel" style="margin-top:18px;">
+                <h2>Aktuell Member-Datebank</h2>
+                <div class="kees-table-wrap">
+                    <table class="kees-table">
+                        <thead><tr><th>Card-ID</th><th>Numm</th><th>Kategorie</th><th>Status</th><th>Notiz</th><th>Aktion</th></tr></thead>
+                        <tbody id="memberTableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script type="module">
+        import QrScanner from 'https://cdn.jsdelivr.net/npm/qr-scanner@1.4.2/qr-scanner.min.js';
+
+        const DB_KEY = 'm75-member-db-v1';
+        const LOG_KEY = 'm75-entry-log-v1';
+        const $ = function(id) { return document.getElementById(id); };
+        let scanner = null;
+        let lastScanText = '';
+        let lastScanAt = 0;
+
+        function loadJson(key, fallback) {
+            try { return JSON.parse(localStorage.getItem(key)) || fallback; } catch (_) { return fallback; }
+        }
+
+        function saveJson(key, value) {
+            localStorage.setItem(key, JSON.stringify(value));
+        }
+
+        function normalizeCardId(value) {
+            return String(value || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8);
+        }
+
+        function extractCardId(text) {
+            const raw = String(text || '');
+            const explicit = raw.match(/CARD[- ]?ID\s*[:=]\s*([A-Z0-9]{8})/i) || raw.match(/Card-ID\s*[:=]\s*([A-Z0-9]{8})/i);
+            if (explicit) return normalizeCardId(explicit[1]);
+            const compact = normalizeCardId(raw);
+            if (compact.length === 8) return compact;
+            const any = raw.toUpperCase().match(/\b[A-Z0-9]{8}\b/);
+            return any ? normalizeCardId(any[0]) : '';
+        }
+
+        function extractLine(text, labels) {
+            const lines = String(text || '').split(/\r?\n/);
+            for (const line of lines) {
+                for (const label of labels) {
+                    const re = new RegExp('^\\s*' + label + '\\s*[:=]\\s*(.+)$', 'i');
+                    const match = line.match(re);
+                    if (match) return match[1].trim();
+                }
+            }
+            return '';
+        }
+
+        function parseMemberFromText(text) {
+            const cardId = extractCardId(text);
+            const name = extractLine(text, ['Haaptlizenséierten', 'Haaptlizenzéierten', 'DEMANDEUR', 'ANTRAGSTELLER', 'Nom', 'Name']) || '';
+            const category = extractLine(text, ['COTISATIOUN 2025-2026', 'Kategorie', 'CATEGORIE FLH', 'FLH KATEGORIE']) || '';
+            return { cardId, name, category, status: 'Aktiv', notes: String(text || '').trim() };
+        }
+
+        function getMembers() { return loadJson(DB_KEY, []); }
+        function getLogs() { return loadJson(LOG_KEY, []); }
+        function setMembers(members) { saveJson(DB_KEY, members); renderAll(); }
+        function setLogs(logs) { saveJson(LOG_KEY, logs); renderAll(); }
+
+        function upsertMember(member) {
+            const cardId = normalizeCardId(member.cardId);
+            if (!cardId) return false;
+            const members = getMembers();
+            const existing = members.find(function(item) { return item.cardId === cardId; });
+            const clean = {
+                cardId,
+                name: member.name || '-',
+                category: member.category || '-',
+                status: member.status || 'Aktiv',
+                notes: member.notes || ''
+            };
+            if (existing) Object.assign(existing, clean);
+            else members.push(clean);
+            setMembers(members.sort(function(a, b) { return a.name.localeCompare(b.name); }));
+            return true;
+        }
+
+        function classifyScan(cardId) {
+            const members = getMembers();
+            const logs = getLogs();
+            const member = members.find(function(item) { return item.cardId === cardId; });
+            const eventName = $('eventName').value.trim() || 'Ouni Event';
+            const duplicate = logs.some(function(item) { return item.cardId === cardId && item.eventName === eventName && item.status !== 'UNKNOWN'; });
+            if (!member) return { status: 'UNKNOWN', member: null, note: 'Card-ID ass net an der lokaler Member-Datebank.' };
+            if (member.status !== 'Aktiv') return { status: 'BLOCKED', member, note: 'Member-Status: ' + member.status };
+            if (duplicate) return { status: 'DUPLICATE', member, note: 'Dës Card-ID gouf fir dësen Event scho gescannt.' };
+            return { status: 'VALID', member, note: 'Valabel Memberskaart.' };
+        }
+
+        function recordScan(text) {
+            const cardId = extractCardId(text);
+            if (!cardId) {
+                showResult('unknown', 'Keng Card-ID fonnt', [{ label: 'QR/Text', value: 'Ongültegt Format' }]);
+                return;
+            }
+            const result = classifyScan(cardId);
+            const entry = {
+                time: new Date().toISOString(),
+                status: result.status,
+                cardId,
+                name: result.member ? result.member.name : '-',
+                eventName: $('eventName').value.trim() || 'Ouni Event',
+                entryPoint: $('entryPoint').value.trim() || '-',
+                scanType: $('scanType').value,
+                note: result.note,
+                raw: String(text || '')
+            };
+            const logs = getLogs();
+            logs.unshift(entry);
+            setLogs(logs);
+            showResult(result.status.toLowerCase(), result.status, [
+                { label: 'Card-ID', value: cardId },
+                { label: 'Numm', value: entry.name },
+                { label: 'Event', value: entry.eventName },
+                { label: 'Notiz', value: result.note }
+            ]);
+        }
+
+        function showResult(kind, title, items) {
+            const box = $('scanResult');
+            box.className = 'kees-scan-result ' + (kind === 'valid' ? 'valid' : kind === 'duplicate' || kind === 'blocked' ? 'duplicate' : kind === 'unknown' ? 'unknown' : '');
+            box.innerHTML = '<div class="kees-status">' + escapeHtml(title) + '</div><div class="kees-meta">' + items.map(function(item) {
+                return '<span class="kees-pill"><strong>' + escapeHtml(item.label) + ':</strong> ' + escapeHtml(item.value) + '</span>';
+            }).join('') + '</div>';
+        }
+
+        function escapeHtml(value) {
+            return String(value || '').replace(/[&<>"]/g, function(char) {
+                return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[char];
+            });
+        }
+
+        function downloadCsv(filename, rows) {
+            const csv = rows.map(function(row) {
+                return row.map(function(cell) { return '"' + String(cell || '').replace(/"/g, '""') + '"'; }).join(',');
+            }).join('\n');
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function renderMembers() {
+            const tbody = $('memberTableBody');
+            tbody.innerHTML = getMembers().map(function(member) {
+                return '<tr><td><strong>' + escapeHtml(member.cardId) + '</strong></td><td>' + escapeHtml(member.name) + '</td><td>' + escapeHtml(member.category) + '</td><td>' + escapeHtml(member.status) + '</td><td>' + escapeHtml(member.notes).slice(0, 180) + '</td><td><button class="kees-button danger" data-delete-member="' + escapeHtml(member.cardId) + '" type="button">Läschen</button></td></tr>';
+            }).join('') || '<tr><td colspan="6">Nach keng Memberen importéiert.</td></tr>';
+        }
+
+        function renderLogs() {
+            const status = $('filterStatus').value;
+            const eventFilter = $('filterEvent').value.toLowerCase();
+            const classFilter = $('filterClass').value.toLowerCase();
+            const rows = getLogs().filter(function(item) {
+                return (!status || item.status === status) && (!eventFilter || item.eventName.toLowerCase().includes(eventFilter)) && (!classFilter || item.scanType.toLowerCase().includes(classFilter));
+            });
+            $('scanLogBody').innerHTML = rows.map(function(item) {
+                return '<tr><td>' + new Date(item.time).toLocaleString('de-LU') + '</td><td><strong>' + escapeHtml(item.status) + '</strong></td><td>' + escapeHtml(item.cardId) + '</td><td>' + escapeHtml(item.name) + '</td><td>' + escapeHtml(item.eventName) + '</td><td>' + escapeHtml(item.scanType) + '</td><td>' + escapeHtml(item.entryPoint) + '</td><td>' + escapeHtml(item.note) + '</td></tr>';
+            }).join('') || '<tr><td colspan="8">Nach keng Entréen.</td></tr>';
+        }
+
+        function renderKpis() {
+            const logs = getLogs();
+            const counts = logs.reduce(function(acc, item) { acc[item.status] = (acc[item.status] || 0) + 1; return acc; }, {});
+            $('kpiGrid').innerHTML = [
+                ['Scans', logs.length],
+                ['Valabel', counts.VALID || 0],
+                ['Duebel', counts.DUPLICATE || 0],
+                ['Onbekannt', counts.UNKNOWN || 0],
+                ['Blockéiert', counts.BLOCKED || 0],
+                ['Memberen DB', getMembers().length]
+            ].map(function(item) { return '<div class="kees-kpi"><strong>' + item[1] + '</strong><span>' + item[0] + '</span></div>'; }).join('');
+        }
+
+        function renderAll() {
+            renderMembers();
+            renderLogs();
+            renderKpis();
+        }
+
+        $('startCamera').addEventListener('click', async function() {
+            try {
+                if (!scanner) {
+                    scanner = new QrScanner($('qr-video'), function(result) {
+                        const text = typeof result === 'string' ? result : result.data;
+                        const now = Date.now();
+                        if (text === lastScanText && now - lastScanAt < 2500) return;
+                        lastScanText = text;
+                        lastScanAt = now;
+                        recordScan(text);
+                    }, { highlightScanRegion: true, highlightCodeOutline: true });
+                }
+                await scanner.start();
+                $('cameraState').classList.add('kees-hidden');
+            } catch (error) {
+                $('cameraState').classList.remove('kees-hidden');
+                $('cameraState').innerText = 'Kamera konnt net gestart ginn: ' + error.message;
+            }
+        });
+
+        $('stopCamera').addEventListener('click', function() {
+            if (scanner) scanner.stop();
+            $('cameraState').classList.remove('kees-hidden');
+            $('cameraState').innerText = 'Kamera gestoppt.';
+        });
+
+        $('manualScanBtn').addEventListener('click', function() { recordScan($('manualScan').value); });
+        $('clearManual').addEventListener('click', function() { $('manualScan').value = ''; });
+        $('saveMember').addEventListener('click', function() {
+            const ok = upsertMember({ cardId: $('memberCardId').value, name: $('memberName').value.trim(), category: $('memberCategory').value.trim(), status: $('memberStatus').value, notes: $('memberNotes').value.trim() });
+            if (!ok) alert('Card-ID fehlt oder ass net valabel.');
+        });
+        $('fillFromQr').addEventListener('click', function() {
+            const parsed = parseMemberFromText($('memberNotes').value || $('manualScan').value || $('bulkImport').value);
+            $('memberCardId').value = parsed.cardId;
+            $('memberName').value = parsed.name;
+            $('memberCategory').value = parsed.category;
+            $('memberStatus').value = parsed.status;
+            $('memberNotes').value = parsed.notes;
+        });
+        $('importMembers').addEventListener('click', function() {
+            const text = $('bulkImport').value.trim();
+            if (!text) return;
+            const chunks = text.includes('\n\n') ? text.split(/\n\s*\n/) : text.split(/\r?\n/);
+            let count = 0;
+            chunks.forEach(function(chunk) {
+                const cols = chunk.split(',');
+                let member;
+                if (cols.length >= 2 && extractCardId(cols[0])) {
+                    member = { cardId: cols[0], name: cols[1], category: cols[2] || '-', status: cols[3] || 'Aktiv', notes: cols.slice(4).join(',') };
+                } else {
+                    member = parseMemberFromText(chunk);
+                }
+                if (member.cardId && upsertMember(member)) count++;
+            });
+            alert(count + ' Member(en) importéiert/aktualiséiert.');
+        });
+        $('exportMembers').addEventListener('click', function() {
+            downloadCsv('m75-member-db.csv', [['Card-ID', 'Numm', 'Kategorie', 'Status', 'Notiz']].concat(getMembers().map(function(m) { return [m.cardId, m.name, m.category, m.status, m.notes]; })));
+        });
+        $('exportLog').addEventListener('click', function() {
+            downloadCsv('m75-entree-log.csv', [['Zeit', 'Status', 'Card-ID', 'Numm', 'Event', 'Klass', 'Kees', 'Notiz']].concat(getLogs().map(function(l) { return [l.time, l.status, l.cardId, l.name, l.eventName, l.scanType, l.entryPoint, l.note]; })));
+        });
+        $('clearLog').addEventListener('click', function() {
+            if (confirm('Entrée Log wierklech läschen?')) setLogs([]);
+        });
+        $('memberTableBody').addEventListener('click', function(event) {
+            const id = event.target.getAttribute('data-delete-member');
+            if (!id) return;
+            if (confirm('Member ' + id + ' läschen?')) setMembers(getMembers().filter(function(member) { return member.cardId !== id; }));
+        });
+        ['filterStatus', 'filterEvent', 'filterClass'].forEach(function(id) { $(id).addEventListener('input', renderLogs); $(id).addEventListener('change', renderLogs); });
+
+        renderAll();
+    </script>
+</body>
+</html>

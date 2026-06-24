@@ -2093,10 +2093,36 @@ function initializeNewsCarousel() {
     if (!carousel) return;
 
     const track = carousel.querySelector('[data-news-track]');
-    const slides = Array.from(carousel.querySelectorAll('[data-news-slide]'));
+    let slides = Array.from(carousel.querySelectorAll('[data-news-slide]'));
     const prevButton = carousel.querySelector('[data-news-prev]');
     const nextButton = carousel.querySelector('[data-news-next]');
     const dotsContainer = carousel.querySelector('[data-news-dots]');
+
+    // Zeitgesteuerte Slides: noch nicht gestartete (data-news-starts) oder
+    // abgelaufene (data-news-expires) Meldungen automatisch entfernen.
+    // Format: "YYYY-MM-DD" oder "YYYY-MM-DDTHH:MM". Ohne Uhrzeit gilt der Slide
+    // bis zum Tagesende des angegebenen Datums.
+    const nowTs = new Date();
+    slides.forEach((slide) => {
+        const starts = slide.getAttribute('data-news-starts');
+        const expires = slide.getAttribute('data-news-expires');
+        if (starts) {
+            const start = new Date(starts);
+            if (!isNaN(start) && nowTs < start) {
+                slide.remove();
+                return;
+            }
+        }
+        if (expires) {
+            const end = new Date(expires);
+            if (!expires.includes('T')) end.setHours(23, 59, 59, 999);
+            if (!isNaN(end) && nowTs > end) {
+                slide.remove();
+            }
+        }
+    });
+    slides = Array.from(carousel.querySelectorAll('[data-news-slide]'));
+
     if (!track || slides.length === 0) return;
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
