@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events | Mersch75 Handball</title>
+    <meta name="description" content="Veranstaltungen und Events des Mersch75 Handball Club – Anmeldung, Details und Informationen.">
+    <link rel="stylesheet" href="styles.css?v=20260624a">
+    <script src="js/events-gate.js" defer></script>
+    <style>
+        /* ── Events-Page specific styles ── */
+        .events-hero {
+            background: linear-gradient(135deg, #002b5c 0%, #004080 60%, #0057a8 100%);
+            padding: 3.5rem 1.5rem 3rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .events-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .events-hero-badge {
+            display: inline-block;
+            background: #f9d611;
+            color: #002b5c;
+            font-size: .75rem;
+            font-weight: 800;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            padding: .35rem .9rem;
+            border-radius: 999px;
+            margin-bottom: 1rem;
+        }
+        .events-hero h1 {
+            color: #fff;
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            font-weight: 800;
+            margin: 0 0 .75rem;
+            line-height: 1.1;
+        }
+        .events-hero p {
+            color: rgba(255,255,255,.75);
+            font-size: 1.05rem;
+            margin: 0;
+        }
+
+        /* ── Filter bar ── */
+        .events-filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .5rem;
+            justify-content: center;
+            padding: 1.5rem 1rem 0;
+        }
+        .ev-filter-btn {
+            padding: .5rem 1.25rem;
+            border: 2px solid #d0d8e4;
+            border-radius: 999px;
+            background: #fff;
+            color: #002b5c;
+            font-size: .85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .18s;
+        }
+        .ev-filter-btn.is-active,
+        .ev-filter-btn:hover {
+            background: #002b5c;
+            border-color: #002b5c;
+            color: #f9d611;
+        }
+
+        /* ── Event grid ── */
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem 1.5rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* ── Event card ── */
+        .ev-card {
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0,43,92,.09);
+            display: flex;
+            flex-direction: column;
+            transition: transform .2s, box-shadow .2s;
+        }
+        .ev-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 36px rgba(0,43,92,.16);
+        }
+        .ev-card-banner {
+            height: 8px;
+        }
+        .ev-card-banner.color-blue   { background: linear-gradient(90deg, #002b5c, #0057a8); }
+        .ev-card-banner.color-yellow { background: linear-gradient(90deg, #f9d611, #ffc107); }
+        .ev-card-banner.color-green  { background: linear-gradient(90deg, #27ae60, #2ecc71); }
+        .ev-card-banner.color-red    { background: linear-gradient(90deg, #c0392b, #e74c3c); }
+
+        .ev-card-body {
+            padding: 1.25rem 1.5rem 1rem;
+            flex: 1;
+        }
+        .ev-card-meta {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            margin-bottom: .85rem;
+        }
+        .ev-date-block {
+            min-width: 48px;
+            text-align: center;
+            background: #f0f4f8;
+            border-radius: 10px;
+            padding: .4rem .5rem;
+            flex-shrink: 0;
+        }
+        .ev-date-block .ev-day {
+            display: block;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #002b5c;
+            line-height: 1;
+        }
+        .ev-date-block .ev-month {
+            display: block;
+            font-size: .65rem;
+            font-weight: 700;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            color: #666;
+        }
+        .ev-card-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #002b5c;
+            margin: 0;
+            line-height: 1.3;
+        }
+        .ev-card-details {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: .3rem;
+        }
+        .ev-card-details li {
+            font-size: .85rem;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+        }
+        .ev-card-details li span.icon {
+            font-size: 1rem;
+            width: 1.2rem;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .ev-card-desc {
+            font-size: .88rem;
+            color: #444;
+            line-height: 1.55;
+            margin: 0 0 1rem;
+        }
+        .ev-spots-bar {
+            margin-bottom: .85rem;
+        }
+        .ev-spots-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: .78rem;
+            color: #666;
+            margin-bottom: .3rem;
+        }
+        .ev-spots-track {
+            height: 6px;
+            background: #e8edf3;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+        .ev-spots-fill {
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #002b5c, #0057a8);
+            transition: width .4s;
+        }
+        .ev-spots-fill.is-full { background: linear-gradient(90deg, #c0392b, #e74c3c); }
+
+        .ev-tag-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .4rem;
+            margin-bottom: .75rem;
+        }
+        .ev-tag {
+            font-size: .72rem;
+            font-weight: 700;
+            letter-spacing: .05em;
+            text-transform: uppercase;
+            padding: .25rem .65rem;
+            border-radius: 999px;
+            background: #f0f4f8;
+            color: #002b5c;
+        }
+        .ev-tag.tag-sport    { background: #e8f4fd; color: #0057a8; }
+        .ev-tag.tag-social   { background: #fef9e7; color: #b7950b; }
+        .ev-tag.tag-meeting  { background: #eafaf1; color: #1e8449; }
+        .ev-tag.tag-youth    { background: #fdf2f8; color: #7d3c98; }
+        .ev-tag.tag-members  { background: #f2f3f4; color: #555; }
+        .ev-tag.tag-open     { background: #e8f8f5; color: #148f77; }
+
+        .ev-card-footer {
+            padding: 1rem 1.5rem 1.25rem;
+            border-top: 1px solid #f0f4f8;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: .75rem;
+        }
+        .ev-price {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #002b5c;
+        }
+        .ev-price span {
+            font-size: .8rem;
+            font-weight: 400;
+            color: #888;
+        }
+        .ev-register-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            padding: .6rem 1.2rem;
+            border-radius: 999px;
+            border: none;
+            background: #002b5c;
+            color: #f9d611;
+            font-weight: 700;
+            font-size: .88rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background .18s, transform .15s;
+        }
+        .ev-register-btn:hover {
+            background: #004080;
+            transform: scale(1.03);
+        }
+        .ev-register-btn.is-full {
+            background: #c8d3e0;
+            color: #666;
+            cursor: not-allowed;
+        }
+        .ev-register-btn.is-full:hover { transform: none; }
+
+        /* ── Registration modal ── */
+        .ev-reg-modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9998;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,.6);
+            backdrop-filter: blur(4px);
+        }
+        .ev-reg-modal-overlay[hidden] { display: none; }
+        .ev-reg-modal {
+            background: #fff;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 24px 80px rgba(0,43,92,.3);
+            padding: 2rem 1.75rem 1.75rem;
+            position: relative;
+        }
+        .ev-reg-modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+            line-height: 1;
+        }
+        .ev-reg-modal h3 {
+            margin: 0 0 .25rem;
+            font-size: 1.2rem;
+            color: #002b5c;
+        }
+        .ev-reg-modal .ev-reg-event-name {
+            font-size: .9rem;
+            color: #888;
+            margin: 0 0 1.5rem;
+        }
+        .ev-reg-form-group {
+            margin-bottom: 1rem;
+        }
+        .ev-reg-form-group label {
+            display: block;
+            font-size: .78rem;
+            font-weight: 700;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            color: #002b5c;
+            margin-bottom: .35rem;
+        }
+        .ev-reg-form-group input,
+        .ev-reg-form-group select,
+        .ev-reg-form-group textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: .7rem 1rem;
+            border: 2px solid #d0d8e4;
+            border-radius: 8px;
+            font-size: .95rem;
+            font-family: inherit;
+            color: #222;
+            outline: none;
+            transition: border-color .18s;
+        }
+        .ev-reg-form-group input:focus,
+        .ev-reg-form-group select:focus,
+        .ev-reg-form-group textarea:focus {
+            border-color: #002b5c;
+        }
+        .ev-reg-form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .ev-reg-form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: .75rem;
+        }
+        .ev-reg-submit-btn {
+            width: 100%;
+            padding: .85rem;
+            background: #002b5c;
+            color: #f9d611;
+            font-weight: 800;
+            font-size: 1rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: .5rem;
+            transition: background .18s;
+        }
+        .ev-reg-submit-btn:hover { background: #004080; }
+        .ev-reg-success {
+            text-align: center;
+            padding: 1.5rem 0 .5rem;
+        }
+        .ev-reg-success .ev-success-icon {
+            font-size: 3rem;
+            margin-bottom: .75rem;
+        }
+        .ev-reg-success h4 {
+            font-size: 1.1rem;
+            color: #002b5c;
+            margin: 0 0 .5rem;
+        }
+        .ev-reg-success p {
+            font-size: .9rem;
+            color: #555;
+            margin: 0;
+        }
+
+        /* ── Empty state ── */
+        .ev-empty {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #888;
+            display: none;
+        }
+        .ev-empty.is-visible { display: block; }
+        .ev-empty .ev-empty-icon { font-size: 3rem; margin-bottom: 1rem; }
+
+        /* ── Test badge ── */
+        .ev-test-banner {
+            background: linear-gradient(90deg, #f9d611, #ffc107);
+            color: #002b5c;
+            text-align: center;
+            padding: .6rem 1rem;
+            font-size: .8rem;
+            font-weight: 700;
+            letter-spacing: .04em;
+        }
+
+        @media (max-width: 600px) {
+            .events-grid { padding: 1.5rem 1rem; gap: 1rem; }
+            .ev-reg-form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body class="training-page">
+    <div class="site-shell">
+
+        <header class="site-header compact-header">
+            <a class="brand" href="index.html">
+                <span class="brand-mark">75</span>
+                <span class="brand-copy">
+                    <strong>Mersch75 Handball Club</strong>
+                    <span>Zesumme Staark</span>
+                </span>
+            </a>
+            <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menü</button>
+            <nav class="site-nav" id="site-nav">
+                <a href="index.html">Startseite</a>
+                <a href="training.html">Training</a>
+                                <a href="join.html">Join Us</a>
+                                <a href="nextgen.html">NEXTGEN</a>
+                <a href="news.html">News</a>
+                <a href="inside.html">Inside</a>
+                <a href="gallery.html">Galerie</a>
+                <a href="memories.html">Memories</a>
+                <a href="links.html">Useful Links</a>
+                <a href="hallenkarte.html">Hallenkarte</a>
+                <a href="community.html">Community</a>
+                <a class="is-active" href="events.html">Events</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+        </header>
+
+        <div class="ev-test-banner">
+            🔒 TESTVERSION — Diese Seite ist passwortgeschützt und noch nicht öffentlich.
+        </div>
+
+        <main class="page-main">
+
+            <section class="events-hero">
+                <div class="events-hero-badge">Mersch75 · Saison 2025/26</div>
+                <h1>Events &amp; Veranstaltungen</h1>
+                <p>Turniere, Feste, Versammlungen – alles auf einen Blick</p>
+            </section>
+
+            <div class="events-filter-bar" role="group" aria-label="Events filtern">
+                <button class="ev-filter-btn is-active" data-filter="all">Alle</button>
+                <button class="ev-filter-btn" data-filter="sport">⚽ Sport</button>
+                <button class="ev-filter-btn" data-filter="social">🎉 Feier</button>
+                <button class="ev-filter-btn" data-filter="meeting">📋 Versammlung</button>
+                <button class="ev-filter-btn" data-filter="youth">👶 Jugend</button>
+            </div>
+
+            <div class="events-grid" id="events-grid">
+
+                <!-- Event 1 -->
+                <article class="ev-card" data-category="social">
+                    <div class="ev-card-banner color-yellow"></div>
+                    <div class="ev-card-body">
+                        <div class="ev-card-meta">
+                            <div class="ev-date-block">
+                                <span class="ev-day">12</span>
+                                <span class="ev-month">Jul</span>
+                            </div>
+                            <h2 class="ev-card-title">Barbecue de Fin de Saison 🔥</h2>
+                        </div>
+                        <div class="ev-tag-row">
+                            <span class="ev-tag tag-social">Feier</span>
+                            <span class="ev-tag tag-members">Nur Mitglieder</span>
+                        </div>
+                        <ul class="ev-card-details">
+                            <li><span class="icon">🕕</span> Samstag, 12. Juli 2026 · 17:00 Uhr</li>
+                            <li><span class="icon">📍</span> Hall Omnisports, Mersch</li>
+                            <li><span class="icon">👥</span> Max. 80 Personen</li>
+                        </ul>
+                        <p class="ev-card-desc">Der traditionelle Saisonabschluss! Grillabend mit dem gesamten Club – Spieler, Trainer, Familie. Getränke inklusive.</p>
+                        <div class="ev-spots-bar">
+                            <div class="ev-spots-label">
+                                <span>Anmeldungen</span>
+                                <span id="bbq-spots-label">34 / 80 Plätze</span>
+                            </div>
+                            <div class="ev-spots-track">
+                                <div class="ev-spots-fill" style="width:42.5%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ev-card-footer">
+                        <div class="ev-price">15,00 € <span>/ Person</span></div>
+                        <button class="ev-register-btn" data-event="bbq" data-event-name="Barbecue de Fin de Saison (12. Juli)" data-event-price="15,00 €">
+                            ✍️ Anmelden
+                        </button>
+                    </div>
+                </article>
+
+                <!-- Event 2 -->
+                <article class="ev-card" data-category="meeting">
+                    <div class="ev-card-banner color-blue"></div>
+                    <div class="ev-card-body">
+                        <div class="ev-card-meta">
+                            <div class="ev-date-block">
+                                <span class="ev-day">25</span>
+                                <span class="ev-month">Jun</span>
+                            </div>
+                            <h2 class="ev-card-title">Assemblée Générale 2026 📋</h2>
+                        </div>
+                        <div class="ev-tag-row">
+                            <span class="ev-tag tag-meeting">Versammlung</span>
+                            <span class="ev-tag tag-members">Nur Mitglieder</span>
+                        </div>
+                        <ul class="ev-card-details">
+                            <li><span class="icon">🕗</span> Mittwoch, 25. Juni 2026 · 19:30 Uhr</li>
+                            <li><span class="icon">📍</span> Clubraum Mersch75</li>
+                            <li><span class="icon">👥</span> Unbegrenzt</li>
+                        </ul>
+                        <p class="ev-card-desc">Jahreshauptversammlung: Jahresbericht, Finanzen, Vorstandswahlen und Planung der Saison 2026/27.</p>
+                    </div>
+                    <div class="ev-card-footer">
+                        <div class="ev-price">Gratis <span>/ Eintritt frei</span></div>
+                        <button class="ev-register-btn" data-event="ag2026" data-event-name="Assemblée Générale 2026 (25. Juni)" data-event-price="Gratis">
+                            ✍️ Anmelden
+                        </button>
+                    </div>
+                </article>
+
+                <!-- Event 3 -->
+                <article class="ev-card" data-category="sport">
+                    <div class="ev-card-banner color-green"></div>
+                    <div class="ev-card-body">
+                        <div class="ev-card-meta">
+                            <div class="ev-date-block">
+                                <span class="ev-day">06</span>
+                                <span class="ev-month">Sep</span>
+                            </div>
+                            <h2 class="ev-card-title">Tournoi de Rentrée 🏆</h2>
+                        </div>
+                        <div class="ev-tag-row">
+                            <span class="ev-tag tag-sport">Sport</span>
+                            <span class="ev-tag tag-open">Offen</span>
+                        </div>
+                        <ul class="ev-card-details">
+                            <li><span class="icon">🕙</span> Samstag, 6. September 2026 · 10:00 Uhr</li>
+                            <li><span class="icon">📍</span> Hall Omnisports, Mersch</li>
+                            <li><span class="icon">👥</span> Max. 12 Teams</li>
+                        </ul>
+                        <p class="ev-card-desc">Das traditionelle Saisonauftakt-Turnier. Alle Altersklassen. Anmeldung per Team (min. 8 Spieler).</p>
+                        <div class="ev-spots-bar">
+                            <div class="ev-spots-label">
+                                <span>Teams angemeldet</span>
+                                <span>5 / 12 Teams</span>
+                            </div>
+                            <div class="ev-spots-track">
+                                <div class="ev-spots-fill" style="width:41.6%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ev-card-footer">
+                        <div class="ev-price">30,00 € <span>/ Team</span></div>
+                        <button class="ev-register-btn" data-event="tournoi" data-event-name="Tournoi de Rentrée (6. Sept.)" data-event-price="30,00 € / Team">
+                            ✍️ Anmelden
+                        </button>
+                    </div>
+                </article>
+
+                <!-- Event 4 -->
+                <article class="ev-card" data-category="youth">
+                    <div class="ev-card-banner color-red"></div>
+                    <div class="ev-card-body">
+                        <div class="ev-card-meta">
+                            <div class="ev-date-block">
+                                <span class="ev-day">19</span>
+                                <span class="ev-month">Jul</span>
+                            </div>
+                            <h2 class="ev-card-title">Jugend-Sommercamp ⛺</h2>
+                        </div>
+                        <div class="ev-tag-row">
+                            <span class="ev-tag tag-youth">Jugend</span>
+                            <span class="ev-tag tag-sport">Sport</span>
+                            <span class="ev-tag tag-members">Nur Mitglieder</span>
+                        </div>
+                        <ul class="ev-card-details">
+                            <li><span class="icon">📅</span> 19.–21. Juli 2026 (3 Tage)</li>
+                            <li><span class="icon">📍</span> Jugendherberge Echternach</li>
+                            <li><span class="icon">👥</span> Max. 30 Kinder (U9–U13)</li>
+                        </ul>
+                        <p class="ev-card-desc">Training, Spiel und Spaß! Dreitägiges Sommercamp für unsere Jüngsten. Unterkunft und Verpflegung inklusive.</p>
+                        <div class="ev-spots-bar">
+                            <div class="ev-spots-label">
+                                <span>Anmeldungen</span>
+                                <span>27 / 30 Plätze</span>
+                            </div>
+                            <div class="ev-spots-track">
+                                <div class="ev-spots-fill" style="width:90%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ev-card-footer">
+                        <div class="ev-price">85,00 € <span>/ Kind</span></div>
+                        <button class="ev-register-btn" data-event="camp" data-event-name="Jugend-Sommercamp (19.–21. Juli)" data-event-price="85,00 € / Kind">
+                            ✍️ Anmelden
+                        </button>
+                    </div>
+                </article>
+
+            </div>
+
+            <div class="ev-empty" id="ev-empty">
+                <div class="ev-empty-icon">📅</div>
+                <p>Keine Events in dieser Kategorie gefunden.</p>
+            </div>
+
+        </main>
+
+        <!-- Registration Modal -->
+        <div class="ev-reg-modal-overlay" id="ev-reg-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="ev-reg-modal-title">
+            <div class="ev-reg-modal">
+                <button class="ev-reg-modal-close" id="ev-reg-close" type="button" aria-label="Schliessen">&times;</button>
+
+                <div id="ev-reg-form-view">
+                    <h3 id="ev-reg-modal-title">Event-Anmeldung</h3>
+                    <p class="ev-reg-event-name" id="ev-reg-event-name"></p>
+
+                    <form id="ev-reg-form" action="https://api.web3forms.com/submit" method="POST" novalidate>
+                        <input type="hidden" name="access_key" value="15e3cc53-6864-47dd-bfaf-332cb4ca45e5">
+                        <input type="hidden" name="subject" id="ev-reg-subject" value="Event-Anmeldung Mersch75">
+                        <input type="hidden" name="from_name" value="Mersch75 Events">
+                        <input type="hidden" id="ev-hidden-event" name="Event" value="">
+                        <input type="hidden" id="ev-hidden-price" name="Preis" value="">
+                        <div hidden aria-hidden="true">
+                            <input type="text" name="website" autocomplete="off" tabindex="-1">
+                        </div>
+
+                        <div class="ev-reg-form-row">
+                            <div class="ev-reg-form-group">
+                                <label for="ev-nom">NACHNAME *</label>
+                                <input type="text" id="ev-nom" name="Nachname" autocomplete="family-name" required>
+                            </div>
+                            <div class="ev-reg-form-group">
+                                <label for="ev-prenom">VORNAME *</label>
+                                <input type="text" id="ev-prenom" name="Vorname" autocomplete="given-name" required>
+                            </div>
+                        </div>
+
+                        <div class="ev-reg-form-group">
+                            <label for="ev-email">E-MAIL *</label>
+                            <input type="email" id="ev-email" name="Email" autocomplete="email" required>
+                        </div>
+
+                        <div class="ev-reg-form-group">
+                            <label for="ev-tel">TELEFON / GSM</label>
+                            <input type="tel" id="ev-tel" name="Telefon" autocomplete="tel">
+                        </div>
+
+                        <div class="ev-reg-form-group">
+                            <label for="ev-personen">ANZAHL PERSONEN *</label>
+                            <select id="ev-personen" name="Anzahl_Personen" required>
+                                <option value="1">1 Person</option>
+                                <option value="2">2 Personen</option>
+                                <option value="3">3 Personen</option>
+                                <option value="4">4 Personen</option>
+                                <option value="5+">5 oder mehr</option>
+                            </select>
+                        </div>
+
+                        <div class="ev-reg-form-group">
+                            <label for="ev-comment">BEMERKUNGEN / OPTIONEN</label>
+                            <textarea id="ev-comment" name="Bemerkungen" placeholder="z.B. Allergien, Diätwünsche, Teamname..."></textarea>
+                        </div>
+
+                        <button type="submit" class="ev-reg-submit-btn" id="ev-reg-submit">
+                            ✅ Anmeldung absenden
+                        </button>
+                    </form>
+                </div>
+
+                <div id="ev-reg-success-view" class="ev-reg-success" hidden>
+                    <div class="ev-success-icon">🎉</div>
+                    <h4>Anmeldung erfolgreich!</h4>
+                    <p>Du erhältst eine Bestätigung per E-Mail. Bis bald!</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="site-page-footer">
+            <div class="site-page-footer-shell">
+                <div class="site-page-footer-brand">
+                    <img src="Media/Logos FLH Eq/Logo-Mersch75-50-Joer-3D.png" alt="Mersch75 50 Joer">
+                    <div>
+                        <img class="site-page-footer-wordmark" src="Media/Logos%20FLH%20Eq/Logo%20Mersch75%20Schrift%20%20mat%20Ball%20And%20Handball%20Club%20Fusszeile.png" alt="Mersch75 Handball Club" loading="lazy">
+                        <div class="site-page-footer-social" aria-label="Social Media">
+                            <a href="https://www.facebook.com/mersch75" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5 3.66 9.15 8.44 9.94v-7.03H7.9v-2.91h2.54V9.84c0-2.52 1.49-3.91 3.78-3.91 1.09 0 2.24.2 2.24.2v2.47h-1.26c-1.24 0-1.63.78-1.63 1.57v1.89h2.77l-.44 2.91h-2.33V22c4.78-.79 8.44-4.94 8.44-9.94z"/></svg><span class="visually-hidden">Facebook</span></a>
+                            <a href="https://www.youtube.com/Netjogger58" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M23.5 6.2a3.02 3.02 0 0 0-2.13-2.14C19.46 3.5 12 3.5 12 3.5s-7.46 0-9.37.56A3.02 3.02 0 0 0 .5 6.2C0 8.12 0 12 0 12s0 3.88.5 5.8a3.02 3.02 0 0 0 2.13 2.14c1.91.56 9.37.56 9.37.56s7.46 0 9.37-.56a3.02 3.02 0 0 0 2.13-2.14C24 15.88 24 12 24 12s0-3.88-.5-5.8zM9.6 15.57V8.43L15.82 12 9.6 15.57z"/></svg><span class="visually-hidden">YouTube</span></a>
+                            <a href="https://www.instagram.com/hbmersch75/" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2.2c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.42.56.22.96.48 1.38.9.42.42.68.82.9 1.38.17.42.37 1.06.42 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.42 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.17-1.06.37-2.23.42-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.42a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.17-.42-.37-1.06-.42-2.23C2.21 15.58 2.2 15.2 2.2 12s.01-3.58.07-4.85c.05-1.17.25-1.8.42-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.17 1.06-.37 2.23-.42C8.42 2.21 8.8 2.2 12 2.2zm0 2.16c-3.15 0-3.5.01-4.74.07-1.07.05-1.65.23-2.04.38-.51.2-.88.44-1.27.83-.39.39-.63.76-.83 1.27-.15.39-.33.97-.38 2.04-.06 1.24-.07 1.59-.07 4.74s.01 3.5.07 4.74c.05 1.07.23 1.65.38 2.04.2.51.44.88.83 1.27.39.39.76.63 1.27.83.39.15.97.33 2.04.38 1.24.06 1.59.07 4.74.07s3.5-.01 4.74-.07c1.07-.05 1.65-.23 2.04-.38.51-.2.88-.44 1.27-.83.39-.39.63-.76.83-1.27.15-.39.33-.97.38-2.04.06-1.24.07-1.59.07-4.74s-.01-3.5-.07-4.74c-.05-1.07-.23-1.65-.38-2.04a3.42 3.42 0 0 0-.83-1.27 3.42 3.42 0 0 0-1.27-.83c-.39-.15-.97-.33-2.04-.38C15.5 4.37 15.15 4.36 12 4.36zm0 3.68a3.96 3.96 0 1 1 0 7.92 3.96 3.96 0 0 1 0-7.92zm0 6.53a2.57 2.57 0 1 0 0-5.14 2.57 2.57 0 0 0 0 5.14zm5.04-6.69a.93.93 0 1 1-1.86 0 .93.93 0 0 1 1.86 0z"/></svg><span class="visually-hidden">Instagram</span></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="site-page-footer-cols">
+                    <div class="site-page-footer-col">
+                        <h4>Sport</h4>
+                        <div class="site-page-footer-links">
+                            <a href="index.html">Startseite</a>
+                            <a href="live-center.html">Spillplang</a>
+                            <a href="training.html">Training</a>
+                            <a href="trainerstaff.html">Trainerstaff</a>
+                            <a href="news.html">News</a>
+                        </div>
+                    </div>
+                    <div class="site-page-footer-col">
+                        <h4>Veräin</h4>
+                        <div class="site-page-footer-links">
+                            <a href="gallery.html">Galerie</a>
+                            <a href="memories.html">Memories</a>
+                            <a href="links.html">Useful Links</a>
+                            <a href="comite.html">Comité</a>
+                            <a href="historie.html">Historie</a>
+                                <a href="join.html">Join Us</a>
+                                <a href="nextgen.html">NEXTGEN</a>
+                            </div>
+                        </div>
+                        <div class="site-page-footer-col">
+                            <h4>Service</h4>
+                            <div class="site-page-footer-links">
+                                <a href="contact.html">Contact</a>
+                                <a href="impressum.html">Impressum</a>
+                                <a href="terms.html">Terms &amp; Conditions</a>
+                                <a href="dataprotection.html">Data Protection</a>
+                            </div>
+                        </div>
+                        <div class="site-page-footer-col">
+                        <h4>Kontakt</h4>
+                        <div class="site-page-footer-links">
+                            <a href="mailto:info@mersch75.lu">info@mersch75.lu</a>
+                            <a href="tel:+35228800399">Tél. : 288 00 399</a>
+                            <span>21, rue des Prés · L-7561 Mersch</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="site-page-footer-bottom">
+                    <span class="site-page-footer-legal">RCS: F2345 · BCEELULL: LU730019220008607000</span>
+                    <span>&#169; <span id="current-year"></span> Mersch75 Handball</span>
+                    <a class="admin-link" href="generator.html">Admin Login</a>
+                </div>
+            </div>
+        </footer>
+
+    </main>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+    (function () {
+        /* ── Year ── */
+        var yr = document.getElementById('current-year');
+        if (yr) yr.textContent = new Date().getFullYear();
+
+        /* ── Category filter ── */
+        var filterBtns = document.querySelectorAll('.ev-filter-btn');
+        var cards      = document.querySelectorAll('.ev-card');
+        var empty      = document.getElementById('ev-empty');
+
+        filterBtns.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                filterBtns.forEach(function (b) { b.classList.remove('is-active'); });
+                btn.classList.add('is-active');
+                var cat = btn.dataset.filter;
+                var visible = 0;
+                cards.forEach(function (card) {
+                    var match = cat === 'all' || card.dataset.category === cat;
+                    card.style.display = match ? '' : 'none';
+                    if (match) visible++;
+                });
+                if (empty) empty.classList.toggle('is-visible', visible === 0);
+            });
+        });
+
+        /* ── Registration modal ── */
+        var overlay   = document.getElementById('ev-reg-overlay');
+        var closeBtn  = document.getElementById('ev-reg-close');
+        var formView  = document.getElementById('ev-reg-form-view');
+        var successView = document.getElementById('ev-reg-success-view');
+        var form      = document.getElementById('ev-reg-form');
+        var eventNameEl = document.getElementById('ev-reg-event-name');
+        var hiddenEvent = document.getElementById('ev-hidden-event');
+        var hiddenPrice = document.getElementById('ev-hidden-price');
+        var subjectField = document.getElementById('ev-reg-subject');
+
+        document.querySelectorAll('.ev-register-btn').forEach(function (btn) {
+            if (btn.classList.contains('is-full')) return;
+            btn.addEventListener('click', function () {
+                var name  = btn.dataset.eventName  || '';
+                var price = btn.dataset.eventPrice || '';
+                eventNameEl.textContent    = name;
+                hiddenEvent.value          = name;
+                hiddenPrice.value          = price;
+                subjectField.value         = 'Event-Anmeldung: ' + name;
+                formView.hidden            = false;
+                successView.hidden         = true;
+                overlay.hidden             = false;
+                var first = form.querySelector('input:not([type=hidden])');
+                if (first) setTimeout(function () { first.focus(); }, 30);
+            });
+        });
+
+        function closeOverlay() { overlay.hidden = true; }
+        closeBtn.addEventListener('click', closeOverlay);
+        overlay.addEventListener('click', function (ev) { if (ev.target === overlay) closeOverlay(); });
+        document.addEventListener('keydown', function (ev) { if (!overlay.hidden && ev.key === 'Escape') closeOverlay(); });
+
+        /* ── Form submit via Web3Forms ── */
+        form.addEventListener('submit', function (ev) {
+            ev.preventDefault();
+            var submitBtn = document.getElementById('ev-reg-submit');
+            submitBtn.disabled = true;
+            submitBtn.textContent = '⏳ Wird gesendet...';
+
+            var data = new FormData(form);
+            fetch('https://api.web3forms.com/submit', { method: 'POST', body: data })
+                .then(function (res) { return res.json(); })
+                .then(function (json) {
+                    if (json.success) {
+                        formView.hidden    = true;
+                        successView.hidden = false;
+                        form.reset();
+                        setTimeout(closeOverlay, 3500);
+                    } else {
+                        alert('Fehler beim Senden. Bitte versuche es erneut.');
+                        submitBtn.disabled    = false;
+                        submitBtn.textContent = '✅ Anmeldung absenden';
+                    }
+                })
+                .catch(function () {
+                    alert('Verbindungsfehler. Bitte versuche es erneut.');
+                    submitBtn.disabled    = false;
+                    submitBtn.textContent = '✅ Anmeldung absenden';
+                });
+        });
+    })();
+    </script>
+</body>
+</html>
