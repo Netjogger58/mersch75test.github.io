@@ -178,20 +178,12 @@
                                             <option value="10">10 Persounen</option>
                                         </select>
                                     </div>
-                                    <p class="join-helper-text">Haaptlizenzéierten ass déi Persoun hei am Formulaire. Déi zousätzlech Persoune musse Familljememberen op där selwechter Adress sinn. Elteren/Erzéiungsberechtegten oder weider Spiller kënnen hei fir QR/Lizenz-Virbereedung agedroe ginn.</p>
+                                    <p class="join-helper-text">Haaptlizenzéierten ass déi Persoun hei am Formulaire. Déi zousätzlech Persoune musse Familljememberen op där selwechter Adress sinn. Elteren/Erzéiungsberechtegten oder weider Spiller kënnen hei fir d'Lizenz-Virbereedung agedroe ginn.</p>
                                     <div id="family-members-fields" class="join-family-members-fields"></div>
                                     <input type="hidden" id="FamilySummary" name="FamilySummary" value="">
                                     <div class="join-family-card-preview" id="family-card-preview" aria-live="polite">
-                                        <h3>Verso Card QR Preview</h3>
-                                        <div class="join-family-card-verso">
-                                            <img src="assets/shared/media/M75_Memberskaart.png" alt="Memberskaart verso QR Preview">
-                                            <div class="join-family-card-overlay">
-                                                <strong>FAMILL MEMBERSKAART</strong>
-                                                <small id="family-card-id" class="join-family-card-id"></small>
-                                                <div id="family-card-lines" class="join-family-card-lines"></div>
-                                                <div id="family-qr-code" class="join-family-qr-code"></div>
-                                            </div>
-                                        </div>
+                                        <h3>Memberskaarten</h3>
+                                        <p class="join-helper-text">D'Memberskaart mam QR-Code gëtt intern am Secretariat virbereet an eréischt no Bezuelung vum Membersbeitrag un den Antragsteller geschéckt.</p>
                                     </div>
                                 </div>
                             </div>
@@ -405,19 +397,19 @@
     const MERSCH75_LICENSE_PASSWORD = 'FIhNvLi26';
     const MERSCH75_UI_TEXTS = {
         lu: {
-            nom: 'Numm *', prenom: 'Virnumm *', dob: 'Gebuertsdatum *', mineur: 'Mannerjäreg', cat: 'FLH Kategorie', role: 'Roll / Funktioun *', parent: 'Elengerzéiend *', tuteur1: 'Erzéiungsberechtegten 1 *', tuteur2: 'Erzéiungsberechtegten 2 *', nat: 'Nationalitéit *', cns: 'Matricule CNS *', medico: 'Medico *', licence: 'Lizenz *', club: 'Ale Veräin *', u7: 'U7 medezineschen Zertifikat obligatoresch', strasse: 'Strooss *', postcode: 'Postcode *', ortschaft: 'Uertschaft *', email: 'E-Mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Schécken', sending: 'Gëtt geschéckt...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Deng Umeldung gouf erfollegräich iwwermëttelt.', successNote: 'Du kriss eng Bestätegung per E-Mail.', oui: 'JO', non: 'NEE', joueur: 'Spiller / Spillerin', officiel: 'Offiziell Persoun', arbitre: 'Arbitter', parent_non: 'NEE (2 Erzéiungsberechtegter)', parent_oui: 'JO (1 Erzéiungsberechtegten)', legalRequired: 'Liest an akzeptéiert w.e.g. déi allgemeng Bedéngungen an den Dateschutz.', flhRequired: 'Bestätegt w.e.g. d\'Iwwermëttlung un flh.lu fir d\'Lizenz.', accuracyRequired: 'Bestätegt w.e.g. d\'Richtegkeet vun den Donnéeën.'
+            nom: 'Numm *', prenom: 'Virnumm *', dob: 'Gebuertsdatum *', mineur: 'Mannerjäreg', cat: 'FLH Kategorie', role: 'Roll / Funktioun *', parent: 'Elengerzéiend *', tuteur1: 'Erzéiungsberechtegten 1 *', tuteur2: 'Erzéiungsberechtegten 2 *', nat: 'Nationalitéit *', cns: 'Matricule CNS *', medico: 'Medico *', licence: 'Lizenz *', club: 'Ale Veräin *', u7: 'U7 medezineschen Zertifikat obligatoresch', strasse: 'Strooss *', postcode: 'Postcode *', ortschaft: 'Uertschaft *', email: 'E-Mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Schécken', sending: 'Gëtt geschéckt...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Deng Umeldung gouf erfollegräich iwwermëttelt.', successNote: 'Du kriss eng Bestätegung per E-Mail. D\'Memberskaart gëtt no Bezuelung vum Membersbeitrag nogeschéckt.', oui: 'JO', non: 'NEE', joueur: 'Spiller / Spillerin', officiel: 'Offiziell Persoun', arbitre: 'Arbitter', parent_non: 'NEE (2 Erzéiungsberechtegter)', parent_oui: 'JO (1 Erzéiungsberechtegten)', legalRequired: 'Liest an akzeptéiert w.e.g. déi allgemeng Bedéngungen an den Dateschutz.', flhRequired: 'Bestätegt w.e.g. d\'Iwwermëttlung un flh.lu fir d\'Lizenz.', accuracyRequired: 'Bestätegt w.e.g. d\'Richtegkeet vun den Donnéeën.'
         },
         fr: {
-            nom: 'Nom *', prenom: 'Prénom *', dob: 'Date de naissance *', mineur: 'Mineur', cat: 'Catégorie FLH', role: 'Rôle / Fonction *', parent: 'Parent isolé *', tuteur1: 'Tuteur 1 *', tuteur2: 'Tuteur 2 *', nat: 'Nationalité *', cns: 'Matricule CNS *', medico: 'Médico *', licence: 'Licence *', club: 'Ancien club *', u7: 'U7 certificat médical obligatoire', strasse: 'Rue *', postcode: 'Code postal *', ortschaft: 'Localité *', email: 'E-mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Envoyer', sending: 'Envoi...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Inscription envoyée.', successNote: 'Vous recevrez une confirmation par e-mail.', oui: 'OUI', non: 'NON', joueur: 'Joueur / Joueuse', officiel: 'Officiel(le)', arbitre: 'Arbitre', parent_non: 'NON (2 tuteurs)', parent_oui: 'OUI (1 tuteur)', legalRequired: 'Veuillez lire et accepter les conditions générales et la protection des données.', flhRequired: 'Veuillez confirmer la transmission à flh.lu pour la licence.', accuracyRequired: 'Veuillez confirmer l\'exactitude des données.'
+            nom: 'Nom *', prenom: 'Prénom *', dob: 'Date de naissance *', mineur: 'Mineur', cat: 'Catégorie FLH', role: 'Rôle / Fonction *', parent: 'Parent isolé *', tuteur1: 'Tuteur 1 *', tuteur2: 'Tuteur 2 *', nat: 'Nationalité *', cns: 'Matricule CNS *', medico: 'Médico *', licence: 'Licence *', club: 'Ancien club *', u7: 'U7 certificat médical obligatoire', strasse: 'Rue *', postcode: 'Code postal *', ortschaft: 'Localité *', email: 'E-mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Envoyer', sending: 'Envoi...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Inscription envoyée.', successNote: 'Vous recevrez une confirmation par e-mail. La carte membre sera envoyée après paiement de la cotisation.', oui: 'OUI', non: 'NON', joueur: 'Joueur / Joueuse', officiel: 'Officiel(le)', arbitre: 'Arbitre', parent_non: 'NON (2 tuteurs)', parent_oui: 'OUI (1 tuteur)', legalRequired: 'Veuillez lire et accepter les conditions générales et la protection des données.', flhRequired: 'Veuillez confirmer la transmission à flh.lu pour la licence.', accuracyRequired: 'Veuillez confirmer l\'exactitude des données.'
         },
         de: {
-            nom: 'Name *', prenom: 'Vorname *', dob: 'Geburtsdatum *', mineur: 'Minderjährig', cat: 'FLH Kategorie', role: 'Rolle / Funktion *', parent: 'Alleinerziehend *', tuteur1: 'Erziehungsberechtigter 1 *', tuteur2: 'Erziehungsberechtigter 2 *', nat: 'Nationalität *', cns: 'CNS-Matrikelnummer *', medico: 'Medico *', licence: 'Lizenz *', club: 'Ehemaliger Verein *', u7: 'U7 ärztliches Attest obligatorisch', strasse: 'Straße *', postcode: 'Postleitzahl *', ortschaft: 'Ortschaft *', email: 'E-Mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Senden', sending: 'Senden...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Anmeldung gesendet.', successNote: 'Du erhältst eine Bestätigung per E-Mail.', oui: 'JA', non: 'NEIN', joueur: 'Spieler / Spielerin', officiel: 'Offizielle Person', arbitre: 'Schiedsrichter', parent_non: 'NEIN (2 Erziehungsberechtigte)', parent_oui: 'JA (1 Erziehungsberechtigter)', legalRequired: 'Bitte die allgemeinen Bedingungen und den Datenschutz lesen und akzeptieren.', flhRequired: 'Bitte die Übermittlung an flh.lu für die Lizenz bestätigen.', accuracyRequired: 'Bitte die Richtigkeit der Angaben bestätigen.'
+            nom: 'Name *', prenom: 'Vorname *', dob: 'Geburtsdatum *', mineur: 'Minderjährig', cat: 'FLH Kategorie', role: 'Rolle / Funktion *', parent: 'Alleinerziehend *', tuteur1: 'Erziehungsberechtigter 1 *', tuteur2: 'Erziehungsberechtigter 2 *', nat: 'Nationalität *', cns: 'CNS-Matrikelnummer *', medico: 'Medico *', licence: 'Lizenz *', club: 'Ehemaliger Verein *', u7: 'U7 ärztliches Attest obligatorisch', strasse: 'Straße *', postcode: 'Postleitzahl *', ortschaft: 'Ortschaft *', email: 'E-Mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Senden', sending: 'Senden...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Anmeldung gesendet.', successNote: 'Du erhältst eine Bestätigung per E-Mail. Die Mitgliederkarte wird nach Zahlung des Mitgliedsbeitrags zugeschickt.', oui: 'JA', non: 'NEIN', joueur: 'Spieler / Spielerin', officiel: 'Offizielle Person', arbitre: 'Schiedsrichter', parent_non: 'NEIN (2 Erziehungsberechtigte)', parent_oui: 'JA (1 Erziehungsberechtigter)', legalRequired: 'Bitte die allgemeinen Bedingungen und den Datenschutz lesen und akzeptieren.', flhRequired: 'Bitte die Übermittlung an flh.lu für die Lizenz bestätigen.', accuracyRequired: 'Bitte die Richtigkeit der Angaben bestätigen.'
         },
         en: {
-            nom: 'Last name *', prenom: 'First name *', dob: 'Date of birth *', mineur: 'Minor', cat: 'FLH category', role: 'Role / Function *', parent: 'Single parent *', tuteur1: 'Guardian 1 *', tuteur2: 'Guardian 2 *', nat: 'Nationality *', cns: 'CNS number *', medico: 'Medical check *', licence: 'Licence *', club: 'Former club *', u7: 'U7 medical certificate required', strasse: 'Street *', postcode: 'Postcode *', ortschaft: 'City *', email: 'Email *', gsm1: 'Mobile 1 *', gsm2: 'Mobile 2', send: 'Submit', sending: 'Sending...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Registration sent.', successNote: 'You will receive a confirmation by email.', oui: 'YES', non: 'NO', joueur: 'Player', officiel: 'Official', arbitre: 'Referee', parent_non: 'NO (2 guardians)', parent_oui: 'YES (1 guardian)', legalRequired: 'Please read and accept the terms and conditions and data protection.', flhRequired: 'Please confirm the transfer to flh.lu for the licence.', accuracyRequired: 'Please confirm the accuracy of the data.'
+            nom: 'Last name *', prenom: 'First name *', dob: 'Date of birth *', mineur: 'Minor', cat: 'FLH category', role: 'Role / Function *', parent: 'Single parent *', tuteur1: 'Guardian 1 *', tuteur2: 'Guardian 2 *', nat: 'Nationality *', cns: 'CNS number *', medico: 'Medical check *', licence: 'Licence *', club: 'Former club *', u7: 'U7 medical certificate required', strasse: 'Street *', postcode: 'Postcode *', ortschaft: 'City *', email: 'Email *', gsm1: 'Mobile 1 *', gsm2: 'Mobile 2', send: 'Submit', sending: 'Sending...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Registration sent.', successNote: 'You will receive a confirmation by email. The membership card will be sent after the membership fee has been paid.', oui: 'YES', non: 'NO', joueur: 'Player', officiel: 'Official', arbitre: 'Referee', parent_non: 'NO (2 guardians)', parent_oui: 'YES (1 guardian)', legalRequired: 'Please read and accept the terms and conditions and data protection.', flhRequired: 'Please confirm the transfer to flh.lu for the licence.', accuracyRequired: 'Please confirm the accuracy of the data.'
         },
         pt: {
-            nom: 'Apelido *', prenom: 'Nome próprio *', dob: 'Data de nascimento *', mineur: 'Menor', cat: 'Categoria FLH', role: 'Função *', parent: 'Encarregado isolado *', tuteur1: 'Encarregado 1 *', tuteur2: 'Encarregado 2 *', nat: 'Nacionalidade *', cns: 'Número CNS *', medico: 'Exame médico *', licence: 'Licença *', club: 'Clube anterior *', u7: 'U7 certificado médico obrigatório', strasse: 'Rua *', postcode: 'Código postal *', ortschaft: 'Localidade *', email: 'E-mail *', gsm1: 'Telemóvel 1 *', gsm2: 'Telemóvel 2', send: 'Enviar', sending: 'A enviar...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Inscrição enviada.', successNote: 'Receberá uma confirmação por e-mail.', oui: 'SIM', non: 'NÃO', joueur: 'Jogador / Jogadora', officiel: 'Oficial', arbitre: 'Árbitro', parent_non: 'NÃO (2 encarregados)', parent_oui: 'SIM (1 encarregado)', legalRequired: 'Por favor, leia e aceite os termos e condições e a proteção de dados.', flhRequired: 'Por favor, confirme o envio para flh.lu para a licença.', accuracyRequired: 'Por favor, confirme a exatidão dos dados.'
+            nom: 'Apelido *', prenom: 'Nome próprio *', dob: 'Data de nascimento *', mineur: 'Menor', cat: 'Categoria FLH', role: 'Função *', parent: 'Encarregado isolado *', tuteur1: 'Encarregado 1 *', tuteur2: 'Encarregado 2 *', nat: 'Nacionalidade *', cns: 'Número CNS *', medico: 'Exame médico *', licence: 'Licença *', club: 'Clube anterior *', u7: 'U7 certificado médico obrigatório', strasse: 'Rua *', postcode: 'Código postal *', ortschaft: 'Localidade *', email: 'E-mail *', gsm1: 'Telemóvel 1 *', gsm2: 'Telemóvel 2', send: 'Enviar', sending: 'A enviar...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Inscrição enviada.', successNote: 'Receberá uma confirmação por e-mail. O cartão de membro será enviado após o pagamento da quota.', oui: 'SIM', non: 'NÃO', joueur: 'Jogador / Jogadora', officiel: 'Oficial', arbitre: 'Árbitro', parent_non: 'NÃO (2 encarregados)', parent_oui: 'SIM (1 encarregado)', legalRequired: 'Por favor, leia e aceite os termos e condições e a proteção de dados.', flhRequired: 'Por favor, confirme o envio para flh.lu para a licença.', accuracyRequired: 'Por favor, confirme a exatidão dos dados.'
         }
     };
     const MERSCH75_LEGAL_TEXTS = {
@@ -441,6 +433,7 @@
     let currentLang = 'lu';
     let currentAge = null;
     let currentCotisationAge = null;
+    const familyMemberCardIds = {};
     const flhCategoryRules = {
         male: [
             { category: 'Veterans', maxYear: 1990 },
@@ -490,6 +483,14 @@
         }
 
         return input.value;
+    }
+
+    function ensureFamilyMemberCardId(index) {
+        if (!familyMemberCardIds[index]) {
+            familyMemberCardIds[index] = generateCardInternalId();
+        }
+
+        return familyMemberCardIds[index];
     }
 
     function suggestTarif() {
@@ -629,30 +630,111 @@
         return members;
     }
 
-    function buildFamilySummary() {
+    function buildFamilyRegistrationSummary() {
         if (getCheckedValue('FamilleFlag') !== 'Oui') {
             return '';
         }
 
         const lines = [];
-        const address = [getValue('Strasse'), getValue('Postcode'), getValue('Ortschaft')].filter(Boolean).join(', ');
-        lines.push('FAMILL MEMBERSKAART 2025-2026');
-        lines.push('Card-ID: ' + ensureCardInternalId());
+        lines.push('FAMILL MEMBERSKAART / UMELDUNG');
         lines.push('Total Persounen: ' + getFamilyMemberCount());
         lines.push('Haaptlizenséierten: ' + (getFullName() || '-'));
         lines.push('Gebuertsdatum: ' + (getValue('DateNaissance') || '-'));
         lines.push('CNS: ' + (getValue('CNS') || '-'));
         lines.push('Roll: ' + getValue('Role'));
         lines.push('Lizenz: ' + getValue('Licence'));
-        lines.push('Adress: ' + (address || '-'));
-
-        if (document.getElementById('Mineur').value === 'OUI') {
-            lines.push('Elteren/Erzéiungsberechtegten: ' + getGuardianText());
-        }
 
         getFamilyMembers().forEach(function(member, index) {
             const memberLine = 'Persoun ' + (index + 2) + ': ' + (member.name || '-') + ' | ' + (member.relation || '-') + ' | Lizenz: ' + (member.license || 'Nee');
             lines.push(memberLine + (member.dob ? ' | Geb.: ' + member.dob : '') + (member.cns ? ' | CNS: ' + member.cns : ''));
+        });
+
+        return lines.join('\n');
+    }
+
+    function buildMemberCardRecords() {
+        const address = [getValue('Strasse'), getValue('Postcode'), getValue('Ortschaft')].filter(Boolean).join(', ');
+        const records = [{
+            number: 1,
+            cardId: ensureCardInternalId(),
+            name: getFullName() || '-',
+            relation: 'Haaptlizenséierten',
+            dob: getValue('DateNaissance') || '-',
+            cns: getValue('CNS') || '-',
+            role: getValue('Role'),
+            license: getValue('Licence'),
+            address: address || '-'
+        }];
+
+        if (getCheckedValue('FamilleFlag') === 'Oui') {
+            getFamilyMembers().forEach(function(member, index) {
+                records.push({
+                    number: index + 2,
+                    cardId: ensureFamilyMemberCardId(index + 2),
+                    name: member.name || '-',
+                    relation: member.relation || '-',
+                    dob: member.dob || '-',
+                    cns: member.cns || '-',
+                    role: member.relation || '-',
+                    license: member.license || 'Nee',
+                    address: address || '-'
+                });
+            });
+        }
+
+        return records;
+    }
+
+    function buildMemberCardPayload(record) {
+        return [
+            'MEMBERSKAART MERSCH75 2025-2026',
+            'Card-ID: ' + record.cardId,
+            'Persoun: ' + record.number,
+            'Numm: ' + record.name,
+            'Roll/Relatioun: ' + record.relation,
+            'Gebuertsdatum: ' + record.dob,
+            'CNS: ' + record.cns,
+            'Lizenz: ' + record.license,
+            'Adress: ' + record.address
+        ].join('\n');
+    }
+
+    function buildMemberCardsForSecretariat() {
+        const records = buildMemberCardRecords();
+        const lines = [];
+        lines.push('MEMBERSKAARTEN / QR FIR SECRETARIAT');
+        lines.push('Ausstellen no Bezuelung vum Membersbeitrag. Net un den Antragsteller virun Bezuelung verschécken.');
+        lines.push('Unzuel Kaarten: ' + records.length);
+
+        records.forEach(function(record) {
+            lines.push('----------------------------------------');
+            lines.push('KAART ' + record.number + ' / ' + records.length);
+            lines.push('Card-ID: ' + record.cardId);
+            lines.push('Numm: ' + record.name);
+            lines.push('Roll/Relatioun: ' + record.relation);
+            lines.push('Gebuertsdatum: ' + record.dob);
+            lines.push('CNS: ' + record.cns);
+            lines.push('Lizenz: ' + record.license);
+            lines.push('QR-DATEN:');
+            buildMemberCardPayload(record).split('\n').forEach(function(line) {
+                lines.push(line);
+            });
+        });
+
+        return lines.join('\n');
+    }
+
+    function buildFamilySummary() {
+        if (getCheckedValue('FamilleFlag') !== 'Oui') {
+            return '';
+        }
+
+        const lines = [];
+        lines.push('FAMILL MEMBERSKAART 2025-2026');
+        lines.push('Total Persounen: ' + getFamilyMemberCount());
+
+        buildMemberCardRecords().forEach(function(record) {
+            lines.push('Persoun ' + record.number + ': ' + record.name + ' | Card-ID: ' + record.cardId + ' | ' + record.relation + ' | Lizenz: ' + record.license);
         });
 
         return lines.join('\n');
@@ -682,26 +764,8 @@
         updateFamilyLicenseRequirements();
         const summary = buildFamilySummary();
         const hidden = document.getElementById('FamilySummary');
-        const linesBox = document.getElementById('family-card-lines');
-        const qrBox = document.getElementById('family-qr-code');
-        const cardIdBox = document.getElementById('family-card-id');
 
-        cardIdBox.innerText = summary ? 'Card-ID: ' + ensureCardInternalId() : '';
         hidden.value = summary;
-        linesBox.innerHTML = summary ? summary.split('\n').map(function(line) { return '<span>' + escapeHtml(line) + '</span>'; }).join('') : '';
-        qrBox.innerHTML = '';
-
-        if (summary && typeof QRCode !== 'undefined') {
-            new QRCode(qrBox, {
-                text: summary,
-                width: 148,
-                height: 148,
-                typeNumber: 16,
-                colorDark: '#002f65',
-                colorLight: '#ffffff',
-                correctLevel: QRCode.CorrectLevel.L
-            });
-        }
     }
 
     function updateFamilySection(shouldRender) {
@@ -871,7 +935,7 @@
         updateConsentValidationMessages();
     }
 
-    function buildJoinMessage(includeLicenseLines, messageLanguage) {
+    function buildJoinMessage(includeLicenseLines, messageLanguage, includeMemberCards) {
         const lines = [];
         const isFrenchMessage = messageLanguage === 'fr';
         const text = isFrenchMessage ? {
@@ -890,18 +954,24 @@
         }
 
         lines.push('========================================');
-        lines.push('CARD-ID: ' + ensureCardInternalId());
         lines.push(text.applicant + ': ' + getFullName());
         lines.push(text.role + ': ' + getValue('Role'));
         lines.push('BASE CATEGORIE FLH: ' + getValue('FlhCategoryBasis'));
         lines.push(text.category + ': ' + getCategoryValue());
         lines.push('COTISATIOUN 2025-2026: ' + getValue('Cotisation') + (getCheckedValue('FamilleFlag') === 'Oui' ? ' (Famill 2+)' : ''));
 
-        const familySummary = buildFamilySummary();
+        const familyRegistrationSummary = buildFamilyRegistrationSummary();
 
-        if (familySummary) {
+        if (familyRegistrationSummary) {
             lines.push('----------------------------------------');
-            familySummary.split('\n').forEach(function(line) {
+            familyRegistrationSummary.split('\n').forEach(function(line) {
+                lines.push(line);
+            });
+        }
+
+        if (includeMemberCards) {
+            lines.push('----------------------------------------');
+            buildMemberCardsForSecretariat().split('\n').forEach(function(line) {
                 lines.push(line);
             });
         }
@@ -1171,7 +1241,7 @@
             await sendToWeb3Forms(createCleanWeb3FormsData(
                 MERSCH75_WEB3FORMS_MAIN_KEY,
                 'Nouvelle inscription Mersch 75',
-                buildJoinMessage(true, 'fr')
+                buildJoinMessage(true, 'fr', false)
             ));
 
             // Sicherheits-Pause zur Umgehung von Web3Forms Anti-Spam-Filtern
@@ -1181,7 +1251,7 @@
             await sendToWeb3Forms(createCleanWeb3FormsData(
                 MERSCH75_WEB3FORMS_MAX_KEY,
                 (isMinor ? 'MINDERJAEHRIG - ' : '') + 'Neue Anmeldung Mersch 75',
-                buildJoinMessage(false, 'de')
+                buildJoinMessage(false, 'de', true)
             ));
 
             form.style.display = 'none';
