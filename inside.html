@@ -329,11 +329,13 @@
                     </div>
 
                     <span class="comite-side-logo">
-                        <img src="assets/pages/inside/media/Inside/Logo-Menu-Mersch75-M75-CA-2025.png" alt="M75 Comité">
-                        <a class="statuten-side-badge" href="assets/pages/comite/media/Statuten%20Mersch75.pdf" target="_blank" rel="noopener" title="Statuten Mersch75 Handball Club (PDF)">
-                            <img src="assets/pages/comite/media/Icon%20Statuten/Logo-StatutenApplestyle.png" alt="Statuten (PDF)">
-                            <span>Statuten<br><small>PDF</small></span>
-                        </a>
+                        <span class="comite-side-logo-inner">
+                            <img src="assets/pages/inside/media/Inside/Logo-Menu-Mersch75-M75-CA-2025.png" alt="M75 Comité">
+                            <a class="statuten-side-badge" href="assets/pages/comite/media/Statuten%20Mersch75.pdf" target="_blank" rel="noopener" title="Statuten Mersch75 Handball Club (PDF)">
+                                <img src="assets/pages/comite/media/Icon%20Statuten/Logo-StatutenApplestyle.png" alt="Statuten (PDF)">
+                                <span>Statuten<br><small>PDF</small></span>
+                            </a>
+                        </span>
                     </span>
                     <div class="hierarchy-container">
                         <div class="level-box-container">
@@ -536,7 +538,7 @@
                     }
 
                     .header-logo-top {
-                        height: 120px;
+                        height: 220px;
                         width: auto;
                     }
 
@@ -546,7 +548,7 @@
 
                     .header-text h1 {
                         color: #002f65;
-                        font-size: 26px;
+                        font-size: 32px;
                         margin: 0;
                         text-transform: uppercase;
                     }
@@ -571,12 +573,16 @@
 
                     .comite-side-logo {
                         float: left;
-                        position: relative;
-                        margin: 0 28px 16px 0;
-                        display: inline-flex;
+                        width: 340px;
+                        margin: 0 24px 16px 0;
+                        text-align: center;
                     }
-                    .comite-side-logo > img {
-                        width: 150px;
+                    .comite-side-logo-inner {
+                        position: relative;
+                        display: inline-block;
+                    }
+                    .comite-side-logo-inner > img {
+                        width: 300px;
                         height: auto;
                         display: block;
                     }
@@ -595,11 +601,10 @@
                         line-height: 1.05;
                         text-decoration: none;
                     }
-                    .statuten-side-badge > img { width: 48px; height: 48px; object-fit: contain; display: block; }
+                    .statuten-side-badge > img { width: 60px; height: 60px; object-fit: contain; display: block; }
                     .statuten-side-badge small { display: block; font-size: 0.62rem; font-weight: 700; opacity: .7; letter-spacing: .08em; }
                     @media (max-width: 760px) {
-                        .comite-side-logo { float: none; display: block; margin: 0 auto 20px; text-align: center; }
-                        .comite-side-logo > img { margin: 0 auto; }
+                        .comite-side-logo { float: none; width: auto; margin: 0 auto 20px; }
                     }
 
                     .level-box-container {
@@ -910,7 +915,7 @@
                                 <a href="memories.html">Memories</a>
                                 <a href="links.html">Useful Links</a>
                                 <a href="hallenkarte.html">Hallenkarte</a>
-                                <a href="inside.html">Intern</a>
+                                <a href="inside.html">Inside</a>
                                 <a href="inside.html#history">Geschicht</a>
                                 <a href="join.html">Join Us</a>
                                 <a href="nextgen.html">NEXTGEN</a>
