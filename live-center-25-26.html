@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Live-Center | Mersch75 Handball</title>
-<meta name="description" content="Live-Center von Mersch75 mit Wochenübersicht, FLH-Ansichten, Archiv und allen Spielen der Mannschaften in einer Projektionsansicht.">
+<title>Spillplang 25/26 (Archiv) | Mersch75 Handball</title>
+<meta name="description" content="Archiv des Live-Centers der Saison 2025/2026: alle Spiele, Resultate und Termine der Mannschaften von Mersch75.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,600;0,700;0,800;0,900;1,600;1,700;1,800;1,900&family=Barlow:ital,wght@0,600;0,700;0,800;0,900;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
@@ -301,11 +301,16 @@
             <div class="lc-hero-row">
                 <img class="lc-hero-logo" src="assets/shared/media/Hauptseite/archive/Logo%20Menu%20Mersch75%20Matchkalenner%20Applestyle.png" alt="Mersch75 Matchkalenner 2025">
                 <div class="lc-hero-copy">
-                    <p class="eyebrow">Spillplang</p>
-                    <h1>Alle Spiele &amp; Termine</h1>
+                    <p class="eyebrow">Spillplang &middot; Archiv</p>
+                    <h1>Saison 2025/2026 &mdash; Alle Spiele &amp; Termine</h1>
                 </div>
             </div>
         </section>
+        <div style="max-width:1460px;margin:0 auto 8px;padding:12px 16px;background:linear-gradient(135deg,#616161 0%,#424242 100%);color:#fff;border-radius:12px;display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-size:0.9rem;">
+            <span style="font-weight:800;letter-spacing:0.04em;">ARCHIV 25/26</span>
+            <span style="opacity:0.92;">Dëst ass den archivéierte Spillplang vun der Saison 2025/2026.</span>
+            <a href="live-center.html" style="margin-left:auto;color:#fff;font-weight:700;text-decoration:underline;">&rarr; Aktuelle Spillplang</a>
+        </div>
 <div id="m75-lc-wrapper">
     <div id="rotate-hint">
         <div class="icon">📱</div>
@@ -359,10 +364,151 @@ const viewConfig = {
     "Archiv":          { h: 4300, top: -560, content: 6800, width: 1360, offsetX: 0 },
 };
 
-let allGamesData = [];
+let allGamesData = [
+    { team: "MÄNNER 1 (H-PRO)", datum: "12.10.25 18:15", heim: "Mersch75", gast: "HC Redange", score: "35:24", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3122231", rtl: "" },
+    { team: "MÄNNER 1 (H-PRO)", datum: "17.10.25 20:15", heim: "HB Leideleng", gast: "Mersch75", score: "34:30", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3123221", rtl: "" },
+    { team: "MÄNNER 1 (H-PRO)", datum: "26.10.25 18:15", heim: "Mersch75", gast: "HBC Schifflange", score: "38:22", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3137641", rtl: "https://youtu.be/fbTVc2Hesq8" },
+    { team: "MÄNNER 1 (H-PRO)", datum: "15.11.25 20:15", heim: "HB Pétange", gast: "Mersch75", score: "45:25", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3177426", rtl: "" },
+    { team: "MÄNNER 1 (H-PRO)", datum: "23.11.25 18:15", heim: "Mersch75", gast: "HB Museldall", score: "43:31", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3202071", rtl: "https://youtu.be/tm-RmshWyhY" },
+    { team: "MÄNNER 1 (H-PRO)", datum: "07.12.25 18:15", heim: "HC Redange", gast: "Mersch75", score: "32:33", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3235293", rtl: "" },
+    { team: "MÄNNER 1 (H-PRO)", datum: "14.12.25 18:15", heim: "Mersch75", gast: "HB Leideleng", score: "29:25", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3250341", rtl: "" },
+    { team: "MÄNNER 1 (H-PRO)", datum: "17.01.26 20:15", heim: "HBC Schifflange", gast: "Mersch75", score: "32:32", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3270341", rtl: "" },
+    { team: "MÄNNER 1 (H-PRO)", datum: "01.02.26 18:55", heim: "Mersch75", gast: "HB Pétange", score: "24:41", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3305685", rtl: "" },
+    { team: "MÄNNER 1 (H-PRO)", datum: "07.02.26 18:00", heim: "HB Museldall", gast: "Mersch75", score: "36:21", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3311917", rtl: "" },
+    { team: "MÄNNER 1 (H-PRO)", datum: "01.03.26 16:00", heim: "Mersch75", gast: "HB Leideleng", score: "28:23", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3357291", rtl: "https://play.rtl.lu/live-arena/13265" },
+    { team: "MÄNNER 1 (H-PRO)", datum: "07.03.26 20:15", heim: "CHEV Diekirch", gast: "Mersch75", score: "40:20", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3368421", rtl: "https://play.rtl.lu/live-arena/13268?summary=1" },
+    { team: "MÄNNER 1 (H-PRO)", datum: "22.03.26 16:00", heim: "Mersch75", gast: "Esp Rumelange", score: "29:43", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3410756", rtl: "https://play.rtl.lu/live-arena/13274?summary=1" },
+    { team: "MÄNNER 1 (H-PRO)", datum: "28.03.26 20:15", heim: "HBC Schifflange", gast: "Mersch75", score: "26:26", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3416716", rtl: "https://play.rtl.lu/live-arena/13277?summary=1" },
+    { team: "MÄNNER 1 (H-PRO)", datum: "12.04.26 17:00", heim: "Mersch75", gast: "HB Petange", score: "34:33", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3422986", rtl: "https://play.rtl.lu/live-arena/13271?summary=1" },
+    { team: "MÄNNER 1 (H-PRO)", datum: "17.04.26 20:15", heim: "HB Leideleng", gast: "Mersch75", score: "35:28", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3424376", rtl: "https://youtu.be/HQaFVejrQdQ" },
+    { team: "MÄNNER 1 (H-PRO)", datum: "03.05.26 16:00", heim: "Mersch75", gast: "CHEV Diekirch", score: "26:37", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3464046", rtl: "https://play.rtl.lu/live-arena/13283?summary=1" },
+    { team: "MÄNNER 1 (H-PRO)", datum: "10.05.26 20:00", heim: "HB Petange", gast: "Mersch75", score: "32-32", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3475561", rtl: "https://play.rtl.lu/live-arena/13286?summary=1" },
+    { team: "MÄNNER 1 (H-PRO)", datum: "16.05.26 20:15", heim: "Esp Rumelange", gast: "Mersch75", score: "40:26", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3478511", rtl: "https://play.rtl.lu/live-arena/13289?summary=1" },
+    { team: "MÄNNER 1 (H-PRO)", datum: "23.05.26 20:15", heim: "Mersch75", gast: "HBC Schifflange", score: "42:33", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3481566", rtl: "https://play.rtl.lu/live-arena/13292?summary=1" },
+
+    { team: "FRAUEN (D-PRO)", datum: "14.09.25 16:00", heim: "Mersch75", gast: "HC Redange", score: "27:28", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3053901", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "21.09.25 18:00", heim: "HBC Schifflange", gast: "Mersch75", score: "13:40", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3071231", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "28.09.25 16:00", heim: "Mersch75", gast: "CHEV Diekirch", score: "16:39", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3089326", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "12.10.25 16:00", heim: "Mersch75", gast: "HB Bieles/Pétange", score: "28:17", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3120761", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "16.10.25 20:00", heim: "Red Boys Differdange 2", gast: "Mersch75", score: "26:24", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3123086", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "19.10.25 16:00", heim: "Mersch75", gast: "HB Käerjeng 2", score: "39:20", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3130826", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "26.10.25 16:00", heim: "Mersch75", gast: "HB Dudelange 2", score: "39:11", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3136851", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "08.11.25 18:00", heim: "HC Redange", gast: "Mersch75", score: "24:39", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3156746", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "16.11.25 16:00", heim: "Mersch75", gast: "HBC Schifflange", score: "30:19", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3184621", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "23.11.25 17:00", heim: "CHEV Diekirch", gast: "Mersch75", score: "52:23", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3200956", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "29.11.25 18:00", heim: "HB Bieles/Pétange", gast: "Mersch75", score: "19:25", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3210141", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "07.12.25 16:00", heim: "Mersch75", gast: "Red Boys Differdange 2", score: "30:22", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3233929", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "14.12.25 16:00", heim: "HB Käerjeng 2", gast: "Mersch75", score: "31:29", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3249049", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "18.12.25 19:30", heim: "HB Dudelange 2", gast: "Mersch75", score: "21:18", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3251249", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "11.01.26 18:00", heim: "HBC Schifflange", gast: "Mersch75", score: "9:31", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3262981", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "18.01.26 16:00", heim: "Mersch75", gast: "HB Bieles/Pétange", score: "31:28", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3276105", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "01.02.26 20:00", heim: "HB Dudelange 2", gast: "Mersch75", score: "29:21", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3305761", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "08.02.26 16:00", heim: "Mersch75", gast: "Red Boys Differdange 2", score: "20:0", sbo: "", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "28.02.26 18:00", heim: "HB Käerjeng 2", gast: "Mersch75", score: "24:44", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3348661", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "15.03.26 16:00", heim: "Mersch75", gast: "HBC Schifflange", score: "20:0", sbo: "", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "21.03.26 18:00", heim: "HB Bieles/Pétange", gast: "Mersch75", score: "23:23", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3403091", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "19.04.26 16:00", heim: "Mersch75", gast: "HB Dudelange 2", score: "26:23", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3435541", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "03.05.26 14:00", heim: "Red Boys Differdange 2", gast: "Mersch75", score: "23:29", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3462841", rtl: "" },
+    { team: "FRAUEN (D-PRO)", datum: "10.05.26 16:00", heim: "Mersch75", gast: "HB Käerjeng 2", score: "37:34", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3474986", rtl: "https://youtu.be/m-HpwMCMjBw?si=5JVSxlI6hkX9RCXa" },
+
+    { team: "JUGEND: U15G", datum: "28.09.25 14:30", heim: "CHEV Diekirch", gast: "Mersch75", score: "42:23", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3087411", rtl: "" },
+    { team: "JUGEND: U15G", datum: "05.10.25 16:00", heim: "Mersch75", gast: "HB Museldall", score: "40:21", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3106596", rtl: "" },
+    { team: "JUGEND: U15G", datum: "12.10.25 14:00", heim: "Mersch75", gast: "HC Redange", score: "39:15", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3119146", rtl: "" },
+    { team: "JUGEND: U15G", datum: "26.10.25 14:00", heim: "Mersch75", gast: "HBC Schifflange", score: "20:42", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3136046", rtl: "" },
+    { team: "JUGEND: U15G", datum: "16.11.25 14:00", heim: "Käerjeng/Esch", gast: "Mersch75", score: "41:25", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3181866", rtl: "" },
+    { team: "JUGEND: U15G", datum: "23.11.25 16:00", heim: "Mersch75", gast: "Red Boys Differdange", score: "22:34", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3200176", rtl: "" },
+    { team: "JUGEND: U15G", datum: "07.12.25 14:00", heim: "Mersch75", gast: "HC Standard 2", score: "41:20", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3232369", rtl: "" },
+    { team: "JUGEND: U15G", datum: "14.12.25 15:15", heim: "Mersch75", gast: "CHEV Diekirch", score: "31:40", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3248425", rtl: "" },
+    { team: "JUGEND: U15G", datum: "18.01.26 14:00", heim: "HB Museldall", gast: "Mersch75", score: "31:36", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3274157", rtl: "" },
+    { team: "JUGEND: U15G", datum: "25.01.26 15:00", heim: "HC Redange", gast: "Mersch75", score: "16:42", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3289797", rtl: "" },
+    { team: "JUGEND: U15G", datum: "01.02.26 18:00", heim: "HBC Schifflange", gast: "Mersch75", score: "20:0", sbo: "", rtl: "" },
+    { team: "JUGEND: U15G", datum: "01.03.26 14:00", heim: "Mersch75", gast: "Käerjeng/Esch", score: "19:42", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3354871", rtl: "" },
+    { team: "JUGEND: U15G", datum: "07.03.26 18:00", heim: "Red Boys Differdange", gast: "Mersch75", score: "20:0", sbo: "", rtl: "" },
+    { team: "JUGEND: U15G", datum: "14.03.26 16:00", heim: "HC Standard 2", gast: "Mersch75", score: "25:31", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3382976", rtl: "" },
+    { team: "JUGEND: U15G", datum: "19.04.26 14:00", heim: "Mersch75", gast: "HB Museldall", score: "39:25", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3433736", rtl: "" },
+    { team: "JUGEND: U15G", datum: "03.05.26 16:00", heim: "HC Standard 2", gast: "Mersch75", score: "34:48", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3463956", rtl: "" },
+    { team: "JUGEND: U15G", datum: "17.05.26 14:00", heim: "Mersch75", gast: "HC Redange", score: "46:21", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3480836", rtl: "" },
+    { team: "JUGEND: U15G", datum: "11.06.26 19:00", heim: "CHEV Diekirch", gast: "Mersch75", score: "46:30", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3484891", rtl: "" },
+    { team: "JUGEND: U15G", datum: "14.06.26 13:00", heim: "Mersch75", gast: "HB Museldall", score: "42:41", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3488556", rtl: "", halle: "290101", nr: "29154014", bem: "Finall - Plaze 7 an 8" },
+
+    { team: "JUGEND: U13M-P3", datum: "27.09.25 15:00", heim: "HBC Schifflange", gast: "Mersch75", score: "29:15", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3076531", rtl: "" },
+    { team: "JUGEND: U13M-P3", datum: "04.10.25 13:45", heim: "Red Boys Differdange 2", gast: "Mersch75", score: "42:19", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3094911", rtl: "" },
+    { team: "JUGEND: U13M-P3", datum: "11.10.25 14:00", heim: "HC Standard 2", gast: "Mersch75", score: "15:42", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3111376", rtl: "" },
+    { team: "JUGEND: U13M-P3", datum: "24.10.25 19:00", heim: "Mersch75", gast: "HBC Schifflange", score: "22:34", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3132161", rtl: "" },
+    { team: "JUGEND: U13M-P3", datum: "15.11.25 10:30", heim: "Mersch75", gast: "Red Boys Differdange 2", score: "23:33", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3168681", rtl: "" },
+    { team: "JUGEND: U13M-P3", datum: "22.11.25 10:30", heim: "Mersch75", gast: "HC Standard 2", score: "24:13", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3188426", rtl: "" },
+
+    { team: "JUGEND: U13M-PE", datum: "05.12.25 19:00", heim: "Mersch75", gast: "HB Museldall", score: "25:18", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3221521", rtl: "" },
+    { team: "JUGEND: U13M-PE", datum: "13.12.25 14:00", heim: "HC Berchem 2", gast: "Mersch75", score: "21:26", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3238813", rtl: "" },
+    { team: "JUGEND: U13M-PE", datum: "24.01.26 16:00", heim: "HB Dudelange 2", gast: "Mersch75", score: "16:25", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3288729", rtl: "" },
+    { team: "JUGEND: U13M-PE", datum: "31.01.26 16:00", heim: "HB Schifflange 2", gast: "Mersch75", score: "20:28", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3296897", rtl: "" },
+    { team: "JUGEND: U13M-PE", datum: "07.02.26 14:00", heim: "HC Standard 2", gast: "Mersch75", score: "12:23", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3308465", rtl: "" },
+    { team: "JUGEND: U13M-PE", datum: "28.02.26 14:00", heim: "Handball Esch", gast: "Mersch75", score: "25:33", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3344336", rtl: "" },
+    { team: "JUGEND: U13M-PE", datum: "07.03.26 16:00", heim: "HB Museldall", gast: "Mersch75", score: "19:35", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3364736", rtl: "" },
+    { team: "JUGEND: U13M-PE", datum: "15.03.26 14:00", heim: "Mersch75", gast: "HC Berchem 2", score: "32:18", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3390871", rtl: "" },
+    { team: "JUGEND: U13M-PE", datum: "17.04.26 19:00", heim: "Mersch75", gast: "HB Pétange", score: "29:15", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3424146", rtl: "", nr: "29503037" },
+    { team: "JUGEND: U13M-PE", datum: "02.05.26 10:30", heim: "Mersch75", gast: "HB Dudelange 2",  score: "49:22", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3454511", rtl: "", nr: "29503043" },
+    { team: "JUGEND: U13M-PE", datum: "08.05.26 18:00", heim: "Mersch75", gast: "HBC Schifflange", score: "30:19", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3465391", rtl: "", nr: "29503046" },
+    { team: "JUGEND: U13M-PE", datum: "16.05.26 10:30", heim: "Mersch75", gast: "HC Standard 2", score: "25:28", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3476156", rtl: "", nr: "29503049" },
+    { team: "JUGEND: U13M-PE", datum: "05.06.26 15:30", heim: "HB Pétange", gast: "Mersch75", score: "", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3484116", rtl: "", nr: "29503009" },
+    { team: "JUGEND: U13M-PE", datum: "06.06.26 10:30", heim: "Mersch75", gast: "Handball Esch", score: "39:26", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3484146", rtl: "https://youtu.be/5A9jJBTCQ04", nr: "29503052" },
+
+    { team: "JUGEND: U11 Elite", datum: "11.01.26 10:00", heim: "Mersch75", gast: "Handball Esch", score: "24:15", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3259137", rtl: "" },
+    { team: "JUGEND: U11 Elite", datum: "25.01.26 14:00", heim: "HBC Schifflange", gast: "Mersch75", score: "31:23", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3288729", rtl: "" },
+    { team: "JUGEND: U11 Elite", datum: "01.02.26 14:00", heim: "Mersch75", gast: "HC Berchem", score: "23:26", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3302965", rtl: "" },
+    { team: "JUGEND: U11 Elite", datum: "08.02.26 10:00", heim: "Red Boys", gast: "Mersch75", score: "16:26", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3313481", rtl: "" },
+    { team: "JUGEND: U11 Elite", datum: "01.03.26 14:00", heim: "Handball Esch", gast: "Mersch75", score: "17:25", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3354461", rtl: "" },
+    { team: "JUGEND: U11 Elite", datum: "15.03.26 10:00", heim: "Mersch75", gast: "HBC Schifflange", score: "29:20", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3386916", rtl: "" },
+    { team: "JUGEND: U11 Elite", datum: "22.03.26 13:00", heim: "HC Berchem", gast: "Mersch75", score: "25:22", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3407236", rtl: "" },
+    { team: "JUGEND: U11 Elite", datum: "19.04.26 10:00", heim: "Mersch75", gast: "Red Boys Diff", score: "32:6", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3431106", rtl: "" },
+    { team: "JUGEND: U11 Elite", datum: "03.05.26 10:00", heim: "HB Museldall", gast: "Mersch75", score: "3:20", bem: "Mersch75/HB Käerjeng/HB Museldall", sbo: "", rtl: "" },
+    { team: "JUGEND: U11 Elite", datum: "03.05.26 11:04", heim: "Mersch75", gast: "HB Käerjeng", score: "25:16", bem: "Mersch75/HB Käerjeng/HB Museldall", sbo: "", rtl: "" },
+    { team: "JUGEND: U11M-EPF5-10", datum: "17.05.26 14:00", heim: "Mersch75", gast: "HC Standard", score: "23:16", nr: "29555201", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3480066", rtl: "https://youtu.be/iOKcKALGlxs" },
+    { team: "JUGEND: U11M-EPF5-10", datum: "07.06.26 14:00", heim: "HC Standard", gast: "Mersch75", score: "18:22", nr: "29555301", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3484596", rtl: "" },
+
+    { team: "JUGEND: U11 Espoirs", datum: "12.10.25 10:00", heim: "Mersch75", gast: "Tournoi", score: "-", bem: "Mersch2, Museldall1, Museldall2,Käerjeng", sbo: "", rtl: "" },
+    { team: "JUGEND: U11 Espoirs", datum: "26.10.25 10:00", heim: "Berchem", gast: "Tournoi", score: "-", bem: "Mersch75, Mersch75_2, Berchem2", sbo: "", rtl: "" },
+    { team: "JUGEND: U11 Espoirs", datum: "16.11.25 10:00", heim: "Standard", gast: "Tournoi", score: "-", bem: "Mersch75,1+2 Standard, 1+2, Redboys", sbo: "", rtl: "" },
+    { team: "JUGEND: U11 Espoirs", datum: "14.12.25 10:00", heim: "Mersch75", gast: "Tournoi", score: "-", bem: "Mersch75, 1+2, Käerjeng", sbo: "", rtl: "" },
+    { team: "JUGEND: U11 Espoirs", datum: "18.01.26 10:00", heim: "Mersch75", gast: "Tournoi", score: "-", bem: "HBC Schifflange, CHEV", sbo: "", rtl: "" },
+    { team: "JUGEND: U11 Espoirs", datum: "01.02.26 10:00", heim: "Standard", gast: "Tournoi", score: "-", bem: "Mersch75/HCS/CHEV/Museldall/Bierchem", sbo: "", rtl: "" },
+    { team: "JUGEND: U11 Espoirs", datum: "01.03.26 10:00", heim: "Berchem", gast: "Tournoi", score: "-", bem: "Mersch75/HBLeudl./Péiteng1&2", sbo: "", rtl: "" },
+    { team: "JUGEND: U11 Espoirs", datum: "08.03.26 10:00", heim: "Mersch75", gast: "Tournoi", score: "-", bem: "HC Standard/HCBS", sbo: "", rtl: "" },
+    { team: "JUGEND: U11 Espoirs", datum: "22.03.26 10:00", heim: "Mersch75", gast: "Tournoi", score: "-", bem: "HBD/HB Leudelange", sbo: "", rtl: "" },
+    { team: "JUGEND: U11 Espoirs", datum: "19.04.26 10:00", heim: "Dudelange", gast: "Tournoi", score: "-", bem: "Mersch75/HBPétange/HC Standard", sbo: "", rtl: "" },
+    { team: "JUGEND: U11 Espoirs", datum: "03.05.26 10:00", heim: "Museldall", gast: "Tournoi", score: "-", bem: "Mersch75/HBD/HBCS/CHEV", sbo: "", rtl: "" },
+    { team: "JUGEND: U11 Espoirs", datum: "17.05.26 10:00", heim: "Mersch75 🏠", gast: "Tournoi", score: "-", bem: "Mersch75/CHEV/HB Pétange", sbo: "", rtl: "" },
+    { team: "JUGEND: U11 Espoirs", datum: "14.06.26 10:00", heim: "Mersch75 🏠", gast: "Tournoi", score: "-", bem: "Mersch75/CHEV/HB Museldall", sbo: "", rtl: "" },
+
+    { team: "JUGEND: U9M", datum: "05.10.25 10:00", heim: "Schifflange", gast: "Tournoi", score: "-", bem: "Mersch75, Museldall, RedBoys, Esch, Berchem, Bieles", sbo: "", rtl: "" },
+    { team: "JUGEND: U9M", datum: "19.10.25 10:00", heim: "Standard", gast: "Tournoi", score: "-", bem: "Mersch75, Esch, RedBoys, Petange, Leudelange, Bieles", sbo: "", rtl: "" },
+    { team: "JUGEND: U9M", datum: "23.11.25 10:00", heim: "Mersch75", gast: "Tournoi", score: "-", bem: "Museldall, Diekirch, Standard, Esch, Käerjeng", sbo: "", rtl: "" },
+    { team: "JUGEND: U9M", datum: "07.12.25 10:00", heim: "Coque", gast: "Tournoi", score: "-", bem: "Mersch75", sbo: "", rtl: "" },
+    { team: "JUGEND: U9M", datum: "11.01.26 10:00", heim: "Bieles", gast: "Tournoi", score: "-", bem: "Mersch75,HBB,HBL,HBK,RBD, HBD", sbo: "", rtl: "" },
+    { team: "JUGEND: U9M", datum: "25.01.26 10:00", heim: "Chev Diekirch", gast: "Tournoi", score: "-", bem: "Mersch75,HCB,HBM,HCST,HBL", sbo: "", rtl: "" },
+    { team: "JUGEND: U9M", datum: "01.02.26 09:30", heim: "Coque", gast: "Tournoi", score: "-", bem: "Mersch75", sbo: "", rtl: "" },
+    { team: "JUGEND: U9M", datum: "01.03.26 10:00", heim: "Mersch75", gast: "Tournoi", score: "-", bem: "HCB,HCST,HBD,HBK,CHEV", sbo: "", rtl: "" },
+    { team: "JUGEND: U9M", datum: "19.04.26 10:00", heim: "Pétange", gast: "Tournoi 10", score: "-", bem: "Mersch75,HB Käerjeng,HC Standard, HB Dudelange,Handball Leideleng", sbo: "", rtl: "" },
+    { team: "JUGEND: U9M", datum: "03.05.26 10:00", heim: "Red Boys", gast: "Tournoi 11", score: "-", bem: "Mersch75, HB Käerjeng, HB Esch, HBCS, HC Berchem, HB Péiteng", sbo: "", rtl: "" },
+    { team: "JUGEND: U9M", datum: "17.05.26 10:00", heim: "Käerjeng", gast: "Tournoi 12", score: "-", bem: "Mersch75, HB Museldall, HB Dudelange, HC Standard, HBCS", sbo: "", rtl: "" },
+    { team: "JUGEND: U9M", datum: "07.06.26 10:00", heim: "Dudelange", gast: "Tournoi 13", score: "-", bem: "Mersch75, Esch, Bieles, Leudelange, HBCS, Käerjeng", sbo: "", rtl: "" },
+
+    { team: "JUGEND: U7M", datum: "26.10.25 10:00", heim: "Mersch75", gast: "Tournoi", score: "-", bem: "", sbo: "", rtl: "" },
+    { team: "JUGEND: U7M", datum: "30.11.25 10:00", heim: "Plateau 07", gast: "Mersch75", score: "-", bem: "", sbo: "", rtl: "" },
+    { team: "JUGEND: U7M", datum: "01.02.26 10:00", heim: "Museldall", gast: "Mersch75", score: "-", bem: "", sbo: "", rtl: "" }
+    // Pokal-Spiele werden zentral in coupeData gepflegt (Coupe-Tab) -- hier entfernt, um Duplikate im Spielplan zu vermeiden.
+];
 
 // FORWARD-FILL & MERGE ALGORITHMUS
-const rawFlhSchedule = ``;
+const rawFlhSchedule = `
+U11M-ESPOIRS
+29553701 So, 03.05.26, 10:00h 290091
+Turnéier U11 HB Museldall : HBM HBD HBCS CHEV M75
+
+U09M
+29421101 So, 03.05.26, 10:00h 290141
+Turnéier U09 Red Boys Diff : RB HBK M75 HBE HBCS HCB HBP
+`;
 
 function parseRawSchedule(rawText) {
     const lines = rawText.split('\n').map(line => line.trim()).filter(line => line !== '');
@@ -430,7 +576,12 @@ const missingGames = parseRawSchedule(rawFlhSchedule);
 allGamesData = mergeGameData(allGamesData, missingGames);
 
 function applyLiveCenterCorrections() {
-const corrections = [];
+const corrections = [
+    { team: "JUGEND: U15G", datum: "14.06.26 13:00", heim: "Mersch75", gast: "HB Museldall", score: "42:41", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3488556", rtl: "", halle: "290101", nr: "29154014", bem: "Finall - Plaze 7 an 8" },
+    { team: "JUGEND: U13M-PE", datum: "06.06.26 10:30", heim: "Mersch75", gast: "Handball Esch", score: "39:26", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3484146", rtl: "https://youtu.be/5A9jJBTCQ04", nr: "29503052" },
+    { team: "JUGEND: U11M-EPF5-10", datum: "17.05.26 14:00", heim: "Mersch75", gast: "HC Standard", score: "23:16", nr: "29555201", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3480066", rtl: "https://youtu.be/iOKcKALGlxs" },
+    { team: "JUGEND: U11M-EPF5-10", datum: "07.06.26 14:00", heim: "HC Standard", gast: "Mersch75", score: "18:22", nr: "29555301", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3484596", rtl: "" }
+];
 allGamesData = allGamesData.filter(g => !(g.nr === "29503052" && (!g.score || !g.sbo)));
 corrections.forEach(c => {
     const idx = allGamesData.findIndex(g => (c.nr && g.nr === c.nr) || (c.sbo && g.sbo === c.sbo));
@@ -440,11 +591,100 @@ corrections.forEach(c => {
 }
 applyLiveCenterCorrections();
 
-const coupeData = [];
+const coupeData = [
+{ kat:"H-C-LN",  datum:"05.10.25 18:00", heim:"Mersch75",      gast:"HB Esch",       score:"25:47", bem:"", sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3108476", rtl:"https://play.rtl.lu/live-arena/11730" },
+{ kat:"D-C-LN",  datum:"05.10.25 16:00", heim:"CHEV Diekirch", gast:"Mersch75",       score:"27:10", bem:"Arrêté avant la fin", sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3107036", rtl:"https://play.rtl.lu/live-arena/11733" },
+{ kat:"U13M-C",  datum:"19.10.25 14:00", heim:"Mersch75",      gast:"CHEV Diekirch",  score:"34:14", bem:"Match Inversé", sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3129666", rtl:"https://youtu.be/Gb4C9R3kBLE" },
+{ kat:"U13M-C",  datum:"09.01.26 18:00", heim:"Mersch75",      gast:"HC Berchem 2",   score:"33:24", bem:"", sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3255841", rtl:"https://youtu.be/gFucY2QNDMc" },
+{ kat:"U15G-C",  datum:"11.01.26 14:00", heim:"Mersch75",      gast:"Käerjeng/Esch",  score:"22:43", bem:"", sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3261221", rtl:"https://youtu.be/FZ0tyKA2i9w" },
+{ kat:"U13M-C",  datum:"21.03.26 14:00", heim:"HC Berchem",    gast:"Mersch75",       score:"32:19", bem:"", sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3399046", rtl:"https://youtu.be/nU0uoUfu66M" },
+];
 
-const m75Data = [];
+const m75Data = [
+{ event:"Turnéier",         datum:"23.08.25 11:20", a:"Mersch75",       b:"Berchem 2",                   kat:"Hommes", bem:"" },
+{ event:"Turnéier",         datum:"23.08.25 13:20", a:"Mersch75",       b:"Pétange",                     kat:"Hommes", bem:"" },
+{ event:"Turnéier",         datum:"23.08.25 14:40", a:"Homecourt",      b:"Mersch75",                    kat:"Hommes", bem:"" },
+{ event:"Turnéier",         datum:"24.08.25 10:40", a:"Museldall",      b:"Mersch75",                    kat:"Hommes", bem:"" },
+{ event:"Turnéier",         datum:"24.08.25 12:00", a:"Leideleng",      b:"Mersch75",                    kat:"Hommes", bem:"" },
+{ event:"50-Joer Turnéier", datum:"31.08.25 14:00", a:"HC Réiden",      b:"Mersch75",                    kat:"Hommes", bem:"" },
+{ event:"50-Joer Turnéier", datum:"31.08.25 16:00", a:"HC Standard",    b:"Mersch75",                    kat:"Hommes", bem:"" },
+{ event:"50-Joer Turnéier", datum:"31.08.25 16:40", a:"HB Bieles",      b:"Mersch75",                    kat:"Femmes", bem:"" },
+{ event:"50-Joer Turnéier", datum:"31.08.25 18:00", a:"CHEV Diekrech",  b:"Mersch75",                    kat:"Femmes", bem:"" },
+{ event:"50-Joer Turnéier", datum:"31.08.25 19:20", a:"CHEV Diekrech",  b:"Mersch75",                    kat:"Hommes", bem:"" },
+{ event:"KidsDays",         datum:"01.09.25 14:00", a:"Spill a Spaass", b:"Kanner vu 9–12 Joer",         kat:"", bem:"13:00–17:30" },
+{ event:"KidsDays",         datum:"02.09.25 14:00", a:"Spill a Spaass", b:"Kanner vu 9–12 Joer",         kat:"", bem:"13:00–17:30" },
+{ event:"KidsDays",         datum:"03.09.25 14:00", a:"Spill a Spaass", b:"Kanner vu 9–12 + 6–8 Joer",   kat:"", bem:"13:00–17:30" },
+{ event:"KidsDays",         datum:"04.09.25 14:00", a:"Spill a Spaass", b:"Kanner vu 9–12 + 6–8 Joer",   kat:"", bem:"13:00–17:30" },
+{ event:"KidsDays",         datum:"05.09.25 14:00", a:"Spill a Spaass", b:"Kanner vu 9–12 + 6–8 Joer",   kat:"", bem:"13:00–17:30" },
+{ event:"KidsDays",         datum:"06.09.25 14:00", a:"Spill a Spaass", b:"Kanner vu 9–12 Joer",         kat:"", bem:"Schwammen Colmar-Bierg + Oofschlossfest" },
+];
 
-const flhData = [];
+const flhData = [
+{ kat:"FE",   datum:"30.08.25 15:00", ort:"Käerjeng", heim:"HB Käerjeng",    gast:"HB Dudelange",   score:"27:23", bem:"Am Dribbel Käerjeng", future:false, nr:"29010001" },
+{ kat:"HO",   datum:"30.08.25 17:30", ort:"Käerjeng", heim:"RedBoys",        gast:"HC Berchem",     score:"36:29", bem:"Am Dribbel Käerjeng", future:false, nr:"29010002" },
+{ kat:"U18G", datum:"31.10.25 16:00", ort:"Coque",   heim:"Nordmazedonien", gast:"Finnland",       score:"36:29", bem:"Quali EHF U18", future:false },
+{ kat:"U18G", datum:"31.10.25 18:30", ort:"Coque",   heim:"Griechenland",   gast:"Lëtzebuerg",     score:"27:21", bem:"Quali EHF U18", future:false },
+{ kat:"U18G", datum:"01.11.25 14:30", ort:"Coque",   heim:"Nordmazedonien", gast:"Griechenland",   score:"31:32", bem:"Quali EHF U18", future:false },
+{ kat:"U18G", datum:"01.11.25 17:00", ort:"Coque",   heim:"Finnland",       gast:"Lëtzebuerg",     score:"32:24", bem:"Quali EHF U18", future:false },
+{ kat:"HO",   datum:"01.11.25 20:00", ort:"Coque",   heim:"Lettland",       gast:"Lëtzebuerg",     score:"28:20", bem:"Quali WM 27", future:false },
+{ kat:"U18G", datum:"02.11.25 13:00", ort:"Coque",   heim:"Griechenland",   gast:"Finnland",       score:"25:29", bem:"Quali EHF U18", future:false },
+{ kat:"U18G", datum:"02.11.25 15:30", ort:"Coque",   heim:"Lëtzebuerg",     gast:"Nordmazedonien", score:"17:25", bem:"Quali EHF U18", future:false },
+{ kat:"HO",   datum:"02.11.25 18:30", ort:"Coque",   heim:"Lëtzebuerg",     gast:"Lettland",       score:"33:34", bem:"Quali WM 27", future:false },
+
+{ kat:"FE", datum:"02.05.26 20:15", ort:"Käerjeng", heim:"HB Käerjeng", gast:"HB Dudelange", score:"20:24", bem:"AXA League Fraen | HB Dudelange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3459741" },
+{ kat:"FE", datum:"09.05.26 18:00", ort:"Dudelange", heim:"HB Dudelange", gast:"HB Käerjeng", score:"24:28", bem:"AXA League Fraen | HB Dudelange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3470121" },
+{ kat:"FE", datum:"16.05.26 18:00", ort:"Käerjeng", heim:"HB Käerjeng", gast:"HB Dudelange", score:"28:29", bem:"AXA League Fraen | HB Dudelange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3478471" },
+{ kat:"FE", datum:"02.05.26 18:00", ort:"Differdange", heim:"Red Boys Diff", gast:"HB Museldall", score:"34:31", bem:"AXA League Fraen | HB Dudelange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3459061" },
+{ kat:"FE", datum:"09.05.26 18:00", ort:"Museldall", heim:"HB Museldall", gast:"Red Boys Diff", score:"40:34", bem:"AXA League Fraen | HB Dudelange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3470081" },
+{ kat:"FE", datum:"15.05.26 20:30", ort:"Differdange", heim:"Red Boys Diff", gast:"HB Museldall", score:"38:31", bem:"AXA League Fraen | HB Dudelange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3476036" },
+
+{ kat:"HO", datum:"21.02.26 20:15", ort:"Käerjeng", heim:"HB Käerjeng", gast:"Red Boys Diff", score:"30:38", bem:"AXA League Männer | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3332116" },
+{ kat:"HO", datum:"21.02.26 20:15", ort:"Berchem", heim:"HC Berchem", gast:"HB Dudelange", score:"38:37", bem:"AXA League Männer | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3332186" },
+{ kat:"HO", datum:"21.02.26 20:15", ort:"Luxembourg", heim:"HC Standard", gast:"Handball Esch", score:"30:34", bem:"AXA League Männer | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3332176" },
+{ kat:"HO", datum:"28.02.26 20:15", ort:"Berchem", heim:"HC Berchem", gast:"HB Käerjeng", score:"33:38", bem:"AXA League Männer | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3350411" },
+{ kat:"HO", datum:"28.02.26 20:15", ort:"Esch", heim:"Handball Esch", gast:"HB Dudelange", score:"31:41", bem:"AXA League Männer | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3350416" },
+{ kat:"HO", datum:"01.03.26 16:00", ort:"Differdange", heim:"Red Boys Diff", gast:"HC Standard", score:"33:20", bem:"AXA League Männer | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3357166" },
+{ kat:"HO", datum:"07.03.26 20:15", ort:"Dudelange", heim:"HB Dudelange", gast:"HB Käerjeng", score:"48:30", bem:"AXA League Männer | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3368401" },
+{ kat:"HO", datum:"07.03.26 20:15", ort:"Differdange", heim:"Red Boys Diff", gast:"Handball Esch", score:"32:28", bem:"AXA League Männer | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3368486" },
+{ kat:"HO", datum:"07.03.26 20:15", ort:"Luxembourg", heim:"HC Standard", gast:"HC Berchem", score:"22:26", bem:"AXA League Männer | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3368426" },
+{ kat:"HO", datum:"14.03.26 20:15", ort:"Käerjeng", heim:"HB Käerjeng", gast:"Handball Esch", score:"33:28", bem:"AXA League Männer | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3386731" },
+{ kat:"HO", datum:"14.03.26 20:15", ort:"Berchem", heim:"HC Berchem", gast:"Red Boys Diff", score:"43:39", bem:"AXA League Männer | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3386751" },
+{ kat:"HO", datum:"14.03.26 20:15", ort:"Luxembourg", heim:"HC Standard", gast:"HB Dudelange", score:"25:42", bem:"AXA League Männer | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3386716" },
+{ kat:"HO", datum:"28.03.26 20:15", ort:"Käerjeng", heim:"HB Käerjeng", gast:"HC Standard", score:"34:33", bem:"AXA League Männer | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3416731" },
+{ kat:"HO", datum:"28.03.26 20:15", ort:"Dudelange", heim:"HB Dudelange", gast:"Red Boys Diff", score:"30:30", bem:"AXA League Männer | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3416726" },
+{ kat:"HO", datum:"28.03.26 20:15", ort:"Esch", heim:"Handball Esch", gast:"HC Berchem", score:"27:26", bem:"AXA League Männer | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3416741" },
+{ kat:"HO", datum:"18.04.26 20:15", ort:"Dudelange", heim:"HB Dudelange", gast:"HC Berchem", score:"29:32", bem:"AXA League Männer | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3430941" },
+{ kat:"HO", datum:"18.04.26 20:15", ort:"Differdange", heim:"Red Boys Diff", gast:"HB Käerjeng", score:"47:25", bem:"AXA League Männer | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3430876" },
+{ kat:"HO", datum:"18.04.26 20:15", ort:"Esch", heim:"Handball Esch", gast:"HC Standard", score:"31:25", bem:"AXA League Männer | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3430931" },
+{ kat:"HO", datum:"02.05.26 18:00", ort:"Käerjeng", heim:"HB Käerjeng", gast:"HC Berchem", score:"16:32", bem:"AXA League Männer | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3458936" },
+{ kat:"HO", datum:"02.05.26 18:00", ort:"Dudelange", heim:"HB Dudelange", gast:"Handball Esch", score:"42:32", bem:"AXA League Männer | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3458946" },
+{ kat:"HO", datum:"02.05.26 20:15", ort:"Luxembourg", heim:"HC Standard", gast:"Red Boys Diff", score:"25:32", bem:"AXA League Männer | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3459736" },
+{ kat:"HO", datum:"08.05.26 20:30", ort:"Esch", heim:"Handball Esch", gast:"Red Boys Diff", score:"31:36", bem:"AXA League Männer | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3465506" },
+{ kat:"HO", datum:"09.05.26 20:15", ort:"Käerjeng", heim:"HB Käerjeng", gast:"HB Dudelange", score:"30:43", bem:"AXA League Männer | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3470321" },
+{ kat:"HO", datum:"09.05.26 20:15", ort:"Berchem", heim:"HC Berchem", gast:"HC Standard", score:"29:27", bem:"AXA League Männer | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3470331" },
+{ kat:"HO", datum:"16.05.26 20:15", ort:"Dudelange", heim:"HB Dudelange", gast:"HC Standard", score:"48:40", bem:"AXA League Männer | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3478501" },
+{ kat:"HO", datum:"16.05.26 20:15", ort:"Differdange", heim:"Red Boys Diff", gast:"HC Berchem", score:"34:38", bem:"AXA League Männer | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3478521" },
+{ kat:"HO", datum:"16.05.26 20:15", ort:"Esch", heim:"Handball Esch", gast:"HB Käerjeng", score:"39:32", bem:"AXA League Männer | Red Boys Differdange Meister", future:false, sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3478516" },
+{ kat:"HO", datum:"23.05.26 20:15", ort:"Berchem", heim:"HC Berchem", gast:"Handball Esch", score:"", bem:"AXA League Männer | Red Boys Differdange Meister", future:true },
+{ kat:"HO", datum:"23.05.26 20:15", ort:"Differdange", heim:"Red Boys Diff", gast:"HB Dudelange", score:"", bem:"AXA League Männer | Red Boys Differdange Meister", future:true },
+{ kat:"HO", datum:"23.05.26 20:15", ort:"Luxembourg", heim:"HC Standard", gast:"HB Käerjeng", score:"", bem:"AXA League Männer | Red Boys Differdange Meister", future:true },
+
+{ kat:"U9M", datum:"19.04.26 10:00", ort:"Pétange",   heim:"U9 Tournoi 10", gast:"—", score:"", bem:"Mersch75, Käerjeng, Standard, Dudelange, Leideleng", future:true, nr:"290122" },
+{ kat:"U9M", datum:"03.05.26 10:00", ort:"Red Boys Diff",  heim:"U9 Tournoi 11", gast:"—", score:"", bem:"RB HBK M75 HBE HBCS HCB HBP", future:true, nr:"29421121" },
+{ kat:"U9M", datum:"17.05.26 10:00", ort:"Käerjeng",  heim:"U9 Tournoi 12", gast:"—", score:"", bem:"Mersch75, Museldall, Dudelange, Standard, HBCS", future:true, nr:"29421111" },
+{ kat:"U9M", datum:"07.06.26 10:00", ort:"Dudelange", heim:"U9 Tournoi 13", gast:"—", score:"", bem:"Mersch75, Esch, Bieles, Leudelange, HBCS, Käerjeng", future:true, nr:"29421122" },
+
+{ kat:"H-C-LN",  datum:"23.04.26 18:30", ort:"Coque Kirchberg", heim:"HB Dudelange",   gast:"HC Standard",    score:"34:23", bem:"Final4 | 2, Rue Léon Hengen | L-1745 Kirchberg", future:false, nr:"29110202", sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3437551" },
+{ kat:"H-C-LN",  datum:"23.04.26 20:45", ort:"Coque Kirchberg", heim:"HC Berchem",     gast:"Handball Esch",  score:"27:33", bem:"Final4 | 2, Rue Léon Hengen | L-1745 Kirchberg", future:false, nr:"29110201", sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3437686" },
+{ kat:"D-C-LN",  datum:"24.04.26 18:30", ort:"Coque Kirchberg", heim:"HB Dudelange",   gast:"Red Boys Diff",  score:"27:37", bem:"Final4 | 2, Rue Léon Hengen | L-1745 Kirchberg", future:false, nr:"29610202", sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3437776" },
+{ kat:"D-C-LN",  datum:"24.04.26 20:45", ort:"Coque Kirchberg", heim:"HB Käerjeng",    gast:"HB Museldall",   score:"32:21", bem:"Final4 | 2, Rue Léon Hengen | L-1745 Kirchberg", future:false, nr:"29610201", sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3437976" },
+{ kat:"U15F-C",  datum:"25.04.26 13:30", ort:"Coque Kirchberg", heim:"HBC Schiffl.",   gast:"HB Dudelange",   score:"25:24", bem:"Final4 | 2, Rue Léon Hengen | L-1745 Kirchberg", future:false, nr:"29810101", sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3441101" },
+{ kat:"U15G-C",  datum:"25.04.26 15:45", ort:"Coque Kirchberg", heim:"Käerjeng/Esch",  gast:"HBC Schiffl.",   score:"31:29", bem:"Final4 | 2, Rue Léon Hengen | L-1745 Kirchberg", future:false, nr:"29160101", sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3443361" },
+{ kat:"H-C-LN",  datum:"25.04.26 20:45", ort:"Coque Kirchberg", heim:"HB Dudelange",   gast:"HB Esch",         score:"27:28", bem:"Finale H-C-LN | 2, Rue Léon Hengen | L-1745 Kirchberg", future:false, nr:"HO_25.04.26", sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3446726" },
+{ kat:"U13M-C",  datum:"26.04.26 13:00", ort:"Coque Kirchberg", heim:"Red Boys Diff 2", gast:"HC Berchem",    score:"34:31", bem:"Final4 | 2, Rue Léon Hengen | L-1745 Kirchberg", future:false, nr:"29510101", sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3449151" },
+{ kat:"H-C-FLH", datum:"26.04.26 15:00", ort:"Coque Kirchberg", heim:"HB Käerjeng 2",  gast:"HB Dudelange 2", score:"28:33", bem:"Final4 | 2, Rue Léon Hengen | L-1745 Kirchberg", future:false, nr:"29310101", sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3450771" },
+{ kat:"D-C-LN",  datum:"26.04.26 17:00", ort:"Coque Kirchberg", heim:"Red Boys Diff",  gast:"HB Käerjeng",    score:"23:25", bem:"Finale D-C-LN | 2, Rue Léon Hengen | L-1745 Kirchberg", future:false, nr:"FE_26.04.26", sbo:"https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3452491" },
+];
 
 function parseDatePreview(str) {
 if (!str || str === "-") return 9999999999999;
@@ -662,7 +902,11 @@ rows: typeof m75Data !== 'undefined' ? m75Data.map(r => `<tr>
 }
 
 // --- Saison-Abschluss: U11 Elite Turnier 03.05.26 (Berechtigung Spiel um Platz 5) ---
-const u11EliteTournamentData = [];
+const u11EliteTournamentData = [
+    { datum:"03.05.26 10:00", heim:"HB Museldall", gast:"Mersch75",     score:"3:20",  bem:"Turnier-Spiel 1 – ohne Resultatsvermerk auf FLH-Seite" },
+    { datum:"03.05.26 11:04", heim:"Mersch75",     gast:"HB Käerjeng",  score:"25:16", bem:"Turnier-Spiel 2 – ohne Resultatsvermerk auf FLH-Seite" },
+    { datum:"03.05.26 —",     heim:"Mersch75",     gast:"HC Standard",  score:"",      bem:"Spiel um Platz 5 (Berechtigung durch Turnier-Sieg)" }
+];
 
 function renderU11Tournament() {
     return {
@@ -1013,14 +1257,6 @@ ${sboCell(r.sbo)}${rtlCell(r.rtl || r.yt)}
 </tr>`;
 } catch (e) {}
 });
-
-if (!rows) {
-rows = `<tr><td colspan="8" style="padding:32px 16px;text-align:center;color:#666;line-height:1.6;">
-<strong style="display:block;font-size:1.05rem;color:#005eb8;margin-bottom:6px;">Saison 2026/2027 – a Virbereedung</strong>
-D'Spiller ginn agedroen, soubal de Kalenner vun der FLH steet.<br>
-De komplette Spillplang vun der leschter Saison fënns du am <a href="live-center-25-26.html" style="color:#005eb8;font-weight:700;">Archiv 25/26 &rarr;</a>
-</td></tr>`;
-}
 
 return {
 head: "<tr><th>Datum</th><th>Kategorie</th><th>Heim</th><th>Gast</th><th style='text-align:center;'>Resultat</th><th>SBO</th><th>RTL/YT</th><th class='col-bem'>Bemerkung</th></tr>",
