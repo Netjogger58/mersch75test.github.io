@@ -1212,6 +1212,8 @@ let currentPhase = "";
 
 sortedGames.forEach(r => {
 try {
+// Phantom-Zeile "Turnéier U11" (ohne Resultat -> "Kommend") nicht anzeigen
+if (/Turn.?ier\s*U11/i.test(r.heim || "") || /Turn.?ier\s*U11/i.test(r.gast || "")) return;
 let cleanTeam = normalizeTeamLabel(r.team || "");
 let groupKey = getTeamGroupKey(r.team || "");
 if (groupKey !== currentCat) {
