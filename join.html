@@ -397,6 +397,13 @@
     <script>
     const MERSCH75_WEB3FORMS_MAIN_KEY = '15e3cc53-6864-47dd-bfaf-332cb4ca45e5';
     const MERSCH75_WEB3FORMS_MAX_KEY = 'f748489b-abc6-4e37-bb82-860a82c91f4e';
+    // Test-Modus: Numm mat "TEST" -> all Mailen op dëse Schlëssel (m75.deisad@gmail.com), näischt un Secrétaire/Max
+    const MERSCH75_WEB3FORMS_TEST_KEY = '9f36724d-0d6c-4ac4-b325-11ce6f7d0a5b';
+    // Google-Sheet-Ubannung (Apps Script Web App). Deployment-URL vum Adrien-Test-Master:
+    const MERSCH75_SHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbys4iCtkWmA31-15rlGjel16HLcNTgZIPSURFO5DqOgpndcld5C_nyg9HeDZJ13pfkThg/exec';
+    const MERSCH75_SHEET_TOKEN = 'm75-join-9f36-secure-2026';
+    // false = nëmmen TEST-Umeldunge ginn an d'Sheet geschriwwen (Testphase). Op true setzen wann de Secrétaire-Master aktiv ass.
+    const MERSCH75_SHEET_PRODUCTION = false;
     const MERSCH75_LICENSE_LINK = 'https://submit.paperless.io/f/s4zaWnzHBwxcPK8jAkkbjPpVC1giUfr7';
     const MERSCH75_LICENSE_PASSWORD = 'FIhNvLi26';
     const MERSCH75_UI_TEXTS = {
@@ -1056,6 +1063,82 @@
         throw new Error(data.message || 'Web3Forms konnte die Anfrage nicht senden.');
     }
 
+    // --- Google-Sheet-Ubannung + Test-Modus ---------------------------------
+    function isTestSubmission() {
+        return /\bTEST\b/i.test(getFullName());
+    }
+
+    function buildSheetPayload(isTest) {
+        const mainMember = {
+            nom: getValue('Nom'),
+            prenom: getValue('Prenom'),
+            randomNo: ensureCardInternalId(),
+            lang: currentLang,
+            nationalite: getValue('Nationalite'),
+            strasse: getValue('Strasse'),
+            postcode: getValue('Postcode'),
+            ortschaft: getValue('Ortschaft'),
+            categorie: getCategoryValue(),
+            basis: getValue('FlhCategoryBasis'),
+            dob: getValue('DateNaissance'),
+            cns: getValue('CNS'),
+            cnsComplete: getCnsComplete(),
+            gsm1: getValue('GSM1'),
+            gsm2: getValue('GSM2'),
+            email: getValue('Email'),
+            role: getValue('Role'),
+            licence: getValue('Licence'),
+            mineur: document.getElementById('Mineur').value
+        };
+
+        const members = [mainMember];
+
+        getFamilyMembers().forEach(function(member, index) {
+            members.push({
+                nom: member.name,
+                prenom: '',
+                randomNo: ensureFamilyMemberCardId(index + 1),
+                lang: currentLang,
+                nationalite: getValue('Nationalite'),
+                strasse: getValue('Strasse'),
+                postcode: getValue('Postcode'),
+                ortschaft: getValue('Ortschaft'),
+                categorie: '',
+                basis: '',
+                dob: member.dob,
+                cns: member.cns,
+                cnsComplete: '',
+                gsm1: '',
+                gsm2: '',
+                email: getValue('Email'),
+                role: 'Joueur / Joueuse',
+                licence: member.license === 'Jo' ? 'Oui' : 'Non',
+                mineur: ''
+            });
+        });
+
+        return {
+            token: MERSCH75_SHEET_TOKEN,
+            isTest: isTest === true,
+            members: members
+        };
+    }
+
+    async function sendToSheet(payload) {
+        if (!MERSCH75_SHEET_ENDPOINT) {
+            return; // Endpoint nach net konfiguréiert
+        }
+
+        // no-cors + text/plain: Apps Script äntwert mat engem Cross-Origin-Redirect.
+        // no-cors schéckt de Request (fire-and-forget) ouni datt de Browser en um Redirect blockéiert.
+        await fetch(MERSCH75_SHEET_ENDPOINT, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload)
+        });
+    }
+
     function calculateAgeOnDate(day, month, year, referenceDate) {
         let age = referenceDate.getFullYear() - year;
 
@@ -1238,25 +1321,56 @@
         submitBtn.innerText = MERSCH75_UI_TEXTS[detectLegalLanguage()].sending;
 
         const isMinor = document.getElementById('Mineur').value === 'OUI';
+        const isTest = isTestSubmission();
         const delay = function(ms) { return new Promise(function(res) { setTimeout(res, ms); }); };
 
         try {
-            // E-Mail 1: Französisch an Hauptschlüssel (inkl. Lizenz-Link für FLH)
-            await sendToWeb3Forms(createCleanWeb3FormsData(
-                MERSCH75_WEB3FORMS_MAIN_KEY,
-                'Nouvelle inscription Mersch 75',
-                buildJoinMessage(true, 'fr', false)
-            ));
+            if (isTest) {
+                // TEST-Modus: alles op de Test-Schlëssel (m75.deisad@gmail.com), näischt un Secrétaire/Max.
+                // E-Mail 1: Französisch (inkl. Lizenz-Link für FLH)
+                await sendToWeb3Forms(createCleanWeb3FormsData(
+                    MERSCH75_WEB3FORMS_TEST_KEY,
+                    'TEST - Nouvelle inscription Mersch 75',
+                    buildJoinMessage(true, 'fr', false)
+                ));
 
-            // Sicherheits-Pause zur Umgehung von Web3Forms Anti-Spam-Filtern
-            await delay(3500);
+                // Bei engem Mineur eng 2. Mail (Max-Kopie), och op d'Test-Adress.
+                if (isMinor) {
+                    await delay(3500);
+                    await sendToWeb3Forms(createCleanWeb3FormsData(
+                        MERSCH75_WEB3FORMS_TEST_KEY,
+                        'TEST - MINDERJAEHRIG - Neue Anmeldung Mersch 75',
+                        buildJoinMessage(false, 'de', true)
+                    ));
+                }
+            } else {
+                // E-Mail 1: Französisch an Hauptschlüssel (inkl. Lizenz-Link für FLH)
+                await sendToWeb3Forms(createCleanWeb3FormsData(
+                    MERSCH75_WEB3FORMS_MAIN_KEY,
+                    'Nouvelle inscription Mersch 75',
+                    buildJoinMessage(true, 'fr', false)
+                ));
 
-            // E-Mail 2: Deutsch an Sekundärschlüssel (interne Kopie, ohne Lizenz-Link)
-            await sendToWeb3Forms(createCleanWeb3FormsData(
-                MERSCH75_WEB3FORMS_MAX_KEY,
-                (isMinor ? 'MINDERJAEHRIG - ' : '') + 'Neue Anmeldung Mersch 75',
-                buildJoinMessage(false, 'de', true)
-            ));
+                // Sicherheits-Pause zur Umgehung von Web3Forms Anti-Spam-Filtern
+                await delay(3500);
+
+                // E-Mail 2: Deutsch an Sekundärschlüssel (interne Kopie, ohne Lizenz-Link)
+                await sendToWeb3Forms(createCleanWeb3FormsData(
+                    MERSCH75_WEB3FORMS_MAX_KEY,
+                    (isMinor ? 'MINDERJAEHRIG - ' : '') + 'Neue Anmeldung Mersch 75',
+                    buildJoinMessage(false, 'de', true)
+                ));
+            }
+
+            // Google-Sheet: am Test ëmmer (Adrien-Master); soss nëmme wann d'Produktioun aktiv ass.
+            if (isTest || MERSCH75_SHEET_PRODUCTION) {
+                try {
+                    await sendToSheet(buildSheetPayload(isTest));
+                } catch (sheetError) {
+                    // Sheet-Feeler net fatal: Mail(en) sinn scho fort als Backup.
+                    console.error('Sheet-Ubannung Feeler:', sheetError);
+                }
+            }
 
             form.style.display = 'none';
             document.querySelector('.join-lang-selector').style.display = 'none';
