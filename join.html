@@ -124,7 +124,7 @@
                                 </div>
                             </div>
 
-                            <div class="join-form-group">
+                            <div class="join-form-group" id="basis-section">
                                 <label id="lbl-flh-category-basis" for="FlhCategoryBasis">BASE CATEGORIE FLH *</label>
                                 <select id="FlhCategoryBasis" name="FlhCategoryBasis" required>
                                     <option value="Garçons - Hommes">Garçons - Hommes</option>
@@ -145,7 +145,29 @@
                                     <option value="Joueur / Joueuse">Joueur / Joueuse</option>
                                     <option value="Officiel(le)">Officiel(le)</option>
                                     <option value="Arbitre">Arbitre</option>
+                                    <option value="Bénévole / Contact Famille">Bénévole / Contact Famille</option>
                                 </select>
+                            </div>
+
+                            <div class="join-form-group" id="extra-roles-section">
+                                <label id="lbl-extra-roles">Zousätzlech Funktioun(en) (fakultativ)</label>
+                                <div class="join-checkbox-row" id="extra-role-joueur">
+                                    <input type="checkbox" id="RoleAlsoJoueur" name="RoleAlsoJoueur" value="Oui">
+                                    <label for="RoleAlsoJoueur" id="lbl-also-joueur">Och Spiller / Spillerin</label>
+                                </div>
+                                <div class="join-checkbox-row" id="extra-role-arbitre">
+                                    <input type="checkbox" id="RoleAlsoArbitre" name="RoleAlsoArbitre" value="Oui">
+                                    <label for="RoleAlsoArbitre" id="lbl-also-arbitre">Och Arbitter</label>
+                                </div>
+                                <div class="join-checkbox-row" id="extra-role-officiel">
+                                    <input type="checkbox" id="RoleAlsoOfficiel" name="RoleAlsoOfficiel" value="Oui">
+                                    <label for="RoleAlsoOfficiel" id="lbl-also-officiel">Och Offiziell Persoun</label>
+                                </div>
+                                <div class="join-checkbox-row" id="extra-role-benevole">
+                                    <input type="checkbox" id="RoleAlsoBenevole" name="RoleAlsoBenevole" value="Oui">
+                                    <label for="RoleAlsoBenevole" id="lbl-also-benevole">Och Bénévole / Kontakt Famill</label>
+                                </div>
+                                <p class="join-helper-text" id="lbl-extra-roles-hint">Z.B. Spiller deen och Arbitter ass. Déi éischt Funktioun (Spiller) bestëmmt d'Kategorie.</p>
                             </div>
 
                             <div class="join-form-group" id="tarif-section">
@@ -211,26 +233,26 @@
                                 </div>
                             </div>
 
-                            <div class="join-form-group">
+                            <div class="join-form-group" id="nat-section">
                                 <label id="lbl-nat" for="Nationalite">NATIONALITE *</label>
                                 <input type="text" id="Nationalite" name="Nationalite" autocomplete="country-name" required>
                             </div>
 
-                            <div class="join-form-group">
+                            <div class="join-form-group" id="cns-section">
                                 <label id="lbl-cns" for="CNS">MATRICULE CNS (5 CHIFFRES) *</label>
                                 <input type="text" id="CNS" name="CNS" maxlength="5" inputmode="numeric" pattern="[0-9]{5}" required>
                                 <span id="cns-prefix-display" class="join-helper-text" aria-live="polite"></span>
                             </div>
 
                             <div class="join-form-row">
-                                <div class="join-form-group">
+                                <div class="join-form-group" id="medico-group">
                                     <label id="lbl-medico" for="Medico">MEDICO? *</label>
                                     <select id="Medico" name="Medico" required>
                                         <option value="Non">Non</option>
                                         <option value="Oui">Oui</option>
                                     </select>
                                 </div>
-                                <div class="join-form-group">
+                                <div class="join-form-group" id="licence-group">
                                     <label id="lbl-licence" for="Licence">LICENCE? *</label>
                                     <select id="Licence" name="Licence" required>
                                         <option value="Non">Non</option>
@@ -239,7 +261,7 @@
                                 </div>
                             </div>
 
-                            <div class="join-form-group">
+                            <div class="join-form-group" id="club-section">
                                 <label id="lbl-club" for="AncienClub">ANCIEN CLUB (OU &quot;NEANT&quot;) *</label>
                                 <input type="text" id="AncienClub" name="AncienClub" required>
                             </div>
@@ -288,7 +310,7 @@
                                 </label>
                             </div>
 
-                            <div class="join-checkbox-row is-emphasis">
+                            <div class="join-checkbox-row is-emphasis" id="flh-consent-row">
                                 <input type="checkbox" id="FlhPortalConsent" name="FlhPortalConsent" value="Oui" required>
                                 <label for="FlhPortalConsent" id="lbl-flh">Info: Ech hu verstaan dat meng Umeldung mat dësen Daten un d' flh.lu geschéckt ginn fir eng Lizenz auszestellen.</label>
                             </div>
@@ -408,19 +430,19 @@
     const MERSCH75_LICENSE_PASSWORD = 'FIhNvLi26';
     const MERSCH75_UI_TEXTS = {
         lu: {
-            nom: 'Numm *', prenom: 'Virnumm *', dob: 'Gebuertsdatum *', mineur: 'Mannerjäreg', cat: 'FLH Kategorie', role: 'Roll / Funktioun *', parent: 'Elengerzéiend *', tuteur1: 'Erzéiungsberechtegten 1 *', tuteur2: 'Erzéiungsberechtegten 2 *', nat: 'Nationalitéit *', cns: 'Matricule CNS *', medico: 'Medico *', licence: 'Lizenz *', club: 'Ale Veräin *', u7: 'U7 medezineschen Zertifikat obligatoresch', strasse: 'Strooss *', postcode: 'Postcode *', ortschaft: 'Uertschaft *', email: 'E-Mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Schécken', sending: 'Gëtt geschéckt...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Deng Umeldung gouf erfollegräich iwwermëttelt.', successNote: 'Du kriss eng Bestätegung per E-Mail. D\'Memberskaart gëtt no Bezuelung vum Membersbeitrag nogeschéckt.', oui: 'JO', non: 'NEE', joueur: 'Spiller / Spillerin', officiel: 'Offiziell Persoun', arbitre: 'Arbitter', parent_non: 'NEE (2 Erzéiungsberechtegter)', parent_oui: 'JO (1 Erzéiungsberechtegten)', legalRequired: 'Liest an akzeptéiert w.e.g. déi allgemeng Bedéngungen an den Dateschutz.', flhRequired: 'Bestätegt w.e.g. d\'Iwwermëttlung un flh.lu fir d\'Lizenz.', accuracyRequired: 'Bestätegt w.e.g. d\'Richtegkeet vun den Donnéeën.'
+            nom: 'Numm *', prenom: 'Virnumm *', dob: 'Gebuertsdatum *', mineur: 'Mannerjäreg', cat: 'FLH Kategorie', role: 'Roll / Funktioun *', parent: 'Elengerzéiend *', tuteur1: 'Erzéiungsberechtegten 1 *', tuteur2: 'Erzéiungsberechtegten 2 *', nat: 'Nationalitéit *', cns: 'Matricule CNS *', medico: 'Medico *', licence: 'Lizenz *', club: 'Ale Veräin *', u7: 'U7 medezineschen Zertifikat obligatoresch', strasse: 'Strooss *', postcode: 'Postcode *', ortschaft: 'Uertschaft *', email: 'E-Mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Schécken', sending: 'Gëtt geschéckt...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Deng Umeldung gouf erfollegräich iwwermëttelt.', successNote: 'Du kriss eng Bestätegung per E-Mail. D\'Memberskaart gëtt no Bezuelung vum Membersbeitrag nogeschéckt.', oui: 'JO', non: 'NEE', joueur: 'Spiller / Spillerin', officiel: 'Offiziell Persoun', arbitre: 'Arbitter', benevole: 'Bénévole / Kontakt Famill', parent_non: 'NEE (2 Erzéiungsberechtegter)', parent_oui: 'JO (1 Erzéiungsberechtegten)', legalRequired: 'Liest an akzeptéiert w.e.g. déi allgemeng Bedéngungen an den Dateschutz.', flhRequired: 'Bestätegt w.e.g. d\'Iwwermëttlung un flh.lu fir d\'Lizenz.', accuracyRequired: 'Bestätegt w.e.g. d\'Richtegkeet vun den Donnéeën.', extraRoles: 'Zousätzlech Funktioun(en) (fakultativ)', extraRolesHint: 'Z.B. Spiller deen och Arbitter ass. Déi éischt Funktioun bestëmmt d\'Kategorie.', alsoPrefix: 'Och'
         },
         fr: {
-            nom: 'Nom *', prenom: 'Prénom *', dob: 'Date de naissance *', mineur: 'Mineur', cat: 'Catégorie FLH', role: 'Rôle / Fonction *', parent: 'Parent isolé *', tuteur1: 'Tuteur 1 *', tuteur2: 'Tuteur 2 *', nat: 'Nationalité *', cns: 'Matricule CNS *', medico: 'Médico *', licence: 'Licence *', club: 'Ancien club *', u7: 'U7 certificat médical obligatoire', strasse: 'Rue *', postcode: 'Code postal *', ortschaft: 'Localité *', email: 'E-mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Envoyer', sending: 'Envoi...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Inscription envoyée.', successNote: 'Vous recevrez une confirmation par e-mail. La carte membre sera envoyée après paiement de la cotisation.', oui: 'OUI', non: 'NON', joueur: 'Joueur / Joueuse', officiel: 'Officiel(le)', arbitre: 'Arbitre', parent_non: 'NON (2 tuteurs)', parent_oui: 'OUI (1 tuteur)', legalRequired: 'Veuillez lire et accepter les conditions générales et la protection des données.', flhRequired: 'Veuillez confirmer la transmission à flh.lu pour la licence.', accuracyRequired: 'Veuillez confirmer l\'exactitude des données.'
+            nom: 'Nom *', prenom: 'Prénom *', dob: 'Date de naissance *', mineur: 'Mineur', cat: 'Catégorie FLH', role: 'Rôle / Fonction *', parent: 'Parent isolé *', tuteur1: 'Tuteur 1 *', tuteur2: 'Tuteur 2 *', nat: 'Nationalité *', cns: 'Matricule CNS *', medico: 'Médico *', licence: 'Licence *', club: 'Ancien club *', u7: 'U7 certificat médical obligatoire', strasse: 'Rue *', postcode: 'Code postal *', ortschaft: 'Localité *', email: 'E-mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Envoyer', sending: 'Envoi...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Inscription envoyée.', successNote: 'Vous recevrez une confirmation par e-mail. La carte membre sera envoyée après paiement de la cotisation.', oui: 'OUI', non: 'NON', joueur: 'Joueur / Joueuse', officiel: 'Officiel(le)', arbitre: 'Arbitre', benevole: 'Bénévole / Contact Famille', parent_non: 'NON (2 tuteurs)', parent_oui: 'OUI (1 tuteur)', legalRequired: 'Veuillez lire et accepter les conditions générales et la protection des données.', flhRequired: 'Veuillez confirmer la transmission à flh.lu pour la licence.', accuracyRequired: 'Veuillez confirmer l\'exactitude des données.', extraRoles: 'Fonction(s) supplémentaire(s) (facultatif)', extraRolesHint: 'P.ex. joueur qui est aussi arbitre. La première fonction détermine la catégorie.', alsoPrefix: 'Aussi'
         },
         de: {
-            nom: 'Name *', prenom: 'Vorname *', dob: 'Geburtsdatum *', mineur: 'Minderjährig', cat: 'FLH Kategorie', role: 'Rolle / Funktion *', parent: 'Alleinerziehend *', tuteur1: 'Erziehungsberechtigter 1 *', tuteur2: 'Erziehungsberechtigter 2 *', nat: 'Nationalität *', cns: 'CNS-Matrikelnummer *', medico: 'Medico *', licence: 'Lizenz *', club: 'Ehemaliger Verein *', u7: 'U7 ärztliches Attest obligatorisch', strasse: 'Straße *', postcode: 'Postleitzahl *', ortschaft: 'Ortschaft *', email: 'E-Mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Senden', sending: 'Senden...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Anmeldung gesendet.', successNote: 'Du erhältst eine Bestätigung per E-Mail. Die Mitgliederkarte wird nach Zahlung des Mitgliedsbeitrags zugeschickt.', oui: 'JA', non: 'NEIN', joueur: 'Spieler / Spielerin', officiel: 'Offizielle Person', arbitre: 'Schiedsrichter', parent_non: 'NEIN (2 Erziehungsberechtigte)', parent_oui: 'JA (1 Erziehungsberechtigter)', legalRequired: 'Bitte die allgemeinen Bedingungen und den Datenschutz lesen und akzeptieren.', flhRequired: 'Bitte die Übermittlung an flh.lu für die Lizenz bestätigen.', accuracyRequired: 'Bitte die Richtigkeit der Angaben bestätigen.'
+            nom: 'Name *', prenom: 'Vorname *', dob: 'Geburtsdatum *', mineur: 'Minderjährig', cat: 'FLH Kategorie', role: 'Rolle / Funktion *', parent: 'Alleinerziehend *', tuteur1: 'Erziehungsberechtigter 1 *', tuteur2: 'Erziehungsberechtigter 2 *', nat: 'Nationalität *', cns: 'CNS-Matrikelnummer *', medico: 'Medico *', licence: 'Lizenz *', club: 'Ehemaliger Verein *', u7: 'U7 ärztliches Attest obligatorisch', strasse: 'Straße *', postcode: 'Postleitzahl *', ortschaft: 'Ortschaft *', email: 'E-Mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Senden', sending: 'Senden...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Anmeldung gesendet.', successNote: 'Du erhältst eine Bestätigung per E-Mail. Die Mitgliederkarte wird nach Zahlung des Mitgliedsbeitrags zugeschickt.', oui: 'JA', non: 'NEIN', joueur: 'Spieler / Spielerin', officiel: 'Offizielle Person', arbitre: 'Schiedsrichter', benevole: 'Freiwillige / Familienkontakt', parent_non: 'NEIN (2 Erziehungsberechtigte)', parent_oui: 'JA (1 Erziehungsberechtigter)', legalRequired: 'Bitte die allgemeinen Bedingungen und den Datenschutz lesen und akzeptieren.', flhRequired: 'Bitte die Übermittlung an flh.lu für die Lizenz bestätigen.', accuracyRequired: 'Bitte die Richtigkeit der Angaben bestätigen.', extraRoles: 'Zusätzliche Funktion(en) (optional)', extraRolesHint: 'Z.B. Spieler der auch Schiedsrichter ist. Die erste Funktion bestimmt die Kategorie.', alsoPrefix: 'Auch'
         },
         en: {
-            nom: 'Last name *', prenom: 'First name *', dob: 'Date of birth *', mineur: 'Minor', cat: 'FLH category', role: 'Role / Function *', parent: 'Single parent *', tuteur1: 'Guardian 1 *', tuteur2: 'Guardian 2 *', nat: 'Nationality *', cns: 'CNS number *', medico: 'Medical check *', licence: 'Licence *', club: 'Former club *', u7: 'U7 medical certificate required', strasse: 'Street *', postcode: 'Postcode *', ortschaft: 'City *', email: 'Email *', gsm1: 'Mobile 1 *', gsm2: 'Mobile 2', send: 'Submit', sending: 'Sending...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Registration sent.', successNote: 'You will receive a confirmation by email. The membership card will be sent after the membership fee has been paid.', oui: 'YES', non: 'NO', joueur: 'Player', officiel: 'Official', arbitre: 'Referee', parent_non: 'NO (2 guardians)', parent_oui: 'YES (1 guardian)', legalRequired: 'Please read and accept the terms and conditions and data protection.', flhRequired: 'Please confirm the transfer to flh.lu for the licence.', accuracyRequired: 'Please confirm the accuracy of the data.'
+            nom: 'Last name *', prenom: 'First name *', dob: 'Date of birth *', mineur: 'Minor', cat: 'FLH category', role: 'Role / Function *', parent: 'Single parent *', tuteur1: 'Guardian 1 *', tuteur2: 'Guardian 2 *', nat: 'Nationality *', cns: 'CNS number *', medico: 'Medical check *', licence: 'Licence *', club: 'Former club *', u7: 'U7 medical certificate required', strasse: 'Street *', postcode: 'Postcode *', ortschaft: 'City *', email: 'Email *', gsm1: 'Mobile 1 *', gsm2: 'Mobile 2', send: 'Submit', sending: 'Sending...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Registration sent.', successNote: 'You will receive a confirmation by email. The membership card will be sent after the membership fee has been paid.', oui: 'YES', non: 'NO', joueur: 'Player', officiel: 'Official', arbitre: 'Referee', benevole: 'Volunteer / Family contact', parent_non: 'NO (2 guardians)', parent_oui: 'YES (1 guardian)', legalRequired: 'Please read and accept the terms and conditions and data protection.', flhRequired: 'Please confirm the transfer to flh.lu for the licence.', accuracyRequired: 'Please confirm the accuracy of the data.', extraRoles: 'Additional function(s) (optional)', extraRolesHint: 'E.g. a player who is also a referee. The first function determines the category.', alsoPrefix: 'Also'
         },
         pt: {
-            nom: 'Apelido *', prenom: 'Nome próprio *', dob: 'Data de nascimento *', mineur: 'Menor', cat: 'Categoria FLH', role: 'Função *', parent: 'Encarregado isolado *', tuteur1: 'Encarregado 1 *', tuteur2: 'Encarregado 2 *', nat: 'Nacionalidade *', cns: 'Número CNS *', medico: 'Exame médico *', licence: 'Licença *', club: 'Clube anterior *', u7: 'U7 certificado médico obrigatório', strasse: 'Rua *', postcode: 'Código postal *', ortschaft: 'Localidade *', email: 'E-mail *', gsm1: 'Telemóvel 1 *', gsm2: 'Telemóvel 2', send: 'Enviar', sending: 'A enviar...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Inscrição enviada.', successNote: 'Receberá uma confirmação por e-mail. O cartão de membro será enviado após o pagamento da quota.', oui: 'SIM', non: 'NÃO', joueur: 'Jogador / Jogadora', officiel: 'Oficial', arbitre: 'Árbitro', parent_non: 'NÃO (2 encarregados)', parent_oui: 'SIM (1 encarregado)', legalRequired: 'Por favor, leia e aceite os termos e condições e a proteção de dados.', flhRequired: 'Por favor, confirme o envio para flh.lu para a licença.', accuracyRequired: 'Por favor, confirme a exatidão dos dados.'
+            nom: 'Apelido *', prenom: 'Nome próprio *', dob: 'Data de nascimento *', mineur: 'Menor', cat: 'Categoria FLH', role: 'Função *', parent: 'Encarregado isolado *', tuteur1: 'Encarregado 1 *', tuteur2: 'Encarregado 2 *', nat: 'Nacionalidade *', cns: 'Número CNS *', medico: 'Exame médico *', licence: 'Licença *', club: 'Clube anterior *', u7: 'U7 certificado médico obrigatório', strasse: 'Rua *', postcode: 'Código postal *', ortschaft: 'Localidade *', email: 'E-mail *', gsm1: 'Telemóvel 1 *', gsm2: 'Telemóvel 2', send: 'Enviar', sending: 'A enviar...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Inscrição enviada.', successNote: 'Receberá uma confirmação por e-mail. O cartão de membro será enviado após o pagamento da quota.', oui: 'SIM', non: 'NÃO', joueur: 'Jogador / Jogadora', officiel: 'Oficial', arbitre: 'Árbitro', benevole: 'Voluntário / Contacto família', parent_non: 'NÃO (2 encarregados)', parent_oui: 'SIM (1 encarregado)', legalRequired: 'Por favor, leia e aceite os termos e condições e a proteção de dados.', flhRequired: 'Por favor, confirme o envio para flh.lu para a licença.', accuracyRequired: 'Por favor, confirme a exatidão dos dados.', extraRoles: 'Função(ões) adicional(is) (opcional)', extraRolesHint: 'Ex.: jogador que também é árbitro. A primeira função determina a categoria.', alsoPrefix: 'Também'
         }
     };
     const MERSCH75_LEGAL_TEXTS = {
@@ -512,8 +534,10 @@
             select.value = 'Membre Famille (2+) – €250';
             return;
         }
-        const role = document.getElementById('Role').value;
-        if (role === 'Officiel(le)' || role === 'Arbitre') {
+        // Offizieller / Arbitter (ëmmer mat Lizenz) oder Bénévole mat Lizenz = €50,
+        // och wann d'Persoun gläichzäiteg Spiller ass (Comité/Offiziell/Arbitter mat Lizenz).
+        const flags = getRoleFlags();
+        if (flags.isOfficial || flags.isReferee || (flags.isVolunteer && flags.hasLicence)) {
             select.value = 'Membre Licence Officiel – €50';
             return;
         }
@@ -596,28 +620,77 @@
                             '<option value="Familljemember selwecht Adress">Familljemember selwecht Adress</option>' +
                         '</select>' +
                     '</div>' +
-                    '<div class="join-form-group">' +
-                        '<label for="FamilyMember' + i + 'License">Lizenz gewënscht?</label>' +
-                        '<select id="FamilyMember' + i + 'License" name="FamilyMember' + i + 'License">' +
-                            '<option value="Nee">Nee / nëmmen QR</option>' +
-                            '<option value="Jo">Jo, Lizenz virbereeden</option>' +
+                    '<div class="join-form-group" id="FamilyMember' + i + 'BenevoleWrap">' +
+                        '<label for="FamilyMember' + i + 'Benevole">Bénévole ginn?</label>' +
+                        '<select id="FamilyMember' + i + 'Benevole" name="FamilyMember' + i + 'Benevole">' +
+                            '<option value="Nee">Nee</option>' +
+                            '<option value="Jo">Jo</option>' +
                         '</select>' +
                     '</div>' +
                 '</div>' +
-                '<div class="join-form-row">' +
-                    '<div class="join-form-group">' +
-                        '<label for="FamilyMember' + i + 'Dob">Gebuertsdatum fir Lizenz</label>' +
-                        '<input type="text" id="FamilyMember' + i + 'Dob" name="FamilyMember' + i + 'Dob" placeholder="01.01.2010" inputmode="numeric" pattern="[0-9]{2}\\.[0-9]{2}\\.[0-9]{4}">' +
+                '<div class="join-form-group" id="FamilyMember' + i + 'LicenseWrap" style="display:none;">' +
+                    '<label for="FamilyMember' + i + 'License">Mat Lizenz?</label>' +
+                    '<select id="FamilyMember' + i + 'License" name="FamilyMember' + i + 'License">' +
+                        '<option value="Nee">Nee / nëmmen QR</option>' +
+                        '<option value="Jo">Jo, Lizenz virbereeden</option>' +
+                    '</select>' +
+                '</div>' +
+                '<div id="FamilyMember' + i + 'LicenseDetails" style="display:none;">' +
+                    '<div class="join-form-row">' +
+                        '<div class="join-form-group">' +
+                            '<label for="FamilyMember' + i + 'Dob">Gebuertsdatum fir Lizenz</label>' +
+                            '<input type="text" id="FamilyMember' + i + 'Dob" name="FamilyMember' + i + 'Dob" placeholder="01.01.2010" inputmode="numeric" pattern="[0-9]{2}\\.[0-9]{2}\\.[0-9]{4}">' +
+                        '</div>' +
+                        '<div class="join-form-group">' +
+                            '<label for="FamilyMember' + i + 'Cns">Matricule CNS (5 Zifferen)</label>' +
+                            '<input type="text" id="FamilyMember' + i + 'Cns" name="FamilyMember' + i + 'Cns" maxlength="5" inputmode="numeric" pattern="[0-9]{5}">' +
+                        '</div>' +
                     '</div>' +
-                    '<div class="join-form-group">' +
-                        '<label for="FamilyMember' + i + 'Cns">CNS 5 Zifferen</label>' +
-                        '<input type="text" id="FamilyMember' + i + 'Cns" name="FamilyMember' + i + 'Cns" maxlength="5" inputmode="numeric" pattern="[0-9]{5}">' +
+                    '<div class="join-form-row">' +
+                        '<div class="join-form-group">' +
+                            '<label for="FamilyMember' + i + 'Nationalite">Nationalitéit</label>' +
+                            '<input type="text" id="FamilyMember' + i + 'Nationalite" name="FamilyMember' + i + 'Nationalite" autocomplete="country-name">' +
+                        '</div>' +
+                        '<div class="join-form-group">' +
+                            '<label for="FamilyMember' + i + 'Club">Ale Veräin (oder &quot;NEANT&quot;)</label>' +
+                            '<input type="text" id="FamilyMember' + i + 'Club" name="FamilyMember' + i + 'Club">' +
+                        '</div>' +
                     '</div>' +
                 '</div>' +
             '</div>');
         }
 
         container.innerHTML = blocks.join('');
+        updateAllFamilyMemberVisibility();
+    }
+
+    function updateFamilyMemberVisibility(i) {
+        const benevoleSel = document.getElementById('FamilyMember' + i + 'Benevole');
+        if (!benevoleSel) return;
+        const relation = getValue('FamilyMember' + i + 'Relation');
+        const isChild = /Kand/i.test(relation);
+        const benevoleWrap = document.getElementById('FamilyMember' + i + 'BenevoleWrap');
+        const licenseWrap = document.getElementById('FamilyMember' + i + 'LicenseWrap');
+        const licenseSel = document.getElementById('FamilyMember' + i + 'License');
+        const details = document.getElementById('FamilyMember' + i + 'LicenseDetails');
+
+        // Bénévole-Fro nëmme fir Elteren / Erwuessener (net fir e Kand-Spiller)
+        benevoleWrap.style.display = isChild ? 'none' : '';
+        const wantsBenevole = benevoleSel.value === 'Jo';
+
+        // Lizenz-Fro: Kand (Spiller) oder wann Bénévole gewielt gouf
+        const showLicense = isChild || wantsBenevole;
+        licenseWrap.style.display = showLicense ? '' : 'none';
+
+        // Bei Lizenz: Gebuertsdatum, Matricule, Nationalitéit an Ale Veräin
+        details.style.display = (showLicense && licenseSel.value === 'Jo') ? '' : 'none';
+    }
+
+    function updateAllFamilyMemberVisibility() {
+        const total = getFamilyMemberCount();
+        for (let i = 1; i < total; i++) {
+            updateFamilyMemberVisibility(i);
+        }
     }
 
     function getFamilyMembers() {
@@ -632,9 +705,12 @@
             members.push({
                 name: getValue('FamilyMember' + i + 'Name'),
                 relation: getValue('FamilyMember' + i + 'Relation'),
+                benevole: getValue('FamilyMember' + i + 'Benevole'),
                 license: getValue('FamilyMember' + i + 'License'),
                 dob: getValue('FamilyMember' + i + 'Dob'),
-                cns: getValue('FamilyMember' + i + 'Cns')
+                cns: getValue('FamilyMember' + i + 'Cns'),
+                nationalite: getValue('FamilyMember' + i + 'Nationalite'),
+                club: getValue('FamilyMember' + i + 'Club')
             });
         }
 
@@ -904,6 +980,12 @@
         document.getElementById('lbl-mineur').innerText = ui.mineur;
         document.getElementById('lbl-cat').innerText = ui.cat;
         document.getElementById('lbl-role').innerText = ui.role;
+        document.getElementById('lbl-extra-roles').innerText = ui.extraRoles;
+        document.getElementById('lbl-extra-roles-hint').innerText = ui.extraRolesHint;
+        document.getElementById('lbl-also-joueur').innerText = ui.alsoPrefix + ' ' + ui.joueur;
+        document.getElementById('lbl-also-arbitre').innerText = ui.alsoPrefix + ' ' + ui.arbitre;
+        document.getElementById('lbl-also-officiel').innerText = ui.alsoPrefix + ' ' + ui.officiel;
+        document.getElementById('lbl-also-benevole').innerText = ui.alsoPrefix + ' ' + ui.benevole;
         document.getElementById('lbl-parent').innerText = ui.parent;
         document.getElementById('lbl-tuteur1').innerText = ui.tuteur1;
         document.getElementById('lbl-tuteur2').innerText = ui.tuteur2;
@@ -937,6 +1019,7 @@
         role.options[0].text = ui.joueur;
         role.options[1].text = ui.officiel;
         role.options[2].text = ui.arbitre;
+        role.options[3].text = ui.benevole;
 
         const parent = document.getElementById('ParentIsole');
         parent.options[0].text = ui.parent_non;
@@ -1069,6 +1152,7 @@
     }
 
     function buildSheetPayload(isTest) {
+        const flags = getRoleFlags();
         const mainMember = {
             nom: getValue('Nom'),
             prenom: getValue('Prenom'),
@@ -1078,28 +1162,36 @@
             strasse: getValue('Strasse'),
             postcode: getValue('Postcode'),
             ortschaft: getValue('Ortschaft'),
-            categorie: getCategoryValue(),
-            basis: getValue('FlhCategoryBasis'),
+            categorie: flags.needsCategory ? getCategoryValue() : '',
+            basis: flags.needsCategory ? getValue('FlhCategoryBasis') : '',
             dob: getValue('DateNaissance'),
-            cns: getValue('CNS'),
-            cnsComplete: getCnsComplete(),
+            cns: flags.hasLicence ? getValue('CNS') : '',
+            cnsComplete: flags.hasLicence ? getCnsComplete() : '',
             gsm1: getValue('GSM1'),
             gsm2: getValue('GSM2'),
             email: getValue('Email'),
-            role: getValue('Role'),
-            licence: getValue('Licence'),
+            role: flags.role,
+            roles: flags.roles,
+            licence: flags.hasLicence ? 'Oui' : 'Non',
+            catCode: buildCatCode(flags),
             mineur: document.getElementById('Mineur').value
         };
 
         const members = [mainMember];
 
         getFamilyMembers().forEach(function(member, index) {
+            const isChild = /Kand/i.test(member.relation || '');
+            const wantsBenevole = member.benevole === 'Jo';
+            const memberHasLicence = member.license === 'Jo';
+            // Kand = Spiller (kee Code). Elteren/Erwuessener nëmme wann se Bénévole ginn -> 214/215.
+            const memberRole = isChild ? 'Joueur / Joueuse' : (wantsBenevole ? 'Bénévole / Contact Famille' : '');
+            const memberCatCode = isChild ? '' : (wantsBenevole ? getBenevoleCatCode(memberHasLicence) : '');
             members.push({
                 nom: member.name,
                 prenom: '',
                 randomNo: ensureFamilyMemberCardId(index + 1),
                 lang: currentLang,
-                nationalite: getValue('Nationalite'),
+                nationalite: member.nationalite || getValue('Nationalite'),
                 strasse: getValue('Strasse'),
                 postcode: getValue('Postcode'),
                 ortschaft: getValue('Ortschaft'),
@@ -1111,8 +1203,9 @@
                 gsm1: '',
                 gsm2: '',
                 email: getValue('Email'),
-                role: 'Joueur / Joueuse',
-                licence: member.license === 'Jo' ? 'Oui' : 'Non',
+                role: memberRole || 'Joueur / Joueuse',
+                licence: memberHasLicence ? 'Oui' : 'Non',
+                catCode: memberCatCode,
                 mineur: ''
             });
         });
@@ -1161,6 +1254,171 @@
         return match ? match.category : '';
     }
 
+    // --- CAT-Coden (Spalt J / "Cat") ----------------------------------------
+    const MERSCH75_CAT_CODES = {
+        male:   { Seniors: '2', U21: '3', U17: '4', U15: '5', U13: '6', U11: '7', U9: '8', Veterans: '9', U7: '21' },
+        female: { Seniors: '12', U17: '14', U15: '16', U13: '15', U11: '17', U9: '18', Veterans: '19', U7: '21' }
+    };
+    const MERSCH75_OFFICIEL_CODE = { male: '1', female: '11' };
+    const MERSCH75_ARBITRE_CODE = '10';
+    const MERSCH75_BENEVOLE_CODE = '50';
+    // Arbitter réischt ab U13 (net fir U11/U9/U7)
+    const MERSCH75_REFEREE_CATEGORIES = ['U13', 'U15', 'U17', 'U21', 'Seniors', 'Veterans'];
+
+    function getGenderKey() {
+        return document.getElementById('FlhCategoryBasis').value === 'Filles - Femmes' ? 'female' : 'male';
+    }
+
+    function getCategoryCatCode(categoryName, genderKey) {
+        const table = MERSCH75_CAT_CODES[genderKey] || {};
+        return table[categoryName] || '';
+    }
+
+    function canBeReferee() {
+        const cat = getCategoryValue();
+        if (!cat) return true; // nach keng Kategorie -> net blockéieren
+        return MERSCH75_REFEREE_CATEGORIES.indexOf(cat) !== -1;
+    }
+
+    // --- Roll-Logik: wéi eng Felder pro Roll néideg sinn -------------------
+    function getSelectedRoles() {
+        const primary = getValue('Role');
+        const selected = {};
+        selected[primary] = true;
+        const extra = {
+            'Joueur / Joueuse': 'RoleAlsoJoueur',
+            'Officiel(le)': 'RoleAlsoOfficiel',
+            'Arbitre': 'RoleAlsoArbitre',
+            'Bénévole / Contact Famille': 'RoleAlsoBenevole'
+        };
+        Object.keys(extra).forEach(function(role) {
+            const cb = document.getElementById(extra[role]);
+            if (cb && cb.checked) selected[role] = true;
+        });
+        // Fix Reihenfolleg: Spiller ëmmer als éischt, Arbitter drun
+        const order = ['Joueur / Joueuse', 'Officiel(le)', 'Bénévole / Contact Famille', 'Arbitre'];
+        return order.filter(function(role) { return selected[role]; });
+    }
+
+    function getRoleFlags() {
+        const roles = getSelectedRoles();
+        const has = function(r) { return roles.indexOf(r) !== -1; };
+        const isPlayer = has('Joueur / Joueuse');
+        const isOfficial = has('Officiel(le)');
+        const isReferee = has('Arbitre');
+        const isVolunteer = has('Bénévole / Contact Famille');
+        // Offizieller an Arbitter hunn ëmmer eng Lizenz
+        const forcedLicence = isOfficial || isReferee;
+        const hasLicence = forcedLicence ? true : (document.getElementById('Licence').value === 'Oui');
+        const over50 = typeof currentAge === 'number' && currentAge > 50;
+        // Medico: Spiller mat Lizenz ëmmer; Arbitter ausser >50; keen Offizieller/Bénévole eleng
+        let needsMedico = false;
+        if (isPlayer && hasLicence) needsMedico = true;
+        if (isReferee && !over50) needsMedico = true;
+        // Kategorie-Uweisung fir Spiller/Arbitter; Geschlecht (Basis) och fir Offizieller (Code 1/11)
+        const needsCategory = isPlayer || isReferee;
+        const needsGender = isPlayer || isReferee || isOfficial;
+        const role = getValue('Role');
+        return {
+            roles: roles, role: role,
+            isPlayer: isPlayer, isOfficial: isOfficial, isReferee: isReferee, isVolunteer: isVolunteer,
+            forcedLicence: forcedLicence, hasLicence: hasLicence, over50: over50,
+            needsMedico: needsMedico, needsCategory: needsCategory, needsGender: needsGender
+        };
+    }
+
+    function buildCatCode(flags) {
+        const gender = getGenderKey();
+        const playerCode = flags.isPlayer ? getCategoryCatCode(getCategoryValue(), gender) : '';
+        // Arbitter: Code 10 virun de Spiller-Code (ouni Trennzeechen), z.B. Seniors=102, Vétéran=109
+        if (flags.isReferee) return MERSCH75_ARBITRE_CODE + playerCode;
+        if (flags.isPlayer) return playerCode;                     // Spiller = Kategorie-Code
+        if (flags.isOfficial) return MERSCH75_OFFICIEL_CODE[gender]; // Officiel H=1 / D=11
+        if (flags.isVolunteer) return MERSCH75_BENEVOLE_CODE;       // reng Bénévole = 50
+        return '';
+    }
+
+    function getBenevoleCatCode(hasLicence) {
+        return hasLicence ? '215' : '214';                         // Contact Famille (Familljesektioun)
+    }
+
+    function toggleSection(id, show) {
+        const el = document.getElementById(id);
+        if (el) el.style.display = show ? '' : 'none';
+    }
+
+    function toggleFieldRequired(id, required) {
+        const el = document.getElementById(id);
+        if (el) el.required = required;
+    }
+
+    function applyRoleRules() {
+        const f = getRoleFlags();
+
+        // Zousätzlech-Roll-Checkbox déi der Haaptroll entspriicht verstoppen
+        const primary = getValue('Role');
+        const extraMap = {
+            'Joueur / Joueuse': { wrap: 'extra-role-joueur', cb: 'RoleAlsoJoueur' },
+            'Officiel(le)': { wrap: 'extra-role-officiel', cb: 'RoleAlsoOfficiel' },
+            'Arbitre': { wrap: 'extra-role-arbitre', cb: 'RoleAlsoArbitre' },
+            'Bénévole / Contact Famille': { wrap: 'extra-role-benevole', cb: 'RoleAlsoBenevole' }
+        };
+        Object.keys(extraMap).forEach(function(role) {
+            const wrap = document.getElementById(extraMap[role].wrap);
+            const cb = document.getElementById(extraMap[role].cb);
+            if (role === primary) {
+                if (cb) cb.checked = false;
+                if (wrap) wrap.style.display = 'none';
+            } else if (wrap) {
+                wrap.style.display = '';
+            }
+        });
+
+        // Arbitter réischt ab U13: "Och Arbitter" spären wann ze jonk
+        const arbitreWrap = document.getElementById('extra-role-arbitre');
+        const arbitreCb = document.getElementById('RoleAlsoArbitre');
+        if (primary !== 'Arbitre' && arbitreWrap && arbitreWrap.style.display !== 'none') {
+            if (!canBeReferee()) {
+                if (arbitreCb) { arbitreCb.checked = false; arbitreCb.disabled = true; }
+                arbitreWrap.style.opacity = '0.5';
+            } else if (arbitreCb) {
+                arbitreCb.disabled = false;
+                arbitreWrap.style.opacity = '';
+            }
+        }
+
+        // Lizenz: Offizieller/Arbitter ëmmer "Oui" a verstoppt; soss auswielbar
+        const licenceGroup = document.getElementById('licence-group');
+        const licence = document.getElementById('Licence');
+        if (f.forcedLicence) {
+            licence.value = 'Oui';
+            licenceGroup.style.display = 'none';
+            licence.required = false;
+        } else {
+            licenceGroup.style.display = '';
+            licence.required = true;
+        }
+
+        // Geschlecht (Basis) fir Kategorie/Officiel-Code; Kategorie-Uweisung fir Spiller/Arbitter
+        toggleSection('basis-section', f.needsGender);
+        toggleFieldRequired('FlhCategoryBasis', f.needsGender);
+        toggleSection('cat-section', f.needsCategory);
+
+        // CNS / Nationalitéit / Ale Veräin: nëmme mat Lizenz
+        toggleSection('cns-section', f.hasLicence);
+        toggleFieldRequired('CNS', f.hasLicence);
+        toggleSection('nat-section', f.hasLicence);
+        toggleFieldRequired('Nationalite', f.hasLicence);
+        toggleSection('club-section', f.hasLicence);
+        toggleFieldRequired('AncienClub', f.hasLicence);
+
+        // Medico
+        toggleSection('medico-group', f.needsMedico);
+        toggleFieldRequired('Medico', f.needsMedico);
+
+        updateCnsDisplay();
+    }
+
     function calcCategorie(dob) {
         const parts = dob.split('.');
 
@@ -1179,6 +1437,7 @@
             currentAge = null;
             currentCotisationAge = null;
             setRequiredState(false, '');
+            applyRoleRules();
             return;
         }
 
@@ -1195,6 +1454,7 @@
         currentAge = age;
         currentCotisationAge = cotisationAge;
         setRequiredState(isMinor, cat);
+        applyRoleRules();
         suggestTarif();
     }
 
@@ -1218,6 +1478,7 @@
             currentAge = null;
             currentCotisationAge = null;
             setRequiredState(false, '');
+            applyRoleRules();
         }
 
         updateCnsDisplay();
@@ -1225,8 +1486,26 @@
     });
 
     document.getElementById('Role').addEventListener('change', function() {
+        applyRoleRules();
         suggestTarif();
         updateFamilySummary();
+    });
+
+    document.getElementById('Licence').addEventListener('change', function() {
+        applyRoleRules();
+        suggestTarif();
+        updateFamilySummary();
+    });
+
+    ['RoleAlsoJoueur', 'RoleAlsoArbitre', 'RoleAlsoOfficiel', 'RoleAlsoBenevole'].forEach(function(id) {
+        const cb = document.getElementById(id);
+        if (cb) {
+            cb.addEventListener('change', function() {
+                applyRoleRules();
+                suggestTarif();
+                updateFamilySummary();
+            });
+        }
     });
 
     document.getElementById('FlhCategoryBasis').addEventListener('change', function() {
@@ -1265,7 +1544,10 @@
 
         updateFamilySummary();
     });
-    document.getElementById('family-members-fields').addEventListener('change', updateFamilySummary);
+    document.getElementById('family-members-fields').addEventListener('change', function() {
+        updateAllFamilyMemberVisibility();
+        updateFamilySummary();
+    });
 
     ['Nom', 'Prenom', 'Licence', 'Strasse', 'Postcode', 'Ortschaft', 'Tuteur1', 'Tuteur2'].forEach(function(id) {
         document.getElementById(id).addEventListener('input', updateFamilySummary);
@@ -1421,6 +1703,7 @@
 
     ensureCardInternalId();
     updateLang('lu');
+    applyRoleRules();
     updateCnsDisplay();
     updateFamilySection(false);
     updateConsentValidationMessages();
