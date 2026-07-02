@@ -171,7 +171,7 @@
                             </div>
 
                             <div class="join-form-group" id="tarif-section">
-                                <label id="lbl-tarif" for="Cotisation">COTISATIOUN 2025-2026 <span class="join-helper-text">(Automatesch virgeschloen op Basis vum Alter — kann ugepasst ginn. Keng Bezuelung)</span></label>
+                                <label id="lbl-tarif" for="Cotisation">COTISATIOUN 2025-2026 <span class="join-helper-text">(Automatesch virgeschloen op Basis vum Alter — kann ugepasst ginn an op enger AG geännert ginn, wat fir déi kommend Saison a Kraft trëtt.)</span></label>
                                 <select id="Cotisation" name="Cotisation">
                                     <option value="Membre étudiant, jeune joueur < 16 – €100">Membre étudiant / jeune joueur &lt; 16 – €100</option>
                                     <option value="Membre étudiant, jeune joueur > 16 – €100">Membre étudiant / jeune joueur &gt; 16 – €100</option>
@@ -1330,7 +1330,8 @@
     function buildCatCode(flags) {
         const gender = getGenderKey();
         const playerCode = flags.isPlayer ? getCategoryCatCode(getCategoryValue(), gender) : '';
-        // Arbitter: Code 10 virun de Spiller-Code (ouni Trennzeechen), z.B. Seniors=102, Vétéran=109
+        // Arbitter: Code 10 virun de Spiller-Code (ouni Trennzeechen)
+        // z.B. Seniors-H=102, Vétéran-H=109, Vétérans-Dames=1019, U13-Dames=1015
         if (flags.isReferee) return MERSCH75_ARBITRE_CODE + playerCode;
         if (flags.isPlayer) return playerCode;                     // Spiller = Kategorie-Code
         if (flags.isOfficial) return MERSCH75_OFFICIEL_CODE[gender]; // Officiel H=1 / D=11
