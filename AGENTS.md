@@ -29,3 +29,12 @@
 - Ask before making destructive cleanup outside the current migration plan.
 - Do not “tidy” unrelated files.
 - Prefer repository conventions over inventing new ones.
+
+## Join → Google Sheet Automation (join.html)
+- `join.html` posts new registrations to a Google Apps Script Web App that writes rows into a Google-Sheet master; column **C** = `Random-No` (from `generateCardInternalId`, alphabet `ABCDEFGHJKLMNPQRSTUVWXYZ23456789`), with a server-side uniqueness/collision check.
+- Config constants in `join.html`: `MERSCH75_SHEET_ENDPOINT` (Apps Script deploy URL), `MERSCH75_SHEET_TOKEN` (`m75-join-9f36-secure-2026`), `MERSCH75_WEB3FORMS_TEST_KEY`, `MERSCH75_SHEET_PRODUCTION` (false during test phase).
+- **Test mode:** if the surname (`Nom`) contains `TEST`, all Web3Forms mails go only to `m75.deisad@gmail.com` (never Secrétaire/Max); minors trigger 2 mails. Sheet writes go only to the Adrien test master and rows are marked `TEST`.
+- Real Web3Forms mail flow (main FR key + Max DE copy) is unchanged; FLH licence form stays manual.
+- **Roles & CAT-code (column J):** multi-role via checkboxes (e.g. player + referee). Player = FLH category code; Officiel H=`1`/D=`11`; referee=`10`; player+referee = `10`+category code (e.g. `102`, `109`, `1019`); pure Bénévole=`50`; Contact Famille=`214`/`215`. Referee only from U13+. `roles` array drives sheet markers AK (Off) / AM (SR). Logic in `buildCatCode` / `getRoleFlags` / `suggestTarif`.
+- **Fee (`suggestTarif`):** Officiel/referee or Bénévole-with-licence → €50 even if also a player; family (2+) → €250; otherwise age-based player fee. Tarif label + hint are i18n (`tarif`/`tarifHint`).
+- Full details + Apps Script code: `.windsurf/plans/join-to-sheet-automation-f4cdcc.md`.

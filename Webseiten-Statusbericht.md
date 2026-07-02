@@ -232,3 +232,27 @@ Legende: ✅ **Fertig & gepflegt** · 🟦 **Funktioniert, ausbaufähig** · �
 ---
 
 *Hinweis: Dieser Bericht basiert auf statischer Code-Analyse des Website-Repos vom 29.06.2026. Zeilen-/Größenangaben sind gemessen (`wc -l`, `du`, `grep`).*
+
+---
+
+## Nachtrag (01.07.2026): Join → Google-Sheet-Automatisierung
+
+Neue Mitglieder aus `join.html` werden künftig **automatisch in eine Google-Sheet-Mitgliederliste** geschrieben (über ein Google-Apps-Script-Web-App), inkl. der zufälligen `Random-No` in **Spalte C** und der FLH-Kategorie-Logik.
+
+- **Zwei-Spur:** Der Sekretär führt seine eigene Excel-Liste weiter; die Automatisierung schreibt in einen separaten Google-Sheet-**Master** (zuerst Test-Master „Adrien", danach Sekretär-Master).
+- **Test-Modus:** Nachname mit `TEST` → alle Mails nur an `m75.deisad@gmail.com`, nichts an Sekretär/Max; Sheet-Schreiben nur in den Adrien-Test-Master (Zeile als `TEST` markiert).
+- Der bestehende **Web3Forms-Mailfluss** (Haupt-FR-Key + Max-DE-Kopie) bleibt unverändert; das FLH-Lizenzformular bleibt manuell.
+- **Vollständiger Plan + Apps-Script-Code:** `.windsurf/plans/join-to-sheet-automation-f4cdcc.md`.
+
+---
+
+## Nachtrag (02.07.2026): Join-Formular — Rollen, CAT-Codes & Beitrag
+
+Erweiterung der Rollen-/Kategorie-Logik in `join.html`:
+
+- **Multi-Rolle:** Zusätzlich zur Hauptfunktion können weitere Funktionen per Checkbox gewählt werden (z.B. Spieler **und** Schiedsrichter). Übersetzt in 5 Sprachen.
+- **CAT-Code (Spalte J):** Spieler = FLH-Kategorie-Code (H: Seniors=2 … Vétérans=9, U7=21 · D: Dames=12 … Vétérans=19, U7=21) · Officiel H=`1`/D=`11` · Schiedsrichter=`10` · **Spieler+Schiedsrichter = `10`+Kategorie-Code** (z.B. `102`, `109`, `1019`) · reiner Bénévole=`50` · Contact Famille=`214`/`215`.
+- **Regel:** Schiedsrichter erst **ab U13** (Option für U11/U9/U7 gesperrt).
+- **Beitrag:** Officiel/Schiedsrichter (immer mit Lizenz) bzw. Bénévole mit Lizenz → **€50, auch wenn gleichzeitig Spieler**. Der Beitrag ist ein anpassbarer Vorschlag und **kann auf einer AG geändert** werden (Wirkung ab der kommenden Saison). Titel + Hinweis in 5 Sprachen.
+- **Sheet-Marker:** `roles`-Array → Spalte AK (`Off`) bzw. AM (`SR`), auch beim Spieler-Schiedsrichter.
+- **Doku im Vereins-OS:** `docs/join-to-sheet-automation-f4cdcc.md` (Abschnitt „Roll-, CAT-Code- & Cotisatioun-Logik").
