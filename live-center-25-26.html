@@ -450,7 +450,7 @@ let allGamesData = [
     { team: "JUGEND: U13M-PE", datum: "02.05.26 10:30", heim: "Mersch75", gast: "HB Dudelange 2",  score: "49:22", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3454511", rtl: "", nr: "29503043" },
     { team: "JUGEND: U13M-PE", datum: "08.05.26 18:00", heim: "Mersch75", gast: "HBC Schifflange", score: "30:19", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3465391", rtl: "", nr: "29503046" },
     { team: "JUGEND: U13M-PE", datum: "16.05.26 10:30", heim: "Mersch75", gast: "HC Standard 2", score: "25:28", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3476156", rtl: "", nr: "29503049" },
-    { team: "JUGEND: U13M-PE", datum: "05.06.26 15:30", heim: "HB Pétange", gast: "Mersch75", score: "", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3484116", rtl: "", nr: "29503009" },
+    { team: "JUGEND: U13M-PE", datum: "05.06.26 15:30", heim: "HB Pétange", gast: "Mersch75", score: "15:30", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3484116", rtl: "", nr: "29503009" },
     { team: "JUGEND: U13M-PE", datum: "06.06.26 10:30", heim: "Mersch75", gast: "Handball Esch", score: "39:26", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3484146", rtl: "https://youtu.be/5A9jJBTCQ04", nr: "29503052" },
 
     { team: "JUGEND: U11 Elite", datum: "11.01.26 10:00", heim: "Mersch75", gast: "Handball Esch", score: "24:15", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3259137", rtl: "" },
@@ -1015,6 +1015,21 @@ function renderStandingsPanel() {
 
     const standings = window.__liveStandings || {};
     const activeCat = window.__allGamesFilter || 'all';
+
+    const hasAnyStandings = Object.keys(standings).some(function (k) {
+        return Array.isArray(standings[k]) && standings[k].length;
+    });
+    if (!hasAnyStandings) {
+        panel.innerHTML =
+            '<div class="standings-empty" style="color:#444;font-size:0.9rem;line-height:1.55;padding:6px 0;">' +
+            '<p style="margin:0 0 8px;"><strong>LB:</strong> D’Saison 25/26 ass ofgeschloss – d’FLH publizéiert dës Tabellen net méi live. Déi komplett Schlusstabellen (all Ronnen a Phasen) fënns du an der <a href="statistics-25-26.html" style="color:#005eb8;font-weight:700;">Statistik 25/26 &rarr;</a></p>' +
+            '<p style="margin:0 0 8px;"><strong>FR:</strong> La saison 25/26 est terminée – la FLH ne publie plus ces classements en direct. Les classements finaux complets (toutes les rondes et phases) se trouvent dans les <a href="statistics-25-26.html" style="color:#005eb8;font-weight:700;">Statistiques 25/26 &rarr;</a></p>' +
+            '<p style="margin:0 0 8px;"><strong>DE:</strong> Die Saison 25/26 ist abgeschlossen – die FLH stellt diese Tabellen nicht mehr live bereit. Die vollständigen Abschlusstabellen (alle Runden und Phasen) findest du in der <a href="statistics-25-26.html" style="color:#005eb8;font-weight:700;">Statistik 25/26 &rarr;</a></p>' +
+            '<p style="margin:0 0 8px;"><strong>EN:</strong> The 25/26 season is over – the FLH no longer publishes these tables live. The complete final tables (all rounds and phases) are available in the <a href="statistics-25-26.html" style="color:#005eb8;font-weight:700;">Statistics 25/26 &rarr;</a></p>' +
+            '<p style="margin:0;"><strong>PT:</strong> A época 25/26 terminou – a FLH já não publica estas tabelas em direto. As tabelas finais completas (todas as rondas e fases) estão nas <a href="statistics-25-26.html" style="color:#005eb8;font-weight:700;">Estatísticas 25/26 &rarr;</a></p>' +
+            '</div>';
+        return;
+    }
 
     function renderOneTable(cat) {
         if (STANDINGS_NO_TABLE[cat]) {
