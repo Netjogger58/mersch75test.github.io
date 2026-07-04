@@ -79,8 +79,9 @@
     function buildMergeKey(game) {
         if (!game) return '';
 
-        const sbo = getSboLink(game.sbo.replace(/^.*sGID=/, '')) || trimValue(game.sbo);
-        if (sbo) return 'sbo|' + sbo;
+        const raw = trimValue(game.sboLive) || trimValue(game.sbo);
+        const sgid = raw.match(/sGID=(\d+)/);
+        if (sgid) return 'sbo|' + sgid[1];
 
         const number = trimValue(game.nr);
         if (number) return 'nr|' + number;
@@ -116,7 +117,8 @@
         if (trimValue(incoming.halle)) merged.halle = incoming.halle;
         if (trimValue(incoming.score)) merged.score = incoming.score;
         if (trimValue(incoming.bem)) merged.bem = incoming.bem;
-        if (trimValue(incoming.sbo)) merged.sbo = incoming.sbo;
+        if (trimValue(incoming.sbo) && !trimValue(base.sbo)) merged.sbo = incoming.sbo;
+        if (trimValue(incoming.sboLive) && !trimValue(base.sboLive)) merged.sboLive = incoming.sboLive;
         if (!trimValue(merged.rtl) && trimValue(incoming.rtl)) merged.rtl = incoming.rtl;
         if (!trimValue(merged.yt) && trimValue(incoming.yt)) merged.yt = incoming.yt;
 

@@ -639,7 +639,7 @@ return `<tr>
 <td><strong>${r.heim}</strong></td>
 <td>${r.gast}</td>
 <td class="score-cell ${scoreCSS(r.score,r.heim)}">${r.score}</td>
-${sboCell(r.sbo)}${rtlCell(r.rtl)}
+${sboCell(r)}${rtlCell(r.rtl)}
 <td class="col-bem">${r.bem}</td>
 </tr>`;
 }).join("") : ""
@@ -737,7 +737,7 @@ return `<tr>
 <td>${r.gast}</td>
 <td class="score-cell">${r.score||'<span class="tag tag-future">▶ Kommend</span>'}</td>
 <td style="color:#888;font-size:0.8rem">${r.bem}</td>
-${sboCell(r.sbo)}${rtlCell("")}
+${sboCell(r)}${rtlCell("")}
 </tr>`;
 }).join("")
 };
@@ -1008,7 +1008,7 @@ rows += `<tr>
 <td><strong>${r.heim}</strong></td>
 <td>${r.gast}</td>
 <td style="text-align:center;">${scoreDisplay}</td>
-${sboCell(r.sbo)}${rtlCell(r.rtl || r.yt)}
+${sboCell(r)}${rtlCell(r.rtl || r.yt)}
 <td class="col-bem">${r.bem || ""}</td>
 </tr>`;
 } catch (e) {}
@@ -1175,9 +1175,17 @@ refreshLiveCenterScheduleData(false);
 
 }
 
-function sboCell(v) {
-if (!v || v === "fehlt") return '<td class="link-cell"><span class="link-fehlt">🔗 fehlt</span></td>';
-return `<td class="link-cell"><a class="link-sbo" href="${v}" target="_blank" rel="noopener">📄 SBO</a></td>`;
+function sboCell(row) {
+// Ëmmt entweder e String (Original-URL) oder e Spill-Objet {sbo, sboLive}.
+// Prioritéit: eis archivéiert Kopie (sbo, z.B. sbo-archiv/2627/<gNo>.pdf op Hetzner),
+// soss Fallback op den Handball4All-Original (sboLive).
+let local = '', live = '';
+if (typeof row === 'string') { local = row; }
+else if (row) { local = row.sbo || ''; live = row.sboLive || ''; }
+const href = local || live;
+if (!href || href === "fehlt") return '<td class="link-cell"><span class="link-fehlt">🔗 fehlt</span></td>';
+const label = local ? '📄 SBO' : '📄 SBO (FLH)';
+return `<td class="link-cell"><a class="link-sbo" href="${href}" target="_blank" rel="noopener">${label}</a></td>`;
 }
 
 function rtlCell(v) {
