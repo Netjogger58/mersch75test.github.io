@@ -760,32 +760,13 @@ let activeLiveCenterMode = '';
 let liveCenterRefreshPromise = null;
 
 function refreshLiveCenterScheduleData(forceRefresh) {
-if (!window.MerschFlhSync) return Promise.resolve(false);
-if (!forceRefresh && liveCenterRefreshPromise) return liveCenterRefreshPromise;
-
-liveCenterRefreshPromise = window.MerschFlhSync.fetchAllGames().then(function(livePayload) {
-if (livePayload && livePayload.standingsByLabel) {
-    window.__liveStandings = livePayload.standingsByLabel;
-}
-if (Array.isArray(livePayload.games) && livePayload.games.length) {
-allGamesData = window.MerschFlhSync.mergeLiveSeasonGames(allGamesData, livePayload);
-applyLiveCenterCorrections();
-if (activeLiveCenterMode === 'static' && activeLiveCenterEntry && activeLiveCenterEntry.t === 'allgames') {
-showStatic(activeLiveCenterEntry);
-}
-return true;
-}
+// AGEFROON 25/26: FLH/Handball4All stellt d'25/26-Donnéeën net méi live bereet.
+// D'Archiv leeft rein statesch – kee Live-Fetch méi, fir falsch/eidel Merges an
+// doudege Netz-Ufroen ze verhënneren. D'Schlusstabellen stinn an der Statistik 25/26.
 if (activeLiveCenterMode === 'static' && activeLiveCenterEntry && activeLiveCenterEntry.t === 'allgames') {
     renderStandingsPanel();
 }
-return false;
-}).catch(function() {
-return false;
-}).finally(function() {
-liveCenterRefreshPromise = null;
-});
-
-return liveCenterRefreshPromise;
+return Promise.resolve(false);
 }
 
 const NAV = {
