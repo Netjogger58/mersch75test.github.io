@@ -1307,6 +1307,11 @@
         return MERSCH75_REFEREE_CATEGORIES.indexOf(cat) !== -1;
     }
 
+    function canBeOfficial() {
+        // Ënner 16 Joer kann ee net Offizielle ginn
+        return currentAge === null || currentAge >= 16;
+    }
+
     // --- Roll-Logik: wéi eng Felder pro Roll néideg sinn -------------------
     function getSelectedRoles() {
         const primary = getValue('Role');
@@ -1337,7 +1342,7 @@
         const isVolunteer = has('Bénévole / Contact Famille') || isVolunteerLic;
         // Spiller, Offizieller, Arbitter a Bénévole-mat-Lizenz hunn ëmmer eng Lizenz (Spiller inkl. U7)
         const forcedLicence = isPlayer || isOfficial || isReferee || isVolunteerLic;
-        const hasLicence = forcedLicence ? true : (document.getElementById('Licence').value === 'Oui');
+        const hasLicence = forcedLicence; // eenzeg net-forcéiert Roll = reng Bénévole -> keng Lizenz
         const over50 = typeof currentAge === 'number' && currentAge > 50;
         // Medico: Spiller mat Lizenz ëmmer; Arbitter ausser >50; keen Offizieller/Bénévole eleng
         let needsMedico = false;
@@ -1382,6 +1387,16 @@
     }
 
     function applyRoleRules() {
+        // Officiel réischt ab 16 Joer: Optioun spären + zrécksetzen wann ze jonk
+        const roleSelect = document.getElementById('Role');
+        const officielOption = roleSelect ? roleSelect.querySelector('option[value="Officiel(le)"]') : null;
+        if (officielOption) {
+            officielOption.disabled = !canBeOfficial();
+            if (!canBeOfficial() && roleSelect.value === 'Officiel(le)') {
+                roleSelect.value = 'Joueur / Joueuse';
+            }
+        }
+
         const f = getRoleFlags();
 
         // Zousätzlech-Roll-Checkbox déi der Haaptroll entspriicht verstoppen
@@ -1416,17 +1431,25 @@
             }
         }
 
-        // Lizenz: Offizieller/Arbitter ëmmer "Oui" a verstoppt; soss auswielbar
+        // Officiel réischt ab 16: "Och Offiziell" spären wann ze jonk
+        const officielWrap = document.getElementById('extra-role-officiel');
+        const officielCb = document.getElementById('RoleAlsoOfficiel');
+        if (primary !== 'Officiel(le)' && officielWrap && officielWrap.style.display !== 'none') {
+            if (!canBeOfficial()) {
+                if (officielCb) { officielCb.checked = false; officielCb.disabled = true; }
+                officielWrap.style.opacity = '0.5';
+            } else if (officielCb) {
+                officielCb.disabled = false;
+                officielWrap.style.opacity = '';
+            }
+        }
+
+        // Lizenz: Offizieller/Arbitter/Spiller/Bénévole-mat-Lizenz ëmmer "Oui"; reng Bénévole d'office "Non" — ëmmer verstoppt
         const licenceGroup = document.getElementById('licence-group');
         const licence = document.getElementById('Licence');
-        if (f.forcedLicence) {
-            licence.value = 'Oui';
-            licenceGroup.style.display = 'none';
-            licence.required = false;
-        } else {
-            licenceGroup.style.display = '';
-            licence.required = true;
-        }
+        licence.value = f.forcedLicence ? 'Oui' : 'Non';
+        licenceGroup.style.display = 'none';
+        licence.required = false;
 
         // Geschlecht (Basis) fir Kategorie/Officiel-Code; Kategorie-Uweisung fir Spiller/Arbitter
         toggleSection('basis-section', f.needsGender);
