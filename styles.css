@@ -5372,3 +5372,20 @@ body[data-gen-unlocked="1"] .poster-edit-overlay { display: inline-flex; }
         line-height: 1.08;
     }
 }
+
+/* AG-Umeldung Modal */
+.ag-modal { position: fixed; inset: 0; z-index: 1300; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.ag-modal[hidden] { display: none; }
+.ag-modal-backdrop { position: absolute; inset: 0; background: rgba(5, 17, 48, 0.62); backdrop-filter: blur(4px); }
+.ag-modal-card { position: relative; z-index: 1; width: min(460px, 96vw); background: #ffffff; border-radius: 22px; padding: 26px 24px; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.42); text-align: center; }
+.ag-modal-close { position: absolute; top: 10px; right: 12px; width: 40px; height: 40px; border-radius: 50%; border: none; background: rgba(0, 47, 101, 0.08); color: #002f65; font-size: 24px; line-height: 1; cursor: pointer; }
+.ag-modal-close:hover, .ag-modal-close:focus-visible { background: rgba(0, 47, 101, 0.18); outline: none; }
+.ag-modal-card h2 { margin: 4px 0 8px; color: #002f65; font-size: 1.45rem; }
+.ag-modal-sub { margin: 0 0 14px; color: #6d7784; font-size: 0.92rem; font-weight: 600; }
+.ag-modal-text { margin: 0 0 14px; color: #1f2937; font-size: 0.98rem; }
+.ag-modal-mail { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; padding: 10px 12px; border-radius: 14px; background: rgba(0, 47, 101, 0.06); font-weight: 800; color: #002f65; }
+.ag-modal-copy { border: 1px solid rgba(0, 47, 101, 0.2); background: #ffffff; color: #002f65; border-radius: 999px; padding: 6px 14px; font-weight: 700; cursor: pointer; }
+.ag-modal-copy:hover, .ag-modal-copy:focus-visible { background: rgba(0, 47, 101, 0.1); outline: none; }
+.ag-modal-btn { display: inline-flex; align-items: center; justify-content: center; width: 100%; padding: 14px 18px; border-radius: 999px; background: linear-gradient(135deg, #fffdf0 0%, #fff6c2 100%); border: 2px solid #f9d611; color: #002b5c; font-weight: 800; text-decoration: none; box-shadow: 0 8px 18px rgba(249, 214, 17, 0.25); }
+.ag-modal-btn:hover, .ag-modal-btn:focus-visible { transform: translateY(-1px); outline: none; }
+.ag-modal-hint { margin: 12px 0 0; color: #1a7f37; font-weight: 700; font-size: 0.9rem; }

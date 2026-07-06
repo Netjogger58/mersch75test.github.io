@@ -2290,6 +2290,46 @@ function initializeNewsCarousel() {
     goTo(0);
 }
 
+function initializeAgModal() {
+    const modal = document.getElementById('agModal');
+    if (!modal) return;
+    const triggers = document.querySelectorAll('.news-ag-link');
+    const closeEls = modal.querySelectorAll('[data-ag-close]');
+    const copyBtn = modal.querySelector('[data-ag-copy]');
+    const hint = modal.querySelector('[data-ag-hint]');
+    let lastFocus = null;
+    function openModal(event) {
+        if (event) event.preventDefault();
+        lastFocus = document.activeElement;
+        modal.hidden = false;
+        document.body.style.overflow = 'hidden';
+        const closeBtn = modal.querySelector('.ag-modal-close');
+        if (closeBtn) closeBtn.focus();
+    }
+    function closeModal() {
+        modal.hidden = true;
+        document.body.style.overflow = '';
+        if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+    }
+    triggers.forEach((t) => t.addEventListener('click', openModal));
+    closeEls.forEach((el) => el.addEventListener('click', closeModal));
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !modal.hidden) closeModal();
+    });
+    if (copyBtn) {
+        copyBtn.addEventListener('click', async () => {
+            const value = copyBtn.getAttribute('data-ag-copy');
+            try {
+                await navigator.clipboard.writeText(value);
+            } catch (_) { /* clipboard blockéiert */ }
+            if (hint) {
+                hint.hidden = false;
+                window.setTimeout(() => { hint.hidden = true; }, 2500);
+            }
+        });
+    }
+}
+
 ensureSiteLanguageSwitcher();
 initializeSiteLanguage();
 // initializeLanguageSelectionHint();  // Hinweisbanner "Wielt hei Är Sprooch." deaktiviert – Sprachumschalter ist dezent in der Kopfzeile sichtbar.
@@ -2298,6 +2338,7 @@ initializeTrainingSchedule();
 initializeJoinUsForm();
 initializeSharedFooters();
 initializeNewsCarousel();
+initializeAgModal();
 initializeFeedbackSystem();
 syncCurrentYear();
 
