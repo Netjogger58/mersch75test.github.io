@@ -423,9 +423,17 @@
     const MERSCH75_WEB3FORMS_TEST_KEY = '9f36724d-0d6c-4ac4-b325-11ce6f7d0a5b';
     // Google-Sheet-Ubannung (Apps Script Web App). Deployment-URL vum Adrien-Test-Master:
     const MERSCH75_SHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbys4iCtkWmA31-15rlGjel16HLcNTgZIPSURFO5DqOgpndcld5C_nyg9HeDZJ13pfkThg/exec';
-    const MERSCH75_SHEET_TOKEN = 'm75-join-9f36-secure-2026';
+    // reCAPTCHA v3 Site-Key — DIERF ëffentlech sinn. De Secret-Key kënnt AN DE APPS SCRIPT (Script Properties), NI hei!
+    const MERSCH75_RECAPTCHA_SITE_KEY = 'PASTE_RECAPTCHA_SITE_KEY_HERE';
     // false = nëmmen TEST-Umeldunge ginn an d'Sheet geschriwwen (Testphase). Op true setzen wann de Secrétaire-Master aktiv ass.
     const MERSCH75_SHEET_PRODUCTION = false;
+    // reCAPTCHA v3 Script dynamesch lueden (nëmme wann e Site-Key gesat ass)
+    if (MERSCH75_RECAPTCHA_SITE_KEY && MERSCH75_RECAPTCHA_SITE_KEY.indexOf('PASTE_') !== 0) {
+        var _m75rc = document.createElement('script');
+        _m75rc.src = 'https://www.google.com/recaptcha/api.js?render=' + MERSCH75_RECAPTCHA_SITE_KEY;
+        _m75rc.async = true;
+        document.head.appendChild(_m75rc);
+    }
     const MERSCH75_LICENSE_LINK = 'https://submit.paperless.io/f/s4zaWnzHBwxcPK8jAkkbjPpVC1giUfr7';
     const MERSCH75_LICENSE_PASSWORD = 'FIhNvLi26';
     const MERSCH75_UI_TEXTS = {
@@ -1213,24 +1221,39 @@
         });
 
         return {
-            token: MERSCH75_SHEET_TOKEN,
             isTest: isTest === true,
             members: members
         };
     }
 
-    async function sendToSheet(payload) {
+    // Hëlt e reCAPTCHA-v3-Token (server-säiteg am Apps Script gepréift). Kee Secret am Client.
+    function getRecaptchaToken() {
+        return new Promise(function(resolve) {
+            if (typeof grecaptcha === 'undefined' || !MERSCH75_RECAPTCHA_SITE_KEY || MERSCH75_RECAPTCHA_SITE_KEY.indexOf('PASTE_') === 0) {
+                resolve(''); // net konfiguréiert -> eidele Token; Apps Script refuséiert dann
+                return;
+            }
+            grecaptcha.ready(function() {
+                grecaptcha.execute(MERSCH75_RECAPTCHA_SITE_KEY, { action: 'join' })
+                    .then(function(token) { resolve(token || ''); })
+                    .catch(function() { resolve(''); });
+            });
+        });
+    }
+
+    async function sendToSheet(payload, recaptchaToken) {
         if (!MERSCH75_SHEET_ENDPOINT) {
             return; // Endpoint nach net konfiguréiert
         }
 
         // no-cors + text/plain: Apps Script äntwert mat engem Cross-Origin-Redirect.
         // no-cors schéckt de Request (fire-and-forget) ouni datt de Browser en um Redirect blockéiert.
+        // De reCAPTCHA-Token gëtt matgeschéckt a SERVER-SÄITEG (Apps Script) gepréift.
         await fetch(MERSCH75_SHEET_ENDPOINT, {
             method: 'POST',
             mode: 'no-cors',
             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify(payload)
+            body: JSON.stringify(Object.assign({}, payload, { recaptcha: recaptchaToken || '' }))
         });
     }
 
@@ -1650,7 +1673,8 @@
             // Google-Sheet: am Test ëmmer (Adrien-Master); soss nëmme wann d'Produktioun aktiv ass.
             if (isTest || MERSCH75_SHEET_PRODUCTION) {
                 try {
-                    await sendToSheet(buildSheetPayload(isTest));
+                    const recaptchaToken = await getRecaptchaToken();
+                    await sendToSheet(buildSheetPayload(isTest), recaptchaToken);
                 } catch (sheetError) {
                     // Sheet-Feeler net fatal: Mail(en) sinn scho fort als Backup.
                     console.error('Sheet-Ubannung Feeler:', sheetError);
