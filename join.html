@@ -1332,8 +1332,8 @@
         const isOfficial = has('Officiel(le)');
         const isReferee = has('Arbitre');
         const isVolunteer = has('Bénévole / Contact Famille');
-        // Offizieller an Arbitter hunn ëmmer eng Lizenz
-        const forcedLicence = isOfficial || isReferee;
+        // Spiller, Offizieller an Arbitter hunn ëmmer eng Lizenz (Spiller inkl. U7)
+        const forcedLicence = isPlayer || isOfficial || isReferee;
         const hasLicence = forcedLicence ? true : (document.getElementById('Licence').value === 'Oui');
         const over50 = typeof currentAge === 'number' && currentAge > 50;
         // Medico: Spiller mat Lizenz ëmmer; Arbitter ausser >50; keen Offizieller/Bénévole eleng
