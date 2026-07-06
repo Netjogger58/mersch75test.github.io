@@ -2296,7 +2296,20 @@ function initializeAgModal() {
     const triggers = document.querySelectorAll('.news-ag-link');
     const closeEls = modal.querySelectorAll('[data-ag-close]');
     const copyBtn = modal.querySelector('[data-ag-copy]');
+    const mailBtn = modal.querySelector('.ag-modal-btn');
     const hint = modal.querySelector('[data-ag-hint]');
+    const mailText = 'An: info@mersch75.lu\n'
+        + 'Betreff: Umeldung Generalversammlung 10.07.2026\n\n'
+        + 'Moien,\n\n'
+        + 'Ech melle mech mat ____ Persoun(en) un fir op d\'Generalversammlung & Ofschloss-Party de 10. Juli 2026 ze kommen.\n\n'
+        + 'Numm(en):\n\n'
+        + 'Merci a bis geschwënn!';
+    function showHint(message) {
+        if (!hint) return;
+        hint.textContent = message;
+        hint.hidden = false;
+        window.setTimeout(() => { hint.hidden = true; }, 4000);
+    }
     let lastFocus = null;
     function openModal(event) {
         if (event) event.preventDefault();
@@ -2316,16 +2329,39 @@ function initializeAgModal() {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && !modal.hidden) closeModal();
     });
+    async function copyText(value) {
+        try {
+            await navigator.clipboard.writeText(value);
+            return true;
+        } catch (_) {
+            try {
+                const ta = document.createElement('textarea');
+                ta.value = value;
+                ta.style.position = 'fixed';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.focus();
+                ta.select();
+                const ok = document.execCommand('copy');
+                document.body.removeChild(ta);
+                return ok;
+            } catch (_e) {
+                return false;
+            }
+        }
+    }
     if (copyBtn) {
         copyBtn.addEventListener('click', async () => {
-            const value = copyBtn.getAttribute('data-ag-copy');
-            try {
-                await navigator.clipboard.writeText(value);
-            } catch (_) { /* clipboard blockéiert */ }
-            if (hint) {
-                hint.hidden = false;
-                window.setTimeout(() => { hint.hidden = true; }, 2500);
-            }
+            const ok = await copyText(copyBtn.getAttribute('data-ag-copy'));
+            showHint(ok ? 'Adress kopéiert ✓' : 'info@mersch75.lu');
+        });
+    }
+    if (mailBtn) {
+        mailBtn.addEventListener('click', async () => {
+            const ok = await copyText(mailText);
+            showHint(ok
+                ? 'E-Mail-Text kopéiert ✓ — fügt en an ären Mailprogramm oder Webmail (Gmail, Outlook...) an a schéckt en un info@mersch75.lu'
+                : 'Schéckt eng Mail un info@mersch75.lu');
         });
     }
 }
