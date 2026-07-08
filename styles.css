@@ -5389,3 +5389,13 @@ body[data-gen-unlocked="1"] .poster-edit-overlay { display: inline-flex; }
 .ag-modal-btn { display: inline-flex; align-items: center; justify-content: center; width: 100%; padding: 14px 18px; border-radius: 999px; background: linear-gradient(135deg, #fffdf0 0%, #fff6c2 100%); border: 2px solid #f9d611; color: #002b5c; font-weight: 800; text-decoration: none; box-shadow: 0 8px 18px rgba(249, 214, 17, 0.25); }
 .ag-modal-btn:hover, .ag-modal-btn:focus-visible { transform: translateY(-1px); outline: none; }
 .ag-modal-hint { margin: 12px 0 0; color: #1a7f37; font-weight: 700; font-size: 0.9rem; }
+
+/* AG-Slide: Banner + zwee Aktioun-Boxen */
+.news-carousel-track .news-ag-media { width: 100%; margin: 0; justify-self: center; display: flex; flex-direction: column; gap: 14px; align-items: stretch; }
+.news-carousel-track .news-ag-media img { width: 100%; max-height: 440px; object-fit: contain; background: transparent; filter: drop-shadow(0 18px 28px rgba(0, 20, 45, 0.22)); }
+.news-ag-actions { display: flex; gap: 12px; width: 100%; }
+.news-ag-box { flex: 1 1 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 12px 14px; border-radius: 16px; text-decoration: none; cursor: pointer; border: 2px solid #f9d611; background: linear-gradient(135deg, #fffdf0 0%, #fff6c2 100%); color: #002b5c; font-weight: 800; text-align: center; box-shadow: 0 8px 18px rgba(249, 214, 17, 0.25); transition: transform 0.15s ease; }
+.news-ag-box:hover, .news-ag-box:focus-visible { transform: translateY(-2px); outline: none; }
+.news-ag-box-title { font-size: 1.05rem; line-height: 1.1; }
+.news-ag-box-sub { font-size: 0.76rem; font-weight: 700; opacity: 0.82; }
+@media (max-width: 560px) { .news-ag-actions { flex-direction: column; } }
