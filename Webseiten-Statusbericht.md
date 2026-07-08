@@ -1,5 +1,7 @@
 # mersch75.lu — Webseiten-Statusbericht & Ausbau-Empfehlungen
 
+> **→ Laufende Änderungen siehe [`CHANGELOG.md`](CHANGELOG.md).** Dieser Bericht ist ein Gesamtbild-Snapshot; der aktuellste Stand pro Änderung steht im Changelog.
+
 > **Erstellt:** 29. Juni 2026 · **Autor:** Cascade (KI-Assistenz) · **Basis:** Code-Analyse des Repos `Netjogger58/mersch75test.github.io`
 > **Zweck:** Ehrlicher Ist-Zustand (fertig / ausbaufähig / nur Idee) der öffentlichen Vereins-Website, Bewertung von Struktur, Komplexität, Aufbau & Visuellem — plus konkrete Anregungen inkl. SEO-, Performance- & Automatisierungs-Konzept.
 
