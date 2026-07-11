@@ -4729,6 +4729,61 @@ body.stats2526-page {
         flex-direction: column;
     }
 }
+
+/* Trainerteams-Iwwersiicht */
+.staff-teams-list {
+    list-style: none;
+    margin: 18px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+}
+
+.staff-teams-list li {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 16px;
+    align-items: center;
+    padding: 12px 16px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.84);
+    border: 1px solid rgba(0, 47, 101, 0.08);
+}
+
+.staff-team-name {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--blue);
+}
+
+.staff-team-name small {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    opacity: 0.75;
+}
+
+.staff-team-coaches {
+    color: #23364a;
+    font-weight: 700;
+    line-height: 1.5;
+}
+
+.staff-team-extra {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #5a6b7d;
+}
+
+@media (max-width: 560px) {
+    .staff-teams-list li {
+        grid-template-columns: 1fr;
+        gap: 4px;
+    }
+}
 /* === Generator-Gate (Soft-Lock-Modal + Lock-Icon + Edit-Overlay) === */
 .gen-modal {
     position: fixed;

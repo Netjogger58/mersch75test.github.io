@@ -8,6 +8,9 @@ Format: `Datum · Commit · was & warum`. Details stehen in der jeweiligen Git-C
 
 ---
 
+## 2026-07-11
+- **Trainerstaff: Team-Übersicht Saison 2026-2027** oben auf `trainerstaff.html` ergänzt (Team → Trainer, inkl. Golkiipertrainer). Bio-Karten darunter unverändert. CSS-Block „Trainerteams-Iwwersiicht" + `styles.css?v=20260711trainers`.
+
 ## 2026-07-08
 - `6f08f9d` **AG-Slide: 2 Boxen statt einem Bild-Link.** Banner bleibt als Bild; darunter Box 1 „Umellen" (öffnet Anmelde-Popup) + Box 2 „Procuration ausdrécken" (öffnet PDF). PDF nach `assets/shared/media/Hauptseite/Procuration-AG-2026.pdf` verschoben (ASCII-Name gegen URL-Encoding-Probleme). CSS `styles.css?v=20260708box1`.
 
