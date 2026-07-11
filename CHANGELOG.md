@@ -9,6 +9,7 @@ Format: `Datum · Commit · was & warum`. Details stehen in der jeweiligen Git-C
 ---
 
 ## 2026-07-11
+- **Comité (`inside.html`) aktualisiert:** Armand Kremer & Philippe Kremer entfernt; Vizepräsident = „(nach net besat)"; Buvette-Rollen Koordinatioun/Entréeskeess = „(net besat)"; Festivitéiten nur noch Jeff Schuster; Sponsoring ohne Armand. Neu: Charles Epps (1. Ekipp Männer) & Xavier Maquil unter „Weider Memberen".
 - **Trainerstaff: Team-Übersicht Saison 2026-2027** oben auf `trainerstaff.html` ergänzt (Team → Trainer, inkl. Golkiipertrainer). Bio-Karten darunter unverändert. CSS-Block „Trainerteams-Iwwersiicht" + `styles.css?v=20260711trainers`.
 
 ## 2026-07-08
