@@ -27,7 +27,13 @@
         .join-tarif-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 6px 0 18px; }
         .join-tarif-cards img { width: 100%; border-radius: 14px; box-shadow: 0 10px 24px rgba(0,0,0,0.14); }
         .join-tarif-prices { width: 100%; border-radius: 14px; border: 1px solid rgba(0,47,101,0.1); display: block; }
-        @media (max-width: 620px) { .join-tarif-cards { grid-template-columns: 1fr; } .join-tarif-dialog { padding: 18px; } }
+        .join-tarif-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+        .join-tarif-list li { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 12px 16px; border-radius: 12px; background: rgba(0,47,101,0.05); border: 1px solid rgba(0,47,101,0.1); }
+        .join-tarif-label { font-weight: 800; color: #002f65; }
+        .join-tarif-price { font-weight: 800; color: #002f65; white-space: nowrap; }
+        .join-tarif-list li.join-tarif-family { flex-direction: column; align-items: flex-start; gap: 4px; }
+        .join-tarif-list li.join-tarif-family .join-tarif-price { white-space: normal; font-weight: 600; color: #23364a; line-height: 1.45; }
+        @media (max-width: 620px) { .join-tarif-cards { grid-template-columns: 1fr; } .join-tarif-dialog { padding: 18px; } .join-tarif-list li { flex-direction: column; align-items: flex-start; gap: 2px; } }
     </style>
 </head>
 <body class="join-page">
@@ -345,7 +351,16 @@
                     <div class="join-tarif-cards">
                         <img src="assets/shared/media/M75_Memberskaart.png" alt="Memberskaart" loading="lazy">
                     </div>
-                    <img class="join-tarif-prices" src="assets/pages/join/media/Tariffer%202025-2026.png" alt="Fixation vun den Cotisatiounen 2025-2026" loading="lazy">
+                    <ul class="join-tarif-list">
+                        <li><span class="join-tarif-label">Adulte Tarif</span><span class="join-tarif-price">300€</span></li>
+                        <li><span class="join-tarif-label">Youth Tarif (≤ 25 ans)</span><span class="join-tarif-price">210€</span></li>
+                        <li><span class="join-tarif-label">Kidssport &amp; Loisirs</span><span class="join-tarif-price">50€</span></li>
+                        <li><span class="join-tarif-label">Officiels</span><span class="join-tarif-price">50€</span></li>
+                        <li class="join-tarif-family">
+                            <span class="join-tarif-label">Family Tarif*</span>
+                            <span class="join-tarif-price">Tarif le plus élevé (parmi les membres de la famille) + 50 € par membre (≤ 25 ans) / 80 € par membre adulte supplémentaire</span>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
