@@ -9,7 +9,7 @@ Format: `Datum · Commit · was & warum`. Details stehen in der jeweiligen Git-C
 ---
 
 ## 2026-07-11
-- **Join Us (`join.html`): Tarif-Liste ersetzt.** Tarif-Bild im Modal durch Text-Liste ersetzt: Adulte 300€, Youth (≤25) 210€, Kidssport & Loisirs 50€, Officiels 50€, Family-Tarif (Formel). Offen: Cotisation-Dropdown im Formular hat noch alte Beträge (€200 usw.).
+- **Join Us (`join.html`): Cotisatioun 2026-2027 komplett umgestellt.** Tarif-Liste im Modal + Formular-Dropdown + Auto-Logik (`suggestTarif`) + Family-Label + Saison-Labels/Karten-Texte (alle „2025-2026" → „2026-2027"). Neue Tarife: Adulte €300, Youth (≤25) €210, Kidssport & Loisirs €50, Officiels €50, Family Tarif (Formel). Auto-Vorschlag: >25 = Adulte, ≤25 = Youth, Officiel/Arbitter/Bénévole+Lizenz = €50, Family-Flag = Family; Kidssport & Loisirs nur manuell. Alte Optionen (€100/€200/€250, honoraire, Donateur) entfernt. Spiegel-Doku in Vereins-OS `docs/join-to-sheet-automation-f4cdcc.md` mit angepasst. (Fee-Rules-DB im M75-Manager ist leer → dort nichts zu ändern.)
 - **Comité (`inside.html`) aktualisiert:** Armand Kremer & Philippe Kremer entfernt; Vizepräsident = „(nach net besat)"; Buvette-Rollen Koordinatioun/Entréeskeess = „(net besat)"; Festivitéiten nur noch Jeff Schuster; Sponsoring ohne Armand. Neu: Charles Epps (1. Ekipp Männer) & Xavier Maquil unter „Weider Memberen".
 - **Trainerstaff: Team-Übersicht Saison 2026-2027** oben auf `trainerstaff.html` ergänzt (Team → Trainer, inkl. Golkiipertrainer). Bio-Karten darunter unverändert. CSS-Block „Trainerteams-Iwwersiicht" + `styles.css?v=20260711trainers`.
 

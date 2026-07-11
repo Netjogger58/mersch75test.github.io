@@ -75,9 +75,9 @@
                 <div class="join-form-layout">
                     <div class="join-form-card">
                         <div class="join-lang-selector" aria-label="Sprooch auswielen">
-                            <button type="button" class="join-tarif-trigger" id="joinTarifTrigger" aria-haspopup="dialog" aria-controls="joinTarifModal" title="Tariffer 2025-2026 weisen">
+                            <button type="button" class="join-tarif-trigger" id="joinTarifTrigger" aria-haspopup="dialog" aria-controls="joinTarifModal" title="Tariffer 2026-2027 weisen">
                                 <img src="assets/shared/media/M75_Memberskaart.png" alt="Memberskaart Mersch75 - Tariffer weisen">
-                                <span class="join-tarif-trigger-hint">Tariffer 2025-2026</span>
+                                <span class="join-tarif-trigger-hint">Tariffer 2026-2027</span>
                             </button>
                             <div class="join-lang-picker" role="tablist" aria-label="Sproochen">
                                 <button class="join-lang-button is-active" type="button" data-lang="lu" aria-pressed="true">LU</button>
@@ -136,7 +136,7 @@
                                     <option value="Garçons - Hommes">Garçons - Hommes</option>
                                     <option value="Filles - Femmes">Filles - Femmes</option>
                                 </select>
-                                <p class="join-helper-text">Selon FLH Catégories d'Âge 2025-2026.</p>
+                                <p class="join-helper-text">Selon FLH Catégories d'Âge 2026-2027.</p>
                             </div>
 
                             <div id="cat-section">
@@ -178,20 +178,17 @@
                             </div>
 
                             <div class="join-form-group" id="tarif-section">
-                                <label id="lbl-tarif" for="Cotisation"><span id="lbl-tarif-title">COTISATIOUN 2025-2026</span> <span class="join-helper-text" id="lbl-tarif-hint">(Automatesch virgeschloen op Basis vum Alter — kann ugepasst ginn an op enger AG geännert ginn, wat fir déi kommend Saison a Kraft trëtt.)</span></label>
+                                <label id="lbl-tarif" for="Cotisation"><span id="lbl-tarif-title">COTISATIOUN 2026-2027</span> <span class="join-helper-text" id="lbl-tarif-hint">(Automatesch virgeschloen op Basis vum Alter — kann ugepasst ginn an op enger AG geännert ginn, wat fir déi kommend Saison a Kraft trëtt.)</span></label>
                                 <select id="Cotisation" name="Cotisation">
-                                    <option value="Membre étudiant, jeune joueur < 16 – €100">Membre étudiant / jeune joueur &lt; 16 – €100</option>
-                                    <option value="Membre étudiant, jeune joueur > 16 – €100">Membre étudiant / jeune joueur &gt; 16 – €100</option>
-                                    <option value="Membre Joueur Adulte – €200">Membre Joueur Adulte – €200</option>
-                                    <option value="Membre Famille (2+) – €250">Membre Famille (2+) – €250</option>
-                                    <option value="Membre section loisir (WF4HB/MF4HB) – €50">Membre section loisir (WF4HB/MF4HB) – €50</option>
-                                    <option value="Membre Licence Officiel – €50">Membre Licence Officiel – €50</option>
-                                    <option value="Membre honoraire – €50">Membre honoraire – €50</option>
-                                    <option value="Donateur – €9,99+">Donateur – €9,99+</option>
+                                    <option value="Youth Tarif (≤ 25 ans) – €210">Youth Tarif (≤ 25 ans) – €210</option>
+                                    <option value="Adulte Tarif – €300">Adulte Tarif – €300</option>
+                                    <option value="Kidssport &amp; Loisirs – €50">Kidssport &amp; Loisirs – €50</option>
+                                    <option value="Officiels – €50">Officiels – €50</option>
+                                    <option value="Family Tarif">Family Tarif (voir détails)</option>
                                 </select>
                                 <div class="join-checkbox-row" style="margin-top:10px;">
                                     <input type="checkbox" id="FamilleFlag" name="FamilleFlag" value="Oui">
-                                    <label for="FamilleFlag" id="lbl-famille">Famill-Memberskaart (2+ Persounen) – €250</label>
+                                    <label for="FamilleFlag" id="lbl-famille">Famill-Memberskaart (2+ Persounen)</label>
                                 </div>
 
                                 <div id="family-section" class="join-family-section">
@@ -347,7 +344,7 @@
                 <div class="join-tarif-backdrop" data-tarif-close></div>
                 <div class="join-tarif-dialog" role="document">
                     <button type="button" class="join-tarif-close" data-tarif-close aria-label="Zoumaachen">&times;</button>
-                    <h2 id="joinTarifModalTitle">Memberskaart &amp; Tariffer 2025-2026</h2>
+                    <h2 id="joinTarifModalTitle">Memberskaart &amp; Tariffer 2026-2027</h2>
                     <div class="join-tarif-cards">
                         <img src="assets/shared/media/M75_Memberskaart.png" alt="Memberskaart" loading="lazy">
                     </div>
@@ -454,19 +451,19 @@
     const MERSCH75_LICENSE_PASSWORD = 'FIhNvLi26';
     const MERSCH75_UI_TEXTS = {
         lu: {
-            nom: 'Numm *', prenom: 'Virnumm *', dob: 'Gebuertsdatum *', mineur: 'Mannerjäreg', cat: 'FLH Kategorie', role: 'Roll / Funktioun *', parent: 'Elengerzéiend *', tuteur1: 'Erzéiungsberechtegten 1 *', tuteur2: 'Erzéiungsberechtegten 2 *', nat: 'Nationalitéit *', cns: 'Matricule CNS *', medico: 'Medico *', licence: 'Lizenz *', club: 'Ale Veräin *', u7: 'U7 medezineschen Zertifikat obligatoresch', strasse: 'Strooss *', postcode: 'Postcode *', ortschaft: 'Uertschaft *', email: 'E-Mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Schécken', sending: 'Gëtt geschéckt...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Deng Umeldung gouf erfollegräich iwwermëttelt.', successNote: 'Du kriss eng Bestätegung per E-Mail. D\'Memberskaart gëtt no Bezuelung vum Membersbeitrag nogeschéckt.', oui: 'JO', non: 'NEE', joueur: 'Spiller / Spillerin', officiel: 'Offiziell Persoun', arbitre: 'Arbitter', benevole: 'Bénévole / Kontakt Famill', benevoleLic: 'Bénévole / Kontakt Famill (mat Lizenz)', parent_non: 'NEE (2 Erzéiungsberechtegter)', parent_oui: 'JO (1 Erzéiungsberechtegten)', legalRequired: 'Liest an akzeptéiert w.e.g. déi allgemeng Bedéngungen an den Dateschutz.', flhRequired: 'Bestätegt w.e.g. d\'Iwwermëttlung un flh.lu fir d\'Lizenz.', accuracyRequired: 'Bestätegt w.e.g. d\'Richtegkeet vun den Donnéeën.', extraRoles: 'Zousätzlech Funktioun(en) (fakultativ)', extraRolesHint: 'Z.B. Spiller deen och Arbitter ass. Déi éischt Funktioun bestëmmt d\'Kategorie.', alsoPrefix: 'Och', tarif: 'COTISATIOUN 2025-2026', tarifHint: '(Automatesch virgeschloen op Basis vum Alter — kann ugepasst ginn an op enger AG geännert ginn, wat fir déi kommend Saison a Kraft trëtt.)'
+            nom: 'Numm *', prenom: 'Virnumm *', dob: 'Gebuertsdatum *', mineur: 'Mannerjäreg', cat: 'FLH Kategorie', role: 'Roll / Funktioun *', parent: 'Elengerzéiend *', tuteur1: 'Erzéiungsberechtegten 1 *', tuteur2: 'Erzéiungsberechtegten 2 *', nat: 'Nationalitéit *', cns: 'Matricule CNS *', medico: 'Medico *', licence: 'Lizenz *', club: 'Ale Veräin *', u7: 'U7 medezineschen Zertifikat obligatoresch', strasse: 'Strooss *', postcode: 'Postcode *', ortschaft: 'Uertschaft *', email: 'E-Mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Schécken', sending: 'Gëtt geschéckt...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Deng Umeldung gouf erfollegräich iwwermëttelt.', successNote: 'Du kriss eng Bestätegung per E-Mail. D\'Memberskaart gëtt no Bezuelung vum Membersbeitrag nogeschéckt.', oui: 'JO', non: 'NEE', joueur: 'Spiller / Spillerin', officiel: 'Offiziell Persoun', arbitre: 'Arbitter', benevole: 'Bénévole / Kontakt Famill', benevoleLic: 'Bénévole / Kontakt Famill (mat Lizenz)', parent_non: 'NEE (2 Erzéiungsberechtegter)', parent_oui: 'JO (1 Erzéiungsberechtegten)', legalRequired: 'Liest an akzeptéiert w.e.g. déi allgemeng Bedéngungen an den Dateschutz.', flhRequired: 'Bestätegt w.e.g. d\'Iwwermëttlung un flh.lu fir d\'Lizenz.', accuracyRequired: 'Bestätegt w.e.g. d\'Richtegkeet vun den Donnéeën.', extraRoles: 'Zousätzlech Funktioun(en) (fakultativ)', extraRolesHint: 'Z.B. Spiller deen och Arbitter ass. Déi éischt Funktioun bestëmmt d\'Kategorie.', alsoPrefix: 'Och', tarif: 'COTISATIOUN 2026-2027', tarifHint: '(Automatesch virgeschloen op Basis vum Alter — kann ugepasst ginn an op enger AG geännert ginn, wat fir déi kommend Saison a Kraft trëtt.)'
         },
         fr: {
-            nom: 'Nom *', prenom: 'Prénom *', dob: 'Date de naissance *', mineur: 'Mineur', cat: 'Catégorie FLH', role: 'Rôle / Fonction *', parent: 'Parent isolé *', tuteur1: 'Tuteur 1 *', tuteur2: 'Tuteur 2 *', nat: 'Nationalité *', cns: 'Matricule CNS *', medico: 'Médico *', licence: 'Licence *', club: 'Ancien club *', u7: 'U7 certificat médical obligatoire', strasse: 'Rue *', postcode: 'Code postal *', ortschaft: 'Localité *', email: 'E-mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Envoyer', sending: 'Envoi...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Inscription envoyée.', successNote: 'Vous recevrez une confirmation par e-mail. La carte membre sera envoyée après paiement de la cotisation.', oui: 'OUI', non: 'NON', joueur: 'Joueur / Joueuse', officiel: 'Officiel(le)', arbitre: 'Arbitre', benevole: 'Bénévole / Contact Famille', benevoleLic: 'Bénévole / Contact Famille (avec licence)', parent_non: 'NON (2 tuteurs)', parent_oui: 'OUI (1 tuteur)', legalRequired: 'Veuillez lire et accepter les conditions générales et la protection des données.', flhRequired: 'Veuillez confirmer la transmission à flh.lu pour la licence.', accuracyRequired: 'Veuillez confirmer l\'exactitude des données.', extraRoles: 'Fonction(s) supplémentaire(s) (facultatif)', extraRolesHint: 'P.ex. joueur qui est aussi arbitre. La première fonction détermine la catégorie.', alsoPrefix: 'Aussi', tarif: 'COTISATION 2025-2026', tarifHint: '(Proposée automatiquement selon l\'âge — modifiable, et pouvant être changée lors d\'une AG, avec effet pour la saison à venir.)'
+            nom: 'Nom *', prenom: 'Prénom *', dob: 'Date de naissance *', mineur: 'Mineur', cat: 'Catégorie FLH', role: 'Rôle / Fonction *', parent: 'Parent isolé *', tuteur1: 'Tuteur 1 *', tuteur2: 'Tuteur 2 *', nat: 'Nationalité *', cns: 'Matricule CNS *', medico: 'Médico *', licence: 'Licence *', club: 'Ancien club *', u7: 'U7 certificat médical obligatoire', strasse: 'Rue *', postcode: 'Code postal *', ortschaft: 'Localité *', email: 'E-mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Envoyer', sending: 'Envoi...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Inscription envoyée.', successNote: 'Vous recevrez une confirmation par e-mail. La carte membre sera envoyée après paiement de la cotisation.', oui: 'OUI', non: 'NON', joueur: 'Joueur / Joueuse', officiel: 'Officiel(le)', arbitre: 'Arbitre', benevole: 'Bénévole / Contact Famille', benevoleLic: 'Bénévole / Contact Famille (avec licence)', parent_non: 'NON (2 tuteurs)', parent_oui: 'OUI (1 tuteur)', legalRequired: 'Veuillez lire et accepter les conditions générales et la protection des données.', flhRequired: 'Veuillez confirmer la transmission à flh.lu pour la licence.', accuracyRequired: 'Veuillez confirmer l\'exactitude des données.', extraRoles: 'Fonction(s) supplémentaire(s) (facultatif)', extraRolesHint: 'P.ex. joueur qui est aussi arbitre. La première fonction détermine la catégorie.', alsoPrefix: 'Aussi', tarif: 'COTISATION 2026-2027', tarifHint: '(Proposée automatiquement selon l\'âge — modifiable, et pouvant être changée lors d\'une AG, avec effet pour la saison à venir.)'
         },
         de: {
-            nom: 'Name *', prenom: 'Vorname *', dob: 'Geburtsdatum *', mineur: 'Minderjährig', cat: 'FLH Kategorie', role: 'Rolle / Funktion *', parent: 'Alleinerziehend *', tuteur1: 'Erziehungsberechtigter 1 *', tuteur2: 'Erziehungsberechtigter 2 *', nat: 'Nationalität *', cns: 'CNS-Matrikelnummer *', medico: 'Medico *', licence: 'Lizenz *', club: 'Ehemaliger Verein *', u7: 'U7 ärztliches Attest obligatorisch', strasse: 'Straße *', postcode: 'Postleitzahl *', ortschaft: 'Ortschaft *', email: 'E-Mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Senden', sending: 'Senden...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Anmeldung gesendet.', successNote: 'Du erhältst eine Bestätigung per E-Mail. Die Mitgliederkarte wird nach Zahlung des Mitgliedsbeitrags zugeschickt.', oui: 'JA', non: 'NEIN', joueur: 'Spieler / Spielerin', officiel: 'Offizielle Person', arbitre: 'Schiedsrichter', benevole: 'Freiwillige / Familienkontakt', benevoleLic: 'Freiwillige / Familienkontakt (mit Lizenz)', parent_non: 'NEIN (2 Erziehungsberechtigte)', parent_oui: 'JA (1 Erziehungsberechtigter)', legalRequired: 'Bitte die allgemeinen Bedingungen und den Datenschutz lesen und akzeptieren.', flhRequired: 'Bitte die Übermittlung an flh.lu für die Lizenz bestätigen.', accuracyRequired: 'Bitte die Richtigkeit der Angaben bestätigen.', extraRoles: 'Zusätzliche Funktion(en) (optional)', extraRolesHint: 'Z.B. Spieler der auch Schiedsrichter ist. Die erste Funktion bestimmt die Kategorie.', alsoPrefix: 'Auch', tarif: 'MITGLIEDSBEITRAG 2025-2026', tarifHint: '(Automatisch nach Alter vorgeschlagen — anpassbar und kann auf einer Generalversammlung geändert werden, mit Wirkung für die kommende Saison.)'
+            nom: 'Name *', prenom: 'Vorname *', dob: 'Geburtsdatum *', mineur: 'Minderjährig', cat: 'FLH Kategorie', role: 'Rolle / Funktion *', parent: 'Alleinerziehend *', tuteur1: 'Erziehungsberechtigter 1 *', tuteur2: 'Erziehungsberechtigter 2 *', nat: 'Nationalität *', cns: 'CNS-Matrikelnummer *', medico: 'Medico *', licence: 'Lizenz *', club: 'Ehemaliger Verein *', u7: 'U7 ärztliches Attest obligatorisch', strasse: 'Straße *', postcode: 'Postleitzahl *', ortschaft: 'Ortschaft *', email: 'E-Mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Senden', sending: 'Senden...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Anmeldung gesendet.', successNote: 'Du erhältst eine Bestätigung per E-Mail. Die Mitgliederkarte wird nach Zahlung des Mitgliedsbeitrags zugeschickt.', oui: 'JA', non: 'NEIN', joueur: 'Spieler / Spielerin', officiel: 'Offizielle Person', arbitre: 'Schiedsrichter', benevole: 'Freiwillige / Familienkontakt', benevoleLic: 'Freiwillige / Familienkontakt (mit Lizenz)', parent_non: 'NEIN (2 Erziehungsberechtigte)', parent_oui: 'JA (1 Erziehungsberechtigter)', legalRequired: 'Bitte die allgemeinen Bedingungen und den Datenschutz lesen und akzeptieren.', flhRequired: 'Bitte die Übermittlung an flh.lu für die Lizenz bestätigen.', accuracyRequired: 'Bitte die Richtigkeit der Angaben bestätigen.', extraRoles: 'Zusätzliche Funktion(en) (optional)', extraRolesHint: 'Z.B. Spieler der auch Schiedsrichter ist. Die erste Funktion bestimmt die Kategorie.', alsoPrefix: 'Auch', tarif: 'MITGLIEDSBEITRAG 2026-2027', tarifHint: '(Automatisch nach Alter vorgeschlagen — anpassbar und kann auf einer Generalversammlung geändert werden, mit Wirkung für die kommende Saison.)'
         },
         en: {
-            nom: 'Last name *', prenom: 'First name *', dob: 'Date of birth *', mineur: 'Minor', cat: 'FLH category', role: 'Role / Function *', parent: 'Single parent *', tuteur1: 'Guardian 1 *', tuteur2: 'Guardian 2 *', nat: 'Nationality *', cns: 'CNS number *', medico: 'Medical check *', licence: 'Licence *', club: 'Former club *', u7: 'U7 medical certificate required', strasse: 'Street *', postcode: 'Postcode *', ortschaft: 'City *', email: 'Email *', gsm1: 'Mobile 1 *', gsm2: 'Mobile 2', send: 'Submit', sending: 'Sending...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Registration sent.', successNote: 'You will receive a confirmation by email. The membership card will be sent after the membership fee has been paid.', oui: 'YES', non: 'NO', joueur: 'Player', officiel: 'Official', arbitre: 'Referee', benevole: 'Volunteer / Family contact', benevoleLic: 'Volunteer / Family contact (with licence)', parent_non: 'NO (2 guardians)', parent_oui: 'YES (1 guardian)', legalRequired: 'Please read and accept the terms and conditions and data protection.', flhRequired: 'Please confirm the transfer to flh.lu for the licence.', accuracyRequired: 'Please confirm the accuracy of the data.', extraRoles: 'Additional function(s) (optional)', extraRolesHint: 'E.g. a player who is also a referee. The first function determines the category.', alsoPrefix: 'Also', tarif: 'MEMBERSHIP FEE 2025-2026', tarifHint: '(Suggested automatically based on age — adjustable, and may be changed at a General Assembly, taking effect for the coming season.)'
+            nom: 'Last name *', prenom: 'First name *', dob: 'Date of birth *', mineur: 'Minor', cat: 'FLH category', role: 'Role / Function *', parent: 'Single parent *', tuteur1: 'Guardian 1 *', tuteur2: 'Guardian 2 *', nat: 'Nationality *', cns: 'CNS number *', medico: 'Medical check *', licence: 'Licence *', club: 'Former club *', u7: 'U7 medical certificate required', strasse: 'Street *', postcode: 'Postcode *', ortschaft: 'City *', email: 'Email *', gsm1: 'Mobile 1 *', gsm2: 'Mobile 2', send: 'Submit', sending: 'Sending...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Registration sent.', successNote: 'You will receive a confirmation by email. The membership card will be sent after the membership fee has been paid.', oui: 'YES', non: 'NO', joueur: 'Player', officiel: 'Official', arbitre: 'Referee', benevole: 'Volunteer / Family contact', benevoleLic: 'Volunteer / Family contact (with licence)', parent_non: 'NO (2 guardians)', parent_oui: 'YES (1 guardian)', legalRequired: 'Please read and accept the terms and conditions and data protection.', flhRequired: 'Please confirm the transfer to flh.lu for the licence.', accuracyRequired: 'Please confirm the accuracy of the data.', extraRoles: 'Additional function(s) (optional)', extraRolesHint: 'E.g. a player who is also a referee. The first function determines the category.', alsoPrefix: 'Also', tarif: 'MEMBERSHIP FEE 2026-2027', tarifHint: '(Suggested automatically based on age — adjustable, and may be changed at a General Assembly, taking effect for the coming season.)'
         },
         pt: {
-            nom: 'Apelido *', prenom: 'Nome próprio *', dob: 'Data de nascimento *', mineur: 'Menor', cat: 'Categoria FLH', role: 'Função *', parent: 'Encarregado isolado *', tuteur1: 'Encarregado 1 *', tuteur2: 'Encarregado 2 *', nat: 'Nacionalidade *', cns: 'Número CNS *', medico: 'Exame médico *', licence: 'Licença *', club: 'Clube anterior *', u7: 'U7 certificado médico obrigatório', strasse: 'Rua *', postcode: 'Código postal *', ortschaft: 'Localidade *', email: 'E-mail *', gsm1: 'Telemóvel 1 *', gsm2: 'Telemóvel 2', send: 'Enviar', sending: 'A enviar...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Inscrição enviada.', successNote: 'Receberá uma confirmação por e-mail. O cartão de membro será enviado após o pagamento da quota.', oui: 'SIM', non: 'NÃO', joueur: 'Jogador / Jogadora', officiel: 'Oficial', arbitre: 'Árbitro', benevole: 'Voluntário / Contacto família', benevoleLic: 'Voluntário / Contacto família (com licença)', parent_non: 'NÃO (2 encarregados)', parent_oui: 'SIM (1 encarregado)', legalRequired: 'Por favor, leia e aceite os termos e condições e a proteção de dados.', flhRequired: 'Por favor, confirme o envio para flh.lu para a licença.', accuracyRequired: 'Por favor, confirme a exatidão dos dados.', extraRoles: 'Função(ões) adicional(is) (opcional)', extraRolesHint: 'Ex.: jogador que também é árbitro. A primeira função determina a categoria.', alsoPrefix: 'Também', tarif: 'QUOTA 2025-2026', tarifHint: '(Sugerida automaticamente com base na idade — ajustável e pode ser alterada numa Assembleia Geral, entrando em vigor na próxima época.)'
+            nom: 'Apelido *', prenom: 'Nome próprio *', dob: 'Data de nascimento *', mineur: 'Menor', cat: 'Categoria FLH', role: 'Função *', parent: 'Encarregado isolado *', tuteur1: 'Encarregado 1 *', tuteur2: 'Encarregado 2 *', nat: 'Nacionalidade *', cns: 'Número CNS *', medico: 'Exame médico *', licence: 'Licença *', club: 'Clube anterior *', u7: 'U7 certificado médico obrigatório', strasse: 'Rua *', postcode: 'Código postal *', ortschaft: 'Localidade *', email: 'E-mail *', gsm1: 'Telemóvel 1 *', gsm2: 'Telemóvel 2', send: 'Enviar', sending: 'A enviar...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Inscrição enviada.', successNote: 'Receberá uma confirmação por e-mail. O cartão de membro será enviado após o pagamento da quota.', oui: 'SIM', non: 'NÃO', joueur: 'Jogador / Jogadora', officiel: 'Oficial', arbitre: 'Árbitro', benevole: 'Voluntário / Contacto família', benevoleLic: 'Voluntário / Contacto família (com licença)', parent_non: 'NÃO (2 encarregados)', parent_oui: 'SIM (1 encarregado)', legalRequired: 'Por favor, leia e aceite os termos e condições e a proteção de dados.', flhRequired: 'Por favor, confirme o envio para flh.lu para a licença.', accuracyRequired: 'Por favor, confirme a exatidão dos dados.', extraRoles: 'Função(ões) adicional(is) (opcional)', extraRolesHint: 'Ex.: jogador que também é árbitro. A primeira função determina a categoria.', alsoPrefix: 'Também', tarif: 'QUOTA 2026-2027', tarifHint: '(Sugerida automaticamente com base na idade — ajustável e pode ser alterada numa Assembleia Geral, entrando em vigor na próxima época.)'
         }
     };
     const MERSCH75_LEGAL_TEXTS = {
@@ -555,24 +552,20 @@
         if (!select) return;
         const familleFlag = document.getElementById('FamilleFlag');
         if (familleFlag && familleFlag.checked) {
-            select.value = 'Membre Famille (2+) – €250';
+            select.value = 'Family Tarif';
             return;
         }
-        // Offizieller / Arbitter (ëmmer mat Lizenz) oder Bénévole mat Lizenz = €50,
-        // och wann d'Persoun gläichzäiteg Spiller ass (Comité/Offiziell/Arbitter mat Lizenz).
+        // Offizieller / Arbitter (ëmmer mat Lizenz) oder Bénévole mat Lizenz = €50
         const flags = getRoleFlags();
         if (flags.isOfficial || flags.isReferee || (flags.isVolunteer && flags.hasLicence)) {
-            select.value = 'Membre Licence Officiel – €50';
+            select.value = 'Officiels – €50';
             return;
         }
-        const category = getCategoryValue();
-        if (!category) return;
-        if (category === 'Seniors' || category === 'Veterans') {
-            select.value = 'Membre Joueur Adulte – €200';
-        } else if (category === 'U17' || category === 'U21') {
-            select.value = 'Membre étudiant, jeune joueur > 16 – €100';
+        // Alter-baséiert: iwwer 25 Joer = Adulte (€300), soss Youth ≤25 (€210)
+        if (typeof currentAge === 'number' && currentAge > 25) {
+            select.value = 'Adulte Tarif – €300';
         } else {
-            select.value = 'Membre étudiant, jeune joueur < 16 – €100';
+            select.value = 'Youth Tarif (≤ 25 ans) – €210';
         }
     }
 
@@ -798,7 +791,7 @@
 
     function buildMemberCardPayload(record) {
         return [
-            'MEMBERSKAART MERSCH75 2025-2026',
+            'MEMBERSKAART MERSCH75 2026-2027',
             'Card-ID: ' + record.cardId,
             'Persoun: ' + record.number,
             'Numm: ' + record.name,
@@ -841,7 +834,7 @@
         }
 
         const lines = [];
-        lines.push('FAMILL MEMBERSKAART 2025-2026');
+        lines.push('FAMILL MEMBERSKAART 2026-2027');
         lines.push('Total Persounen: ' + getFamilyMemberCount());
 
         buildMemberCardRecords().forEach(function(record) {
@@ -1079,7 +1072,7 @@
         lines.push(text.role + ': ' + getValue('Role'));
         lines.push('BASE CATEGORIE FLH: ' + getValue('FlhCategoryBasis'));
         lines.push(text.category + ': ' + getCategoryValue());
-        lines.push('COTISATIOUN 2025-2026: ' + getValue('Cotisation') + (getCheckedValue('FamilleFlag') === 'Oui' ? ' (Famill 2+)' : ''));
+        lines.push('COTISATIOUN 2026-2027: ' + getValue('Cotisation') + (getCheckedValue('FamilleFlag') === 'Oui' ? ' (Famill 2+)' : ''));
 
         const familyRegistrationSummary = buildFamilyRegistrationSummary();
 
