@@ -183,7 +183,7 @@
                                     <option value="Youth Tarif (≤ 25 ans) – €210">Youth Tarif (≤ 25 ans) – €210</option>
                                     <option value="Adulte Tarif – €300">Adulte Tarif – €300</option>
                                     <option value="Kidssport &amp; Loisirs – €10/unité ou Family Tarif">Kidssport &amp; Loisirs – €10/unité ou Family Tarif</option>
-                                    <option value="Officiels – €50">Officiels – €50</option>
+                                    <option value="Officiels – keng Cotisatioun (min. €50 fir Stëmmrecht AG)">Officiels – keng Cotisatioun (min. €50 fir Stëmmrecht AG)</option>
                                     <option value="Family Tarif – €384">Family Tarif – €384</option>
                                 </select>
                                 <div class="join-checkbox-row" style="margin-top:10px;">
@@ -351,8 +351,11 @@
                     <ul class="join-tarif-list">
                         <li><span class="join-tarif-label">Adulte Tarif</span><span class="join-tarif-price">300€</span></li>
                         <li><span class="join-tarif-label">Youth Tarif (≤ 25 ans)</span><span class="join-tarif-price">210€</span></li>
-                        <li><span class="join-tarif-label">Officiels</span><span class="join-tarif-price">50€</span></li>
                         <li><span class="join-tarif-label">Family Tarif</span><span class="join-tarif-price">384€</span></li>
+                        <li class="join-tarif-family">
+                            <span class="join-tarif-label">Officiels (mat/ouni Lizenz)</span>
+                            <span class="join-tarif-price">Keng Cotisatioun · min. 50€ fir Stëmmrecht op der AG</span>
+                        </li>
                         <li class="join-tarif-family">
                             <span class="join-tarif-label">Kidssport &amp; Loisirs</span>
                             <span class="join-tarif-price">10 € par unité ou Family Tarif</span>
@@ -488,7 +491,9 @@
     let currentAge = null;
     let currentCotisationAge = null;
     const familyMemberCardIds = {};
-    // FLH Alterskategorien Saison 2026-2027 (Gebuertsjoren +1 vs. 2025-2026; U4 = Kidssport).
+    // Alterskategorien Saison 2026-2027 (Männer-Grenzen vum Comité bestätegt).
+    // U7 = jéngste OFFIZIELL FLH-Kategorie (2020-2022). U4 (2023/2024) ass eng Mersch75-INTERN
+    // Struktur, KENG FLH-Kategorie — bewosst net méi jonk wéi 2024 (fir keng Puppelcher unzelackelen).
     const flhCategoryRules = {
         male: [
             { category: 'Veterans', maxYear: 1991 },
@@ -499,8 +504,8 @@
             { category: 'U13', minYear: 2014, maxYear: 2015 },
             { category: 'U11', minYear: 2016, maxYear: 2017 },
             { category: 'U9', minYear: 2018, maxYear: 2019 },
-            { category: 'U7', minYear: 2020, maxYear: 2021 },
-            { category: 'U4', minYear: 2022 }
+            { category: 'U7', minYear: 2020, maxYear: 2022 },
+            { category: 'U4', minYear: 2023, maxYear: 2024 }
         ],
         female: [
             { category: 'Veterans', maxYear: 1991 },
@@ -510,8 +515,8 @@
             { category: 'U13', minYear: 2014, maxYear: 2015 },
             { category: 'U11', minYear: 2016, maxYear: 2017 },
             { category: 'U9', minYear: 2018, maxYear: 2019 },
-            { category: 'U7', minYear: 2020, maxYear: 2021 },
-            { category: 'U4', minYear: 2022 }
+            { category: 'U7', minYear: 2020, maxYear: 2022 },
+            { category: 'U4', minYear: 2023, maxYear: 2024 }
         ]
     };
 
@@ -558,10 +563,11 @@
             select.value = 'Family Tarif – €384';
             return;
         }
-        // Offizieller / Arbitter (ëmmer mat Lizenz) oder Bénévole mat Lizenz = €50
+        // Officiels (Offizieller/Arbitter mat/ouni Lizenz, oder Bénévole mat Lizenz):
+        // keng Cotisatioun; min. 50€ fir Stëmmrecht op der AG (cf. Statuten)
         const flags = getRoleFlags();
         if (flags.isOfficial || flags.isReferee || (flags.isVolunteer && flags.hasLicence)) {
-            select.value = 'Officiels – €50';
+            select.value = 'Officiels – keng Cotisatioun (min. €50 fir Stëmmrecht AG)';
             return;
         }
         // Kidssport & Loisirs = U4 → €10/unité ou Family Tarif
