@@ -1148,7 +1148,7 @@ function initializeTrainingSchedule() {
     const hotspotGroupBase = [
         {
             group: 'u4',
-            trainers: 'Grégory Redavid, Marc Jungels, Max Blanc (LUXQF4)',
+            trainers: 'Gina Dimola, Kevin Wolmering, Marc Jungels, Max Blanc (LUXQF4)',
             slots: [
                 { dayKey: 'sat', time: '10:00 - 11:00', location: LOC_ECOLE }
             ],
@@ -1182,7 +1182,7 @@ function initializeTrainingSchedule() {
         },
         {
             group: 'u11',
-            trainers: 'Max Blanc (LUXQF4), Elie Schuster',
+            trainers: 'Max Blanc (LUXQF4), Elie Schuster, Grégory Redavid, Laurent Metzler',
             slots: [
                 { dayKey: 'wed', time: '17:00 - 18:30', location: LOC_OMNI },
                 { dayKey: 'fri', time: '17:30 - 19:00', location: LOC_KROU }
