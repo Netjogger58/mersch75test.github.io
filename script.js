@@ -1230,7 +1230,7 @@ function initializeTrainingSchedule() {
         },
         {
             group: 'filles',
-            trainers: 'Anne Bisenius Holm (LUXQF3), Katarzyna Pietrasik',
+            trainers: 'Anne Bisenius Holm (LUXQF3)',
             slots: [
                 { dayKey: 'fri', time: '16:30 - 17:30', location: LOC_OMNI }
             ],
