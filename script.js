@@ -1148,12 +1148,12 @@ function initializeTrainingSchedule() {
     const hotspotGroupBase = [
         {
             group: 'u4',
-            trainers: 'Grégory Redavid, Christophe Kremer, Marc Jungels, Max Blanc (LUXQF4)',
+            trainers: 'Grégory Redavid, Marc Jungels, Max Blanc (LUXQF4)',
             slots: [
                 { dayKey: 'sat', time: '10:00 - 11:00', location: LOC_ECOLE }
             ],
             areas: [
-                { left: 87.97, top: 31.45, width: 11.47, height: 7.53 }
+                { left: 87.97, top: 31.46, width: 11.52, height: 7.54 }
             ]
         },
         {
@@ -1164,8 +1164,8 @@ function initializeTrainingSchedule() {
                 { dayKey: 'fri', time: '16:30 - 17:30', location: LOC_KROU }
             ],
             areas: [
-                { left: 30.38, top: 57.81, width: 11.52, height: 7.53 },
-                { left: 76.45, top: 50.28, width: 11.52, height: 7.53 }
+                { left: 30.38, top: 57.85, width: 11.52, height: 7.54 },
+                { left: 76.45, top: 50.31, width: 11.52, height: 7.54 }
             ]
         },
         {
@@ -1176,8 +1176,8 @@ function initializeTrainingSchedule() {
                 { dayKey: 'thu', time: '17:30 - 19:00', location: LOC_KROU }
             ],
             areas: [
-                { left: 18.86, top: 57.81, width: 11.52, height: 11.30 },
-                { left: 53.41, top: 57.81, width: 11.52, height: 11.30 }
+                { left: 18.86, top: 57.85, width: 11.52, height: 11.31 },
+                { left: 53.41, top: 57.85, width: 11.52, height: 11.31 }
             ]
         },
         {
@@ -1188,8 +1188,8 @@ function initializeTrainingSchedule() {
                 { dayKey: 'fri', time: '17:30 - 19:00', location: LOC_KROU }
             ],
             areas: [
-                { left: 41.90, top: 54.05, width: 11.51, height: 11.29 },
-                { left: 76.45, top: 57.81, width: 11.52, height: 11.30 }
+                { left: 41.90, top: 50.31, width: 11.52, height: 15.08 },
+                { left: 76.45, top: 57.85, width: 11.52, height: 7.54 }
             ]
         },
         {
@@ -1200,8 +1200,8 @@ function initializeTrainingSchedule() {
                 { dayKey: 'fri', time: '17:30 - 19:00', location: LOC_OMNI }
             ],
             areas: [
-                { left: 7.34, top: 57.81, width: 11.52, height: 11.30 },
-                { left: 64.93, top: 57.81, width: 11.52, height: 11.30 }
+                { left: 7.34, top: 54.08, width: 11.52, height: 11.31 },
+                { left: 64.93, top: 57.85, width: 11.52, height: 7.54 }
             ]
         },
         {
@@ -1212,8 +1212,8 @@ function initializeTrainingSchedule() {
                 { dayKey: 'wed', time: '18:30 - 20:00', location: LOC_OMNI }
             ],
             areas: [
-                { left: 7.34, top: 69.11, width: 11.52, height: 11.30 },
-                { left: 41.90, top: 65.34, width: 11.51, height: 11.30 }
+                { left: 7.34, top: 69.16, width: 11.52, height: 7.54 },
+                { left: 41.90, top: 65.39, width: 11.52, height: 11.31 }
             ]
         },
         {
@@ -1224,8 +1224,8 @@ function initializeTrainingSchedule() {
                 { dayKey: 'fri', time: '19:00 - 20:30', location: LOC_KROU }
             ],
             areas: [
-                { left: 41.90, top: 76.64, width: 5.75, height: 11.30 },
-                { left: 76.45, top: 69.11, width: 11.52, height: 11.30 }
+                { left: 41.90, top: 76.70, width: 5.76, height: 7.54 },
+                { left: 76.45, top: 69.16, width: 11.52, height: 11.31 }
             ]
         },
         {
@@ -1235,7 +1235,7 @@ function initializeTrainingSchedule() {
                 { dayKey: 'fri', time: '16:30 - 17:30', location: LOC_OMNI }
             ],
             areas: [
-                { left: 64.93, top: 50.28, width: 11.52, height: 7.53 }
+                { left: 64.93, top: 50.31, width: 11.52, height: 3.77 }
             ]
         },
         {
@@ -1246,8 +1246,8 @@ function initializeTrainingSchedule() {
                 { dayKey: 'fri', time: '19:00 - 20:30', location: LOC_OMNI }
             ],
             areas: [
-                { left: 18.86, top: 69.11, width: 11.52, height: 11.30 },
-                { left: 64.93, top: 69.11, width: 11.52, height: 11.30 }
+                { left: 18.86, top: 69.16, width: 11.52, height: 11.31 },
+                { left: 64.93, top: 69.16, width: 11.52, height: 11.31 }
             ]
         },
         {
@@ -1259,9 +1259,9 @@ function initializeTrainingSchedule() {
                 { dayKey: 'fri', time: '20:00 - 21:30', location: LOC_KROU }
             ],
             areas: [
-                { left: 7.34, top: 76.64, width: 11.52, height: 11.30 },
-                { left: 47.66, top: 76.64, width: 5.75, height: 11.30 },
-                { left: 76.45, top: 76.64, width: 11.52, height: 11.30 }
+                { left: 7.34, top: 76.70, width: 11.52, height: 7.54 },
+                { left: 47.66, top: 76.70, width: 5.76, height: 7.54 },
+                { left: 76.45, top: 76.70, width: 11.52, height: 7.54 }
             ]
         },
         {
@@ -1271,7 +1271,7 @@ function initializeTrainingSchedule() {
                 { dayKey: 'mon', time: '20:30 - 22:00', location: LOC_GARE }
             ],
             areas: [
-                { left: 18.86, top: 80.41, width: 11.52, height: 11.30 }
+                { left: 18.86, top: 80.47, width: 11.52, height: 11.31 }
             ]
         }
     ];
