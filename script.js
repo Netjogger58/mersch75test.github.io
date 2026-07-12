@@ -1139,7 +1139,7 @@ function initializeTrainingSchedule() {
     const LOC_OMNI = 'Hall Omnisports, 21, rue des Prés, Mersch';
     const LOC_KROU = 'Hall Omnisports Krounebierg, 11, rue de la Piscine, Mersch';
     const LOC_GARE = 'Sporthal Lëntgen (Gare), 50, rue de la Gare, Lëntgen';
-    const LOC_ECOLE = "Schoulsportshal Lëntgen (École), 4, rue de l'Ecole, Lëntgen";
+    const LOC_ECOLE = "Schoulsporthal Lintgen (École), 4, rue de l'Ecole, Lintgen";
 
     // Positiounen op der Tabell 2026-2027 (Prozent, aus dem Gitter gemooss).
     // Kolonnen: A Lun/Omni 7.34 · B Lun/Gare 18.86 · C Mar/Krounebierg 30.38 · D Mer/Omni 41.90
