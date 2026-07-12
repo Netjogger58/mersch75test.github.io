@@ -488,27 +488,30 @@
     let currentAge = null;
     let currentCotisationAge = null;
     const familyMemberCardIds = {};
+    // FLH Alterskategorien Saison 2026-2027 (Gebuertsjoren +1 vs. 2025-2026; U4 = Kidssport).
     const flhCategoryRules = {
         male: [
-            { category: 'Veterans', maxYear: 1990 },
-            { category: 'Seniors', minYear: 1991, maxYear: 2004 },
-            { category: 'U21', minYear: 2005, maxYear: 2008 },
-            { category: 'U17', minYear: 2009, maxYear: 2010 },
-            { category: 'U15', minYear: 2011, maxYear: 2012 },
-            { category: 'U13', minYear: 2013, maxYear: 2014 },
-            { category: 'U11', minYear: 2015, maxYear: 2016 },
-            { category: 'U9', minYear: 2017, maxYear: 2018 },
-            { category: 'U7', minYear: 2019 }
+            { category: 'Veterans', maxYear: 1991 },
+            { category: 'Seniors', minYear: 1992, maxYear: 2005 },
+            { category: 'U21', minYear: 2006, maxYear: 2009 },
+            { category: 'U17', minYear: 2010, maxYear: 2011 },
+            { category: 'U15', minYear: 2012, maxYear: 2013 },
+            { category: 'U13', minYear: 2014, maxYear: 2015 },
+            { category: 'U11', minYear: 2016, maxYear: 2017 },
+            { category: 'U9', minYear: 2018, maxYear: 2019 },
+            { category: 'U7', minYear: 2020, maxYear: 2021 },
+            { category: 'U4', minYear: 2022 }
         ],
         female: [
-            { category: 'Veterans', maxYear: 1990 },
-            { category: 'Seniors', minYear: 1991, maxYear: 2008 },
-            { category: 'U17', minYear: 2009, maxYear: 2010 },
-            { category: 'U15', minYear: 2011, maxYear: 2012 },
-            { category: 'U13', minYear: 2013, maxYear: 2014 },
-            { category: 'U11', minYear: 2015, maxYear: 2016 },
-            { category: 'U9', minYear: 2017, maxYear: 2018 },
-            { category: 'U7', minYear: 2019 }
+            { category: 'Veterans', maxYear: 1991 },
+            { category: 'Seniors', minYear: 1992, maxYear: 2009 },
+            { category: 'U17', minYear: 2010, maxYear: 2011 },
+            { category: 'U15', minYear: 2012, maxYear: 2013 },
+            { category: 'U13', minYear: 2014, maxYear: 2015 },
+            { category: 'U11', minYear: 2016, maxYear: 2017 },
+            { category: 'U9', minYear: 2018, maxYear: 2019 },
+            { category: 'U7', minYear: 2020, maxYear: 2021 },
+            { category: 'U4', minYear: 2022 }
         ]
     };
 
@@ -559,6 +562,11 @@
         const flags = getRoleFlags();
         if (flags.isOfficial || flags.isReferee || (flags.isVolunteer && flags.hasLicence)) {
             select.value = 'Officiels – €50';
+            return;
+        }
+        // Kidssport & Loisirs = U4 → €50
+        if (getCategoryValue() === 'U4') {
+            select.value = 'Kidssport & Loisirs – €50';
             return;
         }
         // Alter-baséiert: iwwer 25 Joer = Adulte (€300), soss Youth ≤25 (€210)
