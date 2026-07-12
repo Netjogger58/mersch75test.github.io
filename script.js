@@ -4,20 +4,6 @@ function syncCurrentYear() {
     });
 }
 
-function initializeFeedbackSystem() {
-    if (window.Mersch75FeedbackConfig || document.body.classList.contains('feedback-admin-page')) return;
-
-    const version = '20260608b';
-    const configScript = document.createElement('script');
-    configScript.src = 'feedback-config.js?v=' + version;
-    configScript.onload = () => {
-        const feedbackScript = document.createElement('script');
-        feedbackScript.src = 'feedback.js?v=' + version;
-        document.body.append(feedbackScript);
-    };
-    document.body.append(configScript);
-}
-
 function ensureSiteLanguageSwitcher() {
     // Wenn die Seite bereits einen Sprachumschalter mitbringt, nichts tun.
     if (document.querySelector('.site-language-switcher')) return;
@@ -2430,7 +2416,6 @@ initializeJoinUsForm();
 initializeSharedFooters();
 initializeNewsCarousel();
 initializeAgModal();
-initializeFeedbackSystem();
 syncCurrentYear();
 
 // Passwuert Modal fir Wëllkomm Mapp
