@@ -182,9 +182,9 @@
                                 <select id="Cotisation" name="Cotisation">
                                     <option value="Youth Tarif (≤ 25 ans) – €210">Youth Tarif (≤ 25 ans) – €210</option>
                                     <option value="Adulte Tarif – €300">Adulte Tarif – €300</option>
-                                    <option value="Kidssport &amp; Loisirs – €50">Kidssport &amp; Loisirs – €50</option>
+                                    <option value="Kidssport &amp; Loisirs – €10/unité ou Family Tarif">Kidssport &amp; Loisirs – €10/unité ou Family Tarif</option>
                                     <option value="Officiels – €50">Officiels – €50</option>
-                                    <option value="Family Tarif">Family Tarif (voir détails)</option>
+                                    <option value="Family Tarif – €384">Family Tarif – €384</option>
                                 </select>
                                 <div class="join-checkbox-row" style="margin-top:10px;">
                                     <input type="checkbox" id="FamilleFlag" name="FamilleFlag" value="Oui">
@@ -351,11 +351,11 @@
                     <ul class="join-tarif-list">
                         <li><span class="join-tarif-label">Adulte Tarif</span><span class="join-tarif-price">300€</span></li>
                         <li><span class="join-tarif-label">Youth Tarif (≤ 25 ans)</span><span class="join-tarif-price">210€</span></li>
-                        <li><span class="join-tarif-label">Kidssport &amp; Loisirs</span><span class="join-tarif-price">50€</span></li>
                         <li><span class="join-tarif-label">Officiels</span><span class="join-tarif-price">50€</span></li>
+                        <li><span class="join-tarif-label">Family Tarif</span><span class="join-tarif-price">384€</span></li>
                         <li class="join-tarif-family">
-                            <span class="join-tarif-label">Family Tarif*</span>
-                            <span class="join-tarif-price">Tarif le plus élevé (parmi les membres de la famille) + 50 € par membre (≤ 25 ans) / 80 € par membre adulte supplémentaire</span>
+                            <span class="join-tarif-label">Kidssport &amp; Loisirs</span>
+                            <span class="join-tarif-price">10 € par unité ou Family Tarif</span>
                         </li>
                     </ul>
                 </div>
@@ -555,7 +555,7 @@
         if (!select) return;
         const familleFlag = document.getElementById('FamilleFlag');
         if (familleFlag && familleFlag.checked) {
-            select.value = 'Family Tarif';
+            select.value = 'Family Tarif – €384';
             return;
         }
         // Offizieller / Arbitter (ëmmer mat Lizenz) oder Bénévole mat Lizenz = €50
@@ -564,9 +564,9 @@
             select.value = 'Officiels – €50';
             return;
         }
-        // Kidssport & Loisirs = U4 → €50
+        // Kidssport & Loisirs = U4 → €10/unité ou Family Tarif
         if (getCategoryValue() === 'U4') {
-            select.value = 'Kidssport & Loisirs – €50';
+            select.value = 'Kidssport & Loisirs – €10/unité ou Family Tarif';
             return;
         }
         // Alter-baséiert: iwwer 25 Joer = Adulte (€300), soss Youth ≤25 (€210)
