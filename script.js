@@ -1065,11 +1065,14 @@ function initializeTrainingSchedule() {
                 u4: { label: 'Kidssports U4', title: 'Kidssports U4' },
                 u7: { label: 'U7', title: 'U7' },
                 u9: { label: 'U9', title: 'U9' },
-                u11: { label: 'U11', title: 'U11' },
-                u13u15: { label: 'U13 + U15', title: 'U13 & U15' },
-                filles: { label: 'Filles', title: 'Filles U9 / U11 / U13' },
-                fraen: { label: 'Fraen', title: 'Fraen' },
-                haeren: { label: 'Männer S1 / S2 / U21 - U17', title: 'Männer S1 / S2 / U21 - U17' }
+                u11: { label: 'U11', title: 'U11 (débutants confirmés)' },
+                u13f: { label: 'U13F', title: 'U13 Meedercher' },
+                u13g: { label: 'U13G', title: 'U13 Jongen' },
+                u15: { label: 'U15', title: 'U15' },
+                filles: { label: 'Filles', title: 'Meedercher (Ufänger)' },
+                femmes: { label: 'Fraen', title: 'Fraen' },
+                hommes: { label: 'Männer', title: 'Männer' },
+                loisir: { label: 'Loisir', title: 'Loisir' }
             }
         },
         fr: {
@@ -1080,11 +1083,14 @@ function initializeTrainingSchedule() {
                 u4: { label: 'Kidssports U4', title: 'Kidssports U4' },
                 u7: { label: 'U7', title: 'U7' },
                 u9: { label: 'U9', title: 'U9' },
-                u11: { label: 'U11', title: 'U11' },
-                u13u15: { label: 'U13 + U15', title: 'U13 & U15' },
-                filles: { label: 'Filles', title: 'Groupe Filles U9 / U11 / U13' },
-                fraen: { label: 'Dames', title: 'Dames' },
-                haeren: { label: 'Hommes S1 / S2 / U21 - U17', title: 'Hommes S1 / S2 / U21 - U17' }
+                u11: { label: 'U11', title: 'U11 (débutants confirmés)' },
+                u13f: { label: 'U13F', title: 'U13 Filles' },
+                u13g: { label: 'U13G', title: 'U13 Garçons' },
+                u15: { label: 'U15', title: 'U15' },
+                filles: { label: 'Filles', title: 'Filles (débutantes)' },
+                femmes: { label: 'Dames', title: 'Dames' },
+                hommes: { label: 'Hommes', title: 'Hommes' },
+                loisir: { label: 'Loisir', title: 'Loisir' }
             }
         },
         de: {
@@ -1095,11 +1101,14 @@ function initializeTrainingSchedule() {
                 u4: { label: 'Kidssports U4', title: 'Kidssports U4' },
                 u7: { label: 'U7', title: 'U7' },
                 u9: { label: 'U9', title: 'U9' },
-                u11: { label: 'U11', title: 'U11' },
-                u13u15: { label: 'U13 + U15', title: 'U13 & U15' },
-                filles: { label: 'Mädchen', title: 'Mädchengruppe U9 / U11 / U13' },
-                fraen: { label: 'Frauen', title: 'Frauen' },
-                haeren: { label: 'Männer S1 / S2 / U21 - U17', title: 'Männer S1 / S2 / U21 - U17' }
+                u11: { label: 'U11', title: 'U11 (débutants confirmés)' },
+                u13f: { label: 'U13F', title: 'U13 Mädchen' },
+                u13g: { label: 'U13G', title: 'U13 Jungen' },
+                u15: { label: 'U15', title: 'U15' },
+                filles: { label: 'Mädchen', title: 'Mädchen (Anfänger)' },
+                femmes: { label: 'Frauen', title: 'Frauen' },
+                hommes: { label: 'Männer', title: 'Männer' },
+                loisir: { label: 'Loisir', title: 'Freizeit / Loisir' }
             }
         },
         en: {
@@ -1110,11 +1119,14 @@ function initializeTrainingSchedule() {
                 u4: { label: 'Kidssports U4', title: 'Kidssports U4' },
                 u7: { label: 'U7', title: 'U7' },
                 u9: { label: 'U9', title: 'U9' },
-                u11: { label: 'U11', title: 'U11' },
-                u13u15: { label: 'U13 + U15', title: 'U13 & U15' },
-                filles: { label: 'Girls', title: 'Girls Group U9 / U11 / U13' },
-                fraen: { label: 'Women', title: 'Women' },
-                haeren: { label: 'Men S1 / S2 / U21 - U17', title: 'Men S1 / S2 / U21 - U17' }
+                u11: { label: 'U11', title: 'U11 (débutants confirmés)' },
+                u13f: { label: 'U13F', title: 'U13 Girls' },
+                u13g: { label: 'U13G', title: 'U13 Boys' },
+                u15: { label: 'U15', title: 'U15' },
+                filles: { label: 'Girls', title: 'Girls (beginners)' },
+                femmes: { label: 'Women', title: 'Women' },
+                hommes: { label: 'Men', title: 'Men' },
+                loisir: { label: 'Loisir', title: 'Recreational' }
             }
         },
         pt: {
@@ -1125,112 +1137,155 @@ function initializeTrainingSchedule() {
                 u4: { label: 'Kidssports U4', title: 'Kidssports U4' },
                 u7: { label: 'U7', title: 'U7' },
                 u9: { label: 'U9', title: 'U9' },
-                u11: { label: 'U11', title: 'U11' },
-                u13u15: { label: 'U13 + U15', title: 'U13 & U15' },
-                filles: { label: 'Raparigas', title: 'Grupo Feminino U9 / U11 / U13' },
-                fraen: { label: 'Seniores femininas', title: 'Seniores femininas' },
-                haeren: { label: 'Seniores masculinos S1 / S2 / U21 - U17', title: 'Seniores masculinos S1 / S2 / U21 - U17' }
+                u11: { label: 'U11', title: 'U11 (débutants confirmés)' },
+                u13f: { label: 'U13F', title: 'U13 Raparigas' },
+                u13g: { label: 'U13G', title: 'U13 Rapazes' },
+                u15: { label: 'U15', title: 'U15' },
+                filles: { label: 'Raparigas', title: 'Raparigas (iniciantes)' },
+                femmes: { label: 'Seniores femininas', title: 'Seniores femininas' },
+                hommes: { label: 'Seniores masculinos', title: 'Seniores masculinos' },
+                loisir: { label: 'Loisir', title: 'Lazer' }
             }
         }
     };
 
+    // Halen
+    const LOC_OMNI = 'Hall Omnisports, 21, rue des Prés, Mersch';
+    const LOC_KROU = 'Hall Omnisports Krounebierg, 11, rue de la Piscine, Mersch';
+    const LOC_GARE = 'Sporthal Lëntgen (Gare), 50, rue de la Gare, Lëntgen';
+    const LOC_ECOLE = "Schoulsportshal Lëntgen (École), 4, rue de l'Ecole, Lëntgen";
+
+    // Positiounen op der Tabell 2026-2027 (Prozent, aus dem Gitter gemooss).
+    // Kolonnen: A Lun/Omni 7.34 · B Lun/Gare 18.86 · C Mar/Krounebierg 30.38 · D Mer/Omni 41.90
+    //           E Jeu/Krounebierg 53.41 · F Ven/Omni 64.93 · G Ven/Krounebierg 76.45 · H Sam/École 87.97
+    // Zäit-Reihen: 09:00 = 23.92 %, all 30 Min = 3.77 %.
     const hotspotGroupBase = [
         {
             group: 'u4',
             trainers: 'Grégory Redavid, Christophe Kremer, Marc Jungels, Max Blanc (LUXQF4)',
             slots: [
-                { dayKey: 'wed', time: '16:30 - 17:30', location: 'Omnisports, 21, rue des Prés, Mersch' },
-                { dayKey: 'sat', time: '10:00 - 11:00', location: "Sportshal Lëntgen, 4, rue de l'Ecole, Lëntgen" }
+                { dayKey: 'sat', time: '10:00 - 11:00', location: LOC_ECOLE }
             ],
             areas: [
-                { left: 43.1, top: 47.3, width: 11.4, height: 8.4 },
-                { left: 87.4, top: 30.6, width: 10.8, height: 8.3 }
+                { left: 87.97, top: 31.45, width: 11.47, height: 7.53 }
             ]
         },
         {
             group: 'u7',
             trainers: 'Max Blanc (LUXQF4), Anne Holm (LUXQF3)',
             slots: [
-                { dayKey: 'tue', time: '17:30 - 18:30', location: 'Sportshal Lëntgen, 50, rue de la Gare' },
-                { dayKey: 'fri', time: '16:30 - 17:30', location: 'Hall Omnisports Krounebierg, 11, rue de la Piscine, Mersch' }
+                { dayKey: 'tue', time: '17:30 - 18:30', location: LOC_KROU },
+                { dayKey: 'fri', time: '16:30 - 17:30', location: LOC_KROU }
             ],
             areas: [
-                { left: 20.2, top: 55.6, width: 10.8, height: 8.1 },
-                { left: 76.1, top: 47.3, width: 11.3, height: 8.4 }
+                { left: 30.38, top: 57.81, width: 11.52, height: 7.53 },
+                { left: 76.45, top: 50.28, width: 11.52, height: 7.53 }
             ]
         },
         {
             group: 'u9',
             trainers: 'Max Blanc (LUXQF4), Louis Van der Weken (LUXQF2Bis)',
             slots: [
-                { dayKey: 'tue', time: '17:30 - 19:00', location: 'Hall Omnisports Krounebierg, 11, rue de la Piscine, Mersch' },
-                { dayKey: 'thu', time: '17:30 - 19:00', location: 'Hall Omnisports Krounebierg, 11, rue de la Piscine, Mersch' }
+                { dayKey: 'mon', time: '17:30 - 19:00', location: LOC_GARE },
+                { dayKey: 'thu', time: '17:30 - 19:00', location: LOC_KROU }
             ],
             areas: [
-                { left: 32.3, top: 55.6, width: 10.8, height: 12.2 },
-                { left: 54.4, top: 55.6, width: 10.9, height: 12.4 }
+                { left: 18.86, top: 57.81, width: 11.52, height: 11.30 },
+                { left: 53.41, top: 57.81, width: 11.52, height: 11.30 }
             ]
         },
         {
             group: 'u11',
             trainers: 'Max Blanc (LUXQF4), Elie Schuster',
             slots: [
-                { dayKey: 'wed', time: '17:30 - 19:00', location: 'Hall Omnisports, 21, rue des Prés, Mersch' },
-                { dayKey: 'fri', time: '17:30 - 19:00', location: 'Hall Omnisports Krounebierg, 11, rue de la Piscine, Mersch' }
+                { dayKey: 'wed', time: '17:00 - 18:30', location: LOC_OMNI },
+                { dayKey: 'fri', time: '17:30 - 19:00', location: LOC_KROU }
             ],
             areas: [
-                { left: 43.1, top: 55.7, width: 11.4, height: 12.3 },
-                { left: 76.1, top: 55.6, width: 11.3, height: 12.4 }
+                { left: 41.90, top: 54.05, width: 11.51, height: 11.29 },
+                { left: 76.45, top: 57.81, width: 11.52, height: 11.30 }
             ]
         },
         {
-            group: 'u13u15',
+            group: 'u13f',
             trainers: 'Max Blanc (LUXQF4), Mathis Derneden',
             slots: [
-                { dayKey: 'mon', time: '17:30 - 19:00', location: 'Hall Omnisports, 21, rue des Prés, Mersch' },
-                { dayKey: 'wed', time: '18:30 - 20:00', location: 'Hall Omnisports, 21, rue des Prés, Mersch' },
-                { dayKey: 'fri', time: '19:00 - 20:30', location: 'Hall Omnisports Krounebierg, 11, rue de la Piscine, Mersch' }
+                { dayKey: 'mon', time: '17:30 - 19:00', location: LOC_OMNI },
+                { dayKey: 'fri', time: '17:30 - 19:00', location: LOC_OMNI }
             ],
             areas: [
-                { left: 10.1, top: 55.6, width: 11.3, height: 12.2 },
-                { left: 43.1, top: 67.9, width: 11.4, height: 8.3 },
-                { left: 76.1, top: 68.0, width: 11.3, height: 8.3 }
+                { left: 7.34, top: 57.81, width: 11.52, height: 11.30 },
+                { left: 64.93, top: 57.81, width: 11.52, height: 11.30 }
+            ]
+        },
+        {
+            group: 'u13g',
+            trainers: 'Max Blanc (LUXQF4), Mathis Derneden',
+            slots: [
+                { dayKey: 'mon', time: '19:00 - 20:30', location: LOC_OMNI },
+                { dayKey: 'wed', time: '18:30 - 20:00', location: LOC_OMNI }
+            ],
+            areas: [
+                { left: 7.34, top: 69.11, width: 11.52, height: 11.30 },
+                { left: 41.90, top: 65.34, width: 11.51, height: 11.30 }
+            ]
+        },
+        {
+            group: 'u15',
+            trainers: 'Max Blanc (LUXQF4), Mathis Derneden',
+            slots: [
+                { dayKey: 'wed', time: '20:00 - 21:30', location: LOC_OMNI },
+                { dayKey: 'fri', time: '19:00 - 20:30', location: LOC_KROU }
+            ],
+            areas: [
+                { left: 41.90, top: 76.64, width: 5.75, height: 11.30 },
+                { left: 76.45, top: 69.11, width: 11.52, height: 11.30 }
             ]
         },
         {
             group: 'filles',
             trainers: 'Anne Bisenius Holm (LUXQF3), Katarzyna Pietrasik',
             slots: [
-                { dayKey: 'fri', time: '17:30 - 19:00', location: 'Hall Omnisports, 21, rue des Prés, Mersch' }
+                { dayKey: 'fri', time: '16:30 - 17:30', location: LOC_OMNI }
             ],
             areas: [
-                { left: 65.3, top: 55.6, width: 10.8, height: 12.4 }
+                { left: 64.93, top: 50.28, width: 11.52, height: 7.53 }
             ]
         },
         {
-            group: 'fraen',
+            group: 'femmes',
             trainers: 'Katarzyna Pietrasik',
             slots: [
-                { dayKey: 'mon', time: '19:00 - 20:30', location: 'Hall Omnisports, 21, rue des Prés, Mersch' },
-                { dayKey: 'fri', time: '19:00 - 20:30', location: 'Hall Omnisports, 21, rue des Prés, Mersch' }
+                { dayKey: 'mon', time: '19:00 - 20:30', location: LOC_GARE },
+                { dayKey: 'fri', time: '19:00 - 20:30', location: LOC_OMNI }
             ],
             areas: [
-                { left: 10.1, top: 67.9, width: 11.3, height: 12.2 },
-                { left: 65.3, top: 68.0, width: 10.8, height: 12.2 }
+                { left: 18.86, top: 69.11, width: 11.52, height: 11.30 },
+                { left: 64.93, top: 69.11, width: 11.52, height: 11.30 }
             ]
         },
         {
-            group: 'haeren',
-            trainers: 'Laurent Metzler',
+            group: 'hommes',
+            trainers: '',
             slots: [
-                { dayKey: 'mon', time: '20:30 - 21:30', location: 'Hall Omnisports, 21, rue des Prés, Mersch' },
-                { dayKey: 'wed', time: '20:30 - 21:30', location: 'Hall Omnisports, 21, rue des Prés, Mersch' },
-                { dayKey: 'fri', time: '20:30 - 21:30', location: 'Hall Omnisports Krounebierg, 11, rue de la Piscine, Mersch' }
+                { dayKey: 'mon', time: '20:00 - 21:30', location: LOC_OMNI },
+                { dayKey: 'wed', time: '20:00 - 21:30', location: LOC_OMNI },
+                { dayKey: 'fri', time: '20:00 - 21:30', location: LOC_KROU }
             ],
             areas: [
-                { left: 10.1, top: 80.2, width: 11.3, height: 8.5 },
-                { left: 43.1, top: 76.2, width: 11.4, height: 12.4 },
-                { left: 76.1, top: 76.3, width: 11.3, height: 12.3 }
+                { left: 7.34, top: 76.64, width: 11.52, height: 11.30 },
+                { left: 47.66, top: 76.64, width: 5.75, height: 11.30 },
+                { left: 76.45, top: 76.64, width: 11.52, height: 11.30 }
+            ]
+        },
+        {
+            group: 'loisir',
+            trainers: 'Mersch75',
+            slots: [
+                { dayKey: 'mon', time: '20:30 - 22:00', location: LOC_GARE }
+            ],
+            areas: [
+                { left: 18.86, top: 80.41, width: 11.52, height: 11.30 }
             ]
         }
     ];
@@ -1256,7 +1311,7 @@ function initializeTrainingSchedule() {
                 group: group.group,
                 label: translatedGroup.label,
                 title: translatedGroup.title,
-                trainers: `${translation.trainerPrefix} ${group.trainers}`,
+                trainers: group.trainers ? `${translation.trainerPrefix} ${group.trainers}` : '',
                 slots: group.slots.map((slot) => ({
                     day: translation.days[slot.dayKey] || scheduleTranslations.lb.days[slot.dayKey],
                     time: slot.time,
@@ -1315,7 +1370,7 @@ function initializeTrainingSchedule() {
 
         tooltip.innerHTML = [
             `<h3>${groupInfo.title}</h3>`,
-            `<p>${groupInfo.trainers}</p>`,
+            groupInfo.trainers ? `<p>${groupInfo.trainers}</p>` : '',
             `<ul>${slots}</ul>`
         ].join('');
         tooltip.classList.add('is-visible');
