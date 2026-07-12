@@ -9,7 +9,7 @@ Format: `Datum · Commit · was & warum`. Details stehen in der jeweiligen Git-C
 ---
 
 ## 2026-07-12
-- **Training (`training.html`): Trainingsplan-Bild ersetzt** durch `assets/Entrainement 2026_2027.png` (Alt-Text „Trainingsplan 2026-2027").
+- **Training (`training.html`): Trainingsplan-Bild ersetzt** durch `assets/Entraînements 2026_2027.png` (Alt-Text „Trainingsplan 2026-2027"; altes Bild entfernt).
 - **Join Us (`join.html`): Officiels-Regel + Alterskategorien geklärt.** Officiels (mat/ouni Lizenz) zahlen **keine Cotisation**, aber **min. 50€ für Stimmrecht auf der AG** (lt. Statuten) — Modal-Liste, Dropdown & `suggestTarif` angepasst. Alterskategorien (Männer, vom Comité bestätigt): U11=2016-2017, U9=2018-2019, **U7=2020-2022** (jüngste offizielle FLH-Kategorie), **U4=2023/2024** (M75-intern, keine FLH-Kategorie, nicht jünger als 2024) = Kidssport; darüber U13=2014-2015, U15=2012-2013, U17=2010-2011, U21=2006-2009, Seniors 1992-2005, Veterans ≤1991. Damen-Bänder parallel gesetzt (FLH-Bestätigung ausstehend). Spiegel-Doku Vereins-OS aktualisiert.
 - **Join Us (`join.html`): Tarife 2026-2027 korrigiert.** Neue/korrigierte Werte: Adulte €300, Youth (≤25) €210, Officiels €50, **Kidssport & Loisirs = €10 par unité ou Family Tarif** (auto für U4), **Family Tarif = fix €384**. Aktualisiert in Modal-Liste, Dropdown, `suggestTarif`. FLH-Alterskategorien um +1 Jahr auf 2026-2027 verschoben + U4 (Jg. 2022+) ergänzt. Spiegel-Doku Vereins-OS `docs/join-to-sheet-automation-f4cdcc.md` angepasst.
 
