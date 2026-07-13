@@ -1161,11 +1161,11 @@ function initializeTrainingSchedule() {
             trainers: 'Max Blanc (LUXQF4), Anne Holm (LUXQF3)',
             slots: [
                 { dayKey: 'tue', time: '17:30 - 18:30', location: LOC_KROU },
-                { dayKey: 'fri', time: '16:30 - 17:30', location: LOC_KROU }
+                { dayKey: 'fri', time: '16:30 - 17:00', location: LOC_KROU }
             ],
             areas: [
                 { left: 30.38, top: 54.08, width: 11.52, height: 7.54 },
-                { left: 76.45, top: 46.54, width: 11.52, height: 7.54 }
+                { left: 76.45, top: 46.54, width: 11.52, height: 3.77 }
             ]
         },
         {
@@ -1185,11 +1185,11 @@ function initializeTrainingSchedule() {
             trainers: 'Max Blanc (LUXQF4), Elie Schuster, Grégory Redavid, Laurent Metzler',
             slots: [
                 { dayKey: 'wed', time: '17:00 - 18:30', location: LOC_OMNI },
-                { dayKey: 'fri', time: '17:30 - 19:00', location: LOC_KROU }
+                { dayKey: 'fri', time: '17:00 - 18:30', location: LOC_KROU }
             ],
             areas: [
                 { left: 41.90, top: 46.54, width: 11.52, height: 15.08 },
-                { left: 76.45, top: 54.08, width: 11.52, height: 7.54 }
+                { left: 76.45, top: 50.31, width: 11.52, height: 11.31 }
             ]
         },
         {
@@ -1200,7 +1200,7 @@ function initializeTrainingSchedule() {
                 { dayKey: 'fri', time: '17:30 - 19:00', location: LOC_OMNI }
             ],
             areas: [
-                { left: 7.34, top: 54.08, width: 11.52, height: 11.31 },
+                { left: 13.10, top: 54.08, width: 5.76, height: 11.31 },
                 { left: 64.93, top: 57.85, width: 11.52, height: 7.54 }
             ]
         },
@@ -1208,34 +1208,34 @@ function initializeTrainingSchedule() {
             group: 'u13g',
             trainers: 'Max Blanc (LUXQF4), Mathis Derneden',
             slots: [
-                { dayKey: 'mon', time: '19:00 - 20:30', location: LOC_OMNI },
-                { dayKey: 'wed', time: '18:30 - 20:00', location: LOC_OMNI }
+                { dayKey: 'mon', time: '17:30 - 18:30', location: LOC_OMNI },
+                { dayKey: 'wed', time: '19:00 - 20:00', location: LOC_OMNI }
             ],
             areas: [
-                { left: 7.34, top: 65.39, width: 11.52, height: 7.54 },
-                { left: 41.90, top: 61.62, width: 11.52, height: 11.31 }
+                { left: 7.34, top: 54.08, width: 5.76, height: 7.54 },
+                { left: 41.90, top: 65.39, width: 11.52, height: 7.54 }
             ]
         },
         {
             group: 'u15',
             trainers: 'Max Blanc (LUXQF4), Mathis Derneden',
             slots: [
-                { dayKey: 'wed', time: '20:00 - 21:30', location: LOC_OMNI },
-                { dayKey: 'fri', time: '19:00 - 20:30', location: LOC_KROU }
+                { dayKey: 'mon', time: '19:00 - 20:00', location: LOC_OMNI },
+                { dayKey: 'fri', time: '19:00 - 20:00', location: LOC_KROU }
             ],
             areas: [
-                { left: 41.90, top: 76.70, width: 5.76, height: 7.54 },
-                { left: 76.45, top: 65.39, width: 11.52, height: 11.31 }
+                { left: 7.34, top: 65.39, width: 11.52, height: 7.54 },
+                { left: 76.45, top: 65.39, width: 11.52, height: 7.54 }
             ]
         },
         {
             group: 'filles',
             trainers: 'Anne Bisenius Holm (LUXQF3)',
             slots: [
-                { dayKey: 'fri', time: '16:30 - 17:30', location: LOC_OMNI }
+                { dayKey: 'fri', time: '16:30 - 17:00', location: LOC_OMNI }
             ],
             areas: [
-                { left: 64.93, top: 46.54, width: 11.52, height: 7.54 }
+                { left: 64.93, top: 46.54, width: 11.52, height: 3.77 }
             ]
         },
         {
@@ -1260,7 +1260,7 @@ function initializeTrainingSchedule() {
             ],
             areas: [
                 { left: 7.34, top: 80.47, width: 11.52, height: 7.54 },
-                { left: 47.66, top: 76.70, width: 5.76, height: 7.54 },
+                { left: 41.90, top: 76.70, width: 11.52, height: 7.54 },
                 { left: 76.45, top: 80.47, width: 11.52, height: 7.54 }
             ]
         },
