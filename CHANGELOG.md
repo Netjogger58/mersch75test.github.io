@@ -9,6 +9,8 @@ Format: `Datum · Commit · was & warum`. Details stehen in der jeweiligen Git-C
 ---
 
 ## 2026-07-14
+- **Image-Optimierung: WebP/AVIF + Lazy-Loading + `<picture>`-Fallback.** Node-Skript `tools/convert-images.mjs` konvertéiert all PNG/JPEG/WebP/AVIF-Originaler (ausser `.git`, `node_modules`, `sbo-archiv`, `tools`) an WebP- an AVIF-Varianten, generéiert `<picture>`-Elementer mat `<source srcset>` fir AVIF/WebP a setzt `loading="lazy"` (Hero-Biller op `index.html` kréien `loading="eager"`). 974 Biller veraarbecht, 26 HTML-Säiten aktualiséiert, korrupte `Yamas.png` geläscht. Dokumentatioun: `docs/image-optimization.md`.
+- **Inside-Seite (`inside.html`): Statuten-Badge Layout gefléckt.** CSS-Selektoren `> img` op `> picture > img` erweidert, nodeems d'Konvertéierungs-Script d'Biller an `<picture>`-Wrapper gesat huet – d'Statuten-Logo iwwerdeckt net méi dat drënnerläit Comité-Logo.
 - **FLH Statistik-Archiv.** FLH-Donnéeën (Spillplang + Tabellen) an `data/flh-archive-2627.json` an `data/flh-archive-2526.json` exportéiert, esou datt si lokal verfügbar bleiwen, och wann d'FLH hir Donnéeën ewechhëlt. Neit Node-Skript `tools/flh-archive.mjs` fir den Export. SBO-PDFen an `sbo-archiv/2627/` a `sbo-archiv/2526/` erofgelueden (137 Stéck pro Saison) mat Index an `data/sbo-index-2627.json` / `data/sbo-index-2526.json`. `js/flh-live-sync.js` erweidert: `loadArchive(season)`, `loadSboIndex(season)` a `resolveSboLink()`. `live-center.html` a `live-center-25-26.html` lueden d'Archiv am Hannergrond, benotzen et als Fallback, a leeden SBO-Linken op lokal PDFen ëm. Cache-Bust `flh-live-sync.js?v=20260714a`.
 
 ## 2026-07-13
