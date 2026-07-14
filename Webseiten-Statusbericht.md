@@ -196,11 +196,20 @@ Legende: ✅ **Fertig & gepflegt** · 🟦 **Funktioniert, ausbaufähig** · �
 9. **Strukturierte Daten** (`schema.org` SportsOrganization, Events) → bessere Google-Darstellung.
 10. **Linkchecker als GitHub Action** (tote Links/Bilder automatisch melden — passt zu `AGENTS.md`).
 
-### 8.3 Strategisch (Verbindung zur Vereins-OS-App)
-11. **Öffentliche Read-API der App** (siehe App-Bericht) → Website zeigt **Live-Tabelle/nächste Spiele/Torschützen** direkt aus der App statt nur aus handball4all.
-12. **Interne Tools in die App verlagern** (Generator-Editing, Scanner, Feedback-intern) → echter Login statt Soft-Lock.
-13. **News-/Event-Pflege aus der App** generieren (App ist „Quelle", Website ist „Schaufenster").
-14. **PWA-Funktion** (installierbar, Offline-Spielplan) für die öffentliche Seite.
+### 8.3 Strategisch (Verbindung zur Vereins-OS-App) – Stand 2026-07-15
+
+Aktuell **intern live / in Entwicklung** in der App (`Vereins-OS`):
+
+- **Einheitliche Mitgliedersortierung** über alle Trainer-Ansichten (Teams, Anwesenheit, Nominierungen): Médico-Problemfälle (`inapte`, `overdue`, `keen Médico`) rutschen nach unten; Jugend-Teams werden alt→jung sortiert, Senioren jung→alt; Nominierungen für anstehende Spiele heben Spieler innerhalb der Listen hervor.
+- **Aufsteiger-Teams / Multi-Team-Zugehörigkeit:** Jugend-Spieler können pro Team direkt für höhere Altersklassen freigeschaltet werden (z.B. U7→U9, U9→U11, U11 Espoir→U11 Elite & U13, U13→U15). Erfasst über `extra_team_ids` in der Mitglieder-Datenbank; wirkt in Teams-, Anwesenheits- und Nominationslisten.
+- **Prouftraining (Probe-Training):** In der Anwesenheits-Liste kann ein Trainer manuell neue Spieler hinzufügen und als „Prouftraining" markieren. Nach Erhalt der Lizenz wird der Haken entfernt – die Trainings werden dann als normale Einheiten gezählt.
+
+**Offene strategische Punkte (Website ↔ App):**
+
+1. **Öffentliche Read-API der App** (siehe App-Bericht) → Website zeigt **Live-Tabelle/nächste Spiele/Torschützen** direkt aus der App statt nur aus handball4all.
+2. **Interne Tools in die App verlagern** (Generator-Editing, Scanner, Feedback-intern) → echter Login statt Soft-Lock.
+3. **News-/Event-Pflege aus der App** generieren (App ist „Quelle", Website ist „Schaufenster").
+4. **PWA-Funktion** (installierbar, Offline-Spielplan) für die öffentliche Seite.
 
 ---
 

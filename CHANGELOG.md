@@ -8,6 +8,14 @@ Format: `Datum · Commit · was & warum`. Details stehen in der jeweiligen Git-C
 
 ---
 
+## 2026-07-15
+- **Vereins-OS-App (intern) – Nominatiounen, Aufsteiger-Teams & Prouftraining.**
+  - **Nominatiounen / Teams / Anwesenheet:** Memberer ginn iwwerall (Teams, Anwesenheet, Nominéierungen) no deem selwechte System sortéiert: Médico-Problemer (`inapte`, `overdue`, `keen Médico`) no ënnen, Alter (Jugend alt→jung, Senioren jung→alt), alphabetesch als Fallback.
+  - **Aufsteiger-Teams (extraTeamIds):** Jugend-Spiller kënnen elo zu méi héije Kategorien agesat ginn. An der Team-Détail-Lëscht gëtt et fir all Jugend-Spiller 1–2 Checkboxen (z.B. U7→U9, U9→U11, U11 Espoir→U11 Elite a U13, U13→U15). Wann ugewielt, kënnt de Spiller och an där héijerer Ekipp nominéiert ginn. Gilt och an der Anwesenheet.
+  - **Nominatioun-Boost:** Memberer, déi fir e kommende Match schonn nominéiert sinn, ruckelen an Teams/Anwesenheet automatesch no uewen.
+  - **Prouftraining (isTrial):** An der Anwesenheet kann een elo manuell neie Spiller anerakommen (z.B. Jugend-Spiller déi eng Kategorie méi héich trainéieren). Si kréien de Status „Prouftraining". Soubal se eng Lizenz hunn, gëtt den Haken ewechgeholl a d'Trainingszählung gët normal gezielt.
+  - Member-Detail krut eng nei Käerzeg „Zousätzlech Teams"; Backend krut nei Endpunkten (`/api/nominations/team/:id`) an nei Datenbankspalten (`extra_team_ids`, `attendance.is_trial`).
+
 ## 2026-07-14
 - **Image-Optimierung: WebP/AVIF + Lazy-Loading + `<picture>`-Fallback.** Node-Skript `tools/convert-images.mjs` konvertéiert all PNG/JPEG/WebP/AVIF-Originaler (ausser `.git`, `node_modules`, `sbo-archiv`, `tools`) an WebP- an AVIF-Varianten, generéiert `<picture>`-Elementer mat `<source srcset>` fir AVIF/WebP a setzt `loading="lazy"` (Hero-Biller op `index.html` kréien `loading="eager"`). 974 Biller veraarbecht, 26 HTML-Säiten aktualiséiert, korrupte `Yamas.png` geläscht. Dokumentatioun: `docs/image-optimization.md`.
 - **Inside-Seite (`inside.html`): Statuten-Badge Layout gefléckt.** CSS-Selektoren `> img` op `> picture > img` erweidert, nodeems d'Konvertéierungs-Script d'Biller an `<picture>`-Wrapper gesat huet – d'Statuten-Logo iwwerdeckt net méi dat drënnerläit Comité-Logo.

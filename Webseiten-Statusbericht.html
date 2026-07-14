@@ -208,7 +208,14 @@ GitHub Pages (Hosting)  ──► Domain mersch75.lu (CNAME)
 <li><strong>Strukturierte Daten</strong> (<code>schema.org</code> SportsOrganization, Events) → bessere Google-Darstellung.</li>
 <li><strong>Linkchecker als GitHub Action</strong> (tote Links/Bilder automatisch melden — passt zu <code>AGENTS.md</code>).</li>
 </ol>
-<h3>8.3 Strategisch (Verbindung zur Vereins-OS-App)</h3>
+<h3>8.3 Strategisch (Verbindung zur Vereins-OS-App) – Stand 2026-07-15</h3>
+<p>Aktuell <strong>intern live / in Entwicklung</strong> in der App (<code>Vereins-OS</code>):</p>
+<ul>
+<li><strong>Einheitliche Mitgliedersortierung</strong> über alle Trainer-Ansichten (Teams, Anwesenheit, Nominierungen): Médico-Problemfälle (<code>inapte</code>, <code>overdue</code>, <code>keen Médico</code>) rutschen nach unten; Jugend-Teams werden alt→jung sortiert, Senioren jung→alt; Nominierungen für anstehende Spiele heben Spieler innerhalb der Listen hervor.</li>
+<li><strong>Aufsteiger-Teams / Multi-Team-Zugehörigkeit:</strong> Jugend-Spieler können pro Team direkt für höhere Altersklassen freigeschaltet werden (z.B. U7→U9, U9→U11, U11 Espoir→U11 Elite &amp; U13, U13→U15). Erfasst über <code>extra_team_ids</code> in der Mitglieder-Datenbank; wirkt in Teams-, Anwesenheits- und Nominationslisten.</li>
+<li><strong>Prouftraining (Probe-Training):</strong> In der Anwesenheits-Liste kann ein Trainer manuell neue Spieler hinzufügen und als „Prouftraining" markieren. Nach Erhalt der Lizenz wird der Haken entfernt – die Trainings werden dann als normale Einheiten gezählt.</li>
+</ul>
+<p><strong>Offene strategische Punkte (Website ↔ App):</strong></p>
 <ol>
 <li><strong>Öffentliche Read-API der App</strong> (siehe App-Bericht) → Website zeigt <strong>Live-Tabelle/nächste Spiele/Torschützen</strong> direkt aus der App statt nur aus handball4all.</li>
 <li><strong>Interne Tools in die App verlagern</strong> (Generator-Editing, Scanner, Feedback-intern) → echter Login statt Soft-Lock.</li>
