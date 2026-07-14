@@ -289,8 +289,61 @@
         return Array.from(mergedByKey.values());
     }
 
+    function loadArchive(season) {
+        const fileName = 'data/flh-archive-' + (season || '2627') + '.json';
+        return fetch(fileName, { cache: 'no-store' })
+            .then(function(response) {
+                if (!response.ok) throw new Error('Archive ' + fileName + ' HTTP ' + response.status);
+                return response.json();
+            })
+            .then(function(archive) {
+                return {
+                    games: archive && Array.isArray(archive.games) ? archive.games : [],
+                    standingsByLabel: archive && archive.standingsByLabel ? archive.standingsByLabel : {},
+                    fetchedAt: archive && archive.fetchedAt ? archive.fetchedAt : '',
+                    season: archive && archive.season ? archive.season : season
+                };
+            })
+            .catch(function() {
+                return { games: [], standingsByLabel: {}, fetchedAt: '', season: season };
+            });
+    }
+
+    function loadSboIndex(season) {
+        const fileName = 'data/sbo-index-' + (season || '2627') + '.json';
+        if (window.__sboIndexLoading && window.__sboIndexLoading[season]) return window.__sboIndexLoading[season];
+        if (!window.__sboIndexLoading) window.__sboIndexLoading = {};
+        window.__sboIndexLoading[season] = fetch(fileName, { cache: 'no-store' })
+            .then(function(response) {
+                if (!response.ok) throw new Error('SBO index ' + fileName + ' HTTP ' + response.status);
+                return response.json();
+            })
+            .then(function(index) {
+                return (index && typeof index === 'object') ? index : {};
+            })
+            .catch(function() {
+                return {};
+            });
+        return window.__sboIndexLoading[season];
+    }
+
+    function resolveSboLink(href, season, indexEntries) {
+        if (!href) return href;
+        const match = String(href).match(/sGID=(\d+)/);
+        if (!match) return href;
+        const sgid = match[1];
+        const entries = indexEntries || (window.__sboIndex && window.__sboIndex[season]) || {};
+        if (entries[sgid]) {
+            return 'sbo-archiv/' + (season || '2627') + '/' + sgid + '.pdf';
+        }
+        return href;
+    }
+
     window.MerschFlhSync = {
         fetchAllGames: fetchAllGames,
-        mergeLiveSeasonGames: mergeLiveSeasonGames
+        mergeLiveSeasonGames: mergeLiveSeasonGames,
+        loadArchive: loadArchive,
+        loadSboIndex: loadSboIndex,
+        resolveSboLink: resolveSboLink
     };
 })();

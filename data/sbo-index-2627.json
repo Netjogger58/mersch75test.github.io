@@ -1,1 +1,824 @@
-{}
+{
+  "3053901": {
+    "file": "sbo-archiv/2627/3053901.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3053901",
+    "savedAt": "2026-07-14T06:20:06.375Z",
+    "bytes": 143405
+  },
+  "3071231": {
+    "file": "sbo-archiv/2627/3071231.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3071231",
+    "savedAt": "2026-07-14T06:20:06.789Z",
+    "bytes": 142766
+  },
+  "3076531": {
+    "file": "sbo-archiv/2627/3076531.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3076531",
+    "savedAt": "2026-07-14T06:20:24.405Z",
+    "bytes": 141119
+  },
+  "3087411": {
+    "file": "sbo-archiv/2627/3087411.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3087411",
+    "savedAt": "2026-07-14T06:20:16.622Z",
+    "bytes": 144662
+  },
+  "3089326": {
+    "file": "sbo-archiv/2627/3089326.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3089326",
+    "savedAt": "2026-07-14T06:20:07.099Z",
+    "bytes": 144285
+  },
+  "3094911": {
+    "file": "sbo-archiv/2627/3094911.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3094911",
+    "savedAt": "2026-07-14T06:20:24.818Z",
+    "bytes": 144795
+  },
+  "3106596": {
+    "file": "sbo-archiv/2627/3106596.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3106596",
+    "savedAt": "2026-07-14T06:20:17.006Z",
+    "bytes": 143201
+  },
+  "3107036": {
+    "file": "sbo-archiv/2627/3107036.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3107036",
+    "savedAt": "2026-07-14T06:20:36.380Z",
+    "bytes": 141147
+  },
+  "3108476": {
+    "file": "sbo-archiv/2627/3108476.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3108476",
+    "savedAt": "2026-07-14T06:20:35.972Z",
+    "bytes": 145930
+  },
+  "3111376": {
+    "file": "sbo-archiv/2627/3111376.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3111376",
+    "savedAt": "2026-07-14T06:20:25.153Z",
+    "bytes": 142712
+  },
+  "3119146": {
+    "file": "sbo-archiv/2627/3119146.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3119146",
+    "savedAt": "2026-07-14T06:20:17.335Z",
+    "bytes": 142829
+  },
+  "3120761": {
+    "file": "sbo-archiv/2627/3120761.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3120761",
+    "savedAt": "2026-07-14T06:20:07.506Z",
+    "bytes": 141671
+  },
+  "3122231": {
+    "file": "sbo-archiv/2627/3122231.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3122231",
+    "savedAt": "2026-07-14T06:19:57.443Z",
+    "bytes": 144005
+  },
+  "3123086": {
+    "file": "sbo-archiv/2627/3123086.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3123086",
+    "savedAt": "2026-07-14T06:20:08.258Z",
+    "bytes": 143327
+  },
+  "3123221": {
+    "file": "sbo-archiv/2627/3123221.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3123221",
+    "savedAt": "2026-07-14T06:19:57.879Z",
+    "bytes": 145822
+  },
+  "3129666": {
+    "file": "sbo-archiv/2627/3129666.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3129666",
+    "savedAt": "2026-07-14T06:20:36.732Z",
+    "bytes": 142388
+  },
+  "3130826": {
+    "file": "sbo-archiv/2627/3130826.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3130826",
+    "savedAt": "2026-07-14T06:20:08.606Z",
+    "bytes": 143743
+  },
+  "3132161": {
+    "file": "sbo-archiv/2627/3132161.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3132161",
+    "savedAt": "2026-07-14T06:20:25.873Z",
+    "bytes": 143947
+  },
+  "3136046": {
+    "file": "sbo-archiv/2627/3136046.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3136046",
+    "savedAt": "2026-07-14T06:20:18.088Z",
+    "bytes": 144174
+  },
+  "3136851": {
+    "file": "sbo-archiv/2627/3136851.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3136851",
+    "savedAt": "2026-07-14T06:20:09.043Z",
+    "bytes": 143527
+  },
+  "3137641": {
+    "file": "sbo-archiv/2627/3137641.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3137641",
+    "savedAt": "2026-07-14T06:19:58.290Z",
+    "bytes": 145149
+  },
+  "3156746": {
+    "file": "sbo-archiv/2627/3156746.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3156746",
+    "savedAt": "2026-07-14T06:20:09.900Z",
+    "bytes": 144228
+  },
+  "3168681": {
+    "file": "sbo-archiv/2627/3168681.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3168681",
+    "savedAt": "2026-07-14T06:20:26.245Z",
+    "bytes": 143596
+  },
+  "3177426": {
+    "file": "sbo-archiv/2627/3177426.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3177426",
+    "savedAt": "2026-07-14T06:19:58.700Z",
+    "bytes": 145804
+  },
+  "3181866": {
+    "file": "sbo-archiv/2627/3181866.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3181866",
+    "savedAt": "2026-07-14T06:20:18.461Z",
+    "bytes": 143626
+  },
+  "3184621": {
+    "file": "sbo-archiv/2627/3184621.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3184621",
+    "savedAt": "2026-07-14T06:20:10.107Z",
+    "bytes": 143135
+  },
+  "3188426": {
+    "file": "sbo-archiv/2627/3188426.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3188426",
+    "savedAt": "2026-07-14T06:20:26.515Z",
+    "bytes": 139712
+  },
+  "3200176": {
+    "file": "sbo-archiv/2627/3200176.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3200176",
+    "savedAt": "2026-07-14T06:20:18.659Z",
+    "bytes": 143326
+  },
+  "3200956": {
+    "file": "sbo-archiv/2627/3200956.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3200956",
+    "savedAt": "2026-07-14T06:20:10.580Z",
+    "bytes": 145645
+  },
+  "3202071": {
+    "file": "sbo-archiv/2627/3202071.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3202071",
+    "savedAt": "2026-07-14T06:19:59.451Z",
+    "bytes": 145356
+  },
+  "3210141": {
+    "file": "sbo-archiv/2627/3210141.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3210141",
+    "savedAt": "2026-07-14T06:20:10.911Z",
+    "bytes": 142618
+  },
+  "3221521": {
+    "file": "sbo-archiv/2627/3221521.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3221521",
+    "savedAt": "2026-07-14T06:20:26.857Z",
+    "bytes": 140755
+  },
+  "3232369": {
+    "file": "sbo-archiv/2627/3232369.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3232369",
+    "savedAt": "2026-07-14T06:20:19.420Z",
+    "bytes": 143519
+  },
+  "3233929": {
+    "file": "sbo-archiv/2627/3233929.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3233929",
+    "savedAt": "2026-07-14T06:20:11.617Z",
+    "bytes": 143751
+  },
+  "3235293": {
+    "file": "sbo-archiv/2627/3235293.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3235293",
+    "savedAt": "2026-07-14T06:19:59.823Z",
+    "bytes": 145293
+  },
+  "3238813": {
+    "file": "sbo-archiv/2627/3238813.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3238813",
+    "savedAt": "2026-07-14T06:20:27.609Z",
+    "bytes": 143059
+  },
+  "3248425": {
+    "file": "sbo-archiv/2627/3248425.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3248425",
+    "savedAt": "2026-07-14T06:20:19.897Z",
+    "bytes": 144465
+  },
+  "3249049": {
+    "file": "sbo-archiv/2627/3249049.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3249049",
+    "savedAt": "2026-07-14T06:20:12.010Z",
+    "bytes": 144618
+  },
+  "3250341": {
+    "file": "sbo-archiv/2627/3250341.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3250341",
+    "savedAt": "2026-07-14T06:20:00.199Z",
+    "bytes": 143548
+  },
+  "3251249": {
+    "file": "sbo-archiv/2627/3251249.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3251249",
+    "savedAt": "2026-07-14T06:20:12.421Z",
+    "bytes": 143155
+  },
+  "3255841": {
+    "file": "sbo-archiv/2627/3255841.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3255841",
+    "savedAt": "2026-07-14T06:20:37.073Z",
+    "bytes": 142708
+  },
+  "3259137": {
+    "file": "sbo-archiv/2627/3259137.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3259137",
+    "savedAt": "2026-07-14T06:20:32.159Z",
+    "bytes": 139628
+  },
+  "3261221": {
+    "file": "sbo-archiv/2627/3261221.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3261221",
+    "savedAt": "2026-07-14T06:20:37.738Z",
+    "bytes": 144262
+  },
+  "3262981": {
+    "file": "sbo-archiv/2627/3262981.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3262981",
+    "savedAt": "2026-07-14T06:20:13.070Z",
+    "bytes": 140401
+  },
+  "3270341": {
+    "file": "sbo-archiv/2627/3270341.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3270341",
+    "savedAt": "2026-07-14T06:20:01.089Z",
+    "bytes": 145126
+  },
+  "3274157": {
+    "file": "sbo-archiv/2627/3274157.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3274157",
+    "savedAt": "2026-07-14T06:20:20.307Z",
+    "bytes": 144542
+  },
+  "3276105": {
+    "file": "sbo-archiv/2627/3276105.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3276105",
+    "savedAt": "2026-07-14T06:20:13.442Z",
+    "bytes": 144134
+  },
+  "3288729": {
+    "file": "sbo-archiv/2627/3288729.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3288729",
+    "savedAt": "2026-07-14T06:20:27.988Z",
+    "bytes": 142114
+  },
+  "3289797": {
+    "file": "sbo-archiv/2627/3289797.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3289797",
+    "savedAt": "2026-07-14T06:20:20.488Z",
+    "bytes": 142739
+  },
+  "3296897": {
+    "file": "sbo-archiv/2627/3296897.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3296897",
+    "savedAt": "2026-07-14T06:20:28.223Z",
+    "bytes": 142290
+  },
+  "3302965": {
+    "file": "sbo-archiv/2627/3302965.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3302965",
+    "savedAt": "2026-07-14T06:20:32.855Z",
+    "bytes": 141189
+  },
+  "3305685": {
+    "file": "sbo-archiv/2627/3305685.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3305685",
+    "savedAt": "2026-07-14T06:20:01.282Z",
+    "bytes": 144570
+  },
+  "3305761": {
+    "file": "sbo-archiv/2627/3305761.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3305761",
+    "savedAt": "2026-07-14T06:20:13.753Z",
+    "bytes": 143283
+  },
+  "3308465": {
+    "file": "sbo-archiv/2627/3308465.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3308465",
+    "savedAt": "2026-07-14T06:20:28.887Z",
+    "bytes": 139934
+  },
+  "3311917": {
+    "file": "sbo-archiv/2627/3311917.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3311917",
+    "savedAt": "2026-07-14T06:20:01.604Z",
+    "bytes": 144504
+  },
+  "3313481": {
+    "file": "sbo-archiv/2627/3313481.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3313481",
+    "savedAt": "2026-07-14T06:20:33.221Z",
+    "bytes": 139870
+  },
+  "3332116": {
+    "file": "sbo-archiv/2627/3332116.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3332116",
+    "savedAt": "2026-07-14T06:20:41.012Z",
+    "bytes": 145963
+  },
+  "3332176": {
+    "file": "sbo-archiv/2627/3332176.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3332176",
+    "savedAt": "2026-07-14T06:20:42.090Z",
+    "bytes": 145349
+  },
+  "3332186": {
+    "file": "sbo-archiv/2627/3332186.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3332186",
+    "savedAt": "2026-07-14T06:20:41.418Z",
+    "bytes": 146422
+  },
+  "3344336": {
+    "file": "sbo-archiv/2627/3344336.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3344336",
+    "savedAt": "2026-07-14T06:20:29.247Z",
+    "bytes": 143245
+  },
+  "3348661": {
+    "file": "sbo-archiv/2627/3348661.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3348661",
+    "savedAt": "2026-07-14T06:20:14.256Z",
+    "bytes": 144408
+  },
+  "3350411": {
+    "file": "sbo-archiv/2627/3350411.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3350411",
+    "savedAt": "2026-07-14T06:20:42.431Z",
+    "bytes": 146333
+  },
+  "3350416": {
+    "file": "sbo-archiv/2627/3350416.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3350416",
+    "savedAt": "2026-07-14T06:20:42.862Z",
+    "bytes": 145673
+  },
+  "3354461": {
+    "file": "sbo-archiv/2627/3354461.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3354461",
+    "savedAt": "2026-07-14T06:20:33.395Z",
+    "bytes": 140221
+  },
+  "3354871": {
+    "file": "sbo-archiv/2627/3354871.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3354871",
+    "savedAt": "2026-07-14T06:20:21.085Z",
+    "bytes": 143747
+  },
+  "3357166": {
+    "file": "sbo-archiv/2627/3357166.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3357166",
+    "savedAt": "2026-07-14T06:20:43.189Z",
+    "bytes": 144127
+  },
+  "3357291": {
+    "file": "sbo-archiv/2627/3357291.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3357291",
+    "savedAt": "2026-07-14T06:20:01.791Z",
+    "bytes": 143263
+  },
+  "3364736": {
+    "file": "sbo-archiv/2627/3364736.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3364736",
+    "savedAt": "2026-07-14T06:20:29.533Z",
+    "bytes": 142660
+  },
+  "3368401": {
+    "file": "sbo-archiv/2627/3368401.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3368401",
+    "savedAt": "2026-07-14T06:20:43.811Z",
+    "bytes": 146420
+  },
+  "3368421": {
+    "file": "sbo-archiv/2627/3368421.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3368421",
+    "savedAt": "2026-07-14T06:20:02.493Z",
+    "bytes": 144189
+  },
+  "3368426": {
+    "file": "sbo-archiv/2627/3368426.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3368426",
+    "savedAt": "2026-07-14T06:20:44.611Z",
+    "bytes": 143489
+  },
+  "3368486": {
+    "file": "sbo-archiv/2627/3368486.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3368486",
+    "savedAt": "2026-07-14T06:20:44.255Z",
+    "bytes": 146079
+  },
+  "3382976": {
+    "file": "sbo-archiv/2627/3382976.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3382976",
+    "savedAt": "2026-07-14T06:20:21.475Z",
+    "bytes": 143474
+  },
+  "3386716": {
+    "file": "sbo-archiv/2627/3386716.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3386716",
+    "savedAt": "2026-07-14T06:20:46.010Z",
+    "bytes": 144688
+  },
+  "3386731": {
+    "file": "sbo-archiv/2627/3386731.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3386731",
+    "savedAt": "2026-07-14T06:20:44.923Z",
+    "bytes": 146046
+  },
+  "3386751": {
+    "file": "sbo-archiv/2627/3386751.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3386751",
+    "savedAt": "2026-07-14T06:20:45.581Z",
+    "bytes": 147542
+  },
+  "3386916": {
+    "file": "sbo-archiv/2627/3386916.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3386916",
+    "savedAt": "2026-07-14T06:20:33.777Z",
+    "bytes": 140883
+  },
+  "3390871": {
+    "file": "sbo-archiv/2627/3390871.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3390871",
+    "savedAt": "2026-07-14T06:20:30.173Z",
+    "bytes": 142178
+  },
+  "3399046": {
+    "file": "sbo-archiv/2627/3399046.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3399046",
+    "savedAt": "2026-07-14T06:20:38.068Z",
+    "bytes": 143007
+  },
+  "3403091": {
+    "file": "sbo-archiv/2627/3403091.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3403091",
+    "savedAt": "2026-07-14T06:20:14.970Z",
+    "bytes": 141229
+  },
+  "3407236": {
+    "file": "sbo-archiv/2627/3407236.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3407236",
+    "savedAt": "2026-07-14T06:20:34.409Z",
+    "bytes": 140541
+  },
+  "3410756": {
+    "file": "sbo-archiv/2627/3410756.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3410756",
+    "savedAt": "2026-07-14T06:20:02.900Z",
+    "bytes": 146197
+  },
+  "3416716": {
+    "file": "sbo-archiv/2627/3416716.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3416716",
+    "savedAt": "2026-07-14T06:20:03.128Z",
+    "bytes": 143742
+  },
+  "3416726": {
+    "file": "sbo-archiv/2627/3416726.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3416726",
+    "savedAt": "2026-07-14T06:20:47.119Z",
+    "bytes": 145075
+  },
+  "3416731": {
+    "file": "sbo-archiv/2627/3416731.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3416731",
+    "savedAt": "2026-07-14T06:20:46.523Z",
+    "bytes": 147014
+  },
+  "3416741": {
+    "file": "sbo-archiv/2627/3416741.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3416741",
+    "savedAt": "2026-07-14T06:20:47.456Z",
+    "bytes": 144311
+  },
+  "3422986": {
+    "file": "sbo-archiv/2627/3422986.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3422986",
+    "savedAt": "2026-07-14T06:20:03.516Z",
+    "bytes": 145794
+  },
+  "3424146": {
+    "file": "sbo-archiv/2627/3424146.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3424146",
+    "savedAt": "2026-07-14T06:20:30.482Z",
+    "bytes": 142468
+  },
+  "3424376": {
+    "file": "sbo-archiv/2627/3424376.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3424376",
+    "savedAt": "2026-07-14T06:20:03.922Z",
+    "bytes": 145218
+  },
+  "3430876": {
+    "file": "sbo-archiv/2627/3430876.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3430876",
+    "savedAt": "2026-07-14T06:20:48.446Z",
+    "bytes": 145615
+  },
+  "3430931": {
+    "file": "sbo-archiv/2627/3430931.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3430931",
+    "savedAt": "2026-07-14T06:20:48.816Z",
+    "bytes": 144534
+  },
+  "3430941": {
+    "file": "sbo-archiv/2627/3430941.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3430941",
+    "savedAt": "2026-07-14T06:20:47.836Z",
+    "bytes": 145051
+  },
+  "3431106": {
+    "file": "sbo-archiv/2627/3431106.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3431106",
+    "savedAt": "2026-07-14T06:20:34.700Z",
+    "bytes": 139842
+  },
+  "3433736": {
+    "file": "sbo-archiv/2627/3433736.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3433736",
+    "savedAt": "2026-07-14T06:20:21.712Z",
+    "bytes": 143591
+  },
+  "3435541": {
+    "file": "sbo-archiv/2627/3435541.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3435541",
+    "savedAt": "2026-07-14T06:20:15.185Z",
+    "bytes": 143907
+  },
+  "3437551": {
+    "file": "sbo-archiv/2627/3437551.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3437551",
+    "savedAt": "2026-07-14T06:20:53.363Z",
+    "bytes": 144821
+  },
+  "3437686": {
+    "file": "sbo-archiv/2627/3437686.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3437686",
+    "savedAt": "2026-07-14T06:20:53.756Z",
+    "bytes": 145408
+  },
+  "3437776": {
+    "file": "sbo-archiv/2627/3437776.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3437776",
+    "savedAt": "2026-07-14T06:20:54.131Z",
+    "bytes": 145387
+  },
+  "3437976": {
+    "file": "sbo-archiv/2627/3437976.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3437976",
+    "savedAt": "2026-07-14T06:20:54.493Z",
+    "bytes": 143984
+  },
+  "3441101": {
+    "file": "sbo-archiv/2627/3441101.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3441101",
+    "savedAt": "2026-07-14T06:20:55.096Z",
+    "bytes": 143454
+  },
+  "3443361": {
+    "file": "sbo-archiv/2627/3443361.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3443361",
+    "savedAt": "2026-07-14T06:20:55.393Z",
+    "bytes": 144663
+  },
+  "3446726": {
+    "file": "sbo-archiv/2627/3446726.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3446726",
+    "savedAt": "2026-07-14T06:20:55.745Z",
+    "bytes": 144995
+  },
+  "3449151": {
+    "file": "sbo-archiv/2627/3449151.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3449151",
+    "savedAt": "2026-07-14T06:20:56.456Z",
+    "bytes": 144343
+  },
+  "3450771": {
+    "file": "sbo-archiv/2627/3450771.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3450771",
+    "savedAt": "2026-07-14T06:20:56.861Z",
+    "bytes": 144898
+  },
+  "3452491": {
+    "file": "sbo-archiv/2627/3452491.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3452491",
+    "savedAt": "2026-07-14T06:20:57.168Z",
+    "bytes": 144238
+  },
+  "3454511": {
+    "file": "sbo-archiv/2627/3454511.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3454511",
+    "savedAt": "2026-07-14T06:20:30.658Z",
+    "bytes": 144158
+  },
+  "3458936": {
+    "file": "sbo-archiv/2627/3458936.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3458936",
+    "savedAt": "2026-07-14T06:20:49.143Z",
+    "bytes": 143846
+  },
+  "3458946": {
+    "file": "sbo-archiv/2627/3458946.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3458946",
+    "savedAt": "2026-07-14T06:20:49.496Z",
+    "bytes": 145660
+  },
+  "3459061": {
+    "file": "sbo-archiv/2627/3459061.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3459061",
+    "savedAt": "2026-07-14T06:20:39.592Z",
+    "bytes": 145075
+  },
+  "3459736": {
+    "file": "sbo-archiv/2627/3459736.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3459736",
+    "savedAt": "2026-07-14T06:20:50.114Z",
+    "bytes": 144504
+  },
+  "3459741": {
+    "file": "sbo-archiv/2627/3459741.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3459741",
+    "savedAt": "2026-07-14T06:20:38.293Z",
+    "bytes": 142957
+  },
+  "3462841": {
+    "file": "sbo-archiv/2627/3462841.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3462841",
+    "savedAt": "2026-07-14T06:20:15.561Z",
+    "bytes": 142526
+  },
+  "3463956": {
+    "file": "sbo-archiv/2627/3463956.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3463956",
+    "savedAt": "2026-07-14T06:20:22.488Z",
+    "bytes": 144784
+  },
+  "3464046": {
+    "file": "sbo-archiv/2627/3464046.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3464046",
+    "savedAt": "2026-07-14T06:20:04.538Z",
+    "bytes": 144391
+  },
+  "3465391": {
+    "file": "sbo-archiv/2627/3465391.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3465391",
+    "savedAt": "2026-07-14T06:20:30.827Z",
+    "bytes": 142296
+  },
+  "3465506": {
+    "file": "sbo-archiv/2627/3465506.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3465506",
+    "savedAt": "2026-07-14T06:20:50.393Z",
+    "bytes": 145710
+  },
+  "3470081": {
+    "file": "sbo-archiv/2627/3470081.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3470081",
+    "savedAt": "2026-07-14T06:20:39.962Z",
+    "bytes": 146536
+  },
+  "3470121": {
+    "file": "sbo-archiv/2627/3470121.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3470121",
+    "savedAt": "2026-07-14T06:20:38.942Z",
+    "bytes": 145160
+  },
+  "3470321": {
+    "file": "sbo-archiv/2627/3470321.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3470321",
+    "savedAt": "2026-07-14T06:20:50.808Z",
+    "bytes": 146272
+  },
+  "3470331": {
+    "file": "sbo-archiv/2627/3470331.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3470331",
+    "savedAt": "2026-07-14T06:20:51.141Z",
+    "bytes": 145185
+  },
+  "3474986": {
+    "file": "sbo-archiv/2627/3474986.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3474986",
+    "savedAt": "2026-07-14T06:20:16.244Z",
+    "bytes": 145593
+  },
+  "3475561": {
+    "file": "sbo-archiv/2627/3475561.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3475561",
+    "savedAt": "2026-07-14T06:20:05.051Z",
+    "bytes": 144973
+  },
+  "3476036": {
+    "file": "sbo-archiv/2627/3476036.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3476036",
+    "savedAt": "2026-07-14T06:20:40.624Z",
+    "bytes": 145958
+  },
+  "3476156": {
+    "file": "sbo-archiv/2627/3476156.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3476156",
+    "savedAt": "2026-07-14T06:20:31.445Z",
+    "bytes": 143176
+  },
+  "3478471": {
+    "file": "sbo-archiv/2627/3478471.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3478471",
+    "savedAt": "2026-07-14T06:20:39.274Z",
+    "bytes": 144725
+  },
+  "3478501": {
+    "file": "sbo-archiv/2627/3478501.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3478501",
+    "savedAt": "2026-07-14T06:20:51.851Z",
+    "bytes": 146385
+  },
+  "3478511": {
+    "file": "sbo-archiv/2627/3478511.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3478511",
+    "savedAt": "2026-07-14T06:20:05.286Z",
+    "bytes": 145328
+  },
+  "3478516": {
+    "file": "sbo-archiv/2627/3478516.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3478516",
+    "savedAt": "2026-07-14T06:20:52.665Z",
+    "bytes": 146545
+  },
+  "3478521": {
+    "file": "sbo-archiv/2627/3478521.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3478521",
+    "savedAt": "2026-07-14T06:20:52.254Z",
+    "bytes": 145933
+  },
+  "3480066": {
+    "file": "sbo-archiv/2627/3480066.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3480066",
+    "savedAt": "2026-07-14T06:20:34.910Z",
+    "bytes": 140053
+  },
+  "3480836": {
+    "file": "sbo-archiv/2627/3480836.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3480836",
+    "savedAt": "2026-07-14T06:20:22.815Z",
+    "bytes": 143816
+  },
+  "3481566": {
+    "file": "sbo-archiv/2627/3481566.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3481566",
+    "savedAt": "2026-07-14T06:20:05.662Z",
+    "bytes": 146355
+  },
+  "3484116": {
+    "file": "sbo-archiv/2627/3484116.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3484116",
+    "savedAt": "2026-07-14T06:20:31.646Z",
+    "bytes": 141514
+  },
+  "3484146": {
+    "file": "sbo-archiv/2627/3484146.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3484146",
+    "savedAt": "2026-07-14T06:20:31.840Z",
+    "bytes": 143599
+  },
+  "3484596": {
+    "file": "sbo-archiv/2627/3484596.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3484596",
+    "savedAt": "2026-07-14T06:20:35.258Z",
+    "bytes": 139688
+  },
+  "3484891": {
+    "file": "sbo-archiv/2627/3484891.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3484891",
+    "savedAt": "2026-07-14T06:20:23.222Z",
+    "bytes": 145619
+  },
+  "3488556": {
+    "file": "sbo-archiv/2627/3488556.pdf",
+    "url": "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3488556",
+    "savedAt": "2026-07-14T06:20:23.685Z",
+    "bytes": 146020
+  }
+}

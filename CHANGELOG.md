@@ -8,6 +8,9 @@ Format: `Datum · Commit · was & warum`. Details stehen in der jeweiligen Git-C
 
 ---
 
+## 2026-07-14
+- **FLH Statistik-Archiv.** FLH-Donnéeën (Spillplang + Tabellen) an `data/flh-archive-2627.json` an `data/flh-archive-2526.json` exportéiert, esou datt si lokal verfügbar bleiwen, och wann d'FLH hir Donnéeën ewechhëlt. Neit Node-Skript `tools/flh-archive.mjs` fir den Export. SBO-PDFen an `sbo-archiv/2627/` a `sbo-archiv/2526/` erofgelueden (137 Stéck pro Saison) mat Index an `data/sbo-index-2627.json` / `data/sbo-index-2526.json`. `js/flh-live-sync.js` erweidert: `loadArchive(season)`, `loadSboIndex(season)` a `resolveSboLink()`. `live-center.html` a `live-center-25-26.html` lueden d'Archiv am Hannergrond, benotzen et als Fallback, a leeden SBO-Linken op lokal PDFen ëm. Cache-Bust `flh-live-sync.js?v=20260714a`.
+
 ## 2026-07-13
 - **Training (`script.js` / `training.html`): Hotspots + Trainingsplan v130726.** Trainingsplan-Bild elo **`assets/Entrainements-2026-2027-130726.png`** (näischten Upload, 13.07.2026). Hotspots nees an d'nei Biller ugepasst: **U13F Méindes 17:30–19:00** (korrigéiert Zäit), U7 Fréng 16:30–17:00, U11 Freides 17:00–18:30, U13G Méindes 17:30–18:30 / Mëttwoch 19:00–20:00, U15 Méindes/Freides 19:00–20:00, Filles Fréng 16:30–17:00, Hommes Box-Breeten a Positiounen ugepasst. Duplizéiert Fichier `assets/Entraînements2026:2027 13072026.png` mat Doppelpunkt geläscht. Cache-Bust op **alle Säiten** op `script.js?v=20260713sched4` synchroniséiert.
 - **News & Startseit (`news.html` + `index.html`): Save-the-Date-Slide 20.09.2026** synchroniséiert.
