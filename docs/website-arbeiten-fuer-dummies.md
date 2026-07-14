@@ -6,7 +6,62 @@ Dës Dokument ass fir jiddereen, déi éischt Kéier un der Mersch75-Websäit (m
 
 ---
 
-## 1. Grouss Iwwersiicht
+## 1. Wat brauchs de fir unzefänken (Virbedéngungen)
+
+Ier s de un der Websäit schaffe kanns, brauchs de e puer Saachen. Hei alles Schrëtt fir Schrëtt.
+
+### 1.1 E GitHub-Kont
+
+- **Jo, du brauchs onbedéngt e GitHub-Kont.** D'Websäit läit an engem GitHub-Repository (`Netjogger58/mersch75test.github.io`).
+- Falls s de nach kee Kont hues: op [github.com](https://github.com) goen a gratis registréieren (E-Mail, Benotzernumm, Passwuert).
+- **Duerno muss s de vum Proprietär (Netjogger58 / ECG) als "Collaborator" agelueden ginn**, soss kanns de keng Ännerungen späicheren (pushen). Schéck däi GitHub-Benotzernumm un Netjogger58, du kriss dann eng Invitatioun per E-Mail, déi s de unhëlls.
+- Ouni Collaborator-Zougang kanns de d'Fichiere just **liesen**, awer net änneren.
+
+### 1.2 Programmer déi s de installéiere muss
+
+| Programm | Wofir | Wou erofgelueden |
+|----------|-------|------------------|
+| **Git** | Fir Ännerungen erofzelueden a pushen | [git-scm.com](https://git-scm.com) |
+| **Code-Editor** | Fir d'Fichieren ze änneren (empfeelen: VS Code) | [code.visualstudio.com](https://code.visualstudio.com) |
+| **Node.js** | Fir d'Hëllefs-Scripten (Biller, FLH-Archiv) | [nodejs.org](https://nodejs.org) (LTS-Versioun) |
+| **Webbrowser** | Fir ze testen (Chrome, Safari, Firefox) | scho do |
+
+> **Hiweis:** Node.js brauchs de nëmmen, wann s de Biller konvertéiere oder d'FLH-Daten aktualiséiere wëlls. Fir einfachen Text ze änneren duer e Code-Editor.
+
+### 1.3 Grondwëssen dat hëllefräich ass
+
+- **Ganz roueg:** du muss kee Programméierer sinn fir Text oder Biller z'änneren.
+- Hëllefräich ass e bësse Grondwëssen iwwer:
+  - **HTML** (wéi eng Säit opgebaut ass – Tags wéi `<p>`, `<img>`, `<div>`).
+  - **Git** (späicheren = commit, eroplueden = push). Kuck Kapitel 5.
+  - **Terminal / Kommandozeil** (fir d'Scripten). Nëmmen néideg fir Biller/FLH.
+- Wann eppes onkloer ass: **éischt froen, dann änneren.**
+
+### 1.4 D'Websäit op däi Computer lueden (klonen)
+
+Eng eemoleg Aktioun um Ufank. Terminal opmaachen an:
+
+```bash
+git clone https://github.com/Netjogger58/mersch75test.github.io.git
+cd mersch75test.github.io
+```
+
+Dosdno hues de all d'Fichiere lokal a kanns lassleeën.
+
+### 1.5 Ier s de ufänks – Checkliste
+
+1. GitHub-Kont erstallt.
+2. Als Collaborator agelueden (Invitatioun ugeholl).
+3. Git installéiert (`git --version` am Terminal fir ze préiwen).
+4. Code-Editor installéiert (VS Code).
+5. (Optional) Node.js installéiert (`node --version`).
+6. Repository geklont (Kapitel 1.4).
+
+Wann all Punkten ✅ sinn, kanns de mat Kapitel 2 weiderfueren.
+
+---
+
+## 2. Grouss Iwwersiicht
 
 - D'Websäit ass **statesch**: just HTML, CSS a JavaScript. Keng WordPress, keng React-Build.
 - Se gëtt op **GitHub Pages** gehost.
@@ -15,9 +70,9 @@ Dës Dokument ass fir jiddereen, déi éischt Kéier un der Mersch75-Websäit (m
 
 ---
 
-## 2. Wichteg Verzeichnisser a Fichieren
+## 3. Wichteg Verzeichnisser a Fichieren
 
-### 2.1 Haaptverzeichnis
+### 3.1 Haaptverzeichnis
 
 - `index.html` – Start- a News-Säit.
 - `*.html` – Eng Datei pro Säit (`inside.html`, `training.html`, `join.html`, ...).
@@ -25,7 +80,7 @@ Dës Dokument ass fir jiddereen, déi éischt Kéier un der Mersch75-Websäit (m
 - `script.js` – JavaScript fir d'News, Navigation, i18n, Formularen, asw.
 - `CNAME` – Definéiert d'Domain `mersch75.lu` (net änneren!).
 
-### 2.2 `assets/`
+### 3.2 `assets/`
 
 Hei sinn all Biller, Logoen, PDFen an aner Dateien.
 
@@ -33,7 +88,7 @@ Hei sinn all Biller, Logoen, PDFen an aner Dateien.
 - `assets/pages/<säit>/media/` – Biller, déi nëmmen op enger bestëmmter Säit gebraucht ginn.
 - `assets/pages/comite/media/` – Comité, Organigramm, Statuten.
 
-### 2.3 `tools/`
+### 3.3 `tools/`
 
 Automatesch Hëllefs-Scripten (Node.js):
 
@@ -41,7 +96,7 @@ Automatesch Hëllefs-Scripten (Node.js):
 - `flh-archive.mjs` – Lued FLH-Spillplang, Tabellen an SBO-PDFen erof.
 - `package.json` – Huet d'Ofhängegkeeten (z. B. `sharp`).
 
-### 2.4 `data/`
+### 3.4 `data/`
 
 JSON-Fichieren a lokal Archiver:
 
@@ -49,15 +104,15 @@ JSON-Fichieren a lokal Archiver:
 - `data/flh-archive-2526.json` – FLH-Daten fir 2025/26.
 - `data/sbo-index-*.json` – Index vun de lokalen SBO-PDFen.
 
-### 2.5 `sbo-archiv/`
+### 3.5 `sbo-archiv/`
 
 Hei gi SBO-PDFen (Spillberichter) vun der FLH geséchert.
 
 ---
 
-## 3. Ännerunge maachen
+## 4. Ännerunge maachen
 
-### 3.1 Text an enger Säit
+### 4.1 Text an enger Säit
 
 1. `.html`-Fichier an engem Texteditor opmaachen.
 2. Nom Text sichen (`Cmd + F`).
@@ -66,7 +121,7 @@ Hei gi SBO-PDFen (Spillberichter) vun der FLH geséchert.
 
 > **Opgepasst:** Text, deen op 5 Sproochen iwwersat gëtt, steet am `script.js` an engem I18n-Objet (z. B. `window.i18n`). Direkt an HTML geschriwwene Text gëtt nëmmen op där Säit ugewisen.
 
-### 3.2 Biller derbäisetzen ersetzen
+### 4.2 Biller derbäisetzen ersetzen
 
 1. Bild an den richtegen Dossier kopéieren (z. B. `assets/pages/index/media/Hauptseite/`).
 2. Fichier-Numm ouni Sonnerzeechen a Leerzeechen halen, wann méiglech (oder `%20` an HTML benotzen).
@@ -79,14 +134,14 @@ Hei gi SBO-PDFen (Spillberichter) vun der FLH geséchert.
 4. D'Script aktualiséiert d'HTML automatesch a setzt `<picture>` mat Lazy-Loading.
 5. Ännerunge committen a pushen.
 
-### 3.3 News-Slide änneren
+### 4.3 News-Slide änneren
 
 - De News-Carousel ass an `index.html` an `news.html` (muss identesch sinn).
 - Jiddwer Slide ass en `<article class="news-slide ...">` Block.
 - Den Text kann direkt an HTML geännert ginn.
-- Bilder duerch d'Script konvertéieren (siëhe 3.2).
+- Bilder duerch d'Script konvertéieren (siëhe 4.2).
 
-### 3.4 Trainingplang aktualiséieren
+### 4.4 Trainingplang aktualiséieren
 
 - De Trainingplang ass en Bild, z. B. `assets/Entrainements-2026-2027-130726.png`.
 - Hotspots (klickbar Boxen) si an `script.js` ageschriwwen.
@@ -95,13 +150,13 @@ Hei gi SBO-PDFen (Spillberichter) vun der FLH geséchert.
   2. `script.js` sichen nom ale Bildnumm.
   3. Hotspot-Positionen an `script.js` upassen (Prozentwäerter).
 
-### 3.5 Comité / Organigramm
+### 4.5 Comité / Organigramm
 
 - `inside.html` huet den Header-Beräich mam Comité-Logo an Organigramm.
 - Comité-Fotoen an `assets/pages/comite/media/`.
 - Passwuert-geschützten Deel: d'Passwuert ass nëmmen client-säiteg (`M75`) – net wierklech sécher, just fir Léit ze verhënneren, déi net vum Comité sinn.
 
-### 3.6 FLH-Daten a Live-Center
+### 4.6 FLH-Daten a Live-Center
 
 - `live-center.html` a `live-center-25-26.html` hun engem "Lokal Archiv".
 - Node-Script `tools/flh-archive.mjs` aktualiséiert d'Archiver:
@@ -113,9 +168,9 @@ Hei gi SBO-PDFen (Spillberichter) vun der FLH geséchert.
 
 ---
 
-## 4. Git-Workflow
+## 5. Git-Workflow
 
-### 4.1 Lokal testen
+### 5.1 Lokal testen
 
 D'Websäit brauch kënne Server. Du kanns d'HTML-Fichieren direkt am Browser opmaachen:
 
@@ -131,7 +186,7 @@ python3 -m http.server 8000
 
 Dann am Browser `http://localhost:8000` opmaachen.
 
-### 4.2 Ännerungen publizéieren
+### 5.2 Ännerungen publizéieren
 
 ```bash
 git status          # kucken wat geännert ginn ass
@@ -144,9 +199,9 @@ No e puer Minuten ass d'Websäit op `mersch75.lu` aktualiséiert (GitHub Pages b
 
 ---
 
-## 5. Wichteg Tools
+## 6. Wichteg Tools
 
-### 5.1 Biller konvertéieren
+### 6.1 Biller konvertéieren
 
 ```bash
 cd tools
@@ -157,14 +212,14 @@ node convert-images.mjs
 - Schreift `<picture>`-Markup an all `.html`.
 - Setzt `loading="lazy"`.
 
-### 5.2 FLH-Archiv aktualiséieren
+### 6.2 FLH-Archiv aktualiséieren
 
 ```bash
 cd tools
 node flh-archive.mjs --season=2627
 ```
 
-### 5.3 Cache-Bust-Parametern
+### 6.3 Cache-Bust-Parametern
 
 CSS a JS ginn oft mat `?v=20260713a` gelueden. Nodeems s de `script.js` oder `styles.css` geännert hues, muss deen Parameter an den HTML-Fichieren aktualiséiert ginn, soss kucken d'Besicheren nach déi al Versioun:
 
@@ -172,13 +227,13 @@ CSS a JS ginn oft mat `?v=20260713a` gelueden. Nodeems s de `script.js` oder `st
 <script src="script.js?v=20260714a"></script>
 ```
 
-### 5.4 `push_updates.sh`
+### 6.4 `push_updates.sh`
 
 Klenge Helper, deen eng Séier vun Ännerunge pusht. Kuck dran, ier s de en ausféiers.
 
 ---
 
-## 6. Heefeg Feeler a Piège
+## 7. Heefeg Feeler a Piège
 
 | Problem | Méiglech Ursaach | Léisung |
 |---------|------------------|---------|
@@ -191,7 +246,7 @@ Klenge Helper, deen eng Séier vun Ännerunge pusht. Kuck dran, ier s de en ausf
 
 ---
 
-## 7. Wéini soll een hëllefen froen?
+## 8. Wéini soll een hëllefen froen?
 
 - Wann s de nët weess, wou een Text steet.
 - Wann een JavaScript-Logik geännert soll ginn (Tariffer, Hotspots, i18n).
@@ -200,13 +255,15 @@ Klenge Helper, deen eng Séier vun Ännerunge pusht. Kuck dran, ier s de en ausf
 
 ---
 
-## 8. Zesummefaassung fir den Ufank
+## 9. Zesummefaassung fir den Ufank
 
-1. Websäit ass **statesch HTML/CSS/JS**.
-2. Biller an `assets/`, generéiert Varianten duerch `tools/convert-images.mjs`.
-3. Text direkt an `.html` oder an `script.js` (i18n).
-4. Lokal testen, dann `git add / commit / push`.
-5. GitHub Pages deployt automatesch.
-6. Bei Zweiwel: Backup maachen an froen.
+1. **GitHub-Kont** maachen + als Collaborator agelueden ginn (Kapitel 1).
+2. **Git + Code-Editor** (+ Node.js) installéieren an d'Repository klonen.
+3. Websäit ass **statesch HTML/CSS/JS** (keng WordPress, kee Server).
+4. Biller an `assets/`, generéiert Varianten duerch `tools/convert-images.mjs`.
+5. Text direkt an `.html` oder an `script.js` (i18n).
+6. Lokal testen, dann `git add / commit / push`.
+7. GitHub Pages deployt automatesch op `mersch75.lu`.
+8. Bei Zweiwel: Backup maachen an froen.
 
 **Gutt ze wëssen:** Den Haapt-Kontakt / Proprietär vun der Websäit ass Netjogger58 / ECG. Bei groussen Ännerunge soll ëmmer ofgestëmmt ginn.
