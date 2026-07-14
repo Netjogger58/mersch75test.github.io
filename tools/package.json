@@ -1,0 +1,10 @@
+{
+  "name": "mersch75-image-tools",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "sharp": "^0.33.4",
+    "node-html-parser": "^6.1.13"
+  }
+}
