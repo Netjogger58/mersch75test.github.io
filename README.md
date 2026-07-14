@@ -1,0 +1,11 @@
+# mersch75.lu
+
+Statesch Vereins-Websäit vum **Mersch75 Handball Club** (männerlech a femenge Hockey an Handball), gehost op GitHub Pages.
+
+Wichteg Dokumenter:
+
+- [`CHANGELOG.md`](CHANGELOG.md) — laufend Ännerungen.
+- [`docs/flh-archive.md`](docs/flh-archive.md) — **FLH Statistik-Archiv**: Spillplang, Resultater, Tabellen an SBO-PDFen ginn lokal geséchert, fir datt si och verfügbar bleiwen, wann d'FLH (handball4all.de) hir Donnéeën ännert oder ewechhëlt.
+- [`Webseiten-Statusbericht.md`](Webseiten-Statusbericht.md) — Gesamtzoustand vun der Websäit.
+
+Technologie: statesch HTML/CSS/JS (keen Framework, keen Build), i18n fir 5 Sproochen, Live-Overlay vun der FLH iwwer `js/flh-live-sync.js`.

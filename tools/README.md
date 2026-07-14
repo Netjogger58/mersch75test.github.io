@@ -1,7 +1,7 @@
 # SBO-Archiv-Tools
 
 Hält eng eege Kopie vun de Handball4All-SBO-Berichter (PDF), well d'FLH se net méi
-zouverlässeg uweist. Plang: `../.windsurf/plans/sbo-archiv-hetzner-7c1e4a.md`.
+zouverlässeg uweist. Déi voll Dokumentatioun vum FLH-Archiv (Spillplang, Tabellen, SBO-PDFen) fënns du ënner [`docs/flh-archive.md`](../docs/flh-archive.md).
 
 Viraussetzung: **Node 18+** (built-in `fetch`). Fir d'Parsen: **Poppler** (`brew install poppler`).
 
