@@ -4,6 +4,7 @@
 import os
 import re
 import html
+import argparse
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import cm
 from reportlab.lib import colors
@@ -15,8 +16,16 @@ from reportlab.platypus import (
 )
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-INPUT = os.path.join(BASE_DIR, 'docs', 'website-arbeiten-fuer-dummies.md')
-OUTPUT = os.path.join(BASE_DIR, 'docs', 'website-arbeiten-fuer-dummies.pdf')
+DEFAULT_INPUT = os.path.join(BASE_DIR, 'docs', 'website-arbeiten-fuer-dummies.md')
+DEFAULT_OUTPUT = os.path.join(BASE_DIR, 'docs', 'website-arbeiten-fuer-dummies.pdf')
+
+def parse_args():
+    parser = argparse.ArgumentParser(description='Markdown → PDF fir Mersch75-Dokumenter.')
+    parser.add_argument('--input', default=DEFAULT_INPUT, help='Markdown-Fichier (default: docs/website-arbeiten-fuer-dummies.md)')
+    parser.add_argument('--output', default=DEFAULT_OUTPUT, help='Ziel-PDF (default: docs/website-arbeiten-fuer-dummies.pdf)')
+    parser.add_argument('--title', default='Mersch75.lu', help='Titel op der Éischter Säit')
+    parser.add_argument('--subtitle', default='Websäit – Dummies Guide', help='Ënnertitel op der Éischter Säit')
+    return parser.parse_args()
 
 styles = getSampleStyleSheet()
 
@@ -96,11 +105,11 @@ def parse_table(rows):
     ]))
     return table
 
-def main():
-    with open(INPUT, 'r', encoding='utf-8') as f:
+def main(input_file=DEFAULT_INPUT, output_file=DEFAULT_OUTPUT, title='Mersch75.lu', subtitle='Websäit – Dummies Guide'):
+    with open(input_file, 'r', encoding='utf-8') as f:
         lines = f.readlines()
 
-    story = [Paragraph('Mersch75.lu', TITLE), Paragraph('Websäit – Dummies Guide', H1), Spacer(1, 12)]
+    story = [Paragraph(title, TITLE), Paragraph(subtitle, H1), Spacer(1, 12)]
 
     i = 0
     n = len(lines)
@@ -215,9 +224,10 @@ def main():
 
     flush_list(story, list_buffer, list_type)
 
-    doc = SimpleDocTemplate(OUTPUT, pagesize=A4, rightMargin=2*cm, leftMargin=2*cm, topMargin=2*cm, bottomMargin=2*cm)
+    doc = SimpleDocTemplate(output_file, pagesize=A4, rightMargin=2*cm, leftMargin=2*cm, topMargin=2*cm, bottomMargin=2*cm)
     doc.build(story)
-    print(f'PDF geschriwen: {OUTPUT}')
+    print(f'PDF geschriwen: {output_file}')
 
 if __name__ == '__main__':
-    main()
+    args = parse_args()
+    main(args.input, args.output, args.title, args.subtitle)
