@@ -28,7 +28,17 @@ Ier s de un der Websäit schaffe kanns, brauchs de e puer Saachen. Hei alles Sch
 
 > **Hiweis:** Node.js brauchs de nëmmen, wann s de Biller konvertéiere oder d'FLH-Daten aktualiséiere wëlls. Fir einfachen Text ze änneren duer e Code-Editor.
 
-### 1.3 Grondwëssen dat hëllefräich ass
+> **Video-Tutorial:** E YouTube-Video fir déi éischt Schrëtt ass **an der Maach** an gëtt hei verlinkt, soubal et fäerdeg ass.
+
+### 1.3 Zwei-Faktor-Authentifikatioun (2FA) – staark empfohlen
+
+- Fir däi GitHub-Kont ze sécheren, ass et **staark empfohlen** 2FA anzeschalten (SMS, Authenticator-App oder Passkeys).
+- D'Websäit selwer brauch keng 2FA, mä den Zougang zum Repo ass wichteg.
+- Heiansdo verlaangt GitHub fir Collaborateure 2FA. Wann dat de Fall ass, kritt s de eng Notifikatioun wann s de derbäikomm.
+
+Hëllef: [GitHub 2FA anstiellen](https://docs.github.com/de/authentication/securing-your-account-with-two-factor-authentication-2fa)
+
+### 1.4 Grondwëssen dat hëllefräich ass
 
 - **Ganz roueg:** du muss kee Programméierer sinn fir Text oder Biller z'änneren.
 - Hëllefräich ass e bësse Grondwëssen iwwer:
@@ -37,7 +47,7 @@ Ier s de un der Websäit schaffe kanns, brauchs de e puer Saachen. Hei alles Sch
   - **Terminal / Kommandozeil** (fir d'Scripten). Nëmmen néideg fir Biller/FLH.
 - Wann eppes onkloer ass: **éischt froen, dann änneren.**
 
-### 1.4 D'Websäit op däi Computer lueden (klonen)
+### 1.5 D'Websäit op däi Computer lueden (klonen)
 
 Eng eemoleg Aktioun um Ufank. Terminal opmaachen an:
 
@@ -48,14 +58,24 @@ cd mersch75test.github.io
 
 Dosdno hues de all d'Fichiere lokal a kanns lassleeën.
 
-### 1.5 Ier s de ufänks – Checkliste
+### 1.6 Backup-Strategie
+
+Du brauchs keng komplizéiert Backup-Routine, just dës 3 Regelen:
+
+1. **Nie eppes ouni Commit änneren.** Soubal eppes fäerdeg ass: `git commit` + `git push`. Dann ass d'Versioun sécher op GitHub.
+2. **Regeleméisseg Pullen.** Ier s de ufänks, `git pull` ausféieren – sou huet s de déi lescht Versioun.
+3. **Lokal Kopiéien.** Fir riskant Ännerunge kanns de e Fichier manuell an en aneren Dossier kopéieren, ier s de dréi gezunn gezunn.
+
+### 1.7 Ier s de ufänks – Checkliste
 
 1. GitHub-Kont erstallt.
 2. Als Collaborator agelueden (Invitatioun ugeholl).
 3. Git installéiert (`git --version` am Terminal fir ze préiwen).
 4. Code-Editor installéiert (VS Code).
 5. (Optional) Node.js installéiert (`node --version`).
-6. Repository geklont (Kapitel 1.4).
+6. 2FA fir GitHub-Kont ageschalt (empfohlen, Kapitel 1.3).
+7. Backup-Regelen verstanen (Kapitel 1.6).
+8. Repository geklont (Kapitel 1.5).
 
 Wann all Punkten ✅ sinn, kanns de mat Kapitel 2 weiderfueren.
 
@@ -258,12 +278,15 @@ Klenge Helper, deen eng Séier vun Ännerunge pusht. Kuck dran, ier s de en ausf
 ## 9. Zesummefaassung fir den Ufank
 
 1. **GitHub-Kont** maachen + als Collaborator agelueden ginn (Kapitel 1).
-2. **Git + Code-Editor** (+ Node.js) installéieren an d'Repository klonen.
-3. Websäit ass **statesch HTML/CSS/JS** (keng WordPress, kee Server).
-4. Biller an `assets/`, generéiert Varianten duerch `tools/convert-images.mjs`.
-5. Text direkt an `.html` oder an `script.js` (i18n).
-6. Lokal testen, dann `git add / commit / push`.
-7. GitHub Pages deployt automatesch op `mersch75.lu`.
-8. Bei Zweiwel: Backup maachen an froen.
+2. **Git + Code-Editor** (+ Node.js) installéieren; 2FA fir GitHub aschalten.
+3. **Repository klonen** an d'Backup-Regelen kennen (commit → push, reegelméisseg pullen).
+4. Websäit ass **statesch HTML/CSS/JS** (keng WordPress, kee Server).
+5. Biller an `assets/`, generéiert Varianten duerch `tools/convert-images.mjs`.
+6. Text direkt an `.html` oder an `script.js` (i18n).
+7. Lokal testen, dann `git add / commit / push`.
+8. GitHub Pages deployt automatesch op `mersch75.lu`.
+9. Bei Zweiwel: Backup maachen an froen.
+
+**Video-Tutorial:** Follegt (aktuell an der Maach).
 
 **Gutt ze wëssen:** Den Haapt-Kontakt / Proprietär vun der Websäit ass Netjogger58 / ECG. Bei groussen Ännerunge soll ëmmer ofgestëmmt ginn.
