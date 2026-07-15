@@ -233,7 +233,7 @@
             const box = document.getElementById('trainingTimeBox');
             const text = document.getElementById('trainingTimeText');
             const cat = computeCategory(birthdate, gender);
-            if (cat && !catSelect.value) {
+            if (cat && gender) {
                 catSelect.value = cat;
             }
             const selectedCat = catSelect.value;
