@@ -29,7 +29,7 @@
       trialGenderOther: "Anerest",
       trialMessageSuccess: "Merci! Mir schécken Iech d'Detailer per Mail.",
       trialMessageError: "Eppes ass schif gaangen. Probéiert et spéider nees.",
-      trialBreakNotice: "D'Kannerträining huet elo Summerpaus a geht am September 2026 erëm lass."
+      trialBreakNotice: "D'Kannerträining huet elo Summerpaus. De geneeën Startdatum gëtt nach kommunizéiert."
     },
     fr: {
       trialPageTitle: "Entraînement d'essai | Mersch75 Handball",
@@ -59,7 +59,7 @@
       trialGenderOther: "Autre",
       trialMessageSuccess: "Merci ! Nous vous enverrons les détails par e-mail.",
       trialMessageError: "Une erreur est survenue. Veuillez réessayer plus tard.",
-      trialBreakNotice: "L'entraînement des jeunes est actuellement en pause estivale et reprend en septembre 2026."
+      trialBreakNotice: "L'entraînement des jeunes est actuellement en pause estivale. La date exacte de reprise sera communiquée prochainement."
     },
     de: {
       trialPageTitle: "Probetraining | Mersch75 Handball",
@@ -89,7 +89,7 @@
       trialGenderOther: "Divers",
       trialMessageSuccess: "Danke! Wir senden dir die Details per E-Mail.",
       trialMessageError: "Etwas ist schiefgelaufen. Bitte versuche es später erneut.",
-      trialBreakNotice: "Das Kindertraining ist momentan in der Sommerpause und startet im September 2026 wieder."
+      trialBreakNotice: "Das Kindertraining ist momentan in der Sommerpause. Der genaue Starttermin wird noch kommuniziert."
     },
     en: {
       trialPageTitle: "Trial Training | Mersch75 Handball",
@@ -119,7 +119,7 @@
       trialGenderOther: "Other",
       trialMessageSuccess: "Thank you! We'll send you the details by email.",
       trialMessageError: "Something went wrong. Please try again later.",
-      trialBreakNotice: "Youth training is currently on summer break and will resume in September 2026."
+      trialBreakNotice: "Youth training is currently on summer break. The exact start date will be communicated soon."
     },
     pt: {
       trialPageTitle: "Treino experimental | Mersch75 Handball",
@@ -149,7 +149,7 @@
       trialGenderOther: "Outro",
       trialMessageSuccess: "Obrigado! Enviaremos os detalhes por e-mail.",
       trialMessageError: "Algo correu mal. Tenta novamente mais tarde.",
-      trialBreakNotice: "O treino juvenil está atualmente em pausa de verão e retoma em setembro de 2026."
+      trialBreakNotice: "O treino juvenil está atualmente em pausa de verão. A data exata de retoma será comunicada em breve."
     }
   };
   Object.keys(extra).forEach(function (lang) {
