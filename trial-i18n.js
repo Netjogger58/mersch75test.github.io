@@ -26,7 +26,6 @@
       trialNoTrainingTime: "Wielt Gebuertsdag a Geschlecht aus, fir d'Trainingzäit ze gesinn.",
       trialGenderMale: "Männlech",
       trialGenderFemale: "Weiblech",
-      trialGenderOther: "Anerest",
       trialMessageSuccess: "Merci! Mir schécken Iech d'Detailer per Mail.",
       trialMessageError: "Eppes ass schif gaangen. Probéiert et spéider nees.",
       trialBreakNotice: "D'Kannerträining huet elo Summerpaus. De geneeën Startdatum gëtt nach kommunizéiert."
@@ -56,7 +55,6 @@
       trialNoTrainingTime: "Choisissez la date de naissance et le sexe pour voir les horaires.",
       trialGenderMale: "Masculin",
       trialGenderFemale: "Féminin",
-      trialGenderOther: "Autre",
       trialMessageSuccess: "Merci ! Nous vous enverrons les détails par e-mail.",
       trialMessageError: "Une erreur est survenue. Veuillez réessayer plus tard.",
       trialBreakNotice: "L'entraînement des jeunes est actuellement en pause estivale. La date exacte de reprise sera communiquée prochainement."
@@ -86,7 +84,6 @@
       trialNoTrainingTime: "Wähle Geburtsdatum und Geschlecht aus, um die Trainingszeit zu sehen.",
       trialGenderMale: "Männlich",
       trialGenderFemale: "Weiblich",
-      trialGenderOther: "Divers",
       trialMessageSuccess: "Danke! Wir senden dir die Details per E-Mail.",
       trialMessageError: "Etwas ist schiefgelaufen. Bitte versuche es später erneut.",
       trialBreakNotice: "Das Kindertraining ist momentan in der Sommerpause. Der genaue Starttermin wird noch kommuniziert."
@@ -116,7 +113,6 @@
       trialNoTrainingTime: "Choose date of birth and gender to see the training time.",
       trialGenderMale: "Male",
       trialGenderFemale: "Female",
-      trialGenderOther: "Other",
       trialMessageSuccess: "Thank you! We'll send you the details by email.",
       trialMessageError: "Something went wrong. Please try again later.",
       trialBreakNotice: "Youth training is currently on summer break. The exact start date will be communicated soon."
@@ -146,7 +142,6 @@
       trialNoTrainingTime: "Escolhe a data de nascimento e o género para veres o horário.",
       trialGenderMale: "Masculino",
       trialGenderFemale: "Feminino",
-      trialGenderOther: "Outro",
       trialMessageSuccess: "Obrigado! Enviaremos os detalhes por e-mail.",
       trialMessageError: "Algo correu mal. Tenta novamente mais tarde.",
       trialBreakNotice: "O treino juvenil está atualmente em pausa de verão. A data exata de retoma será comunicada em breve."
