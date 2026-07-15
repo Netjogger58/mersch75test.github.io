@@ -101,16 +101,10 @@
                             <select name="teamCategory" id="teamCategory" required>
                                 <option value="">Automatesch erkennen</option>
                                 <option value="U4">U4</option>
-                                <option value="U5">U5</option>
-                                <option value="U6">U6</option>
                                 <option value="U7">U7</option>
-                                <option value="U8">U8</option>
                                 <option value="U9">U9</option>
-                                <option value="U10">U10</option>
                                 <option value="U11">U11</option>
-                                <option value="U12">U12</option>
                                 <option value="U13">U13</option>
-                                <option value="U14">U14</option>
                                 <option value="U15">U15</option>
                                 <option value="Seniors Femmes">Seniors Femmes</option>
                                 <option value="Seniors Hommes">Seniors Hommes</option>
@@ -200,23 +194,17 @@
     <script src="script.js?v=20260713sched4"></script>
     <script src="trial-i18n.js?v=1"></script>
     <script>
-        // === Trainingszäiten: hei euer aktuellen Donnéeën agin ===
-        // De Schlëssel muss exakt der teamCategory entspriechen.
+        // === Trainingszäiten no aktuelle Plang 2026/2027 (Version 13.07.2026) ===
+        // Schlëssel = Kategorie aus dem Dropdown.
         const TRAINING_TIMES = {
-            "U4":  "Méiglechen Termin: Mardi 17h00 – 18h00, Hall Miersch",
-            "U5":  "Mardi 17h00 – 18h00 a Vendredi 17h00 – 18h00, Hall Miersch",
-            "U6":  "Mardi 17h30 – 18h45 a Vendredi 17h30 – 18h45, Hall Miersch",
-            "U7":  "Mardi 17h30 – 18h45 a Vendredi 17h30 – 18h45, Hall Miersch",
-            "U8":  "Mardi 18h00 – 19h15 a Jeudi 18h00 – 19h15, Hall Miersch",
-            "U9":  "Mardi 18h00 – 19h15 a Jeudi 18h00 – 19h15, Hall Miersch",
-            "U10": "Mercredi 17h30 – 18h45 a Samedi 10h00 – 11h30, Hall Miersch",
-            "U11": "Mercredi 17h30 – 18h45 a Samedi 10h00 – 11h30, Hall Miersch",
-            "U12": "Lundi 18h00 – 19h30 a Mercredi 18h00 – 19h30, Hall Miersch",
-            "U13": "Lundi 18h00 – 19h30 a Mercredi 18h00 – 19h30, Hall Miersch",
-            "U14": "Mardi 19h00 – 20h30 a Jeudi 19h00 – 20h30, Hall Miersch",
-            "U15": "Mardi 19h00 – 20h30 a Jeudi 19h00 – 20h30, Hall Miersch",
-            "Seniors Femmes": "Mardi 20h00 – 21h30, Hall Krounebierg",
-            "Seniors Hommes": "Mardi 20h00 – 21h30 a Vendredi 20h00 – 21h30, Hall Miersch"
+            "U4":  "Samedi 10h30 – 11h00, Salle des Sports École fondamentale (Lintgen)",
+            "U7":  "Mëttwoch 17h00 – 18h00 (Hall Krounebierg) a Samedi 17h00 – 18h00 (Salle des Sports École fondamentale, Lintgen)",
+            "U9":  "Dënschdeg 17h30 – 18h30 (Hall Lintgen Gare) a Donneschdeg 17h30 – 18h30 (Hall Omnisports Miersch)",
+            "U11": "Donneschdeg 17h00 – 18h00 (Hall Omnisports Miersch), Freideg 17h00 – 18h00 (Hall Krounebierg) a Samedi 17h30 – 18h00 (Salle des Sports École fondamentale, Lintgen)",
+            "U13": "Méindeg 17h30 – 18h30 (Hall Omnisports Miersch), Donneschdeg 18h00 – 19h00 (Hall Omnisports Miersch) a Freideg 17h30 – 18h30 (Hall Krounebierg)",
+            "U15": "Méindeg 19h00 – 20h00 (Hall Omnisports Miersch), Freideg 19h00 – 20h00 (Hall Krounebierg) a Samedi 19h00 – 20h00 (Salle des Sports École fondamentale, Lintgen)",
+            "Seniors Femmes": "Méindeg 18h30 – 20h00, Dënschdeg 18h30 – 20h00, Mëttwoch 19h00 – 20h30 a Freideg 18h30 – 20h00",
+            "Seniors Hommes": "Méindeg 20h00 – 21h30, Donneschdeg 19h30 – 21h00 a Samedi 20h30 – 21h30"
         };
 
         function computeCategory(birthdate, gender) {
@@ -227,10 +215,14 @@
             let age = seasonStart.getFullYear() - birth.getFullYear();
             const bdayThisSeason = new Date(seasonStart.getFullYear(), birth.getMonth(), birth.getDate());
             if (bdayThisSeason > seasonStart) age--;
-            if (age >= 4 && age <= 15) return "U" + age;
-            if (age >= 16) return gender === "female" ? "Seniors Femmes" : "Seniors Hommes";
-            // Kanner ënner 4 gi bis U4 zougewisen
-            return age >= 3 ? "U4" : "";
+            // Kategorieen no Trainingsplang 2026/2027: U4, U7, U9, U11, U13, U15, Seniors Femmes/Hommes
+            if (age <= 3) return "U4";
+            if (age <= 6) return "U7";
+            if (age <= 8) return "U9";
+            if (age <= 10) return "U11";
+            if (age <= 12) return "U13";
+            if (age <= 14) return "U15";
+            return gender === "female" ? "Seniors Femmes" : "Seniors Hommes";
         }
 
         function updateTrainingTime() {
