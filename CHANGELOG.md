@@ -9,6 +9,16 @@ Format: `Datum · Commit · was & warum`. Details stehen in der jeweiligen Git-C
 ---
 
 ## 2026-07-15
+- **Vereins-OS-App (geplant) – Vereinfachten Prouftraining-Input in der Anwesenheit.**
+  - Statt einer langen Dropdown-Liste aller Mitglieder bekommt der Trainer ein einheitliches Formular mit: Vorname, Nachname, Geburtsdatum, Handynummer (optional) und den letzten 5 Ziffern der KV-Karte (optional).
+  - Bei bekanntem Namen + Geburtsdatum wird der existente Member sofort als Prouftraining für den aktuellen Tag/Team eingetragen (funktioniert für alle Aufsteiger-Kombinationen: U7↔U9, U13↔U15, Jugend↔Senioren, Frauen↔Männer).
+  - Falls der Spieler nicht in der Datenbank ist, kann der Trainer wählen:
+    - als **neuen Member mit Status `pending`** anlegen (wird vom Sekretariat validiert), oder
+    - nur als **temporären Training-Gast** für den aktuellen Tag erfassen.
+  - Spieler, die regulär in einer höheren Kategorie trainieren (`extraTeamIds`), erscheinen automatisch in der Suche.
+  - Ziel: Trainer müssen nicht mehr auf KI warten, um neue oder spontane Spieler in eine Trainingseinheit einzutragen.
+
+## 2026-07-15
 - **Vereins-OS-App (intern) – Nominatiounen, Aufsteiger-Teams & Prouftraining.**
   - **Nominatiounen / Teams / Anwesenheet:** Memberer ginn iwwerall (Teams, Anwesenheet, Nominéierungen) no deem selwechte System sortéiert: Médico-Problemer (`inapte`, `overdue`, `keen Médico`) no ënnen, Alter (Jugend alt→jung, Senioren jung→alt), alphabetesch als Fallback.
   - **Aufsteiger-Teams (extraTeamIds):** Jugend-Spiller kënnen elo zu méi héije Kategorien agesat ginn. An der Team-Détail-Lëscht gëtt et fir all Jugend-Spiller 1–2 Checkboxen (z.B. U7→U9, U9→U11, U11 Espoir→U11 Elite a U13, U13→U15). Wann ugewielt, kënnt de Spiller och an där héijerer Ekipp nominéiert ginn. Gilt och an der Anwesenheet.
