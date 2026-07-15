@@ -9,7 +9,7 @@ Format: `Datum · Commit · was & warum`. Details stehen in der jeweiligen Git-C
 ---
 
 ## 2026-07-15
-- **Vereins-OS-App (geplant) – Vereinfachten Prouftraining-Input in der Anwesenheit.**
+- **Vereins-OS-App (umgesetzt) – Vereinfachten Prouftraining-Input in der Anwesenheit.**
   - Statt einer langen Dropdown-Liste aller Mitglieder bekommt der Trainer ein einheitliches Formular mit: Vorname, Nachname, Geburtsdatum, Handynummer (optional) und den letzten 5 Ziffern der KV-Karte (optional).
   - Bei bekanntem Namen + Geburtsdatum wird der existente Member sofort als Prouftraining für den aktuellen Tag/Team eingetragen (funktioniert für alle Aufsteiger-Kombinationen: U7↔U9, U13↔U15, Jugend↔Senioren, Frauen↔Männer).
   - Falls der Spieler nicht in der Datenbank ist, kann der Trainer wählen:
