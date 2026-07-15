@@ -10,7 +10,7 @@
       sponsorBenefit1: "Sichtbarkeet – Logo op Trikot, Banner, Social Media a Site",
       sponsorBenefit2: "Regionalt Netzwierk – Kontakt mat Familljen, Firmaen an der Gemeng",
       sponsorBenefit3: "Flexible Paketen – vum Matchday-Package bis zur laangfristeger Partnerschaft",
-      sponsorBenefit4: "Engagéiert Jugend – Märk handelt wierklech fir Kanner a Jugendlech aus der Regioun",
+      sponsorBenefit4: "Engagéiert Jugend – Dir ënnerstëtzt wierklech d'Kanner a Jugendlech aus der Regioun",
       sponsorFormTitle: "Sponsor / Partner ginn",
       sponsorFormIntro: "Fëllt de Formulaire aus, an dir gitt an de nächsten Deeg vum Här Max Blanc kontaktéiert.",
       sponsorLabelCompany: "Firma / Institutioun",
@@ -31,7 +31,7 @@
       sponsorLabelMessage: "Bemierkung",
       sponsorConsent: "Ech erlaben d'Kontaktaufnahm per E-Mail / Telefon fir d'Bespréchung vun der Partnerschaft.",
       sponsorSubmit: "Ufro schécken",
-      sponsorMessageSuccess: "Merci! Mir schécken Iech bald e passend Ugebott.",
+      sponsorMessageSuccess: "Merci, den Här Max Blanc wäert Iech schnellstens kontaktéieren.",
       sponsorMessageError: "Eppes ass schif gaangen. Probéiert et spéider nees."
     },
     fr: {
@@ -64,7 +64,7 @@
       sponsorLabelMessage: "Remarque",
       sponsorConsent: "J'autorise à être contacté(e) par e-mail / téléphone pour discuter du partenariat.",
       sponsorSubmit: "Envoyer la demande",
-      sponsorMessageSuccess: "Merci ! Nous vous enverrons bientôt une offre adaptée.",
+      sponsorMessageSuccess: "Merci, M. Max Blanc vous contactera dans les plus brefs délais.",
       sponsorMessageError: "Une erreur est survenue. Veuillez réessayer plus tard."
     },
     de: {
@@ -76,7 +76,7 @@
       sponsorBenefit1: "Sichtbarkeit – Logo auf Trikot, Banner, Social Media und Website",
       sponsorBenefit2: "Regionales Netzwerk – Kontakt zu Familien, Unternehmen und Gemeinde",
       sponsorBenefit3: "Flexible Pakete – vom Matchday-Package bis zur langfristigen Partnerschaft",
-      sponsorBenefit4: "Engagierte Jugend – Sie handeln wirklich für Kinder und Jugendliche aus der Region",
+      sponsorBenefit4: "Engagierte Jugend – Sie unterstützen wirklich die Kinder und Jugendliche aus der Region",
       sponsorFormTitle: "Sponsor / Partner werden",
       sponsorFormIntro: "Füllen Sie das Formular aus. Sie werden in den nächsten Tagen von Herrn Max Blanc kontaktiert.",
       sponsorLabelCompany: "Firma / Institution",
@@ -97,7 +97,7 @@
       sponsorLabelMessage: "Anmerkung",
       sponsorConsent: "Ich erlaube die Kontaktaufnahme per E-Mail / Telefon zur Besprechung der Partnerschaft.",
       sponsorSubmit: "Anfrage senden",
-      sponsorMessageSuccess: "Danke! Wir senden Ihnen bald ein passendes Angebot.",
+      sponsorMessageSuccess: "Vielen Dank, Herr Max Blanc wird sich schnellstmöglich bei Ihnen melden.",
       sponsorMessageError: "Etwas ist schiefgelaufen. Bitte versuche es später erneut."
     },
     en: {
@@ -130,7 +130,7 @@
       sponsorLabelMessage: "Note",
       sponsorConsent: "I allow contact by email / phone to discuss the partnership.",
       sponsorSubmit: "Send request",
-      sponsorMessageSuccess: "Thank you! We will send you a tailored offer soon.",
+      sponsorMessageSuccess: "Thank you, Mr Max Blanc will contact you as soon as possible.",
       sponsorMessageError: "Something went wrong. Please try again later."
     },
     pt: {
@@ -163,7 +163,7 @@
       sponsorLabelMessage: "Observação",
       sponsorConsent: "Autorizo o contacto por e-mail / telefone para discutir a parceria.",
       sponsorSubmit: "Enviar pedido",
-      sponsorMessageSuccess: "Obrigado! Enviaremos em breve uma proposta adequada.",
+      sponsorMessageSuccess: "Obrigado, o Sr. Max Blanc contactá-lo-á o mais rapidamente possível.",
       sponsorMessageError: "Algo correu mal. Tenta novamente mais tarde."
     }
   };
