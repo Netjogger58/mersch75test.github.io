@@ -155,4 +155,8 @@
   Object.keys(extra).forEach(function (lang) {
     if (translations[lang]) Object.assign(translations[lang], extra[lang]);
   });
+
+  if (typeof window.Mersch75I18n !== 'undefined' && typeof window.Mersch75I18n.setLanguage === 'function') {
+    window.Mersch75I18n.setLanguage(window.Mersch75I18n.getLanguage());
+  }
 })();
