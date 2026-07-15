@@ -723,6 +723,8 @@ function initializeSiteLanguage() {
         });
     });
 
+    window.translations = translations;
+
     window.Mersch75I18n = {
         getLanguage() {
             return resolveLanguage(window.localStorage.getItem(storageKey) || fallbackLanguage);

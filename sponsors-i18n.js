@@ -1,5 +1,5 @@
 (function () {
-  if (typeof translations === 'undefined') return;
+  if (typeof window.translations === 'undefined') return;
   const extra = {
     lb: {
       sponsorsPageTitle: "Sponsoren / Partner | Mersch75 Handball",
@@ -88,7 +88,7 @@
     }
   };
   Object.keys(extra).forEach(function (lang) {
-    if (translations[lang]) Object.assign(translations[lang], extra[lang]);
+    if (window.translations[lang]) Object.assign(window.translations[lang], extra[lang]);
   });
 
   if (typeof window.Mersch75I18n !== 'undefined' && typeof window.Mersch75I18n.setLanguage === 'function') {
