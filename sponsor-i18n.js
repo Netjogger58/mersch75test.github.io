@@ -30,7 +30,7 @@
       sponsorInterestNextgenSponsored: "NEXTGEN sponsored by",
       sponsorLabelMessage: "Bemierkung",
       sponsorConsent: "Ech erlaben d'Kontaktaufnahm per E-Mail / Telefon fir d'Bespréchung vun der Partnerschaft.",
-      sponsorSubmit: "Anfrage schécken",
+      sponsorSubmit: "Ufro schécken",
       sponsorMessageSuccess: "Merci! Mir schécken Iech bald e passend Ugebott.",
       sponsorMessageError: "Eppes ass schif gaangen. Probéiert et spéider nees."
     },
