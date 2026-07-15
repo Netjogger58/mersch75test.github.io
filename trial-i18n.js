@@ -10,7 +10,7 @@
       trialBenefit1: "Erfuerene Trainer – fir all Niveau",
       trialBenefit2: "Gemëschten Teams – vum Spill bis zum Training",
       trialBenefit3: "Fair Play – Respekt steet bei eis uewen",
-      trialFormTitle: "ELO UNMELDEN",
+      trialFormTitle: "ELO UMELDEN",
       trialFormIntro: "Fëllt d'Formulaire aus. Mir schécken Iech all Detailer zum nächsten Training.",
       trialLabelChild: "Numm vum Kand",
       trialLabelBirthdate: "Gebuertsdag",
