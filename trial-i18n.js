@@ -28,7 +28,8 @@
       trialGenderFemale: "Weiblech",
       trialMessageSuccess: "Merci! Mir schécken Iech d'Detailer per Mail.",
       trialMessageError: "Eppes ass schif gaangen. Probéiert et spéider nees.",
-      trialBreakNotice: "D'Kannerträining huet elo Summerpaus. De geneeën Startdatum gëtt nach kommunizéiert."
+      trialBreakNotice: "D'Kannerträining huet elo Summerpaus. De geneeën Startdatum gëtt nach kommunizéiert.",
+      trialJoinNotice: "Wann dir bei eis bleiwe wëllt, gitt är Donnéeën op <a href='join.html'>mersch75.lu/join.html</a> erëm an."
     },
     fr: {
       trialPageTitle: "Entraînement d'essai | Mersch75 Handball",
@@ -57,7 +58,8 @@
       trialGenderFemale: "Féminin",
       trialMessageSuccess: "Merci ! Nous vous enverrons les détails par e-mail.",
       trialMessageError: "Une erreur est survenue. Veuillez réessayer plus tard.",
-      trialBreakNotice: "L'entraînement des jeunes est actuellement en pause estivale. La date exacte de reprise sera communiquée prochainement."
+      trialBreakNotice: "L'entraînement des jeunes est actuellement en pause estivale. La date exacte de reprise sera communiquée prochainement.",
+      trialJoinNotice: "Si vous souhaitez rester avec nous, veuillez saisir à nouveau vos données sur <a href='join.html'>mersch75.lu/join.html</a>."
     },
     de: {
       trialPageTitle: "Probetraining | Mersch75 Handball",
@@ -86,7 +88,8 @@
       trialGenderFemale: "Weiblich",
       trialMessageSuccess: "Danke! Wir senden dir die Details per E-Mail.",
       trialMessageError: "Etwas ist schiefgelaufen. Bitte versuche es später erneut.",
-      trialBreakNotice: "Das Kindertraining ist momentan in der Sommerpause. Der genaue Starttermin wird noch kommuniziert."
+      trialBreakNotice: "Das Kindertraining ist momentan in der Sommerpause. Der genaue Starttermin wird noch kommuniziert.",
+      trialJoinNotice: "Wenn du bei uns bleiben möchtest, gib deine Daten bitte auf <a href='join.html'>mersch75.lu/join.html</a> erneut ein."
     },
     en: {
       trialPageTitle: "Trial Training | Mersch75 Handball",
@@ -115,7 +118,8 @@
       trialGenderFemale: "Female",
       trialMessageSuccess: "Thank you! We'll send you the details by email.",
       trialMessageError: "Something went wrong. Please try again later.",
-      trialBreakNotice: "Youth training is currently on summer break. The exact start date will be communicated soon."
+      trialBreakNotice: "Youth training is currently on summer break. The exact start date will be communicated soon.",
+      trialJoinNotice: "If you want to stay with us, please re-enter your details at <a href='join.html'>mersch75.lu/join.html</a>."
     },
     pt: {
       trialPageTitle: "Treino experimental | Mersch75 Handball",
@@ -144,7 +148,8 @@
       trialGenderFemale: "Feminino",
       trialMessageSuccess: "Obrigado! Enviaremos os detalhes por e-mail.",
       trialMessageError: "Algo correu mal. Tenta novamente mais tarde.",
-      trialBreakNotice: "O treino juvenil está atualmente em pausa de verão. A data exata de retoma será comunicada em breve."
+      trialBreakNotice: "O treino juvenil está atualmente em pausa de verão. A data exata de retoma será comunicada em breve.",
+      trialJoinNotice: "Se quiser ficar connosco, volte a introduzir os seus dados em <a href='join.html'>mersch75.lu/join.html</a>."
     }
   };
   Object.keys(extra).forEach(function (lang) {
