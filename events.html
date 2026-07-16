@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Events | Mersch75 Handball</title>
-    <meta name="description" content="Veranstaltungen und Events des Mersch75 Handball Club – Anmeldung, Details und Informationen.">
+    <title data-i18n="eventsPageTitle">Events | Mersch75 Handball</title>
+    <meta name="description" content="Veranstaltungen und Events des Mersch75 Handball Club – Anmeldung, Details und Informationen." data-i18n-attr="content:eventsMetaDesc">
     <link rel="stylesheet" href="styles.css?v=20260626foot1">
     <script src="js/events-gate.js" defer></script>
     <style>
@@ -438,24 +438,24 @@
             </nav>
         </header>
 
-        <div class="ev-test-banner">
+        <div class="ev-test-banner" data-i18n="eventsTestBanner">
             🔒 TESTVERSION — Diese Seite ist passwortgeschützt und noch nicht öffentlich.
         </div>
 
         <main class="page-main">
 
             <section class="events-hero">
-                <div class="events-hero-badge">Mersch75 · Saison 2025/26</div>
-                <h1>Events &amp; Veranstaltungen</h1>
-                <p>Turniere, Feste, Versammlungen – alles auf einen Blick</p>
+                <div class="events-hero-badge" data-i18n="eventsHeroBadge">Mersch75 · Saison 2025/26</div>
+                <h1 data-i18n="eventsHeroTitle">Events &amp; Veranstaltungen</h1>
+                <p data-i18n="eventsHeroSubtitle">Turniere, Feste, Versammlungen – alles auf einen Blick</p>
             </section>
 
             <div class="events-filter-bar" role="group" aria-label="Events filtern">
-                <button class="ev-filter-btn is-active" data-filter="all">Alle</button>
-                <button class="ev-filter-btn" data-filter="sport">⚽ Sport</button>
-                <button class="ev-filter-btn" data-filter="social">🎉 Feier</button>
-                <button class="ev-filter-btn" data-filter="meeting">📋 Versammlung</button>
-                <button class="ev-filter-btn" data-filter="youth">👶 Jugend</button>
+                <button class="ev-filter-btn is-active" data-filter="all" data-i18n="eventsFilterAll">Alle</button>
+                <button class="ev-filter-btn" data-filter="sport" data-i18n="eventsFilterSport">⚽ Sport</button>
+                <button class="ev-filter-btn" data-filter="social" data-i18n="eventsFilterSocial">🎉 Feier</button>
+                <button class="ev-filter-btn" data-filter="meeting" data-i18n="eventsFilterMeeting">📋 Versammlung</button>
+                <button class="ev-filter-btn" data-filter="youth" data-i18n="eventsFilterYouth">👶 Jugend</button>
             </div>
 
             <div class="events-grid" id="events-grid">
@@ -472,8 +472,8 @@
                             <h2 class="ev-card-title">Barbecue de Fin de Saison 🔥</h2>
                         </div>
                         <div class="ev-tag-row">
-                            <span class="ev-tag tag-social">Feier</span>
-                            <span class="ev-tag tag-members">Nur Mitglieder</span>
+                            <span class="ev-tag tag-social" data-i18n="eventsTagSocial">Feier</span>
+                            <span class="ev-tag tag-members" data-i18n="eventsTagMembers">Nur Mitglieder</span>
                         </div>
                         <ul class="ev-card-details">
                             <li><span class="icon">🕕</span> Samstag, 12. Juli 2026 · 17:00 Uhr</li>
@@ -483,7 +483,7 @@
                         <p class="ev-card-desc">Der traditionelle Saisonabschluss! Grillabend mit dem gesamten Club – Spieler, Trainer, Familie. Getränke inklusive.</p>
                         <div class="ev-spots-bar">
                             <div class="ev-spots-label">
-                                <span>Anmeldungen</span>
+                                <span data-i18n="eventsRegCount">Anmeldungen</span>
                                 <span id="bbq-spots-label">34 / 80 Plätze</span>
                             </div>
                             <div class="ev-spots-track">
@@ -492,9 +492,9 @@
                         </div>
                     </div>
                     <div class="ev-card-footer">
-                        <div class="ev-price">15,00 € <span>/ Person</span></div>
+                        <div class="ev-price">15,00 € <span data-i18n="eventsPerPerson">/ Person</span></div>
                         <button class="ev-register-btn" data-event="bbq" data-event-name="Barbecue de Fin de Saison (12. Juli)" data-event-price="15,00 €">
-                            ✍️ Anmelden
+                            <span data-i18n="eventsRegister">✍️ Anmelden</span>
                         </button>
                     </div>
                 </article>
@@ -511,8 +511,8 @@
                             <h2 class="ev-card-title">Assemblée Générale 2026 📋</h2>
                         </div>
                         <div class="ev-tag-row">
-                            <span class="ev-tag tag-meeting">Versammlung</span>
-                            <span class="ev-tag tag-members">Nur Mitglieder</span>
+                            <span class="ev-tag tag-meeting" data-i18n="eventsTagMeeting">Versammlung</span>
+                            <span class="ev-tag tag-members" data-i18n="eventsTagMembers">Nur Mitglieder</span>
                         </div>
                         <ul class="ev-card-details">
                             <li><span class="icon">🕗</span> Mittwoch, 25. Juni 2026 · 19:30 Uhr</li>
@@ -522,9 +522,9 @@
                         <p class="ev-card-desc">Jahreshauptversammlung: Jahresbericht, Finanzen, Vorstandswahlen und Planung der Saison 2026/27.</p>
                     </div>
                     <div class="ev-card-footer">
-                        <div class="ev-price">Gratis <span>/ Eintritt frei</span></div>
+                        <div class="ev-price"><span data-i18n="eventsFree">Gratis</span> <span data-i18n="eventsFreeEntry">/ Eintritt frei</span></div>
                         <button class="ev-register-btn" data-event="ag2026" data-event-name="Assemblée Générale 2026 (25. Juni)" data-event-price="Gratis">
-                            ✍️ Anmelden
+                            <span data-i18n="eventsRegister">✍️ Anmelden</span>
                         </button>
                     </div>
                 </article>
@@ -541,8 +541,8 @@
                             <h2 class="ev-card-title">Tournoi de Rentrée 🏆</h2>
                         </div>
                         <div class="ev-tag-row">
-                            <span class="ev-tag tag-sport">Sport</span>
-                            <span class="ev-tag tag-open">Offen</span>
+                            <span class="ev-tag tag-sport" data-i18n="eventsTagSport">Sport</span>
+                            <span class="ev-tag tag-open" data-i18n="eventsTagOpen">Offen</span>
                         </div>
                         <ul class="ev-card-details">
                             <li><span class="icon">🕙</span> Samstag, 6. September 2026 · 10:00 Uhr</li>
@@ -552,7 +552,7 @@
                         <p class="ev-card-desc">Das traditionelle Saisonauftakt-Turnier. Alle Altersklassen. Anmeldung per Team (min. 8 Spieler).</p>
                         <div class="ev-spots-bar">
                             <div class="ev-spots-label">
-                                <span>Teams angemeldet</span>
+                                <span data-i18n="eventsTeamsRegistered">Teams angemeldet</span>
                                 <span>5 / 12 Teams</span>
                             </div>
                             <div class="ev-spots-track">
@@ -561,9 +561,9 @@
                         </div>
                     </div>
                     <div class="ev-card-footer">
-                        <div class="ev-price">30,00 € <span>/ Team</span></div>
+                        <div class="ev-price">30,00 € <span data-i18n="eventsPerTeam">/ Team</span></div>
                         <button class="ev-register-btn" data-event="tournoi" data-event-name="Tournoi de Rentrée (6. Sept.)" data-event-price="30,00 € / Team">
-                            ✍️ Anmelden
+                            <span data-i18n="eventsRegister">✍️ Anmelden</span>
                         </button>
                     </div>
                 </article>
@@ -580,9 +580,9 @@
                             <h2 class="ev-card-title">Jugend-Sommercamp ⛺</h2>
                         </div>
                         <div class="ev-tag-row">
-                            <span class="ev-tag tag-youth">Jugend</span>
-                            <span class="ev-tag tag-sport">Sport</span>
-                            <span class="ev-tag tag-members">Nur Mitglieder</span>
+                            <span class="ev-tag tag-youth" data-i18n="eventsTagYouth">Jugend</span>
+                            <span class="ev-tag tag-sport" data-i18n="eventsTagSport">Sport</span>
+                            <span class="ev-tag tag-members" data-i18n="eventsTagMembers">Nur Mitglieder</span>
                         </div>
                         <ul class="ev-card-details">
                             <li><span class="icon">📅</span> 19.–21. Juli 2026 (3 Tage)</li>
@@ -592,7 +592,7 @@
                         <p class="ev-card-desc">Training, Spiel und Spaß! Dreitägiges Sommercamp für unsere Jüngsten. Unterkunft und Verpflegung inklusive.</p>
                         <div class="ev-spots-bar">
                             <div class="ev-spots-label">
-                                <span>Anmeldungen</span>
+                                <span data-i18n="eventsRegCount">Anmeldungen</span>
                                 <span>27 / 30 Plätze</span>
                             </div>
                             <div class="ev-spots-track">
@@ -601,9 +601,9 @@
                         </div>
                     </div>
                     <div class="ev-card-footer">
-                        <div class="ev-price">85,00 € <span>/ Kind</span></div>
+                        <div class="ev-price">85,00 € <span data-i18n="eventsPerChild">/ Kind</span></div>
                         <button class="ev-register-btn" data-event="camp" data-event-name="Jugend-Sommercamp (19.–21. Juli)" data-event-price="85,00 € / Kind">
-                            ✍️ Anmelden
+                            <span data-i18n="eventsRegister">✍️ Anmelden</span>
                         </button>
                     </div>
                 </article>
@@ -612,7 +612,7 @@
 
             <div class="ev-empty" id="ev-empty">
                 <div class="ev-empty-icon">📅</div>
-                <p>Keine Events in dieser Kategorie gefunden.</p>
+                <p data-i18n="eventsEmpty">Keine Events in dieser Kategorie gefunden.</p>
             </div>
 
         </main>
@@ -623,7 +623,7 @@
                 <button class="ev-reg-modal-close" id="ev-reg-close" type="button" aria-label="Schliessen">&times;</button>
 
                 <div id="ev-reg-form-view">
-                    <h3 id="ev-reg-modal-title">Event-Anmeldung</h3>
+                    <h3 id="ev-reg-modal-title" data-i18n="eventsRegTitle">Event-Anmeldung</h3>
                     <p class="ev-reg-event-name" id="ev-reg-event-name"></p>
 
                     <form id="ev-reg-form" action="https://api.web3forms.com/submit" method="POST" novalidate>
@@ -638,27 +638,27 @@
 
                         <div class="ev-reg-form-row">
                             <div class="ev-reg-form-group">
-                                <label for="ev-nom">NACHNAME *</label>
+                                <label for="ev-nom" data-i18n="eventsRegLabelLastname">NACHNAME *</label>
                                 <input type="text" id="ev-nom" name="Nachname" autocomplete="family-name" required>
                             </div>
                             <div class="ev-reg-form-group">
-                                <label for="ev-prenom">VORNAME *</label>
+                                <label for="ev-prenom" data-i18n="eventsRegLabelFirstname">VORNAME *</label>
                                 <input type="text" id="ev-prenom" name="Vorname" autocomplete="given-name" required>
                             </div>
                         </div>
 
                         <div class="ev-reg-form-group">
-                            <label for="ev-email">E-MAIL *</label>
+                            <label for="ev-email" data-i18n="eventsRegLabelEmail">E-MAIL *</label>
                             <input type="email" id="ev-email" name="Email" autocomplete="email" required>
                         </div>
 
                         <div class="ev-reg-form-group">
-                            <label for="ev-tel">TELEFON / GSM</label>
+                            <label for="ev-tel" data-i18n="eventsRegLabelPhone">TELEFON / GSM</label>
                             <input type="tel" id="ev-tel" name="Telefon" autocomplete="tel">
                         </div>
 
                         <div class="ev-reg-form-group">
-                            <label for="ev-personen">ANZAHL PERSONEN *</label>
+                            <label for="ev-personen" data-i18n="eventsRegLabelPersons">ANZAHL PERSONEN *</label>
                             <select id="ev-personen" name="Anzahl_Personen" required>
                                 <option value="1">1 Person</option>
                                 <option value="2">2 Personen</option>
@@ -669,20 +669,20 @@
                         </div>
 
                         <div class="ev-reg-form-group">
-                            <label for="ev-comment">BEMERKUNGEN / OPTIONEN</label>
-                            <textarea id="ev-comment" name="Bemerkungen" placeholder="z.B. Allergien, Diätwünsche, Teamname..."></textarea>
+                            <label for="ev-comment" data-i18n="eventsRegLabelComment">BEMERKUNGEN / OPTIONEN</label>
+                            <textarea id="ev-comment" name="Bemerkungen" placeholder="z.B. Allergien, Diätwünsche, Teamname..." data-i18n-attr="placeholder:eventsRegPlaceholderComment"></textarea>
                         </div>
 
                         <button type="submit" class="ev-reg-submit-btn" id="ev-reg-submit">
-                            ✅ Anmeldung absenden
+                            <span data-i18n="eventsRegSubmit">✅ Anmeldung absenden</span>
                         </button>
                     </form>
                 </div>
 
                 <div id="ev-reg-success-view" class="ev-reg-success" hidden>
                     <div class="ev-success-icon">🎉</div>
-                    <h4>Anmeldung erfolgreich!</h4>
-                    <p>Du erhältst eine Bestätigung per E-Mail. Bis bald!</p>
+                    <h4 data-i18n="eventsRegSuccessTitle">Anmeldung erfolgreich!</h4>
+                    <p data-i18n="eventsRegSuccessMsg">Du erhältst eine Bestätigung per E-Mail. Bis bald!</p>
                 </div>
             </div>
         </div>
@@ -763,6 +763,7 @@
     </div>
 
     <script src="script.js?v=20260713sched4"></script>
+    <script src="events-i18n.js?v=20260716e1"></script>
     <script>
     (function () {
         /* ── Year ── */
