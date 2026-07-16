@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Join Us | Mersch75 Handball</title>
-    <meta name="description" content="Mitmachen bei Mersch75: Einstieg, Training und erste Kontaktpunkte für neue Spieler und Familien.">
+    <title data-i18n="joinPageTitle">Join Us | Mersch75 Handball</title>
+    <meta name="description" content="Mitmachen bei Mersch75: Einstieg, Training und erste Kontaktpunkte für neue Spieler und Familien." data-i18n-attr="content:joinMetaDesc">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -85,7 +85,7 @@
     <source srcset="assets/shared/media/M75_Memberskaart.webp" type="image/webp">
     <img src="assets/shared/media/M75_Memberskaart.png" alt="Memberskaart Mersch75 - Tariffer weisen" loading="lazy">
 </picture>
-                                <span class="join-tarif-trigger-hint">Tariffer 2026-2027</span>
+                                <span class="join-tarif-trigger-hint" data-i18n="joinTarifTrigger">Tariffer 2026-2027</span>
                             </button>
                             <div class="join-lang-picker" role="tablist" aria-label="Sproochen">
                                 <button class="join-lang-button is-active" type="button" data-lang="lu" aria-pressed="true">LU</button>
@@ -218,8 +218,8 @@
                                     <div id="family-members-fields" class="join-family-members-fields"></div>
                                     <input type="hidden" id="FamilySummary" name="FamilySummary" value="">
                                     <div class="join-family-card-preview" id="family-card-preview" aria-live="polite">
-                                        <h3>Memberskaarten</h3>
-                                        <p class="join-helper-text">D'Memberskaart mam QR-Code gëtt intern am Secretariat virbereet an eréischt no Bezuelung vum Membersbeitrag un den Antragsteller geschéckt.</p>
+                                        <h3 data-i18n="joinMembersCards">Memberskaarten</h3>
+                                        <p class="join-helper-text" data-i18n="joinMembersCardHint">D'Memberskaart mam QR-Code gëtt intern am Secretariat virbereet an eréischt no Bezuelung vum Membersbeitrag un den Antragsteller geschéckt.</p>
                                     </div>
                                 </div>
                             </div>
@@ -352,7 +352,7 @@
                 <div class="join-tarif-backdrop" data-tarif-close></div>
                 <div class="join-tarif-dialog" role="document">
                     <button type="button" class="join-tarif-close" data-tarif-close aria-label="Zoumaachen">&times;</button>
-                    <h2 id="joinTarifModalTitle">Memberskaart &amp; Tariffer 2026-2027</h2>
+                    <h2 id="joinTarifModalTitle" data-i18n="joinTarifModalTitle">Memberskaart &amp; Tariffer 2026-2027</h2>
                     <div class="join-tarif-cards">
                         <picture>
     <source srcset="assets/shared/media/M75_Memberskaart.avif" type="image/avif">
@@ -361,16 +361,16 @@
 </picture>
                     </div>
                     <ul class="join-tarif-list">
-                        <li><span class="join-tarif-label">Adulte Tarif</span><span class="join-tarif-price">300€</span></li>
-                        <li><span class="join-tarif-label">Youth Tarif (≤ 25 ans)</span><span class="join-tarif-price">210€</span></li>
-                        <li><span class="join-tarif-label">Family Tarif</span><span class="join-tarif-price">384€</span></li>
+                        <li><span class="join-tarif-label" data-i18n="joinTarifAdulte">Adulte Tarif</span><span class="join-tarif-price">300€</span></li>
+                        <li><span class="join-tarif-label" data-i18n="joinTarifYouth">Youth Tarif (≤ 25 ans)</span><span class="join-tarif-price">210€</span></li>
+                        <li><span class="join-tarif-label" data-i18n="joinTarifFamily">Family Tarif</span><span class="join-tarif-price">384€</span></li>
                         <li class="join-tarif-family">
-                            <span class="join-tarif-label">Officiels (mat/ouni Lizenz)</span>
-                            <span class="join-tarif-price">Keng Cotisatioun · min. 50€ fir Stëmmrecht op der AG</span>
+                            <span class="join-tarif-label" data-i18n="joinTarifOfficiels">Officiels (mat/ouni Lizenz)</span>
+                            <span class="join-tarif-price" data-i18n="joinTarifOfficielsPrice">Keng Cotisatioun · min. 50€ fir Stëmmrecht op der AG</span>
                         </li>
                         <li class="join-tarif-family">
-                            <span class="join-tarif-label">Kidssport &amp; Loisirs</span>
-                            <span class="join-tarif-price">10 € par unité ou Family Tarif</span>
+                            <span class="join-tarif-label" data-i18n="joinTarifKids">Kidssport &amp; Loisirs</span>
+                            <span class="join-tarif-price" data-i18n="joinTarifKidsPrice">10 € par unité ou Family Tarif</span>
                         </li>
                     </ul>
                 </div>
@@ -451,6 +451,7 @@
     </div>
 
     <script src="script.js?v=20260713sched4"></script>
+    <script src="join-i18n.js?v=20260716j1"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>
     const MERSCH75_WEB3FORMS_MAIN_KEY = '15e3cc53-6864-47dd-bfaf-332cb4ca45e5';
