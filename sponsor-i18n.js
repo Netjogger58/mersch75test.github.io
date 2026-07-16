@@ -8,9 +8,9 @@
       sponsorHeroCta: "Sponsoranfrage schécken",
       sponsorBenefitsTitle: "WAT BÄIT ÄR FIRMA?",
       sponsorBenefit1: "Sichtbarkeet – Logo op Trikot, Banner, Social Media a Site",
-      sponsorBenefit2: "Regionalt Netzwierk – Kontakt mat Familljen, Firmaen an der Gemeng",
-      sponsorBenefit3: "Flexible Paketen – vum Matchday-Package bis zur laangfristeger Partnerschaft",
-      sponsorBenefit4: "Engagéiert Jugend – Dir ënnerstëtzt wierklech d'Kanner a Jugendlecher aus der Regioun",
+      sponsorBenefit2: "Regionaalt Netzwierk – Kontakt mat Familljen, Firmaen an der Gemeng",
+      sponsorBenefit3: "Flexible Offeren – vum Matchday-Package bis zur laangfristeger Partnerschaft",
+      sponsorBenefit4: "Engagéiert Jugend – Mat enger richteger Ënnerstëtzung fir d'Kanner a Jugendlecher aus der Regioun",
       sponsorFormTitle: "Sponsor / Partner ginn",
       sponsorFormIntro: "Fëllt de Formulaire aus, an dir gitt an de nächsten Deeg vum Här Max Blanc kontaktéiert.",
       sponsorLabelCompany: "Firma / Institutioun",
@@ -31,7 +31,7 @@
       sponsorLabelMessage: "Bemierkung",
       sponsorConsent: "Ech erlaben d'Kontaktaufnahm per E-Mail / Telefon fir d'Bespréchung vun der Partnerschaft.",
       sponsorSubmit: "Ufro schécken",
-      sponsorMessageSuccess: "Merci, den Här Max Blanc wäert Iech schnellstens kontaktéieren.",
+      sponsorMessageSuccess: "Merci, den Här Max Blanc wäert schnellstens Kontakt mat Iech ophuelen.",
       sponsorMessageError: "Eppes ass schif gaangen. Probéiert et spéider nees."
     },
     fr: {
