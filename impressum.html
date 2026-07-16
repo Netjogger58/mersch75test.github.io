@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Impressum | Mersch75 Handball</title>
-    <meta name="description" content="Impressum / Mentions légales von Mersch75 Handball mit Vereinsangaben, gesetzlichem Vertreter, Kontakt und Registrierung.">
+    <title data-i18n="impressumPageTitle">Impressum | Mersch75 Handball</title>
+    <meta name="description" content="Impressum / Mentions légales von Mersch75 Handball mit Vereinsangaben, gesetzlichem Vertreter, Kontakt und Registrierung." data-i18n-attr="content:impressumMetaDesc">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -43,7 +43,7 @@
 
         <main class="page-main">
             <section class="section legal-hero">
-                <h1 class="legal-hero-title">Impressum &amp; Mentions légales</h1>
+                <h1 class="legal-hero-title" data-i18n="impressumHeroTitle">Impressum &amp; Mentions légales</h1>
             </section>
 
             <section class="section legal-layout">
@@ -371,6 +371,7 @@
     </div>
 
     <script src="script.js?v=20260713sched4"></script>
+    <script src="misc-i18n.js?v=20260716m1"></script>
     <script>
         (function initializeLegalLangSwitcher() {
             const buttons = Array.from(document.querySelectorAll('[data-legal-lang-button]'));
