@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact | Mersch75 Handball</title>
-    <meta name="description" content="Kontakt zu Mersch75 Handball für Verein, Probetraining und allgemeine Anfragen.">
+    <title data-i18n="contactPageTitle">Contact | Mersch75 Handball</title>
+    <meta name="description" content="Kontakt zu Mersch75 Handball für Verein, Probetraining und allgemeine Anfragen." data-i18n-attr="content:contactMetaDesc">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -47,28 +47,28 @@
     <img src="assets/shared/media/Header_Logos_media/Logo-Menu-Mersch75-Contact-2025.png" alt="Contact Mersch75" class="contact-icon" loading="lazy">
 </picture>
                     <div class="contact-header-text">
-                        <h1 class="contact-title">Contact</h1>
+                        <h1 class="contact-title" data-i18n="contactTitle">Contact</h1>
                     </div>
                 </div>
 
                 <div class="contact-info-row">
                     <div class="contact-info-card">
                         <div>
-                            <p class="contact-info-label">E-Mail</p>
+                            <p class="contact-info-label" data-i18n="contactLabelEmail">E-Mail</p>
                             <a href="mailto:info@mersch75.lu">info@mersch75.lu</a>
                         </div>
                     </div>
 
                     <div class="contact-info-card">
                         <div>
-                            <p class="contact-info-label">Telefon</p>
+                            <p class="contact-info-label" data-i18n="contactLabelPhone">Telefon</p>
                             <a href="tel:+35228800399">(+352) 288 00 399</a>
                         </div>
                     </div>
 
                     <div class="contact-info-card">
                         <div>
-                            <p class="contact-info-label">Adresse</p>
+                            <p class="contact-info-label" data-i18n="contactLabelAddress">Adresse</p>
                             <p>21, rue des Pres<br>L-7561 Mersch</p>
                         </div>
                     </div>
@@ -110,7 +110,7 @@
         <source srcset="assets/shared/media/Header_Logos_media/Logo-Menu-Mersch75-Contact-2025.avif" type="image/avif"><source srcset="assets/shared/media/Header_Logos_media/Logo-Menu-Mersch75-Contact-2025.webp" type="image/webp">
     <img src="assets/shared/media/Header_Logos_media/Logo-Menu-Mersch75-Contact-2025.png" class="contact-form-icon" loading="lazy">
 </picture>
-                                Message
+                                <span data-i18n="contactFormTitle">Message</span>
                             </h2>
 
                             <form id="contactForm" action="https://api.web3forms.com/submit" method="POST">
@@ -122,36 +122,36 @@
 
                                 <div class="contact-frow">
                                     <div class="contact-fg">
-                                        <label for="contact-firstname">Vorname *</label>
-                                        <input id="contact-firstname" type="text" name="firstname" required placeholder="Prenom / Vorname...">
+                                        <label for="contact-firstname" data-i18n="contactLabelFirstname">Vorname *</label>
+                                        <input id="contact-firstname" type="text" name="firstname" required placeholder="Prenom / Vorname..." data-i18n-attr="placeholder:contactPlaceholderFirstname">
                                     </div>
 
                                     <div class="contact-fg">
-                                        <label for="contact-lastname">Nachname *</label>
-                                        <input id="contact-lastname" type="text" name="lastname" required placeholder="Nom / Nachname...">
+                                        <label for="contact-lastname" data-i18n="contactLabelLastname">Nachname *</label>
+                                        <input id="contact-lastname" type="text" name="lastname" required placeholder="Nom / Nachname..." data-i18n-attr="placeholder:contactPlaceholderLastname">
                                     </div>
                                 </div>
 
                                 <div class="contact-frow">
                                     <div class="contact-fg">
-                                        <label for="contact-email">E-Mail *</label>
+                                        <label for="contact-email" data-i18n="contactLabelEmailForm">E-Mail *</label>
                                         <input id="contact-email" type="email" name="email" required placeholder="email@example.com">
                                     </div>
 
                                     <div class="contact-fg">
-                                        <label for="contact-phone">Telefon</label>
+                                        <label for="contact-phone" data-i18n="contactLabelPhoneForm">Telefon</label>
                                         <input id="contact-phone" type="tel" name="phone" placeholder="+352 ...">
                                     </div>
                                 </div>
 
                                 <div class="contact-fg">
-                                    <label for="contact-subject">Betreff *</label>
-                                    <input id="contact-subject" type="text" name="subject_user" required placeholder="Sujet / Thema...">
+                                    <label for="contact-subject" data-i18n="contactLabelSubject">Betreff *</label>
+                                    <input id="contact-subject" type="text" name="subject_user" required placeholder="Sujet / Thema..." data-i18n-attr="placeholder:contactPlaceholderSubject">
                                 </div>
 
                                 <div class="contact-fg">
-                                    <label for="contact-message">Nachricht *</label>
-                                    <textarea id="contact-message" name="message" rows="5" required placeholder="Votre message / Ar Noriicht / Ihre Nachricht..."></textarea>
+                                    <label for="contact-message" data-i18n="contactLabelMessage">Nachricht *</label>
+                                    <textarea id="contact-message" name="message" rows="5" required placeholder="Votre message / Ar Noriicht / Ihre Nachricht..." data-i18n-attr="placeholder:contactPlaceholderMessage"></textarea>
                                 </div>
 
                                 <button type="submit" class="contact-submit" id="contactSubmitBtn">
@@ -160,26 +160,24 @@
         <source srcset="assets/shared/media/Header_Logos_media/Logo-Menu-Mersch75-Contact-2025.avif" type="image/avif"><source srcset="assets/shared/media/Header_Logos_media/Logo-Menu-Mersch75-Contact-2025.webp" type="image/webp">
     <img src="assets/shared/media/Header_Logos_media/Logo-Menu-Mersch75-Contact-2025.png" class="contact-btn-icon" loading="lazy">
 </picture>
-                                    SEND / SCHECKEN / SENDEN
+                                    <span data-i18n="contactSubmit">SEND / SCHECKEN / SENDEN</span>
                                 </button>
 
-                                <p class="contact-form-note">
+                                <p class="contact-form-note" data-i18n="contactFormNote">
                                     Mehrsprachige Anfragen si kee Problem.
                                 </p>
                             </form>
 
                             <div id="contactSuccess" class="contact-success" style="display:none;">
                                 <div class="contact-success-icon">OK</div>
-                                <h3>Merci / Dankeschon / Thank you!</h3>
-                                <p>LU: Ar Noriicht gouf geschackt. Mir mellen eis esou séier wei meiglech.</p>
-                                <p>FR: Votre message a ete envoye. Nous vous repondrons dans les plus brefs delais.</p>
-                                <p>DE: Ihre Nachricht wurde gesendet. Wir melden uns so schnell wie moglich.</p>
+                                <h3 data-i18n="contactSuccessTitle">Merci / Dankeschon / Thank you!</h3>
+                                <p data-i18n="contactSuccessMsg">Ar Noriicht gouf geschéckt. Mir mellen eis esou séier wéi méiglech.</p>
                                 <button type="button" id="contactResetBtn" class="contact-reset-btn">
-                                    Neie Message / Nouveau message / Neue Nachricht
+                                    <span data-i18n="contactReset">Neie Message / Nouveau message / Neue Nachricht</span>
                                 </button>
                             </div>
 
-                            <div id="contactError" class="contact-error" style="display:none;">
+                            <div id="contactError" class="contact-error" style="display:none;" data-i18n="contactError">
                                 Fehler beim Senden. Bitte versuche es nochmal oder schreib direkt an <a href="mailto:info@mersch75.lu">info@mersch75.lu</a>
                             </div>
                         </div>
@@ -663,5 +661,6 @@
         })();
     </script>
     <script src="script.js?v=20260713sched4"></script>
+    <script src="contact-i18n.js?v=20260716c1"></script>
 </body>
 </html>
