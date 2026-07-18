@@ -1190,7 +1190,7 @@ function initializeTrainingSchedule() {
                 { dayKey: 'fri', time: '17:00 - 18:30', location: LOC_KROU }
             ],
             areas: [
-                { left: 41.90, top: 46.54, width: 11.52, height: 11.31 },
+                { left: 41.90, top: 50.31, width: 11.52, height: 15.08 },
                 { left: 76.45, top: 54.08, width: 11.52, height: 11.31 }
             ]
         },
@@ -1203,7 +1203,7 @@ function initializeTrainingSchedule() {
             ],
             areas: [
                 { left: 13.10, top: 54.08, width: 5.76, height: 11.31 },
-                { left: 64.93, top: 54.08, width: 11.52, height: 7.54 }
+                { left: 64.93, top: 57.85, width: 11.52, height: 11.31 }
             ]
         },
         {
@@ -1215,7 +1215,7 @@ function initializeTrainingSchedule() {
             ],
             areas: [
                 { left: 7.34, top: 54.08, width: 5.76, height: 11.31 },
-                { left: 41.90, top: 61.62, width: 11.52, height: 7.54 }
+                { left: 41.90, top: 65.39, width: 11.52, height: 15.08 }
             ]
         },
         {
@@ -1248,8 +1248,8 @@ function initializeTrainingSchedule() {
                 { dayKey: 'fri', time: '19:00 - 20:30', location: LOC_OMNI }
             ],
             areas: [
-                { left: 18.86, top: 65.39, width: 11.52, height: 11.31 },
-                { left: 64.93, top: 65.39, width: 11.52, height: 11.31 }
+                { left: 18.86, top: 69.16, width: 11.52, height: 15.08 },
+                { left: 64.93, top: 69.16, width: 11.52, height: 15.08 }
             ]
         },
         {
@@ -1262,7 +1262,7 @@ function initializeTrainingSchedule() {
             ],
             areas: [
                 { left: 7.34, top: 80.47, width: 11.52, height: 7.54 },
-                { left: 41.90, top: 72.93, width: 11.52, height: 11.31 },
+                { left: 41.90, top: 76.70, width: 11.52, height: 11.31 },
                 { left: 76.45, top: 80.47, width: 11.52, height: 7.54 }
             ]
         },
