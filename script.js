@@ -1215,7 +1215,7 @@ function initializeTrainingSchedule() {
             ],
             areas: [
                 { left: 7.34, top: 54.08, width: 5.76, height: 11.31 },
-                { left: 41.90, top: 61.62, width: 11.52, height: 15.08 }
+                { left: 41.90, top: 61.62, width: 11.52, height: 11.31 }
             ]
         },
         {
@@ -1262,7 +1262,7 @@ function initializeTrainingSchedule() {
             ],
             areas: [
                 { left: 7.34, top: 80.47, width: 11.52, height: 7.54 },
-                { left: 41.90, top: 72.93, width: 11.52, height: 11.31 },
+                { left: 41.90, top: 72.93, width: 11.52, height: 15.08 },
                 { left: 76.45, top: 80.47, width: 11.52, height: 7.54 }
             ]
         },
