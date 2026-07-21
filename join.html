@@ -339,6 +339,11 @@
                             <strong>Merci / Danke / Thank you / Obrigado!</strong>
                             <span>Deng Umeldung gouf erfollegraich iwwermettelt.</span>
                             <small>Du kriss eng Bestateigung per E-Mail.</small>
+                            <div id="success-card-id-wrap" style="display:none;margin-top:14px;padding:12px 18px;background:#f0f7ff;border:2px dashed #002f65;border-radius:12px;">
+                                <span style="font-weight:700;color:#002f65;">Deng Card-ID / Your Card-ID:</span>
+                                <code id="success-card-id" style="font-size:1.3rem;font-weight:800;letter-spacing:0.12em;color:#002f65;display:block;margin-top:4px;"></code>
+                                <small style="color:#23364a;">Notéier der dës Card-ID — si gehéiert zu denger Memberskaart.</small>
+                            </div>
                             <a id="welcomeMappLink" class="join-welcome-link" href="wellkomm-mapp.html" target="_blank" rel="noopener"
                                style="display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding:14px 26px;background:linear-gradient(135deg,#fffdf0 0%,#fff6c2 100%);border:2px solid #f9d611;border-radius:999px;color:#002b5c;font-weight:700;text-decoration:none;font-size:1.05rem;box-shadow:0 8px 18px rgba(249,214,17,0.25);">
                                 📖 Wëllkomm-Mapp opmaachen / öffnen / open / abrir
@@ -464,6 +469,8 @@
     const MERSCH75_RECAPTCHA_SITE_KEY = '6Ld_vEYtAAAAAAJLnatRYYqXnj1aq5GAcuOnkshg';
     // false = nëmmen TEST-Umeldunge ginn an d'Sheet geschriwwen (Testphase). Op true setzen wann de Secrétaire-Master aktiv ass.
     const MERSCH75_SHEET_PRODUCTION = false;
+    // Vereins-OS App: nei Umeldunge ginn direkt an d'App geschriwwen (Card-ID gëtt do gespäichert)
+    const MERSCH75_APP_JOINUS_ENDPOINT = 'https://manager.mersch75.lu/api/joinus';
     // reCAPTCHA v3 Script dynamesch lueden (nëmme wann e Site-Key gesat ass)
     if (MERSCH75_RECAPTCHA_SITE_KEY && MERSCH75_RECAPTCHA_SITE_KEY.indexOf('PASTE_') !== 0) {
         var _m75rc = document.createElement('script');
@@ -1201,6 +1208,39 @@
         throw new Error(data.message || 'Web3Forms konnte die Anfrage nicht senden.');
     }
 
+    // --- Vereins-OS App-Ubannung (direkt Member + Card-ID an der App) ---------
+    async function sendToApp() {
+        if (!MERSCH75_APP_JOINUS_ENDPOINT) return null;
+        const flags = getRoleFlags();
+        const payload = {
+            Nom: getValue('Nom'),
+            Prenom: getValue('Prenom'),
+            Email: getValue('Email'),
+            GSM1: getValue('GSM1'),
+            Strasse: getValue('Strasse'),
+            Postcode: getValue('Postcode'),
+            Ortschaft: getValue('Ortschaft'),
+            Nationalite: getValue('Nationalite'),
+            CNS: flags.hasLicence ? getCnsComplete() : '',
+            DateNaissance: getValue('DateNaissance'),
+            Langue: currentLang,
+            Categorie: flags.needsCategory ? getCategoryValue() : '',
+            Role: flags.role,
+            CardInternalId: ensureCardInternalId(),
+            website: ''
+        };
+        const response = await fetch(MERSCH75_APP_JOINUS_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await response.json();
+        if (!response.ok || data.ok !== true) {
+            throw new Error(data.message || 'App-Ubannung feelgeschloen.');
+        }
+        return data.member;
+    }
+
     // --- Google-Sheet-Ubannung + Test-Modus ---------------------------------
     function isTestSubmission() {
         return /\bTEST\b/i.test(getFullName());
@@ -1739,6 +1779,17 @@
                 ));
             }
 
+            // Vereins-OS App: Member direkt uleeën (Card-ID gëtt an der App gespäichert)
+            let appMember = null;
+            if (!isTest) {
+                try {
+                    appMember = await sendToApp();
+                } catch (appError) {
+                    // App-Feeler net fatal: Mail(en) sinn scho fort als Backup.
+                    console.error('App-Ubannung Feeler:', appError);
+                }
+            }
+
             // Google-Sheet: am Test ëmmer (Adrien-Master); soss nëmme wann d'Produktioun aktiv ass.
             if (isTest || MERSCH75_SHEET_PRODUCTION) {
                 try {
@@ -1758,6 +1809,16 @@
 
             const successBox = document.getElementById('success-box');
             successBox.style.display = 'block';
+
+            // Card-ID uweisen (aus der App-Äntwert oder lokal generéiert)
+            try {
+                const cardIdEl = document.getElementById('success-card-id');
+                if (cardIdEl) {
+                    const shownCardId = (appMember && appMember.cardId) || ensureCardInternalId();
+                    cardIdEl.textContent = shownCardId;
+                    cardIdEl.parentElement.style.display = 'block';
+                }
+            } catch (_) { /* non-fatal */ }
 
             // Personalisierter Link zur Wëllkomm-Mapp (Vorname + Sprache aus dem Formular)
             try {
