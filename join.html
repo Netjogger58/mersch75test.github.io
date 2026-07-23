@@ -154,7 +154,7 @@
             border: 1.5px solid var(--m75-border); border-radius: var(--m75-radius-sm);
             font-size: 16px; font-family: var(--m75-font); color: var(--m75-text);
             background: rgba(255,255,255,0.85); transition: var(--m75-transition);
-            -webkit-appearance: none; appearance: none;
+            -webkit-appearance: none; appearance: none; box-sizing: border-box;
         }
         .join-form-group input[type="text"]:focus,
         .join-form-group input[type="email"]:focus,
@@ -284,7 +284,7 @@
             width: 100%; padding: 10px 12px; border: 1.5px solid var(--m75-border);
             border-radius: 10px; font-size: 14px; font-family: var(--m75-font);
             color: var(--m75-text); background: var(--m75-card-bg);
-            transition: var(--m75-transition); -webkit-appearance: none; appearance: none;
+            transition: var(--m75-transition); -webkit-appearance: none; appearance: none; box-sizing: border-box;
         }
         .join-family-grid input:focus, .join-family-grid select:focus {
             outline: none; border-color: var(--m75-border-focus);
