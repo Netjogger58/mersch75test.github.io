@@ -15,7 +15,8 @@
       joinTarifKidsPrice: "10 € pro Unité oder Family Tarif",
       joinMembersCards: "Memberskaarten",
       joinMembersCardHint: "D'Memberskaart mam QR-Code gëtt intern am Secretariat virbereet an eréischt no Bezuelung vum Membersbeitrag un den Antragsteller geschéckt.",
-      joinWelcomeMapp: "📖 Wëllkomm-Mapp opmaachen"
+      joinWelcomeMapp: "📖 Wëllkomm-Mapp opmaachen",
+      cnsHint: "Just déi läscht 5 Zifferen."
     },
     fr: {
       joinPageTitle: "Join Us | Mersch75 Handball",
@@ -31,7 +32,8 @@
       joinTarifKidsPrice: "10 € par unité ou Tarif Famille",
       joinMembersCards: "Cartes membre",
       joinMembersCardHint: "La carte membre avec QR-code est préparée en interne au secrétariat et envoyée après paiement de la cotisation.",
-      joinWelcomeMapp: "📖 Ouvrir le pack de bienvenue"
+      joinWelcomeMapp: "📖 Ouvrir le pack de bienvenue",
+      cnsHint: "Entrez uniquement les 5 derniers chiffres."
     },
     de: {
       joinPageTitle: "Join Us | Mersch75 Handball",
@@ -47,7 +49,8 @@
       joinTarifKidsPrice: "10 € pro Einheit oder Familien-Tarif",
       joinMembersCards: "Mitgliederkarten",
       joinMembersCardHint: "Die Mitgliederkarte mit QR-Code wird intern im Sekretariat vorbereitet und erst nach Zahlung des Mitgliedsbeitrags an den Antragsteller geschickt.",
-      joinWelcomeMapp: "📖 Willkommens-Mappe öffnen"
+      joinWelcomeMapp: "📖 Willkommens-Mappe öffnen",
+      cnsHint: "Nur die letzten 5 Ziffern eingeben."
     },
     en: {
       joinPageTitle: "Join Us | Mersch75 Handball",
@@ -63,7 +66,8 @@
       joinTarifKidsPrice: "10 € per session or Family fee",
       joinMembersCards: "Membership cards",
       joinMembersCardHint: "The membership card with QR code is prepared internally by the secretariat and sent to the applicant after payment of the membership fee.",
-      joinWelcomeMapp: "📖 Open welcome pack"
+      joinWelcomeMapp: "📖 Open welcome pack",
+      cnsHint: "Enter only the last 5 digits."
     },
     pt: {
       joinPageTitle: "Join Us | Mersch75 Handball",
@@ -79,7 +83,8 @@
       joinTarifKidsPrice: "10 € por sessão ou Quota Família",
       joinMembersCards: "Cartões de membro",
       joinMembersCardHint: "O cartão de membro com código QR é preparado internamente pela secretaria e enviado após o pagamento da quota.",
-      joinWelcomeMapp: "📖 Abrir pack de boas-vindas"
+      joinWelcomeMapp: "📖 Abrir pack de boas-vindas",
+      cnsHint: "Introduza apenas os últimos 5 dígitos."
     }
   };
   Object.keys(extra).forEach(function (lang) {
