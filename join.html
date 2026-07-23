@@ -440,7 +440,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="join-form-group" id="extra-roles-section">
+                                <div class="join-form-group" id="extra-roles-section" style="display:none;">
                                     <div class="m75-extra-roles-row">
                                         <div class="join-checkbox-row" id="extra-role-joueur">
                                             <input type="checkbox" id="RoleAlsoJoueur" name="RoleAlsoJoueur" value="Oui">
@@ -1019,7 +1019,7 @@
                             mineurEl.value = age < 18 ? 'OUI' : 'NON';
                             // Zousätzlech Rollen nëmme fir >= 16 Joer
                             var extraRow = document.getElementById('FamilyMember' + idx + 'ExtraRoles');
-                            if (extraRow) extraRow.style.display = (age < 16) ? 'none' : '';
+                            if (extraRow) extraRow.style.display = (age >= 16) ? '' : 'none';
                         } else {
                             dobEl.value = '';
                             cnsEl.value = '';
@@ -1063,6 +1063,9 @@
                                 if (role === primary) {
                                     cb.checked = false;
                                     if (row) row.style.display = 'none';
+                                } else if (role === 'Bénévole / Contact Famille' && primary === 'Joueur / Joueuse') {
+                                    cb.checked = true;
+                                    if (row) row.style.display = 'none';
                                 } else {
                                     if (row) row.style.display = '';
                                 }
@@ -1072,6 +1075,9 @@
                     });
                     // Trigger initial hide
                     roleSel.dispatchEvent(new Event('change'));
+                    // Extra-Rollen am Ufank verstoppen (bis CNS13 aged ginn)
+                    var extraRowInit = document.getElementById('FamilyMember' + idx + 'ExtraRoles');
+                    if (extraRowInit) extraRowInit.style.display = 'none';
                 }
             })(i);
         }
@@ -1913,9 +1919,9 @@
         const f = getRoleFlags();
 
         // Och-Arbitter/Och-Offiziell/Och-Bénévole just ugewise fir >= 16 Joer
-        const extraRolesRow = document.querySelector('.m75-extra-roles-row');
-        if (extraRolesRow) {
-            extraRolesRow.style.display = (currentAge !== null && currentAge < 16) ? 'none' : '';
+        const extraRolesSection = document.getElementById('extra-roles-section');
+        if (extraRolesSection) {
+            extraRolesSection.style.display = (currentAge !== null && currentAge >= 16) ? '' : 'none';
         }
 
         // Zousätzlech-Roll-Checkbox déi der Haaptroll entspriicht verstoppen
@@ -1931,6 +1937,10 @@
             const cb = document.getElementById(extraMap[role].cb);
             if (role === primary) {
                 if (cb) cb.checked = false;
+                if (wrap) wrap.style.display = 'none';
+            } else if (role === 'Bénévole / Contact Famille' && primary === 'Joueur / Joueuse') {
+                // Spiller ass automatesch och Bénévole - net uweisen
+                if (cb) cb.checked = true;
                 if (wrap) wrap.style.display = 'none';
             } else if (wrap) {
                 wrap.style.display = '';
