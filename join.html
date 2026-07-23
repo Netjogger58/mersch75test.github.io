@@ -391,7 +391,7 @@
                                 <h3 class="m75-section-title" id="m75-title-person">Demandeur 1</h3>
                                 <div class="m75-row-3">
                                     <div class="join-form-group">
-                                        <label id="lbl-nom" for="Nom">NOM(S) *</label>
+                                        <label id="lbl-nom" for="Nom">NUMM *</label>
                                         <input type="text" id="Nom" name="Nom" autocomplete="family-name" required>
                                     </div>
                                     <div class="join-form-group">
@@ -399,20 +399,13 @@
                                         <input type="text" id="Prenom" name="Prenom" autocomplete="given-name" required>
                                     </div>
                                     <div class="join-form-group">
-                                        <label id="lbl-cns13" for="CNS13">MATRICULE CNS (13) *</label>
+                                        <label id="lbl-cns13" for="CNS13">CNS (13) *</label>
                                         <input type="text" id="CNS13" name="CNS13" placeholder="1980010123456" inputmode="numeric" pattern="[0-9]{13}" maxlength="13" required>
                                     </div>
                                 </div>
                                 <div class="m75-row-3">
-                                    <div class="join-form-group">
-                                        <label id="lbl-mineur" for="Mineur">MINEUR? *</label>
-                                        <select id="Mineur" disabled>
-                                            <option value="NON">NON</option>
-                                            <option value="OUI">OUI</option>
-                                        </select>
-                                    </div>
                                     <div class="join-form-group" id="nat-section">
-                                        <label id="lbl-nat" for="Nationalite">NATIONALITE *</label>
+                                        <label id="lbl-nat" for="Nationalite">NATIONALITÉIT *</label>
                                         <input type="text" id="Nationalite" name="Nationalite" autocomplete="country-name" required>
                                     </div>
                                     <div class="join-form-group" id="medico-group">
@@ -422,45 +415,26 @@
                                             <option value="Oui">Oui</option>
                                         </select>
                                     </div>
-                                </div>
-                                <div class="m75-row-3">
                                     <div class="join-form-group" id="club-section">
                                         <label id="lbl-club" for="AncienClub">ALE VERÄIN *</label>
                                         <input type="text" id="AncienClub" name="AncienClub" required>
                                     </div>
-                                    <div class="join-form-group" id="licence-group" style="display:none;">
-                                        <label id="lbl-licence" for="Licence">LIZENZ? *</label>
-                                        <select id="Licence" name="Licence" required>
-                                            <option value="Non">Non</option>
-                                            <option value="Oui">Oui</option>
-                                        </select>
-                                    </div>
-                                    <div id="u7-section">
-                                        <input type="checkbox" id="U7Cert" name="U7Cert" value="Oui">
-                                        <label for="U7Cert" id="lbl-u7">U7 Med. Zertifikat obligatoresch</label>
-                                    </div>
                                 </div>
-                                <input type="hidden" id="DateNaissance" name="DateNaissance" value="">
-                                <input type="hidden" id="CNS" name="CNS" value="">
-                            </div>
-
-                            <div class="m75-section">
-                                <h3 class="m75-section-title" id="m75-title-category">Kategorie & Roll</h3>
                                 <div class="m75-row-3">
                                     <div class="join-form-group" id="basis-section">
-                                        <label id="lbl-flh-category-basis" for="FlhCategoryBasis">BASE CAT. *</label>
+                                        <label id="lbl-flh-category-basis" for="FlhCategoryBasis">BASE *</label>
                                         <select id="FlhCategoryBasis" name="FlhCategoryBasis" required>
                                             <option value="Garçons - Hommes">Garçons - Hommes</option>
                                             <option value="Filles - Femmes">Filles - Femmes</option>
                                         </select>
                                     </div>
                                     <div id="cat-section">
-                                        <label id="lbl-cat" for="Categorie">KATEGORIE (AUTO)</label>
+                                        <label id="lbl-cat" for="Categorie">KATEGORIE</label>
                                         <strong id="cat-display">-</strong>
                                         <input type="hidden" id="Categorie" name="Categorie" value="">
                                     </div>
                                     <div class="join-form-group">
-                                        <label id="lbl-role" for="Role">ROLL / FUNKTIOUN *</label>
+                                        <label id="lbl-role" for="Role">ROLL *</label>
                                         <select id="Role" name="Role" required>
                                             <option value="Joueur / Joueuse">Spiller / Spillerin</option>
                                             <option value="Arbitre">Arbitter</option>
@@ -470,7 +444,6 @@
                                     </div>
                                 </div>
                                 <div class="join-form-group" id="extra-roles-section">
-                                    <label id="lbl-extra-roles">Zousätzlech Funktioun(en) (fakultativ)</label>
                                     <div class="m75-extra-roles-row">
                                         <div class="join-checkbox-row" id="extra-role-joueur">
                                             <input type="checkbox" id="RoleAlsoJoueur" name="RoleAlsoJoueur" value="Oui">
@@ -489,8 +462,11 @@
                                             <label for="RoleAlsoBenevole" id="lbl-also-benevole">Och Bénévole</label>
                                         </div>
                                     </div>
-                                    <p class="m75-extra-roles-hint" id="lbl-extra-roles-hint">Déi éischt Funktioun bestëmmt d'Kategorie.</p>
                                 </div>
+                                <input type="hidden" id="Mineur" name="Mineur" value="NON">
+                                <input type="hidden" id="Licence" name="Licence" value="Non">
+                                <input type="hidden" id="DateNaissance" name="DateNaissance" value="">
+                                <input type="hidden" id="CNS" name="CNS" value="">
                             </div>
 
                             <div id="family-section" class="join-family-section m75-section m75-section--accent">
@@ -583,6 +559,11 @@
                                     <option value="Officiels – keng Cotisatioun (min. €50 fir Stëmmrecht AG)">Officiels – keng Cotisatioun (min. €50 fir Stëmmrecht AG)</option>
                                 </select>
                                 <input type="checkbox" id="FamilleFlag" name="FamilleFlag" value="Oui" style="display:none;">
+                            </div>
+
+                            <div class="join-checkbox-row is-emphasis" id="u7-section" style="display:none;">
+                                <input type="checkbox" id="U7Cert" name="U7Cert" value="Oui" required>
+                                <label for="U7Cert" id="lbl-u7">U7: Medezineschen Zertifikat vun der sportlecher Aptitude obligatoresch (vum Hausdokter auszestellen).</label>
                             </div>
 
                             <div class="join-checkbox-row">
@@ -961,10 +942,6 @@
                 '</div>' +
                 '<div class="m75-row-3" style="margin-top:10px;">' +
                     '<div class="join-form-group">' +
-                        '<label for="FamilyMember' + i + 'Mineur">MINEUR?</label>' +
-                        '<select id="FamilyMember' + i + 'Mineur" disabled><option value="NON">NON</option><option value="OUI">OUI</option></select>' +
-                    '</div>' +
-                    '<div class="join-form-group">' +
                         '<label for="FamilyMember' + i + 'Nat">' + t.nat + '</label>' +
                         '<input type="text" id="FamilyMember' + i + 'Nat" name="FamilyMember' + i + 'Nat" required>' +
                     '</div>' +
@@ -972,18 +949,22 @@
                         '<label for="FamilyMember' + i + 'Medico">' + t.medico + '</label>' +
                         '<select id="FamilyMember' + i + 'Medico" name="FamilyMember' + i + 'Medico" required><option value="Non">Non</option><option value="Oui">Oui</option></select>' +
                     '</div>' +
-                '</div>' +
-                '<div class="m75-row-3" style="margin-top:10px;">' +
                     '<div class="join-form-group">' +
                         '<label for="FamilyMember' + i + 'Club">' + t.club + '</label>' +
                         '<input type="text" id="FamilyMember' + i + 'Club" name="FamilyMember' + i + 'Club" required>' +
                     '</div>' +
+                '</div>' +
+                '<div class="m75-row-3" style="margin-top:10px;">' +
                     '<div class="join-form-group">' +
                         '<label for="FamilyMember' + i + 'Basis">' + t.familyBasis + '</label>' +
                         '<select id="FamilyMember' + i + 'Basis" name="FamilyMember' + i + 'Basis" required>' +
                             '<option value="Garçons - Hommes">' + t.familyBasisM + '</option>' +
                             '<option value="Filles - Femmes">' + t.familyBasisF + '</option>' +
                         '</select>' +
+                    '</div>' +
+                    '<div class="join-form-group join-family-cat-display" id="FamilyMember' + i + 'CatDisplay">' +
+                        '<label>' + t.familyCatAuto + '</label>' +
+                        '<strong id="FamilyMember' + i + 'CatText">-</strong>' +
                     '</div>' +
                     '<div class="join-form-group">' +
                         '<label for="FamilyMember' + i + 'Role">' + t.role + '</label>' +
@@ -995,25 +976,20 @@
                         '</select>' +
                     '</div>' +
                 '</div>' +
-                '<div class="m75-row-3" style="margin-top:10px;align-items:center;">' +
-                    '<div class="join-form-group join-family-cat-display" id="FamilyMember' + i + 'CatDisplay">' +
-                        '<label>' + t.familyCatAuto + '</label>' +
-                        '<strong id="FamilyMember' + i + 'CatText">-</strong>' +
-                    '</div>' +
-                    '<div class="join-form-group">' +
-                        '<label for="FamilyMember' + i + 'Cotisation">' + t.familyCotisation + '</label>' +
-                        '<select id="FamilyMember' + i + 'Cotisation" name="FamilyMember' + i + 'Cotisation">' +
-                            '<option value="Youth Tarif (≤ 25 ans) – €210">Youth Tarif (≤ 25 ans) – €210</option>' +
-                            '<option value="Family Tarif (facultatif) – €384">Family Tarif (facultatif) – €384</option>' +
-                            '<option value="Adulte Tarif – €300">Adulte Tarif – €300</option>' +
-                            '<option value="Kidssport &amp; Loisirs – €10/unité ou Family Tarif">Kidssport &amp; Loisirs</option>' +
-                            '<option value="Officiels – keng Cotisatioun (min. €50 fir Stëmmrecht AG)">Officiels</option>' +
-                        '</select>' +
-                    '</div>' +
+                '<div class="join-form-group" style="margin-top:10px;">' +
+                    '<label for="FamilyMember' + i + 'Cotisation">' + t.familyCotisation + '</label>' +
+                    '<select id="FamilyMember' + i + 'Cotisation" name="FamilyMember' + i + 'Cotisation">' +
+                        '<option value="Youth Tarif (≤ 25 ans) – €210">Youth Tarif (≤ 25 ans) – €210</option>' +
+                        '<option value="Family Tarif (facultatif) – €384">Family Tarif (facultatif) – €384</option>' +
+                        '<option value="Adulte Tarif – €300">Adulte Tarif – €300</option>' +
+                        '<option value="Kidssport &amp; Loisirs – €10/unité ou Family Tarif">Kidssport &amp; Loisirs</option>' +
+                        '<option value="Officiels – keng Cotisatioun (min. €50 fir Stëmmrecht AG)">Officiels</option>' +
+                    '</select>' +
                 '</div>' +
                 '<input type="hidden" id="FamilyMember' + i + 'Dob" name="FamilyMember' + i + 'Dob" value="">' +
                 '<input type="hidden" id="FamilyMember' + i + 'Cns" name="FamilyMember' + i + 'Cns" value="">' +
                 '<input type="hidden" id="FamilyMember' + i + 'Categorie" name="FamilyMember' + i + 'Categorie" value="">' +
+                '<input type="hidden" id="FamilyMember' + i + 'Mineur" name="FamilyMember' + i + 'Mineur" value="NON">' +
             '</div>');
         }
 
@@ -1366,13 +1342,10 @@
         document.getElementById('lbl-cns13').innerText = ui.cns13 || 'MATRICULE CNS (13 ZIFFEREN) *';
         var cns13Hint = document.getElementById('cns13-hint');
         if (cns13Hint) cns13Hint.innerText = ui.cns13Hint || "D'CNS Nummer steet op der Memberskaart / Carte Vitale. Aus hir gëtt Gebuertsdatum & Kategorie automatesch berechent.";
-        document.getElementById('lbl-mineur').innerText = ui.mineur;
         document.getElementById('lbl-cat').innerText = ui.cat;
         document.getElementById('lbl-role').innerText = ui.role;
         document.getElementById('lbl-tarif-title').innerText = ui.tarif;
         document.getElementById('lbl-tarif-hint').innerText = ui.tarifHint;
-        document.getElementById('lbl-extra-roles').innerText = ui.extraRoles;
-        document.getElementById('lbl-extra-roles-hint').innerText = ui.extraRolesHint;
         document.getElementById('lbl-also-joueur').innerText = ui.alsoPrefix + ' ' + ui.joueur;
         document.getElementById('lbl-also-arbitre').innerText = ui.alsoPrefix + ' ' + ui.arbitre;
         document.getElementById('lbl-also-officiel').innerText = ui.alsoPrefix + ' ' + ui.officiel;
@@ -1382,7 +1355,6 @@
         document.getElementById('lbl-tuteur2').innerText = ui.tuteur2;
         document.getElementById('lbl-nat').innerText = ui.nat;
         document.getElementById('lbl-medico').innerText = ui.medico;
-        document.getElementById('lbl-licence').innerText = ui.licence;
         document.getElementById('lbl-club').innerText = ui.club;
         document.getElementById('lbl-u7').innerText = ui.u7;
         document.getElementById('lbl-strasse').innerText = ui.strasse;
@@ -1417,10 +1389,6 @@
         document.getElementById('legal-suffix').innerText = legal.sentenceEnd;
         document.getElementById('submitBtn').innerText = ui.send;
         document.getElementById('Langue').value = currentLang;
-
-        const mineur = document.getElementById('Mineur');
-        mineur.options[0].text = ui.non;
-        mineur.options[1].text = ui.oui;
 
         const role = document.getElementById('Role');
         role.options[0].text = ui.joueur;
@@ -1933,29 +1901,34 @@
             }
         }
 
-        // Lizenz: Offizieller/Arbitter/Spiller/Bénévole-mat-Lizenz ëmmer "Oui"; reng Bénévole d'office "Non" — ëmmer verstoppt
-        const licenceGroup = document.getElementById('licence-group');
+        // Lizenz: Offizieller/Arbitter/Spiller/Bénévole-mat-Lizenz ëmmer "Oui"; reng Bénévole d'office "Non"
         const licence = document.getElementById('Licence');
-        licence.value = f.forcedLicence ? 'Oui' : 'Non';
-        licenceGroup.style.display = 'none';
-        licence.required = false;
+        if (licence) licence.value = f.forcedLicence ? 'Oui' : 'Non';
 
         // Geschlecht (Basis) fir Kategorie/Officiel-Code; Kategorie-Uweisung fir Spiller/Arbitter
         toggleSection('basis-section', f.needsGender);
         toggleFieldRequired('FlhCategoryBasis', f.needsGender);
         toggleSection('cat-section', f.needsCategory);
 
-        // CNS / Nationalitéit / Ale Veräin: nëmme mat Lizenz
-        toggleSection('nat-section', f.hasLicence);
-        toggleFieldRequired('Nationalite', f.hasLicence);
-        toggleSection('club-section', f.hasLicence);
-        toggleFieldRequired('AncienClub', f.hasLicence);
-
         // Medico
         toggleSection('medico-group', f.needsMedico);
         toggleFieldRequired('Medico', f.needsMedico);
 
         updateCnsDisplay();
+    }
+
+    function toggleU7Section(category) {
+        var u7 = document.getElementById('u7-section');
+        if (!u7) return;
+        var show = (category === 'U7' || category === 'U4');
+        u7.style.display = show ? 'flex' : 'none';
+        if (!show) {
+            var cb = document.getElementById('U7Cert');
+            if (cb) { cb.checked = false; cb.removeAttribute('required'); }
+        } else {
+            var cb2 = document.getElementById('U7Cert');
+            if (cb2) cb2.setAttribute('required', 'required');
+        }
     }
 
     function calcCategorie(dob) {
@@ -1977,6 +1950,7 @@
             currentCotisationAge = null;
             setRequiredState(false, '');
             applyRoleRules();
+            toggleU7Section('');
             return;
         }
 
@@ -1995,6 +1969,7 @@
         setRequiredState(isMinor, cat);
         applyRoleRules();
         suggestTarif();
+        toggleU7Section(cat);
     }
 
     document.getElementById('CNS13').addEventListener('input', function() {
@@ -2015,6 +1990,7 @@
             currentCotisationAge = null;
             setRequiredState(false, '');
             applyRoleRules();
+            toggleU7Section('');
         }
         updateCnsDisplay();
         updateFamilySummary();
