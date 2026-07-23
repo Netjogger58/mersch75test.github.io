@@ -158,16 +158,15 @@
         /* Helper text */
         .join-helper-text { font-size: 13px; color: var(--m75-text-secondary); margin-top: 6px; line-height: 1.5; font-weight: 400; }
 
-        /* Auto-category display */
+        /* Auto-category display — same style as family member cards */
         #cat-section { margin-bottom: 12px; display: flex; flex-direction: column; }
         #cat-section label { font-size: 11px; font-weight: 600; color: var(--m75-text-secondary); text-transform: uppercase; letter-spacing: 0.02em; display: block; margin-bottom: 4px; }
         #cat-display {
             display: inline-flex; align-items: center; justify-content: center;
-            padding: 10px 18px; border-radius: 999px; min-height: 42px; box-sizing: border-box;
-            background: linear-gradient(135deg, #0071e3 0%, #00a0e9 100%); color: #fff;
-            font-size: 15px; font-weight: 700; letter-spacing: 0.02em;
-            transition: var(--m75-transition); min-width: 60px; text-align: center;
-            border: 1.5px solid transparent;
+            padding: 10px 14px; border-radius: 999px; min-height: 42px; box-sizing: border-box;
+            font-size: 14px; font-weight: 600; color: var(--m75-blue);
+            background: rgba(0,113,227,0.08); min-width: 60px; text-align: center;
+            border: 1.5px solid var(--m75-border);
         }
 
         /* Checkboxes */
@@ -283,7 +282,7 @@
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 12 8'%3E%3Cpath fill='%236e6e73' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
             background-repeat: no-repeat; background-position: right 10px center; padding-right: 30px;
         }
-        .join-family-cat-display strong { font-size: 14px; color: var(--m75-blue); display: inline-block; padding: 6px 14px; border-radius: 999px; background: rgba(0,113,227,0.08); }
+        .join-family-cat-display strong { font-size: 14px; font-weight: 600; color: var(--m75-blue); display: inline-flex; align-items: center; justify-content: center; padding: 10px 14px; border-radius: 999px; min-height: 42px; box-sizing: border-box; background: rgba(0,113,227,0.08); border: 1.5px solid var(--m75-border); min-width: 60px; text-align: center; }
         @media (max-width: 768px) { .join-family-grid { grid-template-columns: 1fr 1fr; } }
         @media (max-width: 480px) { .join-family-grid { grid-template-columns: 1fr; } }
 
