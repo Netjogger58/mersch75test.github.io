@@ -464,16 +464,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="join-form-group" style="margin-top:10px;">
-                                    <label id="lbl-tarif-d1" for="Cotisation">COTISATIOUN 2026-2027</label>
-                                    <select id="Cotisation" name="Cotisation">
-                                        <option value="Youth Tarif (≤ 25 ans) – €210">Youth Tarif (≤ 25 ans) – €210</option>
-                                        <option value="Family Tarif (facultatif) – €384">Family Tarif (facultatif) – €384</option>
-                                        <option value="Adulte Tarif – €300">Adulte Tarif – €300</option>
-                                        <option value="Kidssport &amp; Loisirs – €10/unité ou Family Tarif">Kidssport &amp; Loisirs – €10/unité ou Family Tarif</option>
-                                        <option value="Officiels – keng Cotisatioun (min. €50 fir Stëmmrecht AG)">Officiels – keng Cotisatioun (min. €50 fir Stëmmrecht AG)</option>
-                                    </select>
-                                </div>
+                                <input type="hidden" id="Cotisation" name="Cotisation" value="">
                                 <input type="hidden" id="Mineur" name="Mineur" value="NON">
                                 <input type="hidden" id="Licence" name="Licence" value="Non">
                                 <input type="hidden" id="DateNaissance" name="DateNaissance" value="">
@@ -847,30 +838,26 @@
     }
 
     function suggestTarif() {
-        const select = document.getElementById('Cotisation');
-        if (!select) return;
+        const cotisationInput = document.getElementById('Cotisation');
         const familleFlag = document.getElementById('FamilleFlag');
+        let value = '';
         if (familleFlag && familleFlag.checked) {
-            select.value = 'Family Tarif (facultatif) – €384';
+            value = 'Family Tarif (facultatif) – €384';
         } else {
-            // Officiels (Offizieller/Arbitter mat/ouni Lizenz, oder Bénévole mat Lizenz):
-            // keng Cotisatioun; min. 50€ fir Stëmmrecht op der AG (cf. Statuten)
             const flags = getRoleFlags();
             if (flags.isOfficial || flags.isReferee || (flags.isVolunteer && flags.hasLicence)) {
-                select.value = 'Officiels – keng Cotisatioun (min. €50 fir Stëmmrecht AG)';
+                value = 'Officiels – keng Cotisatioun (min. €50 fir Stëmmrecht AG)';
             } else if (getCategoryValue() === 'U4') {
-                // Kidssport & Loisirs = U4 → €10/unité ou Family Tarif
-                select.value = 'Kidssport & Loisirs – €10/unité ou Family Tarif';
+                value = 'Kidssport & Loisirs – €10/unité ou Family Tarif';
             } else if (typeof currentAge === 'number' && currentAge > 25) {
-                // Alter-baséiert: iwwer 25 Joer = Adulte (€300), soss Youth ≤25 (€210)
-                select.value = 'Adulte Tarif – €300';
+                value = 'Adulte Tarif – €300';
             } else {
-                select.value = 'Youth Tarif (≤ 25 ans) – €210';
+                value = 'Youth Tarif (≤ 25 ans) – €210';
             }
         }
-        // Sync Zoustëmmungs-Display
+        if (cotisationInput) cotisationInput.value = value;
         var summary = document.getElementById('tarif-summary-display');
-        if (summary) summary.innerText = select.value || '-';
+        if (summary) summary.innerText = value || '-';
     }
 
     function getValue(id) {
@@ -1002,16 +989,7 @@
                         '</div>' +
                     '</div>' +
                 '</div>' +
-                '<div class="join-form-group" style="margin-top:10px;">' +
-                    '<label for="FamilyMember' + i + 'Cotisation">' + t.familyCotisation + '</label>' +
-                    '<select id="FamilyMember' + i + 'Cotisation" name="FamilyMember' + i + 'Cotisation">' +
-                        '<option value="Youth Tarif (≤ 25 ans) – €210">Youth Tarif (≤ 25 ans) – €210</option>' +
-                        '<option value="Family Tarif (facultatif) – €384">Family Tarif (facultatif) – €384</option>' +
-                        '<option value="Adulte Tarif – €300">Adulte Tarif – €300</option>' +
-                        '<option value="Kidssport &amp; Loisirs – €10/unité ou Family Tarif">Kidssport &amp; Loisirs</option>' +
-                        '<option value="Officiels – keng Cotisatioun (min. €50 fir Stëmmrecht AG)">Officiels</option>' +
-                    '</select>' +
-                '</div>' +
+                '<input type="hidden" id="FamilyMember' + i + 'Cotisation" name="FamilyMember' + i + 'Cotisation" value="">' +
                 '<input type="hidden" id="FamilyMember' + i + 'Dob" name="FamilyMember' + i + 'Dob" value="">' +
                 '<input type="hidden" id="FamilyMember' + i + 'Cns" name="FamilyMember' + i + 'Cns" value="">' +
                 '<input type="hidden" id="FamilyMember' + i + 'Categorie" name="FamilyMember' + i + 'Categorie" value="">' +
@@ -1409,8 +1387,6 @@
         if (cns13Hint) cns13Hint.innerText = ui.cns13Hint || "D'CNS Nummer steet op der Memberskaart / Carte Vitale. Aus hir gëtt Gebuertsdatum & Kategorie automatesch berechent.";
         document.getElementById('lbl-cat').innerText = ui.cat;
         document.getElementById('lbl-role').innerText = ui.role;
-        var tarifD1 = document.getElementById('lbl-tarif-d1');
-        if (tarifD1) tarifD1.innerText = ui.tarif || 'COTISATIOUN 2026-2027';
         var tarifSummary = document.getElementById('lbl-tarif-summary');
         if (tarifSummary) tarifSummary.innerText = (ui.tarifSummary || 'COTISATIOUN (AUTO-PROPOSÉIRT)');
         var tarifTitle = document.getElementById('lbl-tarif-title');
