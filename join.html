@@ -158,16 +158,7 @@
         /* Helper text */
         .join-helper-text { font-size: 13px; color: var(--m75-text-secondary); margin-top: 6px; line-height: 1.5; font-weight: 400; }
 
-        /* Auto-category display — same style as family member cards */
-        #cat-section { margin-bottom: 12px; display: flex; flex-direction: column; }
-        #cat-section label { font-size: 11px; font-weight: 600; color: var(--m75-text-secondary); text-transform: uppercase; letter-spacing: 0.02em; display: block; margin-bottom: 4px; }
-        #cat-display {
-            display: inline-flex; align-items: center; justify-content: center;
-            padding: 10px 14px; border-radius: 999px; min-height: 42px; box-sizing: border-box;
-            font-size: 14px; font-weight: 600; color: var(--m75-blue);
-            background: rgba(0,113,227,0.08); min-width: 60px; text-align: center;
-            border: 1.5px solid var(--m75-border);
-        }
+        /* Auto-category display: Demandeur 1 uses .join-family-cat-display class like family members */
 
         /* Checkboxes */
         .join-checkbox-row { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
@@ -237,6 +228,7 @@
         /* Extra roles — inline row */
         .m75-extra-roles-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
         .m75-extra-roles-row .join-checkbox-row { margin-bottom: 0; }
+        .join-family-cat-display label { font-size: 11px; font-weight: 600; color: var(--m75-text-secondary); text-transform: uppercase; letter-spacing: 0.02em; display: block; margin-bottom: 4px; }
         .m75-extra-roles-hint { font-size: 12px; color: var(--m75-text-secondary); margin-top: 6px; line-height: 1.4; }
 
         /* Data purpose notice */
@@ -282,7 +274,7 @@
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 12 8'%3E%3Cpath fill='%236e6e73' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
             background-repeat: no-repeat; background-position: right 10px center; padding-right: 30px;
         }
-        .join-family-cat-display strong { font-size: 14px; font-weight: 600; color: var(--m75-blue); display: inline-flex; align-items: center; justify-content: center; padding: 10px 14px; border-radius: 999px; min-height: 42px; box-sizing: border-box; background: rgba(0,113,227,0.08); border: 1.5px solid var(--m75-border); min-width: 60px; text-align: center; }
+        .join-family-cat-display strong { font-size: 13px; font-weight: 600; color: var(--m75-blue); display: inline-flex; align-items: center; justify-content: center; padding: 8px 12px; border-radius: 999px; min-height: 34px; box-sizing: border-box; background: rgba(0,113,227,0.08); border: 1.5px solid var(--m75-border); min-width: 50px; text-align: center; }
         @media (max-width: 768px) { .join-family-grid { grid-template-columns: 1fr 1fr; } }
         @media (max-width: 480px) { .join-family-grid { grid-template-columns: 1fr; } }
 
@@ -1021,6 +1013,9 @@
                             catText.innerText = cat || '-';
                             var age = calculateAgeOnDate(parsed.day, parsed.month, parsed.year, new Date());
                             mineurEl.value = age < 18 ? 'OUI' : 'NON';
+                            // Zousätzlech Rollen nëmme fir >= 16 Joer
+                            var extraRow = document.getElementById('FamilyMember' + idx + 'ExtraRoles');
+                            if (extraRow) extraRow.style.display = (age < 16) ? 'none' : '';
                         } else {
                             dobEl.value = '';
                             cnsEl.value = '';
@@ -1912,6 +1907,12 @@
         }
 
         const f = getRoleFlags();
+
+        // Och-Arbitter/Och-Offiziell/Och-Bénévole just ugewise fir >= 16 Joer
+        const extraRolesRow = document.querySelector('.m75-extra-roles-row');
+        if (extraRolesRow) {
+            extraRolesRow.style.display = (currentAge !== null && currentAge < 16) ? 'none' : '';
+        }
 
         // Zousätzlech-Roll-Checkbox déi der Haaptroll entspriicht verstoppen
         const primary = getValue('Role');
