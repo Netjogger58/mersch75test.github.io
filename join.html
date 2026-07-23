@@ -199,42 +199,27 @@
                                 <p class="join-helper-text" id="lbl-extra-roles-hint">Z.B. Spiller deen och Arbitter ass. Déi éischt Funktioun (Spiller) bestëmmt d'Kategorie.</p>
                             </div>
 
-                            <div class="join-form-group" id="tarif-section">
-                                <label id="lbl-tarif" for="Cotisation"><span id="lbl-tarif-title">COTISATIOUN 2026-2027</span> <span class="join-helper-text" id="lbl-tarif-hint">(Fir eng Kannersmeldung gëtt firdéngt de Youth Tarif (≤ 25 J.) vum Kand ugewisen, duerno de Family Tarif (facultativ). Dës Affichage ass nëmme informativ — bezuele gëtt just, wann de Veräin eng Rechnung schéckt.)</span></label>
-                                <select id="Cotisation" name="Cotisation">
-                                    <option value="Youth Tarif (≤ 25 ans) – €210">Youth Tarif (≤ 25 ans) – €210</option>
-                                    <option value="Family Tarif (facultatif) – €384">Family Tarif (facultatif) – €384</option>
-                                    <option value="Adulte Tarif – €300">Adulte Tarif – €300</option>
-                                    <option value="Kidssport &amp; Loisirs – €10/unité ou Family Tarif">Kidssport &amp; Loisirs – €10/unité ou Family Tarif</option>
-                                    <option value="Officiels – keng Cotisatioun (min. €50 fir Stëmmrecht AG)">Officiels – keng Cotisatioun (min. €50 fir Stëmmrecht AG)</option>
-                                </select>
-                                <div class="join-checkbox-row" style="margin-top:10px;">
-                                    <input type="checkbox" id="FamilleFlag" name="FamilleFlag" value="Oui">
-                                    <label for="FamilleFlag" id="lbl-famille">Famill-Memberskaart (2+ Persounen)</label>
+                            <div id="family-section" class="join-family-section">
+                                <div class="join-form-group join-form-group--compact">
+                                    <label for="FamilyMemberCount">Wivill Persounen op der Family Memberskaart? *</label>
+                                    <select id="FamilyMemberCount" name="FamilyMemberCount" disabled>
+                                        <option value="2">2 Persounen</option>
+                                        <option value="3">3 Persounen</option>
+                                        <option value="4">4 Persounen</option>
+                                        <option value="5">5 Persounen</option>
+                                        <option value="6">6 Persounen</option>
+                                        <option value="7">7 Persounen</option>
+                                        <option value="8">8 Persounen</option>
+                                        <option value="9">9 Persounen</option>
+                                        <option value="10">10 Persounen</option>
+                                    </select>
                                 </div>
-
-                                <div id="family-section" class="join-family-section">
-                                    <div class="join-form-group join-form-group--compact">
-                                        <label for="FamilyMemberCount">Wivill Persounen op der Family Memberskaart? *</label>
-                                        <select id="FamilyMemberCount" name="FamilyMemberCount" disabled>
-                                            <option value="2">2 Persounen</option>
-                                            <option value="3">3 Persounen</option>
-                                            <option value="4">4 Persounen</option>
-                                            <option value="5">5 Persounen</option>
-                                            <option value="6">6 Persounen</option>
-                                            <option value="7">7 Persounen</option>
-                                            <option value="8">8 Persounen</option>
-                                            <option value="9">9 Persounen</option>
-                                            <option value="10">10 Persounen</option>
-                                        </select>
-                                    </div>
-                                    <p class="join-helper-text">Haaptlizenzéierten ass déi Persoun hei am Formulaire. Déi zousätzlech Persoune musse Familljememberen op där selwechter Adress sinn. Elteren/Erzéiungsberechtegten oder weider Spiller kënnen hei fir d'Lizenz-Virbereedung agedroe ginn.</p>
-                                    <div id="family-members-fields" class="join-family-members-fields"></div>
-                                    <input type="hidden" id="FamilySummary" name="FamilySummary" value="">
-                                    <div class="join-family-card-preview" id="family-card-preview" aria-live="polite">
-                                        <h3 data-i18n="joinMembersCards">Memberskaarten</h3>
-                                        <p class="join-helper-text" data-i18n="joinMembersCardHint">D'Memberskaart mam QR-Code gëtt intern am Secretariat virbereet an eréischt no Bezuelung vum Membersbeitrag un den Antragsteller geschéckt.</p>
-                                    </div>
+                                <p class="join-helper-text">Haaptlizenzéierten ass déi Persoun hei am Formulaire. Déi zousätzlech Persoune musse Familljememberen op där selwechter Adress sinn. Elteren/Erzéiungsberechtegten oder weider Spiller kënnen hei fir d'Lizenz-Virbereedung agedroe ginn.</p>
+                                <div id="family-members-fields" class="join-family-members-fields"></div>
+                                <input type="hidden" id="FamilySummary" name="FamilySummary" value="">
+                                <div class="join-family-card-preview" id="family-card-preview" aria-live="polite">
+                                    <h3 data-i18n="joinMembersCards">Memberskaarten</h3>
+                                    <p class="join-helper-text" data-i18n="joinMembersCardHint">D'Memberskaart mam QR-Code gëtt intern am Secretariat virbereet an eréischt no Bezuelung vum Membersbeitrag un den Antragsteller geschéckt.</p>
                                 </div>
                             </div>
 
@@ -256,6 +241,38 @@
                                         <label id="lbl-tuteur2" for="Tuteur2">TUTEUR 2 (NOM ET PRENOM) *</label>
                                         <input type="text" id="Tuteur2" name="Tuteur2" autocomplete="name">
                                     </div>
+                                </div>
+                            </div>
+
+                            <div class="join-form-group">
+                                <label id="lbl-strasse" for="Strasse">STRASSE *</label>
+                                <input type="text" id="Strasse" name="Strasse" autocomplete="street-address" required>
+                            </div>
+
+                            <div class="join-form-row">
+                                <div class="join-form-group">
+                                    <label id="lbl-postcode" for="Postcode">POSTCODE *</label>
+                                    <input type="text" id="Postcode" name="Postcode" autocomplete="postal-code" required>
+                                </div>
+                                <div class="join-form-group">
+                                    <label id="lbl-ortschaft" for="Ortschaft">ORTSCHAFT *</label>
+                                    <input type="text" id="Ortschaft" name="Ortschaft" autocomplete="address-level2" required>
+                                </div>
+                            </div>
+
+                            <div class="join-form-group">
+                                <label id="lbl-email" for="Email">EMAIL *</label>
+                                <input type="email" id="Email" name="Email" autocomplete="email" required>
+                            </div>
+
+                            <div class="join-form-row">
+                                <div class="join-form-group">
+                                    <label id="lbl-gsm1" for="GSM1">TEL MOBILE / GSM 1 *</label>
+                                    <input type="text" id="GSM1" name="GSM1" autocomplete="tel" required>
+                                </div>
+                                <div class="join-form-group">
+                                    <label id="lbl-gsm2" for="GSM2">TEL MOBILE / GSM 2 (OPTIONNEL)</label>
+                                    <input type="text" id="GSM2" name="GSM2" autocomplete="tel">
                                 </div>
                             </div>
 
@@ -298,36 +315,16 @@
                                 <label for="U7Cert" id="lbl-u7">U7 : CERTIFICAT MEDICAL D'APTITUDE SPORTIVE OBLIGATOIRE (ETABLI PAR LE MEDECIN TRAITANT).</label>
                             </div>
 
-                            <div class="join-form-group">
-                                <label id="lbl-strasse" for="Strasse">STRASSE *</label>
-                                <input type="text" id="Strasse" name="Strasse" autocomplete="street-address" required>
-                            </div>
-
-                            <div class="join-form-row">
-                                <div class="join-form-group">
-                                    <label id="lbl-postcode" for="Postcode">POSTCODE *</label>
-                                    <input type="text" id="Postcode" name="Postcode" autocomplete="postal-code" required>
-                                </div>
-                                <div class="join-form-group">
-                                    <label id="lbl-ortschaft" for="Ortschaft">ORTSCHAFT *</label>
-                                    <input type="text" id="Ortschaft" name="Ortschaft" autocomplete="address-level2" required>
-                                </div>
-                            </div>
-
-                            <div class="join-form-group">
-                                <label id="lbl-email" for="Email">EMAIL *</label>
-                                <input type="email" id="Email" name="Email" autocomplete="email" required>
-                            </div>
-
-                            <div class="join-form-row">
-                                <div class="join-form-group">
-                                    <label id="lbl-gsm1" for="GSM1">TEL MOBILE / GSM 1 *</label>
-                                    <input type="text" id="GSM1" name="GSM1" autocomplete="tel" required>
-                                </div>
-                                <div class="join-form-group">
-                                    <label id="lbl-gsm2" for="GSM2">TEL MOBILE / GSM 2 (OPTIONNEL)</label>
-                                    <input type="text" id="GSM2" name="GSM2" autocomplete="tel">
-                                </div>
+                            <div class="join-form-group" id="tarif-section">
+                                <label id="lbl-tarif" for="Cotisation"><span id="lbl-tarif-title">COTISATIOUN 2026-2027</span> <span class="join-helper-text" id="lbl-tarif-hint">(Fir eng Kannersmeldung gëtt firdéngt de Youth Tarif (≤ 25 J.) vum Kand ugewisen, duerno de Family Tarif (facultativ). Dës Affichage ass nëmme informativ — bezuele gëtt just, wann de Veräin eng Rechnung schéckt.)</span></label>
+                                <select id="Cotisation" name="Cotisation">
+                                    <option value="Youth Tarif (≤ 25 ans) – €210">Youth Tarif (≤ 25 ans) – €210</option>
+                                    <option value="Family Tarif (facultatif) – €384">Family Tarif (facultatif) – €384</option>
+                                    <option value="Adulte Tarif – €300">Adulte Tarif – €300</option>
+                                    <option value="Kidssport &amp; Loisirs – €10/unité ou Family Tarif">Kidssport &amp; Loisirs – €10/unité ou Family Tarif</option>
+                                    <option value="Officiels – keng Cotisatioun (min. €50 fir Stëmmrecht AG)">Officiels – keng Cotisatioun (min. €50 fir Stëmmrecht AG)</option>
+                                </select>
+                                <input type="checkbox" id="FamilleFlag" name="FamilleFlag" value="Oui" style="display:none;">
                             </div>
 
                             <div class="join-checkbox-row">
@@ -1107,11 +1104,9 @@
         updateConsentValidationMessages();
 
         // Update family section labels
-        var lblFamille = document.getElementById('lbl-famille');
-        if (lblFamille) lblFamille.innerText = ui.familyFlag || 'Famill-Memberskaart (2+ Persounen)';
-        var countLabel = document.querySelector('label[for="FamilyMemberCount"]');
+        var countLabel = document.querySelector('#family-section label[for="FamilyMemberCount"]');
         if (countLabel) countLabel.innerText = ui.familyCountLabel || 'Wivill Persounen op der Family Memberskaart? *';
-        var hintEl = document.querySelector('#family-section .join-helper-text');
+        var hintEl = document.querySelector('#family-section > .join-helper-text');
         if (hintEl) hintEl.innerText = ui.familyHint || '';
         // Update family question labels
         var lblFQ = document.getElementById('lbl-family-question');
