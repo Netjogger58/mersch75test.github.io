@@ -238,6 +238,16 @@
         .m75-extra-roles-row .join-checkbox-row { margin-bottom: 0; }
         .m75-extra-roles-hint { font-size: 12px; color: var(--m75-text-secondary); margin-top: 6px; line-height: 1.4; }
 
+        /* Data purpose notice */
+        .m75-data-purpose {
+            margin: 12px 0; padding: 14px 16px; border-radius: var(--m75-radius-sm);
+            background: rgba(0,47,101,0.03); border: 1px solid rgba(0,47,101,0.08);
+        }
+        .m75-data-purpose p {
+            margin: 0; font-size: 12px; line-height: 1.55; color: var(--m75-text-secondary);
+            font-weight: 400; letter-spacing: 0.01em;
+        }
+
         /* ═══ Family section ═══ */
         .join-family-section { display: none; }
         .join-family-members-fields { display: grid; gap: 10px; margin-top: 10px; }
@@ -582,6 +592,10 @@
                                 </label>
                             </div>
 
+                            <div class="m75-data-purpose" id="data-purpose-box">
+                                <p id="data-purpose-text">D'Donnéeën, déi an dësem Formulaire uginn ginn, ginn exklusiv am Kader vum Mersch75 Handball Club veraarbecht an nëmmen fir Handball-Zwecker benotzt (Umeldung, Lizenz, Kategorie-Zoudeelung, Membersverwaltung). Si ginn un d'Fédération Luxembourgeoise de Handball (FLH) weidergeleed fir d'Ausstellung vun enger Lizenz. Keng Weidergab un Drëttparteien ausserhalb vum Handball-Kontext.</p>
+                            </div>
+
                             <div class="join-checkbox-row is-emphasis" id="flh-consent-row">
                                 <input type="checkbox" id="FlhPortalConsent" name="FlhPortalConsent" value="Oui" required>
                                 <label for="FlhPortalConsent" id="lbl-flh">Info: Ech hu verstaan dat meng Umeldung mat dësen Daten un d' flh.lu geschéckt ginn fir eng Lizenz auszestellen.</label>
@@ -760,19 +774,19 @@
     };
     const MERSCH75_LEGAL_TEXTS = {
         lu: {
-            legalPrefix: "Ech hu gelies an akzeptéieren d' ", termsLink: 'Allgemeng Bedéngungen', legalMiddle: ' an Reglementatioun iwwert den ', dataLink: 'Dateschutz', sentenceEnd: '.', flhInfo: "Info: Ech hu verstaan dat meng Umeldung mat dësen Daten un d' flh.lu geschéckt ginn fir eng Lizenz auszestellen.", accuracy: "Bestätegung: Ech confirméiere d'Richtegkeet vun menge Donnéeën."
+            legalPrefix: "Ech hu gelies an akzeptéieren d' ", termsLink: 'Allgemeng Bedéngungen', legalMiddle: ' an Reglementatioun iwwert den ', dataLink: 'Dateschutz', sentenceEnd: '.', flhInfo: "Info: Ech hu verstaan dat meng Umeldung mat dësen Daten un d' flh.lu geschéckt ginn fir eng Lizenz auszestellen.", accuracy: "Bestätegung: Ech confirméiere d'Richtegkeet vun menge Donnéeën.", dataPurpose: "D'Donnéeën, déi an dësem Formulaire uginn ginn, ginn exklusiv am Kader vum Mersch75 Handball Club veraarbecht an nëmmen fir Handball-Zwecker benotzt (Umeldung, Lizenz, Kategorie-Zoudeelung, Membersverwaltung). Si ginn un d'Fédération Luxembourgeoise de Handball (FLH) weidergeleed fir d'Ausstellung vun enger Lizenz. Keng Weidergab un Drëttparteien ausserhalb vum Handball-Kontext."
         },
         fr: {
-            legalPrefix: "J'ai lu et j'accepte les ", termsLink: 'conditions générales', legalMiddle: ' et le règlement relatif à la ', dataLink: 'protection des données', sentenceEnd: '.', flhInfo: "Info: J'ai compris que mon inscription sera envoyée avec ces données à flh.lu afin d'établir une licence.", accuracy: "Confirmation: je confirme l'exactitude de mes données."
+            legalPrefix: "J'ai lu et j'accepte les ", termsLink: 'conditions générales', legalMiddle: ' et le règlement relatif à la ', dataLink: 'protection des données', sentenceEnd: '.', flhInfo: "Info: J'ai compris que mon inscription sera envoyée avec ces données à flh.lu afin d'établir une licence.", accuracy: "Confirmation: je confirme l'exactitude de mes données.", dataPurpose: "Les données saisies dans ce formulaire sont traitées exclusivement dans le cadre du Mersch75 Handball Club et utilisées uniquement à des fins liées au handball (inscription, licence, attribution de catégorie, gestion des membres). Elles sont transmises à la Fédération Luxembourgeoise de Handball (FLH) pour l'établissement d'une licence. Aucune transmission à des tiers en dehors du contexte du handball."
         },
         de: {
-            legalPrefix: 'Ich habe die ', termsLink: 'Allgemeinen Bedingungen', legalMiddle: ' und die Regelung zum ', dataLink: 'Datenschutz', sentenceEnd: ' gelesen und akzeptiert.', flhInfo: 'Info: Ich habe verstanden, dass meine Anmeldung mit diesen Daten an flh.lu gesendet wird, um eine Lizenz auszustellen.', accuracy: 'Bestätigung: Ich bestätige die Richtigkeit meiner Angaben.'
+            legalPrefix: 'Ich habe die ', termsLink: 'Allgemeinen Bedingungen', legalMiddle: ' und die Regelung zum ', dataLink: 'Datenschutz', sentenceEnd: ' gelesen und akzeptiert.', flhInfo: 'Info: Ich habe verstanden, dass meine Anmeldung mit diesen Daten an flh.lu gesendet wird, um eine Lizenz auszustellen.', accuracy: 'Bestätigung: Ich bestätige die Richtigkeit meiner Angaben.', dataPurpose: 'Die in diesem Formular angegebenen Daten werden ausschliesslich im Rahmen des Mersch75 Handball Club verarbeitet und nur für Handball-Zwecke verwendet (Anmeldung, Lizenz, Kategorie-Zuteilung, Mitgliederverwaltung). Sie werden an die Fédération Luxembourgeoise de Handball (FLH) weitergeleitet, um eine Lizenz auszustellen. Keine Weitergabe an Dritte ausserhalb des Handball-Kontexts.'
         },
         en: {
-            legalPrefix: 'I have read and accept the ', termsLink: 'terms and conditions', legalMiddle: ' and the regulation concerning ', dataLink: 'data protection', sentenceEnd: '.', flhInfo: 'Info: I understand that my registration will be sent with this data to flh.lu in order to issue a licence.', accuracy: 'Confirmation: I confirm the accuracy of my information.'
+            legalPrefix: 'I have read and accept the ', termsLink: 'terms and conditions', legalMiddle: ' and the regulation concerning ', dataLink: 'data protection', sentenceEnd: '.', flhInfo: 'Info: I understand that my registration will be sent with this data to flh.lu in order to issue a licence.', accuracy: 'Confirmation: I confirm the accuracy of my information.', dataPurpose: 'The data provided in this form is processed exclusively within the framework of the Mersch75 Handball Club and used solely for handball-related purposes (registration, licence, category assignment, membership management). It is forwarded to the Fédération Luxembourgeoise de Handball (FLH) for the issuance of a licence. No transmission to third parties outside the handball context.'
         },
         pt: {
-            legalPrefix: 'Li e aceito os ', termsLink: 'termos e condições gerais', legalMiddle: ' e o regulamento relativo à ', dataLink: 'proteção de dados', sentenceEnd: '.', flhInfo: 'Info: Compreendi que a minha inscrição será enviada com estes dados para flh.lu para emitir uma licença.', accuracy: 'Confirmação: confirmo a exatidão dos meus dados.'
+            legalPrefix: 'Li e aceito os ', termsLink: 'termos e condições gerais', legalMiddle: ' e o regulamento relativo à ', dataLink: 'proteção de dados', sentenceEnd: '.', flhInfo: 'Info: Compreendi que a minha inscrição será enviada com estes dados para flh.lu para emitir uma licença.', accuracy: 'Confirmação: confirmo a exatidão dos meus dados.', dataPurpose: 'Os dados fornecidos neste formulário são processados exclusivamente no âmbito do Mersch75 Handball Club e utilizados apenas para fins relacionados com o andebol (inscrição, licença, atribuição de categoria, gestão de membros). São transmitidos à Fédération Luxembourgeoise de Handball (FLH) para a emissão de uma licença. Sem transmissão a terceiros fora do contexto do andebol.'
         }
     };
 
@@ -1394,6 +1408,8 @@
         if (secTarif) secTarif.innerText = ui.secTarif || 'Cotisatioun & Zoustëmmung';
         document.getElementById('lbl-flh').innerText = legal.flhInfo;
         document.getElementById('lbl-accuracy').innerText = legal.accuracy;
+        var dataPurposeEl = document.getElementById('data-purpose-text');
+        if (dataPurposeEl) dataPurposeEl.innerText = legal.dataPurpose || '';
         document.getElementById('legal-prefix').innerText = legal.legalPrefix;
         document.getElementById('legal-terms-link').innerText = legal.termsLink;
         document.getElementById('legal-middle').innerText = legal.legalMiddle;
