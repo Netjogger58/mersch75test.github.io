@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="lb">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <script src="https://unpkg.com/easyqrcodejs@4.6.1/dist/easy.qrcode.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #333333;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555555;
+        }
+
+        input[type="text"],
+        input[type="file"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-family: Arial, sans-serif;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        button, a.download-link {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 10px;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        a.download-link {
+            background-color: #28a745;
+        }
+
+        a.download-link:hover {
+            background-color: #1e7e34;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #qrcode {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .home-link {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .home-link:hover {
+            text-decoration: underline;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>QR Code Generator</h1>
+
+        <div class="form-group">
+            <label for="qr-type">QR Code Typ:</label>
+            <select id="qr-type">
+                <option value="text">Text / URL</option>
+                <option value="wifi">WiFi</option>
+                <option value="vcard">vCard (Kontakt)</option>
+                <option value="email">E-Mail</option>
+            </select>
+        </div>
+
+        <div id="group-text" class="input-group">
+            <div class="form-group">
+                <label for="text-input">Inhalt (URL oder Text):</label>
+                <input type="text" id="text-input" value="https://example.com">
+            </div>
+        </div>
+
+        <div id="group-wifi" class="input-group hidden">
+            <div class="form-group">
+                <label for="wifi-ssid">Netznumm (SSID):</label>
+                <input type="text" id="wifi-ssid">
+            </div>
+            <div class="form-group">
+                <label for="wifi-password">Passwuert:</label>
+                <input type="text" id="wifi-password">
+            </div>
+            <div class="form-group">
+                <label for="wifi-type">Verschlësselung:</label>
+                <select id="wifi-type">
+                    <option value="WPA">WPA/WPA2</option>
+                    <option value="WEP">WEP</option>
+                    <option value="nopass">Keng</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="group-vcard" class="input-group hidden">
+            <div class="form-group">
+                <label for="vcard-fname">Virnumm:</label>
+                <input type="text" id="vcard-fname">
+            </div>
+            <div class="form-group">
+                <label for="vcard-lname">Familljennumm:</label>
+                <input type="text" id="vcard-lname">
+            </div>
+            <div class="form-group">
+                <label for="vcard-phone">Telefonsnummer:</label>
+                <input type="text" id="vcard-phone">
+            </div>
+            <div class="form-group">
+                <label for="vcard-email">E-Mail:</label>
+                <input type="text" id="vcard-email">
+            </div>
+        </div>
+
+        <div id="group-email" class="input-group hidden">
+            <div class="form-group">
+                <label for="email-to">Empfänger:</label>
+                <input type="text" id="email-to">
+            </div>
+            <div class="form-group">
+                <label for="email-subject">Sujet:</label>
+                <input type="text" id="email-subject">
+            </div>
+            <div class="form-group">
+                <label for="email-body">Message:</label>
+                <textarea id="email-body" rows="4"></textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="logo-input">Bild (optional, fir an d'Mëtt):</label>
+            <input type="file" id="logo-input" accept="image/png, image/jpeg">
+        </div>
+
+        <button id="generate-btn">QR Code generéieren</button>
+        <a id="download-btn" class="download-link hidden" download="mersch75-qrcode.png">QR Code eroflueden</a>
+
+        <div id="qrcode"></div>
+
+        <a class="home-link" href="index.html">Zréck op d'Startsäit</a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const typeSelector = document.getElementById('qr-type');
+            const groups = {
+                text: document.getElementById('group-text'),
+                wifi: document.getElementById('group-wifi'),
+                vcard: document.getElementById('group-vcard'),
+                email: document.getElementById('group-email')
+            };
+
+            typeSelector.addEventListener('change', function() {
+                for (const key in groups) {
+                    if (groups.hasOwnProperty(key)) {
+                        groups[key].classList.add('hidden');
+                    }
+                }
+                groups[this.value].classList.remove('hidden');
+            });
+
+            const qrcodeContainer = document.getElementById('qrcode');
+            const logoInput = document.getElementById('logo-input');
+            const generateBtn = document.getElementById('generate-btn');
+            const downloadBtn = document.getElementById('download-btn');
+
+            function setDownloadLink() {
+                try {
+                    let dataUrl = '';
+                    const canvas = qrcodeContainer.querySelector('canvas');
+                    const img = qrcodeContainer.querySelector('img');
+                    if (canvas) {
+                        dataUrl = canvas.toDataURL('image/png');
+                    } else if (img && img.src) {
+                        dataUrl = img.src;
+                    }
+
+                    if (dataUrl && dataUrl.startsWith('data:')) {
+                        downloadBtn.href = dataUrl;
+                        downloadBtn.classList.remove('hidden');
+                        return;
+                    }
+                } catch (e) {
+                    console.error('QR download prepare error:', e);
+                }
+                downloadBtn.classList.add('hidden');
+            }
+
+            generateBtn.addEventListener('click', function() {
+                qrcodeContainer.innerHTML = '';
+                downloadBtn.classList.add('hidden');
+
+                const currentType = typeSelector.value;
+                let qrString = '';
+
+                if (currentType === 'text') {
+                    qrString = document.getElementById('text-input').value;
+                } else if (currentType === 'wifi') {
+                    const ssid = document.getElementById('wifi-ssid').value;
+                    const password = document.getElementById('wifi-password').value;
+                    const type = document.getElementById('wifi-type').value;
+                    qrString = 'WIFI:T:' + type + ';S:' + ssid + ';P:' + password + ';;';
+                } else if (currentType === 'vcard') {
+                    const fname = document.getElementById('vcard-fname').value;
+                    const lname = document.getElementById('vcard-lname').value;
+                    const phone = document.getElementById('vcard-phone').value;
+                    const email = document.getElementById('vcard-email').value;
+                    qrString = 'BEGIN:VCARD\nVERSION:3.0\nN:' + lname + ';' + fname + '\nFN:' + fname + ' ' + lname + '\nTEL:' + phone + '\nEMAIL:' + email + '\nEND:VCARD';
+                } else if (currentType === 'email') {
+                    const to = document.getElementById('email-to').value;
+                    const subject = encodeURIComponent(document.getElementById('email-subject').value);
+                    const body = encodeURIComponent(document.getElementById('email-body').value);
+                    qrString = 'mailto:' + to + '?subject=' + subject + '&body=' + body;
+                }
+
+                let options = {
+                    text: qrString,
+                    width: 256,
+                    height: 256,
+                    colorDark: '#000000',
+                    colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.H,
+                    dotScale: 1
+                };
+
+                function renderAndPrepareDownload() {
+                    new QRCode(qrcodeContainer, options);
+                    setTimeout(setDownloadLink, 150);
+                }
+
+                if (logoInput.files && logoInput.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        options.logo = e.target.result;
+                        options.logoWidth = 64;
+                        options.logoHeight = 64;
+                        options.logoBackgroundTransparent = true;
+                        renderAndPrepareDownload();
+                    };
+                    reader.readAsDataURL(logoInput.files[0]);
+                } else {
+                    renderAndPrepareDownload();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
