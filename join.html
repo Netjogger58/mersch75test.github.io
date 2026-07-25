@@ -551,6 +551,7 @@
                                 <div class="join-family-card-preview" id="family-card-preview" aria-live="polite">
                                     <h3 data-i18n="joinMembersCards">Memberskaarten</h3>
                                     <p class="join-helper-text" data-i18n="joinMembersCardHint">D'Memberskaart mam QR-Code gëtt intern am Secretariat virbereet an eréischt no Bezuelung vum Membersbeitrag un den Demandeur geschéckt.</p>
+                                    <p class="join-helper-text sponsor-card-hint">Memberskaarten mat Card-ID fir fräien Entrée fir eis Sponsore ginn nëmme vum Komité ausgestallt.</p>
                                 </div>
                             </div>
 
@@ -887,7 +888,9 @@
             const total = getFamilyMemberCount();
             for (let i = 1; i < total; i++) {
                 const roleEl = document.getElementById('FamilyMember' + i + 'Role');
-                if (roleEl && roleEl.value === 'Joueur / Joueuse') count++;
+                const sameAddrEl = document.getElementById('FamilyMember' + i + 'SameAddress');
+                const sameAddr = sameAddrEl ? (sameAddrEl.checked ? 'Oui' : 'Non') : 'Oui';
+                if (roleEl && roleEl.value === 'Joueur / Joueuse' && sameAddr === 'Oui') count++;
             }
         }
         return count;
@@ -1199,6 +1202,15 @@
                 '</div>' +
                 '<div class="m75-row-3" style="margin-top:10px;">' +
                     '<div class="join-form-group">' +
+                        '<label for="FamilyMember' + i + 'Relation">' + (t.familyRelation || 'Relatioun') + '</label>' +
+                        '<select id="FamilyMember' + i + 'Relation" name="FamilyMember' + i + 'Relation" required>' +
+                            '<option value="Partner / Partnerin">' + (t.familyRelPartner || 'Partner / Partnerin') + '</option>' +
+                            '<option value="Elterendeel / Erzéiungsberechtegten">' + (t.familyRelParent || 'Elterendeel / Erzéiungsberechtegten') + '</option>' +
+                            '<option value="Kand">' + (t.familyRelChild || 'Kand') + '</option>' +
+                            '<option value="Familljemember selwecht Adress">' + (t.familyRelMember || 'Familljemember selwecht Adress') + '</option>' +
+                        '</select>' +
+                    '</div>' +
+                    '<div class="join-form-group">' +
                         '<label for="FamilyMember' + i + 'Basis">' + t.familyBasis + '</label>' +
                         '<select id="FamilyMember' + i + 'Basis" name="FamilyMember' + i + 'Basis" required>' +
                             '<option value="Garçons - Hommes">' + t.familyBasisM + '</option>' +
@@ -1209,6 +1221,8 @@
                         '<label>' + t.familyCatAuto + '</label>' +
                         '<strong id="FamilyMember' + i + 'CatText">-</strong>' +
                     '</div>' +
+                '</div>' +
+                '<div class="m75-row-3" style="margin-top:10px;">' +
                     '<div class="join-form-group">' +
                         '<label for="FamilyMember' + i + 'Role">' + t.role + '</label>' +
                         '<select id="FamilyMember' + i + 'Role" name="FamilyMember' + i + 'Role" required>' +
@@ -1218,8 +1232,6 @@
                             '<option value="Bénévole / Contact Famille">' + t.benevole + '</option>' +
                         '</select>' +
                     '</div>' +
-                '</div>' +
-                '<div class="m75-row-3" style="margin-top:10px;">' +
                     '<div class="join-form-group">' +
                         '<label for="FamilyMember' + i + 'Gsm">' + t.gsm1 + '</label>' +
                         '<input type="text" id="FamilyMember' + i + 'Gsm" name="FamilyMember' + i + 'Gsm" autocomplete="tel">' +
@@ -1227,6 +1239,26 @@
                     '<div class="join-form-group">' +
                         '<label for="FamilyMember' + i + 'Email">' + t.email + '</label>' +
                         '<input type="email" id="FamilyMember' + i + 'Email" name="FamilyMember' + i + 'Email" autocomplete="email">' +
+                    '</div>' +
+                '</div>' +
+                '<div class="m75-row-3" style="margin-top:10px;">' +
+                    '<div class="join-form-group join-checkbox-row">' +
+                        '<input type="checkbox" id="FamilyMember' + i + 'SameAddress" name="FamilyMember' + i + 'SameAddress" value="Oui" checked>' +
+                        '<label for="FamilyMember' + i + 'SameAddress">' + (t.sameAddress || 'Sellaen Adress wéi Demandeur 1') + '</label>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="m75-row-3 member-address-row" id="FamilyMember' + i + 'AddressRow" style="display:none; margin-top:10px;">' +
+                    '<div class="join-form-group">' +
+                        '<label for="FamilyMember' + i + 'Strasse">' + t.strasse + '</label>' +
+                        '<input type="text" id="FamilyMember' + i + 'Strasse" name="FamilyMember' + i + 'Strasse" autocomplete="street-address">' +
+                    '</div>' +
+                    '<div class="join-form-group">' +
+                        '<label for="FamilyMember' + i + 'Postcode">' + t.postcode + '</label>' +
+                        '<input type="text" id="FamilyMember' + i + 'Postcode" name="FamilyMember' + i + 'Postcode" autocomplete="postal-code">' +
+                    '</div>' +
+                    '<div class="join-form-group">' +
+                        '<label for="FamilyMember' + i + 'Ortschaft">' + t.ortschaft + '</label>' +
+                        '<input type="text" id="FamilyMember' + i + 'Ortschaft" name="FamilyMember' + i + 'Ortschaft" autocomplete="address-level2">' +
                     '</div>' +
                 '</div>' +
                 '<input type="hidden" id="FamilyMember' + i + 'Cotisation" name="FamilyMember' + i + 'Cotisation" value="">' +
@@ -1288,6 +1320,30 @@
                         updateFamilySummary();
                     });
                 }
+                // Same address toggle for partner / family member
+                var sameAddr = document.getElementById('FamilyMember' + idx + 'SameAddress');
+                var addrRow = document.getElementById('FamilyMember' + idx + 'AddressRow');
+                var strasseEl = document.getElementById('FamilyMember' + idx + 'Strasse');
+                var postcodeEl = document.getElementById('FamilyMember' + idx + 'Postcode');
+                var ortschaftEl = document.getElementById('FamilyMember' + idx + 'Ortschaft');
+                function updateSameAddress() {
+                    var checked = sameAddr && sameAddr.checked;
+                    if (addrRow) addrRow.style.display = checked ? 'none' : 'block';
+                    if (checked) {
+                        if (strasseEl) { strasseEl.value = getValue('Strasse'); strasseEl.disabled = true; }
+                        if (postcodeEl) { postcodeEl.value = getValue('Postcode'); postcodeEl.disabled = true; }
+                        if (ortschaftEl) { ortschaftEl.value = getValue('Ortschaft'); ortschaftEl.disabled = true; }
+                    } else {
+                        if (strasseEl) strasseEl.disabled = false;
+                        if (postcodeEl) postcodeEl.disabled = false;
+                        if (ortschaftEl) ortschaftEl.disabled = false;
+                    }
+                }
+                if (sameAddr) {
+                    sameAddr.addEventListener('change', function() { updateSameAddress(); updateFamilySummary(); });
+                    updateSameAddress();
+                }
+
                 // Role change: hide matching extra-role checkbox
                 var roleSel = document.getElementById('FamilyMember' + idx + 'Role');
                 if (roleSel) {
@@ -1360,6 +1416,8 @@
                 categorie: getValue('FamilyMember' + i + 'Categorie'),
                 mineur: getValue('FamilyMember' + i + 'Mineur'),
                 role: getValue('FamilyMember' + i + 'Role'),
+                relation: getValue('FamilyMember' + i + 'Relation'),
+                sameAddress: getCheckedValue('FamilyMember' + i + 'SameAddress'),
                 alsoJoueur: getCheckedValue('FamilyMember' + i + 'AlsoJoueur'),
                 alsoArbitre: getCheckedValue('FamilyMember' + i + 'AlsoArbitre'),
                 alsoOfficiel: getCheckedValue('FamilyMember' + i + 'AlsoOfficiel'),
@@ -1429,16 +1487,17 @@
 
         if (getCheckedValue('FamilleFlag') === 'Oui') {
             getFamilyMembers().forEach(function(member, index) {
+                var memberAddress = [member.strasse, member.postcode, member.ortschaft].filter(Boolean).join(', ') || address;
                 records.push({
                     number: index + 2,
                     cardId: ensureFamilyMemberCardId(index + 2),
                     name: (member.nom || '') + ' ' + (member.prenom || '-'),
-                    relation: member.role || '-',
+                    relation: member.relation || member.role || '-',
                     dob: member.dob || '-',
                     cns: member.cns13 || '-',
                     role: member.role || '-',
-                    cotisation: member.cotisation || '-',
-                    address: address || '-'
+                    cotisation: member.cotisation || getValue('Cotisation') || '-',
+                    address: memberAddress || '-'
                 });
             });
         }
