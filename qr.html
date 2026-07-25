@@ -98,6 +98,14 @@
             justify-content: center;
         }
 
+        #qrcode img,
+        #qrcode canvas {
+            max-width: 100%;
+            max-height: 320px;
+            width: auto;
+            height: auto;
+        }
+
         .home-link {
             display: block;
             text-align: center;
@@ -195,7 +203,7 @@
         </div>
 
         <button id="generate-btn">QR Code generéieren</button>
-        <a id="download-btn" class="download-link hidden" download="mersch75-qrcode.png">QR Code eroflueden</a>
+        <a id="download-btn" class="download-link hidden" download="mersch75-qrcode-4k.png">QR Code (4K) eroflueden</a>
 
         <div id="qrcode"></div>
 
@@ -277,8 +285,8 @@
 
                 let options = {
                     text: qrString,
-                    width: 256,
-                    height: 256,
+                    width: 4096,
+                    height: 4096,
                     colorDark: '#000000',
                     colorLight: '#ffffff',
                     correctLevel: QRCode.CorrectLevel.H,
@@ -294,8 +302,8 @@
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         options.logo = e.target.result;
-                        options.logoWidth = 64;
-                        options.logoHeight = 64;
+                        options.logoWidth = 1024;
+                        options.logoHeight = 1024;
                         options.logoBackgroundTransparent = true;
                         renderAndPrepareDownload();
                     };
