@@ -1172,38 +1172,11 @@
         for (let i = 1; i < total; i++) {
             blocks.push('<div class="join-family-member-card">' +
                 '<strong>Demandeur ' + (i + 1) + '</strong>' +
-                '<div class="m75-row-3">' +
-                    '<div class="join-form-group">' +
-                        '<label for="FamilyMember' + i + 'Nom">' + t.nom + '</label>' +
-                        '<input type="text" id="FamilyMember' + i + 'Nom" name="FamilyMember' + i + 'Nom" required>' +
-                    '</div>' +
-                    '<div class="join-form-group">' +
-                        '<label for="FamilyMember' + i + 'Prenom">' + t.prenom + '</label>' +
-                        '<input type="text" id="FamilyMember' + i + 'Prenom" name="FamilyMember' + i + 'Prenom" required>' +
-                    '</div>' +
-                    '<div class="join-form-group">' +
-                        '<label for="FamilyMember' + i + 'Cns13">' + t.familyCns13 + '</label>' +
-                        '<input type="text" id="FamilyMember' + i + 'Cns13" name="FamilyMember' + i + 'Cns13" inputmode="numeric" pattern="[0-9]{13}" maxlength="13" required>' +
-                    '</div>' +
-                '</div>' +
-                '<div class="m75-row-3" style="margin-top:10px;">' +
-                    '<div class="join-form-group">' +
-                        '<label for="FamilyMember' + i + 'Langue">' + (t.langue || 'SPROOCH *') + '</label>' +
-                        '<select id="FamilyMember' + i + 'Langue" name="FamilyMember' + i + 'Langue" required><option value="lu">LU</option><option value="fr">FR</option><option value="de">DE</option><option value="en">EN</option><option value="pt">PT</option></select>' +
-                    '</div>' +
-                    '<div class="join-form-group">' +
-                        '<label for="FamilyMember' + i + 'Nat">' + t.nat + '</label>' +
-                        '<input type="text" id="FamilyMember' + i + 'Nat" name="FamilyMember' + i + 'Nat" list="nationalite-list" autocomplete="country-name" required>' +
-                    '</div>' +
-                    '<div class="join-form-group">' +
-                        '<label for="FamilyMember' + i + 'Club">' + t.club + '</label>' +
-                        '<input type="text" id="FamilyMember' + i + 'Club" name="FamilyMember' + i + 'Club" required>' +
-                    '</div>' +
-                '</div>' +
                 '<div class="m75-row-3" style="margin-top:10px;">' +
                     '<div class="join-form-group">' +
                         '<label for="FamilyMember' + i + 'Relation">' + (t.familyRelation || 'Relatioun') + '</label>' +
                         '<select id="FamilyMember' + i + 'Relation" name="FamilyMember' + i + 'Relation" required>' +
+                            '<option value="" disabled selected>' + (t.familyRelChoose || '-- Wielt --') + '</option>' +
                             '<option value="Partner / Partnerin">' + (t.familyRelPartner || 'Partner / Partnerin') + '</option>' +
                             '<option value="Elterendeel / Erzéiungsberechtegten">' + (t.familyRelParent || 'Elterendeel / Erzéiungsberechtegten') + '</option>' +
                             '<option value="Kand">' + (t.familyRelChild || 'Kand') + '</option>' +
@@ -1211,54 +1184,91 @@
                         '</select>' +
                     '</div>' +
                     '<div class="join-form-group">' +
-                        '<label for="FamilyMember' + i + 'Basis">' + t.familyBasis + '</label>' +
-                        '<select id="FamilyMember' + i + 'Basis" name="FamilyMember' + i + 'Basis" required>' +
-                            '<option value="Garçons - Hommes">' + t.familyBasisM + '</option>' +
-                            '<option value="Filles - Femmes">' + t.familyBasisF + '</option>' +
-                        '</select>' +
-                    '</div>' +
-                    '<div class="join-form-group join-family-cat-display" id="FamilyMember' + i + 'CatDisplay">' +
-                        '<label>' + t.familyCatAuto + '</label>' +
-                        '<strong id="FamilyMember' + i + 'CatText">-</strong>' +
-                    '</div>' +
-                '</div>' +
-                '<div class="m75-row-3" style="margin-top:10px;">' +
-                    '<div class="join-form-group">' +
                         '<label for="FamilyMember' + i + 'Role">' + t.role + '</label>' +
                         '<select id="FamilyMember' + i + 'Role" name="FamilyMember' + i + 'Role" required>' +
+                            '<option value="" disabled selected>' + (t.familyRoleChoose || '-- Wielt --') + '</option>' +
                             '<option value="Joueur / Joueuse">' + t.joueur + '</option>' +
                             '<option value="Arbitre">' + t.arbitre + '</option>' +
                             '<option value="Officiel(le)">' + t.officiel + '</option>' +
                             '<option value="Bénévole / Contact Famille">' + t.benevole + '</option>' +
                         '</select>' +
                     '</div>' +
-                    '<div class="join-form-group">' +
-                        '<label for="FamilyMember' + i + 'Gsm">' + t.gsm1 + '</label>' +
-                        '<input type="text" id="FamilyMember' + i + 'Gsm" name="FamilyMember' + i + 'Gsm" autocomplete="tel">' +
-                    '</div>' +
-                    '<div class="join-form-group">' +
-                        '<label for="FamilyMember' + i + 'Email">' + t.email + '</label>' +
-                        '<input type="email" id="FamilyMember' + i + 'Email" name="FamilyMember' + i + 'Email" autocomplete="email">' +
-                    '</div>' +
                 '</div>' +
-                '<div class="m75-row-3" style="margin-top:10px;">' +
-                    '<div class="join-form-group join-checkbox-row">' +
-                        '<input type="checkbox" id="FamilyMember' + i + 'SameAddress" name="FamilyMember' + i + 'SameAddress" value="Oui" checked>' +
-                        '<label for="FamilyMember' + i + 'SameAddress">' + (t.sameAddress || 'Sellaen Adress wéi Demandeur 1') + '</label>' +
+                '<div class="member-details-box" id="FamilyMember' + i + 'Details" style="display:none;">' +
+                    '<div class="m75-row-3" style="margin-top:10px;">' +
+                        '<div class="join-form-group">' +
+                            '<label for="FamilyMember' + i + 'Nom">' + t.nom + '</label>' +
+                            '<input type="text" id="FamilyMember' + i + 'Nom" name="FamilyMember' + i + 'Nom" required disabled>' +
+                        '</div>' +
+                        '<div class="join-form-group">' +
+                            '<label for="FamilyMember' + i + 'Prenom">' + t.prenom + '</label>' +
+                            '<input type="text" id="FamilyMember' + i + 'Prenom" name="FamilyMember' + i + 'Prenom" required disabled>' +
+                        '</div>' +
                     '</div>' +
-                '</div>' +
-                '<div class="m75-row-3 member-address-row" id="FamilyMember' + i + 'AddressRow" style="display:none; margin-top:10px;">' +
-                    '<div class="join-form-group">' +
-                        '<label for="FamilyMember' + i + 'Strasse">' + t.strasse + '</label>' +
-                        '<input type="text" id="FamilyMember' + i + 'Strasse" name="FamilyMember' + i + 'Strasse" autocomplete="street-address">' +
+                    '<div class="member-player-fields" id="FamilyMember' + i + 'PlayerFields" style="display:none;">' +
+                        '<div class="m75-row-3" style="margin-top:10px;">' +
+                            '<div class="join-form-group">' +
+                                '<label for="FamilyMember' + i + 'Cns13">' + t.familyCns13 + '</label>' +
+                                '<input type="text" id="FamilyMember' + i + 'Cns13" name="FamilyMember' + i + 'Cns13" inputmode="numeric" pattern="[0-9]{13}" maxlength="13" required disabled>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="m75-row-3" style="margin-top:10px;">' +
+                            '<div class="join-form-group">' +
+                                '<label for="FamilyMember' + i + 'Langue">' + (t.langue || 'SPROOCH *') + '</label>' +
+                                '<select id="FamilyMember' + i + 'Langue" name="FamilyMember' + i + 'Langue" required disabled><option value="lu">LU</option><option value="fr">FR</option><option value="de">DE</option><option value="en">EN</option><option value="pt">PT</option></select>' +
+                            '</div>' +
+                            '<div class="join-form-group">' +
+                                '<label for="FamilyMember' + i + 'Nat">' + t.nat + '</label>' +
+                                '<input type="text" id="FamilyMember' + i + 'Nat" name="FamilyMember' + i + 'Nat" list="nationalite-list" autocomplete="country-name" required disabled>' +
+                            '</div>' +
+                            '<div class="join-form-group">' +
+                                '<label for="FamilyMember' + i + 'Club">' + t.club + '</label>' +
+                                '<input type="text" id="FamilyMember' + i + 'Club" name="FamilyMember' + i + 'Club" required disabled>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="m75-row-3" style="margin-top:10px;">' +
+                            '<div class="join-form-group">' +
+                                '<label for="FamilyMember' + i + 'Basis">' + t.familyBasis + '</label>' +
+                                '<select id="FamilyMember' + i + 'Basis" name="FamilyMember' + i + 'Basis" required disabled>' +
+                                    '<option value="Garçons - Hommes">' + t.familyBasisM + '</option>' +
+                                    '<option value="Filles - Femmes">' + t.familyBasisF + '</option>' +
+                                '</select>' +
+                            '</div>' +
+                            '<div class="join-form-group join-family-cat-display" id="FamilyMember' + i + 'CatDisplay">' +
+                                '<label>' + t.familyCatAuto + '</label>' +
+                                '<strong id="FamilyMember' + i + 'CatText">-</strong>' +
+                            '</div>' +
+                        '</div>' +
                     '</div>' +
-                    '<div class="join-form-group">' +
-                        '<label for="FamilyMember' + i + 'Postcode">' + t.postcode + '</label>' +
-                        '<input type="text" id="FamilyMember' + i + 'Postcode" name="FamilyMember' + i + 'Postcode" autocomplete="postal-code">' +
+                    '<div class="m75-row-3" style="margin-top:10px;">' +
+                        '<div class="join-form-group">' +
+                            '<label for="FamilyMember' + i + 'Gsm">' + t.gsm1 + '</label>' +
+                            '<input type="text" id="FamilyMember' + i + 'Gsm" name="FamilyMember' + i + 'Gsm" autocomplete="tel" disabled>' +
+                        '</div>' +
+                        '<div class="join-form-group">' +
+                            '<label for="FamilyMember' + i + 'Email">' + t.email + '</label>' +
+                            '<input type="email" id="FamilyMember' + i + 'Email" name="FamilyMember' + i + 'Email" autocomplete="email" disabled>' +
+                        '</div>' +
                     '</div>' +
-                    '<div class="join-form-group">' +
-                        '<label for="FamilyMember' + i + 'Ortschaft">' + t.ortschaft + '</label>' +
-                        '<input type="text" id="FamilyMember' + i + 'Ortschaft" name="FamilyMember' + i + 'Ortschaft" autocomplete="address-level2">' +
+                    '<div class="m75-row-3" style="margin-top:10px;">' +
+                        '<div class="join-form-group join-checkbox-row">' +
+                            '<input type="checkbox" id="FamilyMember' + i + 'SameAddress" name="FamilyMember' + i + 'SameAddress" value="Oui" checked disabled>' +
+                            '<label for="FamilyMember' + i + 'SameAddress">' + (t.sameAddress || 'Sellaen Adress wéi Demandeur 1') + '</label>' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="m75-row-3 member-address-row" id="FamilyMember' + i + 'AddressRow" style="display:none; margin-top:10px;">' +
+                        '<div class="join-form-group">' +
+                            '<label for="FamilyMember' + i + 'Strasse">' + t.strasse + '</label>' +
+                            '<input type="text" id="FamilyMember' + i + 'Strasse" name="FamilyMember' + i + 'Strasse" autocomplete="street-address" disabled>' +
+                        '</div>' +
+                        '<div class="join-form-group">' +
+                            '<label for="FamilyMember' + i + 'Postcode">' + t.postcode + '</label>' +
+                            '<input type="text" id="FamilyMember' + i + 'Postcode" name="FamilyMember' + i + 'Postcode" autocomplete="postal-code" disabled>' +
+                        '</div>' +
+                        '<div class="join-form-group">' +
+                            '<label for="FamilyMember' + i + 'Ortschaft">' + t.ortschaft + '</label>' +
+                            '<input type="text" id="FamilyMember' + i + 'Ortschaft" name="FamilyMember' + i + 'Ortschaft" autocomplete="address-level2" disabled>' +
+                        '</div>' +
                     '</div>' +
                 '</div>' +
                 '<input type="hidden" id="FamilyMember' + i + 'Cotisation" name="FamilyMember' + i + 'Cotisation" value="">' +
@@ -1270,9 +1280,68 @@
         }
 
         container.innerHTML = blocks.join('');
-        // Attach CNS13 input listeners for each family member
+        // Attach listeners for each family member
         for (let i = 1; i < total; i++) {
             (function(idx) {
+                function updateSameAddressState() {
+                    var sameAddr = document.getElementById('FamilyMember' + idx + 'SameAddress');
+                    var addrRow = document.getElementById('FamilyMember' + idx + 'AddressRow');
+                    var strasseEl = document.getElementById('FamilyMember' + idx + 'Strasse');
+                    var postcodeEl = document.getElementById('FamilyMember' + idx + 'Postcode');
+                    var ortschaftEl = document.getElementById('FamilyMember' + idx + 'Ortschaft');
+                    if (!sameAddr) return;
+                    var checked = sameAddr.checked;
+                    if (addrRow) addrRow.style.display = checked ? 'none' : 'block';
+                    if (checked) {
+                        if (strasseEl) { strasseEl.value = getValue('Strasse'); strasseEl.disabled = true; }
+                        if (postcodeEl) { postcodeEl.value = getValue('Postcode'); postcodeEl.disabled = true; }
+                        if (ortschaftEl) { ortschaftEl.value = getValue('Ortschaft'); ortschaftEl.disabled = true; }
+                    } else {
+                        if (strasseEl) { strasseEl.disabled = false; if (!strasseEl.value) strasseEl.value = getValue('Strasse'); }
+                        if (postcodeEl) { postcodeEl.disabled = false; if (!postcodeEl.value) postcodeEl.value = getValue('Postcode'); }
+                        if (ortschaftEl) { ortschaftEl.disabled = false; if (!ortschaftEl.value) ortschaftEl.value = getValue('Ortschaft'); }
+                    }
+                }
+
+                function updateMemberDetails() {
+                    var roleSel = document.getElementById('FamilyMember' + idx + 'Role');
+                    var details = document.getElementById('FamilyMember' + idx + 'Details');
+                    var playerFields = document.getElementById('FamilyMember' + idx + 'PlayerFields');
+                    var role = roleSel ? roleSel.value : '';
+                    var isPlayer = role === 'Joueur / Joueuse' || role === 'Arbitre';
+                    var isContact = role === 'Officiel(le)' || role === 'Bénévole / Contact Famille';
+                    var active = role && (isPlayer || isContact);
+
+                    if (details) details.style.display = active ? 'block' : 'none';
+                    if (playerFields) playerFields.style.display = isPlayer ? 'block' : 'none';
+
+                    if (details) {
+                        var fields = details.querySelectorAll('input, select');
+                        fields.forEach(function(el) {
+                            if (!active) {
+                                el.disabled = true;
+                            } else {
+                                var inPlayer = playerFields && playerFields.contains(el);
+                                el.disabled = isContact && inPlayer;
+                            }
+                        });
+                    }
+
+                    updateSameAddressState();
+                    updateFamilySummary();
+                    suggestTarif();
+                }
+
+                var roleSel = document.getElementById('FamilyMember' + idx + 'Role');
+                if (roleSel) {
+                    roleSel.addEventListener('change', updateMemberDetails);
+                }
+
+                var sameAddr = document.getElementById('FamilyMember' + idx + 'SameAddress');
+                if (sameAddr) {
+                    sameAddr.addEventListener('change', function() { updateSameAddressState(); updateFamilySummary(); });
+                }
+
                 var cnsInput = document.getElementById('FamilyMember' + idx + 'Cns13');
                 if (cnsInput) {
                     cnsInput.addEventListener('input', function() {
@@ -1286,30 +1355,22 @@
                         if (parsed) {
                             dobEl.value = parsed.dob;
                             cnsEl.value = parsed.cns5;
-                            var basis = document.getElementById('FamilyMember' + idx + 'Basis');
-                            var genderKey = basis && basis.value === 'Filles - Femmes' ? 'female' : 'male';
-                            var cat = getFlhCategoryByBirthYearAndGender(parsed.year, genderKey);
-                            catEl.value = cat;
-                            catText.innerText = cat || '-';
-                            var age = calculateAgeOnDate(parsed.day, parsed.month, parsed.year, new Date());
-                            mineurEl.value = age < 18 ? 'OUI' : 'NON';
-                            // Zousätzlech Rollen nëmme fir >= 16 Joer
-                            var extraRow = document.getElementById('FamilyMember' + idx + 'ExtraRoles');
-                            if (extraRow) extraRow.style.display = (age >= 16) ? '' : 'none';
-                        } else {
-                            dobEl.value = '';
-                            cnsEl.value = '';
                             catEl.value = '';
-                            catText.innerText = '-';
-                            mineurEl.value = '';
+                            if (mineurEl) mineurEl.value = parsed.year >= (new Date().getFullYear() - 18) ? 'OUI' : 'NON';
+                        } else {
+                            if (dobEl) dobEl.value = '';
+                            if (cnsEl) cnsEl.value = '';
+                            if (catEl) catEl.value = '';
+                            if (mineurEl) mineurEl.value = 'NON';
                         }
+                        if (catText) catText.innerText = (catEl && catEl.value) || '-';
                         updateFamilySummary();
                     });
                 }
                 var basisSel = document.getElementById('FamilyMember' + idx + 'Basis');
                 if (basisSel) {
                     basisSel.addEventListener('change', function() {
-                        var cns13 = document.getElementById('FamilyMember' + idx + 'Cns13').value;
+                        var cns13 = getValue('FamilyMember' + idx + 'Cns13');
                         var parsed = parseCns13(cns13);
                         if (parsed) {
                             var genderKey = this.value === 'Filles - Femmes' ? 'female' : 'male';
@@ -1320,65 +1381,8 @@
                         updateFamilySummary();
                     });
                 }
-                // Same address toggle for partner / family member
-                var sameAddr = document.getElementById('FamilyMember' + idx + 'SameAddress');
-                var addrRow = document.getElementById('FamilyMember' + idx + 'AddressRow');
-                var strasseEl = document.getElementById('FamilyMember' + idx + 'Strasse');
-                var postcodeEl = document.getElementById('FamilyMember' + idx + 'Postcode');
-                var ortschaftEl = document.getElementById('FamilyMember' + idx + 'Ortschaft');
-                function updateSameAddress() {
-                    var checked = sameAddr && sameAddr.checked;
-                    if (addrRow) addrRow.style.display = checked ? 'none' : 'block';
-                    if (checked) {
-                        if (strasseEl) { strasseEl.value = getValue('Strasse'); strasseEl.disabled = true; }
-                        if (postcodeEl) { postcodeEl.value = getValue('Postcode'); postcodeEl.disabled = true; }
-                        if (ortschaftEl) { ortschaftEl.value = getValue('Ortschaft'); ortschaftEl.disabled = true; }
-                    } else {
-                        if (strasseEl) strasseEl.disabled = false;
-                        if (postcodeEl) postcodeEl.disabled = false;
-                        if (ortschaftEl) ortschaftEl.disabled = false;
-                    }
-                }
-                if (sameAddr) {
-                    sameAddr.addEventListener('change', function() { updateSameAddress(); updateFamilySummary(); });
-                    updateSameAddress();
-                }
-
-                // Role change: hide matching extra-role checkbox
-                var roleSel = document.getElementById('FamilyMember' + idx + 'Role');
-                if (roleSel) {
-                    roleSel.addEventListener('change', function() {
-                        var primary = this.value;
-                        var extraMap = {
-                            'Joueur / Joueuse': 'AlsoJoueur',
-                            'Arbitre': 'AlsoArbitre',
-                            'Officiel(le)': 'AlsoOfficiel',
-                            'Bénévole / Contact Famille': 'AlsoBenevole'
-                        };
-                        Object.keys(extraMap).forEach(function(role) {
-                            var cbId = 'FamilyMember' + idx + extraMap[role];
-                            var cb = document.getElementById(cbId);
-                            if (cb) {
-                                var row = cb.closest('.join-checkbox-row');
-                                if (role === primary) {
-                                    cb.checked = false;
-                                    if (row) row.style.display = 'none';
-                                } else if (role === 'Bénévole / Contact Famille' && primary === 'Joueur / Joueuse') {
-                                    cb.checked = true;
-                                    if (row) row.style.display = 'none';
-                                } else {
-                                    if (row) row.style.display = '';
-                                }
-                            }
-                        });
-                        updateFamilySummary();
-                    });
-                    // Trigger initial hide
-                    roleSel.dispatchEvent(new Event('change'));
-                    // Extra-Rollen am Ufank verstoppen (bis CNS13 aged ginn)
-                    var extraRowInit = document.getElementById('FamilyMember' + idx + 'ExtraRoles');
-                    if (extraRowInit) extraRowInit.style.display = 'none';
-                }
+                // Trigger initial details state
+                updateMemberDetails();
             })(i);
         }
     }
@@ -1406,16 +1410,22 @@
         const members = [];
 
         for (let i = 1; i < total; i++) {
+            const roleEl = document.getElementById('FamilyMember' + i + 'Role');
+            const sameAddrEl = document.getElementById('FamilyMember' + i + 'SameAddress');
+            const role = roleEl ? roleEl.value : '';
+            const isAdult = !!sameAddrEl;
+            const keepFullDetails = !isAdult || role === 'Joueur / Joueuse' || role === 'Arbitre';
+
             members.push({
                 prenom: getValue('FamilyMember' + i + 'Prenom'),
                 nom: getValue('FamilyMember' + i + 'Nom'),
-                cns13: getValue('FamilyMember' + i + 'Cns13'),
-                dob: getValue('FamilyMember' + i + 'Dob'),
-                cns: getValue('FamilyMember' + i + 'Cns'),
-                basis: getValue('FamilyMember' + i + 'Basis'),
-                categorie: getValue('FamilyMember' + i + 'Categorie'),
-                mineur: getValue('FamilyMember' + i + 'Mineur'),
-                role: getValue('FamilyMember' + i + 'Role'),
+                cns13: keepFullDetails ? getValue('FamilyMember' + i + 'Cns13') : '',
+                dob: keepFullDetails ? getValue('FamilyMember' + i + 'Dob') : '',
+                cns: keepFullDetails ? getValue('FamilyMember' + i + 'Cns') : '',
+                basis: keepFullDetails ? getValue('FamilyMember' + i + 'Basis') : '',
+                categorie: keepFullDetails ? getValue('FamilyMember' + i + 'Categorie') : '',
+                mineur: keepFullDetails ? getValue('FamilyMember' + i + 'Mineur') : '',
+                role: role,
                 relation: getValue('FamilyMember' + i + 'Relation'),
                 sameAddress: getCheckedValue('FamilyMember' + i + 'SameAddress'),
                 alsoJoueur: getCheckedValue('FamilyMember' + i + 'AlsoJoueur'),
@@ -1423,10 +1433,10 @@
                 alsoOfficiel: getCheckedValue('FamilyMember' + i + 'AlsoOfficiel'),
                 alsoBenevole: getCheckedValue('FamilyMember' + i + 'AlsoBenevole'),
                 isPlayer: getCheckedValue('FamilyMember' + i + 'IsPlayer'),
-                cotisation: getValue('FamilyMember' + i + 'Cotisation'),
-                nationalite: getValue('FamilyMember' + i + 'Nat'),
-                medico: getValue('FamilyMember' + i + 'Medico'),
-                club: getValue('FamilyMember' + i + 'Club'),
+                cotisation: keepFullDetails ? getValue('FamilyMember' + i + 'Cotisation') : '',
+                nationalite: keepFullDetails ? getValue('FamilyMember' + i + 'Nat') : '',
+                medico: keepFullDetails ? getValue('FamilyMember' + i + 'Medico') : '',
+                club: keepFullDetails ? getValue('FamilyMember' + i + 'Club') : '',
                 gsm: getValue('FamilyMember' + i + 'Gsm'),
                 email: getValue('FamilyMember' + i + 'Email'),
                 strasse: getValue('FamilyMember' + i + 'Strasse'),
@@ -1611,8 +1621,8 @@
         const lblEmail = document.getElementById('lbl-email');
         const ui = MERSCH75_UI_TEXTS[currentLang] || MERSCH75_UI_TEXTS.lu;
 
-        tuteur1.required = isMinor;
-        tuteur2.required = isMinor && parentIsole.value !== 'OUI';
+        if (tuteur1) tuteur1.required = false;
+        if (tuteur2) tuteur2.required = false;
         u7Cert.required = category === 'U7';
 
         const isYoung = /^U(7|9|11)$/.test(category);
@@ -1621,9 +1631,8 @@
         if (lblGsm1) lblGsm1.innerText = isYoung ? (ui.gsm1 ? ui.gsm1.replace(' *', '') : 'GSM 1') : (ui.gsm1 || 'GSM 1 *');
         if (lblEmail) lblEmail.innerText = isYoung ? (ui.email ? ui.email.replace(' *', '') : 'E-Mail') : (ui.email || 'E-Mail *');
 
-        document.getElementById('parent-section').style.display = isMinor ? 'block' : 'none';
+        document.getElementById('parent-section').style.display = 'none';
         document.getElementById('u7-section').style.display = category === 'U7' ? 'flex' : 'none';
-        document.getElementById('tuteur2-wrap').style.display = parentIsole.value === 'OUI' ? 'none' : 'block';
 
         if (!isMinor) {
             tuteur1.value = '';
@@ -1887,11 +1896,6 @@
         lines.push(text.city + ': ' + getValue('Ortschaft'));
         lines.push('----------------------------------------');
         lines.push(text.minor + ': ' + document.getElementById('Mineur').value);
-
-        if (document.getElementById('Mineur').value === 'OUI') {
-            lines.push(text.singleParent + ': ' + document.getElementById('ParentIsole').value);
-            lines.push(text.guardians + ': ' + getGuardianText());
-        }
 
         lines.push('U7: ' + getCheckedValue('U7Cert'));
         lines.push(text.club + ': ' + getValue('AncienClub'));
