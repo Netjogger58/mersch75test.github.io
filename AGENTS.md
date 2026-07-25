@@ -31,6 +31,7 @@
 - Prefer repository conventions over inventing new ones.
 
 ## Join → Google Sheet Automation (join.html)
+- Source file on GitHub: <https://github.com/Netjogger58/mersch75test.github.io/blob/main/join.html> · Live page: <https://mersch75.lu/join.html>
 - `join.html` posts new registrations to a Google Apps Script Web App that writes rows into a Google-Sheet master; column **C** = `Random-No` (from `generateCardInternalId`, alphabet `ABCDEFGHJKLMNPQRSTUVWXYZ23456789`), with a server-side uniqueness/collision check.
 - Config constants in `join.html`: `MERSCH75_SHEET_ENDPOINT` (Apps Script deploy URL), `MERSCH75_SHEET_TOKEN` (`m75-join-9f36-secure-2026`), `MERSCH75_WEB3FORMS_TEST_KEY`, `MERSCH75_SHEET_PRODUCTION` (false during test phase).
 - **Test mode:** if the surname (`Nom`) contains `TEST`, all Web3Forms mails go only to `m75.deisad@gmail.com` (never Secrétaire/Max); minors trigger 2 mails. Sheet writes go only to the Adrien test master and rows are marked `TEST`.

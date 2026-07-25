@@ -5,6 +5,8 @@ Automatiséiert d'Umeldung vun `join.html` esou datt all neit Member direkt an d
 ## Ausgangslag (wat elo existéiert) — korrigéiert
 
 - `join.html` (Repo `Netjogger58/mersch75test.github.io`) ass eng statesch GitHub-Pages-Säit.
+  - Quellfichier op GitHub: <https://github.com/Netjogger58/mersch75test.github.io/blob/main/join.html>
+  - Live-URL: <https://mersch75.lu/join.html>
 - Beim Ofschécke ginn iwwer **Web3Forms** (`api.web3forms.com`) **zwou E-Mailen** verschéckt:
   - **E-Mail 1** — Franséisch, un den **Haaptschlëssel** (`MAIN_KEY`), **inkl. Lizenz-Link** fir d'FLH.
   - **E-Mail 2** — Däitsch, interne Kopie un de **sekundäre Schlëssel** (Max, `Max.hbm75@gmail.com`); de Betreff kritt de Prefix `MINDERJAEHRIG -` wann de Member **mannerjäreg** ass (`Mineur = OUI`, aktuell Alter < 18).
