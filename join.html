@@ -1775,7 +1775,8 @@
         document.getElementById('lbl-ortschaft').innerText = ui.ortschaft;
         document.getElementById('lbl-email').innerText = ui.email;
         document.getElementById('lbl-gsm1').innerText = ui.gsm1;
-        document.getElementById('lbl-gsm2').innerText = ui.gsm2;
+        var lblGsm2 = document.getElementById('lbl-gsm2');
+        if (lblGsm2) lblGsm2.innerText = ui.gsm2;
         // Section titles
         var secPerson = document.getElementById('m75-title-person');
         if (secPerson) secPerson.innerText = ui.secPerson || 'Demandeur 1';
