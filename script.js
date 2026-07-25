@@ -1913,10 +1913,7 @@ function initializeJoinUsForm() {
 
     const updateLanguage = (lang) => {
         const text = translations[lang];
-
-        if (!text) {
-            return;
-        }
+        const ui = (typeof MERSCH75_UI_TEXTS !== 'undefined' && MERSCH75_UI_TEXTS[lang]) ? MERSCH75_UI_TEXTS[lang] : null;
 
         currentLang = lang;
 
@@ -1928,6 +1925,15 @@ function initializeJoinUsForm() {
             button.classList.toggle('is-active', isActive);
             button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
         });
+
+        const familyQuestionLabel = document.getElementById('lbl-family-question');
+        if (familyQuestionLabel && ui && ui.familyQuestion) familyQuestionLabel.textContent = ui.familyQuestion;
+        const familyQuestionHint = document.getElementById('family-question-hint');
+        if (familyQuestionHint && ui && ui.familyQuestionHint) familyQuestionHint.textContent = ui.familyQuestionHint;
+
+        if (!text) {
+            return;
+        }
 
         elements.nomLabel.textContent = text.nom;
         elements.prenomLabel.textContent = text.prenom;
