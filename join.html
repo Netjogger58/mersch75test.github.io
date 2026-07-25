@@ -1095,7 +1095,7 @@
                 function setPlayerMode(active) {
                     if (playerFields) playerFields.style.display = active ? 'block' : 'none';
                     if (title) title.innerText = (active ? (ui.demandeurTitle || 'Demandeur') : (ui.guardianTitle || 'Erzéiungsberechtegten')) + ' ' + idx;
-                    if (roleSel) roleSel.value = active ? 'Joueur / Joueuse' : 'Officiel(le)';
+                    if (roleSel) roleSel.value = active ? 'Joueur / Joueuse' : 'Bénévole / Contact Famille';
                     setGuardianRequired('Cns13', active);
                     setGuardianRequired('Langue', active);
                     setGuardianRequired('Nat', active);
@@ -1309,24 +1309,32 @@
                     var details = document.getElementById('FamilyMember' + idx + 'Details');
                     var playerFields = document.getElementById('FamilyMember' + idx + 'PlayerFields');
                     var role = roleSel ? roleSel.value : '';
-                    var isPlayer = role === 'Joueur / Joueuse' || role === 'Arbitre';
-                    var isContact = role === 'Officiel(le)' || role === 'Bénévole / Contact Famille';
-                    var active = role && (isPlayer || isContact);
+                    var isFull = role === 'Joueur / Joueuse' || role === 'Arbitre' || role === 'Officiel(le)';
+                    var isContact = role === 'Bénévole / Contact Famille';
+                    var active = isFull || isContact;
 
                     if (details) details.style.display = active ? 'block' : 'none';
-                    if (playerFields) playerFields.style.display = isPlayer ? 'block' : 'none';
+                    if (playerFields) playerFields.style.display = isFull ? 'block' : 'none';
 
-                    if (details) {
-                        var fields = details.querySelectorAll('input, select');
-                        fields.forEach(function(el) {
-                            if (!active) {
-                                el.disabled = true;
-                            } else {
-                                var inPlayer = playerFields && playerFields.contains(el);
-                                el.disabled = isContact && inPlayer;
-                            }
-                        });
+                    function setFamilyRequired(id, req, disabled) {
+                        var el = document.getElementById('FamilyMember' + idx + id);
+                        if (!el) return;
+                        el.disabled = disabled;
+                        if (req) el.setAttribute('required', 'required');
+                        else el.removeAttribute('required');
                     }
+
+                    setFamilyRequired('Nom', active, !active);
+                    setFamilyRequired('Prenom', active, !active);
+                    setFamilyRequired('Gsm', active, !active);
+                    setFamilyRequired('Email', active, !active);
+                    setFamilyRequired('Relation', active, !active);
+                    setFamilyRequired('SameAddress', false, !active);
+                    setFamilyRequired('Cns13', isFull, !isFull);
+                    setFamilyRequired('Langue', isFull, !isFull);
+                    setFamilyRequired('Nat', isFull, !isFull);
+                    setFamilyRequired('Club', isFull, !isFull);
+                    setFamilyRequired('Basis', isFull, !isFull);
 
                     updateSameAddressState();
                     updateFamilySummary();
@@ -1415,7 +1423,7 @@
             const sameAddrEl = document.getElementById('FamilyMember' + i + 'SameAddress');
             const role = roleEl ? roleEl.value : '';
             const isAdult = !!sameAddrEl;
-            const keepFullDetails = !isAdult || role === 'Joueur / Joueuse' || role === 'Arbitre';
+            const keepFullDetails = !isAdult || role === 'Joueur / Joueuse' || role === 'Arbitre' || role === 'Officiel(le)';
 
             members.push({
                 prenom: getValue('FamilyMember' + i + 'Prenom'),
@@ -1438,6 +1446,7 @@
                 nationalite: keepFullDetails ? getValue('FamilyMember' + i + 'Nat') : '',
                 medico: keepFullDetails ? getValue('FamilyMember' + i + 'Medico') : '',
                 club: keepFullDetails ? getValue('FamilyMember' + i + 'Club') : '',
+                langue: getValue('FamilyMember' + i + 'Langue') || currentLang,
                 gsm: getValue('FamilyMember' + i + 'Gsm'),
                 email: getValue('FamilyMember' + i + 'Email'),
                 strasse: getValue('FamilyMember' + i + 'Strasse'),
@@ -1998,15 +2007,15 @@
             var fmPayload = {
                 Nom: fm.nom || getValue('Nom'),
                 Prenom: fm.prenom,
-                Email: getValue('Email'),
-                GSM1: getValue('GSM1'),
-                Strasse: getValue('Strasse'),
-                Postcode: getValue('Postcode'),
-                Ortschaft: getValue('Ortschaft'),
+                Email: fm.email || getValue('Email'),
+                GSM1: fm.gsm || getValue('GSM1'),
+                Strasse: fm.strasse || getValue('Strasse'),
+                Postcode: fm.postcode || getValue('Postcode'),
+                Ortschaft: fm.ortschaft || getValue('Ortschaft'),
                 Nationalite: fm.nationalite || getValue('Nationalite'),
                 CNS: fm.cns13 || '',
                 DateNaissance: fm.dob || '',
-                Langue: currentLang,
+                Langue: fm.langue || currentLang,
                 Categorie: fm.categorie || '',
                 Role: fm.role || 'Joueur / Joueuse',
                 RoleAlsoJoueur: fm.alsoJoueur || 'Non',
