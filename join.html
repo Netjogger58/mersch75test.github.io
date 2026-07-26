@@ -636,12 +636,16 @@
                         <div id="success-box" aria-live="polite">
                             <strong>Merci / Danke / Thank you / Obrigado!</strong>
                             <span>Deng Umeldung gouf erfollegraich iwwermettelt.</span>
+                            <div id="success-family-info" style="display:none;margin-top:10px;padding:10px 16px;background:#f0fdf4;border:1px solid #86efac;border-radius:8px;">
+                                <span id="success-family-text" style="font-weight:600;color:#15803d;"></span>
+                            </div>
                             <small>Du kriss eng Bestateigung per E-Mail.</small>
                             <div id="success-card-id-wrap" style="display:none;margin-top:14px;padding:12px 18px;background:#f0f7ff;border:2px dashed #002f65;border-radius:12px;">
                                 <span style="font-weight:700;color:#002f65;" data-i18n="successCardIdLabel">Deng Card-ID / Your Card-ID:</span>
                                 <code id="success-card-id" style="font-size:1.3rem;font-weight:800;letter-spacing:0.12em;color:#002f65;display:block;margin-top:4px;"></code>
                                 <small style="color:#23364a;" data-i18n="successCardIdHint">Notéier der dës Card-ID — si gehéiert zu denger Memberskaart.</small>
                             </div>
+                            <div id="success-family-cards" style="display:none;margin-top:12px;"></div>
                             <a id="welcomeMappLink" class="join-welcome-link" href="wellkomm-mapp.html" target="_blank" rel="noopener"
                                style="display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding:14px 26px;background:linear-gradient(135deg,#fffdf0 0%,#fff6c2 100%);border:2px solid #f9d611;border-radius:999px;color:#002b5c;font-weight:700;text-decoration:none;font-size:1.05rem;box-shadow:0 8px 18px rgba(249,214,17,0.25);">
                                 📖 Wëllkomm-Mapp opmaachen / öffnen / open / abrir
@@ -2625,6 +2629,43 @@
                     const shownCardId = (appMember && appMember.cardId) || ensureCardInternalId();
                     cardIdEl.textContent = shownCardId;
                     cardIdEl.parentElement.style.display = 'block';
+                }
+            } catch (_) { /* non-fatal */ }
+
+            // Famillje-Info uweisen (wéi vill Memberen ugemellt goufen)
+            try {
+                var isFamily = getCheckedValue('FamilleFlag') === 'Oui';
+                var familyMembers = getFamilyMembers();
+                var totalMembers = isFamily ? (1 + familyMembers.filter(function(fm) { return fm.prenom && fm.prenom.trim(); }).length) : 1;
+                var familyInfo = document.getElementById('success-family-info');
+                var familyText = document.getElementById('success-family-text');
+                var familyCardsDiv = document.getElementById('success-family-cards');
+                if (isFamily && totalMembers > 1 && familyInfo && familyText) {
+                    var langTexts = {
+                        lu: totalMembers + ' Memberen goufen ugemellt (du + ' + (totalMembers - 1) + ' Familljememberen).',
+                        fr: totalMembers + ' membres ont été inscrits (vous + ' + (totalMembers - 1) + ' membres de la famille).',
+                        de: totalMembers + ' Mitglieder wurden angemeldet (du + ' + (totalMembers - 1) + ' Familienmitglieder).',
+                        en: totalMembers + ' members have been registered (you + ' + (totalMembers - 1) + ' family members).',
+                        pt: totalMembers + ' membros foram inscritos (você + ' + (totalMembers - 1) + ' membros da família).'
+                    };
+                    familyText.innerText = langTexts[currentLang] || langTexts.lu;
+                    familyInfo.style.display = 'block';
+
+                    // Card-IDen vun all Familljemember uweisen
+                    if (familyCardsDiv) {
+                        var cardsHtml = '<div style="font-weight:700;color:#002f65;margin-bottom:6px;">Card-IDen vun all Familljemember:</div>';
+                        cardsHtml += '<div style="display:flex;flex-wrap:wrap;gap:8px;">';
+                        cardsHtml += '<div style="padding:6px 12px;background:#f0f7ff;border:1px solid #002f65;border-radius:6px;"><b>' + (document.getElementById('Prenom').value || '') + '</b>: <code style="font-weight:800;letter-spacing:0.1em;">' + ((appMember && appMember.cardId) || ensureCardInternalId()) + '</code></div>';
+                        for (var fi = 0; fi < familyMembers.length; fi++) {
+                            var fm = familyMembers[fi];
+                            if (!fm.prenom || !fm.prenom.trim()) continue;
+                            var fmCard = ensureFamilyMemberCardId(fi + 1);
+                            cardsHtml += '<div style="padding:6px 12px;background:#f0f7ff;border:1px solid #002f65;border-radius:6px;"><b>' + fm.prenom + '</b>: <code style="font-weight:800;letter-spacing:0.1em;">' + fmCard + '</code></div>';
+                        }
+                        cardsHtml += '</div>';
+                        familyCardsDiv.innerHTML = cardsHtml;
+                        familyCardsDiv.style.display = 'block';
+                    }
                 }
             } catch (_) { /* non-fatal */ }
 
