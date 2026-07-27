@@ -249,7 +249,7 @@
         function parseMemberFromText(text) {
             const cardId = extractCardId(text);
             const name = extractLine(text, ['Haaptlizenséierten', 'Haaptlizenzéierten', 'DEMANDEUR', 'ANTRAGSTELLER', 'Nom', 'Name']) || '';
-            const category = extractLine(text, ['COTISATIOUN 2025-2026', 'Kategorie', 'CATEGORIE FLH', 'FLH KATEGORIE']) || '';
+            const category = extractLine(text, ['COTISATIOUN 2026-2027', 'COTISATIOUN 2025-2026', 'Kategorie', 'CATEGORIE FLH', 'FLH KATEGORIE']) || '';
             return { cardId, name, category, status: 'Aktiv', notes: String(text || '').trim() };
         }
 
