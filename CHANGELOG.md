@@ -11,6 +11,7 @@ Format: `Datum · Commit · was & warum`. Details stehen in der jeweiligen Git-C
 ## 2026-07-27
 - **Cleanup & Saison-Update.** Al Backups geläscht: `joinx.html`, `generatorold.html`, `generator.html.bak-logofix`. `generator.html` Saison-Referenze vun 2025/26 op 2026/27 aktualiséiert. `kees-scanner.html` erkennt elo och "COTISATIOUN 2026-2027" nieft der aler 2025-2026.
 - **Vereins-OS-App (interna) — Sprooch, Sortéierung & Data Hygiene.** Sprooch-Ableedung aus Nationalitéit (LU→lb, DE→de, FR→fr, EN→en, Default→fr) bei Member-Créierung + Nightly Auto-Fix (547 Memberen fixt). Wöchentlechen Data Hygiene Report per E-Mail un Admins all Samschdes. Alphabetesch Sortéierung als Default am Secretariat. Default Saison am Matches-Page op 2026-2027 aktualiséiert.
+- **Vereins-OS-App (interna) — Excel-Lëscht Sync & E-Mail Notifikatioun.** Automatesch Synchronisatioun vun der Excel Memberslëscht an d'DB (feelend Adressen, Telefon, E-Mail, Card-ID, Geschlecht asw. ginn ergänzt). All Nuecht um 3:00 Uhr + beim Startup. `./sync-excel.sh` Script fir manuell Upload. E-Mail un `info@mersch75.lu` bei all neier Member-Umeldung iwwert join.html. Ollama + Hermes3 vum Hetzner Server geläscht (12GB Spaicher zuréckgewannt).
 
 ## 2026-07-15
 - **Vereins-OS-App (umgesetzt) – Vereinfachten Prouftraining-Input in der Anwesenheit.**
