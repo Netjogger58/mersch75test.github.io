@@ -91,7 +91,8 @@
                     <p class="trial-join-notice" data-i18n-html="trialJoinNotice">Wann dir bei eis bleiwe wëllt, gitt är Donnéeën op <a href="join.html">mersch75.lu/join.html</a> erëm an.</p>
 
                     <form id="trialForm" class="trial-form">
-                        <label><span data-i18n="trialLabelChild">Numm vum Kand</span> <input type="text" name="childName" required></label>
+                        <label><span data-i18n="trialLabelChild">Numm</span> <input type="text" name="childName" required></label>
+                        <label><span data-i18n="trialLabelFirstName">Virnumm</span> <input type="text" name="firstName" required></label>
                         <label><span data-i18n="trialLabelBirthdate">Gebuertsdag</span> <input type="date" name="birthdate" required></label>
                         <label><span data-i18n="trialLabelGender">Geschlecht</span>
                             <select name="gender" required>
@@ -99,7 +100,7 @@
                                 <option value="female" data-i18n="trialGenderFemale">Weiblech</option>
                             </select>
                         </label>
-                        <label><span data-i18n="trialLabelParent">Numm vum Erzéiungsberechtegten</span> <input type="text" name="parentName" required></label>
+                        <label id="parentField" class="parent-field"><span data-i18n="trialLabelParent">Numm vum Erzéiungsberechtegten</span> <input type="text" name="parentName" required></label>
                         <label><span data-i18n="trialLabelEmail">E-Mail</span> <input type="email" name="email" required></label>
                         <label><span data-i18n="trialLabelPhone">Telefon</span> <input type="tel" name="phone"></label>
                         <label><span data-i18n="trialLabelCategory">Kategorie</span>
@@ -197,7 +198,7 @@
         </main>
     </div>
     <script src="script.js?v=20260713sched4"></script>
-    <script src="trial-i18n.js?v=1"></script>
+    <script src="trial-i18n.js?v=2"></script>
     <script>
         // === Trainingszäiten no aktuelle Plang 2026/2027 (Version 13.07.2026) ===
         // Schlëssel = Kategorie aus dem Dropdown.
@@ -252,12 +253,37 @@
 
         document.querySelector('[name="birthdate"]').addEventListener('change', updateTrainingTime);
         document.querySelector('[name="gender"]').addEventListener('change', updateTrainingTime);
-        document.getElementById('teamCategory').addEventListener('change', updateTrainingTime);
+        document.getElementById('teamCategory').addEventListener('change', function() { updateTrainingTime(); updateParentField(); });
+
+        function updateParentField() {
+            const cat = document.getElementById('teamCategory').value;
+            const parentField = document.getElementById('parentField');
+            const parentInput = parentField.querySelector('input');
+            const isAdult = cat === 'Seniors Femmes' || cat === 'Seniors Hommes';
+            parentField.style.display = isAdult ? 'none' : 'block';
+            parentInput.disabled = isAdult;
+            parentInput.required = !isAdult;
+            if (isAdult) parentInput.value = '';
+        }
+
+        updateParentField();
 
         document.getElementById('trialForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const form = e.target;
-            const data = Object.fromEntries(new FormData(form));
+            const raw = Object.fromEntries(new FormData(form));
+            const isAdult = raw.teamCategory === 'Seniors Femmes' || raw.teamCategory === 'Seniors Hommes';
+            const data = {
+                childName: raw.childName,
+                firstName: raw.firstName,
+                birthdate: raw.birthdate,
+                gender: raw.gender,
+                parentName: isAdult ? [raw.firstName, raw.childName].filter(Boolean).join(' ') : raw.parentName,
+                email: raw.email,
+                phone: raw.phone || '',
+                teamCategory: raw.teamCategory,
+                note: raw.note || '',
+            };
             const msgEl = document.getElementById('trialMessage');
             const API_URL = "https://api.mersch75.lu/api/public/trial-registrations";
             try {
@@ -271,6 +297,7 @@
                     msgEl.style.color = "green";
                     form.reset();
                     updateTrainingTime();
+                    updateParentField();
                 } else {
                     const err = await res.json().catch(() => ({}));
                     msgEl.textContent = err.message || ((translations && translations[document.documentElement.lang] && translations[document.documentElement.lang].trialMessageError) || "Fehler.");
