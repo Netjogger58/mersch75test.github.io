@@ -1211,13 +1211,11 @@ function initializeTrainingSchedule() {
             trainers: 'Max Blanc (LUXQF4), Mathis Derneden',
             slots: [
                 { dayKey: 'mon', time: '17:30 - 19:00', location: LOC_OMNI + " (gedeelt)" },
-                { dayKey: 'wed', time: '18:30 - 20:00', location: LOC_OMNI },
-                { dayKey: 'fri', time: '17:30 - 19:00', location: LOC_KROU }
+                { dayKey: 'wed', time: '18:30 - 20:00', location: LOC_OMNI }
             ],
             areas: [
                 { left: 7.34, top: 54.08, width: 5.76, height: 11.31 },
-                { left: 41.90, top: 61.62, width: 11.52, height: 11.31 },
-                { left: 76.45, top: 54.08, width: 11.52, height: 11.31 }
+                { left: 41.90, top: 61.62, width: 11.52, height: 11.31 }
             ]
         },
         {
