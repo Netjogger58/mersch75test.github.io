@@ -417,6 +417,7 @@
                                     <div class="join-form-group">
                                         <label id="lbl-cns13" for="CNS13">CNS (13) *</label>
                                         <input type="text" id="CNS13" name="CNS13" placeholder="1980010123456" inputmode="numeric" pattern="[0-9]{13}" maxlength="13" required>
+                                        <div id="db-check-result" class="join-helper-text" style="margin-top:8px;min-height:1.4em;"></div>
                                     </div>
                                 </div>
                                 <div class="m75-row-3">
@@ -2793,6 +2794,69 @@
         closeEls.forEach(function(el) { el.addEventListener('click', closeModal); });
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && !modal.hidden) closeModal();
+        });
+    })();
+    </script>
+    <script>
+    (function() {
+        const API_BASE = window.location.hostname === 'localhost' ? 'http://localhost:3000' : 'https://manager.mersch75.lu';
+        const resultEl = document.getElementById('db-check-result');
+
+        function extractBirthdate(cns13) {
+            if (cns13.length !== 13) return '';
+            const y = cns13.slice(0, 4);
+            const m = cns13.slice(4, 6);
+            const d = cns13.slice(6, 8);
+            if (!y || !m || !d) return '';
+            return y + '-' + m + '-' + d;
+        }
+
+        async function checkExistingMember() {
+            const nom = (document.getElementById('Nom').value || '').trim();
+            const prenom = (document.getElementById('Prenom').value || '').trim();
+            const cns13 = (document.getElementById('CNS13').value || '').trim();
+            if (!nom || !prenom || cns13.length !== 13) {
+                if (resultEl) resultEl.textContent = '';
+                return;
+            }
+            const birthdate = extractBirthdate(cns13);
+            if (!birthdate) return;
+
+            if (resultEl) resultEl.textContent = 'Préifung laf…';
+
+            try {
+                const res = await fetch(API_BASE + '/api/auth/lookup-card-id', {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ firstName: prenom, lastName: nom, birthdate })
+                });
+
+                if (res.status === 404) {
+                    if (resultEl) resultEl.textContent = 'Keng Persoun mat dësem Numm a Gebuertsdatum an eiser Datebank fonnt — du kanns de Formulaire weider ausfëllen.';
+                    return;
+                }
+                if (res.status === 409) {
+                    if (resultEl) resultEl.textContent = 'Méi Memberen fonnt — kontrolléier d\'CNS13.';
+                    return;
+                }
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+
+                const data = await res.json();
+                if (data.found) {
+                    if (resultEl) resultEl.innerHTML = '<strong>' + data.name + '</strong> ass scho an eiser Datebank. <br>Logg dech iwwer d\'App an oder fro den Trainer-Code-Login un, fir weiderzemaachen.';
+                } else if (resultEl) {
+                    resultEl.textContent = 'Net an der Datebank fonnt — du kanns de Formulaire weider ausfëllen.';
+                }
+            } catch (e) {
+                console.error('DB check failed:', e);
+                if (resultEl) resultEl.textContent = 'Préifung net méiglech. Fëll de Formulaire trotzdem aus.';
+            }
+        }
+
+        ['Nom', 'Prenom', 'CNS13'].forEach(function(id) {
+            const el = document.getElementById(id);
+            if (el) el.addEventListener('blur', checkExistingMember);
         });
     })();
     </script>
