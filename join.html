@@ -1211,7 +1211,11 @@
                     '<div class="join-form-group">' +
                         '<label for="FamilyMember' + i + 'Langue">' + (t.langue ? t.langue.replace(' *', '') : 'Sprooch') + '</label>' +
                         '<select id="FamilyMember' + i + 'Langue" name="FamilyMember' + i + 'Langue" required>' +
-                            '<option value="lu">LU</option><option value="fr">FR</option><option value="de">DE</option><option value="en">EN</option>' +
+                            '<option value="lu"' + (currentLang==='lu'?' selected':'') + '>LU</option>' +
+                            '<option value="fr"' + (currentLang==='fr'?' selected':'') + '>FR</option>' +
+                            '<option value="de"' + (currentLang==='de'?' selected':'') + '>DE</option>' +
+                            '<option value="en"' + (currentLang==='en'?' selected':'') + '>EN</option>' +
+                            '<option value="pt"' + (currentLang==='pt'?' selected':'') + '>PT</option>' +
                         '</select>' +
                     '</div>' +
                     '<div class="join-form-group">' +
