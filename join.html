@@ -315,6 +315,39 @@
         /* Welcome link */
         .join-welcome-link { transition: var(--m75-transition); }
         .join-welcome-link:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(249,214,17,0.3); }
+
+        /* ═══ Wizard Step-by-Step ═══ */
+        .wizard-step { display: none; animation: wizardFadeIn 350ms cubic-bezier(0.22,1,0.36,1); }
+        .wizard-step.is-active { display: block; }
+        @keyframes wizardFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .wizard-progress { display: flex; align-items: center; gap: 4px; margin-bottom: 24px; padding: 0 4px; }
+        .wizard-progress-dot { flex: 1; height: 4px; border-radius: 2px; background: rgba(0,47,101,0.12); transition: var(--m75-transition); }
+        .wizard-progress-dot.is-done { background: var(--m75-blue); }
+        .wizard-progress-dot.is-active { background: linear-gradient(90deg, var(--m75-blue) 50%, rgba(0,47,101,0.12) 50%); }
+
+        .wizard-nav { display: flex; gap: 12px; margin-top: 24px; }
+        .wizard-btn {
+            padding: 14px 32px; border: none; border-radius: 999px; font-size: 16px; font-weight: 700;
+            font-family: var(--m75-font); cursor: pointer; transition: var(--m75-transition); letter-spacing: 0.01em;
+        }
+        .wizard-btn-back { background: transparent; color: var(--m75-text-secondary); border: 1.5px solid var(--m75-border); }
+        .wizard-btn-back:hover { border-color: var(--m75-blue); color: var(--m75-blue); }
+        .wizard-btn-next { background: linear-gradient(135deg, #0071e3 0%, #00a0e9 100%); color: #fff; box-shadow: 0 4px 14px rgba(0,113,227,0.25); }
+        .wizard-btn-next:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,113,227,0.35); }
+        .wizard-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+        .wizard-summary { background: rgba(0,47,101,0.03); border: 1px solid rgba(0,47,101,0.08); border-radius: var(--m75-radius); padding: 16px 18px; margin-bottom: 20px; }
+        .wizard-summary-title { font-size: 12px; font-weight: 700; color: var(--m75-blue); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px; }
+        .wizard-summary-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+        .wizard-summary-list li { font-size: 13px; color: var(--m75-text); display: flex; gap: 8px; align-items: baseline; }
+        .wizard-summary-list li .ws-label { color: var(--m75-text-secondary); font-weight: 600; min-width: 120px; flex-shrink: 0; }
+        .wizard-summary-list li .ws-value { font-weight: 500; }
+        .wizard-summary-list li.is-empty .ws-value { color: var(--m75-text-secondary); font-style: italic; }
+        .wizard-summary-edit { font-size: 12px; color: var(--m75-blue); cursor: pointer; text-decoration: underline; margin-left: 6px; }
+
+        .wizard-step-title { font-size: 18px; font-weight: 700; color: var(--m75-blue); margin-bottom: 4px; }
+        .wizard-step-hint { font-size: 13px; color: var(--m75-text-secondary); margin-bottom: 16px; line-height: 1.5; }
     </style>
     <script src="consent.js"></script>
 </head>
@@ -394,246 +427,386 @@
                                 <input type="text" id="honeypot" name="website" autocomplete="off" tabindex="-1">
                             </div>
 
-                            <div class="join-form-group join-family-question" id="family-question-section">
-                                <label id="lbl-family-question" for="FamilyQuestion">Wëlls du méi Persounen umellen? (Famill-Memberskaart 2+)</label>
-                                <select id="FamilyQuestion" name="FamilyQuestion">
-                                    <option value="Non" id="opt-family-no">Nee, just mech</option>
-                                    <option value="Oui" id="opt-family-yes">Jo, méi Persounen (Famill)</option>
-                                </select>
-                                <p class="join-helper-text" id="family-question-hint">Famill-Memberskaart: Vun 2+ Persounen (Spiller) un gëtt de Family Tarif ugewand. Kanner, Elteren oder 2 Erwuessener vun der selwechter Adress kënnen zesummen umeld ginn.</p>
+                            <div class="wizard-progress" id="wizardProgress"></div>
+                            <div class="wizard-summary" id="wizardSummary" style="display:none;">
+                                <div class="wizard-summary-title" id="wsTitle">Deng Äntwerten</div>
+                                <ul class="wizard-summary-list" id="wizardSummaryList"></ul>
                             </div>
 
-                            <div class="m75-section">
-                                <h3 class="m75-section-title" id="m75-title-person">Demandeur 1</h3>
-                                <div class="m75-row-3">
-                                    <div class="join-form-group">
-                                        <label id="lbl-nom" for="Nom">NUMM *</label>
-                                        <input type="text" id="Nom" name="Nom" autocomplete="family-name" required>
-                                    </div>
-                                    <div class="join-form-group">
-                                        <label id="lbl-prenom" for="Prenom">VIRNUMM *</label>
-                                        <input type="text" id="Prenom" name="Prenom" autocomplete="given-name" required>
-                                    </div>
-                                    <div class="join-form-group">
-                                        <label id="lbl-cns13" for="CNS13">CNS (13) *</label>
-                                        <input type="text" id="CNS13" name="CNS13" placeholder="1980010123456" inputmode="numeric" pattern="[0-9]{13}" maxlength="13" required>
-                                        <div id="db-check-result" class="join-helper-text" style="margin-top:8px;min-height:1.4em;"></div>
-                                    </div>
-                                </div>
-                                <div class="m75-row-3">
-                                    <div class="join-form-group">
-                                        <label id="lbl-langue" for="Langue">SPROOCH *</label>
-                                        <select id="Langue" name="Langue" required>
-                                            <option value="lu">LU</option>
-                                            <option value="fr">FR</option>
-                                            <option value="de">DE</option>
-                                            <option value="en">EN</option>
-                                            
-                                        </select>
-                                    </div>
-                                    <div class="join-form-group" id="nat-section">
-                                        <label id="lbl-nat" for="Nationalite">NATIONALITÉIT *</label>
-                                        <input type="text" id="Nationalite" name="Nationalite" list="nationalite-list" autocomplete="country-name" required>
-                                        <datalist id="nationalite-list">
-                                            <option value="LUX">
-                                            <option value="FRA">
-                                            <option value="DE">
-                                            <option value="EN">
-                                            <option value="PT">
-                                            <option value="IT">
-                                            <option value="BEL">
-                                            <option value="NLD">
-                                            <option value="ESP">
-                                            <option value="CHE">
-                                            <option value="AUT">
-                                            <option value="POL">
-                                            <option value="ROU">
-                                            <option value="BGR">
-                                            <option value="HRV">
-                                            <option value="SVN">
-                                            <option value="SVK">
-                                            <option value="CZE">
-                                            <option value="HUN">
-                                            <option value="DNK">
-                                            <option value="SWE">
-                                            <option value="FIN">
-                                            <option value="NOR">
-                                            <option value="GBR">
-                                            <option value="IRL">
-                                            <option value="USA">
-                                            <option value="CAN">
-                                            <option value="AUS">
-                                            <option value="NZL">
-                                            <option value="BRA">
-                                            <option value="ARG">
-                                            <option value="MEX">
-                                            <option value="CHN">
-                                            <option value="JPN">
-                                            <option value="KOR">
-                                            <option value="IND">
-                                            <option value="RUS">
-                                            <option value="UKR">
-                                            <option value="TUR">
-                                            <option value="GRC">
-                                            <option value="ISR">
-                                            <option value="EGY">
-                                            <option value="MAR">
-                                            <option value="TUN">
-                                            <option value="DZA">
-                                            <option value="SEN">
-                                            <option value="ZAF">
-                                        </datalist>
-                                    </div>
-                                    <div class="join-form-group" id="club-section">
-                                        <label id="lbl-club" for="AncienClub">ALE VERÄIN *</label>
-                                        <input type="text" id="AncienClub" name="AncienClub" required>
-                                    </div>
-                                </div>
-                                <div class="m75-row-3" id="trainer-section">
-                                    <div class="join-form-group" id="basis-section">
-                                        <label id="lbl-flh-category-basis" for="FlhCategoryBasis">BASE *</label>
-                                        <select id="FlhCategoryBasis" name="FlhCategoryBasis" required>
-                                            <option value="Garçons - Hommes" selected>Garçons - Hommes</option>
-                                            <option value="Filles - Femmes">Filles - Femmes</option>
-                                        </select>
-                                    </div>
-                                    <div class="join-form-group join-family-cat-display" id="cat-section">
-                                        <label id="lbl-cat" for="Categorie">KATEGORIE (AUTO)</label>
-                                        <strong id="cat-display">-</strong>
-                                        <input type="hidden" id="Categorie" name="Categorie" value="">
-                                    </div>
-                                    <div class="join-form-group">
-                                        <label id="lbl-role" for="Role">ROLL *</label>
-                                        <select id="Role" name="Role" required>
-                                            <option value="Joueur / Joueuse">Spiller / Spillerin</option>
-                                            <option value="Arbitre">Arbitter</option>
-                                            <option value="Officiel(le)">Offiziell Persoun</option>
-                                            <option value="Bénévole / Contact Famille">Bénévole / Kontakt Famill</option>
-                                            <option value="Trainer / Teamleader / Teambetreier">Trainer / Teamleader / Teambetreier</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="m75-row-3">
-                                    <div class="join-form-group">
-                                        <label id="lbl-gsm1" for="GSM1">GSM 1 *</label>
-                                        <input type="text" id="GSM1" name="GSM1" autocomplete="tel" required>
-                                    </div>
-                                    <div class="join-form-group">
-                                        <label id="lbl-email" for="Email">E-MAIL *</label>
-                                        <input type="email" id="Email" name="Email" autocomplete="email" required>
-                                    </div>
-                                </div>
-                                <input type="hidden" id="Medico" name="Medico" value="Non">
-                                <input type="hidden" id="Cotisation" name="Cotisation" value="">
-                                <input type="hidden" id="Mineur" name="Mineur" value="NON">
-                                <input type="hidden" id="Licence" name="Licence" value="Non">
-                                <input type="hidden" id="DateNaissance" name="DateNaissance" value="">
-                                <input type="hidden" id="CNS" name="CNS" value="">
-                            </div>
-
-                            <div id="family-section" class="join-family-section m75-section m75-section--accent">
-                                <h3 class="m75-section-title" id="m75-title-family">Famill-Memberskaart</h3>
-                                <div class="join-form-group join-form-group--compact">
-                                    <label for="FamilyMemberCount">Wivill Persounen op der Family Memberskaart? *</label>
-                                    <select id="FamilyMemberCount" name="FamilyMemberCount" disabled>
-                                        <option value="2">2 Persounen</option>
-                                        <option value="3">3 Persounen</option>
-                                        <option value="4">4 Persounen</option>
-                                        <option value="5">5 Persounen</option>
-                                        <option value="6">6 Persounen</option>
-                                        <option value="7">7 Persounen</option>
-                                        <option value="8">8 Persounen</option>
-                                        <option value="9">9 Persounen</option>
-                                        <option value="10">10 Persounen</option>
+                            <!-- Step 0: Family question -->
+                            <div class="wizard-step" data-step="0">
+                                <div class="wizard-step-title" id="ws0-title">Wëlls du méi Persounen umellen?</div>
+                                <div class="wizard-step-hint" id="ws0-hint">Famill-Memberskaart: Vun 2+ Persounen (Spiller) un gëtt de Family Tarif ugewand.</div>
+                                <div class="join-form-group join-family-question" id="family-question-section">
+                                    <label id="lbl-family-question" for="FamilyQuestion">Wëlls du méi Persounen umellen? (Famill-Memberskaart 2+)</label>
+                                    <select id="FamilyQuestion" name="FamilyQuestion">
+                                        <option value="Non" id="opt-family-no">Nee, just mech</option>
+                                        <option value="Oui" id="opt-family-yes">Jo, méi Persounen (Famill)</option>
                                     </select>
+                                    <p class="join-helper-text" id="family-question-hint">Famill-Memberskaart: Vun 2+ Persounen (Spiller) un gëtt de Family Tarif ugewand. Kanner, Elteren oder 2 Erwuessener vun der selwechter Adress kënnen zesummen umeld ginn.</p>
                                 </div>
-                                <p class="join-helper-text">Haaptlizenzéierten ass déi Persoun hei am Formulaire. Déi zousätzlech Persoune musse Familljememberen op där selwechter Adress sinn. Elteren/Erzéiungsberechtegten oder weider Spiller kënnen hei fir d'Lizenz-Virbereedung agedroe ginn.</p>
-                                <div id="family-members-fields" class="join-family-members-fields"></div>
-                                <input type="hidden" id="FamilySummary" name="FamilySummary" value="">
-                                <div class="join-family-card-preview" id="family-card-preview" aria-live="polite">
-                                    <h3 data-i18n="joinMembersCards">Memberskaarten</h3>
-                                    <p class="join-helper-text" data-i18n="joinMembersCardHint">D'Memberskaart mam QR-Code gëtt intern am Secretariat virbereet an eréischt no Bezuelung vum Membersbeitrag un den Demandeur geschéckt.</p>
-                                    <p class="join-helper-text sponsor-card-hint" data-i18n="sponsorCardHint">Memberskaarten mat Card-ID fir fräien Entrée fir eis Sponsore ginn nëmme vum Komité ausgestallt.</p>
+                                <div class="wizard-nav">
+                                    <button type="button" class="wizard-btn wizard-btn-next" id="wizardNext0">Weider</button>
                                 </div>
                             </div>
 
-                            <div id="parent-section" class="m75-section">
-                                <h3 class="m75-section-title" id="m75-title-parent">Elteren / Erzéiungsberechtegten</h3>
-                                <div class="m75-row-3">
+                            <!-- Step 1: Person identity -->
+                            <div class="wizard-step" data-step="1">
+                                <div class="wizard-step-title" id="ws1-title">Demandeur 1 – Perséinlech Donnéeën</div>
+                                <div class="wizard-step-hint" id="ws1-hint">D'CNS Nummer steet op der Memberskaart / Carte Vitale. Aus hir gëtt Gebuertsdatum & Kategorie automatesch berechent.</div>
+                                <div class="m75-section">
+                                    <h3 class="m75-section-title" id="m75-title-person">Demandeur 1</h3>
+                                    <div class="m75-row-3">
+                                        <div class="join-form-group">
+                                            <label id="lbl-nom" for="Nom">NUMM *</label>
+                                            <input type="text" id="Nom" name="Nom" autocomplete="family-name" required>
+                                        </div>
+                                        <div class="join-form-group">
+                                            <label id="lbl-prenom" for="Prenom">VIRNUMM *</label>
+                                            <input type="text" id="Prenom" name="Prenom" autocomplete="given-name" required>
+                                        </div>
+                                        <div class="join-form-group">
+                                            <label id="lbl-cns13" for="CNS13">CNS (13) *</label>
+                                            <input type="text" id="CNS13" name="CNS13" placeholder="1980010123456" inputmode="numeric" pattern="[0-9]{13}" maxlength="13" required>
+                                            <div id="db-check-result" class="join-helper-text" style="margin-top:8px;min-height:1.4em;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="wizard-nav">
+                                    <button type="button" class="wizard-btn wizard-btn-back" id="wizardBack1">Zréck</button>
+                                    <button type="button" class="wizard-btn wizard-btn-next" id="wizardNext1">Weider</button>
+                                </div>
+                            </div>
+
+                            <!-- Step 2: Language, Nationality, Club -->
+                            <div class="wizard-step" data-step="2">
+                                <div class="wizard-step-title" id="ws2-title">Demandeur 1 – Sprooch & Nationalitéit</div>
+                                <div class="wizard-step-hint" id="ws2-hint"></div>
+                                <div class="m75-section">
+                                    <div class="m75-row-3">
+                                        <div class="join-form-group">
+                                            <label id="lbl-langue" for="Langue">SPROOCH *</label>
+                                            <select id="Langue" name="Langue" required>
+                                                <option value="lu">LU</option>
+                                                <option value="fr">FR</option>
+                                                <option value="de">DE</option>
+                                                <option value="en">EN</option>
+                                            </select>
+                                        </div>
+                                        <div class="join-form-group" id="nat-section">
+                                            <label id="lbl-nat" for="Nationalite">NATIONALITÉIT *</label>
+                                            <input type="text" id="Nationalite" name="Nationalite" list="nationalite-list" autocomplete="country-name" required>
+                                            <datalist id="nationalite-list">
+                                                <option value="LUX">
+                                                <option value="FRA">
+                                                <option value="DE">
+                                                <option value="EN">
+                                                <option value="PT">
+                                                <option value="IT">
+                                                <option value="BEL">
+                                                <option value="NLD">
+                                                <option value="ESP">
+                                                <option value="CHE">
+                                                <option value="AUT">
+                                                <option value="POL">
+                                                <option value="ROU">
+                                                <option value="BGR">
+                                                <option value="HRV">
+                                                <option value="SVN">
+                                                <option value="SVK">
+                                                <option value="CZE">
+                                                <option value="HUN">
+                                                <option value="DNK">
+                                                <option value="SWE">
+                                                <option value="FIN">
+                                                <option value="NOR">
+                                                <option value="GBR">
+                                                <option value="IRL">
+                                                <option value="USA">
+                                                <option value="CAN">
+                                                <option value="AUS">
+                                                <option value="NZL">
+                                                <option value="BRA">
+                                                <option value="ARG">
+                                                <option value="MEX">
+                                                <option value="CHN">
+                                                <option value="JPN">
+                                                <option value="KOR">
+                                                <option value="IND">
+                                                <option value="RUS">
+                                                <option value="UKR">
+                                                <option value="TUR">
+                                                <option value="GRC">
+                                                <option value="ISR">
+                                                <option value="EGY">
+                                                <option value="MAR">
+                                                <option value="TUN">
+                                                <option value="DZA">
+                                                <option value="SEN">
+                                                <option value="ZAF">
+                                            </datalist>
+                                        </div>
+                                        <div class="join-form-group" id="club-section">
+                                            <label id="lbl-club" for="AncienClub">ALE VERÄIN *</label>
+                                            <input type="text" id="AncienClub" name="AncienClub" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="wizard-nav">
+                                    <button type="button" class="wizard-btn wizard-btn-back" id="wizardBack2">Zréck</button>
+                                    <button type="button" class="wizard-btn wizard-btn-next" id="wizardNext2">Weider</button>
+                                </div>
+                            </div>
+
+                            <!-- Step 3: Category & Role -->
+                            <div class="wizard-step" data-step="3">
+                                <div class="wizard-step-title" id="ws3-title">Demandeur 1 – Kategorie & Roll</div>
+                                <div class="wizard-step-hint" id="ws3-hint">D'Kategorie gëtt automatesch aus der CNS berechent. Wiel d'Roll an d'Basis (Geschlecht).</div>
+                                <div class="m75-section">
+                                    <div class="m75-row-3" id="trainer-section">
+                                        <div class="join-form-group" id="basis-section">
+                                            <label id="lbl-flh-category-basis" for="FlhCategoryBasis">BASE *</label>
+                                            <select id="FlhCategoryBasis" name="FlhCategoryBasis" required>
+                                                <option value="Garçons - Hommes" selected>Garçons - Hommes</option>
+                                                <option value="Filles - Femmes">Filles - Femmes</option>
+                                            </select>
+                                        </div>
+                                        <div class="join-form-group join-family-cat-display" id="cat-section">
+                                            <label id="lbl-cat" for="Categorie">KATEGORIE (AUTO)</label>
+                                            <strong id="cat-display">-</strong>
+                                            <input type="hidden" id="Categorie" name="Categorie" value="">
+                                        </div>
+                                        <div class="join-form-group">
+                                            <label id="lbl-role" for="Role">ROLL *</label>
+                                            <select id="Role" name="Role" required>
+                                                <option value="Joueur / Joueuse">Spiller / Spillerin</option>
+                                                <option value="Arbitre">Arbitter</option>
+                                                <option value="Officiel(le)">Offiziell Persoun</option>
+                                                <option value="Bénévole / Contact Famille">Bénévole / Kontakt Famill</option>
+                                                <option value="Trainer / Teamleader / Teambetreier">Trainer / Teamleader / Teambetreier</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="m75-extra-roles-row" id="extra-roles-section" style="display:none;">
+                                        <div class="join-checkbox-row" id="extra-role-joueur" style="display:none;">
+                                            <input type="checkbox" id="RoleAlsoJoueur" name="RoleAlsoJoueur" value="Oui">
+                                            <label for="RoleAlsoJoueur" id="lbl-extra-joueur">Och Spiller</label>
+                                        </div>
+                                        <div class="join-checkbox-row" id="extra-role-arbitre">
+                                            <input type="checkbox" id="RoleAlsoArbitre" name="RoleAlsoArbitre" value="Oui">
+                                            <label for="RoleAlsoArbitre" id="lbl-extra-arbitre">Och Arbitter</label>
+                                        </div>
+                                        <div class="join-checkbox-row" id="extra-role-officiel">
+                                            <input type="checkbox" id="RoleAlsoOfficiel" name="RoleAlsoOfficiel" value="Oui">
+                                            <label for="RoleAlsoOfficiel" id="lbl-extra-officiel">Och Offiziell</label>
+                                        </div>
+                                        <div class="join-checkbox-row" id="extra-role-benevole">
+                                            <input type="checkbox" id="RoleAlsoBenevole" name="RoleAlsoBenevole" value="Oui">
+                                            <label for="RoleAlsoBenevole" id="lbl-extra-benevole">Och Bénévole</label>
+                                        </div>
+                                    </div>
+                                    <p class="m75-extra-roles-hint" id="extra-roles-hint">Z.B. Spiller deen och Arbitter ass. Déi éischt Funktioun bestëmmt d'Kategorie.</p>
+                                    <div class="join-form-group" id="trainer-licence-group" style="display:none;">
+                                        <label id="lbl-trainer-licence" for="TrainerLicence">TRAINERSCHÄIN</label>
+                                        <input type="text" id="TrainerLicence" name="TrainerLicence" placeholder="LUXQF1 - LUXQF5 oder Mastercoach">
+                                        <p class="join-helper-text" id="trainer-licence-hint">LUXQF1 - LUXQF5 oder Mastercoach</p>
+                                    </div>
+                                </div>
+                                <div class="wizard-nav">
+                                    <button type="button" class="wizard-btn wizard-btn-back" id="wizardBack3">Zréck</button>
+                                    <button type="button" class="wizard-btn wizard-btn-next" id="wizardNext3">Weider</button>
+                                </div>
+                            </div>
+
+                            <!-- Step 4: Contact -->
+                            <div class="wizard-step" data-step="4">
+                                <div class="wizard-step-title" id="ws4-title">Demandeur 1 – Kontakt</div>
+                                <div class="wizard-step-hint" id="ws4-hint"></div>
+                                <div class="m75-section">
+                                    <div class="m75-row-3">
+                                        <div class="join-form-group">
+                                            <label id="lbl-gsm1" for="GSM1">GSM 1 *</label>
+                                            <input type="text" id="GSM1" name="GSM1" autocomplete="tel" required>
+                                        </div>
+                                        <div class="join-form-group">
+                                            <label id="lbl-email" for="Email">E-MAIL *</label>
+                                            <input type="email" id="Email" name="Email" autocomplete="email" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="wizard-nav">
+                                    <button type="button" class="wizard-btn wizard-btn-back" id="wizardBack4">Zréck</button>
+                                    <button type="button" class="wizard-btn wizard-btn-next" id="wizardNext4">Weider</button>
+                                </div>
+                            </div>
+
+                            <!-- Step 5: Medico + U7 (conditional) -->
+                            <div class="wizard-step" data-step="5">
+                                <div class="wizard-step-title" id="ws5-title">Medico & Zertifikat</div>
+                                <div class="wizard-step-hint" id="ws5-hint"></div>
+                                <div class="m75-section">
+                                    <div class="join-form-group" id="medico-group" style="display:none;">
+                                        <label id="lbl-medico">Medico virleeënd?</label>
+                                        <div class="m75-row-3">
+                                            <div class="join-form-group">
+                                                <select id="MedicoSelect" name="MedicoSelect">
+                                                    <option value="Non">Non</option>
+                                                    <option value="Oui">Oui</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="join-checkbox-row is-emphasis" id="u7-section" style="display:none;">
+                                        <input type="checkbox" id="U7Cert" name="U7Cert" value="Oui" required>
+                                        <label for="U7Cert" id="lbl-u7">U7: Medezineschen Zertifikat vun der sportlecher Aptitude obligatoresch (vum Hausdokter auszestellen).</label>
+                                    </div>
+                                    <input type="hidden" id="Medico" name="Medico" value="Non">
+                                </div>
+                                <div class="wizard-nav">
+                                    <button type="button" class="wizard-btn wizard-btn-back" id="wizardBack5">Zréck</button>
+                                    <button type="button" class="wizard-btn wizard-btn-next" id="wizardNext5">Weider</button>
+                                </div>
+                            </div>
+
+                            <!-- Step 6: Parent/Guardian (conditional) -->
+                            <div class="wizard-step" data-step="6">
+                                <div class="wizard-step-title" id="ws6-title">Elteren / Erzéiungsberechtegten</div>
+                                <div class="wizard-step-hint" id="ws6-hint"></div>
+                                <div id="parent-section" class="m75-section">
+                                    <h3 class="m75-section-title" id="m75-title-parent">Elteren / Erzéiungsberechtegten</h3>
+                                    <div class="m75-row-3">
+                                        <div class="join-form-group join-form-group--compact">
+                                            <label id="lbl-parent" for="ParentIsole">PARENT ISOLE? *</label>
+                                            <select id="ParentIsole" name="ParentIsole">
+                                                <option value="NON">NON (2 Tuteurs)</option>
+                                                <option value="OUI">OUI (1 Tuteur)</option>
+                                            </select>
+                                        </div>
+                                        <div class="join-form-group">
+                                            <label id="lbl-tuteur1" for="Tuteur1">TUTEUR 1 *</label>
+                                            <input type="text" id="Tuteur1" name="Tuteur1" autocomplete="name">
+                                        </div>
+                                        <div class="join-form-group" id="tuteur2-wrap">
+                                            <label id="lbl-tuteur2" for="Tuteur2">TUTEUR 2 *</label>
+                                            <input type="text" id="Tuteur2" name="Tuteur2" autocomplete="name">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="wizard-nav">
+                                    <button type="button" class="wizard-btn wizard-btn-back" id="wizardBack6">Zréck</button>
+                                    <button type="button" class="wizard-btn wizard-btn-next" id="wizardNext6">Weider</button>
+                                </div>
+                            </div>
+
+                            <!-- Step 7: Family members (conditional) -->
+                            <div class="wizard-step" data-step="7">
+                                <div class="wizard-step-title" id="ws7-title">Famill-Memberskaart</div>
+                                <div class="wizard-step-hint" id="ws7-hint">Haaptlizenzéierten ass déi Persoun hei am Formulaire. Déi zousätzlech Persoune musse Familljememberen op där selwechter Adress sinn.</div>
+                                <div id="family-section" class="join-family-section m75-section m75-section--accent">
+                                    <h3 class="m75-section-title" id="m75-title-family">Famill-Memberskaart</h3>
                                     <div class="join-form-group join-form-group--compact">
-                                        <label id="lbl-parent" for="ParentIsole">PARENT ISOLE? *</label>
-                                        <select id="ParentIsole" name="ParentIsole">
-                                            <option value="NON">NON (2 Tuteurs)</option>
-                                            <option value="OUI">OUI (1 Tuteur)</option>
+                                        <label for="FamilyMemberCount">Wivill Persounen op der Family Memberskaart? *</label>
+                                        <select id="FamilyMemberCount" name="FamilyMemberCount" disabled>
+                                            <option value="2">2 Persounen</option>
+                                            <option value="3">3 Persounen</option>
+                                            <option value="4">4 Persounen</option>
+                                            <option value="5">5 Persounen</option>
+                                            <option value="6">6 Persounen</option>
+                                            <option value="7">7 Persounen</option>
+                                            <option value="8">8 Persounen</option>
+                                            <option value="9">9 Persounen</option>
+                                            <option value="10">10 Persounen</option>
                                         </select>
                                     </div>
+                                    <p class="join-helper-text">Haaptlizenzéierten ass déi Persoun hei am Formulaire. Déi zousätzlech Persoune musse Familljememberen op där selwechter Adress sinn. Elteren/Erzéiungsberechtegten oder weider Spiller kënnen hei fir d'Lizenz-Virbereedung agedroe ginn.</p>
+                                    <div id="family-members-fields" class="join-family-members-fields"></div>
+                                    <input type="hidden" id="FamilySummary" name="FamilySummary" value="">
+                                    <div class="join-family-card-preview" id="family-card-preview" aria-live="polite">
+                                        <h3 data-i18n="joinMembersCards">Memberskaarten</h3>
+                                        <p class="join-helper-text" data-i18n="joinMembersCardHint">D'Memberskaart mam QR-Code gëtt intern am Secretariat virbereet an eréischt no Bezuelung vum Membersbeitrag un den Demandeur geschéckt.</p>
+                                        <p class="join-helper-text sponsor-card-hint" data-i18n="sponsorCardHint">Memberskaarten mat Card-ID fir fräien Entrée fir eis Sponsore ginn nëmme vum Komité ausgestallt.</p>
+                                    </div>
+                                </div>
+                                <div class="wizard-nav">
+                                    <button type="button" class="wizard-btn wizard-btn-back" id="wizardBack7">Zréck</button>
+                                    <button type="button" class="wizard-btn wizard-btn-next" id="wizardNext7">Weider</button>
+                                </div>
+                            </div>
+
+                            <!-- Step 8: Address -->
+                            <div class="wizard-step" data-step="8">
+                                <div class="wizard-step-title" id="ws8-title">Kontakt & Adress</div>
+                                <div class="wizard-step-hint" id="ws8-hint"></div>
+                                <div class="m75-section">
+                                    <h3 class="m75-section-title" id="m75-title-contact">Kontakt & Adress</h3>
                                     <div class="join-form-group">
-                                        <label id="lbl-tuteur1" for="Tuteur1">TUTEUR 1 *</label>
-                                        <input type="text" id="Tuteur1" name="Tuteur1" autocomplete="name">
+                                        <label id="lbl-strasse" for="Strasse">STROOSS *</label>
+                                        <input type="text" id="Strasse" name="Strasse" autocomplete="street-address" required>
                                     </div>
-                                    <div class="join-form-group" id="tuteur2-wrap">
-                                        <label id="lbl-tuteur2" for="Tuteur2">TUTEUR 2 *</label>
-                                        <input type="text" id="Tuteur2" name="Tuteur2" autocomplete="name">
+                                    <div class="m75-row-3">
+                                        <div class="join-form-group">
+                                            <label id="lbl-postcode" for="Postcode">POSTCODE *</label>
+                                            <input type="text" id="Postcode" name="Postcode" autocomplete="postal-code" required>
+                                        </div>
+                                        <div class="join-form-group">
+                                            <label id="lbl-ortschaft" for="Ortschaft">UERTSCHAFT *</label>
+                                            <input type="text" id="Ortschaft" name="Ortschaft" autocomplete="address-level2" required>
+                                        </div>
                                     </div>
+                                </div>
+                                <div class="wizard-nav">
+                                    <button type="button" class="wizard-btn wizard-btn-back" id="wizardBack8">Zréck</button>
+                                    <button type="button" class="wizard-btn wizard-btn-next" id="wizardNext8">Weider</button>
                                 </div>
                             </div>
 
-                            <div class="m75-section">
-                                <h3 class="m75-section-title" id="m75-title-contact">Kontakt & Adress</h3>
-                                <div class="join-form-group">
-                                    <label id="lbl-strasse" for="Strasse">STROOSS *</label>
-                                    <input type="text" id="Strasse" name="Strasse" autocomplete="street-address" required>
-                                </div>
-                                <div class="m75-row-3">
-                                    <div class="join-form-group">
-                                        <label id="lbl-postcode" for="Postcode">POSTCODE *</label>
-                                        <input type="text" id="Postcode" name="Postcode" autocomplete="postal-code" required>
+                            <!-- Step 9: Consent & Submit -->
+                            <div class="wizard-step" data-step="9">
+                                <div class="wizard-step-title" id="ws9-title">Zoustëmmung & Ofschécken</div>
+                                <div class="wizard-step-hint" id="ws9-hint"></div>
+                                <div class="m75-section m75-section--accent">
+                                    <h3 class="m75-section-title" id="m75-title-tarif">Zoustëmmung</h3>
+                                    <div class="join-form-group" id="tarif-summary-box" style="margin-bottom:14px;">
+                                        <label id="lbl-tarif-summary">COTISATIOUN (AUTO-PROPOSÉIRT)</label>
+                                        <strong id="tarif-summary-display" style="display:inline-block;padding:8px 16px;border-radius:8px;background:rgba(0,113,227,0.08);color:var(--m75-blue);font-size:14px;font-weight:700;">-</strong>
                                     </div>
-                                    <div class="join-form-group">
-                                        <label id="lbl-ortschaft" for="Ortschaft">UERTSCHAFT *</label>
-                                        <input type="text" id="Ortschaft" name="Ortschaft" autocomplete="address-level2" required>
+                                    <p class="join-helper-text" id="lbl-tarif-hint" style="margin-bottom:12px;">(Automatesch virgeschloen op Basis vun Alter, Funktioun oder Unzuel vun de Memberen déi nei ugemeld ginn. Bezuelt gëtt erréicht op Rechnung vum Veräin (e-mail oder Postwee))</p>
+                                    <input type="checkbox" id="FamilleFlag" name="FamilleFlag" value="Oui" style="display:none;">
+                                    <span id="lbl-tarif-title" style="display:none;">COTISATIOUN 2026-2027</span>
+
+                                    <div class="join-checkbox-row">
+                                        <input type="checkbox" id="LegalConsent" name="LegalConsent" value="Oui" required>
+                                        <label for="LegalConsent" id="lbl-legal">
+                                            <span id="legal-prefix">Ech hu gelies an akzeptéieren d' </span><a id="legal-terms-link" href="terms.html" target="_blank" rel="noopener noreferrer">Allgemeng Bedéngungen</a><span id="legal-middle"> an Reglementatioun iwwert den </span><a id="legal-data-link" href="dataprotection.html" target="_blank" rel="noopener noreferrer">Dateschutz</a><span id="legal-suffix">.</span>
+                                        </label>
                                     </div>
+
+                                    <div class="m75-data-purpose" id="data-purpose-box">
+                                        <p id="data-purpose-text">D'Donnéeën, déi an dësem Formulaire uginn ginn, ginn exklusiv am Kader vum Mersch75 Handball Club veraarbecht an nëmmen fir Handball-Zwecker benotzt (Umeldung, Lizenz, Kategorie-Zoudeelung, Membersverwaltung). Si ginn un d'Fédération Luxembourgeoise de Handball (FLH) weidergeleed fir d'Ausstellung vun enger Lizenz. Keng Weidergab un Drëttparteien ausserhalb vum Handball-Kontext.</p>
+                                    </div>
+
+                                    <div class="join-checkbox-row is-emphasis" id="flh-consent-row">
+                                        <input type="checkbox" id="FlhPortalConsent" name="FlhPortalConsent" value="Oui" required>
+                                        <label for="FlhPortalConsent" id="lbl-flh">Info: Ech hu verstaan dat meng Umeldung mat dësen Daten un d' flh.lu geschéckt ginn fir eng Lizenz auszestellen.</label>
+                                    </div>
+
+                                    <div class="join-checkbox-row">
+                                        <input type="checkbox" id="AccuracyConsent" name="AccuracyConsent" value="Oui" required>
+                                        <label for="AccuracyConsent" id="lbl-accuracy">Bestätegung: Ech confirméiere d'Richtegkeet vun menge Donnéeën.</label>
+                                    </div>
+
+                                    <button type="submit" id="submitBtn" class="join-submit-button">SEND / ABSCHICKEN</button>
+                                </div>
+                                <div class="wizard-nav">
+                                    <button type="button" class="wizard-btn wizard-btn-back" id="wizardBack9">Zréck</button>
                                 </div>
                             </div>
 
-                            <div class="m75-section m75-section--accent">
-                                <h3 class="m75-section-title" id="m75-title-tarif">Zoustëmmung</h3>
-                                <div class="join-form-group" id="tarif-summary-box" style="margin-bottom:14px;">
-                                    <label id="lbl-tarif-summary">COTISATIOUN (AUTO-PROPOSÉIRT)</label>
-                                    <strong id="tarif-summary-display" style="display:inline-block;padding:8px 16px;border-radius:8px;background:rgba(0,113,227,0.08);color:var(--m75-blue);font-size:14px;font-weight:700;">-</strong>
-                                </div>
-                                <p class="join-helper-text" id="lbl-tarif-hint" style="margin-bottom:12px;">(Automatesch virgeschloen op Basis vun Alter, Funktioun oder Unzuel vun de Memberen déi nei ugemeld ginn. Bezuelt gëtt erréicht op Rechnung vum Veräin (e-mail oder Postwee))</p>
-                                <input type="checkbox" id="FamilleFlag" name="FamilleFlag" value="Oui" style="display:none;">
-                                <span id="lbl-tarif-title" style="display:none;">COTISATIOUN 2026-2027</span>
-
-                            <div class="join-checkbox-row is-emphasis" id="u7-section" style="display:none;">
-                                <input type="checkbox" id="U7Cert" name="U7Cert" value="Oui" required>
-                                <label for="U7Cert" id="lbl-u7">U7: Medezineschen Zertifikat vun der sportlecher Aptitude obligatoresch (vum Hausdokter auszestellen).</label>
-                            </div>
-
-                            <div class="join-checkbox-row">
-                                <input type="checkbox" id="LegalConsent" name="LegalConsent" value="Oui" required>
-                                <label for="LegalConsent" id="lbl-legal">
-                                    <span id="legal-prefix">Ech hu gelies an akzeptéieren d' </span><a id="legal-terms-link" href="terms.html" target="_blank" rel="noopener noreferrer">Allgemeng Bedéngungen</a><span id="legal-middle"> an Reglementatioun iwwert den </span><a id="legal-data-link" href="dataprotection.html" target="_blank" rel="noopener noreferrer">Dateschutz</a><span id="legal-suffix">.</span>
-                                </label>
-                            </div>
-
-                            <div class="m75-data-purpose" id="data-purpose-box">
-                                <p id="data-purpose-text">D'Donnéeën, déi an dësem Formulaire uginn ginn, ginn exklusiv am Kader vum Mersch75 Handball Club veraarbecht an nëmmen fir Handball-Zwecker benotzt (Umeldung, Lizenz, Kategorie-Zoudeelung, Membersverwaltung). Si ginn un d'Fédération Luxembourgeoise de Handball (FLH) weidergeleed fir d'Ausstellung vun enger Lizenz. Keng Weidergab un Drëttparteien ausserhalb vum Handball-Kontext.</p>
-                            </div>
-
-                            <div class="join-checkbox-row is-emphasis" id="flh-consent-row">
-                                <input type="checkbox" id="FlhPortalConsent" name="FlhPortalConsent" value="Oui" required>
-                                <label for="FlhPortalConsent" id="lbl-flh">Info: Ech hu verstaan dat meng Umeldung mat dësen Daten un d' flh.lu geschéckt ginn fir eng Lizenz auszestellen.</label>
-                            </div>
-
-                            <div class="join-checkbox-row">
-                                <input type="checkbox" id="AccuracyConsent" name="AccuracyConsent" value="Oui" required>
-                                <label for="AccuracyConsent" id="lbl-accuracy">Bestätegung: Ech confirméiere d'Richtegkeet vun menge Donnéeën.</label>
-                            </div>
-
-                            <button type="submit" id="submitBtn" class="join-submit-button">SEND / ABSCHICKEN</button>
-                            </div>
+                            <input type="hidden" id="Cotisation" name="Cotisation" value="">
+                            <input type="hidden" id="Mineur" name="Mineur" value="NON">
+                            <input type="hidden" id="Licence" name="Licence" value="Non">
+                            <input type="hidden" id="DateNaissance" name="DateNaissance" value="">
+                            <input type="hidden" id="CNS" name="CNS" value="">
                         </form>
 
                         <div id="success-box" aria-live="polite">
@@ -789,19 +962,19 @@
     const MERSCH75_LICENSE_PASSWORD = 'FIhNvLi26';
     const MERSCH75_UI_TEXTS = {
         lu: {
-            langue: 'Sprooch *', nom: 'Numm *', prenom: 'Virnumm *', dob: 'Gebuertsdatum *', mineur: 'Mannerjäreg', cat: 'FLH Kategorie', catAuto: 'Kategorie (auto)', role: 'Roll / Funktioun *', parent: 'Elengerzéiend *', tuteur1: 'Erzéiungsberechtegten 1 *', tuteur2: 'Erzéiungsberechtegten 2 *', nat: 'Nationalitéit *', cns: 'Matricule CNS *', medico: 'Medico *', licence: 'Lizenz *', club: 'Ale Veräin *', u7: 'U7: Medezineschen Zertifikat vun der sportlecher Aptitude obligatoresch (vum Hausdokter auszestellen)', strasse: 'Strooss *', postcode: 'Postcode *', ortschaft: 'Uertschaft *', email: 'E-Mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Schécken', sending: 'Gëtt geschéckt...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Merci fir däi Umeldung! Mir freeën eis, dech am Mersch 75 Handball Club ze begréissen.', successNote: "Dier kritt geschwënn dräi E-Maile vun der FLH mat den nächste Schrëtt fir d'Lizenzen ofzeschléissen. Kuckt air Mailbox, luet Fotoen erop a fëllt all néideg Donnéeën, déi gefrot ginn, an. All är Memberskaarte ginn Iech zougestallt, esoubal de Membersbäitrag bezuelt ass, Rechnung gëtt vum Mersch75 per Email zougeschéckt.", successNoteOne: "Du kritt geschwënn eng E-Mail vun der FLH mat den nächste Schrëtt fir d'Lizenz ofzeschléissen. Kuck deng Mailbox, lued e Foto erop a fëll all néideg Donnéeën, déi gefrot ginn, an. Däi Memberkaart gëtt der zougestallt, esoubal de Memberbäitrag bezuelt ass, Rechnung gëtt vum Mersch75 per Email zougeschéckt.", joinMembersCardHint: "D'Memberskaart mam QR-Code gëtt intern am Secretariat virbereet an eréischt no Bezuelung vum Membersbeitrag un den Demandeur geschéckt.", oui: 'JO', non: 'NEE', joueur: 'Spiller / Spillerin', officiel: 'Kontaktpersoun', arbitre: 'Arbitter', benevole: 'Bénévole', benevoleLic: 'Bénévole (mat Lizenz)', trainer: 'Trainer / Teamleader / Teambetreier', trainerLic: 'Trainer (mat Lizenz)', trainerLicence: 'TRAINERSCHÄIN', trainerLicenceHint: 'LUXQF1 - LUXQF5 oder Mastercoach', tarifTrainer: 'Trainer / Teamleader / Teambetreier - 0€/50€', parent_non: 'NEE (2 Erzéiungsberechtegter)', parent_oui: 'JO (1 Erzéiungsberechtegten)', legalRequired: 'Liest an akzeptéiert w.e.g. déi allgemeng Bedéngungen an den Dateschutz.', flhRequired: 'Bestätegt w.e.g. d\'Iwwermëttlung un flh.lu fir d\'Lizenz.', accuracyRequired: 'Bestätegt w.e.g. d\'Richtegkeet vun den Donnéeën.', extraRoles: 'Zousätzlech Funktioun(en) (fakultativ)', extraRolesHint: 'Z.B. Spiller deen och Arbitter ass. Déi éischt Funktioun bestëmmt d\'Kategorie.', alsoPrefix: 'Och', tarif: 'COTISATIOUN 2026-2027', tarifHint: '(Automatesch virgeschloen op Basis vun Alter, Funktioun oder Unzuel vun de Memberen déi nei ugemeld ginn. Bezuelt gëtt erréicht op Rechnung vum Veräin (e-mail oder Postwee))', tarifSummary: 'COTISATIOUN (AUTO-PROPOSÉIRT)', familyFlag: 'Famill-Memberskaart (2+ Persounen)', familyQuestion: 'Wëlls du méi Persounen umellen? (Famill-Memberskaart 2+)', familyQuestionNo: 'Nee, just mech', familyQuestionYes: 'Jo, méi Persounen (Famill)', cns13: 'MATRICULE CNS (13 ZIFFEREN) *', cns13Hint: "D'CNS Nummer steet op der Memberskaart / Carte Vitale. Aus hir gëtt Gebuertsdatum & Kategorie automatesch berechent.", secPerson: 'Demandeur 1', secCategory: 'Kategorie & Roll', secFamily: 'Famill-Memberskaart', secParent: 'Elteren / Erzéiungsberechtegten', secContact: 'Kontakt & Adress', secLicense: 'Lizenz-Detailer', secTarif: 'Zoustëmmung', familyPrenom: 'Virnumm *', familyCns13: 'CNS Matricule (13) *', familyBasis: 'Basis', familyBasisM: 'Jongen - Männer', familyBasisF: 'Meedercher - Fraen', familyRelation: 'Roll', familyRolePlayer: 'Spiller / Spillerin', familyRoleOfficial: 'Offiziell Persoun', familyRoleReferee: 'Arbitter', familyRoleVolunteer: 'Bénévole / Kontakt Famill', familyCotisation: 'Cotisatioun', familyCatAuto: 'Kategorie (auto)', familyQuestionHint: 'Famill-Memberskaart: Vun 2+ Persounen (Spiller) un gëtt de Family Tarif ugewand. Kanner, Elteren oder 2 Erwuessener vun der selwechter Adress kënnen zesummen umeld ginn.', familyCountLabel: 'Wivill Persounen op der Family Memberskaart? *', familyHint: 'Haaptlizenzéierten ass déi Persoun hei am Formulaire. Déi zousätzlech Persoune musse Familljememberen op där selwechter Adress sinn. Elteren/Erzéiungsberechtegten oder weider Spiller kënnen hei fir d\'Lizenz-Virbereedung agedroe ginn.', familyPerson: 'Persoun', familyNameLabel: 'Numm a Virnumm *', familyRelation: 'Roll / Relatioun *', familyRelParent: 'Elterendeel / Erzéiungsberechtegten', familyRelChild: 'Kand', familyRelSibling: 'Geschwëster', familyRelPartner: 'Partner / Partnerin', familyRelMember: 'Familljemember selwecht Adress', sameAddress: 'Selwecht Adress wéi Demandeur 1', familyRelChoose: '-- Wielt --', familyRoleChoose: '-- Wielt --', familyBenevole: 'Bénévole ginn?', familyBenevoleYes: 'Jo', familyBenevoleNo: 'Nee', familyLicense: 'Mat Lizenz?', familyLicenseYes: 'Jo, Lizenz virbereeden', familyLicenseNo: 'Nee / nëmmen QR', familyDob: 'Gebuertsdatum fir Lizenz', familyCns: 'Matricule CNS (5 Zifferen)', familyNat: 'Nationalitéit', familyClub: 'Ale Veräin (oder "NEANT")', menu: 'Menü', navHome: 'Startsäit', navTraining: 'Training', navNews: 'Neiegkeeten', navInside: 'Inside', navSponsors: 'Sponsoren / Partner', navStats: 'Statistik', navJoin: 'Maacht mat', navNextgen: 'NEXTGEN', navGallery: 'Galerie', navMemories: 'Erënnerungen', navLinks: 'Nützlech Linken', navHall: 'Hallenkarte', navCommunity: 'Community', navContact: 'Kontakt', joinMembersCards: 'Memberskaarten', joinMembersCardHint: 'D\'Memberskaart mam QR-Code gëtt intern am Secretariat virbereet an eréischt no Bezuelung vum Membersbeitrag un den Demandeur geschéckt.', sponsorCardHint: 'Memberskaarten mat Card-ID fir fräien Entrée fir eis Sponsore ginn nëmme vum Komité ausgestallt.', successCardIdLabel: 'Deng Card-ID:', successCardIdHint: 'Notéier der dës Card-ID — si gehéiert zu denger Memberskaart.',
+            langue: 'Sprooch *', nom: 'Numm *', prenom: 'Virnumm *', dob: 'Gebuertsdatum *', mineur: 'Mannerjäreg', cat: 'FLH Kategorie', catAuto: 'Kategorie (auto)', role: 'Roll / Funktioun *', parent: 'Elengerzéiend *', tuteur1: 'Erzéiungsberechtegten 1 *', tuteur2: 'Erzéiungsberechtegten 2 *', nat: 'Nationalitéit *', cns: 'Matricule CNS *', medico: 'Medico *', licence: 'Lizenz *', club: 'Ale Veräin *', u7: 'U7: Medezineschen Zertifikat vun der sportlecher Aptitude obligatoresch (vum Hausdokter auszestellen)', strasse: 'Strooss *', postcode: 'Postcode *', ortschaft: 'Uertschaft *', email: 'E-Mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Schécken', sending: 'Gëtt geschéckt...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Merci fir däi Umeldung! Mir freeën eis, dech am Mersch 75 Handball Club ze begréissen.', successNote: "Dier kritt geschwënn dräi E-Maile vun der FLH mat den nächste Schrëtt fir d'Lizenzen ofzeschléissen. Kuckt air Mailbox, luet Fotoen erop a fëllt all néideg Donnéeën, déi gefrot ginn, an. All är Memberskaarte ginn Iech zougestallt, esoubal de Membersbäitrag bezuelt ass, Rechnung gëtt vum Mersch75 per Email zougeschéckt.", successNoteOne: "Du kritt geschwënn eng E-Mail vun der FLH mat den nächste Schrëtt fir d'Lizenz ofzeschléissen. Kuck deng Mailbox, lued e Foto erop a fëll all néideg Donnéeën, déi gefrot ginn, an. Däi Memberkaart gëtt der zougestallt, esoubal de Memberbäitrag bezuelt ass, Rechnung gëtt vum Mersch75 per Email zougeschéckt.", joinMembersCardHint: "D'Memberskaart mam QR-Code gëtt intern am Secretariat virbereet an eréischt no Bezuelung vum Membersbeitrag un den Demandeur geschéckt.", oui: 'JO', non: 'NEE', joueur: 'Spiller / Spillerin', officiel: 'Kontaktpersoun', arbitre: 'Arbitter', benevole: 'Bénévole', benevoleLic: 'Bénévole (mat Lizenz)', trainer: 'Trainer / Teamleader / Teambetreier', trainerLic: 'Trainer (mat Lizenz)', trainerLicence: 'TRAINERSCHÄIN', trainerLicenceHint: 'LUXQF1 - LUXQF5 oder Mastercoach', tarifTrainer: 'Trainer / Teamleader / Teambetreier - 0€/50€', parent_non: 'NEE (2 Erzéiungsberechtegter)', parent_oui: 'JO (1 Erzéiungsberechtegten)', legalRequired: 'Liest an akzeptéiert w.e.g. déi allgemeng Bedéngungen an den Dateschutz.', flhRequired: 'Bestätegt w.e.g. d\'Iwwermëttlung un flh.lu fir d\'Lizenz.', accuracyRequired: 'Bestätegt w.e.g. d\'Richtegkeet vun den Donnéeën.', extraRoles: 'Zousätzlech Funktioun(en) (fakultativ)', extraRolesHint: 'Z.B. Spiller deen och Arbitter ass. Déi éischt Funktioun bestëmmt d\'Kategorie.', alsoPrefix: 'Och', tarif: 'COTISATIOUN 2026-2027', tarifHint: '(Automatesch virgeschloen op Basis vun Alter, Funktioun oder Unzuel vun de Memberen déi nei ugemeld ginn. Bezuelt gëtt erréicht op Rechnung vum Veräin (e-mail oder Postwee))', tarifSummary: 'COTISATIOUN (AUTO-PROPOSÉIRT)', familyFlag: 'Famill-Memberskaart (2+ Persounen)', familyQuestion: 'Wëlls du méi Persounen umellen? (Famill-Memberskaart 2+)', familyQuestionNo: 'Nee, just mech', familyQuestionYes: 'Jo, méi Persounen (Famill)', cns13: 'MATRICULE CNS (13 ZIFFEREN) *', cns13Hint: "D'CNS Nummer steet op der Memberskaart / Carte Vitale. Aus hir gëtt Gebuertsdatum & Kategorie automatesch berechent.", secPerson: 'Demandeur 1', secCategory: 'Kategorie & Roll', secFamily: 'Famill-Memberskaart', secParent: 'Elteren / Erzéiungsberechtegten', secContact: 'Kontakt & Adress', secLicense: 'Lizenz-Detailer', secTarif: 'Zoustëmmung', familyPrenom: 'Virnumm *', familyCns13: 'CNS Matricule (13) *', familyBasis: 'Basis', familyBasisM: 'Jongen - Männer', familyBasisF: 'Meedercher - Fraen', familyRelation: 'Roll', familyRolePlayer: 'Spiller / Spillerin', familyRoleOfficial: 'Offiziell Persoun', familyRoleReferee: 'Arbitter', familyRoleVolunteer: 'Bénévole / Kontakt Famill', familyCotisation: 'Cotisatioun', familyCatAuto: 'Kategorie (auto)', familyQuestionHint: 'Famill-Memberskaart: Vun 2+ Persounen (Spiller) un gëtt de Family Tarif ugewand. Kanner, Elteren oder 2 Erwuessener vun der selwechter Adress kënnen zesummen umeld ginn.', familyCountLabel: 'Wivill Persounen op der Family Memberskaart? *', familyHint: 'Haaptlizenzéierten ass déi Persoun hei am Formulaire. Déi zousätzlech Persoune musse Familljememberen op där selwechter Adress sinn. Elteren/Erzéiungsberechtegten oder weider Spiller kënnen hei fir d\'Lizenz-Virbereedung agedroe ginn.', familyPerson: 'Persoun', familyNameLabel: 'Numm a Virnumm *', familyRelation: 'Roll / Relatioun *', familyRelParent: 'Elterendeel / Erzéiungsberechtegten', familyRelChild: 'Kand', familyRelSibling: 'Geschwëster', familyRelPartner: 'Partner / Partnerin', familyRelMember: 'Familljemember selwecht Adress', sameAddress: 'Selwecht Adress wéi Demandeur 1', familyRelChoose: '-- Wielt --', familyRoleChoose: '-- Wielt --', familyBenevole: 'Bénévole ginn?', familyBenevoleYes: 'Jo', familyBenevoleNo: 'Nee', familyLicense: 'Mat Lizenz?', familyLicenseYes: 'Jo, Lizenz virbereeden', familyLicenseNo: 'Nee / nëmmen QR', familyDob: 'Gebuertsdatum fir Lizenz', familyCns: 'Matricule CNS (5 Zifferen)', familyNat: 'Nationalitéit', familyClub: 'Ale Veräin (oder "NEANT")', menu: 'Menü', navHome: 'Startsäit', navTraining: 'Training', navNews: 'Neiegkeeten', navInside: 'Inside', navSponsors: 'Sponsoren / Partner', navStats: 'Statistik', navJoin: 'Maacht mat', navNextgen: 'NEXTGEN', navGallery: 'Galerie', navMemories: 'Erënnerungen', navLinks: 'Nützlech Linken', navHall: 'Hallenkarte', navCommunity: 'Community', navContact: 'Kontakt', joinMembersCards: 'Memberskaarten', joinMembersCardHint: 'D\'Memberskaart mam QR-Code gëtt intern am Secretariat virbereet an eréischt no Bezuelung vum Membersbeitrag un den Demandeur geschéckt.', sponsorCardHint: 'Memberskaarten mat Card-ID fir fräien Entrée fir eis Sponsore ginn nëmme vum Komité ausgestallt.', successCardIdLabel: 'Deng Card-ID:', successCardIdHint: 'Notéier der dës Card-ID — si gehéiert zu denger Memberskaart.', wizardNext: 'Weider', wizardBack: 'Zréck', wizardYes: 'Jo', wizardNo: 'Nee', wizardFamilyQ: 'Famill?', wizardSummaryTitle: 'Deng Äntwerten', wizardStepTitles: { 0: 'Wëlls du méi Persounen umellen?', 1: 'Demandeur 1 – Perséinlech Donnéeën', 2: 'Sprooch & Nationalitéit', 3: 'Kategorie & Roll', 4: 'Kontakt', 5: 'Medico & Zertifikat', 6: 'Elteren / Erzéiungsberechtegten', 7: 'Famill-Memberskaart', 8: 'Adresse', 9: 'Zoustëmmung & Ofschécken' }, wizardStepHints: { 0: 'Famill-Memberskaart: Vun 2+ Persounen (Spiller) un gëtt de Family Tarif ugewand.', 1: "D'CNS Nummer steet op der Memberskaart / Carte Vitale. Aus hir gëtt Gebuertsdatum & Kategorie automatesch berechent.", 2: '', 3: "D'Kategorie gëtt automatesch aus der CNS berechent. Wiel d'Roll an d'Basis (Geschlecht).", 4: '', 5: '', 6: '', 7: 'Haaptlizenzéierten ass déi Persoun hei am Formulaire. Déi zousätzlech Persoune musse Familljememberen op där selwechter Adress sinn.', 8: '', 9: '' }
         },
         fr: {
-            langue: 'Langue *', nom: 'Nom *', prenom: 'Prénom *', dob: 'Date de naissance *', mineur: 'Mineur', cat: 'Catégorie FLH', catAuto: 'Catégorie (auto)', role: 'Rôle / Fonction *', parent: 'Parent isolé *', tuteur1: 'Tuteur 1 *', tuteur2: 'Tuteur 2 *', nat: 'Nationalité *', cns: 'Matricule CNS *', medico: 'Médico *', licence: 'Licence *', club: 'Ancien club *', u7: 'U7: Certificat médical d\'aptitude sportive obligatoire (à faire par le médecin traitant)', strasse: 'Rue *', postcode: 'Code postal *', ortschaft: 'Localité *', email: 'E-mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Envoyer', sending: 'Envoi...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Merci pour ton inscription ! Nous sommes heureux de te souhaiter la bienvenue au Mersch 75 Handball Club.', successNote: 'Tu recevras prochainement un e-mail avec les prochaines étapes pour finaliser ta licence. Consulte ta boîte mail, télécharge une photo et complète les données supplémentaires requises. Ta carte de membre te sera envoyée après le paiement de la cotisation.', oui: 'OUI', non: 'NON', joueur: 'Joueur / Joueuse', officiel: 'Contact', arbitre: 'Arbitre', benevole: 'Bénévole', benevoleLic: 'Bénévole (avec licence)', trainer: 'Trainer / Teamleader / Teambetreier', trainerLic: 'Trainer (mat Lizenz)', trainerLicence: 'TRAINERSCHÄIN', trainerLicenceHint: 'LUXQF1 - LUXQF5 oder Mastercoach', tarifTrainer: 'Trainer / Teamleader / Teambetreier - 0€/50€', parent_non: 'NON (2 tuteurs)', parent_oui: 'OUI (1 tuteur)', legalRequired: 'Veuillez lire et accepter les conditions générales et la protection des données.', flhRequired: 'Veuillez confirmer la transmission à flh.lu pour la licence.', accuracyRequired: 'Veuillez confirmer l\'exactitude des données.', extraRoles: 'Fonction(s) supplémentaire(s) (facultatif)', extraRolesHint: 'P.ex. joueur qui est aussi arbitre. La première fonction détermine la catégorie.', alsoPrefix: 'Aussi', tarif: 'COTISATION 2026-2027', tarifHint: '(Proposé automatiquement selon l\'âge, la fonction ou le nombre de nouveaux membres inscrits. Le paiement s\'effectue sur facture du club (e-mail ou courrier postal).)', tarifSummary: 'COTISATION (AUTO-PROPOSÉE)', familyFlag: 'Carte famille (2+ personnes)', familyQuestion: 'Voulez-vous inscrire d\'autres personnes? (Carte famille 2+)', familyQuestionNo: 'Non, juste moi', familyQuestionYes: 'Oui, plusieurs personnes (famille)', cns13: 'MATRICULE CNS (13 CHIFFRES) *', cns13Hint: "Le numéro CNS se trouve sur la carte membre / Carte Vitale. La date de naissance et la catégorie en sont automatiquement calculées.", secPerson: 'Demandeur 1', secCategory: 'Catégorie & Rôle', secFamily: 'Carte famille', secParent: 'Parents / Tuteurs', secContact: 'Contact & Adresse', secLicense: 'Détails de licence', secTarif: 'Consentement', familyPrenom: 'Prénom *', familyCns13: 'CNS Matricule (13) *', familyBasis: 'Base Catégorie', familyBasisM: 'Garçons - Hommes', familyBasisF: 'Filles - Femmes', familyRelation: 'Rôle', familyRolePlayer: 'Joueur / Joueuse', familyRoleOfficial: 'Officiel(le)', familyRoleReferee: 'Arbitre', familyRoleVolunteer: 'Bénévole / Contact Famille', familyCotisation: 'Cotisation', familyCatAuto: 'Catégorie (auto)', familyQuestionHint: 'Carte famille: à partir de 2 personnes, le tarif famille est appliqué. Enfants, parents ou 2 adultes de la même adresse peuvent être inscrits ensemble.', familyCountLabel: 'Combien de personnes sur la carte famille? *', familyHint: 'Le titulaire principal est la personne dans ce formulaire. Les personnes supplémentaires doivent être membres de la famille à la même adresse. Parents/tuteurs ou autres joueurs peuvent être inscrits ici pour la préparation de la licence.', familyPerson: 'Personne', familyNameLabel: 'Nom et Prénom *', familyRelation: 'Rôle / Relation *', familyRelParent: 'Parent / Tuteur', familyRelChild: 'Enfant', familyRelSibling: 'Frère / Sœur', familyRelPartner: 'Partenaire', familyRelMember: 'Membre de la famille même adresse', sameAddress: "Même adresse que le Demandeur 1", familyRelChoose: '-- Choisissez --', familyRoleChoose: '-- Choisissez --', familyBenevole: 'Bénévole?', familyBenevoleYes: 'Oui', familyBenevoleNo: 'Non', familyLicense: 'Avec licence?', familyLicenseYes: 'Oui, préparer licence', familyLicenseNo: 'Non / QR seulement', familyDob: 'Date de naissance pour licence', familyCns: 'Matricule CNS (5 chiffres)', familyNat: 'Nationalité', familyClub: 'Ancien club (ou "NEANT")', menu: 'Menu', navHome: 'Accueil', navTraining: 'Entraînement', navNews: 'Actualités', navInside: 'Inside', navSponsors: 'Sponsors / Partenaires', navStats: 'Statistiques', navJoin: 'Rejoignez-nous', navNextgen: 'NEXTGEN', navGallery: 'Galerie', navMemories: 'Souvenirs', navLinks: 'Liens utiles', navHall: 'Plan des salles', navCommunity: 'Communauté', navContact: 'Contact', joinMembersCards: 'Cartes de membre', joinMembersCardHint: 'La carte de membre avec QR code est préparée en interne par le secrétariat et envoyée au demandeur uniquement après paiement de la cotisation.', sponsorCardHint: 'Les cartes de membre avec Card-ID pour entrée gratuite à destination de nos sponsors sont uniquement émises par le comité.', successCardIdLabel: 'Votre Card-ID :', successCardIdHint: 'Notez bien cette Card-ID — elle appartient à votre carte de membre.',
+            langue: 'Langue *', nom: 'Nom *', prenom: 'Prénom *', dob: 'Date de naissance *', mineur: 'Mineur', cat: 'Catégorie FLH', catAuto: 'Catégorie (auto)', role: 'Rôle / Fonction *', parent: 'Parent isolé *', tuteur1: 'Tuteur 1 *', tuteur2: 'Tuteur 2 *', nat: 'Nationalité *', cns: 'Matricule CNS *', medico: 'Médico *', licence: 'Licence *', club: 'Ancien club *', u7: 'U7: Certificat médical d\'aptitude sportive obligatoire (à faire par le médecin traitant)', strasse: 'Rue *', postcode: 'Code postal *', ortschaft: 'Localité *', email: 'E-mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Envoyer', sending: 'Envoi...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Merci pour ton inscription ! Nous sommes heureux de te souhaiter la bienvenue au Mersch 75 Handball Club.', successNote: 'Tu recevras prochainement un e-mail avec les prochaines étapes pour finaliser ta licence. Consulte ta boîte mail, télécharge une photo et complète les données supplémentaires requises. Ta carte de membre te sera envoyée après le paiement de la cotisation.', oui: 'OUI', non: 'NON', joueur: 'Joueur / Joueuse', officiel: 'Contact', arbitre: 'Arbitre', benevole: 'Bénévole', benevoleLic: 'Bénévole (avec licence)', trainer: 'Trainer / Teamleader / Teambetreier', trainerLic: 'Trainer (mat Lizenz)', trainerLicence: 'TRAINERSCHÄIN', trainerLicenceHint: 'LUXQF1 - LUXQF5 oder Mastercoach', tarifTrainer: 'Trainer / Teamleader / Teambetreier - 0€/50€', parent_non: 'NON (2 tuteurs)', parent_oui: 'OUI (1 tuteur)', legalRequired: 'Veuillez lire et accepter les conditions générales et la protection des données.', flhRequired: 'Veuillez confirmer la transmission à flh.lu pour la licence.', accuracyRequired: 'Veuillez confirmer l\'exactitude des données.', extraRoles: 'Fonction(s) supplémentaire(s) (facultatif)', extraRolesHint: 'P.ex. joueur qui est aussi arbitre. La première fonction détermine la catégorie.', alsoPrefix: 'Aussi', tarif: 'COTISATION 2026-2027', tarifHint: '(Proposé automatiquement selon l\'âge, la fonction ou le nombre de nouveaux membres inscrits. Le paiement s\'effectue sur facture du club (e-mail ou courrier postal).)', tarifSummary: 'COTISATION (AUTO-PROPOSÉE)', familyFlag: 'Carte famille (2+ personnes)', familyQuestion: 'Voulez-vous inscrire d\'autres personnes? (Carte famille 2+)', familyQuestionNo: 'Non, juste moi', familyQuestionYes: 'Oui, plusieurs personnes (famille)', cns13: 'MATRICULE CNS (13 CHIFFRES) *', cns13Hint: "Le numéro CNS se trouve sur la carte membre / Carte Vitale. La date de naissance et la catégorie en sont automatiquement calculées.", secPerson: 'Demandeur 1', secCategory: 'Catégorie & Rôle', secFamily: 'Carte famille', secParent: 'Parents / Tuteurs', secContact: 'Contact & Adresse', secLicense: 'Détails de licence', secTarif: 'Consentement', familyPrenom: 'Prénom *', familyCns13: 'CNS Matricule (13) *', familyBasis: 'Base Catégorie', familyBasisM: 'Garçons - Hommes', familyBasisF: 'Filles - Femmes', familyRelation: 'Rôle', familyRolePlayer: 'Joueur / Joueuse', familyRoleOfficial: 'Officiel(le)', familyRoleReferee: 'Arbitre', familyRoleVolunteer: 'Bénévole / Contact Famille', familyCotisation: 'Cotisation', familyCatAuto: 'Catégorie (auto)', familyQuestionHint: 'Carte famille: à partir de 2 personnes, le tarif famille est appliqué. Enfants, parents ou 2 adultes de la même adresse peuvent être inscrits ensemble.', familyCountLabel: 'Combien de personnes sur la carte famille? *', familyHint: 'Le titulaire principal est la personne dans ce formulaire. Les personnes supplémentaires doivent être membres de la famille à la même adresse. Parents/tuteurs ou autres joueurs peuvent être inscrits ici pour la préparation de la licence.', familyPerson: 'Personne', familyNameLabel: 'Nom et Prénom *', familyRelation: 'Rôle / Relation *', familyRelParent: 'Parent / Tuteur', familyRelChild: 'Enfant', familyRelSibling: 'Frère / Sœur', familyRelPartner: 'Partenaire', familyRelMember: 'Membre de la famille même adresse', sameAddress: "Même adresse que le Demandeur 1", familyRelChoose: '-- Choisissez --', familyRoleChoose: '-- Choisissez --', familyBenevole: 'Bénévole?', familyBenevoleYes: 'Oui', familyBenevoleNo: 'Non', familyLicense: 'Avec licence?', familyLicenseYes: 'Oui, préparer licence', familyLicenseNo: 'Non / QR seulement', familyDob: 'Date de naissance pour licence', familyCns: 'Matricule CNS (5 chiffres)', familyNat: 'Nationalité', familyClub: 'Ancien club (ou "NEANT")', menu: 'Menu', navHome: 'Accueil', navTraining: 'Entraînement', navNews: 'Actualités', navInside: 'Inside', navSponsors: 'Sponsors / Partenaires', navStats: 'Statistiques', navJoin: 'Rejoignez-nous', navNextgen: 'NEXTGEN', navGallery: 'Galerie', navMemories: 'Souvenirs', navLinks: 'Liens utiles', navHall: 'Plan des salles', navCommunity: 'Communauté', navContact: 'Contact', joinMembersCards: 'Cartes de membre', joinMembersCardHint: 'La carte de membre avec QR code est préparée en interne par le secrétariat et envoyée au demandeur uniquement après paiement de la cotisation.', sponsorCardHint: 'Les cartes de membre avec Card-ID pour entrée gratuite à destination de nos sponsors sont uniquement émises par le comité.', successCardIdLabel: 'Votre Card-ID :', successCardIdHint: 'Notez bien cette Card-ID — elle appartient à votre carte de membre.', wizardNext: 'Suivant', wizardBack: 'Retour', wizardYes: 'Oui', wizardNo: 'Non', wizardFamilyQ: 'Famille?', wizardSummaryTitle: 'Tes réponses', wizardStepTitles: { 0: 'Veux-tu inscrire d\'autres personnes?', 1: 'Demandeur 1 – Données personnelles', 2: 'Langue & Nationalité', 3: 'Catégorie & Rôle', 4: 'Contact', 5: 'Médico & Certificat', 6: 'Parents / Tuteurs', 7: 'Carte famille', 8: 'Adresse', 9: 'Consentement & Envoi' }, wizardStepHints: { 0: 'Carte famille: à partir de 2 personnes (joueurs) le tarif famille est appliqué.', 1: 'Le numéro CNS se trouve sur la carte de membre / Carte Vitale. La date de naissance et la catégorie sont calculées automatiquement.', 2: '', 3: 'La catégorie est calculée automatiquement à partir du CNS. Choisis le rôle et la base (sexe).', 4: '', 5: '', 6: '', 7: 'Le titulaire principal est la personne dans ce formulaire. Les personnes supplémentaires doivent être membres de la famille à la même adresse.', 8: '', 9: '' }
         },
         de: {
-            langue: 'Sprache *', nom: 'Name *', prenom: 'Vorname *', dob: 'Geburtsdatum *', mineur: 'Minderjährig', cat: 'FLH Kategorie', catAuto: 'Kategorie (auto)', role: 'Rolle / Funktion *', parent: 'Alleinerziehend *', tuteur1: 'Erziehungsberechtigter 1 *', tuteur2: 'Erziehungsberechtigter 2 *', nat: 'Nationalität *', cns: 'CNS-Matrikelnummer *', medico: 'Medico *', licence: 'Lizenz *', club: 'Ehemaliger Verein *', u7: 'U7: Ärztliches Attest der sportlichen Tauglichkeit obligatorisch (vom Hausarzt auszustellen)', strasse: 'Straße *', postcode: 'Postleitzahl *', ortschaft: 'Ortschaft *', email: 'E-Mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Senden', sending: 'Senden...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Vielen Dank für deine Anmeldung! Wir freuen uns, dich im Mersch 75 Handball Club willkommen zu heißen.', successNote: 'In Kürze erhältst du eine E-Mail mit den nächsten Schritten zur Vervollständigung deiner Lizenz. Bitte folge dem Link in der E-Mail, um ein aktuelles Passfoto hochzuladen und alle erforderlichen Zusatzdaten auszufüllen. Deine Mitgliedskarte wird nach Zahlung des Mitgliedsbeitrags an dich zugestellt.', oui: 'JA', non: 'NEIN', joueur: 'Spieler / Spielerin', officiel: 'Kontaktperson', arbitre: 'Schiedsrichter', benevole: 'Freiwillige', benevoleLic: 'Freiwillige (mit Lizenz)', trainer: 'Trainer / Teamleader / Teambetreier', trainerLic: 'Trainer (mat Lizenz)', trainerLicence: 'TRAINERSCHÄIN', trainerLicenceHint: 'LUXQF1 - LUXQF5 oder Mastercoach', tarifTrainer: 'Trainer / Teamleader / Teambetreier - 0€/50€', parent_non: 'NEIN (2 Erziehungsberechtigte)', parent_oui: 'JA (1 Erziehungsberechtigter)', legalRequired: 'Bitte die allgemeinen Bedingungen und den Datenschutz lesen und akzeptieren.', flhRequired: 'Bitte die Übermittlung an flh.lu für die Lizenz bestätigen.', accuracyRequired: 'Bitte die Richtigkeit der Angaben bestätigen.', extraRoles: 'Zusätzliche Funktion(en) (optional)', extraRolesHint: 'Z.B. Spieler der auch Schiedsrichter ist. Die erste Funktion bestimmt die Kategorie.', alsoPrefix: 'Auch', tarif: 'MITGLIEDSBEITRAG 2026-2027', tarifHint: '(Automatisch vorgeschlagen auf Basis von Alter, Funktion oder Anzahl der neu angemeldeten Mitglieder. Bezahlt wird auf Rechnung des Vereins (E-Mail oder Post).)', tarifSummary: 'COTISATION (AUTO-VORSCHLAG)', familyFlag: 'Familienkarte (2+ Personen)', familyQuestion: 'Möchtest du weitere Personen anmelden? (Familienkarte 2+)', familyQuestionNo: 'Nein, nur mich', familyQuestionYes: 'Ja, mehrere Personen (Familie)', cns13: 'MATRIKEL CNS (13 ZIFFERN) *', cns13Hint: 'Die CNS-Nummer steht auf der Mitgliedskarte / Carte Vitale. Daraus werden Geburtsdatum & Kategorie automatisch berechnet.', secPerson: 'Antragsteller 1', secCategory: 'Kategorie & Rolle', secFamily: 'Familienkarte', secParent: 'Eltern / Erziehungsberechtigte', secContact: 'Kontakt & Adresse', secLicense: 'Lizenz-Details', secTarif: 'Einwilligung', familyPrenom: 'Vorname *', familyCns13: 'CNS Matricule (13) *', familyBasis: 'Basis', familyBasisM: 'Jungen - Männer', familyBasisF: 'Mädchen - Frauen', familyRelation: 'Rolle', familyRolePlayer: 'Spieler / Spielerin', familyRoleOfficial: 'Offizielle Person', familyRoleReferee: 'Schiedsrichter', familyRoleVolunteer: 'Freiwillige / Familienkontakt', familyCotisation: 'Mitgliedsbeitrag', familyCatAuto: 'Kategorie (auto)', familyQuestionHint: 'Familienkarte: ab 2 Personen wird der Familientarif angewendet. Kinder, Eltern oder 2 Erwachsene derselben Adresse können sich gemeinsam anmelden.', familyCountLabel: 'Wie viele Personen auf der Familienkarte? *', familyHint: 'Der Hauptlizenznehmer ist die Person in diesem Formular. Die zusätzlichen Personen müssen Familienmitglieder an derselben Adresse sein. Eltern/Erziehungsberechtigte oder weitere Spieler können hier für die Lizenzvorbereitung eingetragen werden.', familyPerson: 'Person', familyNameLabel: 'Name und Vorname *', familyRelation: 'Rolle / Beziehung *', familyRelParent: 'Elternteil / Erziehungsberechtigter', familyRelChild: 'Kind', familyRelSibling: 'Geschwister', familyRelPartner: 'Partner / Partnerin', familyRelMember: 'Familienmitglied gleiche Adresse', sameAddress: 'Gleiche Adresse wie Antragsteller 1', familyRelChoose: '-- Wählen --', familyRoleChoose: '-- Wählen --', familyBenevole: 'Freiwilliger?', familyBenevoleYes: 'Ja', familyBenevoleNo: 'Nein', familyLicense: 'Mit Lizenz?', familyLicenseYes: 'Ja, Lizenz vorbereiten', familyLicenseNo: 'Nein / nur QR', familyDob: 'Geburtsdatum für Lizenz', familyCns: 'CNS-Matrikelnummer (5 Ziffern)', familyNat: 'Nationalität', familyClub: 'Ehemaliger Verein (oder "NEANT")', menu: 'Menü', navHome: 'Startseite', navTraining: 'Training', navNews: 'Neuigkeiten', navInside: 'Inside', navSponsors: 'Sponsoren / Partner', navStats: 'Statistik', navJoin: 'Mitmachen', navNextgen: 'NEXTGEN', navGallery: 'Galerie', navMemories: 'Memories', navLinks: 'Nützliche Links', navHall: 'Hallenplan', navCommunity: 'Community', navContact: 'Kontakt', joinMembersCards: 'Mitgliedskarten', joinMembersCardHint: 'Die Mitgliedskarte mit QR-Code wird intern vom Sekretariat vorbereitet und erst nach Zahlung des Mitgliedsbeitrags an den Antragsteller gesendet.', sponsorCardHint: 'Mitgliedskarten mit Card-ID für freien Eintritt für unsere Sponsoren werden nur vom Komitee ausgestellt.', successCardIdLabel: 'Deine Card-ID:', successCardIdHint: 'Notiere dir diese Card-ID — sie gehört zu deiner Mitgliedskarte.',
+            langue: 'Sprache *', nom: 'Name *', prenom: 'Vorname *', dob: 'Geburtsdatum *', mineur: 'Minderjährig', cat: 'FLH Kategorie', catAuto: 'Kategorie (auto)', role: 'Rolle / Funktion *', parent: 'Alleinerziehend *', tuteur1: 'Erziehungsberechtigter 1 *', tuteur2: 'Erziehungsberechtigter 2 *', nat: 'Nationalität *', cns: 'CNS-Matrikelnummer *', medico: 'Medico *', licence: 'Lizenz *', club: 'Ehemaliger Verein *', u7: 'U7: Ärztliches Attest der sportlichen Tauglichkeit obligatorisch (vom Hausarzt auszustellen)', strasse: 'Straße *', postcode: 'Postleitzahl *', ortschaft: 'Ortschaft *', email: 'E-Mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Senden', sending: 'Senden...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Vielen Dank für deine Anmeldung! Wir freuen uns, dich im Mersch 75 Handball Club willkommen zu heißen.', successNote: 'In Kürze erhältst du eine E-Mail mit den nächsten Schritten zur Vervollständigung deiner Lizenz. Bitte folge dem Link in der E-Mail, um ein aktuelles Passfoto hochzuladen und alle erforderlichen Zusatzdaten auszufüllen. Deine Mitgliedskarte wird nach Zahlung des Mitgliedsbeitrags an dich zugestellt.', oui: 'JA', non: 'NEIN', joueur: 'Spieler / Spielerin', officiel: 'Kontaktperson', arbitre: 'Schiedsrichter', benevole: 'Freiwillige', benevoleLic: 'Freiwillige (mit Lizenz)', trainer: 'Trainer / Teamleader / Teambetreier', trainerLic: 'Trainer (mat Lizenz)', trainerLicence: 'TRAINERSCHÄIN', trainerLicenceHint: 'LUXQF1 - LUXQF5 oder Mastercoach', tarifTrainer: 'Trainer / Teamleader / Teambetreier - 0€/50€', parent_non: 'NEIN (2 Erziehungsberechtigte)', parent_oui: 'JA (1 Erziehungsberechtigter)', legalRequired: 'Bitte die allgemeinen Bedingungen und den Datenschutz lesen und akzeptieren.', flhRequired: 'Bitte die Übermittlung an flh.lu für die Lizenz bestätigen.', accuracyRequired: 'Bitte die Richtigkeit der Angaben bestätigen.', extraRoles: 'Zusätzliche Funktion(en) (optional)', extraRolesHint: 'Z.B. Spieler der auch Schiedsrichter ist. Die erste Funktion bestimmt die Kategorie.', alsoPrefix: 'Auch', tarif: 'MITGLIEDSBEITRAG 2026-2027', tarifHint: '(Automatisch vorgeschlagen auf Basis von Alter, Funktion oder Anzahl der neu angemeldeten Mitglieder. Bezahlt wird auf Rechnung des Vereins (E-Mail oder Post).)', tarifSummary: 'COTISATION (AUTO-VORSCHLAG)', familyFlag: 'Familienkarte (2+ Personen)', familyQuestion: 'Möchtest du weitere Personen anmelden? (Familienkarte 2+)', familyQuestionNo: 'Nein, nur mich', familyQuestionYes: 'Ja, mehrere Personen (Familie)', cns13: 'MATRIKEL CNS (13 ZIFFERN) *', cns13Hint: 'Die CNS-Nummer steht auf der Mitgliedskarte / Carte Vitale. Daraus werden Geburtsdatum & Kategorie automatisch berechnet.', secPerson: 'Antragsteller 1', secCategory: 'Kategorie & Rolle', secFamily: 'Familienkarte', secParent: 'Eltern / Erziehungsberechtigte', secContact: 'Kontakt & Adresse', secLicense: 'Lizenz-Details', secTarif: 'Einwilligung', familyPrenom: 'Vorname *', familyCns13: 'CNS Matricule (13) *', familyBasis: 'Basis', familyBasisM: 'Jungen - Männer', familyBasisF: 'Mädchen - Frauen', familyRelation: 'Rolle', familyRolePlayer: 'Spieler / Spielerin', familyRoleOfficial: 'Offizielle Person', familyRoleReferee: 'Schiedsrichter', familyRoleVolunteer: 'Freiwillige / Familienkontakt', familyCotisation: 'Mitgliedsbeitrag', familyCatAuto: 'Kategorie (auto)', familyQuestionHint: 'Familienkarte: ab 2 Personen wird der Familientarif angewendet. Kinder, Eltern oder 2 Erwachsene derselben Adresse können sich gemeinsam anmelden.', familyCountLabel: 'Wie viele Personen auf der Familienkarte? *', familyHint: 'Der Hauptlizenznehmer ist die Person in diesem Formular. Die zusätzlichen Personen müssen Familienmitglieder an derselben Adresse sein. Eltern/Erziehungsberechtigte oder weitere Spieler können hier für die Lizenzvorbereitung eingetragen werden.', familyPerson: 'Person', familyNameLabel: 'Name und Vorname *', familyRelation: 'Rolle / Beziehung *', familyRelParent: 'Elternteil / Erziehungsberechtigter', familyRelChild: 'Kind', familyRelSibling: 'Geschwister', familyRelPartner: 'Partner / Partnerin', familyRelMember: 'Familienmitglied gleiche Adresse', sameAddress: 'Gleiche Adresse wie Antragsteller 1', familyRelChoose: '-- Wählen --', familyRoleChoose: '-- Wählen --', familyBenevole: 'Freiwilliger?', familyBenevoleYes: 'Ja', familyBenevoleNo: 'Nein', familyLicense: 'Mit Lizenz?', familyLicenseYes: 'Ja, Lizenz vorbereiten', familyLicenseNo: 'Nein / nur QR', familyDob: 'Geburtsdatum für Lizenz', familyCns: 'CNS-Matrikelnummer (5 Ziffern)', familyNat: 'Nationalität', familyClub: 'Ehemaliger Verein (oder "NEANT")', menu: 'Menü', navHome: 'Startseite', navTraining: 'Training', navNews: 'Neuigkeiten', navInside: 'Inside', navSponsors: 'Sponsoren / Partner', navStats: 'Statistik', navJoin: 'Mitmachen', navNextgen: 'NEXTGEN', navGallery: 'Galerie', navMemories: 'Memories', navLinks: 'Nützliche Links', navHall: 'Hallenplan', navCommunity: 'Community', navContact: 'Kontakt', joinMembersCards: 'Mitgliedskarten', joinMembersCardHint: 'Die Mitgliedskarte mit QR-Code wird intern vom Sekretariat vorbereitet und erst nach Zahlung des Mitgliedsbeitrags an den Antragsteller gesendet.', sponsorCardHint: 'Mitgliedskarten mit Card-ID für freien Eintritt für unsere Sponsoren werden nur vom Komitee ausgestellt.', successCardIdLabel: 'Deine Card-ID:', successCardIdHint: 'Notiere dir diese Card-ID — sie gehört zu deiner Mitgliedskarte.', wizardNext: 'Weiter', wizardBack: 'Zurück', wizardYes: 'Ja', wizardNo: 'Nein', wizardFamilyQ: 'Familie?', wizardSummaryTitle: 'Deine Antworten', wizardStepTitles: { 0: 'Möchtest du weitere Personen anmelden?', 1: 'Antragsteller 1 – Persönliche Daten', 2: 'Sprache & Nationalität', 3: 'Kategorie & Rolle', 4: 'Kontakt', 5: 'Medico & Zertifikat', 6: 'Eltern / Erziehungsberechtigte', 7: 'Familien-Mitgliedskarte', 8: 'Adresse', 9: 'Zustimmung & Absenden' }, wizardStepHints: { 0: 'Familien-Mitgliedskarte: Ab 2 Personen (Spieler) wird der Familientarif angewendet.', 1: 'Die CNS-Nummer steht auf der Mitgliedskarte / Carte Vitale. Daraus werden Geburtsdatum & Kategorie automatisch berechnet.', 2: '', 3: 'Die Kategorie wird automatisch aus dem CNS berechnet. Wähle Rolle und Basis (Geschlecht).', 4: '', 5: '', 6: '', 7: 'Der Hauptlizenzinhaber ist die Person in diesem Formular. Die zusätzlichen Personen müssen Familienmitglieder an derselben Adresse sein.', 8: '', 9: '' }
         },
         en: {
-            langue: 'Language *', nom: 'Last name *', prenom: 'First name *', dob: 'Date of birth *', mineur: 'Minor', cat: 'FLH category', catAuto: 'Category (auto)', role: 'Role / Function *', parent: 'Single parent *', tuteur1: 'Guardian 1 *', tuteur2: 'Guardian 2 *', nat: 'Nationality *', cns: 'CNS number *', medico: 'Medical check *', licence: 'Licence *', club: 'Former club *', u7: 'U7: Medical certificate of sports aptitude required (to be issued by your family doctor)', strasse: 'Street *', postcode: 'Postcode *', ortschaft: 'City *', email: 'Email *', gsm1: 'Mobile 1 *', gsm2: 'Mobile 2', send: 'Submit', sending: 'Sending...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Thank you for your registration! We are delighted to welcome you to the Mersch 75 Handball Club.', successNote: 'You will soon receive an email with the next steps to complete your licence. Please check your inbox, upload a recent photo and fill in any additional details required. Your membership card will be sent once the membership fee has been paid.', oui: 'YES', non: 'NO', joueur: 'Player', officiel: 'Contact person', arbitre: 'Referee', benevole: 'Volunteer', benevoleLic: 'Volunteer (with licence)', trainer: 'Trainer / Teamleader / Teambetreier', trainerLic: 'Trainer (mat Lizenz)', trainerLicence: 'TRAINERSCHÄIN', trainerLicenceHint: 'LUXQF1 - LUXQF5 oder Mastercoach', tarifTrainer: 'Trainer / Teamleader / Teambetreier - 0€/50€', parent_non: 'NO (2 guardians)', parent_oui: 'YES (1 guardian)', legalRequired: 'Please read and accept the terms and conditions and data protection.', flhRequired: 'Please confirm the transfer to flh.lu for the licence.', accuracyRequired: 'Please confirm the accuracy of the data.', extraRoles: 'Additional function(s) (optional)', extraRolesHint: 'E.g. a player who is also a referee. The first function determines the category.', alsoPrefix: 'Also', tarif: 'MEMBERSHIP FEE 2026-2027', tarifHint: '(Suggested automatically based on age, function or number of newly registered members. Payment is made by invoice from the club (email or post).)', tarifSummary: 'MEMBERSHIP FEE (AUTO-SUGGESTED)', familyFlag: 'Family card (2+ persons)', familyQuestion: 'Do you want to register more persons? (Family card 2+)', familyQuestionNo: 'No, just me', familyQuestionYes: 'Yes, multiple persons (family)', familyQuestionHint: 'Family card: from 2 persons, the family tariff is applied. Children, parents or 2 adults from the same address can register together.', cns13: 'CNS MATRICULE (13 DIGITS) *', cns13Hint: 'The CNS number is on the membership card / Carte Vitale. Date of birth & category are automatically calculated from it.', secPerson: 'Applicant 1', secCategory: 'Category & Role', secFamily: 'Family Card', secParent: 'Parents / Guardians', secContact: 'Contact & Address', secLicense: 'Licence Details', secTarif: 'Consent', familyPrenom: 'First name *', familyCns13: 'CNS Matricule (13) *', familyBasis: 'Base Category', familyBasisM: 'Boys - Men', familyBasisF: 'Girls - Women', familyRelation: 'Role', familyRolePlayer: 'Player', familyRoleOfficial: 'Official', familyRoleReferee: 'Referee', familyRoleVolunteer: 'Volunteer / Family contact', familyCotisation: 'Membership fee', familyCatAuto: 'Category (auto)', familyCountLabel: 'How many persons on the family card? *', familyHint: 'The main license holder is the person in this form. Additional persons must be family members at the same address. Parents/guardians or other players can be registered here for licence preparation.', familyPerson: 'Person', familyNameLabel: 'Full name *', familyRelation: 'Role / Relation *', familyRelParent: 'Parent / Guardian', familyRelChild: 'Child', familyRelSibling: 'Sibling', familyRelPartner: 'Partner', familyRelMember: 'Family member same address', sameAddress: 'Same address as Applicant 1', familyRelChoose: '-- Choose --', familyRoleChoose: '-- Choose --', familyBenevole: 'Volunteer?', familyBenevoleYes: 'Yes', familyBenevoleNo: 'No', familyLicense: 'With licence?', familyLicenseYes: 'Yes, prepare licence', familyLicenseNo: 'No / QR only', familyDob: 'Date of birth for licence', familyCns: 'CNS number (5 digits)', familyNat: 'Nationality', familyClub: 'Former club (or "NEANT")', menu: 'Menu', navHome: 'Home', navTraining: 'Training', navNews: 'News', navInside: 'Inside', navSponsors: 'Sponsors / Partners', navStats: 'Statistics', navJoin: 'Join Us', navNextgen: 'NEXTGEN', navGallery: 'Gallery', navMemories: 'Memories', navLinks: 'Useful Links', navHall: 'Hall Map', navCommunity: 'Community', navContact: 'Contact', joinMembersCards: 'Membership cards', joinMembersCardHint: 'The membership card with QR code is prepared internally by the secretariat and sent to the applicant only after the membership fee has been paid.', sponsorCardHint: 'Membership cards with Card-ID for free entry for our sponsors are issued only by the committee.', successCardIdLabel: 'Your Card-ID:', successCardIdHint: 'Write down this Card-ID — it belongs to your membership card.',
+            langue: 'Language *', nom: 'Last name *', prenom: 'First name *', dob: 'Date of birth *', mineur: 'Minor', cat: 'FLH category', catAuto: 'Category (auto)', role: 'Role / Function *', parent: 'Single parent *', tuteur1: 'Guardian 1 *', tuteur2: 'Guardian 2 *', nat: 'Nationality *', cns: 'CNS number *', medico: 'Medical check *', licence: 'Licence *', club: 'Former club *', u7: 'U7: Medical certificate of sports aptitude required (to be issued by your family doctor)', strasse: 'Street *', postcode: 'Postcode *', ortschaft: 'City *', email: 'Email *', gsm1: 'Mobile 1 *', gsm2: 'Mobile 2', send: 'Submit', sending: 'Sending...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Thank you for your registration! We are delighted to welcome you to the Mersch 75 Handball Club.', successNote: 'You will soon receive an email with the next steps to complete your licence. Please check your inbox, upload a recent photo and fill in any additional details required. Your membership card will be sent once the membership fee has been paid.', oui: 'YES', non: 'NO', joueur: 'Player', officiel: 'Contact person', arbitre: 'Referee', benevole: 'Volunteer', benevoleLic: 'Volunteer (with licence)', trainer: 'Trainer / Teamleader / Teambetreier', trainerLic: 'Trainer (mat Lizenz)', trainerLicence: 'TRAINERSCHÄIN', trainerLicenceHint: 'LUXQF1 - LUXQF5 oder Mastercoach', tarifTrainer: 'Trainer / Teamleader / Teambetreier - 0€/50€', parent_non: 'NO (2 guardians)', parent_oui: 'YES (1 guardian)', legalRequired: 'Please read and accept the terms and conditions and data protection.', flhRequired: 'Please confirm the transfer to flh.lu for the licence.', accuracyRequired: 'Please confirm the accuracy of the data.', extraRoles: 'Additional function(s) (optional)', extraRolesHint: 'E.g. a player who is also a referee. The first function determines the category.', alsoPrefix: 'Also', tarif: 'MEMBERSHIP FEE 2026-2027', tarifHint: '(Suggested automatically based on age, function or number of newly registered members. Payment is made by invoice from the club (email or post).)', tarifSummary: 'MEMBERSHIP FEE (AUTO-SUGGESTED)', familyFlag: 'Family card (2+ persons)', familyQuestion: 'Do you want to register more persons? (Family card 2+)', familyQuestionNo: 'No, just me', familyQuestionYes: 'Yes, multiple persons (family)', familyQuestionHint: 'Family card: from 2 persons, the family tariff is applied. Children, parents or 2 adults from the same address can register together.', cns13: 'CNS MATRICULE (13 DIGITS) *', cns13Hint: 'The CNS number is on the membership card / Carte Vitale. Date of birth & category are automatically calculated from it.', secPerson: 'Applicant 1', secCategory: 'Category & Role', secFamily: 'Family Card', secParent: 'Parents / Guardians', secContact: 'Contact & Address', secLicense: 'Licence Details', secTarif: 'Consent', familyPrenom: 'First name *', familyCns13: 'CNS Matricule (13) *', familyBasis: 'Base Category', familyBasisM: 'Boys - Men', familyBasisF: 'Girls - Women', familyRelation: 'Role', familyRolePlayer: 'Player', familyRoleOfficial: 'Official', familyRoleReferee: 'Referee', familyRoleVolunteer: 'Volunteer / Family contact', familyCotisation: 'Membership fee', familyCatAuto: 'Category (auto)', familyCountLabel: 'How many persons on the family card? *', familyHint: 'The main license holder is the person in this form. Additional persons must be family members at the same address. Parents/guardians or other players can be registered here for licence preparation.', familyPerson: 'Person', familyNameLabel: 'Full name *', familyRelation: 'Role / Relation *', familyRelParent: 'Parent / Guardian', familyRelChild: 'Child', familyRelSibling: 'Sibling', familyRelPartner: 'Partner', familyRelMember: 'Family member same address', sameAddress: 'Same address as Applicant 1', familyRelChoose: '-- Choose --', familyRoleChoose: '-- Choose --', familyBenevole: 'Volunteer?', familyBenevoleYes: 'Yes', familyBenevoleNo: 'No', familyLicense: 'With licence?', familyLicenseYes: 'Yes, prepare licence', familyLicenseNo: 'No / QR only', familyDob: 'Date of birth for licence', familyCns: 'CNS number (5 digits)', familyNat: 'Nationality', familyClub: 'Former club (or "NEANT")', menu: 'Menu', navHome: 'Home', navTraining: 'Training', navNews: 'News', navInside: 'Inside', navSponsors: 'Sponsors / Partners', navStats: 'Statistics', navJoin: 'Join Us', navNextgen: 'NEXTGEN', navGallery: 'Gallery', navMemories: 'Memories', navLinks: 'Useful Links', navHall: 'Hall Map', navCommunity: 'Community', navContact: 'Contact', joinMembersCards: 'Membership cards', joinMembersCardHint: 'The membership card with QR code is prepared internally by the secretariat and sent to the applicant only after the membership fee has been paid.', sponsorCardHint: 'Membership cards with Card-ID for free entry for our sponsors are issued only by the committee.', successCardIdLabel: 'Your Card-ID:', successCardIdHint: 'Write down this Card-ID — it belongs to your membership card.', wizardNext: 'Next', wizardBack: 'Back', wizardYes: 'Yes', wizardNo: 'No', wizardFamilyQ: 'Family?', wizardSummaryTitle: 'Your answers', wizardStepTitles: { 0: 'Do you want to register more people?', 1: 'Applicant 1 – Personal data', 2: 'Language & Nationality', 3: 'Category & Role', 4: 'Contact', 5: 'Medical & Certificate', 6: 'Parents / Guardians', 7: 'Family membership card', 8: 'Address', 9: 'Consent & Submit' }, wizardStepHints: { 0: 'Family card: From 2+ persons (players) the family tariff is applied.', 1: 'The CNS number is on your membership card / Carte Vitale. Date of birth & category are calculated automatically.', 2: '', 3: 'The category is calculated automatically from the CNS. Choose role and basis (gender).', 4: '', 5: '', 6: '', 7: 'The main licence holder is the person in this form. Additional persons must be family members at the same address.', 8: '', 9: '' }
         },
         pt: {
-            langue: 'Língua *', nom: 'Apelido *', prenom: 'Nome próprio *', dob: 'Data de nascimento *', mineur: 'Menor', cat: 'Categoria FLH', catAuto: 'Categoria (auto)', role: 'Função *', parent: 'Encarregado isolado *', tuteur1: 'Encarregado 1 *', tuteur2: 'Encarregado 2 *', nat: 'Nacionalidade *', cns: 'Número CNS *', medico: 'Exame médico *', licence: 'Licença *', club: 'Clube anterior *', u7: 'U7: Certificado médico de aptidão desportiva obrigatório (a emitir pelo médico de família)', strasse: 'Rua *', postcode: 'Código postal *', ortschaft: 'Localidade *', email: 'E-mail *', gsm1: 'Telemóvel 1 *', gsm2: 'Telemóvel 2', send: 'Enviar', sending: 'A enviar...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Obrigado pela tua inscrição! Temos muito gosto em dar-te as boas-vindas ao Mersch 75 Handball Club.', successNote: 'Em breve receberás um e-mail com os próximos passos para finalizar a tua licença. Consulta a tua caixa de entrada, carrega uma fotografia atual e preenche os dados adicionais necessários. O teu cartão de membro será enviado após o pagamento da quota.', oui: 'SIM', non: 'NÃO', joueur: 'Jogador / Jogadora', officiel: 'Pessoa de contacto', arbitre: 'Árbitro', benevole: 'Voluntário', benevoleLic: 'Voluntário (com licença)', trainer: 'Trainer / Teamleader / Teambetreier', trainerLic: 'Trainer (mat Lizenz)', trainerLicence: 'TRAINERSCHÄIN', trainerLicenceHint: 'LUXQF1 - LUXQF5 oder Mastercoach', tarifTrainer: 'Trainer / Teamleader / Teambetreier - 0€/50€', parent_non: 'NÃO (2 encarregados)', parent_oui: 'SIM (1 encarregado)', legalRequired: 'Por favor, leia e aceite os termos e condições e a proteção de dados.', flhRequired: 'Por favor, confirme o envio para flh.lu para a licença.', accuracyRequired: 'Por favor, confirme a exatidão dos dados.', extraRoles: 'Função(ões) adicional(is) (opcional)', extraRolesHint: 'Ex.: jogador que também é árbitro. A primeira função determina a categoria.', alsoPrefix: 'Também', tarif: 'QUOTA 2026-2027', tarifHint: '(Sugerida automaticamente com base na idade, função ou número de novos membros inscritos. O pagamento é efetuado mediante fatura do clube (e-mail ou correio).)', tarifSummary: 'QUOTA (AUTO-SUGERIDA)', familyFlag: 'Cartão família (2+ pessoas)', familyQuestion: 'Queres inscrever mais pessoas? (Cartão família 2+)', familyQuestionNo: 'Não, apenas eu', familyQuestionYes: 'Sim, várias pessoas (família)', cns13: 'MATRÍCULA CNS (13 DÍGITOS) *', cns13Hint: 'O número CNS está no cartão de membro / Carte Vitale. A data de nascimento e a categoria são calculadas automaticamente.', secPerson: 'Requerente 1', secCategory: 'Categoria & Função', secFamily: 'Cartão família', secParent: 'Encarregados / Tutores', secContact: 'Contacto & Morada', secLicense: 'Detalhes da licença', secTarif: 'Consentimento', familyPrenom: 'Nome próprio *', familyCns13: 'CNS Matricule (13) *', familyBasis: 'Base Categoria', familyBasisM: 'Rapazes - Homens', familyBasisF: 'Raparigas - Mulheres', familyRelation: 'Função', familyRolePlayer: 'Jogador / Jogadora', familyRoleOfficial: 'Oficial', familyRoleReferee: 'Árbitro', familyRoleVolunteer: 'Voluntário / Contacto família', familyCotisation: 'Quota', familyCatAuto: 'Categoria (auto)', familyQuestionHint: 'Cartão família: a partir de 2 pessoas, o tarifário família é aplicado. Crianças, pais ou 2 adultos da mesma morada podem inscrever-se juntos.', familyCountLabel: 'Quantas pessoas no cartão família? *', familyHint: 'O titular principal é a pessoa neste formulário. As pessoas adicionais devem ser membros da família na mesma morada. Pais/encarregados ou outros jogadores podem ser inscritos aqui para a preparação da licença.', familyPerson: 'Pessoa', familyNameLabel: 'Nome e Apelido *', familyRelation: 'Função / Relação *', familyRelParent: 'Pai / Encarregado', familyRelChild: 'Criança', familyRelSibling: 'Irmão / Irmã', familyRelPartner: 'Parceiro / Parceira', familyRelMember: 'Membro da família mesma morada', sameAddress: 'Mesma morada que o Requerente 1', familyRelChoose: '-- Escolha --', familyRoleChoose: '-- Escolha --', familyBenevole: 'Voluntário?', familyBenevoleYes: 'Sim', familyBenevoleNo: 'Não', familyLicense: 'Com licença?', familyLicenseYes: 'Sim, preparar licença', familyLicenseNo: 'Não / só QR', familyDob: 'Data de nascimento para licença', familyCns: 'Número CNS (5 dígitos)', familyNat: 'Nacionalidade', familyClub: 'Clube anterior (ou "NEANT")', menu: 'Menu', navHome: 'Início', navTraining: 'Treino', navNews: 'Notícias', navInside: 'Inside', navSponsors: 'Patrocinadores / Parceiros', navStats: 'Estatísticas', navJoin: 'Junta-te a nós', navNextgen: 'NEXTGEN', navGallery: 'Galeria', navMemories: 'Memórias', navLinks: 'Links úteis', navHall: 'Mapa do pavilhão', navCommunity: 'Comunidade', navContact: 'Contacto', joinMembersCards: 'Cartões de membro', joinMembersCardHint: 'O cartão de membro com QR code é preparado internamente pelo secretariado e enviado ao requerente apenas após o pagamento da quota.', sponsorCardHint: 'Os cartões de membro com Card-ID para entrada gratuita dos nossos patrocinadores são emitidos apenas pelo comité.', successCardIdLabel: 'O teu Card-ID:', successCardIdHint: 'Anota este Card-ID — pertence ao teu cartão de membro.',
+            langue: 'Língua *', nom: 'Apelido *', prenom: 'Nome próprio *', dob: 'Data de nascimento *', mineur: 'Menor', cat: 'Categoria FLH', catAuto: 'Categoria (auto)', role: 'Função *', parent: 'Encarregado isolado *', tuteur1: 'Encarregado 1 *', tuteur2: 'Encarregado 2 *', nat: 'Nacionalidade *', cns: 'Número CNS *', medico: 'Exame médico *', licence: 'Licença *', club: 'Clube anterior *', u7: 'U7: Certificado médico de aptidão desportiva obrigatório (a emitir pelo médico de família)', strasse: 'Rua *', postcode: 'Código postal *', ortschaft: 'Localidade *', email: 'E-mail *', gsm1: 'Telemóvel 1 *', gsm2: 'Telemóvel 2', send: 'Enviar', sending: 'A enviar...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Obrigado pela tua inscrição! Temos muito gosto em dar-te as boas-vindas ao Mersch 75 Handball Club.', successNote: 'Em breve receberás um e-mail com os próximos passos para finalizar a tua licença. Consulta a tua caixa de entrada, carrega uma fotografia atual e preenche os dados adicionais necessários. O teu cartão de membro será enviado após o pagamento da quota.', oui: 'SIM', non: 'NÃO', joueur: 'Jogador / Jogadora', officiel: 'Pessoa de contacto', arbitre: 'Árbitro', benevole: 'Voluntário', benevoleLic: 'Voluntário (com licença)', trainer: 'Trainer / Teamleader / Teambetreier', trainerLic: 'Trainer (mat Lizenz)', trainerLicence: 'TRAINERSCHÄIN', trainerLicenceHint: 'LUXQF1 - LUXQF5 oder Mastercoach', tarifTrainer: 'Trainer / Teamleader / Teambetreier - 0€/50€', parent_non: 'NÃO (2 encarregados)', parent_oui: 'SIM (1 encarregado)', legalRequired: 'Por favor, leia e aceite os termos e condições e a proteção de dados.', flhRequired: 'Por favor, confirme o envio para flh.lu para a licença.', accuracyRequired: 'Por favor, confirme a exatidão dos dados.', extraRoles: 'Função(ões) adicional(is) (opcional)', extraRolesHint: 'Ex.: jogador que também é árbitro. A primeira função determina a categoria.', alsoPrefix: 'Também', tarif: 'QUOTA 2026-2027', tarifHint: '(Sugerida automaticamente com base na idade, função ou número de novos membros inscritos. O pagamento é efetuado mediante fatura do clube (e-mail ou correio).)', tarifSummary: 'QUOTA (AUTO-SUGERIDA)', familyFlag: 'Cartão família (2+ pessoas)', familyQuestion: 'Queres inscrever mais pessoas? (Cartão família 2+)', familyQuestionNo: 'Não, apenas eu', familyQuestionYes: 'Sim, várias pessoas (família)', cns13: 'MATRÍCULA CNS (13 DÍGITOS) *', cns13Hint: 'O número CNS está no cartão de membro / Carte Vitale. A data de nascimento e a categoria são calculadas automaticamente.', secPerson: 'Requerente 1', secCategory: 'Categoria & Função', secFamily: 'Cartão família', secParent: 'Encarregados / Tutores', secContact: 'Contacto & Morada', secLicense: 'Detalhes da licença', secTarif: 'Consentimento', familyPrenom: 'Nome próprio *', familyCns13: 'CNS Matricule (13) *', familyBasis: 'Base Categoria', familyBasisM: 'Rapazes - Homens', familyBasisF: 'Raparigas - Mulheres', familyRelation: 'Função', familyRolePlayer: 'Jogador / Jogadora', familyRoleOfficial: 'Oficial', familyRoleReferee: 'Árbitro', familyRoleVolunteer: 'Voluntário / Contacto família', familyCotisation: 'Quota', familyCatAuto: 'Categoria (auto)', familyQuestionHint: 'Cartão família: a partir de 2 pessoas, o tarifário família é aplicado. Crianças, pais ou 2 adultos da mesma morada podem inscrever-se juntos.', familyCountLabel: 'Quantas pessoas no cartão família? *', familyHint: 'O titular principal é a pessoa neste formulário. As pessoas adicionais devem ser membros da família na mesma morada. Pais/encarregados ou outros jogadores podem ser inscritos aqui para a preparação da licença.', familyPerson: 'Pessoa', familyNameLabel: 'Nome e Apelido *', familyRelation: 'Função / Relação *', familyRelParent: 'Pai / Encarregado', familyRelChild: 'Criança', familyRelSibling: 'Irmão / Irmã', familyRelPartner: 'Parceiro / Parceira', familyRelMember: 'Membro da família mesma morada', sameAddress: 'Mesma morada que o Requerente 1', familyRelChoose: '-- Escolha --', familyRoleChoose: '-- Escolha --', familyBenevole: 'Voluntário?', familyBenevoleYes: 'Sim', familyBenevoleNo: 'Não', familyLicense: 'Com licença?', familyLicenseYes: 'Sim, preparar licença', familyLicenseNo: 'Não / só QR', familyDob: 'Data de nascimento para licença', familyCns: 'Número CNS (5 dígitos)', familyNat: 'Nacionalidade', familyClub: 'Clube anterior (ou "NEANT")', menu: 'Menu', navHome: 'Início', navTraining: 'Treino', navNews: 'Notícias', navInside: 'Inside', navSponsors: 'Patrocinadores / Parceiros', navStats: 'Estatísticas', navJoin: 'Junta-te a nós', navNextgen: 'NEXTGEN', navGallery: 'Galeria', navMemories: 'Memórias', navLinks: 'Links úteis', navHall: 'Mapa do pavilhão', navCommunity: 'Comunidade', navContact: 'Contacto', joinMembersCards: 'Cartões de membro', joinMembersCardHint: 'O cartão de membro com QR code é preparado internamente pelo secretariado e enviado ao requerente apenas após o pagamento da quota.', sponsorCardHint: 'Os cartões de membro com Card-ID para entrada gratuita dos nossos patrocinadores são emitidos apenas pelo comité.', successCardIdLabel: 'O teu Card-ID:', successCardIdHint: 'Anota este Card-ID — pertence ao teu cartão de membro.', wizardNext: 'Próximo', wizardBack: 'Voltar', wizardYes: 'Sim', wizardNo: 'Não', wizardFamilyQ: 'Família?', wizardSummaryTitle: 'As tuas respostas', wizardStepTitles: { 0: 'Queres inscrever mais pessoas?', 1: 'Requerente 1 – Dados pessoais', 2: 'Língua & Nacionalidade', 3: 'Categoria & Função', 4: 'Contacto', 5: 'Médico & Certificado', 6: 'Encarregados / Tutores', 7: 'Cartão família', 8: 'Morada', 9: 'Consentimento & Envio' }, wizardStepHints: { 0: 'Cartão família: a partir de 2 pessoas (jogadores) o tarifário família é aplicado.', 1: 'O número CNS está no cartão de membro / Carte Vitale. A data de nascimento e a categoria são calculadas automaticamente.', 2: '', 3: 'A categoria é calculada automaticamente a partir do CNS. Escolhe a função e a base (género).', 4: '', 5: '', 6: '', 7: 'O titular principal é a pessoa neste formulário. As pessoas adicionais devem ser membros da família na mesma morada.', 8: '', 9: '' }
         }
     };
     const MERSCH75_LEGAL_TEXTS = {
@@ -1674,7 +1847,6 @@
         if (lblGsm1) lblGsm1.innerText = isYoung ? (ui.gsm1 ? ui.gsm1.replace(' *', '') : 'GSM 1') : (ui.gsm1 || 'GSM 1 *');
         if (lblEmail) lblEmail.innerText = isYoung ? (ui.email ? ui.email.replace(' *', '') : 'E-Mail') : (ui.email || 'E-Mail *');
 
-        document.getElementById('parent-section').style.display = 'none';
         document.getElementById('u7-section').style.display = category === 'U7' ? 'flex' : 'none';
 
         if (!isMinor) {
@@ -1685,6 +1857,11 @@
 
         if (parentIsole.value === 'OUI') {
             tuteur2.value = '';
+            var tw = document.getElementById('tuteur2-wrap');
+            if (tw) tw.style.display = 'none';
+        } else {
+            var tw2 = document.getElementById('tuteur2-wrap');
+            if (tw2) tw2.style.display = '';
         }
     }
 
@@ -1813,6 +1990,8 @@
         document.getElementById('lbl-nat').innerText = ui.nat;
         document.getElementById('lbl-club').innerText = ui.club;
         document.getElementById('lbl-u7').innerText = ui.u7;
+        var lblMedico = document.getElementById('lbl-medico');
+        if (lblMedico) lblMedico.innerText = ui.medico || 'Medico';
         document.getElementById('lbl-strasse').innerText = ui.strasse;
         document.getElementById('lbl-postcode').innerText = ui.postcode;
         document.getElementById('lbl-ortschaft').innerText = ui.ortschaft;
@@ -1888,6 +2067,10 @@
             const key = el.dataset.i18n;
             if (ui[key]) el.innerText = ui[key];
         });
+
+        // Update wizard step texts and summary for new language
+        if (typeof wizardUpdateStepTexts === 'function') wizardUpdateStepTexts(wizardCurrentStep);
+        if (typeof wizardUpdateSummary === 'function') wizardUpdateSummary();
     }
 
     function buildJoinMessage(includeLicenseLines, messageLanguage, includeMemberCards) {
@@ -2541,6 +2724,26 @@
             calcCategorie(dob);
         }
         updateFamilySummary();
+        if (typeof wizardUpdateSummary === 'function') wizardUpdateSummary();
+    });
+
+    // MedicoSelect syncs to hidden Medico field
+    var medicoSel = document.getElementById('MedicoSelect');
+    if (medicoSel) {
+        medicoSel.addEventListener('change', function() {
+            document.getElementById('Medico').value = this.value;
+            if (typeof wizardUpdateSummary === 'function') wizardUpdateSummary();
+        });
+    }
+
+    // Update wizard summary on any field input in wizard steps
+    document.querySelectorAll('.wizard-step input, .wizard-step select').forEach(function(el) {
+        el.addEventListener('input', function() {
+            if (typeof wizardUpdateSummary === 'function') wizardUpdateSummary();
+        });
+        el.addEventListener('change', function() {
+            if (typeof wizardUpdateSummary === 'function') wizardUpdateSummary();
+        });
     });
 
     document.getElementById('FamilleFlag').addEventListener('change', function() {
@@ -2788,6 +2991,343 @@
             updateLang(this.dataset.lang);
         });
     });
+
+    // ═══ Wizard Controller ═══
+    var wizardCurrentStep = 0;
+    var wizardSteps = Array.prototype.slice.call(document.querySelectorAll('.wizard-step'));
+    var wizardTotalSteps = wizardSteps.length;
+
+    function wizardGetStepEl(step) {
+        return document.querySelector('.wizard-step[data-step="' + step + '"]');
+    }
+
+    function wizardShouldShowStep(step) {
+        if (step === 5) {
+            var flags = getRoleFlags();
+            var cat = getCategoryValue();
+            return flags.needsMedico || cat === 'U7' || cat === 'U4';
+        }
+        if (step === 6) {
+            return document.getElementById('Mineur').value === 'OUI';
+        }
+        if (step === 7) {
+            return getCheckedValue('FamilleFlag') === 'Oui' || document.getElementById('FamilyQuestion').value === 'Oui';
+        }
+        return true;
+    }
+
+    function wizardGetVisibleSteps() {
+        var visible = [];
+        for (var i = 0; i < wizardTotalSteps; i++) {
+            if (wizardShouldShowStep(i)) visible.push(i);
+        }
+        return visible;
+    }
+
+    function wizardValidateStep(step) {
+        var stepEl = wizardGetStepEl(step);
+        if (!stepEl) return true;
+        var inputs = stepEl.querySelectorAll('input[required], select[required], textarea[required]');
+        var valid = true;
+        var firstInvalid = null;
+        for (var i = 0; i < inputs.length; i++) {
+            var el = inputs[i];
+            if (el.type === 'checkbox' && el.required && !el.checked) {
+                valid = false;
+                if (!firstInvalid) firstInvalid = el;
+            } else if (el.type !== 'checkbox' && el.type !== 'hidden') {
+                if (!el.value || !el.value.trim()) {
+                    if (!el.disabled) {
+                        valid = false;
+                        if (!firstInvalid) firstInvalid = el;
+                    }
+                }
+                if (el.pattern && el.value) {
+                    var re = new RegExp('^' + el.pattern + '$');
+                    if (!re.test(el.value)) {
+                        valid = false;
+                        if (!firstInvalid) firstInvalid = el;
+                    }
+                }
+                if (el.type === 'email' && el.value) {
+                    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value)) {
+                        valid = false;
+                        if (!firstInvalid) firstInvalid = el;
+                    }
+                }
+            }
+        }
+        if (!valid && firstInvalid) {
+            firstInvalid.focus();
+            firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        return valid;
+    }
+
+    function wizardUpdateProgress() {
+        var visible = wizardGetVisibleSteps();
+        var progressEl = document.getElementById('wizardProgress');
+        if (!progressEl) return;
+        progressEl.innerHTML = '';
+        var currentVisibleIdx = visible.indexOf(wizardCurrentStep);
+        for (var i = 0; i < visible.length; i++) {
+            var dot = document.createElement('div');
+            dot.className = 'wizard-progress-dot';
+            if (i < currentVisibleIdx) dot.classList.add('is-done');
+            if (i === currentVisibleIdx) dot.classList.add('is-active');
+            progressEl.appendChild(dot);
+        }
+    }
+
+    function wizardGetSummaryItems() {
+        var ui = MERSCH75_UI_TEXTS[currentLang] || MERSCH75_UI_TEXTS.lu;
+        var items = [];
+        var v;
+        
+        // Step 0: Family question
+        v = getValue('FamilyQuestion');
+        items.push({ label: ui.wizardFamilyQ || 'Famill?', value: v === 'Oui' ? (ui.wizardYes || 'Jo') : (ui.wizardNo || 'Nee'), step: 0, always: true });
+
+        // Step 1: Person identity
+        v = getValue('Nom');
+        items.push({ label: ui.nom || 'Numm', value: v, step: 1 });
+        v = getValue('Prenom');
+        items.push({ label: ui.prenom || 'Virnumm', value: v, step: 1 });
+        v = getValue('CNS13');
+        items.push({ label: ui.cns13 || 'CNS', value: v, step: 1 });
+        var dob = getValue('DateNaissance');
+        if (dob) items.push({ label: ui.dob || 'Gebuertsdatum', value: dob, step: 1 });
+
+        // Step 2: Language, Nationality, Club
+        v = getValue('Langue');
+        items.push({ label: ui.langue || 'Sprooch', value: v ? v.toUpperCase() : '', step: 2 });
+        v = getValue('Nationalite');
+        items.push({ label: ui.nat || 'Nationalitéit', value: v, step: 2 });
+        v = getValue('AncienClub');
+        items.push({ label: ui.club || 'Ale Veräin', value: v, step: 2 });
+
+        // Step 3: Category & Role
+        v = getCategoryValue();
+        items.push({ label: ui.catAuto || 'Kategorie', value: v, step: 3 });
+        v = getValue('FlhCategoryBasis');
+        items.push({ label: 'Basis', value: v, step: 3 });
+        v = getValue('Role');
+        items.push({ label: ui.role || 'Roll', value: v, step: 3 });
+        var extras = getSelectedRoles().filter(function(r) { return r !== getValue('Role'); });
+        if (extras.length) items.push({ label: 'Och', value: extras.join(', '), step: 3 });
+
+        // Step 4: Contact
+        v = getValue('GSM1');
+        items.push({ label: ui.gsm1 || 'GSM 1', value: v, step: 4 });
+        v = getValue('Email');
+        items.push({ label: ui.email || 'E-Mail', value: v, step: 4 });
+
+        // Step 5: Medico + U7
+        if (wizardShouldShowStep(5)) {
+            v = getValue('MedicoSelect');
+            items.push({ label: ui.medico || 'Medico', value: v, step: 5 });
+            v = getCheckedValue('U7Cert');
+            if (document.getElementById('u7-section').style.display !== 'none') {
+                items.push({ label: 'U7 Zertifikat', value: v === 'Oui' ? (ui.wizardYes || 'Jo') : (ui.wizardNo || 'Nee'), step: 5 });
+            }
+        }
+
+        // Step 6: Parent/Guardian
+        if (wizardShouldShowStep(6)) {
+            v = getValue('ParentIsole');
+            items.push({ label: ui.parent || 'Parent isolé', value: v, step: 6 });
+            v = getValue('Tuteur1');
+            items.push({ label: ui.tuteur1 || 'Tuteur 1', value: v, step: 6 });
+            if (getValue('ParentIsole') !== 'OUI') {
+                v = getValue('Tuteur2');
+                items.push({ label: ui.tuteur2 || 'Tuteur 2', value: v, step: 6 });
+            }
+        }
+
+        // Step 7: Family members
+        if (wizardShouldShowStep(7)) {
+            var fmc = getFamilyMemberCount();
+            var isMinor = document.getElementById('Mineur').value === 'OUI';
+            items.push({ label: isMinor ? 'Erzéiungsberechtegten' : 'Famill', value: fmc + ' Persounen', step: 7 });
+        }
+
+        // Step 8: Address
+        v = getValue('Strasse');
+        items.push({ label: ui.strasse || 'Strooss', value: v, step: 8 });
+        v = getValue('Postcode');
+        items.push({ label: ui.postcode || 'Postcode', value: v, step: 8 });
+        v = getValue('Ortschaft');
+        items.push({ label: ui.ortschaft || 'Uertschaft', value: v, step: 8 });
+
+        // Step 9: Cotisation
+        v = getValue('Cotisation');
+        items.push({ label: 'Cotisatioun', value: v, step: 9 });
+
+        return items;
+    }
+
+    function wizardUpdateSummary() {
+        var summaryEl = document.getElementById('wizardSummary');
+        var listEl = document.getElementById('wizardSummaryList');
+        if (!summaryEl || !listEl) return;
+        var items = wizardGetSummaryItems();
+        var hasAny = false;
+        var html = '';
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            var hasVal = item.value && item.value.trim();
+            if (hasVal) hasAny = true;
+            var escapedVal = hasVal ? escapeHtml(item.value) : '–';
+            html += '<li class="' + (hasVal ? '' : 'is-empty') + '" data-step="' + item.step + '">' +
+                '<span class="ws-label">' + escapeHtml(item.label) + ':</span>' +
+                '<span class="ws-value">' + escapedVal + '</span>' +
+                (hasVal ? '<span class="wizard-summary-edit" data-goto="' + item.step + '">↩</span>' : '') +
+                '</li>';
+        }
+        listEl.innerHTML = html;
+        summaryEl.style.display = hasAny ? 'block' : 'none';
+
+        // Attach edit links
+        listEl.querySelectorAll('.wizard-summary-edit').forEach(function(link) {
+            link.addEventListener('click', function() {
+                var target = parseInt(this.dataset.goto, 10);
+                wizardGoToStep(target);
+            });
+        });
+
+        // Update title
+        var titleEl = document.getElementById('wsTitle');
+        if (titleEl) {
+            var ui = MERSCH75_UI_TEXTS[currentLang] || MERSCH75_UI_TEXTS.lu;
+            titleEl.innerText = ui.wizardSummaryTitle || 'Deng Äntwerten';
+        }
+    }
+
+    function wizardShowStep(step) {
+        wizardSteps.forEach(function(el) {
+            el.classList.remove('is-active');
+        });
+        var stepEl = wizardGetStepEl(step);
+        if (stepEl) {
+            stepEl.classList.add('is-active');
+            // Update step titles and hints via i18n
+            wizardUpdateStepTexts(step);
+        }
+        wizardCurrentStep = step;
+        wizardUpdateProgress();
+        wizardUpdateSummary();
+        // Scroll to form top
+        var formEl = document.getElementById('registrationForm');
+        if (formEl) {
+            var rect = formEl.getBoundingClientRect();
+            if (rect.top < 0 || rect.top > 200) {
+                formEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+    }
+
+    function wizardUpdateStepTexts(step) {
+        var ui = MERSCH75_UI_TEXTS[currentLang] || MERSCH75_UI_TEXTS.lu;
+        var titles = ui.wizardStepTitles || {};
+        var hints = ui.wizardStepHints || {};
+        var titleEl = document.getElementById('ws' + step + '-title');
+        var hintEl = document.getElementById('ws' + step + '-hint');
+        if (titleEl && titles[step]) titleEl.innerText = titles[step];
+        if (hintEl && hints[step]) hintEl.innerText = hints[step];
+        // Update nav button labels
+        var nextBtn = document.getElementById('wizardNext' + step);
+        var backBtn = document.getElementById('wizardBack' + step);
+        if (nextBtn) nextBtn.innerText = ui.wizardNext || 'Weider';
+        if (backBtn) backBtn.innerText = ui.wizardBack || 'Zréck';
+    }
+
+    function wizardGoToStep(step) {
+        if (step < 0 || step >= wizardTotalSteps) return;
+        wizardShowStep(step);
+    }
+
+    function wizardNext() {
+        if (!wizardValidateStep(wizardCurrentStep)) return;
+        // Run dynamic logic before advancing
+        if (wizardCurrentStep === 0) {
+            var fq = document.getElementById('FamilyQuestion');
+            var flag = document.getElementById('FamilleFlag');
+            if (fq && flag) flag.checked = (fq.value === 'Oui');
+            updateFamilySection(false);
+        }
+        if (wizardCurrentStep === 1) {
+            // Parse CNS13 and update category/age
+            var cns13 = getValue('CNS13');
+            var parsed = parseCns13(cns13);
+            if (parsed) {
+                document.getElementById('DateNaissance').value = parsed.dob;
+                document.getElementById('CNS').value = parsed.cns5;
+                var basis = getValue('FlhCategoryBasis');
+                var genderKey = basis === 'Filles - Femmes' ? 'female' : 'male';
+                var cat = getFlhCategoryByBirthYearAndGender(parsed.year, genderKey);
+                document.getElementById('Categorie').value = cat;
+                var catDisplay = document.getElementById('cat-display');
+                if (catDisplay) catDisplay.innerText = cat || '-';
+                currentAge = calculateAgeOnDate(parsed.day, parsed.month, parsed.year, new Date());
+                document.getElementById('Mineur').value = currentAge < 18 ? 'OUI' : 'NON';
+            }
+            updateCnsDisplay();
+        }
+        if (wizardCurrentStep === 3) {
+            applyRoleRules();
+            var cat = getCategoryValue();
+            setRequiredState(document.getElementById('Mineur').value === 'OUI', cat);
+            toggleU7Section(cat);
+            autoExpandFamilyForMinor(document.getElementById('Mineur').value === 'OUI');
+            suggestTarif();
+        }
+        if (wizardCurrentStep === 5) {
+            var medicoSel = document.getElementById('MedicoSelect');
+            var medicoHidden = document.getElementById('Medico');
+            if (medicoSel && medicoHidden) medicoHidden.value = medicoSel.value;
+        }
+        // Find next visible step
+        var next = wizardCurrentStep + 1;
+        while (next < wizardTotalSteps && !wizardShouldShowStep(next)) {
+            next++;
+        }
+        if (next < wizardTotalSteps) {
+            wizardShowStep(next);
+        }
+    }
+
+    function wizardBack() {
+        var prev = wizardCurrentStep - 1;
+        while (prev >= 0 && !wizardShouldShowStep(prev)) {
+            prev--;
+        }
+        if (prev >= 0) {
+            wizardShowStep(prev);
+        }
+    }
+
+    // Attach navigation button listeners
+    for (var i = 0; i < wizardTotalSteps; i++) {
+        (function(step) {
+            var nextBtn = document.getElementById('wizardNext' + step);
+            var backBtn = document.getElementById('wizardBack' + step);
+            if (nextBtn) nextBtn.addEventListener('click', wizardNext);
+            if (backBtn) backBtn.addEventListener('click', wizardBack);
+        })(i);
+    }
+
+    // Keyboard navigation: Enter on non-textarea fields advances
+    document.querySelectorAll('.wizard-step input, .wizard-step select').forEach(function(el) {
+        el.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && el.tagName !== 'TEXTAREA' && el.type !== 'submit') {
+                e.preventDefault();
+                wizardNext();
+            }
+        });
+    });
+
+    // Initialize: show step 0
+    wizardShowStep(0);
 
     ensureCardInternalId();
     updateLang('lu');
