@@ -1561,7 +1561,7 @@ function initializeJoinUsForm() {
 
     const conditionsUrl = 'https://www.mersch75.lu/x2-terms-and-conditions/';
     const dataProtectionUrl = 'https://www.mersch75.lu/x3-dataprotection/';
-    const registrationEndpoint = 'https://api.web3forms.com/submit';
+    const registrationEndpoint = (window.M75_CONFIG && window.M75_CONFIG.WEB3FORMS_ENDPOINT) || 'https://api.web3forms.com/submit';
     const registrationAccessKey = '15e3cc53-6864-47dd-bfaf-332cb4ca45e5';
     const registrationMailbox = 'hbmersch75secretariat@gmail.com';
 

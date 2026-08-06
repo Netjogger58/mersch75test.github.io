@@ -1,18 +1,24 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-# In das Verzeichnis wechseln, in dem das Skript liegt
-cd "$(dirname "$0")"
+ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"
+cd "$ROOT_DIR"
 
-# Lokalen Stand aktualisieren
-git pull origin main
+CURRENT_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 
-# Alle Änderungen (neue, geänderte, gelöschte Dateien) stagen
+if [[ "$CURRENT_BRANCH" == "main" ]]; then
+  echo "Refusing to auto-push directly to main. Switch to feature/recovery branch."
+  exit 1
+fi
+
+scripts/preflight_check.sh
 git add -A
 
-# Commit mit Zeitstempel erstellen
-COMMIT_MSG="KI-Update $(date '+%Y-%m-%d %H:%M:%S')"
+if git diff --cached --quiet; then
+  echo "No staged changes to commit."
+  exit 0
+fi
+
+COMMIT_MSG="${1:-Update $(date '+%Y-%m-%d %H:%M:%S')}"
 git commit -m "$COMMIT_MSG"
-
-# Änderungen zu GitHub pushen
-git push origin main
-
+git push -u origin "$CURRENT_BRANCH"

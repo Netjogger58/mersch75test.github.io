@@ -300,10 +300,12 @@
         </main>
     </div>
 
+    <script src="js/site-config.js"></script>
     <script src="script.js"></script>
     <script>
     const MERSCH75_WEB3FORMS_MAIN_KEY = '15e3cc53-6864-47dd-bfaf-332cb4ca45e5';
     const MERSCH75_WEB3FORMS_MAX_KEY = 'f748489b-abc6-4e37-bb82-860a82c91f4e';
+    const MERSCH75_WEB3FORMS_ENDPOINT = window.M75_CONFIG && window.M75_CONFIG.WEB3FORMS_ENDPOINT;
     const MERSCH75_LICENSE_LINK = 'https://submit.paperless.io/f/s4zaWnzHBwxcPK8jAkkbjPpVC1giUfr7';
     const MERSCH75_LICENSE_PASSWORD = 'FIhNvLi26';
     const MERSCH75_UI_TEXTS = {
@@ -606,7 +608,11 @@
     }
 
     async function sendToWeb3Forms(formData) {
-        const response = await fetch('https://api.web3forms.com/submit', {
+        if (!MERSCH75_WEB3FORMS_ENDPOINT) {
+            throw new Error('Konfigurationsfehler: Web3Forms Endpoint fehlt.');
+        }
+
+        const response = await fetch(MERSCH75_WEB3FORMS_ENDPOINT, {
             method: 'POST',
             body: formData
         });
