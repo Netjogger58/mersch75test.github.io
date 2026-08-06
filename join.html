@@ -1209,6 +1209,12 @@
                         '</select>' +
                     '</div>' +
                     '<div class="join-form-group">' +
+                        '<label for="FamilyMember' + i + 'Langue">' + (t.langue ? t.langue.replace(' *', '') : 'Sprooch') + '</label>' +
+                        '<select id="FamilyMember' + i + 'Langue" name="FamilyMember' + i + 'Langue" required>' +
+                            '<option value="lu">LU</option><option value="fr">FR</option><option value="de">DE</option><option value="en">EN</option>' +
+                        '</select>' +
+                    '</div>' +
+                    '<div class="join-form-group">' +
                         '<label for="FamilyMember' + i + 'Gsm">' + (t.gsm1 ? t.gsm1.replace(' *', '') : 'GSM') + '</label>' +
                         '<input type="text" id="FamilyMember' + i + 'Gsm" name="FamilyMember' + i + 'Gsm" autocomplete="tel" required>' +
                     '</div>' +
@@ -1254,10 +1260,6 @@
                         '<div class="join-form-group">' +
                             '<label for="FamilyMember' + i + 'Cns13">' + (t.familyCns13 || 'CNS (13 ZIFFEREN)') + '</label>' +
                             '<input type="text" id="FamilyMember' + i + 'Cns13" name="FamilyMember' + i + 'Cns13" inputmode="numeric" pattern="[0-9]{13}" maxlength="13">' +
-                        '</div>' +
-                        '<div class="join-form-group">' +
-                            '<label for="FamilyMember' + i + 'Langue">' + (t.langue || 'SPROOCH') + '</label>' +
-                            '<select id="FamilyMember' + i + 'Langue" name="FamilyMember' + i + 'Langue"><option value="lu">LU</option><option value="fr">FR</option><option value="de">DE</option><option value="en">EN</option></select>' +
                         '</div>' +
                         '<div class="join-form-group">' +
                             '<label for="FamilyMember' + i + 'Role">' + t.role + '</label>' +
@@ -1313,7 +1315,6 @@
                     if (title) title.innerText = (active ? (ui.demandeurTitle || 'Demandeur') : (ui.guardianTitle || 'Erzéiungsberechtegten')) + ' ' + idx;
                     if (roleSel) roleSel.value = active ? 'Joueur / Joueuse' : 'Bénévole / Contact Famille';
                     setGuardianRequired('Cns13', active);
-                    setGuardianRequired('Langue', active);
                     setGuardianRequired('Club', active);
                     setGuardianRequired('Role', active);
                 }
