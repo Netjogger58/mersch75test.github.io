@@ -176,7 +176,7 @@
                 };
 
                 try {
-                    const response = await fetch('/api/public/sponsor-inquiries', {
+                    const response = await fetch('https://api.mersch75.lu/api/public/sponsor-inquiries', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(body),
