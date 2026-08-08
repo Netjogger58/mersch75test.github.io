@@ -62,6 +62,42 @@
                         <div id="en" class="join-lang-text"><strong>Welcome to the club!</strong>Great to have you on board. Please fill out the form to start the internal registration. Once the club receives your data, the official licence request will be initiated by the club manager.</div>
                         <div id="pt" class="join-lang-text"><strong>Bem-vindo ao clube!</strong>É ótimo que queiras reforçar a nossa equipa. Por favor, preenche o formulário para iniciar o registo interno. Assim que o clube receber os teus dados, o pedido oficial de licença será iniciado pelo responsável do clube.</div>
 
+                        <div class="join-quiz-card" id="join-quiz">
+                            <div class="join-quiz-header">
+                                <p class="join-quiz-kicker" id="join-quiz-kicker">Schnellstarter</p>
+                                <h2 id="join-quiz-title">Wéi wëlls du starten?</h2>
+                                <p id="join-quiz-intro">Wiel eng Situatioun. Dëst hëlleft, den richtege Deel vum Formular méi schnell ze fannen.</p>
+                            </div>
+                            <div class="join-quiz-options" role="list" aria-label="Schnellstarter">
+                                <button class="join-quiz-option is-active" type="button" data-quiz-key="player" aria-pressed="true">
+                                    <span class="join-quiz-option-title" id="join-quiz-player-label">Ich möchte spielen</span>
+                                    <span class="join-quiz-option-copy" id="join-quiz-player-copy">Für Spieler:innen, Jugendliche oder Familien</span>
+                                </button>
+                                <button class="join-quiz-option" type="button" data-quiz-key="official" aria-pressed="false">
+                                    <span class="join-quiz-option-title" id="join-quiz-official-label">Ich bin Offiziell</span>
+                                    <span class="join-quiz-option-copy" id="join-quiz-official-copy">Für Trainer, Verantwortliche oder Teamleitung</span>
+                                </button>
+                                <button class="join-quiz-option" type="button" data-quiz-key="referee" aria-pressed="false">
+                                    <span class="join-quiz-option-title" id="join-quiz-referee-label">Ich bin Schiedsrichter</span>
+                                    <span class="join-quiz-option-copy" id="join-quiz-referee-copy">Für die Rolle als Arbiter</span>
+                                </button>
+                                <button class="join-quiz-option" type="button" data-quiz-key="family" aria-pressed="false">
+                                    <span class="join-quiz-option-title" id="join-quiz-family-label">Ich bin Familie / Begleitung</span>
+                                    <span class="join-quiz-option-copy" id="join-quiz-family-copy">Für Eltern, Vormünder oder Begleitpersonen</span>
+                                </button>
+                            </div>
+                            <div class="join-quiz-summary" id="join-quiz-summary">
+                                <div class="join-quiz-summary-badge" id="join-quiz-summary-badge">Spieleintritt</div>
+                                <h3 id="join-quiz-summary-title">Spieleintritt</h3>
+                                <p id="join-quiz-summary-copy">Wiel dës Optioun, wann du selwer spillen wëlls oder e Kind anmelden wëlls. Mir richten den Anmeldescreen op dëse Wee aus.</p>
+                                <ul id="join-quiz-summary-list">
+                                    <li>Spieler- oder Spielerinnenprofil</li>
+                                    <li>FLH-Kategorie wird automatisch ergänzt</li>
+                                    <li>Für Minderjährige zeigen sich die Elternfelder direkt</li>
+                                </ul>
+                            </div>
+                        </div>
+
                         <form id="registrationForm" class="join-registration-form" action="https://api.web3forms.com/submit" method="POST" novalidate>
                             <input type="hidden" name="access_key" value="15e3cc53-6864-47dd-bfaf-332cb4ca45e5">
                             <input type="hidden" name="subject" value="Nouvelle inscription Mersch 75">
@@ -301,13 +337,146 @@
     </div>
 
     <script src="js/site-config.js"></script>
-    <script src="script.js"></script>
+    <script src="script.js?v=20260808joinfix"></script>
     <script>
     const MERSCH75_WEB3FORMS_MAIN_KEY = '15e3cc53-6864-47dd-bfaf-332cb4ca45e5';
     const MERSCH75_WEB3FORMS_MAX_KEY = 'f748489b-abc6-4e37-bb82-860a82c91f4e';
     const MERSCH75_WEB3FORMS_ENDPOINT = window.M75_CONFIG && window.M75_CONFIG.WEB3FORMS_ENDPOINT;
     const MERSCH75_LICENSE_LINK = 'https://submit.paperless.io/f/s4zaWnzHBwxcPK8jAkkbjPpVC1giUfr7';
     const MERSCH75_LICENSE_PASSWORD = 'FIhNvLi26';
+    const MERSCH75_JOIN_QUIZ_CONTENT = {
+        lu: {
+            quizKicker: 'Schnellstarter',
+            quizTitle: 'Wéi wëlls du starten?',
+            quizIntro: 'Wiel eng Situatioun. Dëst hëlleft, den richtege Deel vum Formular méi schnell ze fannen.',
+            playerLabel: 'Ich möchte spielen',
+            playerCopy: 'Für Spieler:innen, Jugendliche oder Familien',
+            playerTitle: 'Spieleintritt',
+            playerSummary: 'Wiel dës Optioun, wann du selwer spillen wëlls oder e Kind anmelden wëlls. Mir richten den Anmeldescreen op dëse Wee aus.',
+            playerBullets: ['Spieler- oder Spielerinnenprofil', 'FLH-Kategorie wird automatisch ergänzt', 'Für Minderjährige zeigen sich die Elternfelder direkt'],
+            officialLabel: 'Ich bin Offiziell',
+            officialCopy: 'Für Trainer, Verantwortliche oder Teamleitung',
+            officialTitle: 'Offiziell / Teamleitung',
+            officialSummary: 'Wiel dës Optioun, wann du als Verantwortlicher, Trainer oder Teamleitung an der Anmeldung beteiliett bist.',
+            officialBullets: ['Offizielle Rolle wird direkt vorbereitet', 'Die nötigen Kontakt- und Lizenzangaben bleiben sichtbar', 'Die Anmeldung passt sich an die Vereinssicht an'],
+            refereeLabel: 'Ich bin Schiedsrichter',
+            refereeCopy: 'Für die Rolle als Arbiter',
+            refereeTitle: 'Schiedsrichter',
+            refereeSummary: 'Wiel dës Optioun, wann du dich als Schiedsrichter anmeldest. Die Rolle wird direkt passend markiert.',
+            refereeBullets: ['Rolle Schiedsrichter wird vorbereitet', 'Die Angaben bleiben einfach und verständlich', 'Die Lizenz- und Kontaktfelder bleiben sichtbar'],
+            familyLabel: 'Ich bin Familie / Begleitung',
+            familyCopy: 'Für Eltern, Vormünder oder Begleitpersonen',
+            familyTitle: 'Familie / Begleitung',
+            familySummary: 'Wiel dës Optioun, wann du eine Anmeldung für ein Kind oder eine Angehörige begleitest. Die Eltern- und Kontaktfelder bleiben direkt sichtbar.',
+            familyBullets: ['Familien- und Vormundschaftsdaten bleiben klar', 'Die relevanten Felder für Minderjährige werden hervorgehoben', 'Die Anmeldung bleibt trotzdem im normalen Formular'],
+            role: 'Joueur / Joueuse'
+        },
+        fr: {
+            quizKicker: 'Démarrage rapide',
+            quizTitle: 'Quel chemin te convient le mieux ?',
+            quizIntro: 'Choisis une situation. Cela permet de trouver plus rapidement la bonne partie du formulaire.',
+            playerLabel: 'Je veux jouer',
+            playerCopy: 'Pour joueuses, joueurs, jeunes ou familles',
+            playerTitle: 'Inscription joueur',
+            playerSummary: 'Choisis cette option si tu souhaites jouer toi-même ou inscrire un enfant. Le parcours est alors orienté vers cette voie.',
+            playerBullets: ['Profil joueur', 'Catégorie FLH complétée automatiquement', 'Les champs parents apparaissent directement pour les mineurs'],
+            officialLabel: 'Je suis officiel',
+            officialCopy: 'Pour entraîneurs, responsables ou encadrement',
+            officialTitle: 'Officiel / encadrement',
+            officialSummary: 'Choisis cette option si tu participes à l’inscription en tant que responsable, entraîneur ou membre de l’encadrement.',
+            officialBullets: ['Le rôle officiel est préparé directement', 'Les informations de contact et de licence restent visibles', 'L’inscription s’adapte à la logique du club'],
+            refereeLabel: 'Je suis arbitre',
+            refereeCopy: 'Pour la fonction d’arbitre',
+            refereeTitle: 'Arbitre',
+            refereeSummary: 'Choisis cette option si tu t’inscris en tant qu’arbitre. Le rôle est alors marqué correctement.',
+            refereeBullets: ['Le rôle arbitre est préparé', 'Les renseignements restent simples et clairs', 'Les champs licence et contact restent visibles'],
+            familyLabel: 'Je suis famille / accompagnement',
+            familyCopy: 'Pour parents, tuteurs ou accompagnants',
+            familyTitle: 'Famille / accompagnement',
+            familySummary: 'Choisis cette option si tu accompagnes une inscription pour un enfant ou un proche. Les champs parents et contacts restent directement visibles.',
+            familyBullets: ['Les informations familiales restent claires', 'Les champs utiles aux mineurs sont mis en évidence', 'L’inscription reste dans le formulaire standard'],
+            role: 'Joueur / Joueuse'
+        },
+        de: {
+            quizKicker: 'Schnellstarter',
+            quizTitle: 'Wo möchtest du starten?',
+            quizIntro: 'Wähle eine Situation. So findest du schneller den passenden Teil des Formulars.',
+            playerLabel: 'Ich möchte spielen',
+            playerCopy: 'Für Spieler:innen, Jugendliche oder Familien',
+            playerTitle: 'Spielereintritt',
+            playerSummary: 'Wähle diese Option, wenn du selbst spielen möchtest oder ein Kind anmelden willst. Der Anmeldeweg wird dann gezielt auf diesen Weg ausgerichtet.',
+            playerBullets: ['Spieler- oder Spielerinnenprofil', 'FLH-Kategorie wird automatisch ergänzt', 'Für Minderjährige zeigen sich die Elternfelder direkt'],
+            officialLabel: 'Ich bin Offiziell',
+            officialCopy: 'Für Trainer, Verantwortliche oder Teamleitung',
+            officialTitle: 'Offiziell / Teamleitung',
+            officialSummary: 'Wähle diese Option, wenn du als Verantwortliche Person, Trainer oder im Teammanagement an der Anmeldung beteiligt bist.',
+            officialBullets: ['Die offizielle Rolle wird vorbereitet', 'Die nötigen Kontakt- und Lizenzangaben bleiben sichtbar', 'Die Anmeldung passt sich an die Vereinssicht an'],
+            refereeLabel: 'Ich bin Schiedsrichter',
+            refereeCopy: 'Für die Rolle als Schiedsrichter',
+            refereeTitle: 'Schiedsrichter',
+            refereeSummary: 'Wähle diese Option, wenn du dich als Schiedsrichter anmeldest. Die Rolle wird direkt passend markiert.',
+            refereeBullets: ['Rolle Schiedsrichter wird vorbereitet', 'Die Angaben bleiben einfach und verständlich', 'Die Lizenz- und Kontaktfelder bleiben sichtbar'],
+            familyLabel: 'Ich bin Familie / Begleitung',
+            familyCopy: 'Für Eltern, Vormünder oder Begleitpersonen',
+            familyTitle: 'Familie / Begleitung',
+            familySummary: 'Wähle diese Option, wenn du eine Anmeldung für ein Kind oder einen Angehörigen begleitest. Die Eltern- und Kontaktfelder bleiben direkt sichtbar.',
+            familyBullets: ['Familien- und Vormundschaftsdaten bleiben klar', 'Die relevanten Felder für Minderjährige werden hervorgehoben', 'Die Anmeldung bleibt trotzdem im normalen Formular'],
+            role: 'Joueur / Joueuse'
+        },
+        en: {
+            quizKicker: 'Quick start',
+            quizTitle: 'Where do you want to start?',
+            quizIntro: 'Choose a situation. This helps you quickly find the right part of the form.',
+            playerLabel: 'I want to play',
+            playerCopy: 'For players, youth or families',
+            playerTitle: 'Player registration',
+            playerSummary: 'Choose this option if you want to play yourself or register a child. The path is then tailored to this direction.',
+            playerBullets: ['Player profile', 'FLH category added automatically', 'Parent fields appear directly for minors'],
+            officialLabel: 'I am an official',
+            officialCopy: 'For coaches, organisers or team management',
+            officialTitle: 'Official / management',
+            officialSummary: 'Choose this option if you are taking part in the registration as a responsible person, coach or member of the team management.',
+            officialBullets: ['Official role is prepared directly', 'Contact and licence details remain visible', 'The registration adapts to the club view'],
+            refereeLabel: 'I am a referee',
+            refereeCopy: 'For the role of referee',
+            refereeTitle: 'Referee',
+            refereeSummary: 'Choose this option if you are registering as a referee. The role is then marked correctly.',
+            refereeBullets: ['Referee role is prepared', 'The information stays simple and clear', 'Licence and contact fields remain visible'],
+            familyLabel: 'I am family / support',
+            familyCopy: 'For parents, guardians or companions',
+            familyTitle: 'Family / support',
+            familySummary: 'Choose this option if you are accompanying a registration for a child or a relative. The parent and contact fields remain directly visible.',
+            familyBullets: ['Family details stay clear', 'The relevant fields for minors are highlighted', 'The registration remains within the standard form'],
+            role: 'Joueur / Joueuse'
+        },
+        pt: {
+            quizKicker: 'Início rápido',
+            quizTitle: 'Onde queres começar?',
+            quizIntro: 'Escolhe uma situação. Isto ajuda-te a encontrar mais rapidamente a parte certa do formulário.',
+            playerLabel: 'Quero jogar',
+            playerCopy: 'Para jogadores, jovens ou famílias',
+            playerTitle: 'Inscrição de jogador',
+            playerSummary: 'Escolhe esta opção se quiseres jogar tu próprio ou registar uma criança. O percurso é então orientado para esta via.',
+            playerBullets: ['Perfil de jogador', 'Categoria FLH completada automaticamente', 'Os campos dos pais aparecem diretamente para menores'],
+            officialLabel: 'Sou oficial',
+            officialCopy: 'Para treinadores, responsáveis ou direção',
+            officialTitle: 'Oficial / direção',
+            officialSummary: 'Escolhe esta opção se participares na inscrição como pessoa responsável, treinador ou membro da direção.',
+            officialBullets: ['O papel oficial é preparado diretamente', 'Os dados de contacto e licença permanecem visíveis', 'O registo adapta-se à lógica do clube'],
+            refereeLabel: 'Sou árbitro',
+            refereeCopy: 'Para a função de árbitro',
+            refereeTitle: 'Árbitro',
+            refereeSummary: 'Escolhe esta opção se te registares como árbitro. O papel é então marcado corretamente.',
+            refereeBullets: ['O papel de árbitro é preparado', 'As informações permanecem simples e claras', 'Os campos licença e contacto permanecem visíveis'],
+            familyLabel: 'Sou família / acompanhamento',
+            familyCopy: 'Para pais, tutores ou acompanhantes',
+            familyTitle: 'Família / acompanhamento',
+            familySummary: 'Escolhe esta opção se estiveres a acompanhar um registo para uma criança ou um familiar. Os campos dos pais e contactos permanecem diretamente visíveis.',
+            familyBullets: ['Os dados familiares permanecem claros', 'Os campos relevantes para menores são destacados', 'O registo permanece no formulário padrão'],
+            role: 'Joueur / Joueuse'
+        }
+    };
+    let currentJoinQuiz = 'player';
     const MERSCH75_UI_TEXTS = {
         lu: {
             nom: 'Numm *', prenom: 'Virnumm *', dob: 'Gebuertsdatum *', mineur: 'Mannerjäreg', cat: 'FLH Kategorie', role: 'Roll / Funktioun *', parent: 'Elengerzéiend *', tuteur1: 'Erzéiungsberechtegten 1 *', tuteur2: 'Erzéiungsberechtegten 2 *', nat: 'Nationalitéit *', cns: 'Matricule CNS *', medico: 'Medico *', licence: 'Lizenz *', club: 'Ale Veräin *', u7: 'U7 medezineschen Zertifikat obligatoresch', strasse: 'Strooss *', postcode: 'Postcode *', ortschaft: 'Uertschaft *', email: 'E-Mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Schécken', sending: 'Gëtt geschéckt...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Deng Umeldung gouf erfollegräich iwwermëttelt.', successNote: 'Du kriss eng Bestätegung per E-Mail.', oui: 'JO', non: 'NEE', joueur: 'Spiller / Spillerin', officiel: 'Offiziell Persoun', arbitre: 'Arbitter', parent_non: 'NEE (2 Erzéiungsberechtegter)', parent_oui: 'JO (1 Erzéiungsberechtegten)', legalRequired: 'Liest an akzeptéiert w.e.g. déi allgemeng Bedéngungen an den Dateschutz.', flhRequired: 'Bestätegt w.e.g. d\'Iwwermëttlung un flh.lu fir d\'Lizenz.', accuracyRequired: 'Bestätegt w.e.g. d\'Richtegkeet vun den Donnéeën.'
@@ -461,6 +630,91 @@
         });
     }
 
+    function getQuizOption(key) {
+        const content = MERSCH75_JOIN_QUIZ_CONTENT[currentLang] || MERSCH75_JOIN_QUIZ_CONTENT.lu;
+        if (key === 'official') {
+            return {
+                title: content.officialTitle,
+                summary: content.officialSummary,
+                bullets: content.officialBullets,
+                role: 'Officiel(le)'
+            };
+        }
+        if (key === 'referee') {
+            return {
+                title: content.refereeTitle,
+                summary: content.refereeSummary,
+                bullets: content.refereeBullets,
+                role: 'Arbitre'
+            };
+        }
+        if (key === 'family') {
+            return {
+                title: content.familyTitle,
+                summary: content.familySummary,
+                bullets: content.familyBullets,
+                role: 'Joueur / Joueuse'
+            };
+        }
+        return {
+            title: content.playerTitle,
+            summary: content.playerSummary,
+            bullets: content.playerBullets,
+            role: content.role
+        };
+    }
+
+    function updateJoinQuizUI() {
+        const content = MERSCH75_JOIN_QUIZ_CONTENT[currentLang] || MERSCH75_JOIN_QUIZ_CONTENT.lu;
+        document.getElementById('join-quiz-kicker').textContent = content.quizKicker;
+        document.getElementById('join-quiz-title').textContent = content.quizTitle;
+        document.getElementById('join-quiz-intro').textContent = content.quizIntro;
+        document.getElementById('join-quiz-player-label').textContent = content.playerLabel;
+        document.getElementById('join-quiz-player-copy').textContent = content.playerCopy;
+        document.getElementById('join-quiz-official-label').textContent = content.officialLabel;
+        document.getElementById('join-quiz-official-copy').textContent = content.officialCopy;
+        document.getElementById('join-quiz-referee-label').textContent = content.refereeLabel;
+        document.getElementById('join-quiz-referee-copy').textContent = content.refereeCopy;
+        document.getElementById('join-quiz-family-label').textContent = content.familyLabel;
+        document.getElementById('join-quiz-family-copy').textContent = content.familyCopy;
+        setJoinQuizSelection(currentJoinQuiz);
+    }
+
+    function setJoinQuizSelection(key) {
+        const quizKey = ['player', 'official', 'referee', 'family'].includes(key) ? key : 'player';
+        currentJoinQuiz = quizKey;
+
+        document.querySelectorAll('.join-quiz-option').forEach(function(button) {
+            const active = button.dataset.quizKey === quizKey;
+            button.classList.toggle('is-active', active);
+            button.setAttribute('aria-pressed', active ? 'true' : 'false');
+        });
+
+        const activeContent = getQuizOption(quizKey);
+        const summaryBadge = document.getElementById('join-quiz-summary-badge');
+        const summaryTitle = document.getElementById('join-quiz-summary-title');
+        const summaryCopy = document.getElementById('join-quiz-summary-copy');
+        const summaryList = document.getElementById('join-quiz-summary-list');
+
+        if (summaryBadge) summaryBadge.textContent = activeContent.title;
+        if (summaryTitle) summaryTitle.textContent = activeContent.title;
+        if (summaryCopy) summaryCopy.textContent = activeContent.summary;
+
+        if (summaryList) {
+            summaryList.innerHTML = '';
+            activeContent.bullets.forEach(function(item) {
+                const li = document.createElement('li');
+                li.textContent = item;
+                summaryList.appendChild(li);
+            });
+        }
+
+        const roleSelect = document.getElementById('Role');
+        if (roleSelect && activeContent.role) {
+            roleSelect.value = activeContent.role;
+        }
+    }
+
     function updateLang(lang) {
         currentLang = MERSCH75_UI_TEXTS[lang] ? lang : 'lu';
         const ui = MERSCH75_UI_TEXTS[currentLang];
@@ -522,6 +776,7 @@
 
         updateSuccessText(currentLang);
         updateConsentValidationMessages();
+        updateJoinQuizUI();
     }
 
     function buildJoinMessage(includeLicenseLines, messageLanguage) {
@@ -809,6 +1064,25 @@
             updateLang(this.dataset.lang);
         });
     });
+
+    document.querySelectorAll('.join-quiz-option').forEach(function(button) {
+        button.addEventListener('click', function() {
+            setJoinQuizSelection(this.dataset.quizKey);
+        });
+    });
+
+    const roleSelect = document.getElementById('Role');
+    if (roleSelect) {
+        roleSelect.addEventListener('change', function() {
+            if (this.value === 'Officiel(le)') {
+                setJoinQuizSelection('official');
+            } else if (this.value === 'Arbitre') {
+                setJoinQuizSelection('referee');
+            } else {
+                setJoinQuizSelection('player');
+            }
+        });
+    }
 
     updateLang('lu');
     updateCnsDisplay();
