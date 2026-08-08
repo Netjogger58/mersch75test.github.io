@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="lu">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -110,60 +110,60 @@
                             </div>
 
                             <div class="join-form-group">
-                                <label id="lbl-nom" for="Nom">NOM(S) SUR CARTE D'IDENTITE *</label>
+                                <label id="lbl-nom" for="Nom">Numm *</label>
                                 <input type="text" id="Nom" name="Nom" autocomplete="family-name" required>
                             </div>
 
                             <div class="join-form-group">
-                                <label id="lbl-prenom" for="Prenom">PRENOM *</label>
+                                <label id="lbl-prenom" for="Prenom">Virnumm *</label>
                                 <input type="text" id="Prenom" name="Prenom" autocomplete="given-name" required>
                             </div>
 
                             <div class="join-form-row">
                                 <div class="join-form-group">
-                                    <label id="lbl-dob" for="DateNaissance">DATE DE NAISSANCE (JJ.MM.AAAA) *</label>
+                                    <label id="lbl-dob" for="DateNaissance">Gebuertsdatum *</label>
                                     <input type="text" id="DateNaissance" name="DateNaissance" placeholder="01.01.2010" inputmode="numeric" pattern="[0-9]{2}\.[0-9]{2}\.[0-9]{4}" required>
                                 </div>
                                 <div class="join-form-group">
-                                    <label id="lbl-mineur" for="Mineur">MINEUR? *</label>
+                                    <label id="lbl-mineur" for="Mineur">Mannerjäreg</label>
                                     <select id="Mineur" disabled>
-                                        <option value="NON">NON</option>
-                                        <option value="OUI">OUI</option>
+                                        <option value="NON">NEE</option>
+                                        <option value="OUI">JO</option>
                                     </select>
                                 </div>
                             </div>
 
                             <div id="cat-section">
-                                <label id="lbl-cat" for="Categorie">CATEGORIE FLH (AUTO)</label>
+                                <label id="lbl-cat" for="Categorie">FLH Kategorie</label>
                                 <strong id="cat-display">-</strong>
                                 <input type="hidden" id="Categorie" name="Categorie" value="">
                             </div>
 
                             <div class="join-form-group">
-                                <label id="lbl-role" for="Role">ROLE / FUNKTION *</label>
+                                <label id="lbl-role" for="Role">Roll / Funktioun *</label>
                                 <select id="Role" name="Role" required>
-                                    <option value="Joueur / Joueuse">Joueur / Joueuse</option>
-                                    <option value="Officiel(le)">Officiel(le)</option>
-                                    <option value="Arbitre">Arbitre</option>
+                                    <option value="Joueur / Joueuse">Spiller / Spillerin</option>
+                                    <option value="Officiel(le)">Offiziell Persoun</option>
+                                    <option value="Arbitre">Arbitter</option>
                                 </select>
                             </div>
 
                             <div id="parent-section">
                                 <div class="join-form-group join-form-group--compact">
-                                    <label id="lbl-parent" for="ParentIsole">PARENT ISOLE / ALLEINERZIEHEND? *</label>
+                                    <label id="lbl-parent" for="ParentIsole">Elengerzéiend *</label>
                                     <select id="ParentIsole" name="ParentIsole">
-                                        <option value="NON">NON (2 Tuteurs)</option>
-                                        <option value="OUI">OUI (1 Tuteur)</option>
+                                        <option value="NON">NEE (2 Erzéiungsberechtegter)</option>
+                                        <option value="OUI">JO (1 Erzéiungsberechtegten)</option>
                                     </select>
                                 </div>
  
                                 <div class="join-form-row">
                                     <div class="join-form-group">
-                                        <label id="lbl-tuteur1" for="Tuteur1">TUTEUR 1 (NOM ET PRENOM) *</label>
+                                        <label id="lbl-tuteur1" for="Tuteur1">Erzéiungsberechtegten 1 *</label>
                                         <input type="text" id="Tuteur1" name="Tuteur1" autocomplete="name">
                                     </div>
                                     <div class="join-form-group" id="tuteur2-wrap">
-                                        <label id="lbl-tuteur2" for="Tuteur2">TUTEUR 2 (NOM ET PRENOM) *</label>
+                                        <label id="lbl-tuteur2" for="Tuteur2">Erzéiungsberechtegten 2 *</label>
                                         <input type="text" id="Tuteur2" name="Tuteur2" autocomplete="name">
                                     </div>
                                 </div>
@@ -173,34 +173,34 @@
                                 <div class="join-form-group join-form-group--compact">
                                     <label id="lbl-family-mode" for="FamilyRegistrationMode">ZUSÄTZLICHE FAMILIENANMELDUNG</label>
                                     <select id="FamilyRegistrationMode" name="FamilyRegistrationMode">
-                                        <option value="NONE">Keine zusätzliche Familienanmeldung</option>
-                                        <option value="PARENT1">Ein Elternteil möchte auch spielen</option>
-                                        <option value="PARENT2">Beide Elternteile möchten auch spielen</option>
+                                        <option value="NONE">Keng zousätzlech Familienanmeldung</option>
+                                        <option value="PARENT1">Ein Elterteil wëll och spillen</option>
+                                        <option value="PARENT2">Beide Elteren wëllen och spillen</option>
                                     </select>
                                 </div>
  
                                 <div class="join-family-details" id="family-registration-details" style="display:none;">
-                                    <p class="join-family-note" id="family-registration-note">Bitte ergänze die Daten der zusätzlichen Elternteile.</p>
+                                    <p class="join-family-note" id="family-registration-note">Fëllt w.e.g. d'Donnéeën vun den zousätzlechen Elteren aus.</p>
  
                                     <div class="join-family-card" id="family-parent-1-card">
-                                        <h3 id="family-parent-1-title">Elternteil 1</h3>
+                                        <h3 id="family-parent-1-title">Elteren 1</h3>
                                         <div class="join-form-row">
                                             <div class="join-form-group">
-                                                <label id="lbl-family-parent1-nom" for="FamilyParent1Nom">NOM *</label>
+                                                <label id="lbl-family-parent1-nom" for="FamilyParent1Nom">Numm *</label>
                                                 <input type="text" id="FamilyParent1Nom" name="FamilyParent1Nom" autocomplete="family-name">
                                             </div>
                                             <div class="join-form-group">
-                                                <label id="lbl-family-parent1-prenom" for="FamilyParent1Prenom">PRÉNOM *</label>
+                                                <label id="lbl-family-parent1-prenom" for="FamilyParent1Prenom">Virnumm *</label>
                                                 <input type="text" id="FamilyParent1Prenom" name="FamilyParent1Prenom" autocomplete="given-name">
                                             </div>
                                         </div>
                                         <div class="join-form-row">
                                             <div class="join-form-group">
-                                                <label id="lbl-family-parent1-dob" for="FamilyParent1Dob">DATE DE NAISSANCE *</label>
+                                                <label id="lbl-family-parent1-dob" for="FamilyParent1Dob">Gebuertsdatum *</label>
                                                 <input type="text" id="FamilyParent1Dob" name="FamilyParent1Dob" placeholder="01.01.2010" inputmode="numeric" pattern="[0-9]{2}\.[0-9]{2}\.[0-9]{4}">
                                             </div>
                                             <div class="join-form-group">
-                                                <label id="lbl-family-parent1-email" for="FamilyParent1Email">EMAIL *</label>
+                                                <label id="lbl-family-parent1-email" for="FamilyParent1Email">E-Mail *</label>
                                                 <input type="email" id="FamilyParent1Email" name="FamilyParent1Email" autocomplete="email">
                                             </div>
                                         </div>
@@ -211,24 +211,24 @@
                                     </div>
  
                                     <div class="join-family-card" id="family-parent-2-card" style="display:none;">
-                                        <h3 id="family-parent-2-title">Elternteil 2</h3>
+                                        <h3 id="family-parent-2-title">Elteren 2</h3>
                                         <div class="join-form-row">
                                             <div class="join-form-group">
-                                                <label id="lbl-family-parent2-nom" for="FamilyParent2Nom">NOM *</label>
+                                                <label id="lbl-family-parent2-nom" for="FamilyParent2Nom">Numm *</label>
                                                 <input type="text" id="FamilyParent2Nom" name="FamilyParent2Nom" autocomplete="family-name">
                                             </div>
                                             <div class="join-form-group">
-                                                <label id="lbl-family-parent2-prenom" for="FamilyParent2Prenom">PRÉNOM *</label>
+                                                <label id="lbl-family-parent2-prenom" for="FamilyParent2Prenom">Virnumm *</label>
                                                 <input type="text" id="FamilyParent2Prenom" name="FamilyParent2Prenom" autocomplete="given-name">
                                             </div>
                                         </div>
                                         <div class="join-form-row">
                                             <div class="join-form-group">
-                                                <label id="lbl-family-parent2-dob" for="FamilyParent2Dob">DATE DE NAISSANCE *</label>
+                                                <label id="lbl-family-parent2-dob" for="FamilyParent2Dob">Gebuertsdatum *</label>
                                                 <input type="text" id="FamilyParent2Dob" name="FamilyParent2Dob" placeholder="01.01.2010" inputmode="numeric" pattern="[0-9]{2}\.[0-9]{2}\.[0-9]{4}">
                                             </div>
                                             <div class="join-form-group">
-                                                <label id="lbl-family-parent2-email" for="FamilyParent2Email">EMAIL *</label>
+                                                <label id="lbl-family-parent2-email" for="FamilyParent2Email">E-Mail *</label>
                                                 <input type="email" id="FamilyParent2Email" name="FamilyParent2Email" autocomplete="email">
                                             </div>
                                         </div>
@@ -241,26 +241,26 @@
                             </div>
  
                             <div class="join-form-group">
-                                <label id="lbl-nat" for="Nationalite">NATIONALITE *</label>
+                                <label id="lbl-nat" for="Nationalite">Nationalitéit *</label>
                                 <input type="text" id="Nationalite" name="Nationalite" autocomplete="country-name" required>
                             </div>
 
                             <div class="join-form-group">
-                                <label id="lbl-cns" for="CNS">MATRICULE CNS (5 CHIFFRES) *</label>
+                                <label id="lbl-cns" for="CNS">Matricule CNS *</label>
                                 <input type="text" id="CNS" name="CNS" maxlength="5" inputmode="numeric" pattern="[0-9]{5}" required>
                                 <span id="cns-prefix-display" class="join-helper-text" aria-live="polite"></span>
                             </div>
 
                             <div class="join-form-row">
                                 <div class="join-form-group">
-                                    <label id="lbl-medico" for="Medico">MEDICO? *</label>
+                                    <label id="lbl-medico" for="Medico">Medico *</label>
                                     <select id="Medico" name="Medico" required>
                                         <option value="Non">Non</option>
                                         <option value="Oui">Oui</option>
                                     </select>
                                 </div>
                                 <div class="join-form-group">
-                                    <label id="lbl-licence" for="Licence">LICENCE? *</label>
+                                    <label id="lbl-licence" for="Licence">Lizenz *</label>
                                     <select id="Licence" name="Licence" required>
                                         <option value="Non">Non</option>
                                         <option value="Oui">Oui</option>
@@ -269,43 +269,43 @@
                             </div>
 
                             <div class="join-form-group">
-                                <label id="lbl-club" for="AncienClub">ANCIEN CLUB (OU &quot;NEANT&quot;) *</label>
+                                <label id="lbl-club" for="AncienClub">Ale Veräin *</label>
                                 <input type="text" id="AncienClub" name="AncienClub" required>
                             </div>
 
                             <div id="u7-section">
                                 <input type="checkbox" id="U7Cert" name="U7Cert" value="Oui">
-                                <label for="U7Cert" id="lbl-u7">U7 : CERTIFICAT MEDICAL D'APTITUDE SPORTIVE OBLIGATOIRE (ETABLI PAR LE MEDECIN TRAITANT).</label>
+                                <label for="U7Cert" id="lbl-u7">U7: medezineschen Zertifikat obligatoresch</label>
                             </div>
 
                             <div class="join-form-group">
-                                <label id="lbl-strasse" for="Strasse">STRASSE *</label>
+                                <label id="lbl-strasse" for="Strasse">Strooss *</label>
                                 <input type="text" id="Strasse" name="Strasse" autocomplete="street-address" required>
                             </div>
 
                             <div class="join-form-row">
                                 <div class="join-form-group">
-                                    <label id="lbl-postcode" for="Postcode">POSTCODE *</label>
+                                    <label id="lbl-postcode" for="Postcode">Postcode *</label>
                                     <input type="text" id="Postcode" name="Postcode" autocomplete="postal-code" required>
                                 </div>
                                 <div class="join-form-group">
-                                    <label id="lbl-ortschaft" for="Ortschaft">ORTSCHAFT *</label>
+                                    <label id="lbl-ortschaft" for="Ortschaft">Uertschaft *</label>
                                     <input type="text" id="Ortschaft" name="Ortschaft" autocomplete="address-level2" required>
                                 </div>
                             </div>
 
                             <div class="join-form-group">
-                                <label id="lbl-email" for="Email">EMAIL *</label>
+                                <label id="lbl-email" for="Email">E-Mail *</label>
                                 <input type="email" id="Email" name="Email" autocomplete="email" required>
                             </div>
 
                             <div class="join-form-row">
                                 <div class="join-form-group">
-                                    <label id="lbl-gsm1" for="GSM1">TEL MOBILE / GSM 1 *</label>
+                                    <label id="lbl-gsm1" for="GSM1">GSM 1 *</label>
                                     <input type="text" id="GSM1" name="GSM1" autocomplete="tel" required>
                                 </div>
                                 <div class="join-form-group">
-                                    <label id="lbl-gsm2" for="GSM2">TEL MOBILE / GSM 2 (OPTIONNEL)</label>
+                                    <label id="lbl-gsm2" for="GSM2">GSM 2</label>
                                     <input type="text" id="GSM2" name="GSM2" autocomplete="tel">
                                 </div>
                             </div>
@@ -327,7 +327,7 @@
                                 <label for="AccuracyConsent" id="lbl-accuracy">Bestätegung: Ech confirméiere d'Richtegkeet vun menge Donnéeën.</label>
                             </div>
 
-                            <button type="submit" id="submitBtn" class="join-submit-button">SEND / ABSCHICKEN</button>
+                            <button type="submit" id="submitBtn" class="join-submit-button">Schécken</button>
                         </form>
 
                         <div id="success-box" aria-live="polite">
@@ -550,19 +550,19 @@
     let currentJoinQuiz = 'player';
     const MERSCH75_UI_TEXTS = {
         lu: {
-            nom: 'Numm *', prenom: 'Virnumm *', dob: 'Gebuertsdatum *', mineur: 'Mannerjäreg', cat: 'FLH Kategorie', role: 'Roll / Funktioun *', parent: 'Elengerzéiend *', tuteur1: 'Erzéiungsberechtegten 1 *', tuteur2: 'Erzéiungsberechtegten 2 *', nat: 'Nationalitéit *', cns: 'Matricule CNS *', medico: 'Medico *', licence: 'Lizenz *', club: 'Ale Veräin *', u7: 'U7 medezineschen Zertifikat obligatoresch', strasse: 'Strooss *', postcode: 'Postcode *', ortschaft: 'Uertschaft *', email: 'E-Mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Schécken', sending: 'Gëtt geschéckt...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Deng Umeldung gouf erfollegräich iwwermëttelt.', successNote: 'Du kriss eng Bestätegung per E-Mail.', oui: 'JO', non: 'NEE', joueur: 'Spiller / Spillerin', officiel: 'Offiziell Persoun', arbitre: 'Arbitter', parent_non: 'NEE (2 Erzéiungsberechtegter)', parent_oui: 'JO (1 Erzéiungsberechtegten)', familyMode: 'ZUSÄTZLICHE FAMILIENANMELDUNG', familyModeNone: 'Keng zousätzlech Familienanmeldung', familyModeOne: 'Ein Elterteil wëll och spillen', familyModeTwo: 'Beide Elteren wëllen och spillen', familyNote: 'Fëllt w.e.g. d\'Donnéeën vun den zousätzlechen Elteren aus.', familyParent1Title: 'Elteren 1', familyParent2Title: 'Elteren 2', familyParentNom: 'Numm *', familyParentPrenom: 'Virnumm *', familyParentDob: 'Gebuertsdatum *', familyParentEmail: 'E-Mail *', familyParentGsm: 'GSM *', legalRequired: 'Liest an akzeptéiert w.e.g. déi allgemeng Bedéngungen an den Dateschutz.', flhRequired: 'Bestätegt w.e.g. d\'Iwwermëttlung un flh.lu fir d\'Lizenz.', accuracyRequired: 'Bestätegt w.e.g. d\'Richtegkeet vun den Donnéeën.'
+            nom: 'Numm *', prenom: 'Virnumm *', dob: 'Gebuertsdatum *', mineur: 'Mannerjäreg', cat: 'FLH Kategorie', role: 'Roll / Funktioun *', parent: 'Elengerzéiend *', tuteur1: 'Erzéiungsberechtegten 1 *', tuteur2: 'Erzéiungsberechtegten 2 *', nat: 'Nationalitéit *', cns: 'Matricule CNS *', cnsPrefix: 'Format CNS:', medico: 'Medico *', licence: 'Lizenz *', club: 'Ale Veräin *', u7: 'U7 medezineschen Zertifikat obligatoresch', strasse: 'Strooss *', postcode: 'Postcode *', ortschaft: 'Uertschaft *', email: 'E-Mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Schécken', sending: 'Gëtt geschéckt...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Deng Umeldung gouf erfollegräich iwwermëttelt.', successNote: 'Du kriss eng Bestätegung per E-Mail.', oui: 'JO', non: 'NEE', joueur: 'Spiller / Spillerin', officiel: 'Offiziell Persoun', arbitre: 'Arbitter', parent_non: 'NEE (2 Erzéiungsberechtegter)', parent_oui: 'JO (1 Erzéiungsberechtegten)', familyMode: 'ZUSÄTZLICHE FAMILIENANMELDUNG', familyModeNone: 'Keng zousätzlech Familienanmeldung', familyModeOne: 'Ein Elterteil wëll och spillen', familyModeTwo: 'Beide Elteren wëllen och spillen', familyNote: 'Fëllt w.e.g. d\'Donnéeën vun den zousätzlechen Elteren aus.', familyParent1Title: 'Elteren 1', familyParent2Title: 'Elteren 2', familyParentNom: 'Numm *', familyParentPrenom: 'Virnumm *', familyParentDob: 'Gebuertsdatum *', familyParentEmail: 'E-Mail *', familyParentGsm: 'GSM *', legalRequired: 'Liest an akzeptéiert w.e.g. déi allgemeng Bedéngungen an den Dateschutz.', flhRequired: 'Bestätegt w.e.g. d\'Iwwermëttlung un flh.lu fir d\'Lizenz.', accuracyRequired: 'Bestätegt w.e.g. d\'Richtegkeet vun den Donnéeën.'
         },
         fr: {
-            nom: 'Nom *', prenom: 'Prénom *', dob: 'Date de naissance *', mineur: 'Mineur', cat: 'Catégorie FLH', role: 'Rôle / Fonction *', parent: 'Parent isolé *', tuteur1: 'Tuteur 1 *', tuteur2: 'Tuteur 2 *', nat: 'Nationalité *', cns: 'Matricule CNS *', medico: 'Médico *', licence: 'Licence *', club: 'Ancien club *', u7: 'U7 certificat médical obligatoire', strasse: 'Rue *', postcode: 'Code postal *', ortschaft: 'Localité *', email: 'E-mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Envoyer', sending: 'Envoi...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Inscription envoyée.', successNote: 'Vous recevrez une confirmation par e-mail.', oui: 'OUI', non: 'NON', joueur: 'Joueur / Joueuse', officiel: 'Officiel(le)', arbitre: 'Arbitre', parent_non: 'NON (2 tuteurs)', parent_oui: 'OUI (1 tuteur)', familyMode: 'ANMELDURE SUPPLÉMENTAIRE DE LA FAMILLE', familyModeNone: 'Aucune inscription familiale supplémentaire', familyModeOne: 'Un parent souhaite aussi jouer', familyModeTwo: 'Les deux parents souhaitent aussi jouer', familyNote: 'Veuillez compléter les données des parents supplémentaires.', familyParent1Title: 'Parent 1', familyParent2Title: 'Parent 2', familyParentNom: 'NOM *', familyParentPrenom: 'PRÉNOM *', familyParentDob: 'DATE DE NAISSANCE *', familyParentEmail: 'EMAIL *', familyParentGsm: 'GSM *', legalRequired: 'Veuillez lire et accepter les conditions générales et la protection des données.', flhRequired: 'Veuillez confirmer la transmission à flh.lu pour la licence.', accuracyRequired: 'Veuillez confirmer l\'exactitude des données.'
+            nom: 'Nom *', prenom: 'Prénom *', dob: 'Date de naissance *', mineur: 'Mineur', cat: 'Catégorie FLH', role: 'Rôle / Fonction *', parent: 'Parent isolé *', tuteur1: 'Tuteur 1 *', tuteur2: 'Tuteur 2 *', nat: 'Nationalité *', cns: 'Matricule CNS *', cnsPrefix: 'Format CNS :', medico: 'Médico *', licence: 'Licence *', club: 'Ancien club *', u7: 'U7 certificat médical obligatoire', strasse: 'Rue *', postcode: 'Code postal *', ortschaft: 'Localité *', email: 'E-mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Envoyer', sending: 'Envoi...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Inscription envoyée.', successNote: 'Vous recevrez une confirmation par e-mail.', oui: 'OUI', non: 'NON', joueur: 'Joueur / Joueuse', officiel: 'Officiel(le)', arbitre: 'Arbitre', parent_non: 'NON (2 tuteurs)', parent_oui: 'OUI (1 tuteur)', familyMode: 'ANMELDURE SUPPLÉMENTAIRE DE LA FAMILLE', familyModeNone: 'Aucune inscription familiale supplémentaire', familyModeOne: 'Un parent souhaite aussi jouer', familyModeTwo: 'Les deux parents souhaitent aussi jouer', familyNote: 'Veuillez compléter les données des parents supplémentaires.', familyParent1Title: 'Parent 1', familyParent2Title: 'Parent 2', familyParentNom: 'NOM *', familyParentPrenom: 'PRÉNOM *', familyParentDob: 'DATE DE NAISSANCE *', familyParentEmail: 'EMAIL *', familyParentGsm: 'GSM *', legalRequired: 'Veuillez lire et accepter les conditions générales et la protection des données.', flhRequired: 'Veuillez confirmer la transmission à flh.lu pour la licence.', accuracyRequired: 'Veuillez confirmer l\'exactitude des données.'
         },
         de: {
-            nom: 'Name *', prenom: 'Vorname *', dob: 'Geburtsdatum *', mineur: 'Minderjährig', cat: 'FLH Kategorie', role: 'Rolle / Funktion *', parent: 'Alleinerziehend *', tuteur1: 'Erziehungsberechtigter 1 *', tuteur2: 'Erziehungsberechtigter 2 *', nat: 'Nationalität *', cns: 'CNS-Matrikelnummer *', medico: 'Medico *', licence: 'Lizenz *', club: 'Ehemaliger Verein *', u7: 'U7 ärztliches Attest obligatorisch', strasse: 'Straße *', postcode: 'Postleitzahl *', ortschaft: 'Ortschaft *', email: 'E-Mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Senden', sending: 'Senden...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Anmeldung gesendet.', successNote: 'Du erhältst eine Bestätigung per E-Mail.', oui: 'JA', non: 'NEIN', joueur: 'Spieler / Spielerin', officiel: 'Offizielle Person', arbitre: 'Schiedsrichter', parent_non: 'NEIN (2 Erziehungsberechtigte)', parent_oui: 'JA (1 Erziehungsberechtigter)', familyMode: 'ZUSÄTZLICHE FAMILIENANMELDUNG', familyModeNone: 'Keine zusätzliche Familienanmeldung', familyModeOne: 'Ein Elternteil möchte auch spielen', familyModeTwo: 'Beide Elternteile möchten auch spielen', familyNote: 'Bitte ergänze die Daten der zusätzlichen Elternteile.', familyParent1Title: 'Elternteil 1', familyParent2Title: 'Elternteil 2', familyParentNom: 'NAME *', familyParentPrenom: 'VORNAME *', familyParentDob: 'GEBURTSDATUM *', familyParentEmail: 'E-MAIL *', familyParentGsm: 'GSM *', legalRequired: 'Bitte die allgemeinen Bedingungen und den Datenschutz lesen und akzeptieren.', flhRequired: 'Bitte die Übermittlung an flh.lu für die Lizenz bestätigen.', accuracyRequired: 'Bitte die Richtigkeit der Angaben bestätigen.'
+            nom: 'Name *', prenom: 'Vorname *', dob: 'Geburtsdatum *', mineur: 'Minderjährig', cat: 'FLH Kategorie', role: 'Rolle / Funktion *', parent: 'Alleinerziehend *', tuteur1: 'Erziehungsberechtigter 1 *', tuteur2: 'Erziehungsberechtigter 2 *', nat: 'Nationalität *', cns: 'CNS-Matrikelnummer *', cnsPrefix: 'Format CNS:', medico: 'Medico *', licence: 'Lizenz *', club: 'Ehemaliger Verein *', u7: 'U7 ärztliches Attest obligatorisch', strasse: 'Straße *', postcode: 'Postleitzahl *', ortschaft: 'Ortschaft *', email: 'E-Mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Senden', sending: 'Senden...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Anmeldung gesendet.', successNote: 'Du erhältst eine Bestätigung per E-Mail.', oui: 'JA', non: 'NEIN', joueur: 'Spieler / Spielerin', officiel: 'Offizielle Person', arbitre: 'Schiedsrichter', parent_non: 'NEIN (2 Erziehungsberechtigte)', parent_oui: 'JA (1 Erziehungsberechtigter)', familyMode: 'ZUSÄTZLICHE FAMILIENANMELDUNG', familyModeNone: 'Keine zusätzliche Familienanmeldung', familyModeOne: 'Ein Elternteil möchte auch spielen', familyModeTwo: 'Beide Elternteile möchten auch spielen', familyNote: 'Bitte ergänze die Daten der zusätzlichen Elternteile.', familyParent1Title: 'Elternteil 1', familyParent2Title: 'Elternteil 2', familyParentNom: 'NAME *', familyParentPrenom: 'VORNAME *', familyParentDob: 'GEBURTSDATUM *', familyParentEmail: 'E-MAIL *', familyParentGsm: 'GSM *', legalRequired: 'Bitte die allgemeinen Bedingungen und den Datenschutz lesen und akzeptieren.', flhRequired: 'Bitte die Übermittlung an flh.lu für die Lizenz bestätigen.', accuracyRequired: 'Bitte die Richtigkeit der Angaben bestätigen.'
         },
         en: {
-            nom: 'Last name *', prenom: 'First name *', dob: 'Date of birth *', mineur: 'Minor', cat: 'FLH category', role: 'Role / Function *', parent: 'Single parent *', tuteur1: 'Guardian 1 *', tuteur2: 'Guardian 2 *', nat: 'Nationality *', cns: 'CNS number *', medico: 'Medical check *', licence: 'Licence *', club: 'Former club *', u7: 'U7 medical certificate required', strasse: 'Street *', postcode: 'Postcode *', ortschaft: 'City *', email: 'Email *', gsm1: 'Mobile 1 *', gsm2: 'Mobile 2', send: 'Submit', sending: 'Sending...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Registration sent.', successNote: 'You will receive a confirmation by email.', oui: 'YES', non: 'NO', joueur: 'Player', officiel: 'Official', arbitre: 'Referee', parent_non: 'NO (2 guardians)', parent_oui: 'YES (1 guardian)', familyMode: 'ADDITIONAL FAMILY REGISTRATION', familyModeNone: 'No additional family registration', familyModeOne: 'One parent also wants to play', familyModeTwo: 'Both parents also want to play', familyNote: 'Please complete the details of the additional parents.', familyParent1Title: 'Parent 1', familyParent2Title: 'Parent 2', familyParentNom: 'LAST NAME *', familyParentPrenom: 'FIRST NAME *', familyParentDob: 'DATE OF BIRTH *', familyParentEmail: 'EMAIL *', familyParentGsm: 'MOBILE *', legalRequired: 'Please read and accept the terms and conditions and data protection.', flhRequired: 'Please confirm the transfer to flh.lu for the licence.', accuracyRequired: 'Please confirm the accuracy of the data.'
+            nom: 'Last name *', prenom: 'First name *', dob: 'Date of birth *', mineur: 'Minor', cat: 'FLH category', role: 'Role / Function *', parent: 'Single parent *', tuteur1: 'Guardian 1 *', tuteur2: 'Guardian 2 *', nat: 'Nationality *', cns: 'CNS number *', cnsPrefix: 'CNS format:', medico: 'Medical check *', licence: 'Licence *', club: 'Former club *', u7: 'U7 medical certificate required', strasse: 'Street *', postcode: 'Postcode *', ortschaft: 'City *', email: 'Email *', gsm1: 'Mobile 1 *', gsm2: 'Mobile 2', send: 'Submit', sending: 'Sending...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Registration sent.', successNote: 'You will receive a confirmation by email.', oui: 'YES', non: 'NO', joueur: 'Player', officiel: 'Official', arbitre: 'Referee', parent_non: 'NO (2 guardians)', parent_oui: 'YES (1 guardian)', familyMode: 'ADDITIONAL FAMILY REGISTRATION', familyModeNone: 'No additional family registration', familyModeOne: 'One parent also wants to play', familyModeTwo: 'Both parents also want to play', familyNote: 'Please complete the details of the additional parents.', familyParent1Title: 'Parent 1', familyParent2Title: 'Parent 2', familyParentNom: 'LAST NAME *', familyParentPrenom: 'FIRST NAME *', familyParentDob: 'DATE OF BIRTH *', familyParentEmail: 'EMAIL *', familyParentGsm: 'MOBILE *', legalRequired: 'Please read and accept the terms and conditions and data protection.', flhRequired: 'Please confirm the transfer to flh.lu for the licence.', accuracyRequired: 'Please confirm the accuracy of the data.'
         },
         pt: {
-            nom: 'Apelido *', prenom: 'Nome próprio *', dob: 'Data de nascimento *', mineur: 'Menor', cat: 'Categoria FLH', role: 'Função *', parent: 'Encarregado isolado *', tuteur1: 'Encarregado 1 *', tuteur2: 'Encarregado 2 *', nat: 'Nacionalidade *', cns: 'Número CNS *', medico: 'Exame médico *', licence: 'Licença *', club: 'Clube anterior *', u7: 'U7 certificado médico obrigatório', strasse: 'Rua *', postcode: 'Código postal *', ortschaft: 'Localidade *', email: 'E-mail *', gsm1: 'Telemóvel 1 *', gsm2: 'Telemóvel 2', send: 'Enviar', sending: 'A enviar...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Inscrição enviada.', successNote: 'Receberá uma confirmação por e-mail.', oui: 'SIM', non: 'NÃO', joueur: 'Jogador / Jogadora', officiel: 'Oficial', arbitre: 'Árbitro', parent_non: 'NÃO (2 encarregados)', parent_oui: 'SIM (1 encarregado)', familyMode: 'INSCRIÇÃO FAMILIAR ADICIONAL', familyModeNone: 'Nenhuma inscrição familiar adicional', familyModeOne: 'Um dos pais também quer jogar', familyModeTwo: 'Os dois pais também querem jogar', familyNote: 'Por favor, complete os dados dos pais adicionais.', familyParent1Title: 'Encarregado 1', familyParent2Title: 'Encarregado 2', familyParentNom: 'APELIDO *', familyParentPrenom: 'NOME PRÓPRIO *', familyParentDob: 'DATA DE NASCIMENTO *', familyParentEmail: 'E-MAIL *', familyParentGsm: 'TELEMÓVEL *', legalRequired: 'Por favor, leia e aceite os termos e condições e a proteção de dados.', flhRequired: 'Por favor, confirme o envio para flh.lu para a licença.', accuracyRequired: 'Por favor, confirme a exatidão dos dados.'
+            nom: 'Apelido *', prenom: 'Nome próprio *', dob: 'Data de nascimento *', mineur: 'Menor', cat: 'Categoria FLH', role: 'Função *', parent: 'Encarregado isolado *', tuteur1: 'Encarregado 1 *', tuteur2: 'Encarregado 2 *', nat: 'Nacionalidade *', cns: 'Número CNS *', cnsPrefix: 'Formato CNS:', medico: 'Exame médico *', licence: 'Licença *', club: 'Clube anterior *', u7: 'U7 certificado médico obrigatório', strasse: 'Rua *', postcode: 'Código postal *', ortschaft: 'Localidade *', email: 'E-mail *', gsm1: 'Telemóvel 1 *', gsm2: 'Telemóvel 2', send: 'Enviar', sending: 'A enviar...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Inscrição enviada.', successNote: 'Receberá uma confirmação por e-mail.', oui: 'SIM', non: 'NÃO', joueur: 'Jogador / Jogadora', officiel: 'Oficial', arbitre: 'Árbitro', parent_non: 'NÃO (2 encarregados)', parent_oui: 'SIM (1 encarregado)', familyMode: 'INSCRIÇÃO FAMILIAR ADICIONAL', familyModeNone: 'Nenhuma inscrição familiar adicional', familyModeOne: 'Um dos pais também quer jogar', familyModeTwo: 'Os dois pais também querem jogar', familyNote: 'Por favor, complete os dados dos pais adicionais.', familyParent1Title: 'Encarregado 1', familyParent2Title: 'Encarregado 2', familyParentNom: 'APELIDO *', familyParentPrenom: 'NOME PRÓPRIO *', familyParentDob: 'DATA DE NASCIMENTO *', familyParentEmail: 'E-MAIL *', familyParentGsm: 'TELEMÓVEL *', legalRequired: 'Por favor, leia e aceite os termos e condições e a proteção de dados.', flhRequired: 'Por favor, confirme o envio para flh.lu para a licença.', accuracyRequired: 'Por favor, confirme a exatidão dos dados.'
         }
     };
     const MERSCH75_LEGAL_TEXTS = {
@@ -583,7 +583,26 @@
         }
     };
 
-    let currentLang = 'lu';
+    function getPreferredLanguage() {
+        const activeButton = document.querySelector('.join-lang-button.is-active');
+        if (activeButton && MERSCH75_UI_TEXTS[activeButton.dataset.lang]) {
+            return activeButton.dataset.lang;
+        }
+
+        const documentLang = document.documentElement.lang && MERSCH75_UI_TEXTS[document.documentElement.lang];
+        if (documentLang) {
+            return document.documentElement.lang;
+        }
+
+        const browserLang = (navigator.language || 'lu').slice(0, 2).toLowerCase();
+        if (MERSCH75_UI_TEXTS[browserLang]) {
+            return browserLang;
+        }
+
+        return 'lu';
+    }
+
+    let currentLang = getPreferredLanguage();
 
     function getValue(id) {
         return document.getElementById(id).value.trim();
@@ -648,13 +667,14 @@
     function updateCnsDisplay() {
         const dob = document.getElementById('DateNaissance').value;
         const cns = document.getElementById('CNS').value.trim();
+        const ui = MERSCH75_UI_TEXTS[currentLang] || MERSCH75_UI_TEXTS.lu;
 
         if (dob.length === 10) {
             const parts = dob.split('.');
             const formattedDob = parts[2] + '.' + parts[1] + '.' + parts[0];
-            document.getElementById('cns-prefix-display').innerText = 'Format CNS: ' + formattedDob + '.' + (cns !== '' ? cns : 'xxxxx');
+            document.getElementById('cns-prefix-display').innerText = ui.cnsPrefix + ' ' + formattedDob + '.' + (cns !== '' ? cns : 'xxxxx');
         } else {
-            document.getElementById('cns-prefix-display').innerText = 'Format CNS: yyyy.mm.dd.xxxxx';
+            document.getElementById('cns-prefix-display').innerText = ui.cnsPrefix + ' yyyy.mm.dd.xxxxx';
         }
     }
 
@@ -831,6 +851,7 @@
         currentLang = MERSCH75_UI_TEXTS[lang] ? lang : 'lu';
         const ui = MERSCH75_UI_TEXTS[currentLang];
         const legal = MERSCH75_LEGAL_TEXTS[currentLang];
+        document.documentElement.lang = currentLang;
 
         document.querySelectorAll('.join-lang-text').forEach(function(el) {
             el.classList.toggle('is-active', el.id === currentLang);
