@@ -386,19 +386,17 @@
                                         <input type="tel" id="GSM1" name="GSM1" autocomplete="tel">
                                         <input type="hidden" id="GSM1Role" name="GSM1Role" value="Ugemellte Persoun">
                                     </div>
-                                    <div class="join-form-group">
+                                    <div class="join-form-group" id="phone-father-group">
                                         <label id="lbl-gsm2" for="GSM2">Telefon Papp</label>
                                         <input type="tel" id="GSM2" name="GSM2" autocomplete="tel">
                                         <input type="hidden" id="GSM2Role" name="GSM2Role" value="Papp">
                                     </div>
-                                </div>
-                                <div class="join-form-row">
-                                    <div class="join-form-group">
+                                    <div class="join-form-group" id="phone-mother-group">
                                         <label id="lbl-gsm3" for="GSM3">Telefon Mamm</label>
                                         <input type="tel" id="GSM3" name="GSM3" autocomplete="tel">
                                         <input type="hidden" id="GSM3Role" name="GSM3Role" value="Mamm">
                                     </div>
-                                    <div class="join-form-group">
+                                    <div class="join-form-group" id="phone-contact-group">
                                         <label id="lbl-gsm4" for="GSM4">Telefon Begleedung / Kontaktpersoun</label>
                                         <input type="tel" id="GSM4" name="GSM4" autocomplete="tel">
                                         <input type="hidden" id="GSM4Role" name="GSM4Role" value="Begleeder">
@@ -918,6 +916,28 @@
             documentType: 'Apenas ficheiros PDF, JPG ou PNG são permitidos.'
         }
     };
+    const MERSCH75_PHONE_TEXTS = {
+        lu: {
+            secondPhone: 'Zweet Telefonsnummer / Kontaktpersoun',
+            singleHelper: 'Fir eng Eenzelpersoun kanns du maximal zwou Telefonsnummeren uginn. Op d’mannst eng ass obligatoresch.'
+        },
+        fr: {
+            secondPhone: 'Deuxième téléphone / personne de contact',
+            singleHelper: 'Pour une inscription individuelle, vous pouvez indiquer au maximum deux numéros. Au moins un numéro est obligatoire.'
+        },
+        de: {
+            secondPhone: 'Zweite Telefonnummer / Kontaktperson',
+            singleHelper: 'Bei einer Einzelanmeldung können maximal zwei Telefonnummern angegeben werden. Mindestens eine ist Pflicht.'
+        },
+        en: {
+            secondPhone: 'Second phone number / contact person',
+            singleHelper: 'For an individual registration, you can provide no more than two phone numbers. At least one is required.'
+        },
+        pt: {
+            secondPhone: 'Segundo telefone / pessoa de contacto',
+            singleHelper: 'Numa inscrição individual, pode indicar no máximo dois números. Pelo menos um é obrigatório.'
+        }
+    };
     const MERSCH75_FLH_CLUBS = [
         'HB Bieles', 'HC Berchem', 'Chev Diekirch', 'Red Boys Differdange',
         'HB Dudelange', 'Handball Esch', 'HB Museldall Grevenmacher',
@@ -1117,6 +1137,24 @@
             const ui = MERSCH75_UI_TEXTS[detectLegalLanguage()];
             validationTarget.setCustomValidity(hasPhoneNumber ? '' : ui.phoneRequired);
         }
+    }
+
+    function updatePhoneFieldVisibility() {
+        const isFamilyProfile = currentJoinQuiz === 'family';
+        const ui = MERSCH75_UI_TEXTS[currentLang] || MERSCH75_UI_TEXTS.lu;
+        const phoneText = MERSCH75_PHONE_TEXTS[currentLang] || MERSCH75_PHONE_TEXTS.lu;
+
+        document.getElementById('phone-father-group').hidden = !isFamilyProfile;
+        document.getElementById('phone-mother-group').hidden = !isFamilyProfile;
+        document.getElementById('lbl-gsm4').innerText = isFamilyProfile ? ui.gsm4 : phoneText.secondPhone;
+        document.getElementById('GSM4Role').value = isFamilyProfile ? 'Begleeder' : 'Kontaktpersoun';
+        document.getElementById('gsm-helper').innerText = isFamilyProfile ? ui.gsmHelper : phoneText.singleHelper;
+
+        if (!isFamilyProfile) {
+            document.getElementById('GSM2').value = '';
+            document.getElementById('GSM3').value = '';
+        }
+        updatePhoneValidationMessage();
     }
 
     function getTrainerQualifications() {
@@ -1728,6 +1766,7 @@
             roleSelect.value = activeContent.role;
         }
         updateOfficialDetails();
+        updatePhoneFieldVisibility();
 
         const siblingSection = document.getElementById('sibling-registration-section');
         const familyRegistrationSection = document.getElementById('family-registration-section');
@@ -1874,6 +1913,7 @@
         updateSiblingLanguage();
         updateRoleLanguage();
         updateJoinQuizUI();
+        updatePhoneFieldVisibility();
     }
 
     function formatPhoneValue(numberId, roleId) {
