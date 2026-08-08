@@ -2058,6 +2058,45 @@ body.privacy-page {
     color: var(--muted);
 }
 
+.join-family-section {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 4px;
+    padding: 18px;
+    border: 1px solid rgba(0, 47, 101, 0.1);
+    border-radius: 18px;
+    background: rgba(232, 237, 244, 0.35);
+}
+
+.join-family-details {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.join-family-note {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.join-family-card {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 16px;
+    border: 1px solid rgba(0, 47, 101, 0.12);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.82);
+}
+
+.join-family-card h3 {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
 .join-checkbox-row {
     display: flex;
     align-items: flex-start;
