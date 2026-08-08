@@ -4,6 +4,20 @@ function syncCurrentYear() {
     });
 }
 
+function initializeFeedbackSystem() {
+    if (window.Mersch75FeedbackConfig || document.body.classList.contains('feedback-admin-page')) return;
+
+    const version = '20260608b';
+    const configScript = document.createElement('script');
+    configScript.src = 'feedback-config.js?v=' + version;
+    configScript.onload = () => {
+        const feedbackScript = document.createElement('script');
+        feedbackScript.src = 'feedback.js?v=' + version;
+        document.body.append(feedbackScript);
+    };
+    document.body.append(configScript);
+}
+
 function ensureSiteLanguageSwitcher() {
     // Wenn die Seite bereits einen Sprachumschalter mitbringt, nichts tun.
     if (document.querySelector('.site-language-switcher')) return;
@@ -51,14 +65,14 @@ function initializeSiteLanguage() {
             compassBody: '<h2>Wien mir sinn</h2><p>Den Handball Club Mersch75 ass zënter 1975 eng fest Gréisst am Lëtzebuerger Sport. No enger beweegter Geschicht hu mir eis 2023 nei erfonnt: Mir setzen zu 100% op eis eege Jugend an eis lokal Identitéit.</p><h2>Eis DNA: S.T.A.A.R.K.</h2><p>Eist Motto ass Programm. Jidderee Buschtaf steet fir e Wäert, dee mir um Terrain an donieft liewen:</p><ul><li><strong>Solidaritéit</strong> – Ee fir all, all fir een.</li><li><strong>Toleranz</strong> – Villfalt ass eis Stäerkt.</li><li><strong>Akzeptanz</strong> – Jiddereen ass wëllkomm.</li><li><strong>Anescht</strong> – Perséinlechkeet gëtt gefërdert.</li><li><strong>Respekt</strong> – Fairplay ass Gesetz.</li><li><strong>Kommunikatioun</strong> – Mir schwätze mateneen, net iwwereneen.</li></ul><h2>Eise Wee: Kuerz &amp; Kompakt</h2><p><strong>1975:</strong> Grënnung duerch de Michel Goergen.<br><strong>1978–1985:</strong> Déi éischt gëllen Ära an der héchster Divisioun.<br><strong>2014:</strong> De groussen Opstig no 30 Joer Gedold an Opbauaarbecht.<br><strong>2015–2023:</strong> D’Léierjoren. Versuch vum Erfolleg duerch deier Investitiounen an extern Spiller. Resultat: Sportlech Top (Axa-League), awer finanziell a mënschlech schwiereg.<br><strong>Zënter 2023:</strong> Den Neistart. Strategesch Ëmorientéierung ewech vum Semi-Professionalismus, hin zu enger professioneller Jugendaarbecht.</p><h2>Firwat Mersch75?</h2><p>Well mir méi si wéi e Sportveräin. Mir sinn eng Erliewensschoul. Mir investéieren eis Ressourcen net an deier Transferte, mä an d’Ausbildung vun eise Kanner. Mat eisem Jugendkoordinator Max Blanc (Tel: 661 406 836) garantéiere mir Top-Training a perséinlech Betreiung.</p><p><strong>Eist Zil:</strong> Nohaltegen Erfolleg mat Spiller aus eiser eegener Rei.</p><p><strong>Deng Plaz:</strong> Ass bei eis – ob als Spiller, Fan oder Benevollen.</p><p>#ZesummeStaark #HBMersch75 #MatHäerzaSéil</p>',
             compassBackHome: 'Zréck op d\'Homepage',
             newsRefEyebrow: 'FLH · Cycle inférieur',
-            newsRefTitle: 'Jonk Schidsrichter: Aschreiwunge sinn op',
-            newsRefBody: 'D\'Formatioun fir jonk Schidsrichter am FLH Cycle inférieur ass online. Eng flott Geleeënheet fir déi nächst Generatioun, Verantwortung ze iwwerhuelen.',
+            newsRefTitle: 'Jonk Schiedsrichter: Aschreiwunge sinn op',
+            newsRefBody: 'D\'Formatioun fir jonk Schiedsrichter am FLH Cycle inférieur ass online. Eng flott Geleeënheet fir déi nächst Generatioun, Verantwortung ze iwwerhuelen.',
             newsRefCta: 'Info & Aschreiwung',
             trainingPageTitle: 'Training | Mersch75 Handball',
             trainingPageDescription: 'Training beim Mersch75: Trainingsplang, Gruppen, Halen a Jugendkoordinatioun op ee Bléck.',
             trainingHeroLogoAlt: 'Team Training Logo',
             trainingTrainerstaff: 'Trainerteam',
-            trainingTrialRequest: 'Prouftraining ufroen',
+            trainingTrialRequest: 'Probetraining ufroen',
             trainingScheduleOpen: 'Trainingsplang am Vollbild opmaachen',
             trainingScheduleClose: 'Vollbild zoumaachen',
             trainingYouthCoord: 'JUGENDKOORDINATIOUN:',
@@ -72,13 +86,10 @@ function initializeSiteLanguage() {
             navTraining: 'Training',
             navTrainerstaff: 'Trainerteam',
             navNews: 'News',
-            navStatistics: 'Statistik',
-            navStatisticsArchive: 'Statistik 25/26',
+            navStatistics: 'Statistik 25/26',
             navJoin: 'Join Us',
-            navTrainerJoin: 'Trainer / Teamleader / Teambetreier',
-            navSponsors: 'Sponsoren / Partner',
+            navSponsors: 'Sponsoren',
             navComite: 'Comité',
-            navInside: 'Inside',
             navGallery: 'Galerie',
             navHistory: 'Geschicht',
             navLinks: 'Nëtzlech Linken',
@@ -195,15 +206,12 @@ function initializeSiteLanguage() {
             navTraining: 'Entraînement',
             navTrainerstaff: 'Encadrement',
             navNews: 'Actualités',
-            navStatistics: 'Statistiques',
-            navStatisticsArchive: 'Statistiques 25/26',
+            navStatistics: 'Statistiques 25/26',
             navJoin: 'Join Us',
-            navTrainerJoin: 'Entraîneur / Team leader / Accompagnateur',
-            navSponsors: 'Sponsors / Partenaires',
+            navSponsors: 'Sponsors',
             navComite: 'Comité',
-            navInside: 'Inside',
             navGallery: 'Galerie',
-            navHistory: 'Histoire',
+            navHistory: 'Historique',
             navLinks: 'Liens utiles',
             usefulFanshopTitle: 'Fanshop Mersch75',
             usefulFanshopMeta: 'Hoodies, T-shirts & articles supporters',
@@ -318,15 +326,12 @@ function initializeSiteLanguage() {
             navTraining: 'Training',
             navTrainerstaff: 'Trainerstaff',
             navNews: 'News',
-            navStatistics: 'Statistik',
-            navStatisticsArchive: 'Statistik 25/26',
+            navStatistics: 'Statistik 25/26',
             navJoin: 'Join Us',
-            navTrainerJoin: 'Trainer / Teamleiter / Betreuer',
-            navSponsors: 'Sponsoren / Partner',
+            navSponsors: 'Sponsoren',
             navComite: 'Comité',
-            navInside: 'Inside',
             navGallery: 'Galerie',
-            navHistory: 'Geschicht',
+            navHistory: 'Historie',
             navLinks: 'Nützliche Links',
             usefulFanshopTitle: 'Mersch75 Fanshop',
             usefulFanshopMeta: 'Hoodies, T-Shirts & Fanartikel',
@@ -441,13 +446,10 @@ function initializeSiteLanguage() {
             navTraining: 'Training',
             navTrainerstaff: 'Coaching Staff',
             navNews: 'News',
-            navStatistics: 'Statistics',
-            navStatisticsArchive: 'Statistics 25/26',
+            navStatistics: 'Statistics 25/26',
             navJoin: 'Join Us',
-            navTrainerJoin: 'Trainer / Team leader / Supervisor',
-            navSponsors: 'Sponsors / Partners',
+            navSponsors: 'Sponsors',
             navComite: 'Committee',
-            navInside: 'Inside',
             navGallery: 'Gallery',
             navHistory: 'History',
             navLinks: 'Useful Links',
@@ -564,13 +566,10 @@ function initializeSiteLanguage() {
             navTraining: 'Treino',
             navTrainerstaff: 'Equipa técnica',
             navNews: 'Notícias',
-            navStatistics: 'Estatísticas',
-            navStatisticsArchive: 'Estatísticas 25/26',
+            navStatistics: 'Estatísticas 25/26',
             navJoin: 'Join Us',
-            navTrainerJoin: 'Treinador / Líder de equipa / Acompanhante',
-            navSponsors: 'Patrocinadores / Parceiros',
+            navSponsors: 'Patrocinadores',
             navComite: 'Comité',
-            navInside: 'Inside',
             navGallery: 'Galeria',
             navHistory: 'História',
             navLinks: 'Links úteis',
@@ -728,8 +727,6 @@ function initializeSiteLanguage() {
         });
     });
 
-    window.translations = translations;
-
     window.Mersch75I18n = {
         getLanguage() {
             return resolveLanguage(window.localStorage.getItem(storageKey) || fallbackLanguage);
@@ -863,15 +860,12 @@ function initializeSiteMenu() {
         { href: 'trainerstaff.html', labelKey: 'navTrainerstaff', fallback: 'Trainerstaff', primary: true },
         { href: 'news.html', labelKey: 'navNews', fallback: 'News', primary: true },
         { href: 'join.html', labelKey: 'navJoin', fallback: 'Join Us', primary: true },
-        { href: 'join.html#trainer-section', labelKey: 'navTrainerJoin', fallback: 'Trainer / Teamleader / Teambetreier', primary: true },
         { href: 'nextgen.html', labelKey: 'navNextgen', fallback: 'NEXTGEN', primary: true },
-        { href: 'inside.html', labelKey: 'navInside', fallback: 'Inside', primary: true },
-        { href: 'statistics-25-26.html', labelKey: 'navStatistics', fallback: 'Statistik', primary: true },
-        { href: 'sponsors.html', labelKey: 'navSponsors', fallback: 'Sponsoren / Partner', primary: true },
+        { href: 'comite.html', labelKey: 'navComite', fallback: 'Comité', primary: true },
+        { href: 'statistics-25-26.html', labelKey: 'navStatistics', fallback: 'Statistik 25/26', primary: true },
         { href: 'gallery.html', labelKey: 'navGallery', fallback: 'Galerie', primary: false },
         { href: 'memories.html', labelKey: 'navMemories', fallback: 'Memories', primary: false },
-        { href: 'statistics-25-26.html', labelKey: 'navStatisticsArchive', fallback: 'Statistik 25/26', primary: false },
-        { href: 'inside.html#history', labelKey: 'navHistory', fallback: 'Geschicht', primary: false },
+        { href: 'historie.html', labelKey: 'navHistory', fallback: 'Historie', primary: false },
         { href: 'links.html', labelKey: 'navLinks', fallback: 'Useful Links', primary: false },
         { href: 'hallenkarte.html', labelKey: 'navHallenkarte', fallback: 'Hallenkarte', primary: false },
         { href: 'contact.html', labelKey: 'navContact', fallback: 'Contact', primary: false }
@@ -1059,14 +1053,11 @@ function initializeTrainingSchedule() {
                 u4: { label: 'Kidssports U4', title: 'Kidssports U4' },
                 u7: { label: 'U7', title: 'U7' },
                 u9: { label: 'U9', title: 'U9' },
-                u11: { label: 'U11', title: 'U11 (débutants confirmés)' },
-                u13f: { label: 'U13F', title: 'U13 Meedercher' },
-                u13g: { label: 'U13G', title: 'U13 Jongen' },
-                u15: { label: 'U15', title: 'U15' },
-                filles: { label: 'Filles', title: 'Meedercher (Ufänger)' },
-                femmes: { label: 'Fraen', title: 'Fraen' },
-                hommes: { label: 'Männer', title: 'Männer' },
-                loisir: { label: 'Loisir', title: 'Loisir' }
+                u11: { label: 'U11', title: 'U11' },
+                u13u15: { label: 'U13 + U15', title: 'U13 & U15' },
+                filles: { label: 'Filles', title: 'Filles U9 / U11 / U13' },
+                fraen: { label: 'Fraen', title: 'Fraen' },
+                haeren: { label: 'Männer S1 / S2 / U21 - U17', title: 'Männer S1 / S2 / U21 - U17' }
             }
         },
         fr: {
@@ -1077,14 +1068,11 @@ function initializeTrainingSchedule() {
                 u4: { label: 'Kidssports U4', title: 'Kidssports U4' },
                 u7: { label: 'U7', title: 'U7' },
                 u9: { label: 'U9', title: 'U9' },
-                u11: { label: 'U11', title: 'U11 (débutants confirmés)' },
-                u13f: { label: 'U13F', title: 'U13 Filles' },
-                u13g: { label: 'U13G', title: 'U13 Garçons' },
-                u15: { label: 'U15', title: 'U15' },
-                filles: { label: 'Filles', title: 'Filles (débutantes)' },
-                femmes: { label: 'Dames', title: 'Dames' },
-                hommes: { label: 'Hommes', title: 'Hommes' },
-                loisir: { label: 'Loisir', title: 'Loisir' }
+                u11: { label: 'U11', title: 'U11' },
+                u13u15: { label: 'U13 + U15', title: 'U13 & U15' },
+                filles: { label: 'Filles', title: 'Groupe Filles U9 / U11 / U13' },
+                fraen: { label: 'Dames', title: 'Dames' },
+                haeren: { label: 'Hommes S1 / S2 / U21 - U17', title: 'Hommes S1 / S2 / U21 - U17' }
             }
         },
         de: {
@@ -1095,14 +1083,11 @@ function initializeTrainingSchedule() {
                 u4: { label: 'Kidssports U4', title: 'Kidssports U4' },
                 u7: { label: 'U7', title: 'U7' },
                 u9: { label: 'U9', title: 'U9' },
-                u11: { label: 'U11', title: 'U11 (débutants confirmés)' },
-                u13f: { label: 'U13F', title: 'U13 Mädchen' },
-                u13g: { label: 'U13G', title: 'U13 Jungen' },
-                u15: { label: 'U15', title: 'U15' },
-                filles: { label: 'Mädchen', title: 'Mädchen (Anfänger)' },
-                femmes: { label: 'Frauen', title: 'Frauen' },
-                hommes: { label: 'Männer', title: 'Männer' },
-                loisir: { label: 'Loisir', title: 'Freizeit / Loisir' }
+                u11: { label: 'U11', title: 'U11' },
+                u13u15: { label: 'U13 + U15', title: 'U13 & U15' },
+                filles: { label: 'Mädchen', title: 'Mädchengruppe U9 / U11 / U13' },
+                fraen: { label: 'Frauen', title: 'Frauen' },
+                haeren: { label: 'Männer S1 / S2 / U21 - U17', title: 'Männer S1 / S2 / U21 - U17' }
             }
         },
         en: {
@@ -1113,14 +1098,11 @@ function initializeTrainingSchedule() {
                 u4: { label: 'Kidssports U4', title: 'Kidssports U4' },
                 u7: { label: 'U7', title: 'U7' },
                 u9: { label: 'U9', title: 'U9' },
-                u11: { label: 'U11', title: 'U11 (débutants confirmés)' },
-                u13f: { label: 'U13F', title: 'U13 Girls' },
-                u13g: { label: 'U13G', title: 'U13 Boys' },
-                u15: { label: 'U15', title: 'U15' },
-                filles: { label: 'Girls', title: 'Girls (beginners)' },
-                femmes: { label: 'Women', title: 'Women' },
-                hommes: { label: 'Men', title: 'Men' },
-                loisir: { label: 'Loisir', title: 'Recreational' }
+                u11: { label: 'U11', title: 'U11' },
+                u13u15: { label: 'U13 + U15', title: 'U13 & U15' },
+                filles: { label: 'Girls', title: 'Girls Group U9 / U11 / U13' },
+                fraen: { label: 'Women', title: 'Women' },
+                haeren: { label: 'Men S1 / S2 / U21 - U17', title: 'Men S1 / S2 / U21 - U17' }
             }
         },
         pt: {
@@ -1131,155 +1113,112 @@ function initializeTrainingSchedule() {
                 u4: { label: 'Kidssports U4', title: 'Kidssports U4' },
                 u7: { label: 'U7', title: 'U7' },
                 u9: { label: 'U9', title: 'U9' },
-                u11: { label: 'U11', title: 'U11 (débutants confirmés)' },
-                u13f: { label: 'U13F', title: 'U13 Raparigas' },
-                u13g: { label: 'U13G', title: 'U13 Rapazes' },
-                u15: { label: 'U15', title: 'U15' },
-                filles: { label: 'Raparigas', title: 'Raparigas (iniciantes)' },
-                femmes: { label: 'Seniores femininas', title: 'Seniores femininas' },
-                hommes: { label: 'Seniores masculinos', title: 'Seniores masculinos' },
-                loisir: { label: 'Loisir', title: 'Lazer' }
+                u11: { label: 'U11', title: 'U11' },
+                u13u15: { label: 'U13 + U15', title: 'U13 & U15' },
+                filles: { label: 'Raparigas', title: 'Grupo Feminino U9 / U11 / U13' },
+                fraen: { label: 'Seniores femininas', title: 'Seniores femininas' },
+                haeren: { label: 'Seniores masculinos S1 / S2 / U21 - U17', title: 'Seniores masculinos S1 / S2 / U21 - U17' }
             }
         }
     };
 
-    // Halen
-    const LOC_OMNI = 'Hall Omnisports, 21, rue des Prés, Mersch';
-    const LOC_KROU = 'Hall Omnisports Krounebierg, 11, rue de la Piscine, Mersch';
-    const LOC_GARE = 'Sporthal Lëntgen (Gare), 50, rue de la Gare, Lëntgen';
-    const LOC_ECOLE = "Schoulsporthal Lintgen (École), 4, rue de l'Ecole, Lintgen";
-
-    // Positiounen op der Tabell 2026-2027 (Prozent, aus dem Gitter gemooss).
-    // Kolonnen: A Lun/Omni 7.34 · B Lun/Gare 18.86 · C Mar/Krounebierg 30.38 · D Mer/Omni 41.90
-    //           E Jeu/Krounebierg 53.41 · F Ven/Omni 64.93 · G Ven/Krounebierg 76.45 · H Sam/École 87.97
-    // Zäit-Reihen: 09:00 = 23.92 %, all 30 Min = 3.77 %.
     const hotspotGroupBase = [
         {
             group: 'u4',
-            trainers: 'Gina Dimola, Kevin Wolmering, Marc Jungels, Max Blanc (LUXQF4)',
+            trainers: 'Grégory Redavid, Christophe Kremer, Marc Jungels, Max Blanc (LUXQF4)',
             slots: [
-                { dayKey: 'sat', time: '10:00 - 11:00', location: LOC_ECOLE }
+                { dayKey: 'wed', time: '16:30 - 17:30', location: 'Omnisports, 21, rue des Prés, Mersch' },
+                { dayKey: 'sat', time: '10:00 - 11:00', location: "Sportshal Lëntgen, 4, rue de l'Ecole, Lëntgen" }
             ],
             areas: [
-                { left: 87.97, top: 27.69, width: 11.52, height: 7.54 }
+                { left: 43.1, top: 47.3, width: 11.4, height: 8.4 },
+                { left: 87.4, top: 30.6, width: 10.8, height: 8.3 }
             ]
         },
         {
             group: 'u7',
             trainers: 'Max Blanc (LUXQF4), Anne Holm (LUXQF3)',
             slots: [
-                { dayKey: 'tue', time: '17:30 - 18:30', location: LOC_KROU },
-                { dayKey: 'fri', time: '16:30 - 17:30', location: LOC_KROU }
+                { dayKey: 'tue', time: '17:30 - 18:30', location: 'Sportshal Lëntgen, 50, rue de la Gare' },
+                { dayKey: 'fri', time: '16:30 - 17:30', location: 'Hall Omnisports Krounebierg, 11, rue de la Piscine, Mersch' }
             ],
             areas: [
-                { left: 30.38, top: 54.08, width: 11.52, height: 7.54 },
-                { left: 76.45, top: 46.54, width: 11.52, height: 7.54 }
+                { left: 20.2, top: 55.6, width: 10.8, height: 8.1 },
+                { left: 76.1, top: 47.3, width: 11.3, height: 8.4 }
             ]
         },
         {
             group: 'u9',
             trainers: 'Max Blanc (LUXQF4), Louis Van der Weken (LUXQF2Bis)',
             slots: [
-                { dayKey: 'mon', time: '17:30 - 19:00', location: LOC_GARE },
-                { dayKey: 'thu', time: '17:30 - 19:00', location: LOC_KROU }
+                { dayKey: 'tue', time: '17:30 - 19:00', location: 'Hall Omnisports Krounebierg, 11, rue de la Piscine, Mersch' },
+                { dayKey: 'thu', time: '17:30 - 19:00', location: 'Hall Omnisports Krounebierg, 11, rue de la Piscine, Mersch' }
             ],
             areas: [
-                { left: 18.86, top: 54.08, width: 11.52, height: 11.31 },
-                { left: 53.41, top: 54.08, width: 11.52, height: 11.31 }
+                { left: 32.3, top: 55.6, width: 10.8, height: 12.2 },
+                { left: 54.4, top: 55.6, width: 10.9, height: 12.4 }
             ]
         },
         {
             group: 'u11',
-            trainers: 'Max Blanc (LUXQF4), Elie Schuster, Grégory Redavid, Laurent Metzler',
+            trainers: 'Max Blanc (LUXQF4), Elie Schuster',
             slots: [
-                { dayKey: 'wed', time: '17:00 - 18:30', location: LOC_OMNI },
-                { dayKey: 'fri', time: '17:30 - 19:00', location: LOC_KROU }
+                { dayKey: 'wed', time: '17:30 - 19:00', location: 'Hall Omnisports, 21, rue des Prés, Mersch' },
+                { dayKey: 'fri', time: '17:30 - 19:00', location: 'Hall Omnisports Krounebierg, 11, rue de la Piscine, Mersch' }
             ],
             areas: [
-                { left: 41.90, top: 50.31, width: 11.52, height: 11.31 },
-                { left: 76.45, top: 54.08, width: 11.52, height: 11.31 }
+                { left: 43.1, top: 55.7, width: 11.4, height: 12.3 },
+                { left: 76.1, top: 55.6, width: 11.3, height: 12.4 }
             ]
         },
         {
-            group: 'u13f',
+            group: 'u13u15',
             trainers: 'Max Blanc (LUXQF4), Mathis Derneden',
             slots: [
-                { dayKey: 'mon', time: '17:30 - 19:00', location: LOC_OMNI + " (gedeelt)" },
-                { dayKey: 'fri', time: '17:30 - 19:00', location: LOC_OMNI }
+                { dayKey: 'mon', time: '17:30 - 19:00', location: 'Hall Omnisports, 21, rue des Prés, Mersch' },
+                { dayKey: 'wed', time: '18:30 - 20:00', location: 'Hall Omnisports, 21, rue des Prés, Mersch' },
+                { dayKey: 'fri', time: '19:00 - 20:30', location: 'Hall Omnisports Krounebierg, 11, rue de la Piscine, Mersch' }
             ],
             areas: [
-                { left: 13.10, top: 54.08, width: 5.76, height: 11.31 },
-                { left: 64.93, top: 54.08, width: 11.52, height: 11.31 }
-            ]
-        },
-        {
-            group: 'u13g',
-            trainers: 'Max Blanc (LUXQF4), Mathis Derneden',
-            slots: [
-                { dayKey: 'mon', time: '17:30 - 19:00', location: LOC_OMNI + " (gedeelt)" },
-                { dayKey: 'wed', time: '18:30 - 20:00', location: LOC_OMNI }
-            ],
-            areas: [
-                { left: 7.34, top: 54.08, width: 5.76, height: 11.31 },
-                { left: 41.90, top: 61.62, width: 11.52, height: 11.31 }
-            ]
-        },
-        {
-            group: 'u15',
-            trainers: 'Max Blanc (LUXQF4), Mathis Derneden',
-            slots: [
-                { dayKey: 'mon', time: '19:00 - 20:30', location: LOC_OMNI },
-                { dayKey: 'fri', time: '19:00 - 20:30', location: LOC_KROU }
-            ],
-            areas: [
-                { left: 7.34, top: 65.39, width: 11.52, height: 7.54 },
-                { left: 76.45, top: 65.39, width: 11.52, height: 7.54 }
+                { left: 10.1, top: 55.6, width: 11.3, height: 12.2 },
+                { left: 43.1, top: 67.9, width: 11.4, height: 8.3 },
+                { left: 76.1, top: 68.0, width: 11.3, height: 8.3 }
             ]
         },
         {
             group: 'filles',
-            trainers: 'Anne Bisenius Holm (LUXQF3)',
+            trainers: 'Anne Bisenius Holm (LUXQF3), Katarzyna Pietrasik',
             slots: [
-                { dayKey: 'fri', time: '16:30 - 17:00', location: LOC_OMNI }
+                { dayKey: 'fri', time: '17:30 - 19:00', location: 'Hall Omnisports, 21, rue des Prés, Mersch' }
             ],
             areas: [
-                { left: 64.93, top: 46.54, width: 11.52, height: 7.54 }
+                { left: 65.3, top: 55.6, width: 10.8, height: 12.4 }
             ]
         },
         {
-            group: 'femmes',
+            group: 'fraen',
             trainers: 'Katarzyna Pietrasik',
             slots: [
-                { dayKey: 'mon', time: '19:00 - 20:30', location: LOC_GARE },
-                { dayKey: 'fri', time: '19:00 - 20:30', location: LOC_OMNI }
+                { dayKey: 'mon', time: '19:00 - 20:30', location: 'Hall Omnisports, 21, rue des Prés, Mersch' },
+                { dayKey: 'fri', time: '19:00 - 20:30', location: 'Hall Omnisports, 21, rue des Prés, Mersch' }
             ],
             areas: [
-                { left: 18.86, top: 65.39, width: 11.52, height: 15.08 },
-                { left: 64.93, top: 65.39, width: 11.52, height: 15.08 }
+                { left: 10.1, top: 67.9, width: 11.3, height: 12.2 },
+                { left: 65.3, top: 68.0, width: 10.8, height: 12.2 }
             ]
         },
         {
-            group: 'hommes',
-            trainers: 'ab 10.8.26 Halle; vorher Laafen + TR im Merscher Park',
+            group: 'haeren',
+            trainers: 'Laurent Metzler',
             slots: [
-                { dayKey: 'mon', time: '20:00 - 21:30', location: LOC_OMNI },
-                { dayKey: 'wed', time: '20:00 - 21:30', location: LOC_OMNI },
-                { dayKey: 'fri', time: '20:00 - 21:30', location: LOC_KROU }
+                { dayKey: 'mon', time: '20:30 - 21:30', location: 'Hall Omnisports, 21, rue des Prés, Mersch' },
+                { dayKey: 'wed', time: '20:30 - 21:30', location: 'Hall Omnisports, 21, rue des Prés, Mersch' },
+                { dayKey: 'fri', time: '20:30 - 21:30', location: 'Hall Omnisports Krounebierg, 11, rue de la Piscine, Mersch' }
             ],
             areas: [
-                { left: 7.34, top: 80.47, width: 11.52, height: 7.54 },
-                { left: 41.90, top: 72.93, width: 11.52, height: 15.08 },
-                { left: 76.45, top: 80.47, width: 11.52, height: 7.54 }
-            ]
-        },
-        {
-            group: 'loisir',
-            trainers: 'Mersch75',
-            slots: [
-                { dayKey: 'mon', time: '20:30 - 22:00', location: LOC_GARE }
-            ],
-            areas: [
-                { left: 18.86, top: 80.47, width: 11.52, height: 11.31 }
+                { left: 10.1, top: 80.2, width: 11.3, height: 8.5 },
+                { left: 43.1, top: 76.2, width: 11.4, height: 12.4 },
+                { left: 76.1, top: 76.3, width: 11.3, height: 12.3 }
             ]
         }
     ];
@@ -1305,7 +1244,7 @@ function initializeTrainingSchedule() {
                 group: group.group,
                 label: translatedGroup.label,
                 title: translatedGroup.title,
-                trainers: group.trainers ? `${translation.trainerPrefix} ${group.trainers}` : '',
+                trainers: `${translation.trainerPrefix} ${group.trainers}`,
                 slots: group.slots.map((slot) => ({
                     day: translation.days[slot.dayKey] || scheduleTranslations.lb.days[slot.dayKey],
                     time: slot.time,
@@ -1364,7 +1303,7 @@ function initializeTrainingSchedule() {
 
         tooltip.innerHTML = [
             `<h3>${groupInfo.title}</h3>`,
-            groupInfo.trainers ? `<p>${groupInfo.trainers}</p>` : '',
+            `<p>${groupInfo.trainers}</p>`,
             `<ul>${slots}</ul>`
         ].join('');
         tooltip.classList.add('is-visible');
@@ -1528,15 +1467,13 @@ function initializeSharedFooters() {
         { href: 'links.html', label: 'Useful Links' },
         { href: 'hallenkarte.html', label: 'Hallenkarte' },
         { href: 'comite.html', label: 'Comité' },
-        { href: 'history.html', label: 'Geschicht' },
+        { href: 'historie.html', label: 'Historie' },
         { href: 'contact.html', label: 'Contact' }
     ];
     const landingQuickLinks = [
         { href: 'matchday.html', label: 'Matchday' },
         { href: 'matchcenter.html', label: 'Matchcenter' },
         { href: 'training.html', label: 'Training' },
-        { href: 'statistics-25-26.html', label: 'Statistik' },
-        { href: 'sponsors.html', label: 'Sponsoren / Partner' },
         { href: 'join.html', label: 'Join Us' },
         { href: 'contact.html', label: 'Contact' }
     ];
@@ -1616,6 +1553,10 @@ function initializeSharedFooters() {
 }
 
 function initializeJoinUsForm() {
+    if (document.body.classList.contains('join-page')) {
+        return;
+    }
+
     const form = document.querySelector('#registrationForm');
 
     if (!form) {
@@ -1624,7 +1565,7 @@ function initializeJoinUsForm() {
 
     const conditionsUrl = 'https://www.mersch75.lu/x2-terms-and-conditions/';
     const dataProtectionUrl = 'https://www.mersch75.lu/x3-dataprotection/';
-    const registrationEndpoint = 'https://api.web3forms.com/submit';
+    const registrationEndpoint = (window.M75_CONFIG && window.M75_CONFIG.WEB3FORMS_ENDPOINT) || 'https://api.web3forms.com/submit';
     const registrationAccessKey = '15e3cc53-6864-47dd-bfaf-332cb4ca45e5';
     const registrationMailbox = 'hbmersch75secretariat@gmail.com';
 
@@ -1919,7 +1860,10 @@ function initializeJoinUsForm() {
 
     const updateLanguage = (lang) => {
         const text = translations[lang];
-        const ui = (typeof MERSCH75_UI_TEXTS !== 'undefined' && MERSCH75_UI_TEXTS[lang]) ? MERSCH75_UI_TEXTS[lang] : null;
+
+        if (!text) {
+            return;
+        }
 
         currentLang = lang;
 
@@ -1931,15 +1875,6 @@ function initializeJoinUsForm() {
             button.classList.toggle('is-active', isActive);
             button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
         });
-
-        const familyQuestionLabel = document.getElementById('lbl-family-question');
-        if (familyQuestionLabel && ui && ui.familyQuestion) familyQuestionLabel.textContent = ui.familyQuestion;
-        const familyQuestionHint = document.getElementById('family-question-hint');
-        if (familyQuestionHint && ui && ui.familyQuestionHint) familyQuestionHint.textContent = ui.familyQuestionHint;
-
-        if (!text) {
-            return;
-        }
 
         elements.nomLabel.textContent = text.nom;
         elements.prenomLabel.textContent = text.prenom;
@@ -2162,57 +2097,14 @@ function initializeNewsCarousel() {
     if (!carousel) return;
 
     const track = carousel.querySelector('[data-news-track]');
-    let slides = Array.from(carousel.querySelectorAll('[data-news-slide]'));
-    if (track) {
-        const agSlide = track.querySelector('.news-slide-ag[data-news-slide]');
-        if (agSlide && track.firstElementChild !== agSlide) {
-            track.prepend(agSlide);
-            slides = Array.from(carousel.querySelectorAll('[data-news-slide]'));
-        }
-    }
+    const slides = Array.from(carousel.querySelectorAll('[data-news-slide]'));
     const prevButton = carousel.querySelector('[data-news-prev]');
     const nextButton = carousel.querySelector('[data-news-next]');
     const dotsContainer = carousel.querySelector('[data-news-dots]');
-
-    // Zeitgesteuerte Slides: noch nicht gestartete (data-news-starts) oder
-    // abgelaufene (data-news-expires) Meldungen automatisch entfernen.
-    // Format: "YYYY-MM-DD" oder "YYYY-MM-DDTHH:MM". Ohne Uhrzeit gilt der Slide
-    // bis zum Tagesende des angegebenen Datums.
-    const nowTs = new Date();
-    slides.forEach((slide) => {
-        const starts = slide.getAttribute('data-news-starts');
-        const expires = slide.getAttribute('data-news-expires');
-        if (starts) {
-            const start = new Date(starts);
-            if (!isNaN(start) && nowTs < start) {
-                slide.remove();
-                return;
-            }
-        }
-        if (expires) {
-            const end = new Date(expires);
-            if (!expires.includes('T')) end.setHours(23, 59, 59, 999);
-            if (!isNaN(end) && nowTs > end) {
-                slide.remove();
-            }
-        }
-    });
-
-    carousel.querySelectorAll('[data-news-expires]:not([data-news-slide])').forEach((item) => {
-        const expires = item.getAttribute('data-news-expires');
-        const end = new Date(expires);
-        if (!expires.includes('T')) end.setHours(23, 59, 59, 999);
-        if (!isNaN(end) && nowTs > end) {
-            item.remove();
-        }
-    });
-
-    slides = Array.from(carousel.querySelectorAll('[data-news-slide]'));
-
     if (!track || slides.length === 0) return;
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const allowAutoplay = false;
+    const allowAutoplay = !reduceMotion && slides.length > 1;
 
     // Bilder ausserhalb des ersten Slides erst bei Bedarf laden.
     slides.forEach((slide, i) => {
@@ -2343,82 +2235,7 @@ function initializeNewsCarousel() {
     });
 
     goTo(0);
-}
-
-function initializeAgModal() {
-    const modal = document.getElementById('agModal');
-    if (!modal) return;
-    const triggers = document.querySelectorAll('.news-ag-link');
-    const closeEls = modal.querySelectorAll('[data-ag-close]');
-    const copyBtn = modal.querySelector('[data-ag-copy]');
-    const mailBtn = modal.querySelector('.ag-modal-btn');
-    const hint = modal.querySelector('[data-ag-hint]');
-    const mailText = 'An: info@mersch75.lu\n'
-        + 'Betreff: Umeldung Generalversammlung 10.07.2026\n\n'
-        + 'Moien,\n\n'
-        + 'Ech melle mech mat ____ Persoun(en) un fir op d\'Generalversammlung & Ofschloss-Party de 10. Juli 2026 ze kommen.\n\n'
-        + 'Numm(en):\n\n'
-        + 'Merci a bis geschwënn!';
-    function showHint(message) {
-        if (!hint) return;
-        hint.textContent = message;
-        hint.hidden = false;
-        window.setTimeout(() => { hint.hidden = true; }, 4000);
-    }
-    let lastFocus = null;
-    function openModal(event) {
-        if (event) event.preventDefault();
-        lastFocus = document.activeElement;
-        modal.hidden = false;
-        document.body.style.overflow = 'hidden';
-        const closeBtn = modal.querySelector('.ag-modal-close');
-        if (closeBtn) closeBtn.focus();
-    }
-    function closeModal() {
-        modal.hidden = true;
-        document.body.style.overflow = '';
-        if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
-    }
-    triggers.forEach((t) => t.addEventListener('click', openModal));
-    closeEls.forEach((el) => el.addEventListener('click', closeModal));
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && !modal.hidden) closeModal();
-    });
-    async function copyText(value) {
-        try {
-            await navigator.clipboard.writeText(value);
-            return true;
-        } catch (_) {
-            try {
-                const ta = document.createElement('textarea');
-                ta.value = value;
-                ta.style.position = 'fixed';
-                ta.style.opacity = '0';
-                document.body.appendChild(ta);
-                ta.focus();
-                ta.select();
-                const ok = document.execCommand('copy');
-                document.body.removeChild(ta);
-                return ok;
-            } catch (_e) {
-                return false;
-            }
-        }
-    }
-    if (copyBtn) {
-        copyBtn.addEventListener('click', async () => {
-            const ok = await copyText(copyBtn.getAttribute('data-ag-copy'));
-            showHint(ok ? 'Adress kopéiert ✓' : 'info@mersch75.lu');
-        });
-    }
-    if (mailBtn) {
-        mailBtn.addEventListener('click', async () => {
-            const ok = await copyText(mailText);
-            showHint(ok
-                ? 'E-Mail-Text kopéiert ✓ — fügt en an ären Mailprogramm oder Webmail (Gmail, Outlook...) an a schéckt en un info@mersch75.lu'
-                : 'Schéckt eng Mail un info@mersch75.lu');
-        });
-    }
+    startAutoplay();
 }
 
 ensureSiteLanguageSwitcher();
@@ -2429,7 +2246,7 @@ initializeTrainingSchedule();
 initializeJoinUsForm();
 initializeSharedFooters();
 initializeNewsCarousel();
-initializeAgModal();
+initializeFeedbackSystem();
 syncCurrentYear();
 
 // Passwuert Modal fir Wëllkomm Mapp
