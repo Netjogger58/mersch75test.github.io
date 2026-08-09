@@ -1567,6 +1567,7 @@
             return {
                 label: ui.tarifOfficial,
                 value: '€50',
+                definitionCode: 'C0012',
                 hint: ui.tarifHint
             };
         }
@@ -1574,7 +1575,8 @@
         if (familyMode !== 'NONE' || getSiblingRegistrations().length > 0) {
             return {
                 label: ui.tarifFamily,
-                value: '€250',
+                value: '€384',
+                definitionCode: 'C0007',
                 hint: ui.tarifHint
             };
         }
@@ -1609,7 +1611,8 @@
         if (age <= 25) {
             return {
                 label: ui.tarifYouth,
-                value: '€210',
+                value: '€200',
+                definitionCode: 'C0007',
                 hint: ui.tarifHint
             };
         }
@@ -1617,6 +1620,7 @@
         return {
             label: ui.tarifAdult,
             value: '€300',
+            definitionCode: 'C0009',
             hint: ui.tarifHint
         };
     }
@@ -2125,6 +2129,8 @@
             familyParent2: [getValue('FamilyParent2Nom'), getValue('FamilyParent2Prenom'), getValue('FamilyParent2Dob'), getValue('FamilyParent2Email'), formatPhoneValue('FamilyParent2Gsm', 'FamilyParent2GsmRole')].filter(Boolean).join(' | '),
             tarifLabel: tariffSuggestion.label,
             tarifValue: tariffSuggestion.value,
+            definitionCode: tariffSuggestion.definitionCode || '',
+            cotisation: tariffSuggestion.value || '',  // alias for Vereins-OS import
             consentSummary: consentSummary,
             legalConsent: getCheckedValue('LegalConsent'),
             flhPortalConsent: getCheckedValue('FlhPortalConsent'),
