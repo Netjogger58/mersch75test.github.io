@@ -2254,6 +2254,37 @@ body.privacy-page {
     letter-spacing: 0.04em;
 }
 
+.join-guardian-card {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 18px;
+    border: 2px solid rgba(0, 47, 101, 0.15);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.88);
+    margin-top: 8px;
+}
+
+.join-guardian-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--blue);
+    margin: 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(0, 47, 101, 0.1);
+}
+
+.join-guardian-addr-hint {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: rgba(0, 47, 101, 0.65);
+    padding: 8px 0 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
 .join-checkbox-row {
     display: flex;
     align-items: flex-start;

@@ -108,20 +108,21 @@
                                 <input type="text" id="honeypot" name="website" autocomplete="off" tabindex="-1">
                             </div>
 
-                            <div class="join-form-group">
-                                <label id="lbl-nom" for="Nom">Numm *</label>
-                                <input type="text" id="Nom" name="Nom" autocomplete="family-name" required>
-                            </div>
-
-                            <div class="join-form-group">
-                                <label id="lbl-prenom" for="Prenom">Virnumm *</label>
-                                <input type="text" id="Prenom" name="Prenom" autocomplete="given-name" required>
+                            <div class="join-form-row">
+                                <div class="join-form-group">
+                                    <label id="lbl-nom" for="Nom">Numm (neie Spiller) *</label>
+                                    <input type="text" id="Nom" name="Nom" autocomplete="family-name" required>
+                                </div>
+                                <div class="join-form-group">
+                                    <label id="lbl-prenom" for="Prenom">Virnumm (neie Spiller) *</label>
+                                    <input type="text" id="Prenom" name="Prenom" autocomplete="given-name" required>
+                                </div>
                             </div>
 
                             <div class="join-form-row">
                                 <div class="join-form-group">
                                     <label id="lbl-dob" for="DateNaissance">Gebuertsdatum *</label>
-                                    <input type="text" id="DateNaissance" name="DateNaissance" placeholder="01.01.2010" inputmode="numeric" pattern="[0-9]{2}\.[0-9]{2}\.[0-9]{4}" required>
+                                    <input type="text" id="DateNaissance" name="DateNaissance" placeholder="01.01.2010" inputmode="numeric" pattern="[0-9]{2, guardian: { familyStructure: 'Estrutura familiar *', fsOptBoth: 'Ambos os pais na mesma morada', fsOptSingle: 'Encarregado único (1 encarregado)', fsOptSep: 'Divorciado / 2 moradas diferentes', guardian1Title: 'Encarregado 1 *', guardian2Title: 'Encarregado 2', nom: 'Apelido *', prenom: 'Nome próprio *', relation: 'Papel', tel: 'Telefone *', email1: 'E-mail *', email2: 'E-mail', addrHint1: 'Morada do encarregado 1 (se diferente)', addrHint2: 'Morada do encarregado 2', strasse: 'Rua', postcode: 'Código postal', ortschaft: 'Localidade', mom: 'Mãe', dad: 'Pai', tut: 'Tutor / Tutora' }}\.[0-9]{2}\.[0-9]{4}" required>
                                 </div>
                                 <div class="join-form-group">
                                     <label id="lbl-mineur" for="Mineur">Mannerjäreg</label>
@@ -182,24 +183,122 @@
                             </div>
 
                             <div id="parent-section">
-                                <div class="join-form-group join-form-group--compact">
-                                    <label id="lbl-parent" for="ParentIsole">Elengerzéiend *</label>
-                                    <select id="ParentIsole" name="ParentIsole">
-                                        <option value="NON">NEE (2 Erzéiungsberechtegter)</option>
-                                        <option value="OUI">JO (1 Erzéiungsberechtegten)</option>
+                                <!-- Familljestruktur -->
+                                <div class="join-form-group">
+                                    <label id="lbl-family-structure" for="FamilyStructure">Familljestruktur *</label>
+                                    <select id="FamilyStructure" name="FamilyStructure" onchange="updateFamilyStructure()">
+                                        <option value="BOTH_SAME" id="fs-opt-both">Béid Eltere mat der selwechter Adress</option>
+                                        <option value="SINGLE" id="fs-opt-single">Elengerzéiend (1 Erzéiungsberechtegte(n))</option>
+                                        <option value="SEPARATED" id="fs-opt-sep">Geschidden / 2 verschidde Adressen</option>
                                     </select>
                                 </div>
- 
-                                <div class="join-form-row">
-                                    <div class="join-form-group">
-                                        <label id="lbl-tuteur1" for="Tuteur1">Erzéiungsberechtegten 1 *</label>
-                                        <input type="text" id="Tuteur1" name="Tuteur1" autocomplete="name">
+
+                                <!-- Erzéiungsberechtegte(n) 1 -->
+                                <div class="join-guardian-card" id="guardian1-card">
+                                    <h3 class="join-guardian-title" id="lbl-guardian1-title">Erzéiungsberechtegte(n) 1 *</h3>
+                                    <div class="join-form-row">
+                                        <div class="join-form-group">
+                                            <label id="lbl-guardian1-nom" for="Guardian1Nom">Numm *</label>
+                                            <input type="text" id="Guardian1Nom" name="Guardian1Nom" autocomplete="family-name">
+                                        </div>
+                                        <div class="join-form-group">
+                                            <label id="lbl-guardian1-prenom" for="Guardian1Prenom">Virnumm *</label>
+                                            <input type="text" id="Guardian1Prenom" name="Guardian1Prenom" autocomplete="given-name">
+                                        </div>
                                     </div>
-                                    <div class="join-form-group" id="tuteur2-wrap">
-                                        <label id="lbl-tuteur2" for="Tuteur2">Erzéiungsberechtegten 2 *</label>
-                                        <input type="text" id="Tuteur2" name="Tuteur2" autocomplete="name">
+                                    <div class="join-form-row">
+                                        <div class="join-form-group">
+                                            <label id="lbl-guardian1-relation" for="Guardian1Relation">Roll</label>
+                                            <select id="Guardian1Relation" name="Guardian1Relation">
+                                                <option value="Mamm" id="g1r-mom">Mamm</option>
+                                                <option value="Papp" id="g1r-dad">Papp</option>
+                                                <option value="Tuteur" id="g1r-tut">Tuteur / Tuteuse</option>
+                                            </select>
+                                        </div>
+                                        <div class="join-form-group">
+                                            <label id="lbl-guardian1-tel" for="Guardian1Tel">Telefon *</label>
+                                            <input type="tel" id="Guardian1Tel" name="Guardian1Tel" autocomplete="tel">
+                                        </div>
+                                    </div>
+                                    <div class="join-form-group">
+                                        <label id="lbl-guardian1-email" for="Guardian1Email">E-Mail *</label>
+                                        <input type="email" id="Guardian1Email" name="Guardian1Email" autocomplete="email">
+                                    </div>
+                                    <!-- Adress nëmmen bei Scheedung -->
+                                    <div id="guardian1-address-wrap" hidden>
+                                        <div class="join-guardian-addr-hint" id="lbl-guardian1-addr-hint">Adress vum Erzéiungsberechtegte(n) 1 (wann anescht wéi vum Kand)</div>
+                                        <div class="join-form-group">
+                                            <label id="lbl-guardian1-strasse" for="Guardian1Strasse">Strooss</label>
+                                            <input type="text" id="Guardian1Strasse" name="Guardian1Strasse" autocomplete="street-address">
+                                        </div>
+                                        <div class="join-form-row">
+                                            <div class="join-form-group">
+                                                <label id="lbl-guardian1-postcode" for="Guardian1Postcode">Postcode</label>
+                                                <input type="text" id="Guardian1Postcode" name="Guardian1Postcode" autocomplete="postal-code">
+                                            </div>
+                                            <div class="join-form-group">
+                                                <label id="lbl-guardian1-ortschaft" for="Guardian1Ortschaft">Uertschaft</label>
+                                                <input type="text" id="Guardian1Ortschaft" name="Guardian1Ortschaft" autocomplete="address-level2">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+
+                                <!-- Erzéiungsberechtegte(n) 2 -->
+                                <div class="join-guardian-card" id="guardian2-card">
+                                    <h3 class="join-guardian-title" id="lbl-guardian2-title">Erzéiungsberechtegte(n) 2</h3>
+                                    <div class="join-form-row">
+                                        <div class="join-form-group">
+                                            <label id="lbl-guardian2-nom" for="Guardian2Nom">Numm *</label>
+                                            <input type="text" id="Guardian2Nom" name="Guardian2Nom" autocomplete="family-name">
+                                        </div>
+                                        <div class="join-form-group">
+                                            <label id="lbl-guardian2-prenom" for="Guardian2Prenom">Virnumm *</label>
+                                            <input type="text" id="Guardian2Prenom" name="Guardian2Prenom" autocomplete="given-name">
+                                        </div>
+                                    </div>
+                                    <div class="join-form-row">
+                                        <div class="join-form-group">
+                                            <label id="lbl-guardian2-relation" for="Guardian2Relation">Roll</label>
+                                            <select id="Guardian2Relation" name="Guardian2Relation">
+                                                <option value="Papp" id="g2r-dad">Papp</option>
+                                                <option value="Mamm" id="g2r-mom">Mamm</option>
+                                                <option value="Tuteur" id="g2r-tut">Tuteur / Tuteuse</option>
+                                            </select>
+                                        </div>
+                                        <div class="join-form-group">
+                                            <label id="lbl-guardian2-tel" for="Guardian2Tel">Telefon *</label>
+                                            <input type="tel" id="Guardian2Tel" name="Guardian2Tel" autocomplete="tel">
+                                        </div>
+                                    </div>
+                                    <div class="join-form-group">
+                                        <label id="lbl-guardian2-email" for="Guardian2Email">E-Mail</label>
+                                        <input type="email" id="Guardian2Email" name="Guardian2Email" autocomplete="email">
+                                    </div>
+                                    <!-- Adress nëmmen bei Scheedung -->
+                                    <div id="guardian2-address-wrap" hidden>
+                                        <div class="join-guardian-addr-hint" id="lbl-guardian2-addr-hint">Adress vum Erzéiungsberechtegte(n) 2</div>
+                                        <div class="join-form-group">
+                                            <label id="lbl-guardian2-strasse" for="Guardian2Strasse">Strooss</label>
+                                            <input type="text" id="Guardian2Strasse" name="Guardian2Strasse" autocomplete="street-address">
+                                        </div>
+                                        <div class="join-form-row">
+                                            <div class="join-form-group">
+                                                <label id="lbl-guardian2-postcode" for="Guardian2Postcode">Postcode</label>
+                                                <input type="text" id="Guardian2Postcode" name="Guardian2Postcode" autocomplete="postal-code">
+                                            </div>
+                                            <div class="join-form-group">
+                                                <label id="lbl-guardian2-ortschaft" for="Guardian2Ortschaft">Uertschaft</label>
+                                                <input type="text" id="Guardian2Ortschaft" name="Guardian2Ortschaft" autocomplete="address-level2">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Rückwärtskompatibilität: alte Felder verstoppt weiderleeden -->
+                                <input type="hidden" id="ParentIsole" name="ParentIsole" value="NON">
+                                <input type="hidden" id="Tuteur1" name="Tuteur1" value="">
+                                <input type="hidden" id="Tuteur2" name="Tuteur2" value="">
                             </div>
  
                             <div class="join-family-section" id="family-registration-section">
@@ -682,20 +781,20 @@
     let submittedQualificationDocument = null;
     const MERSCH75_UI_TEXTS = {
         lu: {
-           nom: 'Numm *', prenom: 'Virnumm *', dob: 'Gebuertsdatum *', mineur: 'Mannerjäreg', cat: 'FLH Kategorie', role: 'Roll / Funktioun *', parent: 'Elengerzéiend *', tuteur1: 'Erzéiungsberechtegten 1 *', tuteur2: 'Erzéiungsberechtegten 2 *', nat: 'Nationalitéit *', cns: 'Matricule CNS *', cnsPrefix: 'Format CNS:', medico: 'Medico *', licence: 'Lizenz *', club: 'Ale Veräin *', u7: 'U7 medezineschen Zertifikat obligatoresch', strasse: 'Strooss *', postcode: 'Postcode *', ortschaft: 'Uertschaft *', email: 'E-Mail *', gsm1: 'Telefon vun der Persoun, déi ugemellt gëtt', gsm2: 'Telefon Papp', gsm3: 'Telefon Mamm', gsm4: 'Telefon Begleedung / Kontaktpersoun', gsmHelper: 'Gëff d\'Nummer direkt bei der richteger Persoun un. Op d\'mannst eng Telefonsnummer ass obligatoresch.', phoneRequired: 'Gëff w.e.g. op d\'mannst eng Telefonsnummer fir déi ugemellte Persoun, de Papp, d\'Mamm oder eng Kontaktpersoun un.', phoneRelationAriaLabel: 'Kontaktpersoun', phoneRelationPlaceholder: 'Wielt d\'Kontaktpersoun', phoneRelationDad: 'Papp', phoneRelationMom: 'Mamm', phoneRelationCompanion: 'Begleeder', phoneRelationOther: 'Andere', send: 'Schécken', sending: 'Gëtt geschéckt...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Deng Umeldung gouf erfollegräich iwwermëttelt.', successNote: 'Du kriss eng Bestätegung per E-Mail.', oui: 'JO', non: 'NEE', joueur: 'Spiller / Spillerin', officiel: 'Offiziell Persoun', arbitre: 'Arbitter', parent_non: 'NEE (2 Erzéiungsberechtegter)', parent_oui: 'JO (1 Erzéiungsberechtegten)', familyMode: 'ZUSÄTZLICHE FAMILIENANMELDUNG', familyModeNone: 'Keng zousätzlech Familienanmeldung', familyModeOne: 'Ein Elterteil wëll och spillen', familyModeTwo: 'Beide Elteren wëllen och spillen', familyNote: 'Fëllt w.e.g. d\'Donnéeën vun den zousätzlechen Elteren aus.', familyParent1Title: 'Elteren 1', familyParent2Title: 'Elteren 2', familyParentNom: 'Numm *', familyParentPrenom: 'Virnumm *', familyParentDob: 'Gebuertsdatum *', familyParentEmail: 'E-Mail *', familyParentGsm: 'Telefon * (Nummer fir Papp / Mamm / Begleeder / Kontaktpersoun)', legalRequired: 'Liest an akzeptéiert w.e.g. déi allgemeng Bedéngungen an den Dateschutz.', flhRequired: 'Bestätegt w.e.g. d\'Iwwermëttlung un flh.lu fir d\'Lizenz.', accuracyRequired: 'Bestätegt w.e.g. d\'Richtegkeet vun den Donnéeën.', tarifLabel: 'Tarif',            tarifHint: 'Dëse Virschlag ass eng orientéierend Schätzung. Dir kritt eng Rechnung per E-Mail mat dem exakten Tarif an deen Dir musst bezuelen.', tarifAdult: 'Adulte Tarif', tarifYouth: 'Youth Tarif', tarifFamily: 'Family Tarif', tarifOfficial: 'Offiziell Tarif'
-        },
+           nom: 'Numm (neie Spiller) *', prenom: 'Virnumm (neie Spiller) *', dob: 'Gebuertsdatum *', mineur: 'Mannerjäreg', cat: 'FLH Kategorie', role: 'Roll / Funktioun *', parent: 'Elengerzéiend *', tuteur1: 'Erzéiungsberechtegten 1 *', tuteur2: 'Erzéiungsberechtegten 2 *', nat: 'Nationalitéit *', cns: 'Matricule CNS *', cnsPrefix: 'Format CNS:', medico: 'Medico *', licence: 'Lizenz *', club: 'Ale Veräin *', u7: 'U7 medezineschen Zertifikat obligatoresch', strasse: 'Strooss *', postcode: 'Postcode *', ortschaft: 'Uertschaft *', email: 'E-Mail *', gsm1: 'Telefon vun der Persoun, déi ugemellt gëtt', gsm2: 'Telefon Papp', gsm3: 'Telefon Mamm', gsm4: 'Telefon Begleedung / Kontaktpersoun', gsmHelper: 'Gëff d\'Nummer direkt bei der richteger Persoun un. Op d\'mannst eng Telefonsnummer ass obligatoresch.', phoneRequired: 'Gëff w.e.g. op d\'mannst eng Telefonsnummer fir déi ugemellte Persoun, de Papp, d\'Mamm oder eng Kontaktpersoun un.', phoneRelationAriaLabel: 'Kontaktpersoun', phoneRelationPlaceholder: 'Wielt d\'Kontaktpersoun', phoneRelationDad: 'Papp', phoneRelationMom: 'Mamm', phoneRelationCompanion: 'Begleeder', phoneRelationOther: 'Andere', send: 'Schécken', sending: 'Gëtt geschéckt...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Deng Umeldung gouf erfollegräich iwwermëttelt.', successNote: 'Du kriss eng Bestätegung per E-Mail.', oui: 'JO', non: 'NEE', joueur: 'Spiller / Spillerin', officiel: 'Offiziell Persoun', arbitre: 'Arbitter', parent_non: 'NEE (2 Erzéiungsberechtegter)', parent_oui: 'JO (1 Erzéiungsberechtegten)', familyMode: 'ZUSÄTZLICHE FAMILIENANMELDUNG', familyModeNone: 'Keng zousätzlech Familienanmeldung', familyModeOne: 'Ein Elterteil wëll och spillen', familyModeTwo: 'Beide Elteren wëllen och spillen', familyNote: 'Fëllt w.e.g. d\'Donnéeën vun den zousätzlechen Elteren aus.', familyParent1Title: 'Elteren 1', familyParent2Title: 'Elteren 2', familyParentNom: 'Numm *', familyParentPrenom: 'Virnumm *', familyParentDob: 'Gebuertsdatum *', familyParentEmail: 'E-Mail *', familyParentGsm: 'Telefon * (Nummer fir Papp / Mamm / Begleeder / Kontaktpersoun)', legalRequired: 'Liest an akzeptéiert w.e.g. déi allgemeng Bedéngungen an den Dateschutz.', flhRequired: 'Bestätegt w.e.g. d\'Iwwermëttlung un flh.lu fir d\'Lizenz.', accuracyRequired: 'Bestätegt w.e.g. d\'Richtegkeet vun den Donnéeën.', tarifLabel: 'Tarif',            tarifHint: 'Dëse Virschlag ass eng orientéierend Schätzung. Dir kritt eng Rechnung per E-Mail mat dem exakten Tarif an deen Dir musst bezuelen.', tarifAdult: 'Adulte Tarif', tarifYouth: 'Youth Tarif', tarifFamily: 'Family Tarif', tarifOfficial: 'Offiziell Tarif'
+        , guardian: { familyStructure: 'Familljestruktur *', fsOptBoth: 'Béid Eltere mat der selwechter Adress', fsOptSingle: 'Elengerzéiend (1 Erzéiungsberechtegte(n))', fsOptSep: 'Geschidden / 2 verschidde Adressen', guardian1Title: 'Erzéiungsberechtegte(n) 1 *', guardian2Title: 'Erzéiungsberechtegte(n) 2', nom: 'Numm *', prenom: 'Virnumm *', relation: 'Roll', tel: 'Telefon *', email1: 'E-Mail *', email2: 'E-Mail', addrHint1: 'Adress vum Erzéiungsberechtegte(n) 1 (wann anescht wéi vum Kand)', addrHint2: 'Adress vum Erzéiungsberechtegte(n) 2', strasse: 'Strooss', postcode: 'Postcode', ortschaft: 'Uertschaft', mom: 'Mamm', dad: 'Papp', tut: 'Tuteur / Tuteuse' }},
         fr: {
-           nom: 'Nom *', prenom: 'Prénom *', dob: 'Date de naissance *', mineur: 'Mineur', cat: 'Catégorie FLH', role: 'Rôle / Fonction *', parent: 'Parent isolé *', tuteur1: 'Tuteur 1 *', tuteur2: 'Tuteur 2 *', nat: 'Nationalité *', cns: 'Matricule CNS *', cnsPrefix: 'Format CNS :', medico: 'Médico *', licence: 'Licence *', club: 'Ancien club *', u7: 'U7 certificat médical obligatoire', strasse: 'Rue *', postcode: 'Code postal *', ortschaft: 'Localité *', email: 'E-mail *', gsm1: 'Téléphone de la personne inscrite', gsm2: 'Téléphone du père', gsm3: 'Téléphone de la mère', gsm4: 'Téléphone de l’accompagnant / contact', gsmHelper: 'Saisissez chaque numéro directement auprès de la bonne personne. Au moins un numéro est obligatoire.', phoneRequired: 'Veuillez indiquer au moins un numéro pour la personne inscrite, le père, la mère ou une personne de contact.', phoneRelationAriaLabel: 'Personne de contact', phoneRelationPlaceholder: 'Choisir la personne', phoneRelationDad: 'Père', phoneRelationMom: 'Mère', phoneRelationCompanion: 'Accompagnant', phoneRelationOther: 'Autre', send: 'Envoyer', sending: 'Envoi...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Inscription envoyée.', successNote: 'Vous recevrez une confirmation par e-mail.', oui: 'OUI', non: 'NON', joueur: 'Joueur / Joueuse', officiel: 'Officiel(le)', arbitre: 'Arbitre', parent_non: 'NON (2 tuteurs)', parent_oui: 'OUI (1 tuteur)', familyMode: 'ANMELDURE SUPPLÉMENTAIRE DE LA FAMILLE', familyModeNone: 'Aucune inscription familiale supplémentaire', familyModeOne: 'Un parent souhaite aussi jouer', familyModeTwo: 'Les deux parents souhaitent aussi jouer', familyNote: 'Veuillez compléter les données des parents supplémentaires.', familyParent1Title: 'Parent 1', familyParent2Title: 'Parent 2', familyParentNom: 'NOM *', familyParentPrenom: 'PRÉNOM *', familyParentDob: 'DATE DE NAISSANCE *', familyParentEmail: 'EMAIL *', familyParentGsm: 'Téléphone * (numéro pour père / mère / accompagnant / contact)', legalRequired: 'Veuillez lire et accepter les conditions générales et la protection des données.', flhRequired: 'Veuillez confirmer la transmission à flh.lu pour la licence.', accuracyRequired: 'Veuillez confirmer l\'exactitude des données.', tarifLabel: 'Tarif proposé',            tarifHint: 'Cette suggestion est indicative. Vous recevrez une facture par e-mail avec le tarif exact à payer.', tarifAdult: 'Tarif adulte', tarifYouth: 'Tarif jeune', tarifFamily: 'Tarif famille', tarifOfficial: 'Tarif officiel'
-        },
+           nom: 'Nom (nouveau joueur) *', prenom: 'Prénom (nouveau joueur) *', dob: 'Date de naissance *', mineur: 'Mineur', cat: 'Catégorie FLH', role: 'Rôle / Fonction *', parent: 'Parent isolé *', tuteur1: 'Tuteur 1 *', tuteur2: 'Tuteur 2 *', nat: 'Nationalité *', cns: 'Matricule CNS *', cnsPrefix: 'Format CNS :', medico: 'Médico *', licence: 'Licence *', club: 'Ancien club *', u7: 'U7 certificat médical obligatoire', strasse: 'Rue *', postcode: 'Code postal *', ortschaft: 'Localité *', email: 'E-mail *', gsm1: 'Téléphone de la personne inscrite', gsm2: 'Téléphone du père', gsm3: 'Téléphone de la mère', gsm4: 'Téléphone de l’accompagnant / contact', gsmHelper: 'Saisissez chaque numéro directement auprès de la bonne personne. Au moins un numéro est obligatoire.', phoneRequired: 'Veuillez indiquer au moins un numéro pour la personne inscrite, le père, la mère ou une personne de contact.', phoneRelationAriaLabel: 'Personne de contact', phoneRelationPlaceholder: 'Choisir la personne', phoneRelationDad: 'Père', phoneRelationMom: 'Mère', phoneRelationCompanion: 'Accompagnant', phoneRelationOther: 'Autre', send: 'Envoyer', sending: 'Envoi...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Inscription envoyée.', successNote: 'Vous recevrez une confirmation par e-mail.', oui: 'OUI', non: 'NON', joueur: 'Joueur / Joueuse', officiel: 'Officiel(le)', arbitre: 'Arbitre', parent_non: 'NON (2 tuteurs)', parent_oui: 'OUI (1 tuteur)', familyMode: 'ANMELDURE SUPPLÉMENTAIRE DE LA FAMILLE', familyModeNone: 'Aucune inscription familiale supplémentaire', familyModeOne: 'Un parent souhaite aussi jouer', familyModeTwo: 'Les deux parents souhaitent aussi jouer', familyNote: 'Veuillez compléter les données des parents supplémentaires.', familyParent1Title: 'Parent 1', familyParent2Title: 'Parent 2', familyParentNom: 'NOM *', familyParentPrenom: 'PRÉNOM *', familyParentDob: 'DATE DE NAISSANCE *', familyParentEmail: 'EMAIL *', familyParentGsm: 'Téléphone * (numéro pour père / mère / accompagnant / contact)', legalRequired: 'Veuillez lire et accepter les conditions générales et la protection des données.', flhRequired: 'Veuillez confirmer la transmission à flh.lu pour la licence.', accuracyRequired: 'Veuillez confirmer l\'exactitude des données.', tarifLabel: 'Tarif proposé',            tarifHint: 'Cette suggestion est indicative. Vous recevrez une facture par e-mail avec le tarif exact à payer.', tarifAdult: 'Tarif adulte', tarifYouth: 'Tarif jeune', tarifFamily: 'Tarif famille', tarifOfficial: 'Tarif officiel'
+        , guardian: { familyStructure: 'Structure familiale *', fsOptBoth: 'Les deux parents à la même adresse', fsOptSingle: 'Parent isolé (1 tuteur)', fsOptSep: 'Divorcé / 2 adresses différentes', guardian1Title: 'Responsable légal 1 *', guardian2Title: 'Responsable légal 2', nom: 'Nom *', prenom: 'Prénom *', relation: 'Rôle', tel: 'Téléphone *', email1: 'E-mail *', email2: 'E-mail', addrHint1: 'Adresse du responsable légal 1 (si différente)', addrHint2: 'Adresse du responsable légal 2', strasse: 'Rue', postcode: 'Code postal', ortschaft: 'Localité', mom: 'Mère', dad: 'Père', tut: 'Tuteur / Tutrice' }},
         de: {
-           nom: 'Name *', prenom: 'Vorname *', dob: 'Geburtsdatum *', mineur: 'Minderjährig', cat: 'FLH Kategorie', role: 'Rolle / Funktion *', parent: 'Alleinerziehend *', tuteur1: 'Erziehungsberechtigter 1 *', tuteur2: 'Erziehungsberechtigter 2 *', nat: 'Nationalität *', cns: 'CNS-Matrikelnummer *', cnsPrefix: 'Format CNS:', medico: 'Medico *', licence: 'Lizenz *', club: 'Ehemaliger Verein *', u7: 'U7 ärztliches Attest obligatorisch', strasse: 'Straße *', postcode: 'Postleitzahl *', ortschaft: 'Ortschaft *', email: 'E-Mail *', gsm1: 'Telefon der angemeldeten Person', gsm2: 'Telefon Vater', gsm3: 'Telefon Mutter', gsm4: 'Telefon Begleitung / Kontaktperson', gsmHelper: 'Trage jede Nummer direkt bei der richtigen Person ein. Mindestens eine Telefonnummer ist erforderlich.', phoneRequired: 'Bitte gib mindestens eine Telefonnummer für die angemeldete Person, Vater, Mutter oder eine Kontaktperson an.', phoneRelationAriaLabel: 'Kontaktperson', phoneRelationPlaceholder: 'Kontaktperson wählen', phoneRelationDad: 'Vater', phoneRelationMom: 'Mutter', phoneRelationCompanion: 'Begleiter', phoneRelationOther: 'Andere', send: 'Senden', sending: 'Senden...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Anmeldung gesendet.', successNote: 'Du erhältst eine Bestätigung per E-Mail.', oui: 'JA', non: 'NEIN', joueur: 'Spieler / Spielerin', officiel: 'Offizielle Person', arbitre: 'Schiedsrichter', parent_non: 'NEIN (2 Erziehungsberechtigte)', parent_oui: 'JA (1 Erziehungsberechtigter)', familyMode: 'ZUSÄTZLICHE FAMILIENANMELDUNG', familyModeNone: 'Keine zusätzliche Familienanmeldung', familyModeOne: 'Ein Elternteil möchte auch spielen', familyModeTwo: 'Beide Elternteile möchten auch spielen', familyNote: 'Bitte ergänze die Daten der zusätzlichen Elternteile.', familyParent1Title: 'Elternteil 1', familyParent2Title: 'Elternteil 2', familyParentNom: 'NAME *', familyParentPrenom: 'VORNAME *', familyParentDob: 'GEBURTSDATUM *', familyParentEmail: 'E-MAIL *', familyParentGsm: 'Telefon * (Nummer für Vater / Mutter / Begleiter / Kontaktperson)', legalRequired: 'Bitte die allgemeinen Bedingungen und den Datenschutz lesen und akzeptieren.', flhRequired: 'Bitte die Übermittlung an flh.lu für die Lizenz bestätigen.', accuracyRequired: 'Bitte die Richtigkeit der Angaben bestätigen.', tarifLabel: 'Vorgeschlagener Tarif',            tarifHint: 'Dieser Vorschlag ist nur eine Orientierung. Sie erhalten eine Rechnung per E-Mail mit dem genauen Tarif, den Sie zahlen müssen.', tarifAdult: 'Erwachsenen-Tarif', tarifYouth: 'Jugend-Tarif', tarifFamily: 'Familien-Tarif', tarifOfficial: 'Offizieller Tarif'
-        },
+           nom: 'Name (neuer Spieler) *', prenom: 'Vorname (neuer Spieler) *', dob: 'Geburtsdatum *', mineur: 'Minderjährig', cat: 'FLH Kategorie', role: 'Rolle / Funktion *', parent: 'Alleinerziehend *', tuteur1: 'Erziehungsberechtigter 1 *', tuteur2: 'Erziehungsberechtigter 2 *', nat: 'Nationalität *', cns: 'CNS-Matrikelnummer *', cnsPrefix: 'Format CNS:', medico: 'Medico *', licence: 'Lizenz *', club: 'Ehemaliger Verein *', u7: 'U7 ärztliches Attest obligatorisch', strasse: 'Straße *', postcode: 'Postleitzahl *', ortschaft: 'Ortschaft *', email: 'E-Mail *', gsm1: 'Telefon der angemeldeten Person', gsm2: 'Telefon Vater', gsm3: 'Telefon Mutter', gsm4: 'Telefon Begleitung / Kontaktperson', gsmHelper: 'Trage jede Nummer direkt bei der richtigen Person ein. Mindestens eine Telefonnummer ist erforderlich.', phoneRequired: 'Bitte gib mindestens eine Telefonnummer für die angemeldete Person, Vater, Mutter oder eine Kontaktperson an.', phoneRelationAriaLabel: 'Kontaktperson', phoneRelationPlaceholder: 'Kontaktperson wählen', phoneRelationDad: 'Vater', phoneRelationMom: 'Mutter', phoneRelationCompanion: 'Begleiter', phoneRelationOther: 'Andere', send: 'Senden', sending: 'Senden...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Anmeldung gesendet.', successNote: 'Du erhältst eine Bestätigung per E-Mail.', oui: 'JA', non: 'NEIN', joueur: 'Spieler / Spielerin', officiel: 'Offizielle Person', arbitre: 'Schiedsrichter', parent_non: 'NEIN (2 Erziehungsberechtigte)', parent_oui: 'JA (1 Erziehungsberechtigter)', familyMode: 'ZUSÄTZLICHE FAMILIENANMELDUNG', familyModeNone: 'Keine zusätzliche Familienanmeldung', familyModeOne: 'Ein Elternteil möchte auch spielen', familyModeTwo: 'Beide Elternteile möchten auch spielen', familyNote: 'Bitte ergänze die Daten der zusätzlichen Elternteile.', familyParent1Title: 'Elternteil 1', familyParent2Title: 'Elternteil 2', familyParentNom: 'NAME *', familyParentPrenom: 'VORNAME *', familyParentDob: 'GEBURTSDATUM *', familyParentEmail: 'E-MAIL *', familyParentGsm: 'Telefon * (Nummer für Vater / Mutter / Begleiter / Kontaktperson)', legalRequired: 'Bitte die allgemeinen Bedingungen und den Datenschutz lesen und akzeptieren.', flhRequired: 'Bitte die Übermittlung an flh.lu für die Lizenz bestätigen.', accuracyRequired: 'Bitte die Richtigkeit der Angaben bestätigen.', tarifLabel: 'Vorgeschlagener Tarif',            tarifHint: 'Dieser Vorschlag ist nur eine Orientierung. Sie erhalten eine Rechnung per E-Mail mit dem genauen Tarif, den Sie zahlen müssen.', tarifAdult: 'Erwachsenen-Tarif', tarifYouth: 'Jugend-Tarif', tarifFamily: 'Familien-Tarif', tarifOfficial: 'Offizieller Tarif'
+        , guardian: { familyStructure: 'Familienstruktur *', fsOptBoth: 'Beide Elternteile gleiche Adresse', fsOptSingle: 'Alleinerziehend (1 Erziehungsberechtigter)', fsOptSep: 'Getrennt / Geschieden – 2 Adressen', guardian1Title: 'Erziehungsberechtigte(r) 1 *', guardian2Title: 'Erziehungsberechtigte(r) 2', nom: 'Name *', prenom: 'Vorname *', relation: 'Rolle', tel: 'Telefon *', email1: 'E-Mail *', email2: 'E-Mail', addrHint1: 'Adresse des Erziehungsberechtigten 1 (falls abweichend)', addrHint2: 'Adresse des Erziehungsberechtigten 2', strasse: 'Straße', postcode: 'Postleitzahl', ortschaft: 'Ortschaft', mom: 'Mutter', dad: 'Vater', tut: 'Vormund' }},
         en: {
-           nom: 'Last name *', prenom: 'First name *', dob: 'Date of birth *', mineur: 'Minor', cat: 'FLH category', role: 'Role / Function *', parent: 'Single parent *', tuteur1: 'Guardian 1 *', tuteur2: 'Guardian 2 *', nat: 'Nationality *', cns: 'CNS number *', cnsPrefix: 'CNS format:', medico: 'Medical check *', licence: 'Licence *', club: 'Former club *', u7: 'U7 medical certificate required', strasse: 'Street *', postcode: 'Postcode *', ortschaft: 'City *', email: 'Email *', gsm1: 'Registered person’s phone', gsm2: 'Father’s phone', gsm3: 'Mother’s phone', gsm4: 'Companion / contact person’s phone', gsmHelper: 'Enter each number directly for the correct person. At least one phone number is required.', phoneRequired: 'Please provide at least one phone number for the registered person, father, mother or a contact person.', phoneRelationAriaLabel: 'Contact person', phoneRelationPlaceholder: 'Choose the contact person', phoneRelationDad: 'Father', phoneRelationMom: 'Mother', phoneRelationCompanion: 'Companion', phoneRelationOther: 'Other', send: 'Submit', sending: 'Sending...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Registration sent.', successNote: 'You will receive a confirmation by email.', oui: 'YES', non: 'NO', joueur: 'Player', officiel: 'Official', arbitre: 'Referee', parent_non: 'NO (2 guardians)', parent_oui: 'YES (1 guardian)', familyMode: 'ADDITIONAL FAMILY REGISTRATION', familyModeNone: 'No additional family registration', familyModeOne: 'One parent also wants to play', familyModeTwo: 'Both parents also want to play', familyNote: 'Please complete the details of the additional parents.', familyParent1Title: 'Parent 1', familyParent2Title: 'Parent 2', familyParentNom: 'LAST NAME *', familyParentPrenom: 'FIRST NAME *', familyParentDob: 'DATE OF BIRTH *', familyParentEmail: 'EMAIL *', familyParentGsm: 'Mobile * (number for father / mother / companion / contact)', legalRequired: 'Please read and accept the terms and conditions and data protection.', flhRequired: 'Please confirm the transfer to flh.lu for the licence.', accuracyRequired: 'Please confirm the accuracy of the data.', tarifLabel: 'Suggested fee',            tarifHint: 'This is a guide only. You will receive an invoice by email with the exact tariff to be paid.', tarifAdult: 'Adult fee', tarifYouth: 'Youth fee', tarifFamily: 'Family fee', tarifOfficial: 'Official fee'
-        },
+           nom: 'Last name (new player) *', prenom: 'First name (new player) *', dob: 'Date of birth *', mineur: 'Minor', cat: 'FLH category', role: 'Role / Function *', parent: 'Single parent *', tuteur1: 'Guardian 1 *', tuteur2: 'Guardian 2 *', nat: 'Nationality *', cns: 'CNS number *', cnsPrefix: 'CNS format:', medico: 'Medical check *', licence: 'Licence *', club: 'Former club *', u7: 'U7 medical certificate required', strasse: 'Street *', postcode: 'Postcode *', ortschaft: 'City *', email: 'Email *', gsm1: 'Registered person’s phone', gsm2: 'Father’s phone', gsm3: 'Mother’s phone', gsm4: 'Companion / contact person’s phone', gsmHelper: 'Enter each number directly for the correct person. At least one phone number is required.', phoneRequired: 'Please provide at least one phone number for the registered person, father, mother or a contact person.', phoneRelationAriaLabel: 'Contact person', phoneRelationPlaceholder: 'Choose the contact person', phoneRelationDad: 'Father', phoneRelationMom: 'Mother', phoneRelationCompanion: 'Companion', phoneRelationOther: 'Other', send: 'Submit', sending: 'Sending...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Registration sent.', successNote: 'You will receive a confirmation by email.', oui: 'YES', non: 'NO', joueur: 'Player', officiel: 'Official', arbitre: 'Referee', parent_non: 'NO (2 guardians)', parent_oui: 'YES (1 guardian)', familyMode: 'ADDITIONAL FAMILY REGISTRATION', familyModeNone: 'No additional family registration', familyModeOne: 'One parent also wants to play', familyModeTwo: 'Both parents also want to play', familyNote: 'Please complete the details of the additional parents.', familyParent1Title: 'Parent 1', familyParent2Title: 'Parent 2', familyParentNom: 'LAST NAME *', familyParentPrenom: 'FIRST NAME *', familyParentDob: 'DATE OF BIRTH *', familyParentEmail: 'EMAIL *', familyParentGsm: 'Mobile * (number for father / mother / companion / contact)', legalRequired: 'Please read and accept the terms and conditions and data protection.', flhRequired: 'Please confirm the transfer to flh.lu for the licence.', accuracyRequired: 'Please confirm the accuracy of the data.', tarifLabel: 'Suggested fee',            tarifHint: 'This is a guide only. You will receive an invoice by email with the exact tariff to be paid.', tarifAdult: 'Adult fee', tarifYouth: 'Youth fee', tarifFamily: 'Family fee', tarifOfficial: 'Official fee'
+        , guardian: { familyStructure: 'Family structure *', fsOptBoth: 'Both parents at the same address', fsOptSingle: 'Single parent (1 guardian)', fsOptSep: 'Divorced / 2 different addresses', guardian1Title: 'Guardian 1 *', guardian2Title: 'Guardian 2', nom: 'Last name *', prenom: 'First name *', relation: 'Role', tel: 'Phone *', email1: 'Email *', email2: 'Email', addrHint1: 'Address of guardian 1 (if different from child)', addrHint2: 'Address of guardian 2', strasse: 'Street', postcode: 'Postcode', ortschaft: 'City', mom: 'Mother', dad: 'Father', tut: 'Guardian' }},
         pt: {
-           nom: 'Apelido *', prenom: 'Nome próprio *', dob: 'Data de nascimento *', mineur: 'Menor', cat: 'Categoria FLH', role: 'Função *', parent: 'Encarregado isolado *', tuteur1: 'Encarregado 1 *', tuteur2: 'Encarregado 2 *', nat: 'Nacionalidade *', cns: 'Número CNS *', cnsPrefix: 'Formato CNS:', medico: 'Exame médico *', licence: 'Licença *', club: 'Clube anterior *', u7: 'U7 certificado médico obrigatório', strasse: 'Rua *', postcode: 'Código postal *', ortschaft: 'Localidade *', email: 'E-mail *', gsm1: 'Telefone da pessoa inscrita', gsm2: 'Telefone do pai', gsm3: 'Telefone da mãe', gsm4: 'Telefone do acompanhante / contacto', gsmHelper: 'Introduz cada número diretamente junto da pessoa certa. É obrigatório pelo menos um número.', phoneRequired: 'Indica pelo menos um número da pessoa inscrita, do pai, da mãe ou de uma pessoa de contacto.', phoneRelationAriaLabel: 'Pessoa de contacto', phoneRelationPlaceholder: 'Escolher a pessoa', phoneRelationDad: 'Pai', phoneRelationMom: 'Mãe', phoneRelationCompanion: 'Acompanhante', phoneRelationOther: 'Outro', send: 'Enviar', sending: 'A enviar...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Inscrição enviada.', successNote: 'Receberá uma confirmação por e-mail.', oui: 'SIM', non: 'NÃO', joueur: 'Jogador / Jogadora', officiel: 'Oficial', arbitre: 'Árbitro', parent_non: 'NÃO (2 encarregados)', parent_oui: 'SIM (1 encarregado)', familyMode: 'INSCRIÇÃO FAMILIAR ADICIONAL', familyModeNone: 'Nenhuma inscrição familiar adicional', familyModeOne: 'Um dos pais também quer jogar', familyModeTwo: 'Os dois pais também querem jogar', familyNote: 'Por favor, complete os dados dos pais adicionais.', familyParent1Title: 'Encarregado 1', familyParent2Title: 'Encarregado 2', familyParentNom: 'APELIDO *', familyParentPrenom: 'NOME PRÓPRIO *', familyParentDob: 'DATA DE NASCIMENTO *', familyParentEmail: 'E-MAIL *', familyParentGsm: 'Telemóvel * (número para pai / mãe / acompanhante / contacto)', legalRequired: 'Por favor, leia e aceite os termos e condições e a proteção de dados.', flhRequired: 'Por favor, confirme o envio para flh.lu para a licença.', accuracyRequired: 'Por favor, confirme a exatidão dos dados.'
-        }
+           nom: 'Apelido (novo jogador) *', prenom: 'Nome próprio (novo jogador) *', dob: 'Data de nascimento *', mineur: 'Menor', cat: 'Categoria FLH', role: 'Função *', parent: 'Encarregado isolado *', tuteur1: 'Encarregado 1 *', tuteur2: 'Encarregado 2 *', nat: 'Nacionalidade *', cns: 'Número CNS *', cnsPrefix: 'Formato CNS:', medico: 'Exame médico *', licence: 'Licença *', club: 'Clube anterior *', u7: 'U7 certificado médico obrigatório', strasse: 'Rua *', postcode: 'Código postal *', ortschaft: 'Localidade *', email: 'E-mail *', gsm1: 'Telefone da pessoa inscrita', gsm2: 'Telefone do pai', gsm3: 'Telefone da mãe', gsm4: 'Telefone do acompanhante / contacto', gsmHelper: 'Introduz cada número diretamente junto da pessoa certa. É obrigatório pelo menos um número.', phoneRequired: 'Indica pelo menos um número da pessoa inscrita, do pai, da mãe ou de uma pessoa de contacto.', phoneRelationAriaLabel: 'Pessoa de contacto', phoneRelationPlaceholder: 'Escolher a pessoa', phoneRelationDad: 'Pai', phoneRelationMom: 'Mãe', phoneRelationCompanion: 'Acompanhante', phoneRelationOther: 'Outro', send: 'Enviar', sending: 'A enviar...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Inscrição enviada.', successNote: 'Receberá uma confirmação por e-mail.', oui: 'SIM', non: 'NÃO', joueur: 'Jogador / Jogadora', officiel: 'Oficial', arbitre: 'Árbitro', parent_non: 'NÃO (2 encarregados)', parent_oui: 'SIM (1 encarregado)', familyMode: 'INSCRIÇÃO FAMILIAR ADICIONAL', familyModeNone: 'Nenhuma inscrição familiar adicional', familyModeOne: 'Um dos pais também quer jogar', familyModeTwo: 'Os dois pais também querem jogar', familyNote: 'Por favor, complete os dados dos pais adicionais.', familyParent1Title: 'Encarregado 1', familyParent2Title: 'Encarregado 2', familyParentNom: 'APELIDO *', familyParentPrenom: 'NOME PRÓPRIO *', familyParentDob: 'DATA DE NASCIMENTO *', familyParentEmail: 'E-MAIL *', familyParentGsm: 'Telemóvel * (número para pai / mãe / acompanhante / contacto)', legalRequired: 'Por favor, leia e aceite os termos e condições e a proteção de dados.', flhRequired: 'Por favor, confirme o envio para flh.lu para a licença.', accuracyRequired: 'Por favor, confirme a exatidão dos dados.'
+        , guardian: { familyStructure: 'Estrutura familiar *', fsOptBoth: 'Ambos os pais na mesma morada', fsOptSingle: 'Encarregado unico (1 encarregado)', fsOptSep: 'Divorciado / 2 moradas diferentes', guardian1Title: 'Encarregado de Educacao 1 *', guardian2Title: 'Encarregado de Educacao 2', nom: 'Apelido *', prenom: 'Nome proprio *', relation: 'Papel', tel: 'Telefone *', email1: 'E-mail *', email2: 'E-mail', addrHint1: 'Morada do encarregado 1 (se diferente)', addrHint2: 'Morada do encarregado 2', strasse: 'Rua', postcode: 'Codigo postal', ortschaft: 'Localidade', mom: 'Mae', dad: 'Pai', tut: 'Tutor / Tutora' }}
     };
     const MERSCH75_SIBLING_TEXTS = {
         lu: {
@@ -1045,26 +1144,43 @@
     function setRequiredState(isMinor, category) {
         const tuteur1 = document.getElementById('Tuteur1');
         const tuteur2 = document.getElementById('Tuteur2');
-        const parentIsole = document.getElementById('ParentIsole');
         const u7Cert = document.getElementById('U7Cert');
+        const structure = document.getElementById('FamilyStructure') ? document.getElementById('FamilyStructure').value : 'BOTH_SAME';
 
-        tuteur1.required = isMinor;
-        tuteur2.required = isMinor && parentIsole.value !== 'OUI';
+        // Guardian-Felder required setzen
+        const g1fields = ['Guardian1Nom','Guardian1Prenom','Guardian1Tel'];
+        g1fields.forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el) el.required = isMinor;
+        });
+        const g1emailEl = document.getElementById('Guardian1Email');
+        if (g1emailEl) g1emailEl.required = isMinor;
+
+        const isSingle = structure === 'SINGLE';
+        const g2fields = ['Guardian2Nom','Guardian2Prenom','Guardian2Tel'];
+        g2fields.forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el) el.required = isMinor && !isSingle;
+        });
+
+        tuteur1.required = false;
+        tuteur2.required = false;
         u7Cert.required = category === 'U7';
 
         document.getElementById('parent-section').style.display = isMinor ? 'block' : 'none';
         document.getElementById('u7-section').style.display = category === 'U7' ? 'flex' : 'none';
-        document.getElementById('tuteur2-wrap').style.display = parentIsole.value === 'OUI' ? 'none' : 'block';
 
         if (!isMinor) {
             tuteur1.value = '';
             tuteur2.value = '';
-            parentIsole.value = 'NON';
+            document.getElementById('ParentIsole').value = 'NON';
+            ['Guardian1Nom','Guardian1Prenom','Guardian1Tel','Guardian1Email',
+             'Guardian2Nom','Guardian2Prenom','Guardian2Tel','Guardian2Email'].forEach(function(id) {
+                var el = document.getElementById(id);
+                if (el) el.value = '';
+            });
         }
-
-        if (parentIsole.value === 'OUI') {
-            tuteur2.value = '';
-        }
+        if (isMinor) updateFamilyStructure();
     }
 
     function updateCnsDisplay() {
@@ -1672,6 +1788,45 @@
         }
     }
 
+    function updateFamilyStructure() {
+        const structure = document.getElementById('FamilyStructure').value;
+        const guardian2Card = document.getElementById('guardian2-card');
+        const guardian1AddrWrap = document.getElementById('guardian1-address-wrap');
+        const guardian2AddrWrap = document.getElementById('guardian2-address-wrap');
+        const isSingle = structure === 'SINGLE';
+        const isSeparated = structure === 'SEPARATED';
+
+        // Erzéiungsberechtegte(n) 2 nëmme bei BOTH_SAME oder SEPARATED
+        guardian2Card.hidden = isSingle;
+
+        // Adressen nëmmen bei Scheedung
+        guardian1AddrWrap.hidden = !isSeparated;
+        guardian2AddrWrap.hidden = !isSeparated;
+
+        // ParentIsole hidden field fir Rückwärtskompatibilität
+        document.getElementById('ParentIsole').value = isSingle ? 'OUI' : 'NON';
+
+        // Tuteur1 + Tuteur2 aus Guardian-Felder fëllen
+        syncGuardianToLegacy();
+    }
+
+    function syncGuardianToLegacy() {
+        const g1nom = document.getElementById('Guardian1Nom').value;
+        const g1pre = document.getElementById('Guardian1Prenom').value;
+        const g2nom = document.getElementById('Guardian2Nom').value;
+        const g2pre = document.getElementById('Guardian2Prenom').value;
+        const t1 = document.getElementById('Tuteur1');
+        const t2 = document.getElementById('Tuteur2');
+        if (t1) t1.value = [g1nom, g1pre].filter(Boolean).join(' ');
+        if (t2) t2.value = [g2nom, g2pre].filter(Boolean).join(' ');
+    }
+
+    // Sync bei Eingabe in Guardian-Felder
+    ['Guardian1Nom','Guardian1Prenom','Guardian2Nom','Guardian2Prenom'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.addEventListener('input', syncGuardianToLegacy);
+    });
+
     function toggleFamilyRegistrationFields() {
         const mode = document.getElementById('FamilyRegistrationMode').value || 'NONE';
         const details = document.getElementById('family-registration-details');
@@ -1873,9 +2028,6 @@
         document.getElementById('lbl-mineur').innerText = ui.mineur;
         document.getElementById('lbl-cat').innerText = ui.cat;
         document.getElementById('lbl-role').innerText = ui.role;
-        document.getElementById('lbl-parent').innerText = ui.parent;
-        document.getElementById('lbl-tuteur1').innerText = ui.tuteur1;
-        document.getElementById('lbl-tuteur2').innerText = ui.tuteur2;
         document.getElementById('lbl-nat').innerText = ui.nat;
         document.getElementById('lbl-cns').innerText = ui.cns;
         document.getElementById('lbl-medico').innerText = ui.medico;
@@ -1895,6 +2047,37 @@
             gsmHelper.innerText = ui.gsmHelper || '';
         }
         updatePhoneRoleSelects(ui);
+
+        // Guardian / Erzéiungsberechtegte(n) Labels
+        var G = ui.guardian || {};
+        var setT = function(id, val) { var el = document.getElementById(id); if (el && val) el.innerText = val; };
+        setT('lbl-family-structure', G.familyStructure);
+        setT('lbl-guardian1-title', G.guardian1Title);
+        setT('lbl-guardian2-title', G.guardian2Title);
+        setT('lbl-guardian1-nom', G.nom); setT('lbl-guardian2-nom', G.nom);
+        setT('lbl-guardian1-prenom', G.prenom); setT('lbl-guardian2-prenom', G.prenom);
+        setT('lbl-guardian1-relation', G.relation); setT('lbl-guardian2-relation', G.relation);
+        setT('lbl-guardian1-tel', G.tel); setT('lbl-guardian2-tel', G.tel);
+        setT('lbl-guardian1-email', G.email1); setT('lbl-guardian2-email', G.email2);
+        setT('lbl-guardian1-addr-hint', G.addrHint1); setT('lbl-guardian2-addr-hint', G.addrHint2);
+        setT('lbl-guardian1-strasse', G.strasse); setT('lbl-guardian2-strasse', G.strasse);
+        setT('lbl-guardian1-postcode', G.postcode); setT('lbl-guardian2-postcode', G.postcode);
+        setT('lbl-guardian1-ortschaft', G.ortschaft); setT('lbl-guardian2-ortschaft', G.ortschaft);
+        // FamilyStructure Options
+        var fs = document.getElementById('FamilyStructure');
+        if (fs && G.fsOptBoth) {
+            fs.options[0].text = G.fsOptBoth;
+            fs.options[1].text = G.fsOptSingle;
+            fs.options[2].text = G.fsOptSep;
+        }
+        // Guardian Relation Options
+        var relations = [[G.mom, G.dad, G.tut], [G.dad, G.mom, G.tut]];
+        [[document.getElementById('Guardian1Relation'), relations[0]],
+         [document.getElementById('Guardian2Relation'), relations[1]]].forEach(function(pair) {
+            var sel = pair[0]; var opts = pair[1];
+            if (sel && opts[0]) { sel.options[0].text = opts[0]; sel.options[1].text = opts[1]; sel.options[2].text = opts[2]; }
+        });
+
         document.getElementById('lbl-family-mode').innerText = ui.familyMode;
         document.getElementById('family-parent-1-title').innerText = ui.familyParent1Title;
         document.getElementById('family-parent-2-title').innerText = ui.familyParent2Title;
