@@ -1567,7 +1567,7 @@
             return {
                 label: ui.tarifOfficial,
                 value: '€50',
-                definitionCode: 'C0012',
+                definitionCode: 'C0007',  // Officiel mat Lizenz (neier Code)
                 hint: ui.tarifHint
             };
         }
@@ -1576,7 +1576,7 @@
             return {
                 label: ui.tarifFamily,
                 value: '€384',
-                definitionCode: 'C0007',
+                definitionCode: 'C0011',  // Contact-Famille 1+ Jugendspiller (neier Code)
                 hint: ui.tarifHint
             };
         }
@@ -1608,11 +1608,38 @@
             };
         }
 
-        if (age <= 25) {
+        if (role === 'Loisir') {
+            return {
+                label: ui.tarifLabel,
+                value: '€10 / Training',
+                definitionCode: 'C0013',  // Loisir ouni Lizenz (Code bleibt gleich)
+                hint: ui.tarifHint
+            };
+        }
+
+        if (age < 6) {
+            return {
+                label: ui.tarifLabel,
+                value: '€10 / Training',
+                definitionCode: 'C0025',  // U4 Spiller (neier Code)
+                hint: ui.tarifHint
+            };
+        }
+
+        if (age < 12) {
             return {
                 label: ui.tarifYouth,
                 value: '€200',
-                definitionCode: 'C0007',
+                definitionCode: 'C0001',  // Spiller U7/U9/U11 (neier Code)
+                hint: ui.tarifHint
+            };
+        }
+
+        if (age < 18) {
+            return {
+                label: ui.tarifYouth,
+                value: '€200',
+                definitionCode: 'C0002',  // Spiller U13-U17 (neier Code)
                 hint: ui.tarifHint
             };
         }
@@ -1620,7 +1647,7 @@
         return {
             label: ui.tarifAdult,
             value: '€300',
-            definitionCode: 'C0009',
+            definitionCode: 'C0003',  // Spiller >18 (neier Code)
             hint: ui.tarifHint
         };
     }
