@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="lu">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -62,6 +62,42 @@
                         <div id="en" class="join-lang-text"><strong>Welcome to the club!</strong>Great to have you on board. Please fill out the form to start the internal registration. Once the club receives your data, the official licence request will be initiated by the club manager.</div>
                         <div id="pt" class="join-lang-text"><strong>Bem-vindo ao clube!</strong>É ótimo que queiras reforçar a nossa equipa. Por favor, preenche o formulário para iniciar o registo interno. Assim que o clube receber os teus dados, o pedido oficial de licença será iniciado pelo responsável do clube.</div>
 
+                        <div class="join-quiz-card" id="join-quiz">
+                            <div class="join-quiz-header">
+                                <p class="join-quiz-kicker" id="join-quiz-kicker">Schnellstarter</p>
+                                <h2 id="join-quiz-title">Wéi wëlls du starten?</h2>
+                                <p id="join-quiz-intro">Wiel eng Situatioun. Dëst hëlleft, den richtege Deel vum Formular méi schnell ze fannen.</p>
+                            </div>
+                            <div class="join-quiz-options" role="list" aria-label="Schnellstarter">
+                                <button class="join-quiz-option is-active" type="button" data-quiz-key="player" aria-pressed="true">
+                                    <span class="join-quiz-option-title" id="join-quiz-player-label">Ech wëll mech als Spiller umellen</span>
+                                    <span class="join-quiz-option-copy" id="join-quiz-player-copy">Fir Spiller:innen, Jugendlecher oder Familljen</span>
+                                </button>
+                                <button class="join-quiz-option" type="button" data-quiz-key="official" aria-pressed="false">
+                                    <span class="join-quiz-option-title" id="join-quiz-official-label">Ech sinn Offiziell</span>
+                                    <span class="join-quiz-option-copy" id="join-quiz-official-copy">Fir Trainer, Teamleitung oder Chrono am Dësch</span>
+                                </button>
+                                <button class="join-quiz-option" type="button" data-quiz-key="referee" aria-pressed="false">
+                                    <span class="join-quiz-option-title" id="join-quiz-referee-label">Ech si Schiedsrichter</span>
+                                    <span class="join-quiz-option-copy" id="join-quiz-referee-copy">Fir d'Rolle als Arbitter</span>
+                                </button>
+                                <button class="join-quiz-option" type="button" data-quiz-key="family" aria-pressed="false">
+                                    <span class="join-quiz-option-title" id="join-quiz-family-label">Ech si Famill / Begleeder</span>
+                                    <span class="join-quiz-option-copy" id="join-quiz-family-copy">Fir Elteren, Pfleeger oder Begleeder</span>
+                                </button>
+                            </div>
+                            <div class="join-quiz-summary" id="join-quiz-summary">
+                                <div class="join-quiz-summary-badge" id="join-quiz-summary-badge">Spilleintritt</div>
+                                <h3 id="join-quiz-summary-title">Spilleintritt</h3>
+                                <p id="join-quiz-summary-copy">Wiel dës Optioun, wann du selwer spille wëlls oder e Kand umelle wëlls. Mir riichten d'Umeldung op dëse Wee aus.</p>
+                                <ul id="join-quiz-summary-list">
+                                    <li>Profil Spiller:in</li>
+                                    <li>FLH-Kategorie gëtt automatesch ergänzt</li>
+                                    <li>Fir Mannerjäreg gesäis du d'Elterefelder direkt</li>
+                                </ul>
+                            </div>
+                        </div>
+
                         <form id="registrationForm" class="join-registration-form" action="https://api.web3forms.com/submit" method="POST" novalidate>
                             <input type="hidden" name="access_key" value="15e3cc53-6864-47dd-bfaf-332cb4ca45e5">
                             <input type="hidden" name="subject" value="Nouvelle inscription Mersch 75">
@@ -74,86 +110,157 @@
                             </div>
 
                             <div class="join-form-group">
-                                <label id="lbl-nom" for="Nom">NOM(S) SUR CARTE D'IDENTITE *</label>
+                                <label id="lbl-nom" for="Nom">Numm *</label>
                                 <input type="text" id="Nom" name="Nom" autocomplete="family-name" required>
                             </div>
 
                             <div class="join-form-group">
-                                <label id="lbl-prenom" for="Prenom">PRENOM *</label>
+                                <label id="lbl-prenom" for="Prenom">Virnumm *</label>
                                 <input type="text" id="Prenom" name="Prenom" autocomplete="given-name" required>
                             </div>
 
                             <div class="join-form-row">
                                 <div class="join-form-group">
-                                    <label id="lbl-dob" for="DateNaissance">DATE DE NAISSANCE (JJ.MM.AAAA) *</label>
+                                    <label id="lbl-dob" for="DateNaissance">Gebuertsdatum *</label>
                                     <input type="text" id="DateNaissance" name="DateNaissance" placeholder="01.01.2010" inputmode="numeric" pattern="[0-9]{2}\.[0-9]{2}\.[0-9]{4}" required>
                                 </div>
                                 <div class="join-form-group">
-                                    <label id="lbl-mineur" for="Mineur">MINEUR? *</label>
+                                    <label id="lbl-mineur" for="Mineur">Mannerjäreg</label>
                                     <select id="Mineur" disabled>
-                                        <option value="NON">NON</option>
-                                        <option value="OUI">OUI</option>
+                                        <option value="NON">NEE</option>
+                                        <option value="OUI">JO</option>
                                     </select>
                                 </div>
                             </div>
 
                             <div id="cat-section">
-                                <label id="lbl-cat" for="Categorie">CATEGORIE FLH (AUTO)</label>
+                                <label id="lbl-cat" for="Categorie">FLH Kategorie</label>
                                 <strong id="cat-display">-</strong>
                                 <input type="hidden" id="Categorie" name="Categorie" value="">
                             </div>
 
                             <div class="join-form-group">
-                                <label id="lbl-role" for="Role">ROLE / FUNKTION *</label>
+                                <label id="lbl-role" for="Role">Roll / Funktioun *</label>
                                 <select id="Role" name="Role" required>
-                                    <option value="Joueur / Joueuse">Joueur / Joueuse</option>
-                                    <option value="Officiel(le)">Officiel(le)</option>
-                                    <option value="Arbitre">Arbitre</option>
+                                    <option value="Joueur / Joueuse">Spiller / Spillerin</option>
+                                    <option value="Officiel(le)">Offiziell Persoun</option>
+                                    <option value="Arbitre">Arbitter</option>
                                 </select>
                             </div>
 
                             <div id="parent-section">
                                 <div class="join-form-group join-form-group--compact">
-                                    <label id="lbl-parent" for="ParentIsole">PARENT ISOLE / ALLEINERZIEHEND? *</label>
+                                    <label id="lbl-parent" for="ParentIsole">Elengerzéiend *</label>
                                     <select id="ParentIsole" name="ParentIsole">
-                                        <option value="NON">NON (2 Tuteurs)</option>
-                                        <option value="OUI">OUI (1 Tuteur)</option>
+                                        <option value="NON">NEE (2 Erzéiungsberechtegter)</option>
+                                        <option value="OUI">JO (1 Erzéiungsberechtegten)</option>
                                     </select>
                                 </div>
-
+ 
                                 <div class="join-form-row">
                                     <div class="join-form-group">
-                                        <label id="lbl-tuteur1" for="Tuteur1">TUTEUR 1 (NOM ET PRENOM) *</label>
+                                        <label id="lbl-tuteur1" for="Tuteur1">Erzéiungsberechtegten 1 *</label>
                                         <input type="text" id="Tuteur1" name="Tuteur1" autocomplete="name">
                                     </div>
                                     <div class="join-form-group" id="tuteur2-wrap">
-                                        <label id="lbl-tuteur2" for="Tuteur2">TUTEUR 2 (NOM ET PRENOM) *</label>
+                                        <label id="lbl-tuteur2" for="Tuteur2">Erzéiungsberechtegten 2 *</label>
                                         <input type="text" id="Tuteur2" name="Tuteur2" autocomplete="name">
                                     </div>
                                 </div>
                             </div>
-
+ 
+                            <div class="join-family-section" id="family-registration-section">
+                                <div class="join-form-group join-form-group--compact">
+                                    <label id="lbl-family-mode" for="FamilyRegistrationMode">ZUSÄTZLICHE FAMILIENANMELDUNG</label>
+                                    <select id="FamilyRegistrationMode" name="FamilyRegistrationMode">
+                                        <option value="NONE">Keng zousätzlech Familienanmeldung</option>
+                                        <option value="PARENT1">Ein Elterteil wëll och spillen</option>
+                                        <option value="PARENT2">Beide Elteren wëllen och spillen</option>
+                                    </select>
+                                </div>
+ 
+                                <div class="join-family-details" id="family-registration-details" style="display:none;">
+                                    <p class="join-family-note" id="family-registration-note">Fëllt w.e.g. d'Donnéeën vun den zousätzlechen Elteren aus.</p>
+ 
+                                    <div class="join-family-card" id="family-parent-1-card">
+                                        <h3 id="family-parent-1-title">Elteren 1</h3>
+                                        <div class="join-form-row">
+                                            <div class="join-form-group">
+                                                <label id="lbl-family-parent1-nom" for="FamilyParent1Nom">Numm *</label>
+                                                <input type="text" id="FamilyParent1Nom" name="FamilyParent1Nom" autocomplete="family-name">
+                                            </div>
+                                            <div class="join-form-group">
+                                                <label id="lbl-family-parent1-prenom" for="FamilyParent1Prenom">Virnumm *</label>
+                                                <input type="text" id="FamilyParent1Prenom" name="FamilyParent1Prenom" autocomplete="given-name">
+                                            </div>
+                                        </div>
+                                        <div class="join-form-row">
+                                            <div class="join-form-group">
+                                                <label id="lbl-family-parent1-dob" for="FamilyParent1Dob">Gebuertsdatum *</label>
+                                                <input type="text" id="FamilyParent1Dob" name="FamilyParent1Dob" placeholder="01.01.2010" inputmode="numeric" pattern="[0-9]{2}\.[0-9]{2}\.[0-9]{4}">
+                                            </div>
+                                            <div class="join-form-group">
+                                                <label id="lbl-family-parent1-email" for="FamilyParent1Email">E-Mail *</label>
+                                                <input type="email" id="FamilyParent1Email" name="FamilyParent1Email" autocomplete="email">
+                                            </div>
+                                        </div>
+                                        <div class="join-form-group">
+                                            <label id="lbl-family-parent1-gsm" for="FamilyParent1Gsm">GSM *</label>
+                                            <input type="text" id="FamilyParent1Gsm" name="FamilyParent1Gsm" autocomplete="tel">
+                                        </div>
+                                    </div>
+ 
+                                    <div class="join-family-card" id="family-parent-2-card" style="display:none;">
+                                        <h3 id="family-parent-2-title">Elteren 2</h3>
+                                        <div class="join-form-row">
+                                            <div class="join-form-group">
+                                                <label id="lbl-family-parent2-nom" for="FamilyParent2Nom">Numm *</label>
+                                                <input type="text" id="FamilyParent2Nom" name="FamilyParent2Nom" autocomplete="family-name">
+                                            </div>
+                                            <div class="join-form-group">
+                                                <label id="lbl-family-parent2-prenom" for="FamilyParent2Prenom">Virnumm *</label>
+                                                <input type="text" id="FamilyParent2Prenom" name="FamilyParent2Prenom" autocomplete="given-name">
+                                            </div>
+                                        </div>
+                                        <div class="join-form-row">
+                                            <div class="join-form-group">
+                                                <label id="lbl-family-parent2-dob" for="FamilyParent2Dob">Gebuertsdatum *</label>
+                                                <input type="text" id="FamilyParent2Dob" name="FamilyParent2Dob" placeholder="01.01.2010" inputmode="numeric" pattern="[0-9]{2}\.[0-9]{2}\.[0-9]{4}">
+                                            </div>
+                                            <div class="join-form-group">
+                                                <label id="lbl-family-parent2-email" for="FamilyParent2Email">E-Mail *</label>
+                                                <input type="email" id="FamilyParent2Email" name="FamilyParent2Email" autocomplete="email">
+                                            </div>
+                                        </div>
+                                        <div class="join-form-group">
+                                            <label id="lbl-family-parent2-gsm" for="FamilyParent2Gsm">GSM *</label>
+                                            <input type="text" id="FamilyParent2Gsm" name="FamilyParent2Gsm" autocomplete="tel">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+ 
                             <div class="join-form-group">
-                                <label id="lbl-nat" for="Nationalite">NATIONALITE *</label>
+                                <label id="lbl-nat" for="Nationalite">Nationalitéit *</label>
                                 <input type="text" id="Nationalite" name="Nationalite" autocomplete="country-name" required>
                             </div>
 
                             <div class="join-form-group">
-                                <label id="lbl-cns" for="CNS">MATRICULE CNS (5 CHIFFRES) *</label>
+                                <label id="lbl-cns" for="CNS">Matricule CNS *</label>
                                 <input type="text" id="CNS" name="CNS" maxlength="5" inputmode="numeric" pattern="[0-9]{5}" required>
                                 <span id="cns-prefix-display" class="join-helper-text" aria-live="polite"></span>
                             </div>
 
                             <div class="join-form-row">
                                 <div class="join-form-group">
-                                    <label id="lbl-medico" for="Medico">MEDICO? *</label>
+                                    <label id="lbl-medico" for="Medico">Medico *</label>
                                     <select id="Medico" name="Medico" required>
                                         <option value="Non">Non</option>
                                         <option value="Oui">Oui</option>
                                     </select>
                                 </div>
                                 <div class="join-form-group">
-                                    <label id="lbl-licence" for="Licence">LICENCE? *</label>
+                                    <label id="lbl-licence" for="Licence">Lizenz *</label>
                                     <select id="Licence" name="Licence" required>
                                         <option value="Non">Non</option>
                                         <option value="Oui">Oui</option>
@@ -162,43 +269,43 @@
                             </div>
 
                             <div class="join-form-group">
-                                <label id="lbl-club" for="AncienClub">ANCIEN CLUB (OU &quot;NEANT&quot;) *</label>
+                                <label id="lbl-club" for="AncienClub">Ale Veräin *</label>
                                 <input type="text" id="AncienClub" name="AncienClub" required>
                             </div>
 
                             <div id="u7-section">
                                 <input type="checkbox" id="U7Cert" name="U7Cert" value="Oui">
-                                <label for="U7Cert" id="lbl-u7">U7 : CERTIFICAT MEDICAL D'APTITUDE SPORTIVE OBLIGATOIRE (ETABLI PAR LE MEDECIN TRAITANT).</label>
+                                <label for="U7Cert" id="lbl-u7">U7: medezineschen Zertifikat obligatoresch</label>
                             </div>
 
                             <div class="join-form-group">
-                                <label id="lbl-strasse" for="Strasse">STRASSE *</label>
+                                <label id="lbl-strasse" for="Strasse">Strooss *</label>
                                 <input type="text" id="Strasse" name="Strasse" autocomplete="street-address" required>
                             </div>
 
                             <div class="join-form-row">
                                 <div class="join-form-group">
-                                    <label id="lbl-postcode" for="Postcode">POSTCODE *</label>
+                                    <label id="lbl-postcode" for="Postcode">Postcode *</label>
                                     <input type="text" id="Postcode" name="Postcode" autocomplete="postal-code" required>
                                 </div>
                                 <div class="join-form-group">
-                                    <label id="lbl-ortschaft" for="Ortschaft">ORTSCHAFT *</label>
+                                    <label id="lbl-ortschaft" for="Ortschaft">Uertschaft *</label>
                                     <input type="text" id="Ortschaft" name="Ortschaft" autocomplete="address-level2" required>
                                 </div>
                             </div>
 
                             <div class="join-form-group">
-                                <label id="lbl-email" for="Email">EMAIL *</label>
+                                <label id="lbl-email" for="Email">E-Mail *</label>
                                 <input type="email" id="Email" name="Email" autocomplete="email" required>
                             </div>
 
                             <div class="join-form-row">
                                 <div class="join-form-group">
-                                    <label id="lbl-gsm1" for="GSM1">TEL MOBILE / GSM 1 *</label>
+                                    <label id="lbl-gsm1" for="GSM1">GSM 1 *</label>
                                     <input type="text" id="GSM1" name="GSM1" autocomplete="tel" required>
                                 </div>
                                 <div class="join-form-group">
-                                    <label id="lbl-gsm2" for="GSM2">TEL MOBILE / GSM 2 (OPTIONNEL)</label>
+                                    <label id="lbl-gsm2" for="GSM2">GSM 2</label>
                                     <input type="text" id="GSM2" name="GSM2" autocomplete="tel">
                                 </div>
                             </div>
@@ -220,7 +327,7 @@
                                 <label for="AccuracyConsent" id="lbl-accuracy">Bestätegung: Ech confirméiere d'Richtegkeet vun menge Donnéeën.</label>
                             </div>
 
-                            <button type="submit" id="submitBtn" class="join-submit-button">SEND / ABSCHICKEN</button>
+                            <button type="submit" id="submitBtn" class="join-submit-button">Schécken</button>
                         </form>
 
                         <div id="success-box" aria-live="polite">
@@ -300,27 +407,162 @@
         </main>
     </div>
 
-    <script src="script.js"></script>
+    <script src="js/site-config.js"></script>
+    <script src="script.js?v=20260808joinfix"></script>
     <script>
     const MERSCH75_WEB3FORMS_MAIN_KEY = '15e3cc53-6864-47dd-bfaf-332cb4ca45e5';
     const MERSCH75_WEB3FORMS_MAX_KEY = 'f748489b-abc6-4e37-bb82-860a82c91f4e';
+    const MERSCH75_WEB3FORMS_ENDPOINT = window.M75_CONFIG && window.M75_CONFIG.WEB3FORMS_ENDPOINT;
     const MERSCH75_LICENSE_LINK = 'https://submit.paperless.io/f/s4zaWnzHBwxcPK8jAkkbjPpVC1giUfr7';
     const MERSCH75_LICENSE_PASSWORD = 'FIhNvLi26';
-    const MERSCH75_UI_TEXTS = {
+    const MERSCH75_JOIN_QUIZ_CONTENT = {
         lu: {
-            nom: 'Numm *', prenom: 'Virnumm *', dob: 'Gebuertsdatum *', mineur: 'Mannerjäreg', cat: 'FLH Kategorie', role: 'Roll / Funktioun *', parent: 'Elengerzéiend *', tuteur1: 'Erzéiungsberechtegten 1 *', tuteur2: 'Erzéiungsberechtegten 2 *', nat: 'Nationalitéit *', cns: 'Matricule CNS *', medico: 'Medico *', licence: 'Lizenz *', club: 'Ale Veräin *', u7: 'U7 medezineschen Zertifikat obligatoresch', strasse: 'Strooss *', postcode: 'Postcode *', ortschaft: 'Uertschaft *', email: 'E-Mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Schécken', sending: 'Gëtt geschéckt...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Deng Umeldung gouf erfollegräich iwwermëttelt.', successNote: 'Du kriss eng Bestätegung per E-Mail.', oui: 'JO', non: 'NEE', joueur: 'Spiller / Spillerin', officiel: 'Offiziell Persoun', arbitre: 'Arbitter', parent_non: 'NEE (2 Erzéiungsberechtegter)', parent_oui: 'JO (1 Erzéiungsberechtegten)', legalRequired: 'Liest an akzeptéiert w.e.g. déi allgemeng Bedéngungen an den Dateschutz.', flhRequired: 'Bestätegt w.e.g. d\'Iwwermëttlung un flh.lu fir d\'Lizenz.', accuracyRequired: 'Bestätegt w.e.g. d\'Richtegkeet vun den Donnéeën.'
+            quizKicker: 'Schnellstarter',
+            quizTitle: 'Wéi wëlls du starten?',
+            quizIntro: 'Wiel eng Situatioun. Dëst hëlleft, den richtege Deel vum Formular méi schnell ze fannen.',
+           playerLabel: 'Ech wëll mech als Spiller umellen',
+            playerCopy: 'Fir Spiller:innen, Jugendlecher oder Familljen',
+            playerTitle: 'Spilleintritt',
+           playerSummary: 'Wiel dës Optioun, wann du selwer spille wëlls oder e Kand umelle wëlls. Mir riichten d\'Umeldung op dëse Wee aus.',
+           playerBullets: ['Profil Spiller:in', 'FLH-Kategorie gëtt automatesch ergänzt', 'Fir Mannerjäreg gesäis du d\'Elterefelder direkt'],
+            officialLabel: 'Ech sinn Offiziell',
+           officialCopy: 'Fir Trainer, Teamleitung oder Chrono am Dësch',
+            officialTitle: 'Offiziell / Teamleitung',
+           officialSummary: 'Wiel dës Optioun, wann du als verantwortlech Persoun, Trainer oder Teamleitung un der Umeldung deelhëlls.',
+           officialBullets: ['Offiziell Roll gëtt direkt virbereet', 'Déi néideg Kontakt- a Lizenzangaben bleiwen sichtbar', 'D\'Umeldung passt sech un d\'Vereinsvisioun un'],
+           refereeLabel: 'Ech si Schiedsrichter',
+            refereeCopy: 'Fir d\'Rolle als Arbitter',
+            refereeTitle: 'Schiedsrichter',
+           refereeSummary: 'Wiel dës Optioun, wann du dech als Schiedsrichter umëlls. D\'Rolle gëtt direkt passend markéiert.',
+            refereeBullets: ['Roll Schiedsrichter gëtt virbereet', 'D\'Angaben bleiwen einfach a verständlech', 'D\'Lizenz- a Kontaktfelder bleiwen sichtbar'],
+           familyLabel: 'Ech si Famill / Begleeder',
+            familyCopy: 'Fir Elteren, Pfleeger oder Begleeder',
+            familyTitle: 'Famill / Begleitung',
+           familySummary: 'Wiel dës Optioun, wann du eng Umeldung fir e Kand oder e Begleeder maachen wëlls. D\'Elteren- a Kontaktfelder bleiwen direkt sichtbar.',
+           familyBullets: ['Famill- a Pﬂeger-/Tutordaten bleiwen kloer', 'Déi relevante Felder fir Mannerjäreg ginn ënnersträicht', 'D\'Umeldung bleift trotzdem am normale Formular'],
+            role: 'Joueur / Joueuse'
         },
         fr: {
-            nom: 'Nom *', prenom: 'Prénom *', dob: 'Date de naissance *', mineur: 'Mineur', cat: 'Catégorie FLH', role: 'Rôle / Fonction *', parent: 'Parent isolé *', tuteur1: 'Tuteur 1 *', tuteur2: 'Tuteur 2 *', nat: 'Nationalité *', cns: 'Matricule CNS *', medico: 'Médico *', licence: 'Licence *', club: 'Ancien club *', u7: 'U7 certificat médical obligatoire', strasse: 'Rue *', postcode: 'Code postal *', ortschaft: 'Localité *', email: 'E-mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Envoyer', sending: 'Envoi...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Inscription envoyée.', successNote: 'Vous recevrez une confirmation par e-mail.', oui: 'OUI', non: 'NON', joueur: 'Joueur / Joueuse', officiel: 'Officiel(le)', arbitre: 'Arbitre', parent_non: 'NON (2 tuteurs)', parent_oui: 'OUI (1 tuteur)', legalRequired: 'Veuillez lire et accepter les conditions générales et la protection des données.', flhRequired: 'Veuillez confirmer la transmission à flh.lu pour la licence.', accuracyRequired: 'Veuillez confirmer l\'exactitude des données.'
+            quizKicker: 'Démarrage rapide',
+            quizTitle: 'Quel chemin te convient le mieux ?',
+            quizIntro: 'Choisis une situation. Cela permet de trouver plus rapidement la bonne partie du formulaire.',
+            playerLabel: 'Je veux jouer',
+            playerCopy: 'Pour joueuses, joueurs, jeunes ou familles',
+            playerTitle: 'Inscription joueur',
+            playerSummary: 'Choisis cette option si tu souhaites jouer toi-même ou inscrire un enfant. Le parcours est alors orienté vers cette voie.',
+            playerBullets: ['Profil joueur', 'Catégorie FLH complétée automatiquement', 'Les champs parents apparaissent directement pour les mineurs'],
+            officialLabel: 'Je suis officiel',
+            officialCopy: 'Pour entraîneurs, responsables ou encadrement',
+            officialTitle: 'Officiel / encadrement',
+            officialSummary: 'Choisis cette option si tu participes à l’inscription en tant que responsable, entraîneur ou membre de l’encadrement.',
+            officialBullets: ['Le rôle officiel est préparé directement', 'Les informations de contact et de licence restent visibles', 'L’inscription s’adapte à la logique du club'],
+            refereeLabel: 'Je suis arbitre',
+            refereeCopy: 'Pour la fonction d’arbitre',
+            refereeTitle: 'Arbitre',
+            refereeSummary: 'Choisis cette option si tu t’inscris en tant qu’arbitre. Le rôle est alors marqué correctement.',
+            refereeBullets: ['Le rôle arbitre est préparé', 'Les renseignements restent simples et clairs', 'Les champs licence et contact restent visibles'],
+            familyLabel: 'Je suis famille / accompagnement',
+            familyCopy: 'Pour parents, tuteurs ou accompagnants',
+            familyTitle: 'Famille / accompagnement',
+            familySummary: 'Choisis cette option si tu accompagnes une inscription pour un enfant ou un proche. Les champs parents et contacts restent directement visibles.',
+            familyBullets: ['Les informations familiales restent claires', 'Les champs utiles aux mineurs sont mis en évidence', 'L’inscription reste dans le formulaire standard'],
+            role: 'Joueur / Joueuse'
         },
         de: {
-            nom: 'Name *', prenom: 'Vorname *', dob: 'Geburtsdatum *', mineur: 'Minderjährig', cat: 'FLH Kategorie', role: 'Rolle / Funktion *', parent: 'Alleinerziehend *', tuteur1: 'Erziehungsberechtigter 1 *', tuteur2: 'Erziehungsberechtigter 2 *', nat: 'Nationalität *', cns: 'CNS-Matrikelnummer *', medico: 'Medico *', licence: 'Lizenz *', club: 'Ehemaliger Verein *', u7: 'U7 ärztliches Attest obligatorisch', strasse: 'Straße *', postcode: 'Postleitzahl *', ortschaft: 'Ortschaft *', email: 'E-Mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Senden', sending: 'Senden...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Anmeldung gesendet.', successNote: 'Du erhältst eine Bestätigung per E-Mail.', oui: 'JA', non: 'NEIN', joueur: 'Spieler / Spielerin', officiel: 'Offizielle Person', arbitre: 'Schiedsrichter', parent_non: 'NEIN (2 Erziehungsberechtigte)', parent_oui: 'JA (1 Erziehungsberechtigter)', legalRequired: 'Bitte die allgemeinen Bedingungen und den Datenschutz lesen und akzeptieren.', flhRequired: 'Bitte die Übermittlung an flh.lu für die Lizenz bestätigen.', accuracyRequired: 'Bitte die Richtigkeit der Angaben bestätigen.'
+            quizKicker: 'Schnellstarter',
+            quizTitle: 'Wo möchtest du starten?',
+            quizIntro: 'Wähle eine Situation. So findest du schneller den passenden Teil des Formulars.',
+            playerLabel: 'Ich möchte spielen',
+            playerCopy: 'Für Spieler:innen, Jugendliche oder Familien',
+            playerTitle: 'Spielereintritt',
+            playerSummary: 'Wähle diese Option, wenn du selbst spielen möchtest oder ein Kind anmelden willst. Der Anmeldeweg wird dann gezielt auf diesen Weg ausgerichtet.',
+            playerBullets: ['Spieler- oder Spielerinnenprofil', 'FLH-Kategorie wird automatisch ergänzt', 'Für Minderjährige zeigen sich die Elternfelder direkt'],
+            officialLabel: 'Ich bin Offiziell',
+            officialCopy: 'Für Trainer, Verantwortliche oder Teamleitung',
+            officialTitle: 'Offiziell / Teamleitung',
+            officialSummary: 'Wähle diese Option, wenn du als Verantwortliche Person, Trainer oder im Teammanagement an der Anmeldung beteiligt bist.',
+            officialBullets: ['Die offizielle Rolle wird vorbereitet', 'Die nötigen Kontakt- und Lizenzangaben bleiben sichtbar', 'Die Anmeldung passt sich an die Vereinssicht an'],
+            refereeLabel: 'Ich bin Schiedsrichter',
+            refereeCopy: 'Für die Rolle als Schiedsrichter',
+            refereeTitle: 'Schiedsrichter',
+            refereeSummary: 'Wähle diese Option, wenn du dich als Schiedsrichter anmeldest. Die Rolle wird direkt passend markiert.',
+            refereeBullets: ['Rolle Schiedsrichter wird vorbereitet', 'Die Angaben bleiben einfach und verständlich', 'Die Lizenz- und Kontaktfelder bleiben sichtbar'],
+            familyLabel: 'Ich bin Familie / Begleitung',
+            familyCopy: 'Für Eltern, Vormünder oder Begleitpersonen',
+            familyTitle: 'Familie / Begleitung',
+            familySummary: 'Wähle diese Option, wenn du eine Anmeldung für ein Kind oder einen Angehörigen begleitest. Die Eltern- und Kontaktfelder bleiben direkt sichtbar.',
+            familyBullets: ['Familien- und Vormundschaftsdaten bleiben klar', 'Die relevanten Felder für Minderjährige werden hervorgehoben', 'Die Anmeldung bleibt trotzdem im normalen Formular'],
+            role: 'Joueur / Joueuse'
         },
         en: {
-            nom: 'Last name *', prenom: 'First name *', dob: 'Date of birth *', mineur: 'Minor', cat: 'FLH category', role: 'Role / Function *', parent: 'Single parent *', tuteur1: 'Guardian 1 *', tuteur2: 'Guardian 2 *', nat: 'Nationality *', cns: 'CNS number *', medico: 'Medical check *', licence: 'Licence *', club: 'Former club *', u7: 'U7 medical certificate required', strasse: 'Street *', postcode: 'Postcode *', ortschaft: 'City *', email: 'Email *', gsm1: 'Mobile 1 *', gsm2: 'Mobile 2', send: 'Submit', sending: 'Sending...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Registration sent.', successNote: 'You will receive a confirmation by email.', oui: 'YES', non: 'NO', joueur: 'Player', officiel: 'Official', arbitre: 'Referee', parent_non: 'NO (2 guardians)', parent_oui: 'YES (1 guardian)', legalRequired: 'Please read and accept the terms and conditions and data protection.', flhRequired: 'Please confirm the transfer to flh.lu for the licence.', accuracyRequired: 'Please confirm the accuracy of the data.'
+            quizKicker: 'Quick start',
+            quizTitle: 'Where do you want to start?',
+            quizIntro: 'Choose a situation. This helps you quickly find the right part of the form.',
+            playerLabel: 'I want to play',
+            playerCopy: 'For players, youth or families',
+            playerTitle: 'Player registration',
+            playerSummary: 'Choose this option if you want to play yourself or register a child. The path is then tailored to this direction.',
+            playerBullets: ['Player profile', 'FLH category added automatically', 'Parent fields appear directly for minors'],
+            officialLabel: 'I am an official',
+            officialCopy: 'For coaches, organisers or team management',
+            officialTitle: 'Official / management',
+            officialSummary: 'Choose this option if you are taking part in the registration as a responsible person, coach or member of the team management.',
+            officialBullets: ['Official role is prepared directly', 'Contact and licence details remain visible', 'The registration adapts to the club view'],
+            refereeLabel: 'I am a referee',
+            refereeCopy: 'For the role of referee',
+            refereeTitle: 'Referee',
+            refereeSummary: 'Choose this option if you are registering as a referee. The role is then marked correctly.',
+            refereeBullets: ['Referee role is prepared', 'The information stays simple and clear', 'Licence and contact fields remain visible'],
+            familyLabel: 'I am family / support',
+            familyCopy: 'For parents, guardians or companions',
+            familyTitle: 'Family / support',
+            familySummary: 'Choose this option if you are accompanying a registration for a child or a relative. The parent and contact fields remain directly visible.',
+            familyBullets: ['Family details stay clear', 'The relevant fields for minors are highlighted', 'The registration remains within the standard form'],
+            role: 'Joueur / Joueuse'
         },
         pt: {
-            nom: 'Apelido *', prenom: 'Nome próprio *', dob: 'Data de nascimento *', mineur: 'Menor', cat: 'Categoria FLH', role: 'Função *', parent: 'Encarregado isolado *', tuteur1: 'Encarregado 1 *', tuteur2: 'Encarregado 2 *', nat: 'Nacionalidade *', cns: 'Número CNS *', medico: 'Exame médico *', licence: 'Licença *', club: 'Clube anterior *', u7: 'U7 certificado médico obrigatório', strasse: 'Rua *', postcode: 'Código postal *', ortschaft: 'Localidade *', email: 'E-mail *', gsm1: 'Telemóvel 1 *', gsm2: 'Telemóvel 2', send: 'Enviar', sending: 'A enviar...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Inscrição enviada.', successNote: 'Receberá uma confirmação por e-mail.', oui: 'SIM', non: 'NÃO', joueur: 'Jogador / Jogadora', officiel: 'Oficial', arbitre: 'Árbitro', parent_non: 'NÃO (2 encarregados)', parent_oui: 'SIM (1 encarregado)', legalRequired: 'Por favor, leia e aceite os termos e condições e a proteção de dados.', flhRequired: 'Por favor, confirme o envio para flh.lu para a licença.', accuracyRequired: 'Por favor, confirme a exatidão dos dados.'
+            quizKicker: 'Início rápido',
+            quizTitle: 'Onde queres começar?',
+            quizIntro: 'Escolhe uma situação. Isto ajuda-te a encontrar mais rapidamente a parte certa do formulário.',
+            playerLabel: 'Quero jogar',
+            playerCopy: 'Para jogadores, jovens ou famílias',
+            playerTitle: 'Inscrição de jogador',
+            playerSummary: 'Escolhe esta opção se quiseres jogar tu próprio ou registar uma criança. O percurso é então orientado para esta via.',
+            playerBullets: ['Perfil de jogador', 'Categoria FLH completada automaticamente', 'Os campos dos pais aparecem diretamente para menores'],
+            officialLabel: 'Sou oficial',
+            officialCopy: 'Para treinadores, responsáveis ou direção',
+            officialTitle: 'Oficial / direção',
+            officialSummary: 'Escolhe esta opção se participares na inscrição como pessoa responsável, treinador ou membro da direção.',
+            officialBullets: ['O papel oficial é preparado diretamente', 'Os dados de contacto e licença permanecem visíveis', 'O registo adapta-se à lógica do clube'],
+            refereeLabel: 'Sou árbitro',
+            refereeCopy: 'Para a função de árbitro',
+            refereeTitle: 'Árbitro',
+            refereeSummary: 'Escolhe esta opção se te registares como árbitro. O papel é então marcado corretamente.',
+            refereeBullets: ['O papel de árbitro é preparado', 'As informações permanecem simples e claras', 'Os campos licença e contacto permanecem visíveis'],
+            familyLabel: 'Sou família / acompanhamento',
+            familyCopy: 'Para pais, tutores ou acompanhantes',
+            familyTitle: 'Família / acompanhamento',
+            familySummary: 'Escolhe esta opção se estiveres a acompanhar um registo para uma criança ou um familiar. Os campos dos pais e contactos permanecem diretamente visíveis.',
+            familyBullets: ['Os dados familiares permanecem claros', 'Os campos relevantes para menores são destacados', 'O registo permanece no formulário padrão'],
+            role: 'Joueur / Joueuse'
+        }
+    };
+    let currentJoinQuiz = 'player';
+    const MERSCH75_UI_TEXTS = {
+        lu: {
+            nom: 'Numm *', prenom: 'Virnumm *', dob: 'Gebuertsdatum *', mineur: 'Mannerjäreg', cat: 'FLH Kategorie', role: 'Roll / Funktioun *', parent: 'Elengerzéiend *', tuteur1: 'Erzéiungsberechtegten 1 *', tuteur2: 'Erzéiungsberechtegten 2 *', nat: 'Nationalitéit *', cns: 'Matricule CNS *', cnsPrefix: 'Format CNS:', medico: 'Medico *', licence: 'Lizenz *', club: 'Ale Veräin *', u7: 'U7 medezineschen Zertifikat obligatoresch', strasse: 'Strooss *', postcode: 'Postcode *', ortschaft: 'Uertschaft *', email: 'E-Mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Schécken', sending: 'Gëtt geschéckt...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Deng Umeldung gouf erfollegräich iwwermëttelt.', successNote: 'Du kriss eng Bestätegung per E-Mail.', oui: 'JO', non: 'NEE', joueur: 'Spiller / Spillerin', officiel: 'Offiziell Persoun', arbitre: 'Arbitter', parent_non: 'NEE (2 Erzéiungsberechtegter)', parent_oui: 'JO (1 Erzéiungsberechtegten)', familyMode: 'ZUSÄTZLICHE FAMILIENANMELDUNG', familyModeNone: 'Keng zousätzlech Familienanmeldung', familyModeOne: 'Ein Elterteil wëll och spillen', familyModeTwo: 'Beide Elteren wëllen och spillen', familyNote: 'Fëllt w.e.g. d\'Donnéeën vun den zousätzlechen Elteren aus.', familyParent1Title: 'Elteren 1', familyParent2Title: 'Elteren 2', familyParentNom: 'Numm *', familyParentPrenom: 'Virnumm *', familyParentDob: 'Gebuertsdatum *', familyParentEmail: 'E-Mail *', familyParentGsm: 'GSM *', legalRequired: 'Liest an akzeptéiert w.e.g. déi allgemeng Bedéngungen an den Dateschutz.', flhRequired: 'Bestätegt w.e.g. d\'Iwwermëttlung un flh.lu fir d\'Lizenz.', accuracyRequired: 'Bestätegt w.e.g. d\'Richtegkeet vun den Donnéeën.'
+        },
+        fr: {
+            nom: 'Nom *', prenom: 'Prénom *', dob: 'Date de naissance *', mineur: 'Mineur', cat: 'Catégorie FLH', role: 'Rôle / Fonction *', parent: 'Parent isolé *', tuteur1: 'Tuteur 1 *', tuteur2: 'Tuteur 2 *', nat: 'Nationalité *', cns: 'Matricule CNS *', cnsPrefix: 'Format CNS :', medico: 'Médico *', licence: 'Licence *', club: 'Ancien club *', u7: 'U7 certificat médical obligatoire', strasse: 'Rue *', postcode: 'Code postal *', ortschaft: 'Localité *', email: 'E-mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Envoyer', sending: 'Envoi...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Inscription envoyée.', successNote: 'Vous recevrez une confirmation par e-mail.', oui: 'OUI', non: 'NON', joueur: 'Joueur / Joueuse', officiel: 'Officiel(le)', arbitre: 'Arbitre', parent_non: 'NON (2 tuteurs)', parent_oui: 'OUI (1 tuteur)', familyMode: 'ANMELDURE SUPPLÉMENTAIRE DE LA FAMILLE', familyModeNone: 'Aucune inscription familiale supplémentaire', familyModeOne: 'Un parent souhaite aussi jouer', familyModeTwo: 'Les deux parents souhaitent aussi jouer', familyNote: 'Veuillez compléter les données des parents supplémentaires.', familyParent1Title: 'Parent 1', familyParent2Title: 'Parent 2', familyParentNom: 'NOM *', familyParentPrenom: 'PRÉNOM *', familyParentDob: 'DATE DE NAISSANCE *', familyParentEmail: 'EMAIL *', familyParentGsm: 'GSM *', legalRequired: 'Veuillez lire et accepter les conditions générales et la protection des données.', flhRequired: 'Veuillez confirmer la transmission à flh.lu pour la licence.', accuracyRequired: 'Veuillez confirmer l\'exactitude des données.'
+        },
+        de: {
+            nom: 'Name *', prenom: 'Vorname *', dob: 'Geburtsdatum *', mineur: 'Minderjährig', cat: 'FLH Kategorie', role: 'Rolle / Funktion *', parent: 'Alleinerziehend *', tuteur1: 'Erziehungsberechtigter 1 *', tuteur2: 'Erziehungsberechtigter 2 *', nat: 'Nationalität *', cns: 'CNS-Matrikelnummer *', cnsPrefix: 'Format CNS:', medico: 'Medico *', licence: 'Lizenz *', club: 'Ehemaliger Verein *', u7: 'U7 ärztliches Attest obligatorisch', strasse: 'Straße *', postcode: 'Postleitzahl *', ortschaft: 'Ortschaft *', email: 'E-Mail *', gsm1: 'GSM 1 *', gsm2: 'GSM 2', send: 'Senden', sending: 'Senden...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Anmeldung gesendet.', successNote: 'Du erhältst eine Bestätigung per E-Mail.', oui: 'JA', non: 'NEIN', joueur: 'Spieler / Spielerin', officiel: 'Offizielle Person', arbitre: 'Schiedsrichter', parent_non: 'NEIN (2 Erziehungsberechtigte)', parent_oui: 'JA (1 Erziehungsberechtigter)', familyMode: 'ZUSÄTZLICHE FAMILIENANMELDUNG', familyModeNone: 'Keine zusätzliche Familienanmeldung', familyModeOne: 'Ein Elternteil möchte auch spielen', familyModeTwo: 'Beide Elternteile möchten auch spielen', familyNote: 'Bitte ergänze die Daten der zusätzlichen Elternteile.', familyParent1Title: 'Elternteil 1', familyParent2Title: 'Elternteil 2', familyParentNom: 'NAME *', familyParentPrenom: 'VORNAME *', familyParentDob: 'GEBURTSDATUM *', familyParentEmail: 'E-MAIL *', familyParentGsm: 'GSM *', legalRequired: 'Bitte die allgemeinen Bedingungen und den Datenschutz lesen und akzeptieren.', flhRequired: 'Bitte die Übermittlung an flh.lu für die Lizenz bestätigen.', accuracyRequired: 'Bitte die Richtigkeit der Angaben bestätigen.'
+        },
+        en: {
+            nom: 'Last name *', prenom: 'First name *', dob: 'Date of birth *', mineur: 'Minor', cat: 'FLH category', role: 'Role / Function *', parent: 'Single parent *', tuteur1: 'Guardian 1 *', tuteur2: 'Guardian 2 *', nat: 'Nationality *', cns: 'CNS number *', cnsPrefix: 'CNS format:', medico: 'Medical check *', licence: 'Licence *', club: 'Former club *', u7: 'U7 medical certificate required', strasse: 'Street *', postcode: 'Postcode *', ortschaft: 'City *', email: 'Email *', gsm1: 'Mobile 1 *', gsm2: 'Mobile 2', send: 'Submit', sending: 'Sending...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Registration sent.', successNote: 'You will receive a confirmation by email.', oui: 'YES', non: 'NO', joueur: 'Player', officiel: 'Official', arbitre: 'Referee', parent_non: 'NO (2 guardians)', parent_oui: 'YES (1 guardian)', familyMode: 'ADDITIONAL FAMILY REGISTRATION', familyModeNone: 'No additional family registration', familyModeOne: 'One parent also wants to play', familyModeTwo: 'Both parents also want to play', familyNote: 'Please complete the details of the additional parents.', familyParent1Title: 'Parent 1', familyParent2Title: 'Parent 2', familyParentNom: 'LAST NAME *', familyParentPrenom: 'FIRST NAME *', familyParentDob: 'DATE OF BIRTH *', familyParentEmail: 'EMAIL *', familyParentGsm: 'MOBILE *', legalRequired: 'Please read and accept the terms and conditions and data protection.', flhRequired: 'Please confirm the transfer to flh.lu for the licence.', accuracyRequired: 'Please confirm the accuracy of the data.'
+        },
+        pt: {
+            nom: 'Apelido *', prenom: 'Nome próprio *', dob: 'Data de nascimento *', mineur: 'Menor', cat: 'Categoria FLH', role: 'Função *', parent: 'Encarregado isolado *', tuteur1: 'Encarregado 1 *', tuteur2: 'Encarregado 2 *', nat: 'Nacionalidade *', cns: 'Número CNS *', cnsPrefix: 'Formato CNS:', medico: 'Exame médico *', licence: 'Licença *', club: 'Clube anterior *', u7: 'U7 certificado médico obrigatório', strasse: 'Rua *', postcode: 'Código postal *', ortschaft: 'Localidade *', email: 'E-mail *', gsm1: 'Telemóvel 1 *', gsm2: 'Telemóvel 2', send: 'Enviar', sending: 'A enviar...', successTitle: 'Merci / Danke / Thank you / Obrigado!', successText: 'Inscrição enviada.', successNote: 'Receberá uma confirmação por e-mail.', oui: 'SIM', non: 'NÃO', joueur: 'Jogador / Jogadora', officiel: 'Oficial', arbitre: 'Árbitro', parent_non: 'NÃO (2 encarregados)', parent_oui: 'SIM (1 encarregado)', familyMode: 'INSCRIÇÃO FAMILIAR ADICIONAL', familyModeNone: 'Nenhuma inscrição familiar adicional', familyModeOne: 'Um dos pais também quer jogar', familyModeTwo: 'Os dois pais também querem jogar', familyNote: 'Por favor, complete os dados dos pais adicionais.', familyParent1Title: 'Encarregado 1', familyParent2Title: 'Encarregado 2', familyParentNom: 'APELIDO *', familyParentPrenom: 'NOME PRÓPRIO *', familyParentDob: 'DATA DE NASCIMENTO *', familyParentEmail: 'E-MAIL *', familyParentGsm: 'TELEMÓVEL *', legalRequired: 'Por favor, leia e aceite os termos e condições e a proteção de dados.', flhRequired: 'Por favor, confirme o envio para flh.lu para a licença.', accuracyRequired: 'Por favor, confirme a exatidão dos dados.'
         }
     };
     const MERSCH75_LEGAL_TEXTS = {
@@ -341,7 +583,26 @@
         }
     };
 
-    let currentLang = 'lu';
+    function getPreferredLanguage() {
+        const activeButton = document.querySelector('.join-lang-button.is-active');
+        if (activeButton && MERSCH75_UI_TEXTS[activeButton.dataset.lang]) {
+            return activeButton.dataset.lang;
+        }
+
+        const documentLang = document.documentElement.lang && MERSCH75_UI_TEXTS[document.documentElement.lang];
+        if (documentLang) {
+            return document.documentElement.lang;
+        }
+
+        const browserLang = (navigator.language || 'lu').slice(0, 2).toLowerCase();
+        if (MERSCH75_UI_TEXTS[browserLang]) {
+            return browserLang;
+        }
+
+        return 'lu';
+    }
+
+    let currentLang = getPreferredLanguage();
 
     function getValue(id) {
         return document.getElementById(id).value.trim();
@@ -406,13 +667,14 @@
     function updateCnsDisplay() {
         const dob = document.getElementById('DateNaissance').value;
         const cns = document.getElementById('CNS').value.trim();
+        const ui = MERSCH75_UI_TEXTS[currentLang] || MERSCH75_UI_TEXTS.lu;
 
         if (dob.length === 10) {
             const parts = dob.split('.');
             const formattedDob = parts[2] + '.' + parts[1] + '.' + parts[0];
-            document.getElementById('cns-prefix-display').innerText = 'Format CNS: ' + formattedDob + '.' + (cns !== '' ? cns : 'xxxxx');
+            document.getElementById('cns-prefix-display').innerText = ui.cnsPrefix + ' ' + formattedDob + '.' + (cns !== '' ? cns : 'xxxxx');
         } else {
-            document.getElementById('cns-prefix-display').innerText = 'Format CNS: yyyy.mm.dd.xxxxx';
+            document.getElementById('cns-prefix-display').innerText = ui.cnsPrefix + ' yyyy.mm.dd.xxxxx';
         }
     }
 
@@ -459,10 +721,137 @@
         });
     }
 
+    function toggleFamilyRegistrationFields() {
+        const mode = document.getElementById('FamilyRegistrationMode').value || 'NONE';
+        const details = document.getElementById('family-registration-details');
+        const parent1Card = document.getElementById('family-parent-1-card');
+        const parent2Card = document.getElementById('family-parent-2-card');
+        const showParent1 = mode === 'PARENT1' || mode === 'PARENT2';
+        const showParent2 = mode === 'PARENT2';
+
+        details.style.display = showParent1 ? 'block' : 'none';
+        parent1Card.style.display = showParent1 ? 'block' : 'none';
+        parent2Card.style.display = showParent2 ? 'block' : 'none';
+
+        const parent1Fields = ['FamilyParent1Nom', 'FamilyParent1Prenom', 'FamilyParent1Dob', 'FamilyParent1Email', 'FamilyParent1Gsm'];
+        const parent2Fields = ['FamilyParent2Nom', 'FamilyParent2Prenom', 'FamilyParent2Dob', 'FamilyParent2Email', 'FamilyParent2Gsm'];
+
+        parent1Fields.forEach(function(id) {
+            const field = document.getElementById(id);
+            if (field) {
+                field.required = showParent1;
+                if (!showParent1) {
+                    field.value = '';
+                }
+            }
+        });
+
+        parent2Fields.forEach(function(id) {
+            const field = document.getElementById(id);
+            if (field) {
+                field.required = showParent2;
+                if (!showParent2) {
+                    field.value = '';
+                }
+            }
+        });
+
+        const note = document.getElementById('family-registration-note');
+        if (note) {
+            note.style.display = showParent1 ? 'block' : 'none';
+        }
+    }
+
+    function getQuizOption(key) {
+        const content = MERSCH75_JOIN_QUIZ_CONTENT[currentLang] || MERSCH75_JOIN_QUIZ_CONTENT.lu;
+        if (key === 'official') {
+            return {
+                title: content.officialTitle,
+                summary: content.officialSummary,
+                bullets: content.officialBullets,
+                role: 'Officiel(le)'
+            };
+        }
+        if (key === 'referee') {
+            return {
+                title: content.refereeTitle,
+                summary: content.refereeSummary,
+                bullets: content.refereeBullets,
+                role: 'Arbitre'
+            };
+        }
+        if (key === 'family') {
+            return {
+                title: content.familyTitle,
+                summary: content.familySummary,
+                bullets: content.familyBullets,
+                role: 'Joueur / Joueuse'
+            };
+        }
+        return {
+            title: content.playerTitle,
+            summary: content.playerSummary,
+            bullets: content.playerBullets,
+            role: content.role
+        };
+    }
+
+    function updateJoinQuizUI() {
+        const content = MERSCH75_JOIN_QUIZ_CONTENT[currentLang] || MERSCH75_JOIN_QUIZ_CONTENT.lu;
+        document.getElementById('join-quiz-kicker').textContent = content.quizKicker;
+        document.getElementById('join-quiz-title').textContent = content.quizTitle;
+        document.getElementById('join-quiz-intro').textContent = content.quizIntro;
+        document.getElementById('join-quiz-player-label').textContent = content.playerLabel;
+        document.getElementById('join-quiz-player-copy').textContent = content.playerCopy;
+        document.getElementById('join-quiz-official-label').textContent = content.officialLabel;
+        document.getElementById('join-quiz-official-copy').textContent = content.officialCopy;
+        document.getElementById('join-quiz-referee-label').textContent = content.refereeLabel;
+        document.getElementById('join-quiz-referee-copy').textContent = content.refereeCopy;
+        document.getElementById('join-quiz-family-label').textContent = content.familyLabel;
+        document.getElementById('join-quiz-family-copy').textContent = content.familyCopy;
+        setJoinQuizSelection(currentJoinQuiz);
+    }
+
+    function setJoinQuizSelection(key) {
+        const quizKey = ['player', 'official', 'referee', 'family'].includes(key) ? key : 'player';
+        currentJoinQuiz = quizKey;
+
+        document.querySelectorAll('.join-quiz-option').forEach(function(button) {
+            const active = button.dataset.quizKey === quizKey;
+            button.classList.toggle('is-active', active);
+            button.setAttribute('aria-pressed', active ? 'true' : 'false');
+        });
+
+        const activeContent = getQuizOption(quizKey);
+        const summaryBadge = document.getElementById('join-quiz-summary-badge');
+        const summaryTitle = document.getElementById('join-quiz-summary-title');
+        const summaryCopy = document.getElementById('join-quiz-summary-copy');
+        const summaryList = document.getElementById('join-quiz-summary-list');
+
+        if (summaryBadge) summaryBadge.textContent = activeContent.title;
+        if (summaryTitle) summaryTitle.textContent = activeContent.title;
+        if (summaryCopy) summaryCopy.textContent = activeContent.summary;
+
+        if (summaryList) {
+            summaryList.innerHTML = '';
+            activeContent.bullets.forEach(function(item) {
+                const li = document.createElement('li');
+                li.textContent = item;
+                summaryList.appendChild(li);
+            });
+        }
+
+        const roleSelect = document.getElementById('Role');
+        if (roleSelect && activeContent.role) {
+            roleSelect.value = activeContent.role;
+        }
+    }
+
     function updateLang(lang) {
         currentLang = MERSCH75_UI_TEXTS[lang] ? lang : 'lu';
         const ui = MERSCH75_UI_TEXTS[currentLang];
         const legal = MERSCH75_LEGAL_TEXTS[currentLang];
+        document.documentElement.lang = currentLang;
 
         document.querySelectorAll('.join-lang-text').forEach(function(el) {
             el.classList.toggle('is-active', el.id === currentLang);
@@ -495,6 +884,20 @@
         document.getElementById('lbl-email').innerText = ui.email;
         document.getElementById('lbl-gsm1').innerText = ui.gsm1;
         document.getElementById('lbl-gsm2').innerText = ui.gsm2;
+        document.getElementById('lbl-family-mode').innerText = ui.familyMode;
+        document.getElementById('family-parent-1-title').innerText = ui.familyParent1Title;
+        document.getElementById('family-parent-2-title').innerText = ui.familyParent2Title;
+        document.getElementById('lbl-family-parent1-nom').innerText = ui.familyParentNom;
+        document.getElementById('lbl-family-parent1-prenom').innerText = ui.familyParentPrenom;
+        document.getElementById('lbl-family-parent1-dob').innerText = ui.familyParentDob;
+        document.getElementById('lbl-family-parent1-email').innerText = ui.familyParentEmail;
+        document.getElementById('lbl-family-parent1-gsm').innerText = ui.familyParentGsm;
+        document.getElementById('lbl-family-parent2-nom').innerText = ui.familyParentNom;
+        document.getElementById('lbl-family-parent2-prenom').innerText = ui.familyParentPrenom;
+        document.getElementById('lbl-family-parent2-dob').innerText = ui.familyParentDob;
+        document.getElementById('lbl-family-parent2-email').innerText = ui.familyParentEmail;
+        document.getElementById('lbl-family-parent2-gsm').innerText = ui.familyParentGsm;
+        document.getElementById('family-registration-note').innerText = ui.familyNote;
         document.getElementById('lbl-flh').innerText = legal.flhInfo;
         document.getElementById('lbl-accuracy').innerText = legal.accuracy;
         document.getElementById('legal-prefix').innerText = legal.legalPrefix;
@@ -518,8 +921,14 @@
         parent.options[0].text = ui.parent_non;
         parent.options[1].text = ui.parent_oui;
 
+        const familyMode = document.getElementById('FamilyRegistrationMode');
+        familyMode.options[0].text = ui.familyModeNone;
+        familyMode.options[1].text = ui.familyModeOne;
+        familyMode.options[2].text = ui.familyModeTwo;
+
         updateSuccessText(currentLang);
         updateConsentValidationMessages();
+        updateJoinQuizUI();
     }
 
     function buildJoinMessage(includeLicenseLines, messageLanguage) {
@@ -568,6 +977,16 @@
             lines.push(text.guardians + ': ' + getGuardianText());
         }
 
+        const familyMode = document.getElementById('FamilyRegistrationMode').value || 'NONE';
+        if (familyMode !== 'NONE') {
+            lines.push('----------------------------------------');
+            lines.push('ADDITIONAL FAMILY REGISTRATION: ' + familyMode);
+            lines.push('PARENT 1: ' + [getValue('FamilyParent1Nom'), getValue('FamilyParent1Prenom'), getValue('FamilyParent1Dob'), getValue('FamilyParent1Email'), getValue('FamilyParent1Gsm')].filter(Boolean).join(' | '));
+            if (familyMode === 'PARENT2') {
+                lines.push('PARENT 2: ' + [getValue('FamilyParent2Nom'), getValue('FamilyParent2Prenom'), getValue('FamilyParent2Dob'), getValue('FamilyParent2Email'), getValue('FamilyParent2Gsm')].filter(Boolean).join(' | '));
+            }
+        }
+
         lines.push('U7: ' + getCheckedValue('U7Cert'));
         lines.push(text.club + ': ' + getValue('AncienClub'));
         lines.push(text.medLicense + ': Med: ' + getValue('Medico') + ' / Liz: ' + getValue('Licence'));
@@ -606,7 +1025,11 @@
     }
 
     async function sendToWeb3Forms(formData) {
-        const response = await fetch('https://api.web3forms.com/submit', {
+        if (!MERSCH75_WEB3FORMS_ENDPOINT) {
+            throw new Error('Konfigurationsfehler: Web3Forms Endpoint fehlt.');
+        }
+
+        const response = await fetch(MERSCH75_WEB3FORMS_ENDPOINT, {
             method: 'POST',
             body: formData
         });
@@ -695,6 +1118,8 @@
         const category = document.getElementById('Categorie').value;
         setRequiredState(isMinor, category);
     });
+
+    document.getElementById('FamilyRegistrationMode').addEventListener('change', toggleFamilyRegistrationFields);
 
     document.getElementById('CNS').addEventListener('input', function() {
         this.value = this.value.slice(0, 5);
@@ -804,6 +1229,26 @@
         });
     });
 
+    document.querySelectorAll('.join-quiz-option').forEach(function(button) {
+        button.addEventListener('click', function() {
+            setJoinQuizSelection(this.dataset.quizKey);
+        });
+    });
+
+    const roleSelect = document.getElementById('Role');
+    if (roleSelect) {
+        roleSelect.addEventListener('change', function() {
+            if (this.value === 'Officiel(le)') {
+                setJoinQuizSelection('official');
+            } else if (this.value === 'Arbitre') {
+                setJoinQuizSelection('referee');
+            } else {
+                setJoinQuizSelection('player');
+            }
+        });
+    }
+
+    toggleFamilyRegistrationFields();
     updateLang('lu');
     updateCnsDisplay();
     updateConsentValidationMessages();

@@ -29,3 +29,9 @@
 - Ask before making destructive cleanup outside the current migration plan.
 - Do not “tidy” unrelated files.
 - Prefer repository conventions over inventing new ones.
+
+## Safe Delivery Workflow
+- Work from an integration/recovery branch, not directly on `main`.
+- Open a draft PR early: `scripts/open_draft_pr.sh main "WIP: <title>"`.
+- Before push/merge, run: `scripts/preflight_check.sh`.
+- Before risky merge/rebase, create remote backup snapshot: `scripts/create_recovery_snapshot.sh`.
