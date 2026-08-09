@@ -108,6 +108,7 @@
                                 <input type="text" id="honeypot" name="website" autocomplete="off" tabindex="-1">
                             </div>
 
+                            <!-- ══ KAND / NEIE SPILLER ══ -->
                             <div class="join-form-row">
                                 <div class="join-form-group">
                                     <label id="lbl-nom" for="Nom">Numm (neie Spiller) *</label>
@@ -122,7 +123,7 @@
                             <div class="join-form-row">
                                 <div class="join-form-group">
                                     <label id="lbl-dob" for="DateNaissance">Gebuertsdatum *</label>
-                                    <input type="text" id="DateNaissance" name="DateNaissance" placeholder="01.01.2010" inputmode="numeric" pattern="[0-9]{2, guardian: { familyStructure: 'Estrutura familiar *', fsOptBoth: 'Ambos os pais na mesma morada', fsOptSingle: 'Encarregado único (1 encarregado)', fsOptSep: 'Divorciado / 2 moradas diferentes', guardian1Title: 'Encarregado 1 *', guardian2Title: 'Encarregado 2', nom: 'Apelido *', prenom: 'Nome próprio *', relation: 'Papel', tel: 'Telefone *', email1: 'E-mail *', email2: 'E-mail', addrHint1: 'Morada do encarregado 1 (se diferente)', addrHint2: 'Morada do encarregado 2', strasse: 'Rua', postcode: 'Código postal', ortschaft: 'Localidade', mom: 'Mãe', dad: 'Pai', tut: 'Tutor / Tutora' }}\.[0-9]{2}\.[0-9]{4}" required>
+                                    <input type="text" id="DateNaissance" name="DateNaissance" placeholder="01.01.2010" inputmode="numeric" pattern="[0-9]{2}\.[0-9]{2}\.[0-9]{4}" required>
                                 </div>
                                 <div class="join-form-group">
                                     <label id="lbl-mineur" for="Mineur">Mannerjäreg</label>
@@ -131,6 +132,17 @@
                                         <option value="OUI">JO</option>
                                     </select>
                                 </div>
+                            </div>
+
+                            <div class="join-form-group">
+                                <label id="lbl-nat" for="Nationalite">Nationalitéit *</label>
+                                <input type="text" id="Nationalite" name="Nationalite" autocomplete="country-name" required>
+                            </div>
+
+                            <div class="join-form-group">
+                                <label id="lbl-cns" for="CNS">Matricule CNS *</label>
+                                <input type="text" id="CNS" name="CNS" maxlength="5" inputmode="numeric" pattern="[0-9]{5}" required>
+                                <span id="cns-prefix-display" class="join-helper-text" aria-live="polite"></span>
                             </div>
 
                             <div id="cat-section">
@@ -158,7 +170,6 @@
                                         <option value="Officiel">Offiziell</option>
                                     </select>
                                 </div>
-
                                 <div id="trainer-qualification-section" hidden>
                                     <fieldset class="join-qualification-fieldset">
                                         <legend id="trainer-qualification-legend">Trainer-Schäin *</legend>
@@ -174,236 +185,11 @@
                                         <span class="join-helper-text" id="trainer-document-help">PDF, JPG oder PNG · maximal 5 MB</span>
                                     </div>
                                 </div>
-
                                 <div class="join-form-group" id="official-description-wrap" hidden>
                                     <label id="lbl-official-description" for="OfficialQualificationDescription">Beschreif deng Qualifikatioun oder Erfarung *</label>
                                     <textarea id="OfficialQualificationDescription" name="OfficialQualificationDescription" rows="4"></textarea>
                                     <span class="join-helper-text" id="official-description-help">Zum Beispill: Chrono (FLH), anere Schäin oder Teamleedung bei engem Veräin.</span>
                                 </div>
-                            </div>
-
-                            <div id="parent-section">
-                                <!-- Familljestruktur -->
-                                <div class="join-form-group">
-                                    <label id="lbl-family-structure" for="FamilyStructure">Familljestruktur *</label>
-                                    <select id="FamilyStructure" name="FamilyStructure" onchange="updateFamilyStructure()">
-                                        <option value="BOTH_SAME" id="fs-opt-both">Béid Eltere mat der selwechter Adress</option>
-                                        <option value="SINGLE" id="fs-opt-single">Elengerzéiend (1 Erzéiungsberechtegte(n))</option>
-                                        <option value="SEPARATED" id="fs-opt-sep">Geschidden / 2 verschidde Adressen</option>
-                                    </select>
-                                </div>
-
-                                <!-- Erzéiungsberechtegte(n) 1 -->
-                                <div class="join-guardian-card" id="guardian1-card">
-                                    <h3 class="join-guardian-title" id="lbl-guardian1-title">Erzéiungsberechtegte(n) 1 *</h3>
-                                    <div class="join-form-row">
-                                        <div class="join-form-group">
-                                            <label id="lbl-guardian1-nom" for="Guardian1Nom">Numm *</label>
-                                            <input type="text" id="Guardian1Nom" name="Guardian1Nom" autocomplete="family-name">
-                                        </div>
-                                        <div class="join-form-group">
-                                            <label id="lbl-guardian1-prenom" for="Guardian1Prenom">Virnumm *</label>
-                                            <input type="text" id="Guardian1Prenom" name="Guardian1Prenom" autocomplete="given-name">
-                                        </div>
-                                    </div>
-                                    <div class="join-form-row">
-                                        <div class="join-form-group">
-                                            <label id="lbl-guardian1-relation" for="Guardian1Relation">Roll</label>
-                                            <select id="Guardian1Relation" name="Guardian1Relation">
-                                                <option value="Mamm" id="g1r-mom">Mamm</option>
-                                                <option value="Papp" id="g1r-dad">Papp</option>
-                                                <option value="Tuteur" id="g1r-tut">Tuteur / Tuteuse</option>
-                                            </select>
-                                        </div>
-                                        <div class="join-form-group">
-                                            <label id="lbl-guardian1-tel" for="Guardian1Tel">Telefon *</label>
-                                            <input type="tel" id="Guardian1Tel" name="Guardian1Tel" autocomplete="tel">
-                                        </div>
-                                    </div>
-                                    <div class="join-form-group">
-                                        <label id="lbl-guardian1-email" for="Guardian1Email">E-Mail *</label>
-                                        <input type="email" id="Guardian1Email" name="Guardian1Email" autocomplete="email">
-                                    </div>
-                                    <!-- Adress nëmmen bei Scheedung -->
-                                    <div id="guardian1-address-wrap" hidden>
-                                        <div class="join-guardian-addr-hint" id="lbl-guardian1-addr-hint">Adress vum Erzéiungsberechtegte(n) 1 (wann anescht wéi vum Kand)</div>
-                                        <div class="join-form-group">
-                                            <label id="lbl-guardian1-strasse" for="Guardian1Strasse">Strooss</label>
-                                            <input type="text" id="Guardian1Strasse" name="Guardian1Strasse" autocomplete="street-address">
-                                        </div>
-                                        <div class="join-form-row">
-                                            <div class="join-form-group">
-                                                <label id="lbl-guardian1-postcode" for="Guardian1Postcode">Postcode</label>
-                                                <input type="text" id="Guardian1Postcode" name="Guardian1Postcode" autocomplete="postal-code">
-                                            </div>
-                                            <div class="join-form-group">
-                                                <label id="lbl-guardian1-ortschaft" for="Guardian1Ortschaft">Uertschaft</label>
-                                                <input type="text" id="Guardian1Ortschaft" name="Guardian1Ortschaft" autocomplete="address-level2">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Erzéiungsberechtegte(n) 2 -->
-                                <div class="join-guardian-card" id="guardian2-card">
-                                    <h3 class="join-guardian-title" id="lbl-guardian2-title">Erzéiungsberechtegte(n) 2</h3>
-                                    <div class="join-form-row">
-                                        <div class="join-form-group">
-                                            <label id="lbl-guardian2-nom" for="Guardian2Nom">Numm *</label>
-                                            <input type="text" id="Guardian2Nom" name="Guardian2Nom" autocomplete="family-name">
-                                        </div>
-                                        <div class="join-form-group">
-                                            <label id="lbl-guardian2-prenom" for="Guardian2Prenom">Virnumm *</label>
-                                            <input type="text" id="Guardian2Prenom" name="Guardian2Prenom" autocomplete="given-name">
-                                        </div>
-                                    </div>
-                                    <div class="join-form-row">
-                                        <div class="join-form-group">
-                                            <label id="lbl-guardian2-relation" for="Guardian2Relation">Roll</label>
-                                            <select id="Guardian2Relation" name="Guardian2Relation">
-                                                <option value="Papp" id="g2r-dad">Papp</option>
-                                                <option value="Mamm" id="g2r-mom">Mamm</option>
-                                                <option value="Tuteur" id="g2r-tut">Tuteur / Tuteuse</option>
-                                            </select>
-                                        </div>
-                                        <div class="join-form-group">
-                                            <label id="lbl-guardian2-tel" for="Guardian2Tel">Telefon *</label>
-                                            <input type="tel" id="Guardian2Tel" name="Guardian2Tel" autocomplete="tel">
-                                        </div>
-                                    </div>
-                                    <div class="join-form-group">
-                                        <label id="lbl-guardian2-email" for="Guardian2Email">E-Mail</label>
-                                        <input type="email" id="Guardian2Email" name="Guardian2Email" autocomplete="email">
-                                    </div>
-                                    <!-- Adress nëmmen bei Scheedung -->
-                                    <div id="guardian2-address-wrap" hidden>
-                                        <div class="join-guardian-addr-hint" id="lbl-guardian2-addr-hint">Adress vum Erzéiungsberechtegte(n) 2</div>
-                                        <div class="join-form-group">
-                                            <label id="lbl-guardian2-strasse" for="Guardian2Strasse">Strooss</label>
-                                            <input type="text" id="Guardian2Strasse" name="Guardian2Strasse" autocomplete="street-address">
-                                        </div>
-                                        <div class="join-form-row">
-                                            <div class="join-form-group">
-                                                <label id="lbl-guardian2-postcode" for="Guardian2Postcode">Postcode</label>
-                                                <input type="text" id="Guardian2Postcode" name="Guardian2Postcode" autocomplete="postal-code">
-                                            </div>
-                                            <div class="join-form-group">
-                                                <label id="lbl-guardian2-ortschaft" for="Guardian2Ortschaft">Uertschaft</label>
-                                                <input type="text" id="Guardian2Ortschaft" name="Guardian2Ortschaft" autocomplete="address-level2">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Rückwärtskompatibilität: alte Felder verstoppt weiderleeden -->
-                                <input type="hidden" id="ParentIsole" name="ParentIsole" value="NON">
-                                <input type="hidden" id="Tuteur1" name="Tuteur1" value="">
-                                <input type="hidden" id="Tuteur2" name="Tuteur2" value="">
-                            </div>
- 
-                            <div class="join-family-section" id="family-registration-section">
-                                <div class="join-form-group join-form-group--compact">
-                                    <label id="lbl-family-mode" for="FamilyRegistrationMode">ZUSÄTZLICHE FAMILIENANMELDUNG</label>
-                                    <select id="FamilyRegistrationMode" name="FamilyRegistrationMode">
-                                        <option value="NONE">Keng zousätzlech Familienanmeldung</option>
-                                        <option value="PARENT1">Ein Elterteil wëll och spillen</option>
-                                        <option value="PARENT2">Beide Elteren wëllen och spillen</option>
-                                    </select>
-                                </div>
- 
-                                <div class="join-family-details" id="family-registration-details" style="display:none;">
-                                    <p class="join-family-note" id="family-registration-note">Fëllt w.e.g. d'Donnéeën vun den zousätzlechen Elteren aus.</p>
- 
-                                    <div class="join-family-card" id="family-parent-1-card">
-                                        <h3 id="family-parent-1-title">Elteren 1</h3>
-                                        <div class="join-form-row">
-                                            <div class="join-form-group">
-                                                <label id="lbl-family-parent1-nom" for="FamilyParent1Nom">Numm *</label>
-                                                <input type="text" id="FamilyParent1Nom" name="FamilyParent1Nom" autocomplete="family-name">
-                                            </div>
-                                            <div class="join-form-group">
-                                                <label id="lbl-family-parent1-prenom" for="FamilyParent1Prenom">Virnumm *</label>
-                                                <input type="text" id="FamilyParent1Prenom" name="FamilyParent1Prenom" autocomplete="given-name">
-                                            </div>
-                                        </div>
-                                        <div class="join-form-row">
-                                            <div class="join-form-group">
-                                                <label id="lbl-family-parent1-dob" for="FamilyParent1Dob">Gebuertsdatum *</label>
-                                                <input type="text" id="FamilyParent1Dob" name="FamilyParent1Dob" placeholder="01.01.2010" inputmode="numeric" pattern="[0-9]{2}\.[0-9]{2}\.[0-9]{4}">
-                                            </div>
-                                            <div class="join-form-group">
-                                                <label id="lbl-family-parent1-email" for="FamilyParent1Email">E-Mail *</label>
-                                                <input type="email" id="FamilyParent1Email" name="FamilyParent1Email" autocomplete="email">
-                                            </div>
-                                        </div>
-                                        <div class="join-form-group">
-                                            <label id="lbl-family-parent1-gsm" for="FamilyParent1Gsm">Telefon * (Papp / Mamm / Begleeder / Kontaktpersoun)</label>
-                                            <div class="join-phone-input-row">
-                                                <input type="text" id="FamilyParent1Gsm" name="FamilyParent1Gsm" autocomplete="tel">
-                                                <select id="FamilyParent1GsmRole" name="FamilyParent1GsmRole" class="join-phone-relation-select" aria-label="Kontaktperson">
-                                                    <option value="">–</option>
-                                                    <option value="Papp">Papp</option>
-                                                    <option value="Mamm">Mamm</option>
-                                                    <option value="Begleeder">Begleeder</option>
-                                                    <option value="Andere">Andere</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
- 
-                                    <div class="join-family-card" id="family-parent-2-card" style="display:none;">
-                                        <h3 id="family-parent-2-title">Elteren 2</h3>
-                                        <div class="join-form-row">
-                                            <div class="join-form-group">
-                                                <label id="lbl-family-parent2-nom" for="FamilyParent2Nom">Numm *</label>
-                                                <input type="text" id="FamilyParent2Nom" name="FamilyParent2Nom" autocomplete="family-name">
-                                            </div>
-                                            <div class="join-form-group">
-                                                <label id="lbl-family-parent2-prenom" for="FamilyParent2Prenom">Virnumm *</label>
-                                                <input type="text" id="FamilyParent2Prenom" name="FamilyParent2Prenom" autocomplete="given-name">
-                                            </div>
-                                        </div>
-                                        <div class="join-form-row">
-                                            <div class="join-form-group">
-                                                <label id="lbl-family-parent2-dob" for="FamilyParent2Dob">Gebuertsdatum *</label>
-                                                <input type="text" id="FamilyParent2Dob" name="FamilyParent2Dob" placeholder="01.01.2010" inputmode="numeric" pattern="[0-9]{2}\.[0-9]{2}\.[0-9]{4}">
-                                            </div>
-                                            <div class="join-form-group">
-                                                <label id="lbl-family-parent2-email" for="FamilyParent2Email">E-Mail *</label>
-                                                <input type="email" id="FamilyParent2Email" name="FamilyParent2Email" autocomplete="email">
-                                            </div>
-                                        </div>
-                                        <div class="join-form-group">
-                                            <label id="lbl-family-parent2-gsm" for="FamilyParent2Gsm">Telefon * (Papp / Mamm / Begleeder / Kontaktpersoun)</label>
-                                            <div class="join-phone-input-row">
-                                                <input type="text" id="FamilyParent2Gsm" name="FamilyParent2Gsm" autocomplete="tel">
-                                                <select id="FamilyParent2GsmRole" name="FamilyParent2GsmRole" class="join-phone-relation-select" aria-label="Kontaktperson">
-                                                    <option value="">–</option>
-                                                    <option value="Papp">Papp</option>
-                                                    <option value="Mamm">Mamm</option>
-                                                    <option value="Begleeder">Begleeder</option>
-                                                    <option value="Andere">Andere</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="join-sibling-section" id="sibling-registration-section" hidden>
-                                <button type="button" class="join-sibling-add" id="add-sibling-button">+ Weidert Kand umellen</button>
-                                <div class="join-family-details" id="sibling-list" aria-live="polite"></div>
-                            </div>
- 
-                            <div class="join-form-group">
-                                <label id="lbl-nat" for="Nationalite">Nationalitéit *</label>
-                                <input type="text" id="Nationalite" name="Nationalite" autocomplete="country-name" required>
-                            </div>
-
-                            <div class="join-form-group">
-                                <label id="lbl-cns" for="CNS">Matricule CNS *</label>
-                                <input type="text" id="CNS" name="CNS" maxlength="5" inputmode="numeric" pattern="[0-9]{5}" required>
-                                <span id="cns-prefix-display" class="join-helper-text" aria-live="polite"></span>
                             </div>
 
                             <div class="join-form-row">
@@ -457,11 +243,11 @@
                                 <label for="U7Cert" id="lbl-u7">U7: medezineschen Zertifikat obligatoresch</label>
                             </div>
 
+                            <!-- ══ ADRESS VUM KAND / FAMILL ══ -->
                             <div class="join-form-group">
                                 <label id="lbl-strasse" for="Strasse">Strooss *</label>
                                 <input type="text" id="Strasse" name="Strasse" autocomplete="street-address" required>
                             </div>
-
                             <div class="join-form-row">
                                 <div class="join-form-group">
                                     <label id="lbl-postcode" for="Postcode">Postcode *</label>
@@ -473,6 +259,127 @@
                                 </div>
                             </div>
 
+                            <!-- ══ ELTEREN / ERZÉIUNGSBERECHTEGTE ══ -->
+                            <!-- (nëmmen bei Mannerjäregen / family-Modus) -->
+                            <div id="parent-section" style="display:none;">
+                                <div class="join-form-section-header">
+                                    <span class="join-section-icon">👨‍👩‍👧</span>
+                                    <span id="lbl-section-guardian">Elteren / Erzéiungsberechtegte</span>
+                                </div>
+
+                                <div class="join-form-group">
+                                    <label id="lbl-family-structure" for="FamilyStructure">Familljestruktur *</label>
+                                    <select id="FamilyStructure" name="FamilyStructure" onchange="updateFamilyStructure()">
+                                        <option value="BOTH_SAME">Béid Eltere mat der selwechter Adress</option>
+                                        <option value="SINGLE">Elengerzéiend (1 Erzéiungsberechtegte(n))</option>
+                                        <option value="SEPARATED">Geschidden / 2 verschidde Adressen</option>
+                                    </select>
+                                </div>
+
+                                <div class="join-guardian-card" id="guardian1-card">
+                                    <h3 class="join-guardian-title" id="lbl-guardian1-title">Erzéiungsberechtegte(n) 1 *</h3>
+                                    <div class="join-form-row">
+                                        <div class="join-form-group">
+                                            <label id="lbl-guardian1-nom" for="Guardian1Nom">Numm *</label>
+                                            <input type="text" id="Guardian1Nom" name="Guardian1Nom" autocomplete="family-name">
+                                        </div>
+                                        <div class="join-form-group">
+                                            <label id="lbl-guardian1-prenom" for="Guardian1Prenom">Virnumm *</label>
+                                            <input type="text" id="Guardian1Prenom" name="Guardian1Prenom" autocomplete="given-name">
+                                        </div>
+                                    </div>
+                                    <div class="join-form-row">
+                                        <div class="join-form-group">
+                                            <label id="lbl-guardian1-relation" for="Guardian1Relation">Roll</label>
+                                            <select id="Guardian1Relation" name="Guardian1Relation">
+                                                <option value="Mamm">Mamm</option>
+                                                <option value="Papp">Papp</option>
+                                                <option value="Tuteur">Tuteur / Tuteuse</option>
+                                            </select>
+                                        </div>
+                                        <div class="join-form-group">
+                                            <label id="lbl-guardian1-tel" for="Guardian1Tel">Telefon *</label>
+                                            <input type="tel" id="Guardian1Tel" name="Guardian1Tel" autocomplete="tel">
+                                        </div>
+                                    </div>
+                                    <div class="join-form-group">
+                                        <label id="lbl-guardian1-email" for="Guardian1Email">E-Mail *</label>
+                                        <input type="email" id="Guardian1Email" name="Guardian1Email" autocomplete="email">
+                                    </div>
+                                    <div id="guardian1-address-wrap" hidden>
+                                        <div class="join-guardian-addr-hint" id="lbl-guardian1-addr-hint">Adress vum Erzéiungsberechtegte(n) 1 (wann anescht wéi vum Kand)</div>
+                                        <div class="join-form-group">
+                                            <label id="lbl-guardian1-strasse" for="Guardian1Strasse">Strooss</label>
+                                            <input type="text" id="Guardian1Strasse" name="Guardian1Strasse" autocomplete="street-address">
+                                        </div>
+                                        <div class="join-form-row">
+                                            <div class="join-form-group">
+                                                <label id="lbl-guardian1-postcode" for="Guardian1Postcode">Postcode</label>
+                                                <input type="text" id="Guardian1Postcode" name="Guardian1Postcode" autocomplete="postal-code">
+                                            </div>
+                                            <div class="join-form-group">
+                                                <label id="lbl-guardian1-ortschaft" for="Guardian1Ortschaft">Uertschaft</label>
+                                                <input type="text" id="Guardian1Ortschaft" name="Guardian1Ortschaft" autocomplete="address-level2">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="join-guardian-card" id="guardian2-card">
+                                    <h3 class="join-guardian-title" id="lbl-guardian2-title">Erzéiungsberechtegte(n) 2</h3>
+                                    <div class="join-form-row">
+                                        <div class="join-form-group">
+                                            <label id="lbl-guardian2-nom" for="Guardian2Nom">Numm *</label>
+                                            <input type="text" id="Guardian2Nom" name="Guardian2Nom" autocomplete="family-name">
+                                        </div>
+                                        <div class="join-form-group">
+                                            <label id="lbl-guardian2-prenom" for="Guardian2Prenom">Virnumm *</label>
+                                            <input type="text" id="Guardian2Prenom" name="Guardian2Prenom" autocomplete="given-name">
+                                        </div>
+                                    </div>
+                                    <div class="join-form-row">
+                                        <div class="join-form-group">
+                                            <label id="lbl-guardian2-relation" for="Guardian2Relation">Roll</label>
+                                            <select id="Guardian2Relation" name="Guardian2Relation">
+                                                <option value="Papp">Papp</option>
+                                                <option value="Mamm">Mamm</option>
+                                                <option value="Tuteur">Tuteur / Tuteuse</option>
+                                            </select>
+                                        </div>
+                                        <div class="join-form-group">
+                                            <label id="lbl-guardian2-tel" for="Guardian2Tel">Telefon *</label>
+                                            <input type="tel" id="Guardian2Tel" name="Guardian2Tel" autocomplete="tel">
+                                        </div>
+                                    </div>
+                                    <div class="join-form-group">
+                                        <label id="lbl-guardian2-email" for="Guardian2Email">E-Mail</label>
+                                        <input type="email" id="Guardian2Email" name="Guardian2Email" autocomplete="email">
+                                    </div>
+                                    <div id="guardian2-address-wrap" hidden>
+                                        <div class="join-guardian-addr-hint" id="lbl-guardian2-addr-hint">Adress vum Erzéiungsberechtegte(n) 2</div>
+                                        <div class="join-form-group">
+                                            <label id="lbl-guardian2-strasse" for="Guardian2Strasse">Strooss</label>
+                                            <input type="text" id="Guardian2Strasse" name="Guardian2Strasse" autocomplete="street-address">
+                                        </div>
+                                        <div class="join-form-row">
+                                            <div class="join-form-group">
+                                                <label id="lbl-guardian2-postcode" for="Guardian2Postcode">Postcode</label>
+                                                <input type="text" id="Guardian2Postcode" name="Guardian2Postcode" autocomplete="postal-code">
+                                            </div>
+                                            <div class="join-form-group">
+                                                <label id="lbl-guardian2-ortschaft" for="Guardian2Ortschaft">Uertschaft</label>
+                                                <input type="text" id="Guardian2Ortschaft" name="Guardian2Ortschaft" autocomplete="address-level2">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <input type="hidden" id="ParentIsole" name="ParentIsole" value="NON">
+                                <input type="hidden" id="Tuteur1" name="Tuteur1" value="">
+                                <input type="hidden" id="Tuteur2" name="Tuteur2" value="">
+                            </div>
+
+                            <!-- ══ E-MAIL + TELEFON / KONTAKT ══ -->
                             <div class="join-form-group">
                                 <label id="lbl-email" for="Email">E-Mail *</label>
                                 <input type="email" id="Email" name="Email" autocomplete="email" required>
@@ -503,6 +410,192 @@
                                 </div>
                             </div>
                             <p id="gsm-helper" class="join-helper-text">Gëff d'Nummer direkt bei der richteger Persoun un. Op d'mannst eng Telefonsnummer ass obligatoresch.</p>
+
+                            <!-- ══ GESCHWËSTER (nëmme family-Modus) ══ -->
+                            <div class="join-sibling-section" id="sibling-registration-section" hidden>
+                                <button type="button" class="join-sibling-add" id="add-sibling-button">+ Weidert Kand umellen</button>
+                                <div class="join-family-details" id="sibling-list" aria-live="polite"></div>
+                            </div>
+
+                            <!-- ══ ELTEREN SPILLEN OCH? (nëmme family-Modus) ══ -->
+                            <div class="join-family-section" id="family-registration-section" hidden>
+                                <div class="join-form-section-header">
+                                    <span class="join-section-icon">🏃</span>
+                                    <span id="lbl-section-parents-play">Spillen d'Eltere och?</span>
+                                </div>
+                                <div class="join-form-group join-form-group--compact">
+                                    <label id="lbl-family-mode" for="FamilyRegistrationMode">Zousätzlech Familienanmeldung</label>
+                                    <select id="FamilyRegistrationMode" name="FamilyRegistrationMode" onchange="toggleFamilyRegistrationFields()">
+                                        <option value="NONE">Nee — keng zousätzlech Umeldung</option>
+                                        <option value="PARENT1">Jo — 1 Elterendeel wëll och spillen</option>
+                                        <option value="PARENT2">Jo — Béid Eltere wëllen och spillen</option>
+                                    </select>
+                                </div>
+
+                                <div class="join-family-details" id="family-registration-details" style="display:none;">
+                                    <p class="join-family-note" id="family-registration-note">Fëllt w.e.g. all Donnéeën vun den Elteren aus, déi och spillen.</p>
+
+                                    <div class="join-family-card" id="family-parent-1-card">
+                                        <h3 id="family-parent-1-title">Elterendeel 1 — als Spiller:in umellen</h3>
+                                        <div class="join-form-row">
+                                            <div class="join-form-group">
+                                                <label id="lbl-family-parent1-nom" for="FamilyParent1Nom">Numm *</label>
+                                                <input type="text" id="FamilyParent1Nom" name="FamilyParent1Nom" autocomplete="family-name">
+                                            </div>
+                                            <div class="join-form-group">
+                                                <label id="lbl-family-parent1-prenom" for="FamilyParent1Prenom">Virnumm *</label>
+                                                <input type="text" id="FamilyParent1Prenom" name="FamilyParent1Prenom" autocomplete="given-name">
+                                            </div>
+                                        </div>
+                                        <div class="join-form-row">
+                                            <div class="join-form-group">
+                                                <label id="lbl-family-parent1-dob" for="FamilyParent1Dob">Gebuertsdatum *</label>
+                                                <input type="text" id="FamilyParent1Dob" name="FamilyParent1Dob" placeholder="01.01.1985" inputmode="numeric" pattern="[0-9]{2}\.[0-9]{2}\.[0-9]{4}">
+                                            </div>
+                                            <div class="join-form-group">
+                                                <label for="FamilyParent1Nat">Nationalitéit *</label>
+                                                <input type="text" id="FamilyParent1Nat" name="FamilyParent1Nat" autocomplete="country-name">
+                                            </div>
+                                        </div>
+                                        <div class="join-form-row">
+                                            <div class="join-form-group">
+                                                <label for="FamilyParent1CNS">Matricule CNS *</label>
+                                                <input type="text" id="FamilyParent1CNS" name="FamilyParent1CNS" maxlength="5" inputmode="numeric" pattern="[0-9]{5}">
+                                            </div>
+                                            <div class="join-form-group">
+                                                <label for="FamilyParent1Club">Ale Veräin *</label>
+                                                <select id="FamilyParent1Club" name="FamilyParent1Club">
+                                                    <option value="">Wielt e Veräin</option>
+                                                    <option value="Keen">Keen</option>
+                                                    <option value="Ausland">Ausland</option>
+                                                    <option value="HB Bieles">HB Bieles</option>
+                                                    <option value="HC Berchem">HC Berchem</option>
+                                                    <option value="Chev Diekirch">Chev Diekirch</option>
+                                                    <option value="Red Boys Differdange">Red Boys Differdange</option>
+                                                    <option value="HB Dudelange">HB Dudelange</option>
+                                                    <option value="Handball Esch">Handball Esch</option>
+                                                    <option value="HB Museldall Grevenmacher">HB Museldall Grevenmacher</option>
+                                                    <option value="Handball Käerjeng">Handball Käerjeng</option>
+                                                    <option value="Handball Leideleng">Handball Leideleng</option>
+                                                    <option value="HC Standard">HC Standard</option>
+                                                    <option value="Mersch75">Mersch75</option>
+                                                    <option value="HC Atert Redange">HC Atert Redange</option>
+                                                    <option value="Espérance Rumelange">Espérance Rumelange</option>
+                                                    <option value="HBC Schifflange">HBC Schifflange</option>
+                                                    <option value="HBC Attert (B)">HBC Attert (B)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="join-form-row">
+                                            <div class="join-form-group">
+                                                <label for="FamilyParent1Medico">Medico *</label>
+                                                <select id="FamilyParent1Medico" name="FamilyParent1Medico">
+                                                    <option value="Non">Non</option>
+                                                    <option value="Oui">Oui</option>
+                                                </select>
+                                            </div>
+                                            <div class="join-form-group">
+                                                <label for="FamilyParent1Licence">Lizenz *</label>
+                                                <select id="FamilyParent1Licence" name="FamilyParent1Licence">
+                                                    <option value="Non">Non</option>
+                                                    <option value="Oui">Oui</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="join-form-row">
+                                            <div class="join-form-group">
+                                                <label id="lbl-family-parent1-email" for="FamilyParent1Email">E-Mail *</label>
+                                                <input type="email" id="FamilyParent1Email" name="FamilyParent1Email" autocomplete="email">
+                                            </div>
+                                            <div class="join-form-group">
+                                                <label id="lbl-family-parent1-gsm" for="FamilyParent1Gsm">Telefon *</label>
+                                                <input type="tel" id="FamilyParent1Gsm" name="FamilyParent1Gsm" autocomplete="tel">
+                                                <input type="hidden" id="FamilyParent1GsmRole" name="FamilyParent1GsmRole" value="Elterendeel1">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="join-family-card" id="family-parent-2-card" style="display:none;">
+                                        <h3 id="family-parent-2-title">Elterendeel 2 — als Spiller:in umellen</h3>
+                                        <div class="join-form-row">
+                                            <div class="join-form-group">
+                                                <label id="lbl-family-parent2-nom" for="FamilyParent2Nom">Numm *</label>
+                                                <input type="text" id="FamilyParent2Nom" name="FamilyParent2Nom" autocomplete="family-name">
+                                            </div>
+                                            <div class="join-form-group">
+                                                <label id="lbl-family-parent2-prenom" for="FamilyParent2Prenom">Virnumm *</label>
+                                                <input type="text" id="FamilyParent2Prenom" name="FamilyParent2Prenom" autocomplete="given-name">
+                                            </div>
+                                        </div>
+                                        <div class="join-form-row">
+                                            <div class="join-form-group">
+                                                <label id="lbl-family-parent2-dob" for="FamilyParent2Dob">Gebuertsdatum *</label>
+                                                <input type="text" id="FamilyParent2Dob" name="FamilyParent2Dob" placeholder="01.01.1985" inputmode="numeric" pattern="[0-9]{2}\.[0-9]{2}\.[0-9]{4}">
+                                            </div>
+                                            <div class="join-form-group">
+                                                <label for="FamilyParent2Nat">Nationalitéit *</label>
+                                                <input type="text" id="FamilyParent2Nat" name="FamilyParent2Nat" autocomplete="country-name">
+                                            </div>
+                                        </div>
+                                        <div class="join-form-row">
+                                            <div class="join-form-group">
+                                                <label for="FamilyParent2CNS">Matricule CNS *</label>
+                                                <input type="text" id="FamilyParent2CNS" name="FamilyParent2CNS" maxlength="5" inputmode="numeric" pattern="[0-9]{5}">
+                                            </div>
+                                            <div class="join-form-group">
+                                                <label for="FamilyParent2Club">Ale Veräin *</label>
+                                                <select id="FamilyParent2Club" name="FamilyParent2Club">
+                                                    <option value="">Wielt e Veräin</option>
+                                                    <option value="Keen">Keen</option>
+                                                    <option value="Ausland">Ausland</option>
+                                                    <option value="HB Bieles">HB Bieles</option>
+                                                    <option value="HC Berchem">HC Berchem</option>
+                                                    <option value="Chev Diekirch">Chev Diekirch</option>
+                                                    <option value="Red Boys Differdange">Red Boys Differdange</option>
+                                                    <option value="HB Dudelange">HB Dudelange</option>
+                                                    <option value="Handball Esch">Handball Esch</option>
+                                                    <option value="HB Museldall Grevenmacher">HB Museldall Grevenmacher</option>
+                                                    <option value="Handball Käerjeng">Handball Käerjeng</option>
+                                                    <option value="Handball Leideleng">Handball Leideleng</option>
+                                                    <option value="HC Standard">HC Standard</option>
+                                                    <option value="Mersch75">Mersch75</option>
+                                                    <option value="HC Atert Redange">HC Atert Redange</option>
+                                                    <option value="Espérance Rumelange">Espérance Rumelange</option>
+                                                    <option value="HBC Schifflange">HBC Schifflange</option>
+                                                    <option value="HBC Attert (B)">HBC Attert (B)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="join-form-row">
+                                            <div class="join-form-group">
+                                                <label for="FamilyParent2Medico">Medico *</label>
+                                                <select id="FamilyParent2Medico" name="FamilyParent2Medico">
+                                                    <option value="Non">Non</option>
+                                                    <option value="Oui">Oui</option>
+                                                </select>
+                                            </div>
+                                            <div class="join-form-group">
+                                                <label for="FamilyParent2Licence">Lizenz *</label>
+                                                <select id="FamilyParent2Licence" name="FamilyParent2Licence">
+                                                    <option value="Non">Non</option>
+                                                    <option value="Oui">Oui</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="join-form-row">
+                                            <div class="join-form-group">
+                                                <label id="lbl-family-parent2-email" for="FamilyParent2Email">E-Mail *</label>
+                                                <input type="email" id="FamilyParent2Email" name="FamilyParent2Email" autocomplete="email">
+                                            </div>
+                                            <div class="join-form-group">
+                                                <label id="lbl-family-parent2-gsm" for="FamilyParent2Gsm">Telefon *</label>
+                                                <input type="tel" id="FamilyParent2Gsm" name="FamilyParent2Gsm" autocomplete="tel">
+                                                <input type="hidden" id="FamilyParent2GsmRole" name="FamilyParent2GsmRole" value="Elterendeel2">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <div class="join-tarif-card" id="tarif-card" aria-live="polite">
                                 <div class="join-tarif-head">
@@ -1146,31 +1239,33 @@
         const tuteur2 = document.getElementById('Tuteur2');
         const u7Cert = document.getElementById('U7Cert');
         const structure = document.getElementById('FamilyStructure') ? document.getElementById('FamilyStructure').value : 'BOTH_SAME';
+        // Bei family-Quiz (Elteren mellen Kand un) ëmmer wéi minor behandelen
+        const effectiveMinor = isMinor || currentJoinQuiz === 'family';
 
         // Guardian-Felder required setzen
         const g1fields = ['Guardian1Nom','Guardian1Prenom','Guardian1Tel'];
         g1fields.forEach(function(id) {
             var el = document.getElementById(id);
-            if (el) el.required = isMinor;
+            if (el) el.required = effectiveMinor;
         });
         const g1emailEl = document.getElementById('Guardian1Email');
-        if (g1emailEl) g1emailEl.required = isMinor;
+        if (g1emailEl) g1emailEl.required = effectiveMinor;
 
         const isSingle = structure === 'SINGLE';
         const g2fields = ['Guardian2Nom','Guardian2Prenom','Guardian2Tel'];
         g2fields.forEach(function(id) {
             var el = document.getElementById(id);
-            if (el) el.required = isMinor && !isSingle;
+            if (el) el.required = effectiveMinor && !isSingle;
         });
 
         tuteur1.required = false;
         tuteur2.required = false;
         u7Cert.required = category === 'U7';
 
-        document.getElementById('parent-section').style.display = isMinor ? 'block' : 'none';
+        document.getElementById('parent-section').style.display = effectiveMinor ? 'block' : 'none';
         document.getElementById('u7-section').style.display = category === 'U7' ? 'flex' : 'none';
 
-        if (!isMinor) {
+        if (!effectiveMinor) {
             tuteur1.value = '';
             tuteur2.value = '';
             document.getElementById('ParentIsole').value = 'NON';
@@ -1180,7 +1275,7 @@
                 if (el) el.value = '';
             });
         }
-        if (isMinor) updateFamilyStructure();
+        if (effectiveMinor) updateFamilyStructure();
     }
 
     function updateCnsDisplay() {
@@ -1959,6 +2054,15 @@
         const isFamilyProfile = quizKey === 'family';
         siblingSection.hidden = !isFamilyProfile;
         familyRegistrationSection.hidden = !isFamilyProfile;
+
+        // Elteren-Sektioun direkt weisen wann Elteren ee Kand umellen
+        const parentSection = document.getElementById('parent-section');
+        if (isFamilyProfile) {
+            parentSection.style.display = 'block';
+            updateFamilyStructure();
+        } else if (document.getElementById('Mineur').value !== 'OUI') {
+            parentSection.style.display = 'none';
+        }
         if (!isFamilyProfile) {
             document.getElementById('FamilyRegistrationMode').value = 'NONE';
             toggleFamilyRegistrationFields();
