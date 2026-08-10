@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=20260810joinfields">
+    <link rel="stylesheet" href="styles.css?v=20260810season1">
 </head>
 <body class="join-page">
     <div class="site-shell">
@@ -233,7 +233,7 @@
                                 </div>
                             </div>
 
-                            <div class="join-form-row join-form-row--4col">
+                            <div class="join-form-row join-form-row--adaptive">
                                 <div class="join-form-group">
                                     <label id="lbl-medico" for="Medico">Medico *</label>
                                     <select id="Medico" name="Medico" required>
@@ -252,39 +252,41 @@
                                         <option value="Oui">Oui</option>
                                     </select>
                                 </div>
-                                <div class="join-form-group" id="licence-details-wrap" hidden>
-                                    <label id="lbl-licence-details" for="LicenceDetails">Wéi eng Lizenz? *</label>
-                                    <input type="text" id="LicenceDetails" name="LicenceDetails">
-                                </div>
                             </div>
 
-                            <div class="join-form-group" id="club-selection-group">
-                                <label id="lbl-club" for="AncienClub">Ale Veräin *</label>
-                                <select id="AncienClub" name="AncienClub" required>
-                                    <option value="">Wielt e Veräin</option>
-                                    <option value="Keen">Keen</option>
-                                    <option value="Ausland">Ausland</option>
-                                    <option value="HB Bieles">HB Bieles</option>
-                                    <option value="HC Berchem">HC Berchem</option>
-                                    <option value="Chev Diekirch">Chev Diekirch</option>
-                                    <option value="Red Boys Differdange">Red Boys Differdange</option>
-                                    <option value="HB Dudelange">HB Dudelange</option>
-                                    <option value="Handball Esch">Handball Esch</option>
-                                    <option value="HB Museldall Grevenmacher">HB Museldall Grevenmacher</option>
-                                    <option value="Handball Käerjeng">Handball Käerjeng</option>
-                                    <option value="Handball Leideleng">Handball Leideleng</option>
-                                    <option value="HC Standard">HC Standard</option>
-                                    <option value="Mersch75">Mersch75</option>
-                                    <option value="Handball Club vun der Gemeng Péiteng">Handball Club vun der Gemeng Péiteng</option>
-                                    <option value="HC Atert Redange">HC Atert Redange</option>
-                                    <option value="Espérance Rumelange">Espérance Rumelange</option>
-                                    <option value="HBC Schifflange">HBC Schifflange</option>
-                                    <option value="HBC Attert (B)">HBC Attert (B)</option>
-                                </select>
-                            </div>
-                            <div class="join-form-group" id="foreign-club-wrap" hidden>
-                                <label id="lbl-foreign-club" for="ForeignClub">Veräin am Ausland *</label>
-                                <input type="text" id="ForeignClub" name="ForeignClub">
+                            <div class="join-form-row join-form-row--adaptive">
+                                <div class="join-form-group" id="licence-details-wrap" hidden>
+                                    <label id="lbl-licence-details" for="LicenceDetails">Lizenznummer *</label>
+                                    <input type="text" id="LicenceDetails" name="LicenceDetails">
+                                </div>
+                                <div class="join-form-group" id="club-selection-group">
+                                    <label id="lbl-club" for="AncienClub">Ale Veräin *</label>
+                                    <select id="AncienClub" name="AncienClub" required>
+                                        <option value="">Wielt e Veräin</option>
+                                        <option value="Keen">Keen</option>
+                                        <option value="Ausland">Ausland</option>
+                                        <option value="HB Bieles">HB Bieles</option>
+                                        <option value="HC Berchem">HC Berchem</option>
+                                        <option value="Chev Diekirch">Chev Diekirch</option>
+                                        <option value="Red Boys Differdange">Red Boys Differdange</option>
+                                        <option value="HB Dudelange">HB Dudelange</option>
+                                        <option value="Handball Esch">Handball Esch</option>
+                                        <option value="HB Museldall Grevenmacher">HB Museldall Grevenmacher</option>
+                                        <option value="Handball Käerjeng">Handball Käerjeng</option>
+                                        <option value="Handball Leideleng">Handball Leideleng</option>
+                                        <option value="HC Standard">HC Standard</option>
+                                        <option value="Mersch75">Mersch75</option>
+                                        <option value="Handball Club vun der Gemeng Péiteng">Handball Club vun der Gemeng Péiteng</option>
+                                        <option value="HC Atert Redange">HC Atert Redange</option>
+                                        <option value="Espérance Rumelange">Espérance Rumelange</option>
+                                        <option value="HBC Schifflange">HBC Schifflange</option>
+                                        <option value="HBC Attert (B)">HBC Attert (B)</option>
+                                    </select>
+                                </div>
+                                <div class="join-form-group" id="foreign-club-wrap" hidden>
+                                    <label id="lbl-foreign-club" for="ForeignClub">Veräin am Ausland *</label>
+                                    <input type="text" id="ForeignClub" name="ForeignClub">
+                                </div>
                             </div>
 
                             <div id="u7-section">
@@ -1219,7 +1221,7 @@
         lu: {
             correspondenceLanguage: 'Sprooch fir de Schrëftverkéier *',
             medicoValidUntil: 'Gülteg bis (Joer) *',
-            licenceDetails: 'Wéi eng Lizenz? *',
+            licenceDetails: 'Lizenznummer *',
             minorEmailNote: 'Bei engem mannerjärege Spiller gëtt d’E-Mail vum Erzéiungsberechtegten 1 fir de Schrëftverkéier benotzt.',
             minorPlayerEmailChoice: 'Huet de Spiller eng eegen E-Mail?',
             minorPlayerEmail: 'E-Mail vum Spiller *',
@@ -1228,7 +1230,7 @@
         fr: {
             correspondenceLanguage: 'Langue de correspondance *',
             medicoValidUntil: 'Valable jusqu’en (année) *',
-            licenceDetails: 'Quelle licence ? *',
+            licenceDetails: 'Numéro de licence *',
             minorEmailNote: 'Pour un joueur mineur, l’adresse e-mail du responsable légal 1 est utilisée pour la correspondance.',
             minorPlayerEmailChoice: 'Le joueur a-t-il sa propre adresse e-mail ?',
             minorPlayerEmail: 'E-mail du joueur *',
@@ -1237,7 +1239,7 @@
         de: {
             correspondenceLanguage: 'Korrespondenzsprache *',
             medicoValidUntil: 'Gültig bis (Jahr) *',
-            licenceDetails: 'Welche Lizenz? *',
+            licenceDetails: 'Lizenznummer *',
             minorEmailNote: 'Bei minderjährigen Spielern wird die E-Mail-Adresse des Erziehungsberechtigten 1 für den Schriftverkehr verwendet.',
             minorPlayerEmailChoice: 'Hat der Spieler eine eigene E-Mail-Adresse?',
             minorPlayerEmail: 'E-Mail des Spielers *',
@@ -1246,7 +1248,7 @@
         en: {
             correspondenceLanguage: 'Correspondence language *',
             medicoValidUntil: 'Valid until (year) *',
-            licenceDetails: 'Which licence? *',
+            licenceDetails: 'Licence number *',
             minorEmailNote: 'For a minor player, the email address of guardian 1 is used for correspondence.',
             minorPlayerEmailChoice: 'Does the player have their own email address?',
             minorPlayerEmail: 'Player email *',
@@ -1255,7 +1257,7 @@
         pt: {
             correspondenceLanguage: 'Língua de correspondência *',
             medicoValidUntil: 'Válido até (ano) *',
-            licenceDetails: 'Qual licença? *',
+            licenceDetails: 'Número da licença *',
             minorEmailNote: 'Para um jogador menor, o endereço de e-mail do encarregado de educação 1 é utilizado para a correspondência.',
             minorPlayerEmailChoice: 'O jogador tem um endereço de e-mail próprio?',
             minorPlayerEmail: 'E-mail do jogador *',
