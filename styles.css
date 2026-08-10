@@ -1846,6 +1846,7 @@ body.privacy-page {
 
 .join-registration-form input[type='text'],
 .join-registration-form input[type='email'],
+.join-registration-form input[type='tel'],
 .join-registration-form select {
     width: 100%;
     padding: 9px 12px;
@@ -1860,6 +1861,7 @@ body.privacy-page {
 
 .join-registration-form input[type='text']:focus,
 .join-registration-form input[type='email']:focus,
+.join-registration-form input[type='tel']:focus,
 .join-registration-form select:focus {
     outline: none;
     border-color: rgba(0, 47, 101, 0.34);
