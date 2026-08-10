@@ -2283,6 +2283,10 @@ body.privacy-page {
     grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.join-form-row--4col {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .join-optional-hint {
     font-size: 0.65rem;
     font-weight: 600;
@@ -2417,6 +2421,12 @@ body.privacy-page {
 
 #website-field {
     display: none;
+}
+
+@media (max-width: 1000px) {
+    .join-form-row--4col {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
 
 @media (max-width: 720px) {

@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=20260609c">
+    <link rel="stylesheet" href="styles.css?v=20260810joinfields">
 </head>
 <body class="join-page">
     <div class="site-shell">
@@ -83,7 +83,7 @@
                                 </button>
                                 <button class="join-quiz-option" type="button" data-quiz-key="official" aria-pressed="false">
                                     <span class="join-quiz-option-title" id="join-quiz-official-label">Ech si Offiziell / Trainer</span>
-                                    <span class="join-quiz-option-copy" id="join-quiz-official-copy">Fir Trainer oder Teamleitung</span>
+                                    <span class="join-quiz-option-copy" id="join-quiz-official-copy">Fir Trainer oder Teamleedung</span>
                                 </button>
                             </div>
                             <div class="join-quiz-summary" id="join-quiz-summary">
@@ -135,9 +135,36 @@
                                 </div>
                             </div>
 
-                            <div class="join-form-group">
-                                <label id="lbl-nat" for="Nationalite">Nationalitéit *</label>
-                                <input type="text" id="Nationalite" name="Nationalite" autocomplete="country-name" required>
+                            <div class="join-form-row">
+                                <div class="join-form-group">
+                                    <label id="lbl-nat" for="Nationalite">Nationalitéit *</label>
+                                    <input type="text" id="Nationalite" name="Nationalite" list="nationality-options" autocomplete="country-name" required>
+                                    <datalist id="nationality-options">
+                                        <option value="Luxembourgesch">
+                                        <option value="Franséisch">
+                                        <option value="Däitsch">
+                                        <option value="Belsch">
+                                        <option value="Portugisesch">
+                                        <option value="Italienesch">
+                                        <option value="Spuenesch">
+                                        <option value="Hollännesch">
+                                        <option value="Brittesch">
+                                        <option value="Iresch">
+                                        <option value="Polnesch">
+                                        <option value="Rumänesch">
+                                        <option value="Ukrainesch">
+                                        <option value="Aner">
+                                    </datalist>
+                                </div>
+                                <div class="join-form-group">
+                                    <label id="lbl-correspondence-language" for="CorrespondenceLanguage">Sprooch fir de Schrëftverkéier *</label>
+                                    <select id="CorrespondenceLanguage" name="CorrespondenceLanguage" required>
+                                        <option value="LB">LB</option>
+                                        <option value="FR">FR</option>
+                                        <option value="DE">DE</option>
+                                        <option value="GB">GB</option>
+                                    </select>
+                                </div>
                             </div>
 
                             <div class="join-form-group">
@@ -153,8 +180,8 @@
                                         </select>
                                     </div>
                                     <div class="join-form-group">
-                                        <input type="text" id="CNS" name="CNS" maxlength="13" inputmode="numeric" autocomplete="off">
                                         <span id="cns-prefix-display" class="join-helper-text" aria-live="polite"></span>
+                                        <input type="text" id="CNS" name="CNS" maxlength="13" inputmode="numeric" autocomplete="off">
                                     </div>
                                 </div>
                             </div>
@@ -194,7 +221,7 @@
                                         <label><input type="checkbox" name="TrainerQualifications" value="Autres" id="TrainerQualificationOther"> <span id="trainer-other-label">Autres</span></label>
                                     </fieldset>
                                     <div class="join-form-group" id="trainer-document-wrap">
-                                        <label id="lbl-trainer-document" for="TrainerQualificationDocument">Dokument vum Trainer-Schäin eroplueden *</label>
+                                        <label id="lbl-trainer-document" for="TrainerQualificationDocument">Dokument vum Trainer-Schäin eroplueden – ze fannen op Guichet.lu oder bei INAPS ufroen *</label>
                                         <input type="file" id="TrainerQualificationDocument" name="qualificationDocument" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png">
                                         <span class="join-helper-text" id="trainer-document-help">PDF, JPG oder PNG · maximal 5 MB</span>
                                     </div>
@@ -206,7 +233,7 @@
                                 </div>
                             </div>
 
-                            <div class="join-form-row">
+                            <div class="join-form-row join-form-row--4col">
                                 <div class="join-form-group">
                                     <label id="lbl-medico" for="Medico">Medico *</label>
                                     <select id="Medico" name="Medico" required>
@@ -214,12 +241,20 @@
                                         <option value="Oui">Oui</option>
                                     </select>
                                 </div>
+                                <div class="join-form-group" id="medico-valid-until-wrap" hidden>
+                                    <label id="lbl-medico-valid-until" for="MedicoValidUntil">Gülteg bis (Joer) *</label>
+                                    <input type="text" id="MedicoValidUntil" name="MedicoValidUntil" inputmode="numeric" pattern="[0-9]{4}" placeholder="YYYY">
+                                </div>
                                 <div class="join-form-group">
                                     <label id="lbl-licence" for="Licence">Lizenz *</label>
                                     <select id="Licence" name="Licence" required>
                                         <option value="Non">Non</option>
                                         <option value="Oui">Oui</option>
                                     </select>
+                                </div>
+                                <div class="join-form-group" id="licence-details-wrap" hidden>
+                                    <label id="lbl-licence-details" for="LicenceDetails">Wéi eng Lizenz? *</label>
+                                    <input type="text" id="LicenceDetails" name="LicenceDetails">
                                 </div>
                             </div>
 
@@ -279,6 +314,20 @@
                                 <div class="join-form-section-header">
                                     <span class="join-section-icon">👨‍👩‍👧</span>
                                     <span id="lbl-section-guardian">Elteren / Erzéiungsberechtegte</span>
+                                </div>
+                                <p id="minor-email-note" class="join-helper-text">Bei engem mannerjärege Spiller gëtt d'E-Mail vum Erzéiungsberechtegten 1 fir de Schrëftverkéier benotzt.</p>
+                                <div class="join-form-row" id="minor-player-email-option" hidden>
+                                    <div class="join-form-group">
+                                        <label id="lbl-minor-player-email-choice" for="MinorPlayerEmailChoice">Huet de Spiller eng eegen E-Mail?</label>
+                                        <select id="MinorPlayerEmailChoice" name="MinorPlayerEmailChoice">
+                                            <option value="Non">Nee</option>
+                                            <option value="Oui">Jo</option>
+                                        </select>
+                                    </div>
+                                    <div class="join-form-group" id="minor-player-email-wrap" hidden>
+                                        <label id="lbl-minor-player-email" for="PlayerEmail">E-Mail vum Spiller *</label>
+                                        <input type="email" id="PlayerEmail" name="PlayerEmail" autocomplete="email">
+                                    </div>
                                 </div>
 
                                 <div class="join-form-group">
@@ -394,7 +443,7 @@
                             </div>
 
                             <!-- ══ E-MAIL + TELEFON / KONTAKT ══ -->
-                            <div class="join-form-group">
+                            <div class="join-form-group" id="applicant-email-group">
                                 <label id="lbl-email" for="Email">E-Mail *</label>
                                 <input type="email" id="Email" name="Email" autocomplete="email" required>
                             </div>
@@ -750,10 +799,10 @@
            playerSummary: 'Wiel dës Optioun, wann du selwer spille wëlls. Mir riichten d\'Umeldung op dëse Wee aus.',
            playerBullets: ['Hei si just all néideg Donnéeën auszefëllen'],
            officialLabel: 'Ech si Offiziell / Trainer',
-           officialCopy: 'Fir Trainer oder Teamleitung',
+           officialCopy: 'Fir Trainer oder Teamleedung',
            officialTitle: 'Offiziell / Trainer',
            officialBadge: 'Offiziell',
-           officialSummary: 'Wiel dës Optioun, wann s du als Trainer, Chrono um Dësch oder an der Teamleitung matmaache wëlls. D\'Umeldung gëtt op dës Roll ugepasst.',
+           officialSummary: 'Wiel dës Optioun, wann s du als Trainer, Chrono um Dësch oder an der Teamleedung matmaache wëlls. D\'Umeldung gëtt op dës Roll ugepasst.',
            officialBullets: ['Offiziell-/Trainer-Rolle gëtt virbereet', 'Kontakt- a Lizenzdate bleiwe sichtbar', 'D\'Umeldung passt sech un d\'Clublogik un'],
            refereeLabel: 'Ech si Schiedsrichter',
            refereeCopy: 'Fir d\'Rolle als Arbitter',
@@ -1033,7 +1082,7 @@
             official: 'Offiziell',
             qualificationLegend: 'Trainer-Schäin *',
             other: 'Autres',
-            documentLabel: 'Dokument vum Trainer-Schäin eroplueden *',
+            documentLabel: 'Dokument vum Trainer-Schäin eroplueden – ze fannen op Guichet.lu oder bei INAPS ufroen *',
             documentHelp: 'PDF, JPG oder PNG · maximal 5 MB',
             descriptionLabel: 'Beschreif deng Qualifikatioun oder Erfarung *',
             descriptionHelp: 'Zum Beispill: Chrono (FLH), anere Schäin oder Teamleedung bei engem Veräin.',
@@ -1054,7 +1103,7 @@
             official: 'Officiel',
             qualificationLegend: 'Diplôme d’entraîneur *',
             other: 'Autres',
-            documentLabel: 'Téléverser le diplôme d’entraîneur *',
+            documentLabel: 'Téléverser le diplôme d’entraîneur – disponible sur Guichet.lu ou à demander auprès de l’INAPS *',
             documentHelp: 'PDF, JPG ou PNG · 5 Mo maximum',
             descriptionLabel: 'Décrivez votre qualification ou expérience *',
             descriptionHelp: 'Par exemple : chrono (FLH), autre diplôme ou gestion d’équipe dans un club.',
@@ -1075,7 +1124,7 @@
             official: 'Offiziell',
             qualificationLegend: 'Trainer-Schein *',
             other: 'Sonstiges',
-            documentLabel: 'Dokument des Trainer-Scheins hochladen *',
+            documentLabel: 'Dokument des Trainer-Scheins hochladen – auf Guichet.lu verfügbar oder bei INAPS anzufragen *',
             documentHelp: 'PDF, JPG oder PNG · maximal 5 MB',
             descriptionLabel: 'Qualifikation oder Erfahrung beschreiben *',
             descriptionHelp: 'Zum Beispiel: Chrono (FLH), anderer Schein oder Teamleitung bei einem Verein.',
@@ -1096,7 +1145,7 @@
             official: 'Official',
             qualificationLegend: 'Coaching qualification *',
             other: 'Other',
-            documentLabel: 'Upload coaching certificate *',
+            documentLabel: 'Upload coaching certificate – available on Guichet.lu or on request from INAPS *',
             documentHelp: 'PDF, JPG or PNG · maximum 5 MB',
             descriptionLabel: 'Describe your qualification or experience *',
             descriptionHelp: 'For example: chrono (FLH), another certificate, or team leadership at a club.',
@@ -1117,7 +1166,7 @@
             official: 'Oficial',
             qualificationLegend: 'Certificado de treinador *',
             other: 'Outros',
-            documentLabel: 'Carregar certificado de treinador *',
+            documentLabel: 'Carregar certificado de treinador – disponível no Guichet.lu ou mediante pedido ao INAPS *',
             documentHelp: 'PDF, JPG ou PNG · máximo 5 MB',
             descriptionLabel: 'Descreva a sua qualificação ou experiência *',
             descriptionHelp: 'Por exemplo: chrono (FLH), outro certificado ou direção de equipa num clube.',
@@ -1129,6 +1178,53 @@
             documentRequired: 'Carregue o documento do certificado LUXQF selecionado.',
             documentTooLarge: 'O documento não pode exceder 5 MB.',
             documentType: 'Apenas ficheiros PDF, JPG ou PNG são permitidos.'
+        }
+    };
+    const MERSCH75_DETAIL_TEXTS = {
+        lu: {
+            correspondenceLanguage: 'Sprooch fir de Schrëftverkéier *',
+            medicoValidUntil: 'Gülteg bis (Joer) *',
+            licenceDetails: 'Wéi eng Lizenz? *',
+            minorEmailNote: 'Bei engem mannerjärege Spiller gëtt d’E-Mail vum Erzéiungsberechtegten 1 fir de Schrëftverkéier benotzt.',
+            minorPlayerEmailChoice: 'Huet de Spiller eng eegen E-Mail?',
+            minorPlayerEmail: 'E-Mail vum Spiller *',
+            nationalities: ['Luxembourgesch', 'Franséisch', 'Däitsch', 'Belsch', 'Portugisesch', 'Italienesch', 'Spuenesch', 'Hollännesch', 'Brittesch', 'Iresch', 'Polnesch', 'Rumänesch', 'Ukrainesch', 'Aner']
+        },
+        fr: {
+            correspondenceLanguage: 'Langue de correspondance *',
+            medicoValidUntil: 'Valable jusqu’en (année) *',
+            licenceDetails: 'Quelle licence ? *',
+            minorEmailNote: 'Pour un joueur mineur, l’adresse e-mail du responsable légal 1 est utilisée pour la correspondance.',
+            minorPlayerEmailChoice: 'Le joueur a-t-il sa propre adresse e-mail ?',
+            minorPlayerEmail: 'E-mail du joueur *',
+            nationalities: ['Luxembourgeoise', 'Française', 'Allemande', 'Belge', 'Portugaise', 'Italienne', 'Espagnole', 'Néerlandaise', 'Britannique', 'Irlandaise', 'Polonaise', 'Roumaine', 'Ukrainienne', 'Autre']
+        },
+        de: {
+            correspondenceLanguage: 'Korrespondenzsprache *',
+            medicoValidUntil: 'Gültig bis (Jahr) *',
+            licenceDetails: 'Welche Lizenz? *',
+            minorEmailNote: 'Bei minderjährigen Spielern wird die E-Mail-Adresse des Erziehungsberechtigten 1 für den Schriftverkehr verwendet.',
+            minorPlayerEmailChoice: 'Hat der Spieler eine eigene E-Mail-Adresse?',
+            minorPlayerEmail: 'E-Mail des Spielers *',
+            nationalities: ['Luxemburgisch', 'Französisch', 'Deutsch', 'Belgisch', 'Portugiesisch', 'Italienisch', 'Spanisch', 'Niederländisch', 'Britisch', 'Irisch', 'Polnisch', 'Rumänisch', 'Ukrainisch', 'Andere']
+        },
+        en: {
+            correspondenceLanguage: 'Correspondence language *',
+            medicoValidUntil: 'Valid until (year) *',
+            licenceDetails: 'Which licence? *',
+            minorEmailNote: 'For a minor player, the email address of guardian 1 is used for correspondence.',
+            minorPlayerEmailChoice: 'Does the player have their own email address?',
+            minorPlayerEmail: 'Player email *',
+            nationalities: ['Luxembourgish', 'French', 'German', 'Belgian', 'Portuguese', 'Italian', 'Spanish', 'Dutch', 'British', 'Irish', 'Polish', 'Romanian', 'Ukrainian', 'Other']
+        },
+        pt: {
+            correspondenceLanguage: 'Língua de correspondência *',
+            medicoValidUntil: 'Válido até (ano) *',
+            licenceDetails: 'Qual licença? *',
+            minorEmailNote: 'Para um jogador menor, o endereço de e-mail do encarregado de educação 1 é utilizado para a correspondência.',
+            minorPlayerEmailChoice: 'O jogador tem um endereço de e-mail próprio?',
+            minorPlayerEmail: 'E-mail do jogador *',
+            nationalities: ['Luxemburguesa', 'Francesa', 'Alemã', 'Belga', 'Portuguesa', 'Italiana', 'Espanhola', 'Neerlandesa', 'Britânica', 'Irlandesa', 'Polaca', 'Romena', 'Ucraniana', 'Outra']
         }
     };
     const MERSCH75_PHONE_TEXTS = {
@@ -1234,6 +1330,45 @@
         return (getValue('Nom') + ' ' + getValue('Prenom')).trim();
     }
 
+    function updateApplicantEmailField(effectiveMinor) {
+        const emailGroup = document.getElementById('applicant-email-group');
+        const applicantEmail = document.getElementById('Email');
+        const guardianEmail = document.getElementById('Guardian1Email');
+
+        if (effectiveMinor) {
+            if (!emailGroup.hidden) {
+                applicantEmail.dataset.adultValue = applicantEmail.value;
+            }
+            applicantEmail.value = guardianEmail.value.trim();
+        } else if (emailGroup.hidden) {
+            applicantEmail.value = applicantEmail.dataset.adultValue || '';
+            delete applicantEmail.dataset.adultValue;
+        }
+        emailGroup.hidden = effectiveMinor;
+        applicantEmail.required = !effectiveMinor;
+    }
+
+    function updateMinorPlayerEmailFields(effectiveMinor, category) {
+        const eligibleCategory = ['U13', 'U15', 'U17', 'U19'].includes(category);
+        const optionGroup = document.getElementById('minor-player-email-option');
+        const choice = document.getElementById('MinorPlayerEmailChoice');
+        const emailWrap = document.getElementById('minor-player-email-wrap');
+        const playerEmail = document.getElementById('PlayerEmail');
+        const eligible = effectiveMinor && eligibleCategory;
+        const showEmail = eligible && choice.value === 'Oui';
+
+        optionGroup.hidden = !eligible;
+        emailWrap.hidden = !showEmail;
+        playerEmail.required = showEmail;
+
+        if (!eligible) {
+            choice.value = 'Non';
+        }
+        if (!showEmail) {
+            playerEmail.value = '';
+        }
+    }
+
     function getCategoryValue() {
         return document.getElementById('Categorie').value || document.getElementById('cat-display').innerText;
     }
@@ -1287,6 +1422,8 @@
 
         document.getElementById('parent-section').style.display = effectiveMinor ? 'block' : 'none';
         document.getElementById('u7-section').style.display = category === 'U7' ? 'flex' : 'none';
+        updateApplicantEmailField(effectiveMinor);
+        updateMinorPlayerEmailFields(effectiveMinor, category);
 
         if (!effectiveMinor) {
             tuteur1.value = '';
@@ -1479,23 +1616,70 @@
 
     function updateClubFields() {
         const isPlayerProfile = currentJoinQuiz === 'player' || currentJoinQuiz === 'family';
+        const officialRole = getValue('OfficialRole');
+        const isTrainerOrTeamCompanion = currentJoinQuiz === 'official' && (officialRole === 'Trainer' || officialRole === 'Teamleader');
+        const requiresFormerClub = isPlayerProfile || isTrainerOrTeamCompanion;
         const clubGroup = document.getElementById('club-selection-group');
         const clubSelect = document.getElementById('AncienClub');
         const foreignWrap = document.getElementById('foreign-club-wrap');
         const foreignClub = document.getElementById('ForeignClub');
-        const showForeignClub = isPlayerProfile && clubSelect.value === 'Ausland';
+        const showForeignClub = requiresFormerClub && clubSelect.value === 'Ausland';
 
-        clubGroup.hidden = !isPlayerProfile;
-        clubSelect.required = isPlayerProfile;
+        clubGroup.hidden = !requiresFormerClub;
+        clubSelect.required = requiresFormerClub;
         foreignWrap.hidden = !showForeignClub;
         foreignClub.required = showForeignClub;
 
-        if (!isPlayerProfile) {
+        if (!requiresFormerClub) {
             clubSelect.value = '';
             foreignClub.value = '';
         } else if (!showForeignClub) {
             foreignClub.value = '';
         }
+    }
+
+    function updateMembershipDetailFields() {
+        const hasMedico = getValue('Medico') === 'Oui';
+        const hasLicence = getValue('Licence') === 'Oui';
+        const medicoWrap = document.getElementById('medico-valid-until-wrap');
+        const medicoValidUntil = document.getElementById('MedicoValidUntil');
+        const licenceWrap = document.getElementById('licence-details-wrap');
+        const licenceDetails = document.getElementById('LicenceDetails');
+
+        medicoWrap.hidden = !hasMedico;
+        medicoValidUntil.required = hasMedico;
+        licenceWrap.hidden = !hasLicence;
+        licenceDetails.required = hasLicence;
+
+        if (!hasMedico) {
+            medicoValidUntil.value = '';
+        }
+        if (!hasLicence) {
+            licenceDetails.value = '';
+        }
+    }
+
+    function updateDetailLanguage() {
+        const text = MERSCH75_DETAIL_TEXTS[currentLang] || MERSCH75_DETAIL_TEXTS.lu;
+        document.getElementById('lbl-correspondence-language').textContent = text.correspondenceLanguage;
+        document.getElementById('lbl-medico-valid-until').textContent = text.medicoValidUntil;
+        document.getElementById('lbl-licence-details').textContent = text.licenceDetails;
+        document.getElementById('minor-email-note').textContent = text.minorEmailNote;
+        document.getElementById('lbl-minor-player-email-choice').textContent = text.minorPlayerEmailChoice;
+        document.getElementById('lbl-minor-player-email').textContent = text.minorPlayerEmail;
+
+        const playerEmailChoice = document.getElementById('MinorPlayerEmailChoice');
+        const ui = MERSCH75_UI_TEXTS[currentLang] || MERSCH75_UI_TEXTS.lu;
+        playerEmailChoice.options[0].text = ui.non;
+        playerEmailChoice.options[1].text = ui.oui;
+
+        const nationalityList = document.getElementById('nationality-options');
+        nationalityList.replaceChildren();
+        text.nationalities.forEach(function(nationality) {
+            const option = document.createElement('option');
+            option.value = nationality;
+            nationalityList.appendChild(option);
+        });
     }
 
     function updateQualificationValidation() {
@@ -2142,14 +2326,10 @@
         siblingSection.hidden = !isFamilyProfile;
         familyRegistrationSection.hidden = !isFamilyProfile;
 
-        // Elteren-Sektioun direkt weisen wann Elteren ee Kand umellen
-        const parentSection = document.getElementById('parent-section');
-        if (isFamilyProfile) {
-            parentSection.style.display = 'block';
-            updateFamilyStructure();
-        } else if (document.getElementById('Mineur').value !== 'OUI') {
-            parentSection.style.display = 'none';
-        }
+        setRequiredState(
+            document.getElementById('Mineur').value === 'OUI',
+            document.getElementById('Categorie').value
+        );
         if (!isFamilyProfile) {
             document.getElementById('FamilyRegistrationMode').value = 'NONE';
             toggleFamilyRegistrationFields();
@@ -2320,8 +2500,10 @@
         updateQualificationValidation();
         updateSiblingLanguage();
         updateRoleLanguage();
+        updateDetailLanguage();
         updateJoinQuizUI();
         updatePhoneFieldVisibility();
+        updateMembershipDetailFields();
         updateTarifSuggestion();
     }
 
@@ -2368,6 +2550,10 @@
         lines.push(text.birthDate + ': ' + getValue('DateNaissance'));
         lines.push('----------------------------------------');
         lines.push(text.email + ': ' + getValue('Email'));
+        if (getValue('PlayerEmail')) {
+            lines.push((isFrenchMessage ? 'E-MAIL DU JOUEUR' : 'SPIELER-E-MAIL') + ': ' + getValue('PlayerEmail'));
+        }
+        lines.push((isFrenchMessage ? 'LANGUE DE CORRESPONDANCE' : 'KORRESPONDENZSPRACHE') + ': ' + getValue('CorrespondenceLanguage'));
         const gsm1Value = formatPhoneValue('GSM1', 'GSM1Role');
         if (gsm1Value) {
             lines.push(text.phoneApplicant + ': ' + gsm1Value);
@@ -2395,7 +2581,7 @@
         lines.push('----------------------------------------');
         lines.push(text.minor + ': ' + document.getElementById('Mineur').value);
 
-        if (document.getElementById('Mineur').value === 'OUI') {
+        if (document.getElementById('Mineur').value === 'OUI' || currentJoinQuiz === 'family') {
             lines.push(text.singleParent + ': ' + document.getElementById('ParentIsole').value);
             lines.push(text.guardians + ': ' + getGuardianText());
         }
@@ -2438,6 +2624,12 @@
             lines.push('Dokument: ' + (submittedQualificationDocument ? submittedQualificationDocument.url : '-'));
         }
         lines.push(text.medLicense + ': Med: ' + getValue('Medico') + ' / Liz: ' + getValue('Licence'));
+        if (getValue('Medico') === 'Oui') {
+            lines.push((isFrenchMessage ? 'MEDICO VALABLE JUSQU’AU' : 'MEDICO GUELTIG BIS') + ': ' + getValue('MedicoValidUntil'));
+        }
+        if (getValue('Licence') === 'Oui') {
+            lines.push((isFrenchMessage ? 'TYPE DE LICENCE' : 'LIZENZART') + ': ' + getValue('LicenceDetails'));
+        }
         lines.push(text.nationality + ': ' + getValue('Nationalite'));
         lines.push(text.legalAccepted + ': ' + getCheckedValue('LegalConsent'));
         lines.push(text.flhAccepted + ': ' + getCheckedValue('FlhPortalConsent'));
@@ -2502,6 +2694,7 @@
             prenom: getValue('Prenom'),
             dateNaissance: getValue('DateNaissance'),
             email: getValue('Email'),
+            playerEmail: getValue('PlayerEmail'),
             role: getValue('Role'),
             categorie: getCategoryValue(),
             mineur: document.getElementById('Mineur').value,
@@ -2511,10 +2704,13 @@
             postcode: getValue('Postcode'),
             city: getValue('Ortschaft'),
             nationality: getValue('Nationalite'),
+            correspondenceLanguage: getValue('CorrespondenceLanguage'),
             cns: getValue('CNS'),
             cnsComplete: getCnsComplete(),
             medico: getValue('Medico'),
+            medicoValidUntil: getValue('MedicoValidUntil'),
             licence: getValue('Licence'),
+            licenceDetails: getValue('LicenceDetails'),
             ancienClub: getFormerClubValue(),
             officialRole: getValue('OfficialRole'),
             trainerQualifications: getTrainerQualifications().join(', '),
@@ -2730,6 +2926,21 @@
     });
     document.getElementById('TrainerQualificationDocument').addEventListener('change', updateQualificationValidation);
     document.getElementById('AncienClub').addEventListener('change', updateClubFields);
+    document.getElementById('Medico').addEventListener('change', updateMembershipDetailFields);
+    document.getElementById('Licence').addEventListener('change', updateMembershipDetailFields);
+    document.getElementById('MedicoValidUntil').addEventListener('input', function() {
+        this.value = this.value.replace(/\D/g, '').slice(0, 4);
+    });
+    document.getElementById('MinorPlayerEmailChoice').addEventListener('change', function() {
+        const effectiveMinor = document.getElementById('Mineur').value === 'OUI' || currentJoinQuiz === 'family';
+        updateMinorPlayerEmailFields(effectiveMinor, document.getElementById('Categorie').value);
+    });
+    document.getElementById('Guardian1Email').addEventListener('input', function() {
+        const effectiveMinor = document.getElementById('Mineur').value === 'OUI' || currentJoinQuiz === 'family';
+        if (effectiveMinor) {
+            document.getElementById('Email').value = this.value.trim();
+        }
+    });
     document.getElementById('sibling-list').addEventListener('click', function(event) {
         const removeButton = event.target.closest('[data-sibling-remove]');
         if (!removeButton) {
@@ -2762,7 +2973,7 @@
     });
 
     document.getElementById('CNS').addEventListener('input', function() {
-        this.value = this.value.slice(0, 5);
+        this.value = this.value.slice(0, this.maxLength > 0 ? this.maxLength : 15);
         updateCnsDisplay();
     });
 
@@ -2791,7 +3002,9 @@
         const submitBtn = document.getElementById('submitBtn');
         const originalText = submitBtn.innerText;
         const isTestMode = isTestSubmission();
+        const effectiveMinor = document.getElementById('Mineur').value === 'OUI' || currentJoinQuiz === 'family';
 
+        updateApplicantEmailField(effectiveMinor);
         ensureCardInternalId();
         document.getElementById('name').value = getFullName();
         document.getElementById('email').value = getValue('Email');
