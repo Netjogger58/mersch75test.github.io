@@ -4,20 +4,6 @@ function syncCurrentYear() {
     });
 }
 
-function initializeFeedbackSystem() {
-    if (window.Mersch75FeedbackConfig || document.body.classList.contains('feedback-admin-page')) return;
-
-    const version = '20260608b';
-    const configScript = document.createElement('script');
-    configScript.src = 'feedback-config.js?v=' + version;
-    configScript.onload = () => {
-        const feedbackScript = document.createElement('script');
-        feedbackScript.src = 'feedback.js?v=' + version;
-        document.body.append(feedbackScript);
-    };
-    document.body.append(configScript);
-}
-
 function ensureSiteLanguageSwitcher() {
     // Wenn die Seite bereits einen Sprachumschalter mitbringt, nichts tun.
     if (document.querySelector('.site-language-switcher')) return;
@@ -142,8 +128,11 @@ function initializeSiteLanguage() {
             newsWomenTitle: 'D\'Frae starten de 24. August',
             newsWomenBody: 'Och bei de Frae ginn d\'Pläng fir déi kommend Saison nach ausgeschafft. Hir Preparatioun fänkt de 24. August 2026 an der Sportshal an der Rue des Prés un. Do baut d\'Ekipp Schrëtt fir Schrëtt Konditioun, Zesummespill a Rhythmus fir d\'Saison 2026/2027 op. 💛💙',
             newsU11Eyebrow: 'Jugend · Preparatioun 26/27',
-            newsU11Title: 'Eis Jugend start Ufanks September',
-            newsU11Body: 'D\'Trainingspläng vun de Jugendequippe fir déi kommend Saison sinn nach an der Ofstëmmung. Ufanks September geet d\'Preparatioun nees lass. Déi genee Zäiten an d\'Andeelung vun den Ekippe gi publizéiert, soubal alles fäerdeg geplangt ass. D\'Foto bleift bis dohinner als Erënnerung un eng staark gemeinsam Saison. 💛💙',
+            newsU11Title: 'U13 an U15 starte schonn de 17. August',
+            newsU11Body: 'Eis U13 an U15 fänken de 17. August 2026 nees mat der Preparatioun un. Déi aner Jugendequippe starte vun Ufanks September un. Déi genee Trainingszäiten an d\'Andeelung vun den Ekippe gi publizéiert, soubal d\'Pläng komplett ofgeschloss sinn. 💛💙',
+            newsYouthPillU13U15: '📅 U13/U15 · 17.08.',
+            newsYouthPillOthers: '🤾 Aner Ekippen · September',
+            newsYouthPillSeason: '💛💙 Saison 26/27',
             newsStatsEyebrow: 'Saisonstatistik 25/26',
             newsStatsTitle: 'STATISTIKEN VUN EISEN EKIPPEN OP ENGER PLAZ',
             newsStatsBody: 'D\'Saisonstatistik 2025/2026 ass live: Tabellen, Resultater an Torschützenlëschten fir Männer, Fraen, U15, U13 an U11 – iwwersiichtlech an aktuell.',
@@ -262,8 +251,11 @@ function initializeSiteLanguage() {
             newsWomenTitle: 'Les femmes reprennent le 24 août',
             newsWomenBody: 'Pour les femmes aussi, les plans de la saison à venir sont encore en cours de finalisation. Leur préparation débutera le 24 août 2026 dans la salle de sport de la rue des Prés. L’équipe y retrouvera progressivement condition physique, automatismes et rythme pour la saison 2026/2027. 💛💙',
             newsU11Eyebrow: 'Jeunes · Préparation 26/27',
-            newsU11Title: 'Les jeunes reprennent début septembre',
-            newsU11Body: 'Les programmes d’entraînement des équipes de jeunes pour la saison à venir sont encore en cours de coordination. La préparation reprendra début septembre. Les horaires précis et la répartition des équipes seront publiés dès que la planification sera terminée. La photo reste entre-temps un souvenir d’une belle saison collective. 💛💙',
+            newsU11Title: 'Les U13 et U15 reprennent dès le 17 août',
+            newsU11Body: 'Nos U13 et U15 reprennent leur préparation le 17 août 2026. Les autres équipes de jeunes recommenceront à partir du début du mois de septembre. Les horaires précis et la répartition des équipes seront publiés dès que la planification sera entièrement finalisée. 💛💙',
+            newsYouthPillU13U15: '📅 U13/U15 · 17.08.',
+            newsYouthPillOthers: '🤾 Autres équipes · Septembre',
+            newsYouthPillSeason: '💛💙 Saison 26/27',
             newsStatsEyebrow: 'Statistiques de saison 25/26',
             newsStatsTitle: 'STATISTIQUES DE NOS ÉQUIPES AU MÊME ENDROIT',
             newsStatsBody: 'Les statistiques de la saison 2025/2026 sont en ligne : classements, résultats et meilleurs buteurs pour les hommes, les femmes, U15, U13 et U11 – clairs et à jour.',
@@ -382,8 +374,11 @@ function initializeSiteLanguage() {
             newsWomenTitle: 'Die Frauen starten am 24. August',
             newsWomenBody: 'Auch bei den Frauen werden die Pläne für die kommende Saison noch ausgearbeitet. Ihre Vorbereitung beginnt am 24. August 2026 in der Sporthalle in der Rue des Prés. Dort baut die Mannschaft Schritt für Schritt Kondition, Zusammenspiel und Rhythmus für die Saison 2026/2027 auf. 💛💙',
             newsU11Eyebrow: 'Jugend · Vorbereitung 26/27',
-            newsU11Title: 'Die Jugend startet Anfang September',
-            newsU11Body: 'Die Trainingspläne der Jugendmannschaften für die kommende Saison werden noch abgestimmt. Anfang September beginnt die Vorbereitung. Die genauen Zeiten und die Einteilung der Teams werden veröffentlicht, sobald die Planung abgeschlossen ist. Bis dahin bleibt das Foto eine Erinnerung an eine starke gemeinsame Saison. 💛💙',
+            newsU11Title: 'U13 und U15 starten bereits am 17. August',
+            newsU11Body: 'Unsere U13 und U15 beginnen am 17. August 2026 wieder mit der Vorbereitung. Die anderen Jugendmannschaften starten ab Anfang September. Die genauen Trainingszeiten und die Einteilung der Teams werden veröffentlicht, sobald die Planung vollständig abgeschlossen ist. 💛💙',
+            newsYouthPillU13U15: '📅 U13/U15 · 17.08.',
+            newsYouthPillOthers: '🤾 Weitere Teams · September',
+            newsYouthPillSeason: '💛💙 Saison 26/27',
             newsStatsEyebrow: 'Saisonstatistik 25/26',
             newsStatsTitle: 'STATISTIKEN UNSERER TEAMS AN EINEM ORT',
             newsStatsBody: 'Die Saisonstatistik 2025/2026 ist live: Tabellen, Ergebnisse und Torschützenlisten für Männer, Frauen, U15, U13 und U11 – übersichtlich und aktuell.',
@@ -502,8 +497,11 @@ function initializeSiteLanguage() {
             newsWomenTitle: 'The women return on 24 August',
             newsWomenBody: 'Plans for the women’s coming season are also still being finalised. Their preparation starts on 24 August 2026 in the sports hall on Rue des Prés. The team will gradually rebuild fitness, coordination and match rhythm for the 2026/2027 season. 💛💙',
             newsU11Eyebrow: 'Youth · Pre-season 26/27',
-            newsU11Title: 'Youth training resumes in early September',
-            newsU11Body: 'Training plans for the youth teams are still being coordinated for the coming season. Preparation resumes in early September. Exact times and team allocations will be published as soon as planning is complete. Until then, the photo remains a reminder of a strong season together. 💛💙',
+            newsU11Title: 'U13 and U15 return on 17 August',
+            newsU11Body: 'Our U13 and U15 teams resume pre-season training on 17 August 2026. The other youth teams will return from early September. Exact training times and team allocations will be published as soon as planning is fully complete. 💛💙',
+            newsYouthPillU13U15: '📅 U13/U15 · 17 Aug',
+            newsYouthPillOthers: '🤾 Other teams · September',
+            newsYouthPillSeason: '💛💙 Season 26/27',
             newsStatsEyebrow: 'Season stats 25/26',
             newsStatsTitle: 'STATS FOR OUR TEAMS IN ONE PLACE',
             newsStatsBody: 'The 2025/2026 season statistics are live: tables, results and top scorers for men, women, U15, U13 and U11 – clear and up to date.',
@@ -622,8 +620,11 @@ function initializeSiteLanguage() {
             newsWomenTitle: 'As mulheres regressam a 24 de agosto',
             newsWomenBody: 'Os planos das mulheres para a próxima época também continuam a ser finalizados. A preparação começa a 24 de agosto de 2026 no pavilhão da Rue des Prés. A equipa irá recuperar progressivamente a condição física, o entrosamento e o ritmo para a época 2026/2027. 💛💙',
             newsU11Eyebrow: 'Formação · Preparação 26/27',
-            newsU11Title: 'A formação regressa no início de setembro',
-            newsU11Body: 'Os planos de treino das equipas jovens para a próxima época ainda estão a ser coordenados. A preparação recomeça no início de setembro. Os horários exatos e a distribuição das equipas serão publicados assim que o planeamento estiver concluído. Até lá, a fotografia fica como recordação de uma grande época em conjunto. 💛💙',
+            newsU11Title: 'U13 e U15 regressam já a 17 de agosto',
+            newsU11Body: 'As nossas equipas U13 e U15 retomam a preparação a 17 de agosto de 2026. As restantes equipas jovens regressam a partir do início de setembro. Os horários exatos e a distribuição das equipas serão publicados assim que o planeamento estiver totalmente concluído. 💛💙',
+            newsYouthPillU13U15: '📅 U13/U15 · 17.08.',
+            newsYouthPillOthers: '🤾 Outras equipas · Setembro',
+            newsYouthPillSeason: '💛💙 Época 26/27',
             newsStatsEyebrow: 'Estatísticas da época 25/26',
             newsStatsTitle: 'ESTATÍSTICAS DAS NOSSAS EQUIPAS NUM SÓ LUGAR',
             newsStatsBody: 'As estatísticas da época 2025/2026 estão online: classificações, resultados e melhores marcadores para homens, mulheres, U15, U13 e U11 – claras e atualizadas.',
@@ -2246,7 +2247,6 @@ initializeTrainingSchedule();
 initializeJoinUsForm();
 initializeSharedFooters();
 initializeNewsCarousel();
-initializeFeedbackSystem();
 syncCurrentYear();
 
 // Passwuert Modal fir Wëllkomm Mapp
