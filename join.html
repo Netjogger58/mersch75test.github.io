@@ -1415,7 +1415,8 @@
 
         document.getElementById('phone-father-group').hidden = !isFamilyProfile;
         document.getElementById('phone-mother-group').hidden = !isFamilyProfile;
-        document.getElementById('lbl-gsm4').innerText = isFamilyProfile ? ui.gsm4 : phoneText.secondPhone;
+        var gsm4lbl = document.getElementById('lbl-gsm4');
+        if (gsm4lbl) gsm4lbl.innerText = isFamilyProfile ? ui.gsm4 : phoneText.secondPhone;
         document.getElementById('GSM4Role').value = isFamilyProfile ? 'Begleeder' : 'Kontaktpersoun';
         document.getElementById('gsm-helper').innerText = isFamilyProfile ? ui.gsmHelper : phoneText.singleHelper;
 
@@ -2203,7 +2204,8 @@
         document.getElementById('lbl-gsm1').innerText = ui.gsm1;
         document.getElementById('lbl-gsm2').innerText = ui.gsm2;
         document.getElementById('lbl-gsm3').innerText = ui.gsm3;
-        document.getElementById('lbl-gsm4').innerText = ui.gsm4;
+        var gsm4el = document.getElementById('lbl-gsm4');
+        if (gsm4el) gsm4el.innerText = ui.gsm4;
         const gsmHelper = document.getElementById('gsm-helper');
         if (gsmHelper) {
             gsmHelper.innerText = ui.gsmHelper || '';
