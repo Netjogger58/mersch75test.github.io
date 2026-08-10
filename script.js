@@ -865,7 +865,7 @@ function initializeSiteMenu() {
         { href: 'statistics-25-26.html', labelKey: 'navStatistics', fallback: 'Statistik 25/26', primary: true },
         { href: 'gallery.html', labelKey: 'navGallery', fallback: 'Galerie', primary: false },
         { href: 'memories.html', labelKey: 'navMemories', fallback: 'Memories', primary: false },
-        { href: 'historie.html', labelKey: 'navHistory', fallback: 'Historie', primary: false },
+        { href: 'history.html', labelKey: 'navHistory', fallback: 'Historie', primary: false },
         { href: 'links.html', labelKey: 'navLinks', fallback: 'Useful Links', primary: false },
         { href: 'hallenkarte.html', labelKey: 'navHallenkarte', fallback: 'Hallenkarte', primary: false },
         { href: 'contact.html', labelKey: 'navContact', fallback: 'Contact', primary: false }
@@ -1467,7 +1467,7 @@ function initializeSharedFooters() {
         { href: 'links.html', label: 'Useful Links' },
         { href: 'hallenkarte.html', label: 'Hallenkarte' },
         { href: 'comite.html', label: 'Comité' },
-        { href: 'historie.html', label: 'Historie' },
+        { href: 'history.html', label: 'Historie' },
         { href: 'contact.html', label: 'Contact' }
     ];
     const landingQuickLinks = [

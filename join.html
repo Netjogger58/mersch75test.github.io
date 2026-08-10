@@ -645,6 +645,7 @@
                             <strong>Merci / Danke / Thank you / Obrigado!</strong>
                             <span>Deng Umeldung gouf erfollegraich iwwermettelt.</span>
                             <small>Du kriss eng Bestateigung per E-Mail.</small>
+                            <p id="integration-warning" hidden></p>
                             <a id="welcomeMappLink" class="join-welcome-link" href="wellkomm-mapp.html" target="_blank" rel="noopener"
                                style="display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding:14px 26px;background:linear-gradient(135deg,#fffdf0 0%,#fff6c2 100%);border:2px solid #f9d611;border-radius:999px;color:#002b5c;font-weight:700;text-decoration:none;font-size:1.05rem;box-shadow:0 8px 18px rgba(249,214,17,0.25);">
                                 📖 Wëllkomm-Mapp opmaachen / öffnen / open / abrir
@@ -686,7 +687,7 @@
                                 <a href="wellkomm-mapp.html" data-password="Mersch75lu@EUR">Wëllkomm Mapp</a>
                                 <a href="hallenkarte.html">Hallenkarte</a>
                                 <a href="comite.html">Comité</a>
-                                <a href="historie.html">Historie</a>
+                                <a href="history.html">Historie</a>
                             </div>
                         </div>
                         <div class="site-page-footer-col">
@@ -718,8 +719,7 @@
         </main>
     </div>
 
-    <script src="js/site-config.js"></script>
-    <script src="script.js?v=20260808joinfix"></script>
+    <script src="script.js?v=20260810joinfix2"></script>
     <script>
     const MERSCH75_WEB3FORMS_MAIN_KEY = '15e3cc53-6864-47dd-bfaf-332cb4ca45e5';
     const MERSCH75_WEB3FORMS_MAX_KEY = 'f748489b-abc6-4e37-bb82-860a82c91f4e';
@@ -731,6 +731,13 @@
     const MERSCH75_SHEET_PRODUCTION = false;
     const MERSCH75_LICENSE_LINK = 'https://submit.paperless.io/f/s4zaWnzHBwxcPK8jAkkbjPpVC1giUfr7';
     const MERSCH75_LICENSE_PASSWORD = 'FIhNvLi26';
+    const MERSCH75_INTEGRATION_WARNING_TEXTS = {
+        lu: 'Deng Umeldung gouf per E-Mail geschéckt. Déi automatesch intern Iwwerdroung war net disponibel; de Veräin verschafft se manuell.',
+        fr: 'Votre inscription a été envoyée par e-mail. Le transfert interne automatique était indisponible ; le club la traitera manuellement.',
+        de: 'Deine Anmeldung wurde per E-Mail gesendet. Die automatische interne Übertragung war nicht verfügbar; der Verein verarbeitet sie manuell.',
+        en: 'Your registration was sent by email. The automatic internal transfer was unavailable; the club will process it manually.',
+        pt: 'A sua inscrição foi enviada por e-mail. A transferência interna automática não estava disponível; o clube irá processá-la manualmente.'
+    };
     const MERSCH75_JOIN_QUIZ_CONTENT = {
         lu: {
             quizKicker: 'Schnellstarter',
@@ -1328,8 +1335,29 @@
         const dobField = document.getElementById('DateNaissance');
         const hasCns = cns.length >= 3;
         dobField.required = !hasCns;
-        const hint = document.getElementById('dob-optional-hint');
-        if (hint) hint.style.display = hasCns ? 'inline' : 'none';
+        updateDobLabel(hasCns);
+    }
+
+    function updateDobLabel(hasCns) {
+        const label = document.getElementById('lbl-dob');
+        if (!label) return;
+
+        const ui = MERSCH75_UI_TEXTS[currentLang] || MERSCH75_UI_TEXTS.lu;
+        const optionalTexts = {
+            lu: '(optional wann Matricule ausgefüllt)',
+            fr: '(facultatif si le matricule est renseigné)',
+            de: '(optional, wenn die Matrikelnummer ausgefüllt ist)',
+            en: '(optional when the identification number is provided)',
+            pt: '(facultativo se o número de identificação estiver preenchido)'
+        };
+        label.textContent = hasCns ? ui.dob.replace(/\s*\*$/, '') + ' ' : ui.dob + ' ';
+
+        const hint = document.createElement('span');
+        hint.id = 'dob-optional-hint';
+        hint.className = 'join-optional-hint';
+        hint.textContent = optionalTexts[currentLang] || optionalTexts.lu;
+        hint.style.display = hasCns ? 'inline' : 'none';
+        label.appendChild(hint);
     }
 
     // Adress-Land-Erkennung: CNS-Typ auto-wuesselen
@@ -2144,7 +2172,7 @@
     function updatePhoneRoleSelects(ui) {
         ['FamilyParent1GsmRole', 'FamilyParent2GsmRole'].forEach(function(id) {
             const select = document.getElementById(id);
-            if (!select) {
+            if (!select || select.tagName !== 'SELECT') {
                 return;
             }
 
@@ -2187,7 +2215,7 @@
 
         document.getElementById('lbl-nom').innerText = ui.nom;
         document.getElementById('lbl-prenom').innerText = ui.prenom;
-        document.getElementById('lbl-dob').innerText = ui.dob;
+        updateDobLabel(document.getElementById('CNS').value.trim().length >= 3);
         document.getElementById('lbl-mineur').innerText = ui.mineur;
         document.getElementById('lbl-cat').innerText = ui.cat;
         document.getElementById('lbl-role').innerText = ui.role;
@@ -2275,9 +2303,11 @@
         role.options[1].text = ui.officiel;
         role.options[2].text = ui.arbitre;
 
-        const parent = document.getElementById('ParentIsole');
-        parent.options[0].text = ui.parent_non;
-        parent.options[1].text = ui.parent_oui;
+        ['Medico', 'Licence'].forEach(function(id) {
+            const select = document.getElementById(id);
+            select.options[0].text = ui.non;
+            select.options[1].text = ui.oui;
+        });
 
         const familyMode = document.getElementById('FamilyRegistrationMode');
         familyMode.options[0].text = ui.familyModeNone;
@@ -2292,6 +2322,7 @@
         updateRoleLanguage();
         updateJoinQuizUI();
         updatePhoneFieldVisibility();
+        updateTarifSuggestion();
     }
 
     function formatPhoneValue(numberId, roleId) {
@@ -2787,7 +2818,14 @@
         try {
             const sheetPayload = buildSheetPayload(isTestMode);
             const qualificationDocument = document.getElementById('TrainerQualificationDocument').files[0] || null;
-            const managerResult = await submitToManager(sheetPayload, qualificationDocument);
+            let managerResult = {};
+            let integrationFailed = false;
+            try {
+                managerResult = await submitToManager(sheetPayload, qualificationDocument);
+            } catch (managerError) {
+                integrationFailed = true;
+                console.error('Manager submission failed; continuing with email delivery.', managerError);
+            }
             if (managerResult.qualificationDocument) {
                 submittedQualificationDocument = managerResult.qualificationDocument;
                 sheetPayload.qualificationDocumentId = managerResult.qualificationDocument.id || '';
@@ -2819,7 +2857,12 @@
                 ));
             }
 
-            await submitToSheet(sheetPayload);
+            try {
+                await submitToSheet(sheetPayload);
+            } catch (sheetError) {
+                integrationFailed = true;
+                console.error('Sheet submission failed after email delivery.', sheetError);
+            }
 
             form.style.display = 'none';
             document.querySelector('.join-lang-selector').style.display = 'none';
@@ -2829,6 +2872,11 @@
 
             const successBox = document.getElementById('success-box');
             successBox.style.display = 'block';
+            const integrationWarning = document.getElementById('integration-warning');
+            integrationWarning.hidden = !integrationFailed;
+            integrationWarning.innerText = integrationFailed
+                ? (MERSCH75_INTEGRATION_WARNING_TEXTS[currentLang] || MERSCH75_INTEGRATION_WARNING_TEXTS.lu)
+                : '';
 
             // Personalisierter Link zur Wëllkomm-Mapp (Vorname + Sprache aus dem Formular)
             try {
