@@ -948,6 +948,31 @@ body.menu-open {
     object-position: center 16%;
 }
 
+.news-carousel-track .news-slide-luxqf3 .events-background {
+    object-position: center center;
+}
+
+.news-carousel-track .news-slide-luxqf3 .events-overlay {
+    grid-template-columns: minmax(320px, 620px) 1fr;
+    background: linear-gradient(90deg, rgba(0, 24, 55, 0.88) 0%, rgba(0, 47, 101, 0.45) 52%, rgba(0, 47, 101, 0.04) 100%);
+}
+
+.news-carousel-track .news-slide-luxqf3 .events-copy {
+    width: 100%;
+    max-width: 620px;
+    background: rgba(0, 47, 101, 0.92);
+}
+
+.news-luxqf-contact {
+    margin: 16px 0 0;
+    font-size: 0.82rem;
+    line-height: 1.45;
+}
+
+.news-luxqf-contact a {
+    color: var(--yellow);
+}
+
 .news-carousel-track .news-slide-u13 .events-copy,
 .news-carousel-track .news-slide-u11 .events-copy,
 .news-carousel-track .news-slide-seniors .events-copy {
@@ -3866,6 +3891,17 @@ body.matchday-page {
         overflow-wrap: break-word;
         word-break: normal;
         hyphens: none;
+    }
+
+    .news-carousel-track .news-slide-luxqf3 .events-overlay {
+        grid-template-columns: 1fr;
+        align-items: end;
+        padding: 18px 12px;
+        background: linear-gradient(180deg, rgba(0, 24, 55, 0.08) 8%, rgba(0, 24, 55, 0.9) 72%);
+    }
+
+    .news-carousel-track .news-slide-luxqf3 .events-copy {
+        width: 100%;
     }
 
     .news-arrow {

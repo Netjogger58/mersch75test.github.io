@@ -54,6 +54,12 @@ function initializeSiteLanguage() {
             newsRefTitle: 'Jonk Schiedsrichter: Aschreiwunge sinn op',
             newsRefBody: 'D\'Formatioun fir jonk Schiedsrichter am FLH Cycle inférieur ass online. Eng flott Geleeënheet fir déi nächst Generatioun, Verantwortung ze iwwerhuelen.',
             newsRefCta: 'Info & Aschreiwung',
+            newsLuxqfEyebrow: 'Avis aux amateurs · Urgent',
+            newsLuxqfTitle: 'LUXQF 3 – Entraîneur de Handball',
+            newsLuxqfBody: 'D\'Aschreiwunge fir d\'Formatioun 2026–2027 sinn op. Bis den 09.09.2026 brauche mir op d\'mannst 7 Kandidaten; soss muss d\'Formatioun annuléiert ginn.',
+            newsLuxqfDeadline: '📅 Aschreiwung bis 09.09.2026',
+            newsLuxqfMinimum: '👥 Minimum 7 Kandidaten',
+            newsLuxqfCta: 'Elo bei INAPS umellen',
             trainingPageTitle: 'Training | Mersch75 Handball',
             trainingPageDescription: 'Training beim Mersch75: Trainingsplang, Gruppen, Halen a Jugendkoordinatioun op ee Bléck.',
             trainingHeroLogoAlt: 'Team Training Logo',
@@ -180,6 +186,12 @@ function initializeSiteLanguage() {
             newsRefTitle: 'Jeunes arbitres : inscriptions ouvertes',
             newsRefBody: 'La formation pour jeunes arbitres du FLH Cycle inférieur est en ligne. Une belle occasion pour la prochaine génération de prendre des responsabilités.',
             newsRefCta: 'Infos & inscription',
+            newsLuxqfEyebrow: 'Avis aux amateurs · Urgent',
+            newsLuxqfTitle: 'LUXQF 3 – Entraîneur de Handball',
+            newsLuxqfBody: 'Les inscriptions à la formation 2026–2027 sont ouvertes. Il faut au moins 7 candidats inscrits avant le 09.09.2026, faute de quoi la formation devra être annulée.',
+            newsLuxqfDeadline: '📅 Inscription avant le 09.09.2026',
+            newsLuxqfMinimum: '👥 Minimum 7 candidats',
+            newsLuxqfCta: 'S\'inscrire auprès de l\'INAPS',
             trainingPageTitle: 'Entraînement | Mersch75 Handball',
             trainingPageDescription: 'Entraînement au Mersch75 : planning, groupes, salles et coordination des jeunes en un coup d\'oeil.',
             trainingHeroLogoAlt: 'Logo team training',
@@ -306,6 +318,12 @@ function initializeSiteLanguage() {
             newsRefTitle: 'Junge Schiedsrichter: Anmeldungen offen',
             newsRefBody: 'Die Ausbildung für junge Schiedsrichter im FLH Cycle inférieur ist online. Eine gute Gelegenheit für die nächste Generation, Verantwortung zu übernehmen.',
             newsRefCta: 'Info & Anmeldung',
+            newsLuxqfEyebrow: 'Aufruf an Interessierte · Dringend',
+            newsLuxqfTitle: 'LUXQF 3 – Handballtrainer',
+            newsLuxqfBody: 'Die Anmeldung für die Ausbildung 2026–2027 ist geöffnet. Bis zum 09.09.2026 werden mindestens 7 Teilnehmende benötigt, andernfalls muss die Ausbildung abgesagt werden.',
+            newsLuxqfDeadline: '📅 Anmeldung bis 09.09.2026',
+            newsLuxqfMinimum: '👥 Mindestens 7 Teilnehmende',
+            newsLuxqfCta: 'Jetzt bei INAPS anmelden',
             trainingPageTitle: 'Training | Mersch75 Handball',
             trainingPageDescription: 'Training bei Mersch75: Trainingsplan, Gruppen, Hallen und Jugendkoordination auf einen Blick.',
             trainingHeroLogoAlt: 'Team-Training Logo',
@@ -432,6 +450,12 @@ function initializeSiteLanguage() {
             newsRefTitle: 'Young referees: registration is open',
             newsRefBody: 'The FLH lower-cycle training for young referees is online. A great opportunity for the next generation to take responsibility.',
             newsRefCta: 'Info & registration',
+            newsLuxqfEyebrow: 'Call for candidates · Urgent',
+            newsLuxqfTitle: 'LUXQF 3 – Handball coach',
+            newsLuxqfBody: 'Registration for the 2026–2027 course is open. At least 7 candidates must register by 9 September 2026, otherwise the course will have to be cancelled.',
+            newsLuxqfDeadline: '📅 Register by 9 September 2026',
+            newsLuxqfMinimum: '👥 Minimum 7 candidates',
+            newsLuxqfCta: 'Register with INAPS',
             trainingPageTitle: 'Training | Mersch75 Handball',
             trainingPageDescription: 'Training at Mersch75: schedule, groups, halls and youth coordination at a glance.',
             trainingHeroLogoAlt: 'Team training logo',
@@ -558,6 +582,12 @@ function initializeSiteLanguage() {
             newsRefTitle: 'Jovens árbitros: inscrições abertas',
             newsRefBody: 'A formação para jovens árbitros do FLH Ciclo inferior está online. Uma boa oportunidade para a próxima geração assumir responsabilidade.',
             newsRefCta: 'Info & inscrição',
+            newsLuxqfEyebrow: 'Aviso aos interessados · Urgente',
+            newsLuxqfTitle: 'LUXQF 3 – Treinador de andebol',
+            newsLuxqfBody: 'As inscrições para a formação 2026–2027 estão abertas. São necessários pelo menos 7 candidatos inscritos até 09.09.2026; caso contrário, a formação terá de ser cancelada.',
+            newsLuxqfDeadline: '📅 Inscrição até 09.09.2026',
+            newsLuxqfMinimum: '👥 Mínimo de 7 candidatos',
+            newsLuxqfCta: 'Inscrever-se no INAPS',
             trainingPageTitle: 'Treino | Mersch75 Handball',
             trainingPageDescription: 'Treino no Mersch75: horários, grupos, pavilhões e coordenação jovem num relance.',
             trainingHeroLogoAlt: 'Logótipo team training',
@@ -2113,6 +2143,20 @@ function initializeNewsCarousel() {
     if (!carousel) return;
 
     const track = carousel.querySelector('[data-news-track]');
+    const now = Date.now();
+    carousel.querySelectorAll('[data-news-slide]').forEach((slide) => {
+        const startsAt = slide.dataset.newsStarts ? Date.parse(slide.dataset.newsStarts) : null;
+        const expiresAt = slide.dataset.newsExpires ? Date.parse(slide.dataset.newsExpires) : null;
+
+        if (Number.isNaN(startsAt) || Number.isNaN(expiresAt)) {
+            console.warn('Invalid news visibility date', slide);
+            return;
+        }
+
+        if ((startsAt !== null && now < startsAt) || (expiresAt !== null && now > expiresAt)) {
+            slide.remove();
+        }
+    });
     const slides = Array.from(carousel.querySelectorAll('[data-news-slide]'));
     const prevButton = carousel.querySelector('[data-news-prev]');
     const nextButton = carousel.querySelector('[data-news-next]');
