@@ -2279,6 +2279,18 @@ body.privacy-page {
     border-bottom: 1px solid rgba(0, 47, 101, 0.1);
 }
 
+.join-form-row--3col {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.join-optional-hint {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: rgba(0, 47, 101, 0.45);
+    text-transform: none;
+    letter-spacing: 0;
+}
+
 .join-guardian-addr-hint {
     font-size: 0.82rem;
     font-weight: 600;
