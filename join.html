@@ -479,6 +479,19 @@
                             <!-- ══ GESCHWËSTER (nëmme family-Modus) ══ -->
                             <div class="join-sibling-section" id="sibling-registration-section" hidden>
                                 <button type="button" class="join-sibling-add" id="add-sibling-button">+ Weidert Kand umellen</button>
+                                <div class="join-family-card join-sibling-captcha" id="sibling-captcha" hidden>
+                                    <h3 id="sibling-captcha-title">Sécherheetsfro</h3>
+                                    <p id="sibling-captcha-intro">Beäntwer dës kuerz Rechenaufgab, fir nach ee Kand bäizesetzen.</p>
+                                    <div class="join-form-group">
+                                        <label id="sibling-captcha-question" for="SiblingCaptchaAnswer"></label>
+                                        <input type="text" id="SiblingCaptchaAnswer" inputmode="numeric" autocomplete="off">
+                                    </div>
+                                    <p class="join-sibling-captcha-error" id="sibling-captcha-error" hidden></p>
+                                    <div class="join-sibling-captcha-actions">
+                                        <button type="button" class="join-sibling-add" id="sibling-captcha-verify">Préiwen</button>
+                                        <button type="button" class="join-sibling-remove" id="sibling-captcha-cancel">Ofbriechen</button>
+                                    </div>
+                                </div>
                                 <div class="join-family-details" id="sibling-list" aria-live="polite"></div>
                             </div>
 
@@ -815,7 +828,7 @@
            familyTitle: 'Famill / Momper – Tuteur / Begleeder',
            familyBadge: 'Famill',
            familySummary: 'Wiel dës Optioun, wann du däi Kand oder deng Kanner als Spiller:in umelle wëlls. D\'Elteren-, Tuteur- a Kontaktfelder ginn direkt ugewisen.',
-           familyBullets: ['Fir all Kand ginn déi néideg Spiller- a Lizenzdaten ausgefëllt', 'Bis zu 9 weider Kanner kënnen iwwer „Weidert Kand umellen“ ergänzt ginn', 'Bis U7 ass en Zertifikat vum Hausdokter néideg (apte pour faire du sport)', 'Et gëtt jee een eegent Telefonsfeld fir déi ugemellte Persoun, de Papp, d\'Mamm an d\'Begleed-/Kontaktpersoun', 'Sou gesäit den Trainer direkt, wéi eng Nummer zu wéi enger Persoun gehéiert'],
+           familyBullets: ['Fir all Kand ginn déi néideg Spiller- a Lizenzdaten ausgefëllt', 'Bis U7 ass en Zertifikat vum Hausdokter néideg (apte pour faire du sport)', 'Et gëtt jee een eegent Telefonsfeld fir déi ugemellte Persoun, de Papp, d\'Mamm an d\'Begleed-/Kontaktpersoun', 'Sou gesäit den Trainer direkt, wéi eng Nummer zu wéi enger Persoun gehéiert'],
            role: 'Joueur / Joueuse'
         },
         fr: {
@@ -845,7 +858,7 @@
            familyTitle: 'Famille / parent – tuteur / accompagnant',
            familyBadge: 'Famille',
            familySummary: 'Choisis cette option pour inscrire ton enfant ou tes enfants comme joueur·euse. Les champs des parents, tuteurs et contacts s’affichent directement.',
-           familyBullets: ['Toutes les données de joueur et de licence nécessaires sont complétées pour chaque enfant', 'Jusqu’à 9 autres enfants peuvent être ajoutés via « Inscrire un autre enfant »', 'Jusqu’en U7, un certificat du médecin traitant est requis (apte pour faire du sport)', 'Un champ téléphonique distinct est prévu pour la personne inscrite, le père, la mère et l’accompagnant/contact', 'L’entraîneur voit ainsi immédiatement quel numéro appartient à quelle personne'],
+           familyBullets: ['Toutes les données de joueur et de licence nécessaires sont complétées pour chaque enfant', 'Jusqu’en U7, un certificat du médecin traitant est requis (apte pour faire du sport)', 'Un champ téléphonique distinct est prévu pour la personne inscrite, le père, la mère et l’accompagnant/contact', 'L’entraîneur voit ainsi immédiatement quel numéro appartient à quelle personne'],
            role: 'Joueur / Joueuse'
         },
         de: {
@@ -875,7 +888,7 @@
            familyTitle: 'Familie / Eltern – Vormund / Begleitung',
            familyBadge: 'Familie',
            familySummary: 'Wähle diese Option, wenn du dein Kind oder deine Kinder als Spieler:in anmelden möchtest. Die Eltern-, Vormund- und Kontaktfelder werden direkt angezeigt.',
-           familyBullets: ['Für jedes Kind werden alle notwendigen Spieler- und Lizenzdaten ausgefüllt', 'Bis zu 9 weitere Kinder können über „Weiteres Kind anmelden“ ergänzt werden', 'Bis U7 ist ein Attest des Hausarztes erforderlich (apte pour faire du sport)', 'Für die angemeldete Person, den Vater, die Mutter und die Begleit-/Kontaktperson gibt es jeweils ein eigenes Telefonfeld', 'So sieht der Trainer sofort, welche Nummer zu welcher Person gehört'],
+           familyBullets: ['Für jedes Kind werden alle notwendigen Spieler- und Lizenzdaten ausgefüllt', 'Bis U7 ist ein Attest des Hausarztes erforderlich (apte pour faire du sport)', 'Für die angemeldete Person, den Vater, die Mutter und die Begleit-/Kontaktperson gibt es jeweils ein eigenes Telefonfeld', 'So sieht der Trainer sofort, welche Nummer zu welcher Person gehört'],
            role: 'Joueur / Joueuse'
         },
         en: {
@@ -905,7 +918,7 @@
            familyTitle: 'Family / parent – guardian / companion',
            familyBadge: 'Family',
            familySummary: 'Choose this option to register your child or children as players. The parent, guardian and contact fields are displayed directly.',
-           familyBullets: ['All required player and licence details are completed for each child', 'Up to 9 additional children can be added using “Register another child”', 'Up to U7, a certificate from the family doctor is required (apte pour faire du sport)', 'Separate phone fields are provided for the registered person, father, mother and companion/contact person', 'This lets the coach immediately see which number belongs to which person'],
+           familyBullets: ['All required player and licence details are completed for each child', 'Up to U7, a certificate from the family doctor is required (apte pour faire du sport)', 'Separate phone fields are provided for the registered person, father, mother and companion/contact person', 'This lets the coach immediately see which number belongs to which person'],
            role: 'Joueur / Joueuse'
         },
         pt: {
@@ -935,14 +948,16 @@
            familyTitle: 'Família / pais – tutor / acompanhante',
            familyBadge: 'Família',
            familySummary: 'Escolhe esta opção para inscrever o teu filho ou os teus filhos como jogadores. Os campos dos pais, tutores e contactos aparecem diretamente.',
-           familyBullets: ['São preenchidos todos os dados necessários de jogador e licença de cada criança', 'Podem ser adicionadas até 9 crianças através de «Inscrever outra criança»', 'Até U7, é necessário um certificado do médico de família (apte pour faire du sport)', 'Existem campos de telefone separados para a pessoa inscrita, o pai, a mãe e o acompanhante/contacto', 'Assim, o treinador vê imediatamente qual número pertence a cada pessoa'],
+           familyBullets: ['São preenchidos todos os dados necessários de jogador e licença de cada criança', 'Até U7, é necessário um certificado do médico de família (apte pour faire du sport)', 'Existem campos de telefone separados para a pessoa inscrita, o pai, a mãe e o acompanhante/contacto', 'Assim, o treinador vê imediatamente qual número pertence a cada pessoa'],
            role: 'Joueur / Joueuse'
         }
     };
     let currentJoinQuiz = 'player';
     let siblingCounter = 0;
-    let siblingLimitConfirmed = false;
-    let siblingCooldownTimer = null;
+    let siblingCaptchaPassed = false;
+    let siblingCaptchaLeft = 0;
+    let siblingCaptchaRight = 0;
+    let siblingCaptchaResult = 0;
     let submittedQualificationDocument = null;
     const MERSCH75_UI_TEXTS = {
         lu: {
@@ -980,8 +995,12 @@
             u7: 'Zertifikat vum Hausdokter disponibel (apte pour faire du sport) *',
             yes: 'Jo',
             no: 'Nee',
-            confirmMore: 'Du hues schonn 5 Geschwëster dobäigesat. Ass dat richteg a wëlls du nach ee Kand umellen?',
-            wait: 'Waart {seconds} Sekonnen…',
+            captchaTitle: 'Sécherheetsfro',
+            captchaIntro: 'Beäntwer dës kuerz Rechenaufgab, fir nach ee Kand bäizesetzen.',
+            captchaQuestion: 'Wéi vill ass {left} + {right}?',
+            captchaVerify: 'Préiwen',
+            captchaCancel: 'Ofbriechen',
+            captchaError: 'D’Äntwert ass net richteg. Probéier et nach eng Kéier.',
             limit: 'Maximal 9 Geschwëster kënnen an enger Umeldung erfaasst ginn.'
         },
         fr: {
@@ -1002,8 +1021,12 @@
             u7: 'Certificat du médecin traitant disponible (apte pour faire du sport) *',
             yes: 'Oui',
             no: 'Non',
-            confirmMore: 'Vous avez déjà ajouté 5 frères ou sœurs. Est-ce correct et souhaitez-vous inscrire un autre enfant ?',
-            wait: 'Patientez {seconds} secondes…',
+            captchaTitle: 'Question de sécurité',
+            captchaIntro: 'Répondez à ce petit calcul pour ajouter un autre enfant.',
+            captchaQuestion: 'Combien font {left} + {right} ?',
+            captchaVerify: 'Vérifier',
+            captchaCancel: 'Annuler',
+            captchaError: 'La réponse est incorrecte. Veuillez réessayer.',
             limit: 'Une inscription peut contenir au maximum 9 frères et sœurs.'
         },
         de: {
@@ -1024,8 +1047,12 @@
             u7: 'Attest des Hausarztes vorhanden (apte pour faire du sport) *',
             yes: 'Ja',
             no: 'Nein',
-            confirmMore: 'Du hast bereits 5 Geschwister hinzugefügt. Ist das richtig und möchtest du noch ein Kind anmelden?',
-            wait: 'Bitte {seconds} Sekunden warten…',
+            captchaTitle: 'Sicherheitsfrage',
+            captchaIntro: 'Beantworte diese kurze Rechenaufgabe, um ein weiteres Kind hinzuzufügen.',
+            captchaQuestion: 'Wie viel ist {left} + {right}?',
+            captchaVerify: 'Prüfen',
+            captchaCancel: 'Abbrechen',
+            captchaError: 'Die Antwort ist nicht richtig. Bitte versuche es erneut.',
             limit: 'Pro Anmeldung können höchstens 9 Geschwister erfasst werden.'
         },
         en: {
@@ -1046,8 +1073,12 @@
             u7: 'Family doctor certificate available (apte pour faire du sport) *',
             yes: 'Yes',
             no: 'No',
-            confirmMore: 'You have already added 5 siblings. Is this correct, and do you want to register another child?',
-            wait: 'Wait {seconds} seconds…',
+            captchaTitle: 'Security question',
+            captchaIntro: 'Answer this short calculation to add another child.',
+            captchaQuestion: 'What is {left} + {right}?',
+            captchaVerify: 'Check',
+            captchaCancel: 'Cancel',
+            captchaError: 'The answer is incorrect. Please try again.',
             limit: 'A registration can contain no more than 9 siblings.'
         },
         pt: {
@@ -1068,8 +1099,12 @@
             u7: 'Certificado do médico de família disponível (apte pour faire du sport) *',
             yes: 'Sim',
             no: 'Não',
-            confirmMore: 'Já adicionou 5 irmãos. Está correto e pretende inscrever mais uma criança?',
-            wait: 'Aguarde {seconds} segundos…',
+            captchaTitle: 'Pergunta de segurança',
+            captchaIntro: 'Responda a este cálculo simples para adicionar outra criança.',
+            captchaQuestion: 'Quanto é {left} + {right}?',
+            captchaVerify: 'Verificar',
+            captchaCancel: 'Cancelar',
+            captchaError: 'A resposta está incorreta. Tente novamente.',
             limit: 'Uma inscrição pode incluir no máximo 9 irmãos.'
         }
     };
@@ -1843,8 +1878,16 @@
 
     function updateSiblingLanguage() {
         const text = MERSCH75_SIBLING_TEXTS[currentLang] || MERSCH75_SIBLING_TEXTS.lu;
-        if (!siblingCooldownTimer) {
-            document.getElementById('add-sibling-button').textContent = text.add;
+        document.getElementById('add-sibling-button').textContent = text.add;
+        document.getElementById('sibling-captcha-title').textContent = text.captchaTitle;
+        document.getElementById('sibling-captcha-intro').textContent = text.captchaIntro;
+        document.getElementById('sibling-captcha-verify').textContent = text.captchaVerify;
+        document.getElementById('sibling-captcha-cancel').textContent = text.captchaCancel;
+        document.getElementById('sibling-captcha-error').textContent = text.captchaError;
+        if (!document.getElementById('sibling-captcha').hidden) {
+            document.getElementById('sibling-captcha-question').textContent = text.captchaQuestion
+                .replace('{left}', siblingCaptchaLeft)
+                .replace('{right}', siblingCaptchaRight);
         }
 
         document.querySelectorAll('.join-sibling-card').forEach(function(card, position) {
@@ -1869,30 +1912,38 @@
         });
     }
 
-    function startSiblingCooldown() {
-        const button = document.getElementById('add-sibling-button');
-        let seconds = 15;
-        button.disabled = true;
+    function hideSiblingCaptcha() {
+        document.getElementById('sibling-captcha').hidden = true;
+        document.getElementById('SiblingCaptchaAnswer').value = '';
+        document.getElementById('sibling-captcha-error').hidden = true;
+        document.getElementById('add-sibling-button').disabled = false;
+    }
 
-        const updateCountdown = function() {
-            const text = MERSCH75_SIBLING_TEXTS[currentLang] || MERSCH75_SIBLING_TEXTS.lu;
-            button.textContent = text.wait.replace('{seconds}', seconds);
-        };
-        updateCountdown();
+    function showSiblingCaptcha() {
+        siblingCaptchaLeft = Math.floor(Math.random() * 8) + 2;
+        siblingCaptchaRight = Math.floor(Math.random() * 8) + 2;
+        siblingCaptchaResult = siblingCaptchaLeft + siblingCaptchaRight;
 
-        siblingCooldownTimer = window.setInterval(function() {
-            seconds -= 1;
-            if (seconds > 0) {
-                updateCountdown();
-                return;
-            }
+        const captcha = document.getElementById('sibling-captcha');
+        const answer = document.getElementById('SiblingCaptchaAnswer');
+        captcha.hidden = false;
+        answer.value = '';
+        document.getElementById('sibling-captcha-error').hidden = true;
+        document.getElementById('add-sibling-button').disabled = true;
+        updateSiblingLanguage();
+        answer.focus();
+    }
 
-            window.clearInterval(siblingCooldownTimer);
-            siblingCooldownTimer = null;
-            button.disabled = false;
-            button.textContent = (MERSCH75_SIBLING_TEXTS[currentLang] || MERSCH75_SIBLING_TEXTS.lu).add;
-            addSibling();
-        }, 1000);
+    function verifySiblingCaptcha() {
+        const answer = Number(document.getElementById('SiblingCaptchaAnswer').value.trim());
+        if (!Number.isInteger(answer) || answer !== siblingCaptchaResult) {
+            document.getElementById('sibling-captcha-error').hidden = false;
+            return;
+        }
+
+        siblingCaptchaPassed = true;
+        hideSiblingCaptcha();
+        addSibling();
     }
 
     function requestSiblingAddition() {
@@ -1904,19 +1955,13 @@
             return;
         }
 
-        if (siblingCount < 5) {
+        // The primary child plus three sibling cards equals four children.
+        if (siblingCount < 3 || siblingCaptchaPassed) {
             addSibling();
             return;
         }
 
-        if (!siblingLimitConfirmed) {
-            if (!window.confirm(text.confirmMore)) {
-                return;
-            }
-            siblingLimitConfirmed = true;
-        }
-
-        startSiblingCooldown();
+        showSiblingCaptcha();
     }
 
     function addSibling() {
@@ -2337,13 +2382,8 @@
 
         if (!isFamilyProfile && getSiblingRegistrations().length > 0) {
             document.getElementById('sibling-list').innerHTML = '';
-            siblingLimitConfirmed = false;
-            if (siblingCooldownTimer) {
-                window.clearInterval(siblingCooldownTimer);
-                siblingCooldownTimer = null;
-            }
-            const addButton = document.getElementById('add-sibling-button');
-            addButton.disabled = false;
+            siblingCaptchaPassed = false;
+            hideSiblingCaptcha();
             updateSiblingLanguage();
             updateTarifSuggestion();
         }
@@ -2920,6 +2960,18 @@
     document.getElementById('FamilyRegistrationMode').addEventListener('change', toggleFamilyRegistrationFields);
 
     document.getElementById('add-sibling-button').addEventListener('click', requestSiblingAddition);
+    document.getElementById('sibling-captcha-verify').addEventListener('click', verifySiblingCaptcha);
+    document.getElementById('sibling-captcha-cancel').addEventListener('click', hideSiblingCaptcha);
+    document.getElementById('SiblingCaptchaAnswer').addEventListener('input', function() {
+        this.value = this.value.replace(/\D/g, '').slice(0, 2);
+        document.getElementById('sibling-captcha-error').hidden = true;
+    });
+    document.getElementById('SiblingCaptchaAnswer').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            verifySiblingCaptcha();
+        }
+    });
     document.getElementById('OfficialRole').addEventListener('change', updateOfficialDetails);
     document.querySelectorAll('input[name="TrainerQualifications"]').forEach(function(input) {
         input.addEventListener('change', updateOfficialDetails);

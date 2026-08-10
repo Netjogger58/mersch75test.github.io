@@ -2214,6 +2214,30 @@ body.privacy-page {
     margin-top: 14px;
 }
 
+.join-sibling-captcha {
+    width: min(100%, 560px);
+}
+
+.join-sibling-captcha[hidden] {
+    display: none;
+}
+
+.join-sibling-captcha h3,
+.join-sibling-captcha p {
+    margin-top: 0;
+}
+
+.join-sibling-captcha-error {
+    color: #9f1239;
+    font-weight: 700;
+}
+
+.join-sibling-captcha-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
 .join-sibling-remove {
     padding: 7px 12px;
     color: #9f1239;
