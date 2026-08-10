@@ -5,7 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QR Code Generator</title>
     <script src="https://unpkg.com/easyqrcodejs@4.6.1/dist/easy.qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
+        :root {
+            --m75-yellow: #FFDE00;
+            --m75-blue: #002F65;
+            --m75-gray: #CACACC;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -68,7 +75,7 @@
         button, a.download-link {
             width: 100%;
             padding: 10px;
-            background-color: #007bff;
+            background-color: var(--m75-blue);
             color: #ffffff;
             border: none;
             border-radius: 4px;
@@ -80,16 +87,66 @@
             text-align: center;
         }
 
-        a.download-link {
-            background-color: #28a745;
+        .download-actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 10px;
         }
 
-        a.download-link:hover {
-            background-color: #1e7e34;
+        .download-actions .download-link {
+            margin-top: 0;
+            background-color: var(--m75-blue);
         }
 
-        button:hover {
-            background-color: #0056b3;
+        .download-actions .download-link:nth-child(2) {
+            background-color: var(--m75-yellow);
+            color: var(--m75-blue);
+        }
+
+        .download-actions .download-link:nth-child(3) {
+            background-color: var(--m75-gray);
+            color: var(--m75-blue);
+        }
+
+        button:hover,
+        .download-actions .download-link:hover {
+            filter: brightness(0.9);
+        }
+
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .color-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .color-control input[type="color"] {
+            width: 52px;
+            height: 42px;
+            padding: 2px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            background: #ffffff;
+            cursor: pointer;
+        }
+
+        .color-value {
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: #555555;
+        }
+
+        .design-note {
+            margin-top: 6px;
+            color: #666666;
+            font-size: 0.8rem;
+            line-height: 1.4;
         }
 
         #qrcode {
@@ -120,6 +177,21 @@
 
         .hidden {
             display: none !important;
+        }
+
+        #qr-render-source,
+        #qr-svg-source {
+            position: fixed;
+            left: -10000px;
+            top: 0;
+            visibility: hidden;
+        }
+
+        @media (max-width: 480px) {
+            .download-actions,
+            .color-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
     <script src="consent.js"></script>
@@ -203,10 +275,55 @@
             <input type="file" id="logo-input" accept="image/png, image/jpeg">
         </div>
 
+        <div class="form-group">
+            <label for="design-preset">Faarfvirlag:</label>
+            <select id="design-preset">
+                <option value="club">Mersch75 – blo, giel a gro</option>
+                <option value="blue-yellow">Blo op giel</option>
+                <option value="classic">Klassesch schwaarz-wäiss</option>
+                <option value="custom">Eege Faarwen</option>
+            </select>
+        </div>
+
+        <div class="color-grid">
+            <div class="form-group">
+                <label for="dark-color">QR-Faarf:</label>
+                <div class="color-control">
+                    <input type="color" id="dark-color" value="#002f65">
+                    <span id="dark-color-value" class="color-value">#002F65</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="light-color">Hannergrond:</label>
+                <div class="color-control">
+                    <input type="color" id="light-color" value="#ffffff">
+                    <span id="light-color-value" class="color-value">#FFFFFF</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="frame-style">Rumm:</label>
+            <select id="frame-style">
+                <option value="club">Mersch75 – giel, blo a gro</option>
+                <option value="yellow">Giel (#FFDE00)</option>
+                <option value="blue">Blo (#002F65)</option>
+                <option value="gray">Gro (#CACACC)</option>
+                <option value="none">Keng Rumm</option>
+            </select>
+            <p class="design-note">Fir eng gutt Liesbarkeet bleift de Kontrast tëscht QR-Code an Hannergrond héich.</p>
+        </div>
+
         <button id="generate-btn">QR Code generéieren</button>
-        <a id="download-btn" class="download-link hidden" download="mersch75-qrcode-4k.png">QR Code (4K) eroflueden</a>
+        <div id="download-actions" class="download-actions hidden">
+            <a id="download-png" class="download-link" download="mersch75-qrcode-4k.png">PNG 4K</a>
+            <a id="download-svg" class="download-link" href="#" download="mersch75-qrcode.svg">SVG</a>
+            <a id="download-pdf" class="download-link" href="#" download="mersch75-qrcode.pdf">PDF</a>
+        </div>
 
         <div id="qrcode"></div>
+        <div id="qr-render-source" aria-hidden="true"></div>
+        <div id="qr-svg-source" aria-hidden="true"></div>
 
         <a class="home-link" href="index.html">Zréck op d'Startsäit</a>
     </div>
@@ -231,35 +348,210 @@
             });
 
             const qrcodeContainer = document.getElementById('qrcode');
+            const renderSource = document.getElementById('qr-render-source');
+            const svgSource = document.getElementById('qr-svg-source');
             const logoInput = document.getElementById('logo-input');
             const generateBtn = document.getElementById('generate-btn');
-            const downloadBtn = document.getElementById('download-btn');
+            const downloadActions = document.getElementById('download-actions');
+            const downloadPng = document.getElementById('download-png');
+            const downloadSvg = document.getElementById('download-svg');
+            const downloadPdf = document.getElementById('download-pdf');
+            const designPreset = document.getElementById('design-preset');
+            const darkColor = document.getElementById('dark-color');
+            const lightColor = document.getElementById('light-color');
+            const darkColorValue = document.getElementById('dark-color-value');
+            const lightColorValue = document.getElementById('light-color-value');
+            const frameStyle = document.getElementById('frame-style');
+            let currentOptions = null;
+            let currentExportCanvas = null;
+            let currentSvgUrl = null;
+            let currentPdfUrl = null;
 
-            function setDownloadLink() {
-                try {
-                    let dataUrl = '';
-                    const canvas = qrcodeContainer.querySelector('canvas');
-                    const img = qrcodeContainer.querySelector('img');
-                    if (canvas) {
-                        dataUrl = canvas.toDataURL('image/png');
-                    } else if (img && img.src) {
-                        dataUrl = img.src;
-                    }
+            const presets = {
+                club: { dark: '#002F65', light: '#FFFFFF', frame: 'club' },
+                'blue-yellow': { dark: '#002F65', light: '#FFDE00', frame: 'blue' },
+                classic: { dark: '#000000', light: '#FFFFFF', frame: 'none' }
+            };
 
-                    if (dataUrl && dataUrl.startsWith('data:')) {
-                        downloadBtn.href = dataUrl;
-                        downloadBtn.classList.remove('hidden');
-                        return;
-                    }
-                } catch (e) {
-                    console.error('QR download prepare error:', e);
+            function updateColorLabels() {
+                darkColorValue.textContent = darkColor.value.toUpperCase();
+                lightColorValue.textContent = lightColor.value.toUpperCase();
+            }
+
+            designPreset.addEventListener('change', function() {
+                const preset = presets[this.value];
+                if (preset) {
+                    darkColor.value = preset.dark;
+                    lightColor.value = preset.light;
+                    frameStyle.value = preset.frame;
+                    updateColorLabels();
                 }
-                downloadBtn.classList.add('hidden');
+            });
+
+            [darkColor, lightColor].forEach(function(input) {
+                input.addEventListener('input', function() {
+                    designPreset.value = 'custom';
+                    updateColorLabels();
+                });
+            });
+
+            function getFrameConfig(size) {
+                const selected = frameStyle.value;
+                if (selected === 'none') {
+                    return { style: selected, padding: 0, colors: [] };
+                }
+                if (selected === 'club') {
+                    return {
+                        style: selected,
+                        padding: Math.round(size * 0.055),
+                        colors: ['#FFDE00', '#002F65', '#CACACC']
+                    };
+                }
+                const colors = {
+                    yellow: '#FFDE00',
+                    blue: '#002F65',
+                    gray: '#CACACC'
+                };
+                return {
+                    style: selected,
+                    padding: Math.round(size * 0.04),
+                    colors: [colors[selected]]
+                };
+            }
+
+            function drawFrame(context, size, frame) {
+                if (!frame.padding) {
+                    return;
+                }
+                if (frame.style === 'club') {
+                    const band = frame.padding / frame.colors.length;
+                    frame.colors.forEach(function(color, index) {
+                        const inset = Math.round(index * band);
+                        context.fillStyle = color;
+                        context.fillRect(
+                            inset,
+                            inset,
+                            size + (frame.padding * 2) - (inset * 2),
+                            size + (frame.padding * 2) - (inset * 2)
+                        );
+                    });
+                    return;
+                }
+                context.fillStyle = frame.colors[0];
+                context.fillRect(0, 0, size + (frame.padding * 2), size + (frame.padding * 2));
+            }
+
+            function createExportCanvas(sourceCanvas) {
+                const frame = getFrameConfig(sourceCanvas.width);
+                const canvas = document.createElement('canvas');
+                canvas.width = sourceCanvas.width + (frame.padding * 2);
+                canvas.height = sourceCanvas.height + (frame.padding * 2);
+                const context = canvas.getContext('2d');
+                drawFrame(context, sourceCanvas.width, frame);
+                context.drawImage(sourceCanvas, frame.padding, frame.padding);
+                return canvas;
+            }
+
+            function prepareDownloads(sourceCanvas) {
+                try {
+                    currentExportCanvas = createExportCanvas(sourceCanvas);
+                    qrcodeContainer.innerHTML = '';
+                    qrcodeContainer.appendChild(currentExportCanvas);
+                    downloadPng.href = currentExportCanvas.toDataURL('image/png');
+                    const pdf = new window.jspdf.jsPDF({
+                        orientation: 'portrait',
+                        unit: 'mm',
+                        format: 'a4'
+                    });
+                    const size = 170;
+                    const offset = (210 - size) / 2;
+                    pdf.addImage(downloadPng.href, 'PNG', offset, 20, size, size, undefined, 'FAST');
+                    if (currentPdfUrl) {
+                        URL.revokeObjectURL(currentPdfUrl);
+                    }
+                    currentPdfUrl = URL.createObjectURL(pdf.output('blob'));
+                    downloadPdf.href = currentPdfUrl;
+                    downloadActions.classList.remove('hidden');
+                } catch (error) {
+                    console.error('QR download prepare error:', error);
+                    downloadActions.classList.add('hidden');
+                }
+            }
+
+            function renderSvgDownload() {
+                if (!currentOptions) {
+                    return;
+                }
+                svgSource.innerHTML = '';
+                const svgOptions = Object.assign({}, currentOptions, {
+                    width: 1024,
+                    height: 1024,
+                    quietZone: 48,
+                    drawer: 'svg',
+                    onRenderingEnd: function() {
+                        const sourceSvg = svgSource.querySelector('svg');
+                        if (!sourceSvg) {
+                            console.error('QR SVG render error: no SVG generated');
+                            return;
+                        }
+                        const renderedSize = Number(sourceSvg.getAttribute('width')) || 1120;
+                        const frame = getFrameConfig(renderedSize);
+                        const fullSize = renderedSize + (frame.padding * 2);
+                        const wrapper = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                        wrapper.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+                        wrapper.setAttribute('width', String(fullSize));
+                        wrapper.setAttribute('height', String(fullSize));
+                        wrapper.setAttribute('viewBox', '0 0 ' + fullSize + ' ' + fullSize);
+
+                        if (frame.padding) {
+                            if (frame.style === 'club') {
+                                const band = frame.padding / frame.colors.length;
+                                frame.colors.forEach(function(color, index) {
+                                    const inset = Math.round(index * band);
+                                    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                                    rect.setAttribute('x', String(inset));
+                                    rect.setAttribute('y', String(inset));
+                                    rect.setAttribute('width', String(fullSize - (inset * 2)));
+                                    rect.setAttribute('height', String(fullSize - (inset * 2)));
+                                    rect.setAttribute('fill', color);
+                                    wrapper.appendChild(rect);
+                                });
+                            } else {
+                                const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                                rect.setAttribute('width', String(fullSize));
+                                rect.setAttribute('height', String(fullSize));
+                                rect.setAttribute('fill', frame.colors[0]);
+                                wrapper.appendChild(rect);
+                            }
+                        }
+
+                        sourceSvg.setAttribute('x', String(frame.padding));
+                        sourceSvg.setAttribute('y', String(frame.padding));
+                        sourceSvg.setAttribute('width', String(renderedSize));
+                        sourceSvg.setAttribute('height', String(renderedSize));
+                        wrapper.appendChild(sourceSvg);
+
+                        const svgText = new XMLSerializer().serializeToString(wrapper);
+                        const blob = new Blob([svgText], { type: 'image/svg+xml;charset=utf-8' });
+                        if (currentSvgUrl) {
+                            URL.revokeObjectURL(currentSvgUrl);
+                        }
+                        currentSvgUrl = URL.createObjectURL(blob);
+                        downloadSvg.href = currentSvgUrl;
+                        svgSource.innerHTML = '';
+                    }
+                });
+                new QRCode(svgSource, svgOptions);
             }
 
             generateBtn.addEventListener('click', function() {
                 qrcodeContainer.innerHTML = '';
-                downloadBtn.classList.add('hidden');
+                renderSource.innerHTML = '';
+                svgSource.innerHTML = '';
+                downloadActions.classList.add('hidden');
+                currentExportCanvas = null;
+                downloadSvg.href = '#';
+                downloadPdf.href = '#';
 
                 const currentType = typeSelector.value;
                 let qrString = '';
@@ -288,15 +580,26 @@
                     text: qrString,
                     width: 4096,
                     height: 4096,
-                    colorDark: '#000000',
-                    colorLight: '#ffffff',
+                    colorDark: darkColor.value,
+                    colorLight: lightColor.value,
                     correctLevel: QRCode.CorrectLevel.H,
-                    dotScale: 1
+                    dotScale: 1,
+                    quietZone: 192,
+                    quietZoneColor: lightColor.value
                 };
 
                 function renderAndPrepareDownload() {
-                    new QRCode(qrcodeContainer, options);
-                    setTimeout(setDownloadLink, 150);
+                    options.onRenderingEnd = function() {
+                        const sourceCanvas = renderSource.querySelector('canvas');
+                        if (sourceCanvas) {
+                            prepareDownloads(sourceCanvas);
+                            renderSvgDownload();
+                        } else {
+                            console.error('QR render error: no canvas generated');
+                        }
+                    };
+                    currentOptions = Object.assign({}, options);
+                    new QRCode(renderSource, options);
                 }
 
                 if (logoInput.files && logoInput.files[0]) {
