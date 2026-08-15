@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=20260810season1">
+    <link rel="stylesheet" href="styles.css?v=20260815nationality3col">
 </head>
 <body class="join-page">
     <div class="site-shell">
@@ -139,6 +139,7 @@
                                 <div class="join-form-group">
                                     <label id="lbl-nat" for="Nationalite">Nationalitéit *</label>
                                     <input type="text" id="Nationalite" name="Nationalite" list="nationality-options" autocomplete="country-name" required>
+                                    <input type="text" id="NationaliteOther" name="NationaliteOther" autocomplete="country-name" placeholder="Aner Nationalitéit" hidden>
                                     <datalist id="nationality-options">
                                         <option value="Luxembourgesch">
                                         <option value="Franséisch">
@@ -1225,7 +1226,7 @@
             minorEmailNote: 'Bei engem mannerjärege Spiller gëtt d’E-Mail vum Erzéiungsberechtegten 1 fir de Schrëftverkéier benotzt.',
             minorPlayerEmailChoice: 'Huet de Spiller eng eegen E-Mail?',
             minorPlayerEmail: 'E-Mail vum Spiller *',
-            nationalities: ['Luxembourgesch', 'Franséisch', 'Däitsch', 'Belsch', 'Portugisesch', 'Italienesch', 'Spuenesch', 'Hollännesch', 'Brittesch', 'Iresch', 'Polnesch', 'Rumänesch', 'Ukrainesch', 'Aner']
+            nationalities: ['Éisträichesch', 'Belsch', 'Bulgaresch', 'Kroatesch', 'Zypriotesch', 'Tschechesch', 'Dänesch', 'Estnesch', 'Finnesch', 'Franséisch', 'Däitsch', 'Griichesch', 'Ungaresch', 'Iresch', 'Italienesch', 'Lettesch', 'Litauesch', 'Luxembourgesch', 'Maltesesch', 'Néierlännesch', 'Polnesch', 'Portugisesch', 'Rumänesch', 'Slowakesch', 'Slowenesch', 'Spuenesch', 'Schwedesch', 'Aner']
         },
         fr: {
             correspondenceLanguage: 'Langue de correspondance *',
@@ -1234,7 +1235,7 @@
             minorEmailNote: 'Pour un joueur mineur, l’adresse e-mail du responsable légal 1 est utilisée pour la correspondance.',
             minorPlayerEmailChoice: 'Le joueur a-t-il sa propre adresse e-mail ?',
             minorPlayerEmail: 'E-mail du joueur *',
-            nationalities: ['Luxembourgeoise', 'Française', 'Allemande', 'Belge', 'Portugaise', 'Italienne', 'Espagnole', 'Néerlandaise', 'Britannique', 'Irlandaise', 'Polonaise', 'Roumaine', 'Ukrainienne', 'Autre']
+            nationalities: ['Autrichienne', 'Belge', 'Bulgare', 'Croate', 'Chypriote', 'Tchèque', 'Danoise', 'Estonienne', 'Finlandaise', 'Française', 'Allemande', 'Grecque', 'Hongroise', 'Irlandaise', 'Italienne', 'Lettonne', 'Lituanienne', 'Luxembourgeoise', 'Maltaise', 'Néerlandaise', 'Polonaise', 'Portugaise', 'Roumaine', 'Slovaque', 'Slovène', 'Espagnole', 'Suédoise', 'Autre']
         },
         de: {
             correspondenceLanguage: 'Korrespondenzsprache *',
@@ -1243,7 +1244,7 @@
             minorEmailNote: 'Bei minderjährigen Spielern wird die E-Mail-Adresse des Erziehungsberechtigten 1 für den Schriftverkehr verwendet.',
             minorPlayerEmailChoice: 'Hat der Spieler eine eigene E-Mail-Adresse?',
             minorPlayerEmail: 'E-Mail des Spielers *',
-            nationalities: ['Luxemburgisch', 'Französisch', 'Deutsch', 'Belgisch', 'Portugiesisch', 'Italienisch', 'Spanisch', 'Niederländisch', 'Britisch', 'Irisch', 'Polnisch', 'Rumänisch', 'Ukrainisch', 'Andere']
+            nationalities: ['Österreichisch', 'Belgisch', 'Bulgarisch', 'Kroatisch', 'Zypriotisch', 'Tschechisch', 'Dänisch', 'Estnisch', 'Finnisch', 'Französisch', 'Deutsch', 'Griechisch', 'Ungarisch', 'Irisch', 'Italienisch', 'Lettisch', 'Litauisch', 'Luxemburgisch', 'Maltesisch', 'Niederländisch', 'Polnisch', 'Portugiesisch', 'Rumänisch', 'Slowakisch', 'Slowenisch', 'Spanisch', 'Schwedisch', 'Andere']
         },
         en: {
             correspondenceLanguage: 'Correspondence language *',
@@ -1252,7 +1253,7 @@
             minorEmailNote: 'For a minor player, the email address of guardian 1 is used for correspondence.',
             minorPlayerEmailChoice: 'Does the player have their own email address?',
             minorPlayerEmail: 'Player email *',
-            nationalities: ['Luxembourgish', 'French', 'German', 'Belgian', 'Portuguese', 'Italian', 'Spanish', 'Dutch', 'British', 'Irish', 'Polish', 'Romanian', 'Ukrainian', 'Other']
+            nationalities: ['Austrian', 'Belgian', 'Bulgarian', 'Croatian', 'Cypriot', 'Czech', 'Danish', 'Estonian', 'Finnish', 'French', 'German', 'Greek', 'Hungarian', 'Irish', 'Italian', 'Latvian', 'Lithuanian', 'Luxembourgish', 'Maltese', 'Dutch', 'Polish', 'Portuguese', 'Romanian', 'Slovak', 'Slovenian', 'Spanish', 'Swedish', 'Other']
         },
         pt: {
             correspondenceLanguage: 'Língua de correspondência *',
@@ -1261,7 +1262,7 @@
             minorEmailNote: 'Para um jogador menor, o endereço de e-mail do encarregado de educação 1 é utilizado para a correspondência.',
             minorPlayerEmailChoice: 'O jogador tem um endereço de e-mail próprio?',
             minorPlayerEmail: 'E-mail do jogador *',
-            nationalities: ['Luxemburguesa', 'Francesa', 'Alemã', 'Belga', 'Portuguesa', 'Italiana', 'Espanhola', 'Neerlandesa', 'Britânica', 'Irlandesa', 'Polaca', 'Romena', 'Ucraniana', 'Outra']
+            nationalities: ['Austríaca', 'Belga', 'Búlgara', 'Croata', 'Cipriota', 'Checa', 'Dinamarquesa', 'Estoniana', 'Finlandesa', 'Francesa', 'Alemã', 'Grega', 'Húngara', 'Irlandesa', 'Italiana', 'Letã', 'Lituana', 'Luxemburguesa', 'Maltesa', 'Neerlandesa', 'Polaca', 'Portuguesa', 'Romena', 'Eslovaca', 'Eslovena', 'Espanhola', 'Sueca', 'Outra']
         }
     };
     const MERSCH75_PHONE_TEXTS = {
@@ -1696,6 +1697,24 @@
         }
     }
 
+    function updateNationalityOther() {
+        const input = document.getElementById('Nationalite');
+        const other = document.getElementById('NationaliteOther');
+        if (!input || !other) return;
+        const text = MERSCH75_DETAIL_TEXTS[currentLang] || MERSCH75_DETAIL_TEXTS.lu;
+        const otherLabel = text.nationalities[text.nationalities.length - 1];
+        const isOther = input.value.trim() === otherLabel;
+        if (isOther) {
+            other.hidden = false;
+            other.required = true;
+            other.focus();
+        } else if (!other.value.trim()) {
+            other.hidden = true;
+            other.required = false;
+        }
+        if (other.value.trim() && isOther) input.value = other.value.trim();
+    }
+
     function updateDetailLanguage() {
         const text = MERSCH75_DETAIL_TEXTS[currentLang] || MERSCH75_DETAIL_TEXTS.lu;
         document.getElementById('lbl-correspondence-language').textContent = text.correspondenceLanguage;
@@ -1717,6 +1736,7 @@
             option.value = nationality;
             nationalityList.appendChild(option);
         });
+        updateNationalityOther();
     }
 
     function updateQualificationValidation() {
@@ -2980,6 +3000,19 @@
     });
     document.getElementById('TrainerQualificationDocument').addEventListener('change', updateQualificationValidation);
     document.getElementById('AncienClub').addEventListener('change', updateClubFields);
+    document.getElementById('Nationalite').addEventListener('input', function() {
+        const other = document.getElementById('NationaliteOther');
+        const text = MERSCH75_DETAIL_TEXTS[currentLang] || MERSCH75_DETAIL_TEXTS.lu;
+        const otherLabel = text.nationalities[text.nationalities.length - 1];
+        const isOther = this.value.trim() === otherLabel;
+        other.hidden = !isOther && !other.value.trim();
+        other.required = isOther;
+        if (isOther) other.focus();
+    });
+    document.getElementById('NationaliteOther').addEventListener('input', function() {
+        const value = this.value.trim();
+        if (value) document.getElementById('Nationalite').value = value;
+    });
     document.getElementById('Medico').addEventListener('change', updateMembershipDetailFields);
     document.getElementById('Licence').addEventListener('change', updateMembershipDetailFields);
     document.getElementById('MedicoValidUntil').addEventListener('input', function() {
