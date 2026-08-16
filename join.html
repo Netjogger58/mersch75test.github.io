@@ -152,6 +152,14 @@
                                         <option value="GB">GB</option>
                                     </select>
                                 </div>
+                                <div class="join-form-group">
+                                    <label id="lbl-gender" for="Gender">Geschlecht *</label>
+                                    <select id="Gender" name="Gender" required>
+                                        <option value="" selected disabled>M / F</option>
+                                        <option value="M">M</option>
+                                        <option value="F">F</option>
+                                    </select>
+                                </div>
                             </div>
 
                             <div class="join-form-group">
@@ -1206,6 +1214,7 @@
     const MERSCH75_DETAIL_TEXTS = {
         lu: {
             correspondenceLanguage: 'Sprooch fir de Schrëftverkéier *',
+            gender: 'Geschlecht *',
             medicoValidUntil: 'Gülteg bis (Joer) *',
             licenceDetails: 'Lizenz Nummer *',
             minorEmailNote: 'Bei engem mannerjärege Spiller gëtt d’E-Mail vum Erzéiungsberechtegten 1 fir de Schrëftverkéier benotzt.',
@@ -1215,6 +1224,7 @@
         },
         fr: {
             correspondenceLanguage: 'Langue de correspondance *',
+            gender: 'Sexe *',
             medicoValidUntil: 'Valable jusqu’en (année) *',
             licenceDetails: 'Numéro de licence *',
             minorEmailNote: 'Pour un joueur mineur, l’adresse e-mail du responsable légal 1 est utilisée pour la correspondance.',
@@ -1224,6 +1234,7 @@
         },
         de: {
             correspondenceLanguage: 'Korrespondenzsprache *',
+            gender: 'Geschlecht *',
             medicoValidUntil: 'Gültig bis (Jahr) *',
             licenceDetails: 'Lizenznummer *',
             minorEmailNote: 'Bei minderjährigen Spielern wird die E-Mail-Adresse des Erziehungsberechtigten 1 für den Schriftverkehr verwendet.',
@@ -1233,6 +1244,7 @@
         },
         en: {
             correspondenceLanguage: 'Correspondence language *',
+            gender: 'Gender *',
             medicoValidUntil: 'Valid until (year) *',
             licenceDetails: 'Licence number *',
             minorEmailNote: 'For a minor player, the email address of guardian 1 is used for correspondence.',
@@ -1242,6 +1254,7 @@
         },
         pt: {
             correspondenceLanguage: 'Língua de correspondência *',
+            gender: 'Sexo *',
             medicoValidUntil: 'Válido até (ano) *',
             licenceDetails: 'Número da licença *',
             minorEmailNote: 'Para um jogador menor, o endereço de e-mail do encarregado de educação 1 é utilizado para a correspondência.',
@@ -1793,6 +1806,7 @@
     function updateDetailLanguage() {
         const text = MERSCH75_DETAIL_TEXTS[currentLang] || MERSCH75_DETAIL_TEXTS.lu;
         document.getElementById('lbl-correspondence-language').textContent = text.correspondenceLanguage;
+        document.getElementById('lbl-gender').textContent = text.gender;
         document.getElementById('lbl-medico-valid-until').textContent = text.medicoValidUntil;
         document.getElementById('lbl-licence-details').textContent = text.licenceDetails;
         document.getElementById('minor-email-note').textContent = text.minorEmailNote;
@@ -2666,9 +2680,9 @@
         const lines = [];
         const isFrenchMessage = messageLanguage === 'fr';
         const text = isFrenchMessage ? {
-            licenseLink: 'LIEN LICENCE', password: 'CODE ACCES', applicant: 'DEMANDEUR', role: 'ROLE / FONCTION', category: 'CATEGORIE FLH', cnsDigits: 'CNS (5 chiffres)', birthDate: 'DATE DE NAISSANCE', email: 'E-MAIL', phoneApplicant: 'TELEPHONE PERSONNE INSCRITE', phoneDad: 'TELEPHONE PERE', phoneMom: 'TELEPHONE MERE', phoneCompanion: 'TELEPHONE ACCOMPAGNANT / CONTACT', street: 'RUE', zip: 'CODE POSTAL', city: 'LOCALITE', minor: 'MINEUR', singleParent: 'PARENT ISOLE', guardians: 'TUTEUR(S)', club: 'ANCIEN CLUB', medLicense: 'MED/LIC', nationality: 'NATIONALITE', legalAccepted: 'CONDITIONS GENERALES ET PROTECTION DES DONNEES ACCEPTEES', flhAccepted: 'TRANSMISSION DES DONNEES A FLH.LU POUR LICENCE COMPRISE', accuracyAccepted: 'EXACTITUDE DES DONNEES CONFIRMEE', cnsComplete: 'MATRICULE CNS COMPLET'
+            licenseLink: 'LIEN LICENCE', password: 'CODE ACCES', applicant: 'DEMANDEUR', role: 'ROLE / FONCTION', category: 'CATEGORIE FLH', cnsDigits: 'CNS (5 chiffres)', birthDate: 'DATE DE NAISSANCE', email: 'E-MAIL', phoneApplicant: 'TELEPHONE PERSONNE INSCRITE', phoneDad: 'TELEPHONE PERE', phoneMom: 'TELEPHONE MERE', phoneCompanion: 'TELEPHONE ACCOMPAGNANT / CONTACT', street: 'RUE', zip: 'CODE POSTAL', city: 'LOCALITE', minor: 'MINEUR', singleParent: 'PARENT ISOLE', guardians: 'TUTEUR(S)', club: 'ANCIEN CLUB', medLicense: 'MED/LIC', nationality: 'NATIONALITE', gender: 'SEXE', legalAccepted: 'CONDITIONS GENERALES ET PROTECTION DES DONNEES ACCEPTEES', flhAccepted: 'TRANSMISSION DES DONNEES A FLH.LU POUR LICENCE COMPRISE', accuracyAccepted: 'EXACTITUDE DES DONNEES CONFIRMEE', cnsComplete: 'MATRICULE CNS COMPLET'
         } : {
-            licenseLink: 'LIZENZ-LINK', password: 'ZUGANGSCODE', applicant: 'ANTRAGSTELLER', role: 'ROLLE / FUNKTION', category: 'FLH KATEGORIE', cnsDigits: 'CNS (5 Ziffern)', birthDate: 'GEBURTSDATUM', email: 'E-MAIL', phoneApplicant: 'TELEFON ANGEMELDETE PERSON', phoneDad: 'TELEFON VATER', phoneMom: 'TELEFON MUTTER', phoneCompanion: 'TELEFON BEGLEITUNG / KONTAKT', street: 'STRASSE', zip: 'POSTLEITZAHL', city: 'ORTSCHAFT', minor: 'MINDERJAEHRIG', singleParent: 'ALLEINERZIEHEND', guardians: 'ERZIEHUNGSBERECHTIGTE(R)', club: 'EHEMALIGER VEREIN', medLicense: 'MED/LIZ', nationality: 'NATIONALITAET', legalAccepted: 'ALLGEMEINE BEDINGUNGEN UND DATENSCHUTZ AKZEPTIERT', flhAccepted: 'DATENUEBERMITTLUNG AN FLH.LU FUER LIZENZ VERSTANDEN', accuracyAccepted: 'RICHTIGKEIT DER ANGABEN BESTAETIGT', cnsComplete: 'MATRICULE CNS KOMPLETT'
+            licenseLink: 'LIZENZ-LINK', password: 'ZUGANGSCODE', applicant: 'ANTRAGSTELLER', role: 'ROLLE / FUNKTION', category: 'FLH KATEGORIE', cnsDigits: 'CNS (5 Ziffern)', birthDate: 'GEBURTSDATUM', email: 'E-MAIL', phoneApplicant: 'TELEFON ANGEMELDETE PERSON', phoneDad: 'TELEFON VATER', phoneMom: 'TELEFON MUTTER', phoneCompanion: 'TELEFON BEGLEITUNG / KONTAKT', street: 'STRASSE', zip: 'POSTLEITZAHL', city: 'ORTSCHAFT', minor: 'MINDERJAEHRIG', singleParent: 'ALLEINERZIEHEND', guardians: 'ERZIEHUNGSBERECHTIGTE(R)', club: 'EHEMALIGER VEREIN', medLicense: 'MED/LIZ', nationality: 'NATIONALITAET', gender: 'GESCHLECHT', legalAccepted: 'ALLGEMEINE BEDINGUNGEN UND DATENSCHUTZ AKZEPTIERT', flhAccepted: 'DATENUEBERMITTLUNG AN FLH.LU FUER LIZENZ VERSTANDEN', accuracyAccepted: 'RICHTIGKEIT DER ANGABEN BESTAETIGT', cnsComplete: 'MATRICULE CNS KOMPLETT'
         };
 
         // Lizenz-Link nur in der französischen Mail (geht an FLH), nicht in der internen deutschen Kopie.
@@ -2771,6 +2785,7 @@
             lines.push((isFrenchMessage ? 'TYPE DE LICENCE' : 'LIZENZART') + ': ' + getValue('LicenceDetails'));
         }
         lines.push(text.nationality + ': ' + getValue('Nationalite'));
+        lines.push(text.gender + ': ' + getValue('Gender'));
         lines.push(text.legalAccepted + ': ' + getCheckedValue('LegalConsent'));
         lines.push(text.flhAccepted + ': ' + getCheckedValue('FlhPortalConsent'));
         lines.push(text.accuracyAccepted + ': ' + getCheckedValue('AccuracyConsent'));
@@ -2844,6 +2859,7 @@
             postcode: getValue('Postcode'),
             city: getValue('Ortschaft'),
             nationality: getValue('Nationalite'),
+            gender: getValue('Gender'),
             correspondenceLanguage: getValue('CorrespondenceLanguage'),
             cns: getValue('CNS'),
             cnsComplete: getCnsComplete(),
