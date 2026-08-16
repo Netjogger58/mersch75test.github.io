@@ -3101,6 +3101,16 @@
         }
     });
 
+    document.getElementById('registrationForm').addEventListener('input', function(event) {
+        const input = event.target;
+        if (!input || input.tagName !== 'INPUT') return;
+        if (input.matches('[id$="Nom"], [name$="Nom"], [data-sibling-field="nom"]')) {
+            input.value = formatLastName(input.value);
+        } else if (input.matches('[id$="Prenom"], [name$="Prenom"], [data-sibling-field="prenom"]')) {
+            input.value = formatFirstName(input.value);
+        }
+    });
+
     document.getElementById('registrationForm').addEventListener('submit', async function(event) {
         event.preventDefault();
 
