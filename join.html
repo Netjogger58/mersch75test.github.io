@@ -1368,6 +1368,25 @@
         return (getValue('Nom') + ' ' + getValue('Prenom')).trim();
     }
 
+    function formatLastName(value) {
+        return String(value || '').trim().toLocaleUpperCase('de-DE');
+    }
+
+    function formatFirstName(value) {
+        return String(value || '').trim().toLocaleLowerCase('de-DE').replace(/(^|[\s-])(\p{L})/gu, function(_match, separator, letter) {
+            return separator + letter.toLocaleUpperCase('de-DE');
+        });
+    }
+
+    function normalizeRegistrationNames() {
+        document.querySelectorAll('input[id$="Nom"], input[name$="Nom"], input[data-sibling-field="nom"]').forEach(function(input) {
+            input.value = formatLastName(input.value);
+        });
+        document.querySelectorAll('input[id$="Prenom"], input[name$="Prenom"], input[data-sibling-field="prenom"]').forEach(function(input) {
+            input.value = formatFirstName(input.value);
+        });
+    }
+
     function updateApplicantEmailField(effectiveMinor) {
         const emailGroup = document.getElementById('applicant-email-group');
         const applicantEmail = document.getElementById('Email');
@@ -3109,6 +3128,7 @@
             return;
         }
 
+        normalizeRegistrationNames();
         submitBtn.disabled = true;
         submitBtn.innerText = MERSCH75_UI_TEXTS[detectLegalLanguage()].sending;
 
@@ -3165,6 +3185,8 @@
             }
 
             form.style.display = 'none';
+            const quickStart = document.getElementById('join-quiz');
+            if (quickStart) quickStart.hidden = true;
             document.querySelector('.join-lang-selector').style.display = 'none';
             document.querySelectorAll('.join-lang-text').forEach(function(el) {
                 el.style.display = 'none';
