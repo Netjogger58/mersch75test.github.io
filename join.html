@@ -3113,7 +3113,7 @@
         } else if (input.matches('[id$="Prenom"], [name$="Prenom"], [data-sibling-field="prenom"]')) {
             input.value = formatFirstName(input.value);
         }
-    });
+    }, true);
 
     document.getElementById('registrationForm').addEventListener('submit', async function(event) {
         event.preventDefault();
