@@ -1519,7 +1519,8 @@
             display.innerText = 'NISS (Belgique) — 11 Zifferen';
         }
 
-        // Gebuersdatum optional maachen wann CNS/Matricule ausgefüllt ass
+        // The CNS field is mandatory; a valid CNS can make the date optional.
+        cnsField.required = true;
         const dobField = document.getElementById('DateNaissance');
         const hasCns = cns.length >= 3;
         dobField.required = !hasCns;
@@ -3115,10 +3116,28 @@
         }
     }, true);
 
-    document.getElementById('registrationForm').addEventListener('submit', async function(event) {
+    function hideJoinQuiz() {
+        const quiz = document.getElementById('join-quiz');
+        if (!quiz || quiz.hidden) return;
+        quiz.hidden = true;
+        quiz.setAttribute('aria-hidden', 'true');
+    }
+
+    const registrationForm = document.getElementById('registrationForm');
+    registrationForm.addEventListener('focusin', hideJoinQuiz);
+    registrationForm.addEventListener('input', hideJoinQuiz);
+    registrationForm.addEventListener('change', hideJoinQuiz);
+
+    registrationForm.addEventListener('submit', async function(event) {
         event.preventDefault();
 
-        const form = document.getElementById('registrationForm');
+        const form = registrationForm;
+        const cnsField = document.getElementById('CNS');
+        if (cnsField) {
+            cnsField.value = (cnsField.value || '').trim();
+            cnsField.required = true;
+        }
+        updateCnsDisplay();
         const submitBtn = document.getElementById('submitBtn');
         const originalText = submitBtn.innerText;
         const isTestMode = isTestSubmission();
@@ -3267,6 +3286,7 @@
     document.querySelectorAll('.join-quiz-option').forEach(function(button) {
         button.addEventListener('click', function() {
             setJoinQuizSelection(this.dataset.quizKey);
+            hideJoinQuiz();
         });
     });
 
