@@ -2619,6 +2619,10 @@ body.privacy-page {
     .join-form-row--4col {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+
+    .join-form-row--adaptive {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
 
 @media (max-width: 720px) {
@@ -2628,6 +2632,10 @@ body.privacy-page {
     }
 
     .join-form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .join-form-row--adaptive {
         grid-template-columns: 1fr;
     }
 
