@@ -2582,6 +2582,25 @@ body.privacy-page {
     box-shadow: 0 12px 24px rgba(249, 214, 17, 0.35);
 }
 
+.join-welcome-frame-wrap {
+    margin-top: 24px;
+}
+
+.join-welcome-frame-wrap h3 {
+    margin: 0 0 12px;
+    color: #002b5c;
+    font-size: 1.15rem;
+}
+
+#welcomeMappFrame {
+    display: block;
+    width: 100%;
+    min-height: 920px;
+    border: 1px solid rgba(0, 47, 101, 0.14);
+    border-radius: 16px;
+    background: #fff;
+}
+
 #website-field {
     display: none;
 }

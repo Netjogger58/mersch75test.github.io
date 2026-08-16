@@ -700,6 +700,10 @@
                                style="display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding:14px 26px;background:linear-gradient(135deg,#fffdf0 0%,#fff6c2 100%);border:2px solid #f9d611;border-radius:999px;color:#002b5c;font-weight:700;text-decoration:none;font-size:1.05rem;box-shadow:0 8px 18px rgba(249,214,17,0.25);">
                                 📖 <span id="welcomeMappLinkLabel">Wëllkomm-Mapp opmaachen</span>
                             </a>
+                            <div id="welcomeMappFrameWrap" class="join-welcome-frame-wrap" hidden>
+                                <h3 id="welcomeMappFrameTitle">Deng perséinlech Wëllkomm-Mapp</h3>
+                                <iframe id="welcomeMappFrame" title="Perséinlech Wëllkomm-Mapp" loading="lazy"></iframe>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -3314,7 +3318,14 @@
                     const params = new URLSearchParams();
                     if (firstName) params.set('name', firstName);
                     params.set('lang', mappLang);
-                    welcomeLink.href = 'wellkomm-mapp.html?' + params.toString();
+                    const welcomeUrl = 'wellkomm-mapp.html?' + params.toString();
+                    welcomeLink.href = welcomeUrl;
+                    const welcomeFrameWrap = document.getElementById('welcomeMappFrameWrap');
+                    const welcomeFrame = document.getElementById('welcomeMappFrame');
+                    if (welcomeFrame && welcomeFrameWrap) {
+                        welcomeFrame.src = welcomeUrl;
+                        welcomeFrameWrap.hidden = false;
+                    }
                 }
             } catch (_) { /* non-fatal */ }
 
