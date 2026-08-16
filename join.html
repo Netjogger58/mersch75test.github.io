@@ -138,8 +138,9 @@
                             <div class="join-form-row">
                                 <div class="join-form-group">
                                     <label id="lbl-nat" for="Nationalite">Nationalitéit *</label>
-                                    <input type="text" id="Nationalite" name="Nationalite" list="nationality-suggestions" autocomplete="country-name" required placeholder="Wielt eng Nationalitéit">
-                                    <datalist id="nationality-suggestions"></datalist>
+                                    <select id="Nationalite" name="Nationalite" autocomplete="country-name" required>
+                                        <option value="">Wielt eng Nationalitéit</option>
+                                    </select>
                                     <input type="text" id="NationaliteOther" name="NationaliteOther" autocomplete="country-name" placeholder="Aner Nationalitéit" hidden>
                                 </div>
                                 <div class="join-form-group">
@@ -1728,26 +1729,46 @@
 
     function populateNationalitySuggestions() {
         const input = document.getElementById('Nationalite');
-        const datalist = document.getElementById('nationality-suggestions');
-        if (!input || !datalist) return;
+        if (!input) return;
         const text = MERSCH75_DETAIL_TEXTS[currentLang] || MERSCH75_DETAIL_TEXTS.lu;
         const suggestions = Array.from(new Set([
             ...(MERSCH75_COUNTRY_SUGGESTIONS[currentLang] || []),
             ...text.nationalities
         ]));
+        const previousNationality = input.value;
 
-        datalist.innerHTML = '';
+        input.innerHTML = '';
+        const placeholder = document.createElement('option');
+        placeholder.value = '';
+        placeholder.textContent = text.nationalities[0] === 'Luxembourgesch'
+            ? 'Wielt eng Nationalitéit'
+            : (currentLang === 'fr' ? 'Choisissez une nationalité' : currentLang === 'de' ? 'Nationalität auswählen' : currentLang === 'en' ? 'Choose a nationality' : currentLang === 'pt' ? 'Escolha uma nacionalidade' : 'Wielt eng Nationalitéit');
+        input.appendChild(placeholder);
         suggestions.forEach(function(suggestion) {
             const option = document.createElement('option');
             option.value = suggestion;
-            datalist.appendChild(option);
+            option.textContent = suggestion;
+            input.appendChild(option);
         });
 
         const otherLabel = getNationalityOtherLabel();
         if (!suggestions.includes(otherLabel)) {
             const option = document.createElement('option');
             option.value = otherLabel;
-            datalist.appendChild(option);
+            option.textContent = otherLabel;
+            input.appendChild(option);
+        }
+
+        const hasPreviousValue = Array.from(input.options).some(function(option) {
+            return option.value === previousNationality;
+        });
+        if (hasPreviousValue) {
+            input.value = previousNationality;
+        } else {
+            const luxembourgOption = Array.from(input.options).find(function(option) {
+                return /luxembourg|luxemburg/i.test(option.value);
+            });
+            input.value = luxembourgOption ? luxembourgOption.value : '';
         }
     }
 
@@ -1790,9 +1811,10 @@
 
         const nationalityInput = document.getElementById('Nationalite');
         const previousNationality = nationalityInput.value;
-        nationalityInput.value = previousNationality || '';
         populateNationalitySuggestions();
-        if (previousNationality && !document.getElementById('nationality-suggestions').querySelector('option[value="' + CSS.escape(previousNationality) + '"]')) {
+        if (previousNationality && !Array.from(nationalityInput.options).some(function(option) {
+            return option.value === previousNationality;
+        })) {
             nationalityInput.value = '';
         }
         updateNationalityOther();
