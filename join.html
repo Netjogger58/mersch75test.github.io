@@ -141,7 +141,8 @@
                                     <select id="Nationalite" name="Nationalite" autocomplete="country-name" required>
                                         <option value="">Wielt eng Nationalitéit</option>
                                     </select>
-                                    <input type="text" id="NationaliteOther" name="NationaliteOther" autocomplete="country-name" placeholder="Aner Nationalitéit" hidden>
+                                    <input type="text" id="NationaliteOther" name="NationaliteOther" list="nationality-other-suggestions" autocomplete="country-name" placeholder="Aner Nationalitéit" hidden>
+                                    <datalist id="nationality-other-suggestions"></datalist>
                                 </div>
                                 <div class="join-form-group">
                                     <label id="lbl-correspondence-language" for="CorrespondenceLanguage">Sprooch fir de Schrëftverkéier *</label>
@@ -1270,6 +1271,9 @@
         en: ['Afghanistan', 'Albania', 'Algeria', 'Argentina', 'Australia', 'Belgium', 'Brazil', 'Bulgaria', 'Canada', 'China', 'Croatia', 'Czech Republic', 'Denmark', 'France', 'Germany', 'Ghana', 'Greece', 'India', 'Ireland', 'Italy', 'Japan', 'Luxembourg', 'Mali', 'Morocco', 'Netherlands', 'Norway', 'Poland', 'Portugal', 'Romania', 'Senegal', 'Spain', 'Sweden', 'Switzerland', 'Turkey', 'Ukraine', 'United Kingdom', 'United States', 'Vietnam'],
         pt: ['Afeganistão', 'Albânia', 'Argélia', 'Argentina', 'Austrália', 'Bélgica', 'Brasil', 'Bulgária', 'Canadá', 'China', 'Dinamarca', 'Espanha', 'Estados Unidos', 'França', 'Gana', 'Grécia', 'Índia', 'Irlanda', 'Itália', 'Japão', 'Luxemburgo', 'Marrocos', 'Mali', 'Países Baixos', 'Portugal', 'Roménia', 'Suécia', 'Suíça', 'Senegal', 'República Checa', 'Turquia', 'Ucrânia', 'Vietname', 'Alemanha']
     };
+    const MERSCH75_PRIMARY_NATIONALITIES = [
+        'Belgium', 'Bulgaria', 'Croatia', 'Cyprus', 'Czech Republic', 'Denmark', 'Estonia', 'Finland', 'France', 'Germany', 'Greece', 'Hungary', 'Ireland', 'Italy', 'Latvia', 'Lithuania', 'Luxembourg', 'Malta', 'Netherlands', 'Austria', 'Poland', 'Portugal', 'Romania', 'Slovakia', 'Slovenia', 'Spain', 'Sweden', 'England'
+    ];
     const MERSCH75_PHONE_TEXTS = {
         lu: {
             secondPhone: 'Zweet Telefonsnummer / Kontaktpersoun',
@@ -1735,13 +1739,20 @@
         return text.nationalities[text.nationalities.length - 1];
     }
 
+    function getNationalityValue() {
+        const selected = getValue('Nationalite');
+        return selected === getNationalityOtherLabel() ? getValue('NationaliteOther') : selected;
+    }
+
     function populateNationalitySuggestions() {
         const input = document.getElementById('Nationalite');
         if (!input) return;
         const text = MERSCH75_DETAIL_TEXTS[currentLang] || MERSCH75_DETAIL_TEXTS.lu;
-        const suggestions = Array.from(new Set([
+        const suggestions = MERSCH75_PRIMARY_NATIONALITIES.slice();
+        const otherSuggestions = Array.from(new Set([
             ...(MERSCH75_COUNTRY_SUGGESTIONS[currentLang] || []),
-            ...text.nationalities
+            ...text.nationalities,
+            ...MERSCH75_PRIMARY_NATIONALITIES
         ]));
         const previousNationality = input.value;
 
@@ -1765,6 +1776,16 @@
             option.value = otherLabel;
             option.textContent = otherLabel;
             input.appendChild(option);
+        }
+
+        const otherDatalist = document.getElementById('nationality-other-suggestions');
+        if (otherDatalist) {
+            otherDatalist.innerHTML = '';
+            otherSuggestions.forEach(function(suggestion) {
+                const option = document.createElement('option');
+                option.value = suggestion;
+                otherDatalist.appendChild(option);
+            });
         }
 
         const hasPreviousValue = Array.from(input.options).some(function(option) {
@@ -2784,7 +2805,7 @@
         if (getValue('Licence') === 'Oui') {
             lines.push((isFrenchMessage ? 'TYPE DE LICENCE' : 'LIZENZART') + ': ' + getValue('LicenceDetails'));
         }
-        lines.push(text.nationality + ': ' + getValue('Nationalite'));
+        lines.push(text.nationality + ': ' + getNationalityValue());
         lines.push(text.gender + ': ' + getValue('Gender'));
         lines.push(text.legalAccepted + ': ' + getCheckedValue('LegalConsent'));
         lines.push(text.flhAccepted + ': ' + getCheckedValue('FlhPortalConsent'));
@@ -2858,7 +2879,7 @@
             street: getValue('Strasse'),
             postcode: getValue('Postcode'),
             city: getValue('Ortschaft'),
-            nationality: getValue('Nationalite'),
+            nationality: getNationalityValue(),
             gender: getValue('Gender'),
             correspondenceLanguage: getValue('CorrespondenceLanguage'),
             cns: getValue('CNS'),
