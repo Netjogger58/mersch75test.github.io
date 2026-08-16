@@ -138,9 +138,8 @@
                             <div class="join-form-row">
                                 <div class="join-form-group">
                                     <label id="lbl-nat" for="Nationalite">Nationalitéit *</label>
-                                    <select id="Nationalite" name="Nationalite" autocomplete="country-name" required>
-                                        <option value="">Wielt eng Nationalitéit</option>
-                                    </select>
+                                    <input id="Nationalite" name="Nationalite" list="nationality-suggestions" autocomplete="country-name" required placeholder="Wielt eng Nationalitéit">
+                                    <datalist id="nationality-suggestions"></datalist>
                                     <input type="text" id="NationaliteOther" name="NationaliteOther" autocomplete="country-name" placeholder="Aner Nationalitéit" hidden>
                                 </div>
                                 <div class="join-form-group">
@@ -1251,6 +1250,13 @@
             nationalities: ['Austríaca', 'Belga', 'Búlgara', 'Croata', 'Cipriota', 'Checa', 'Dinamarquesa', 'Estoniana', 'Finlandesa', 'Francesa', 'Alemã', 'Grega', 'Húngara', 'Irlandesa', 'Italiana', 'Letã', 'Lituana', 'Luxemburguesa', 'Maltesa', 'Neerlandesa', 'Polaca', 'Portuguesa', 'Romena', 'Eslovaca', 'Eslovena', 'Espanhola', 'Sueca', 'Outra']
         }
     };
+    const MERSCH75_COUNTRY_SUGGESTIONS = {
+        lu: ['Afghanistan', 'Albanien', 'Algerien', 'Angola', 'Argentinien', 'Australien', 'Belgien', 'Brasilien', 'Bulgarien', 'China', 'Dänemark', 'Deutschland', 'Ecuador', 'Frankräich', 'Ghana', 'Griechenland', 'Indien', 'Irland', 'Italien', 'Japan', 'Kanada', 'Kongo', 'Luxembourg', 'Marokko', 'Mali', 'Niederlande', 'Norwegen', 'Österreich', 'Portugal', 'Rumänien', 'Schweden', 'Schweiz', 'Senegal', 'Slowakei', 'Spanien', 'Tschechien', 'Türkei', 'Ukraine', 'USA', 'Vereinigtes Königreich', 'Vietnam', 'Zypern'],
+        fr: ['Afghanistan', 'Albanie', 'Algérie', 'Angleterre', 'Argentine', 'Australie', 'Belgique', 'Brésil', 'Bulgarie', 'Chine', 'Danemark', 'Espagne', 'États-Unis', 'France', 'Ghana', 'Grèce', 'Inde', 'Irlande', 'Italie', 'Japon', 'Luxembourg', 'Maroc', 'Mali', 'Pays-Bas', 'Portugal', 'Roumanie', 'Suède', 'Suisse', 'Sénégal', 'Tchéquie', 'Turquie', 'Ukraine', 'Vietnam', 'Allemagne', 'Canada', 'Belgique'],
+        de: ['Afghanistan', 'Albanien', 'Algerien', 'Argentinien', 'Australien', 'Belgien', 'Brasilien', 'Bulgarien', 'China', 'Dänemark', 'Deutschland', 'Ecuador', 'Frankreich', 'Ghana', 'Griechenland', 'Indien', 'Irland', 'Italien', 'Japan', 'Kanada', 'Kongo', 'Luxemburg', 'Marokko', 'Mali', 'Niederlande', 'Norwegen', 'Österreich', 'Portugal', 'Rumänien', 'Schweden', 'Schweiz', 'Senegal', 'Slowakei', 'Spanien', 'Tschechien', 'Türkei', 'Ukraine', 'USA', 'Vereinigtes Königreich', 'Vietnam', 'Zypern'],
+        en: ['Afghanistan', 'Albania', 'Algeria', 'Argentina', 'Australia', 'Belgium', 'Brazil', 'Bulgaria', 'Canada', 'China', 'Croatia', 'Czech Republic', 'Denmark', 'France', 'Germany', 'Ghana', 'Greece', 'India', 'Ireland', 'Italy', 'Japan', 'Luxembourg', 'Mali', 'Morocco', 'Netherlands', 'Norway', 'Poland', 'Portugal', 'Romania', 'Senegal', 'Spain', 'Sweden', 'Switzerland', 'Turkey', 'Ukraine', 'United Kingdom', 'United States', 'Vietnam'],
+        pt: ['Afeganistão', 'Albânia', 'Argélia', 'Argentina', 'Austrália', 'Bélgica', 'Brasil', 'Bulgária', 'Canadá', 'China', 'Dinamarca', 'Espanha', 'Estados Unidos', 'França', 'Gana', 'Grécia', 'Índia', 'Irlanda', 'Itália', 'Japão', 'Luxemburgo', 'Marrocos', 'Mali', 'Países Baixos', 'Portugal', 'Roménia', 'Suécia', 'Suíça', 'Senegal', 'República Checa', 'Turquia', 'Ucrânia', 'Vietname', 'Alemanha']
+    };
     const MERSCH75_PHONE_TEXTS = {
         lu: {
             secondPhone: 'Zweet Telefonsnummer / Kontaktpersoun',
@@ -1711,20 +1717,56 @@
         }
     }
 
+    function getNationalityOtherLabel() {
+        const text = MERSCH75_DETAIL_TEXTS[currentLang] || MERSCH75_DETAIL_TEXTS.lu;
+        return text.nationalities[text.nationalities.length - 1];
+    }
+
+    function populateNationalitySuggestions() {
+        const input = document.getElementById('Nationalite');
+        const datalist = document.getElementById('nationality-suggestions');
+        if (!input || !datalist) return;
+        const text = MERSCH75_DETAIL_TEXTS[currentLang] || MERSCH75_DETAIL_TEXTS.lu;
+        const suggestions = Array.from(new Set([
+            ...(MERSCH75_COUNTRY_SUGGESTIONS[currentLang] || []),
+            ...text.nationalities
+        ]));
+
+        datalist.innerHTML = '';
+        suggestions.forEach(function(suggestion) {
+            const option = document.createElement('option');
+            option.value = suggestion;
+            datalist.appendChild(option);
+        });
+
+        const otherLabel = getNationalityOtherLabel();
+        if (!suggestions.includes(otherLabel)) {
+            const option = document.createElement('option');
+            option.value = otherLabel;
+            datalist.appendChild(option);
+        }
+    }
+
     function updateNationalityOther() {
         const input = document.getElementById('Nationalite');
         const other = document.getElementById('NationaliteOther');
         if (!input || !other) return;
-        const text = MERSCH75_DETAIL_TEXTS[currentLang] || MERSCH75_DETAIL_TEXTS.lu;
-        const otherLabel = text.nationalities[text.nationalities.length - 1];
-        const isOther = input.value.trim() === otherLabel;
-        if (isOther) {
+
+        const otherLabel = getNationalityOtherLabel();
+        const currentValue = input.value.trim();
+        const otherValue = other.value.trim();
+
+        if (currentValue === otherLabel || otherValue) {
+            input.value = otherLabel;
             other.hidden = false;
             other.required = true;
-            other.focus();
-        } else {
-            other.hidden = true;
-            other.required = false;
+            return;
+        }
+
+        other.hidden = true;
+        other.required = false;
+        if (otherValue) {
+            other.value = '';
         }
     }
 
@@ -1742,21 +1784,12 @@
         playerEmailChoice.options[0].text = ui.non;
         playerEmailChoice.options[1].text = ui.oui;
 
-        const nationalityList = document.getElementById('Nationalite');
-        const previousNationality = nationalityList.value;
-        nationalityList.replaceChildren();
-        const emptyOption = document.createElement('option');
-        emptyOption.value = '';
-        emptyOption.textContent = currentLang === 'de' ? 'Nationalität auswählen' : currentLang === 'fr' ? 'Choisir une nationalité' : 'Wielt eng Nationalitéit';
-        nationalityList.appendChild(emptyOption);
-        text.nationalities.forEach(function(nationality) {
-            const option = document.createElement('option');
-            option.value = nationality;
-            option.textContent = nationality;
-            nationalityList.appendChild(option);
-        });
-        if (Array.from(nationalityList.options).some(function(option) { return option.value === previousNationality; })) {
-            nationalityList.value = previousNationality;
+        const nationalityInput = document.getElementById('Nationalite');
+        const previousNationality = nationalityInput.value;
+        nationalityInput.value = previousNationality || '';
+        populateNationalitySuggestions();
+        if (previousNationality && !document.getElementById('nationality-suggestions').querySelector('option[value="' + CSS.escape(previousNationality) + '"]')) {
+            nationalityInput.value = '';
         }
         updateNationalityOther();
     }
@@ -3024,18 +3057,44 @@
     });
     document.getElementById('TrainerQualificationDocument').addEventListener('change', updateQualificationValidation);
     document.getElementById('AncienClub').addEventListener('change', updateClubFields);
-    document.getElementById('Nationalite').addEventListener('change', function() {
+    document.getElementById('Nationalite').addEventListener('input', function() {
         const other = document.getElementById('NationaliteOther');
-        const text = MERSCH75_DETAIL_TEXTS[currentLang] || MERSCH75_DETAIL_TEXTS.lu;
-        const otherLabel = text.nationalities[text.nationalities.length - 1];
-        const isOther = this.value.trim() === otherLabel;
-        other.hidden = !isOther && !other.value.trim();
-        other.required = isOther;
-        if (isOther) other.focus();
+        const value = this.value.trim();
+        const otherLabel = getNationalityOtherLabel();
+
+        if (value === otherLabel) {
+            other.hidden = false;
+            other.required = true;
+            if (!other.value.trim()) {
+                other.focus();
+            }
+            return;
+        }
+
+        if (other.value.trim()) {
+            this.value = otherLabel;
+            other.hidden = false;
+            other.required = true;
+            return;
+        }
+
+        other.hidden = true;
+        other.required = false;
+    });
+    document.getElementById('Nationalite').addEventListener('change', function() {
+        updateNationalityOther();
     });
     document.getElementById('NationaliteOther').addEventListener('input', function() {
         const value = this.value.trim();
-        if (value) document.getElementById('Nationalite').value = value;
+        const main = document.getElementById('Nationalite');
+        if (value) {
+            main.value = getNationalityOtherLabel();
+            this.hidden = false;
+            this.required = true;
+            return;
+        }
+        main.value = '';
+        updateNationalityOther();
     });
     document.getElementById('Medico').addEventListener('change', updateMembershipDetailFields);
     document.getElementById('Licence').addEventListener('change', updateMembershipDetailFields);
