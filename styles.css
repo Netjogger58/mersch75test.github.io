@@ -2010,6 +2010,35 @@ body.privacy-page {
     background: rgba(232, 237, 244, 0.86);
 }
 
+.nationality-suggestions-box {
+    position: relative;
+    z-index: 10;
+    display: grid;
+    max-height: 220px;
+    overflow-y: auto;
+    margin-top: -2px;
+    border: 1px solid rgba(0, 47, 101, 0.14);
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 10px 24px rgba(0, 47, 101, 0.14);
+}
+
+.nationality-suggestion {
+    padding: 9px 12px;
+    border: 0;
+    background: transparent;
+    color: var(--blue);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.nationality-suggestion:hover,
+.nationality-suggestion:focus-visible {
+    background: rgba(0, 47, 101, 0.08);
+    outline: none;
+}
+
 #cat-section,
 #parent-section,
 #u7-section {

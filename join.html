@@ -143,6 +143,7 @@
                                     </select>
                                     <input type="text" id="NationaliteOther" name="NationaliteOther" list="nationality-other-suggestions" autocomplete="country-name" placeholder="Aner Nationalitéit" hidden>
                                     <datalist id="nationality-other-suggestions"></datalist>
+                                    <div id="nationality-other-suggestions-box" class="nationality-suggestions-box" role="listbox" hidden></div>
                                 </div>
                                 <div class="join-form-group">
                                     <label id="lbl-correspondence-language" for="CorrespondenceLanguage">Sprooch fir de Schrëftverkéier *</label>
@@ -1274,6 +1275,24 @@
     const MERSCH75_PRIMARY_NATIONALITIES = [
         'Belgium', 'Bulgaria', 'Croatia', 'Cyprus', 'Czech Republic', 'Denmark', 'Estonia', 'Finland', 'France', 'Germany', 'Greece', 'Hungary', 'Ireland', 'Italy', 'Latvia', 'Lithuania', 'Luxembourg', 'Malta', 'Netherlands', 'Austria', 'Poland', 'Portugal', 'Romania', 'Slovakia', 'Slovenia', 'Spain', 'Sweden', 'England'
     ];
+    const MERSCH75_COUNTRY_CODES = 'AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY HK HM HN HR HT HU ID IE IL IM IN IO IQ IR IS IT JE JM JO JP KE KG KH KI KM KN KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TF TG TH TJ TK TL TM TN TO TR TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS YE YT ZA ZM ZW'.split(' ');
+
+    function getAllCountrySuggestions() {
+        const locale = currentLang === 'fr' ? 'fr' : currentLang === 'de' || currentLang === 'lu' ? 'de' : currentLang === 'pt' ? 'pt' : 'en';
+        let displayNames;
+        try {
+            displayNames = new Intl.DisplayNames([locale], { type: 'region' });
+        } catch (_) {
+            displayNames = null;
+        }
+        return MERSCH75_COUNTRY_CODES.map(function(code) {
+            return displayNames ? displayNames.of(code) : code;
+        }).filter(Boolean).filter(function(name, index, names) {
+            return names.indexOf(name) === index;
+        }).sort(function(a, b) {
+            return a.localeCompare(b, locale);
+        });
+    }
     const MERSCH75_PHONE_TEXTS = {
         lu: {
             secondPhone: 'Zweet Telefonsnummer / Kontaktpersoun',
@@ -1750,6 +1769,7 @@
         const text = MERSCH75_DETAIL_TEXTS[currentLang] || MERSCH75_DETAIL_TEXTS.lu;
         const suggestions = MERSCH75_PRIMARY_NATIONALITIES.slice();
         const otherSuggestions = Array.from(new Set([
+            ...getAllCountrySuggestions(),
             ...(MERSCH75_COUNTRY_SUGGESTIONS[currentLang] || []),
             ...text.nationalities,
             ...MERSCH75_PRIMARY_NATIONALITIES
@@ -1814,6 +1834,7 @@
             input.value = otherLabel;
             other.hidden = false;
             other.required = true;
+            updateOtherCountrySuggestions();
             return;
         }
 
@@ -1822,6 +1843,44 @@
         if (otherValue) {
             other.value = '';
         }
+        hideOtherCountrySuggestions();
+    }
+
+    function hideOtherCountrySuggestions() {
+        const box = document.getElementById('nationality-other-suggestions-box');
+        if (box) {
+            box.hidden = true;
+            box.innerHTML = '';
+        }
+    }
+
+    function updateOtherCountrySuggestions() {
+        const input = document.getElementById('NationaliteOther');
+        const box = document.getElementById('nationality-other-suggestions-box');
+        if (!input || !box || input.hidden || input.value.trim().length < 2) {
+            hideOtherCountrySuggestions();
+            return;
+        }
+
+        const query = input.value.trim().toLocaleLowerCase();
+        const matches = getAllCountrySuggestions().filter(function(country) {
+            return country.toLocaleLowerCase().includes(query);
+        }).slice(0, 8);
+
+        box.innerHTML = '';
+        matches.forEach(function(country) {
+            const option = document.createElement('button');
+            option.type = 'button';
+            option.className = 'nationality-suggestion';
+            option.textContent = country;
+            option.addEventListener('click', function() {
+                input.value = country;
+                hideOtherCountrySuggestions();
+                updateNationalityOther();
+            });
+            box.appendChild(option);
+        });
+        box.hidden = matches.length === 0;
     }
 
     function updateDetailLanguage() {
@@ -3149,10 +3208,14 @@
             main.value = getNationalityOtherLabel();
             this.hidden = false;
             this.required = true;
+            updateOtherCountrySuggestions();
             return;
         }
         main.value = '';
         updateNationalityOther();
+    });
+    document.getElementById('NationaliteOther').addEventListener('blur', function() {
+        setTimeout(hideOtherCountrySuggestions, 150);
     });
     document.getElementById('Medico').addEventListener('change', updateMembershipDetailFields);
     document.getElementById('Licence').addEventListener('change', updateMembershipDetailFields);
