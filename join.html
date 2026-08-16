@@ -3105,7 +3105,7 @@
         }
     });
 
-    document.getElementById('registrationForm').addEventListener('input', function(event) {
+    document.getElementById('registrationForm').addEventListener('blur', function(event) {
         const input = event.target;
         if (!input || input.tagName !== 'INPUT') return;
         if (input.matches('[id$="Nom"], [name$="Nom"], [data-sibling-field="nom"]')) {
