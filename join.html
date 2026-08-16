@@ -138,24 +138,10 @@
                             <div class="join-form-row">
                                 <div class="join-form-group">
                                     <label id="lbl-nat" for="Nationalite">Nationalitéit *</label>
-                                    <input type="text" id="Nationalite" name="Nationalite" list="nationality-options" autocomplete="country-name" required>
+                                    <select id="Nationalite" name="Nationalite" autocomplete="country-name" required>
+                                        <option value="">Wielt eng Nationalitéit</option>
+                                    </select>
                                     <input type="text" id="NationaliteOther" name="NationaliteOther" autocomplete="country-name" placeholder="Aner Nationalitéit" hidden>
-                                    <datalist id="nationality-options">
-                                        <option value="Luxembourgesch">
-                                        <option value="Franséisch">
-                                        <option value="Däitsch">
-                                        <option value="Belsch">
-                                        <option value="Portugisesch">
-                                        <option value="Italienesch">
-                                        <option value="Spuenesch">
-                                        <option value="Hollännesch">
-                                        <option value="Brittesch">
-                                        <option value="Iresch">
-                                        <option value="Polnesch">
-                                        <option value="Rumänesch">
-                                        <option value="Ukrainesch">
-                                        <option value="Aner">
-                                    </datalist>
                                 </div>
                                 <div class="join-form-group">
                                     <label id="lbl-correspondence-language" for="CorrespondenceLanguage">Sprooch fir de Schrëftverkéier *</label>
@@ -1735,11 +1721,10 @@
             other.hidden = false;
             other.required = true;
             other.focus();
-        } else if (!other.value.trim()) {
+        } else {
             other.hidden = true;
             other.required = false;
         }
-        if (other.value.trim() && isOther) input.value = other.value.trim();
     }
 
     function updateDetailLanguage() {
@@ -1756,13 +1741,22 @@
         playerEmailChoice.options[0].text = ui.non;
         playerEmailChoice.options[1].text = ui.oui;
 
-        const nationalityList = document.getElementById('nationality-options');
+        const nationalityList = document.getElementById('Nationalite');
+        const previousNationality = nationalityList.value;
         nationalityList.replaceChildren();
+        const emptyOption = document.createElement('option');
+        emptyOption.value = '';
+        emptyOption.textContent = currentLang === 'de' ? 'Nationalität auswählen' : currentLang === 'fr' ? 'Choisir une nationalité' : 'Wielt eng Nationalitéit';
+        nationalityList.appendChild(emptyOption);
         text.nationalities.forEach(function(nationality) {
             const option = document.createElement('option');
             option.value = nationality;
+            option.textContent = nationality;
             nationalityList.appendChild(option);
         });
+        if (Array.from(nationalityList.options).some(function(option) { return option.value === previousNationality; })) {
+            nationalityList.value = previousNationality;
+        }
         updateNationalityOther();
     }
 
@@ -3029,7 +3023,7 @@
     });
     document.getElementById('TrainerQualificationDocument').addEventListener('change', updateQualificationValidation);
     document.getElementById('AncienClub').addEventListener('change', updateClubFields);
-    document.getElementById('Nationalite').addEventListener('input', function() {
+    document.getElementById('Nationalite').addEventListener('change', function() {
         const other = document.getElementById('NationaliteOther');
         const text = MERSCH75_DETAIL_TEXTS[currentLang] || MERSCH75_DETAIL_TEXTS.lu;
         const otherLabel = text.nationalities[text.nationalities.length - 1];
