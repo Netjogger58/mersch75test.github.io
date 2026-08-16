@@ -1940,6 +1940,24 @@ body.privacy-page {
     margin: 0;
 }
 
+.join-form-group.has-validation-error {
+    border: 2px solid #c62828;
+    border-radius: 8px;
+    padding: 8px;
+    background: #fff5f5;
+}
+
+.join-form-group.has-validation-error label {
+    color: #a51d1d;
+}
+
+.join-form-group.has-validation-error input,
+.join-form-group.has-validation-error select,
+.join-form-group.has-validation-error textarea {
+    border-color: #c62828;
+    box-shadow: 0 0 0 2px rgba(198, 40, 40, 0.15);
+}
+
 .join-form-group {
     display: grid;
     gap: 5px;

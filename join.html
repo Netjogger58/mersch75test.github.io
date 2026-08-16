@@ -3133,8 +3133,20 @@
         updateConsentValidationMessages();
         updatePhoneValidationMessage();
 
+        form.querySelectorAll('.join-form-group.has-validation-error').forEach(function(group) {
+            group.classList.remove('has-validation-error');
+        });
         if (!form.checkValidity()) {
-            form.reportValidity();
+            const invalidFields = Array.from(form.querySelectorAll(':invalid'));
+            invalidFields.forEach(function(field) {
+                const group = field.closest('.join-form-group');
+                if (group) group.classList.add('has-validation-error');
+            });
+            const firstInvalid = invalidFields[0];
+            if (firstInvalid) {
+                firstInvalid.focus();
+                firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
             return;
         }
 
