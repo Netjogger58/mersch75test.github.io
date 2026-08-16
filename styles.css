@@ -1917,6 +1917,7 @@ body.privacy-page {
 .join-registration-form {
     display: grid;
     gap: 10px;
+    min-width: 0;
 }
 
 .join-form-row {
@@ -1924,6 +1925,7 @@ body.privacy-page {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 10px;
     align-items: end;
+    min-width: 0;
 }
 
 .join-form-row > .join-form-group {
@@ -1931,6 +1933,7 @@ body.privacy-page {
     flex-direction: column;
     gap: 5px;
     margin: 0;
+    min-width: 0;
 }
 
 .join-form-row > .join-form-group > label {
@@ -1984,6 +1987,8 @@ body.privacy-page {
 .join-registration-form input[type='tel'],
 .join-registration-form select {
     width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
     padding: 9px 12px;
     border-radius: 10px;
     border: 1px solid rgba(0, 47, 101, 0.08);
