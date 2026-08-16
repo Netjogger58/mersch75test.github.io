@@ -141,8 +141,7 @@
                                     <select id="Nationalite" name="Nationalite" autocomplete="country-name" required>
                                         <option value="">Wielt eng Nationalitéit</option>
                                     </select>
-                                    <input type="text" id="NationaliteOther" name="NationaliteOther" list="nationality-other-suggestions" autocomplete="country-name" placeholder="Aner Nationalitéit" hidden>
-                                    <datalist id="nationality-other-suggestions"></datalist>
+                                    <input type="text" id="NationaliteOther" name="NationaliteOther" autocomplete="off" placeholder="Aner Nationalitéit" hidden>
                                     <div id="nationality-other-suggestions-box" class="nationality-suggestions-box" role="listbox" hidden></div>
                                 </div>
                                 <div class="join-form-group">
@@ -1768,12 +1767,6 @@
         if (!input) return;
         const text = MERSCH75_DETAIL_TEXTS[currentLang] || MERSCH75_DETAIL_TEXTS.lu;
         const suggestions = MERSCH75_PRIMARY_NATIONALITIES.slice();
-        const otherSuggestions = Array.from(new Set([
-            ...getAllCountrySuggestions(),
-            ...(MERSCH75_COUNTRY_SUGGESTIONS[currentLang] || []),
-            ...text.nationalities,
-            ...MERSCH75_PRIMARY_NATIONALITIES
-        ]));
         const previousNationality = input.value;
 
         input.innerHTML = '';
@@ -1798,15 +1791,6 @@
             input.appendChild(option);
         }
 
-        const otherDatalist = document.getElementById('nationality-other-suggestions');
-        if (otherDatalist) {
-            otherDatalist.innerHTML = '';
-            otherSuggestions.forEach(function(suggestion) {
-                const option = document.createElement('option');
-                option.value = suggestion;
-                otherDatalist.appendChild(option);
-            });
-        }
 
         const hasPreviousValue = Array.from(input.options).some(function(option) {
             return option.value === previousNationality;
