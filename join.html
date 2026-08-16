@@ -713,7 +713,7 @@
                             <p id="integration-warning" hidden></p>
                             <a id="welcomeMappLink" class="join-welcome-link" href="wellkomm-mapp.html" target="_blank" rel="noopener"
                                style="display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding:14px 26px;background:linear-gradient(135deg,#fffdf0 0%,#fff6c2 100%);border:2px solid #f9d611;border-radius:999px;color:#002b5c;font-weight:700;text-decoration:none;font-size:1.05rem;box-shadow:0 8px 18px rgba(249,214,17,0.25);">
-                                📖 Wëllkomm-Mapp opmaachen / öffnen / open / abrir
+                                📖 <span id="welcomeMappLinkLabel">Wëllkomm-Mapp opmaachen</span>
                             </a>
                         </div>
                     </div>
@@ -1355,6 +1355,14 @@
     }
 
     let currentLang = getPreferredLanguage();
+
+    const WELCOME_MAPP_LABELS = {
+        lu: 'Wëllkomm-Mapp opmaachen',
+        fr: 'Ouvrir la farde de bienvenue',
+        de: 'Willkommensmappe öffnen',
+        en: 'Open welcome folder',
+        pt: 'Abrir a pasta de boas-vindas'
+    };
 
     function getValue(id) {
         return document.getElementById(id).value.trim();
@@ -2461,6 +2469,8 @@
         currentLang = MERSCH75_UI_TEXTS[lang] ? lang : 'lu';
         const ui = MERSCH75_UI_TEXTS[currentLang];
         const legal = MERSCH75_LEGAL_TEXTS[currentLang];
+        const welcomeLabel = document.getElementById('welcomeMappLinkLabel');
+        if (welcomeLabel) welcomeLabel.textContent = WELCOME_MAPP_LABELS[currentLang];
         document.documentElement.lang = currentLang;
         saveLanguagePreference(currentLang);
 
