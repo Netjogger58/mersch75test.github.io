@@ -182,6 +182,11 @@
                                 </div>
                             </div>
 
+                            <div class="join-form-group">
+                                <label id="lbl-cardid" for="CardId">Carte d'Identité <span class="join-optional-hint" id="cardid-hint">(opt.)</span></label>
+                                <input type="text" id="CardId" name="CardId" autocomplete="off" placeholder="123-456-789...">
+                            </div>
+
                             <div id="cat-section">
                                 <label id="lbl-cat" for="Categorie">FLH Kategorie</label>
                                 <strong id="cat-display">-</strong>
@@ -712,6 +717,9 @@
                             <div id="card-id-display" style="margin-top:10px;padding:10px;background:#f5f5f5;border-radius:6px;display:none;">
                                 <strong id="card-id-label">Card-ID:</strong> <span id="card-id-value"></span>
                             </div>
+                            <div id="manager-warning" style="display:none;margin-top:10px;padding:10px;background:#fff3cd;border-radius:6px;color:#856404;border:1px solid #ffc107;">
+                                <strong>Opgepasst:</strong> D'Umeldung konnt net an der Vereins-OS gespäichert ginn. D'E-Mail gouf trotzdem geschéckt. Kontaktéiert w.e.g. d'Secretariat falls du keng Bestätegung kritt.
+                            </div>
                             <small>Du kriss geschwënn eng E-Mail vun der FLH mat den nächste Schrëtt fir deng Lizenz. Lued eng aktuell Foto erop a fëll déi noch néideg Donnéeën aus. Deng Memberskaart gëtt dir no der Bezuelung vum Membersbäitrag zougeschéckt.</small>
                             <a id="welcomeMappLink" class="join-welcome-link" href="wellkomm-mapp.html" target="_blank" rel="noopener"
                                style="display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding:14px 26px;background:linear-gradient(135deg,#fffdf0 0%,#fff6c2 100%);border:2px solid #f9d611;border-radius:999px;color:#002b5c;font-weight:700;text-decoration:none;font-size:1.05rem;box-shadow:0 8px 18px rgba(249,214,17,0.25);">
@@ -793,7 +801,7 @@
     const MERSCH75_WEB3FORMS_TEST_KEY = '9f36724d-0d6c-4ac4-b325-11ce6f7d0a5b';
     const MERSCH75_WEB3FORMS_ENDPOINT = (window.M75_CONFIG && window.M75_CONFIG.WEB3FORMS_ENDPOINT) || 'https://api.web3forms.com/submit';
     const MERSCH75_SHEET_ENDPOINT = (window.M75_CONFIG && window.M75_CONFIG.SHEET_ENDPOINT) || '';
-    const MERSCH75_MANAGER_ENDPOINT = (window.M75_CONFIG && window.M75_CONFIG.MANAGER_JOIN_ENDPOINT) || 'https://manager.mersch75.lu/api/joinus';
+    const MERSCH75_MANAGER_ENDPOINT = (window.M75_CONFIG && window.M75_CONFIG.MANAGER_JOIN_ENDPOINT) || 'http://localhost:3000/api/joinus';
     const MERSCH75_SHEET_TOKEN = 'm75-join-9f36-secure-2026';
     const MERSCH75_SHEET_PRODUCTION = false;
     const MERSCH75_LICENSE_LINK = 'https://submit.paperless.io/f/s4zaWnzHBwxcPK8jAkkbjPpVC1giUfr7';
@@ -1346,6 +1354,202 @@
             legalPrefix: 'Li e aceito os ', termsLink: 'termos e condições gerais', legalMiddle: ' e o regulamento relativo à ', dataLink: 'proteção de dados', sentenceEnd: '.', flhInfo: 'Info: Compreendi que a minha inscrição será enviada com estes dados para flh.lu para emitir uma licença.', accuracy: 'Confirmação: confirmo a exatidão dos meus dados.'
         }
     };
+
+    const MERSCH75_DEFINITION_CODES = [
+  {
+    "code": "C0001",
+    "label": "Basis Mitglied",
+    "tariff": "0.- (nëmmen Entrée bei Besuch)",
+    "note": "Card-ID, keng Lizenz",
+    "group": "Mitglied"
+  },
+  {
+    "code": "C0002",
+    "label": "einfaches Mitglied",
+    "tariff": "≥ 50.-",
+    "note": "Card-ID, keng Lizenz; optional Bénévole",
+    "group": "Mitglied"
+  },
+  {
+    "code": "C0003",
+    "label": "Contact-Famille - Ex-Jugendspiller",
+    "tariff": "0.-",
+    "note": "Ex-Lizenz; zäitlech limitéiert",
+    "group": "Contact-Famille"
+  },
+  {
+    "code": "C0004",
+    "label": "Contact-Famille - 1+ Jugendspiller",
+    "tariff": "0.- fir de Contact",
+    "note": "Youth Card oder Family Tarif fir d'Kand/Kanner",
+    "group": "Contact-Famille"
+  },
+  {
+    "code": "C0005",
+    "label": "Contact-Famille - 1+ Jugendspiller",
+    "tariff": "50.- oder Family Tarif",
+    "note": "Eege Cotisatioun; 2+ Stëmmen",
+    "group": "Contact-Famille"
+  },
+  {
+    "code": "C0006",
+    "label": "Contact-Famille - Spiller Cat. U4",
+    "tariff": "Pro Training bezuelt",
+    "note": "Keng U4-Lizenz",
+    "group": "Contact-Famille"
+  },
+  {
+    "code": "C0007",
+    "label": "Spiller U7 / U9 / U11 mat Lizenz",
+    "tariff": "200.-",
+    "note": "Youth- oder Family-Tarif",
+    "group": "Jugendspiller"
+  },
+  {
+    "code": "C0008",
+    "label": "Spiller U13 - U17 mat Lizenz",
+    "tariff": "200.-",
+    "note": "Youth- oder Family-Tarif",
+    "group": "Jugendspiller"
+  },
+  {
+    "code": "C0009",
+    "label": "Spiller >18 mat Lizenz",
+    "tariff": "300.-",
+    "note": "Adult-Tarif; reduzéiert bei gläicher Adress",
+    "group": "Spiller"
+  },
+  {
+    "code": "C0010",
+    "label": "Spiller >16 a Comité-Member",
+    "tariff": "200.-",
+    "note": "Tarif no Alter a Kategorie",
+    "group": "Comité"
+  },
+  {
+    "code": "C0011",
+    "label": "Comité >16",
+    "tariff": "50.- oder méi (facultativ)",
+    "note": "Keng Lizenz néideg",
+    "group": "Comité"
+  },
+  {
+    "code": "C0012",
+    "label": "Officiel mat Lizenz",
+    "tariff": "Facultativ, min. 50.- fir Stëmmrecht",
+    "note": "Chrono / SBO / Officiel",
+    "group": "Officiel"
+  },
+  {
+    "code": "C0013",
+    "label": "Loisir (mat / ouni Lizenz)",
+    "tariff": "Pro Training oder Youth / Adult / Family / Officiel 50.-",
+    "note": "Stëmmrecht nëmme mat Lizenz",
+    "group": "Loisir"
+  },
+  {
+    "code": "C0014",
+    "label": "Ugepassten Tarif duerch Comité / Tresorier",
+    "tariff": "Ugepasst",
+    "note": "Manuell Entscheedung",
+    "group": "Sonderfall"
+  },
+  {
+    "code": "C0015",
+    "label": "Prof. Trainer",
+    "tariff": "Normalerweis 0.-; nach net definéiert",
+    "note": "Trainer-Lizenz",
+    "group": "Trainer"
+  },
+  {
+    "code": "C0016",
+    "label": "Amateur Trainer",
+    "tariff": "Individuell mam Ben B. ausgehandelt",
+    "note": "Trainer-Lizenz",
+    "group": "Trainer"
+  },
+  {
+    "code": "C0017",
+    "label": "Trainer, Spiller",
+    "tariff": "Individuell mam Ben B. / Comité ausgehandelt",
+    "note": "Tarif no Alter a Kategorie",
+    "group": "Trainer"
+  },
+  {
+    "code": "C0018",
+    "label": "Trainer, Spiller, Comité",
+    "tariff": "Individuell mam Ben B. / Comité ausgehandelt",
+    "note": "Tarif no Alter a Kategorie",
+    "group": "Trainer"
+  },
+  {
+    "code": "C0019",
+    "label": "Trainer, Spiller, Offiziellen",
+    "tariff": "Individuell mam Ben B. / Comité ausgehandelt",
+    "note": "Tarif no Alter a Kategorie",
+    "group": "Trainer"
+  },
+  {
+    "code": "C0020",
+    "label": "Trainer, Spiller, Comité, Offiziellen",
+    "tariff": "Individuell mam Ben B. / Comité ausgehandelt",
+    "note": "Tarif no Alter a Kategorie",
+    "group": "Trainer"
+  },
+  {
+    "code": "C0021",
+    "label": "Trainer Helperteams, Teamchef, Teambegleeder, Teamcheffin",
+    "tariff": "Individuell mam Ben B. / Comité ausgehandelt",
+    "note": "Tarif no Alter a Kategorie",
+    "group": "Trainer"
+  },
+  {
+    "code": "C0022",
+    "label": "Definitiouns Probleemer",
+    "tariff": "De Comité leet den Tarif fest",
+    "note": "Definitioun an Tarif manuell klären",
+    "group": "Sonderfall"
+  },
+  {
+    "code": "C0030",
+    "label": "Zuschauer Anonym - Supporter M75",
+    "tariff": "-",
+    "note": "Fix Card-ID M75S2627",
+    "group": "Zuschauer"
+  },
+  {
+    "code": "C0031",
+    "label": "Zuschauer Anonym (allgemeng)",
+    "tariff": "-",
+    "note": "Fix Card-ID AUTS2627",
+    "group": "Zuschauer"
+  },
+  {
+    "code": "C0032",
+    "label": "Zuschauer (Jorescard)",
+    "tariff": "Tendenziell 100.-",
+    "note": "Nach net definitiv beschloss",
+    "group": "Zuschauer"
+  },
+  {
+    "code": "C0040",
+    "label": "Ancien-Member (Archiv)",
+    "tariff": "0.-",
+    "note": "Keng Card-ID; reng statistesch",
+    "group": "Archiv"
+  }
+];
+
+    function lookupDefinitionCode(code) {
+        if (!code) return null;
+        const normalized = String(code).trim().toUpperCase();
+        for (let i = 0; i < MERSCH75_DEFINITION_CODES.length; i++) {
+            if (MERSCH75_DEFINITION_CODES[i].code === normalized) {
+                return MERSCH75_DEFINITION_CODES[i];
+            }
+        }
+        return null;
+    }
 
     const MERSCH75_LANGUAGE_STORAGE_KEY = 'mersch75-join-language';
 
@@ -2291,19 +2495,22 @@
         const ui = MERSCH75_UI_TEXTS[currentLang] || MERSCH75_UI_TEXTS.lu;
 
         if (role === 'Officiel(le)' || role === 'Arbitre') {
+            const code = lookupDefinitionCode('C0012');
+            const tariffText = code ? code.tariff : 'Individuell mam Ben B. / Comité ausgehandelt';
             return {
                 label: ui.tarifOfficial,
-                value: '€50',
-                definitionCode: 'C0007',  // Officiel mat Lizenz (neier Code)
+                value: tariffText,
+                definitionCode: code ? code.code : 'C0012',
                 hint: ui.tarifHint
             };
         }
 
         if (familyMode !== 'NONE' || getSiblingRegistrations().length > 0) {
+            const code = lookupDefinitionCode('C0004');
             return {
                 label: ui.tarifFamily,
-                value: '€384',
-                definitionCode: 'C0011',  // Contact-Famille 1+ Jugendspiller (neier Code)
+                value: code ? code.tariff : '0.- fir de Contact',
+                definitionCode: code ? code.code : 'C0004',
                 hint: ui.tarifHint
             };
         }
@@ -2336,45 +2543,50 @@
         }
 
         if (role === 'Loisir') {
+            const code = lookupDefinitionCode('C0013');
             return {
                 label: ui.tarifLabel,
-                value: '€10 / Training',
-                definitionCode: 'C0013',  // Loisir ouni Lizenz (Code bleibt gleich)
+                value: code ? code.tariff : 'Pro Training oder Youth / Adult / Family / Officiel 50.-',
+                definitionCode: code ? code.code : 'C0013',
                 hint: ui.tarifHint
             };
         }
 
         if (age < 6) {
+            const code = lookupDefinitionCode('C0006');
             return {
                 label: ui.tarifLabel,
-                value: '€10 / Training',
-                definitionCode: 'C0025',  // U4 Spiller (neier Code)
+                value: code ? code.tariff : 'Pro Training bezuelt',
+                definitionCode: code ? code.code : 'C0006',
                 hint: ui.tarifHint
             };
         }
 
         if (age < 12) {
+            const code = lookupDefinitionCode('C0007');
             return {
                 label: ui.tarifYouth,
-                value: '€200',
-                definitionCode: 'C0001',  // Spiller U7/U9/U11 (neier Code)
+                value: code ? code.tariff : '200.-',
+                definitionCode: code ? code.code : 'C0007',
                 hint: ui.tarifHint
             };
         }
 
         if (age < 18) {
+            const code = lookupDefinitionCode('C0008');
             return {
                 label: ui.tarifYouth,
-                value: '€200',
-                definitionCode: 'C0002',  // Spiller U13-U17 (neier Code)
+                value: code ? code.tariff : '200.-',
+                definitionCode: code ? code.code : 'C0008',
                 hint: ui.tarifHint
             };
         }
 
+        const code = lookupDefinitionCode('C0009');
         return {
             label: ui.tarifAdult,
-            value: '€300',
-            definitionCode: 'C0003',  // Spiller >18 (neier Code)
+            value: code ? code.tariff : '300.-',
+            definitionCode: code ? code.code : 'C0009',
             hint: ui.tarifHint
         };
     }
@@ -2771,9 +2983,9 @@
         const lines = [];
         const isFrenchMessage = messageLanguage === 'fr';
         const text = isFrenchMessage ? {
-            licenseLink: 'LIEN LICENCE', password: 'CODE ACCES', applicant: 'DEMANDEUR', role: 'ROLE / FONCTION', category: 'CATEGORIE FLH', cnsDigits: 'CNS (5 chiffres)', birthDate: 'DATE DE NAISSANCE', email: 'E-MAIL', phoneApplicant: 'TELEPHONE PERSONNE INSCRITE', phoneDad: 'TELEPHONE PERE', phoneMom: 'TELEPHONE MERE', phoneCompanion: 'TELEPHONE ACCOMPAGNANT / CONTACT',             street: 'RUE', zip: 'CODE POSTAL', city: 'LOCALITE', minor: 'MINEUR', singleParent: 'PARENT ISOLE', guardians: 'TUTEUR(S)', club: 'ANCIEN CLUB', medLicense: 'MED/LIC', nationality: 'NATIONALITE', gender: 'SEXE', legalAccepted: 'CONDITIONS GENERALES ET PROTECTION DES DONNEES ACCEPTEES', flhAccepted: 'TRANSMISSION DES DONNEES A FLH.LU POUR LICENCE COMPRISE', accuracyAccepted: 'EXACTITUDE DES DONNEES CONFIRMEE', cnsComplete: 'MATRICULE CNS COMPLET'
+            licenseLink: 'LIEN LICENCE', password: 'CODE ACCES', applicant: 'DEMANDEUR', role: 'ROLE / FONCTION', category: 'CATEGORIE FLH', cnsDigits: 'CNS (5 chiffres)', birthDate: 'DATE DE NAISSANCE', email: 'E-MAIL', phoneApplicant: 'TELEPHONE PERSONNE INSCRITE', phoneCompanion: 'TELEPHONE ACCOMPAGNANT / CONTACT',             street: 'RUE', zip: 'CODE POSTAL', city: 'LOCALITE', minor: 'MINEUR', singleParent: 'PARENT ISOLE', guardians: 'TUTEUR(S)', club: 'ANCIEN CLUB', medLicense: 'MED/LIC', nationality: 'NATIONALITE', gender: 'SEXE', legalAccepted: 'CONDITIONS GENERALES ET PROTECTION DES DONNEES ACCEPTEES', flhAccepted: 'TRANSMISSION DES DONNEES A FLH.LU POUR LICENCE COMPRISE', accuracyAccepted: 'EXACTITUDE DES DONNEES CONFIRMEE', cnsComplete: 'MATRICULE CNS COMPLET'
         } : {
-            licenseLink: 'LIZENZ-LINK', password: 'ZUGANGSCODE', applicant: 'ANTRAGSTELLER', role: 'ROLLE / FUNKTION', category: 'FLH KATEGORIE', cnsDigits: 'CNS (5 Ziffern)', birthDate: 'GEBURTSDATUM', email: 'E-MAIL', phoneApplicant: 'TELEFON ANGEMELDETE PERSON', phoneDad: 'TELEFON VATER', phoneMom: 'TELEFON MUTTER', phoneCompanion: 'TELEFON BEGLEITUNG / KONTAKT',             street: 'STRASSE', zip: 'POSTLEITZAHL', city: 'ORTSCHAFT', minor: 'MINDERJAEHRIG', singleParent: 'ALLEINERZIEHEND', guardians: 'ERZIEHUNGSBERECHTIGTE(R)', club: 'EHEMALIGER VEREIN', medLicense: 'MED/LIZ', nationality: 'NATIONALITAET', gender: 'GESCHLECHT', legalAccepted: 'ALLGEMEINE BEDINGUNGEN UND DATENSCHUTZ AKZEPTIERT', flhAccepted: 'DATENUEBERMITTLUNG AN FLH.LU FUER LIZENZ VERSTANDEN', accuracyAccepted: 'RICHTIGKEIT DER ANGABEN BESTAETIGT', cnsComplete: 'MATRICULE CNS KOMPLETT'
+            licenseLink: 'LIZENZ-LINK', password: 'ZUGANGSCODE', applicant: 'ANTRAGSTELLER', role: 'ROLLE / FUNKTION', category: 'FLH KATEGORIE', cnsDigits: 'CNS (5 Ziffern)', birthDate: 'GEBURTSDATUM', email: 'E-MAIL', phoneApplicant: 'TELEFON ANGEMELDETE PERSON', phoneCompanion: 'TELEFON BEGLEITUNG / KONTAKT',             street: 'STRASSE', zip: 'POSTLEITZAHL', city: 'ORTSCHAFT', minor: 'MINDERJAEHRIG', singleParent: 'ALLEINERZIEHEND', guardians: 'ERZIEHUNGSBERECHTIGTE(R)', club: 'EHEMALIGER VEREIN', medLicense: 'MED/LIZ', nationality: 'NATIONALITAET', gender: 'GESCHLECHT', legalAccepted: 'ALLGEMEINE BEDINGUNGEN UND DATENSCHUTZ AKZEPTIERT', flhAccepted: 'DATENUEBERMITTLUNG AN FLH.LU FUER LIZENZ VERSTANDEN', accuracyAccepted: 'RICHTIGKEIT DER ANGABEN BESTAETIGT', cnsComplete: 'MATRICULE CNS KOMPLETT'
         };
 
         // Lizenz-Link nur in der französischen Mail (geht an FLH), nicht in der internen deutschen Kopie.
@@ -2792,6 +3004,10 @@
         lines.push('========================================');
         lines.push('');
         lines.push(text.cnsDigits + ': ' + getValue('CNS'));
+        const cardIdValue = getValue('CardId');
+        if (cardIdValue) {
+            lines.push((isFrenchMessage ? 'CARTE D\'IDENTITE' : 'ID-KARTE / CARTE D\'IDENTITE') + ': ' + cardIdValue);
+        }
         lines.push(text.birthDate + ': ' + getValue('DateNaissance'));
         lines.push('----------------------------------------');
         lines.push(text.email + ': ' + getValue('Email'));
@@ -2804,14 +3020,19 @@
             lines.push(text.phoneApplicant + ': ' + gsm1Value);
         }
 
+        const gsm2Role = getValue('GSM2Role');
+        const gsm3Role = getValue('GSM3Role');
+        const gsm2Label = gsm2Role ? (isFrenchMessage ? 'TELEPHONE ' + gsm2Role.toUpperCase() : 'TELEFON ' + gsm2Role.toUpperCase()) : (isFrenchMessage ? 'TELEPHONE 2' : 'TELEFON 2');
+        const gsm3Label = gsm3Role ? (isFrenchMessage ? 'TELEPHONE ' + gsm3Role.toUpperCase() : 'TELEFON ' + gsm3Role.toUpperCase()) : (isFrenchMessage ? 'TELEPHONE 3' : 'TELEFON 3');
+
         const gsm2Value = formatPhoneValue('GSM2', 'GSM2Role');
         if (gsm2Value) {
-            lines.push(text.phoneDad + ': ' + gsm2Value);
+            lines.push(gsm2Label + ': ' + gsm2Value);
         }
 
         const gsm3Value = formatPhoneValue('GSM3', 'GSM3Role');
         if (gsm3Value) {
-            lines.push(text.phoneMom + ': ' + gsm3Value);
+            lines.push(gsm3Label + ': ' + gsm3Value);
         }
 
         const gsm4Value = formatPhoneValue('GSM4', 'GSM4Role');
@@ -2954,6 +3175,7 @@
             correspondenceLanguage: getValue('CorrespondenceLanguage'),
             cns: getValue('CNS'),
             cnsComplete: getCnsComplete(),
+            cardId: getValue('CardId'),
             medico: getValue('Medico'),
             medicoValidUntil: getValue('MedicoValidUntil'),
             licence: getValue('Licence'),
@@ -3433,6 +3655,13 @@
 
             const successBox = document.getElementById('success-box');
             successBox.style.display = 'block';
+
+            if (integrationFailed) {
+                const managerWarning = document.getElementById('manager-warning');
+                if (managerWarning) {
+                    managerWarning.style.display = 'block';
+                }
+            }
 
             // Personalisierter Link zur Wëllkomm-Mapp (Vorname + Sprache aus dem Formular)
             try {
