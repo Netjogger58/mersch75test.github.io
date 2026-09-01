@@ -38,229 +38,141 @@
             </nav>
         </header>
         <main class="page-main">
-            <section class="news-carousel section-frame" aria-roledescription="carousel" aria-label="News" data-news-carousel>
-                <div class="news-carousel-head">
+            <section class="news-feed section-frame" aria-labelledby="newsFeedHeading">
+                <div class="news-feed-head">
                     <p class="eyebrow" data-i18n="newsKicker">News</p>
-                    <h2 data-i18n="newsHeading">Aktuelles vum Mersch75</h2>
+                    <h2 id="newsFeedHeading" data-i18n="newsHeading">Aktuelles vum Mersch75</h2>
                 </div>
-                <div class="news-carousel-viewport">
-                    <div class="news-carousel-track" data-news-track>
-                        <article class="news-slide events-section news-slide-thematch" aria-label="THE Match" data-news-slide>
-                            <picture>
-                                <source srcset="assets/shared/media/Handballfeld-mat-Draach-an-der-Perspectiv-scaled.avif" type="image/avif">
-                                <source srcset="assets/shared/media/Handballfeld-mat-Draach-an-der-Perspectiv-scaled.webp" type="image/webp">
-                                <img src="assets/shared/media/Handballfeld-mat-Draach-an-der-Perspectiv-scaled.png" class="events-background" loading="eager">
-                            </picture>
-                            <div class="events-overlay events-overlay-poster">
-                                <img src="assets/THE Match.jpg" alt="THE Match" class="events-poster-image" loading="eager">
-                            </div>
-                        </article>
-                        <article class="news-slide events-section news-slide-luxqf3" aria-label="LUXQF 3 Handballtrainer-Ausbildung" data-news-slide data-news-expires="2026-09-09T23:59:59+02:00">
-                            <img src="assets/HBTrainer%20Kuren.webp" class="events-background" alt="" loading="eager">
-                            <div class="events-overlay">
-                                <div class="events-copy">
-                                    <p class="eyebrow" data-i18n="newsLuxqfEyebrow">Avis aux amateurs · Urgent</p>
-                                    <h2 data-i18n="newsLuxqfTitle">LUXQF 3 – Entraîneur de Handball</h2>
-                                    <p data-i18n="newsLuxqfBody">D'Aschreiwunge fir d'Formatioun 2026–2027 sinn op. Bis den 09.09.2026 brauche mir op d'mannst 7 Kandidaten; soss muss d'Formatioun annuléiert ginn.</p>
-                                    <div class="events-pill-row">
-                                        <span class="events-pill" data-i18n="newsLuxqfDeadline">📅 Aschreiwung bis 09.09.2026</span>
-                                        <span class="events-pill" data-i18n="newsLuxqfMinimum">👥 Minimum 7 Kandidaten</span>
-                                        <span class="events-pill">FLH · INAPS</span>
-                                    </div>
-                                    <div class="inline-action-row">
-                                        <a class="hero-button hero-button-primary" href="https://inaps.public.lu/fr/inscriptions/formations-initiales/handball/26baseflh01.html#bloub-6" target="_blank" rel="noopener" data-i18n="newsLuxqfCta">Elo bei INAPS umellen</a>
-                                    </div>
-                                    <p class="news-luxqf-contact"><strong>Fédération Luxembourgeoise de Handball</strong><br>Max Scherschel · +352 48 54 74 · <a href="mailto:max.scherschel@flh.lu">max.scherschel@flh.lu</a></p>
+                <div class="news-feed-grid">
+                    <article class="news-card news-card-hero news-slide-thematch" aria-label="THE Match">
+                        <picture>
+                            <source srcset="assets/shared/media/Handballfeld-mat-Draach-an-der-Perspectiv-scaled.avif" type="image/avif">
+                            <source srcset="assets/shared/media/Handballfeld-mat-Draach-an-der-Perspectiv-scaled.webp" type="image/webp">
+                            <img src="assets/shared/media/Handballfeld-mat-Draach-an-der-Perspectiv-scaled.png" class="news-card-bg" alt="" loading="eager">
+                        </picture>
+                        <div class="news-card-overlay">
+                            <img src="assets/THE Match.jpg" alt="THE Match" class="news-card-poster" loading="eager">
+                        </div>
+                    </article>
+                    <article class="news-card news-slide-luxqf3" aria-label="LUXQF 3 Handballtrainer-Ausbildung">
+                        <img src="assets/HBTrainer%20Kuren.webp" class="news-card-bg" alt="" loading="eager">
+                        <div class="news-card-overlay">
+                            <div class="news-card-copy">
+                                <p class="eyebrow" data-i18n="newsLuxqfEyebrow">Avis aux amateurs · Urgent</p>
+                                <h3 data-i18n="newsLuxqfTitle">LUXQF 3 – Entraîneur de Handball</h3>
+                                <div class="news-card-pills">
+                                    <span class="events-pill" data-i18n="newsLuxqfDeadline">📅 Aschreiwung bis 09.09.2026</span>
                                 </div>
                             </div>
-                        </article>
-
-                        <article class="news-slide events-section news-slide-floumaart" aria-label="Floumaart zu Schous" data-news-slide>
-                            <img src="assets/shared/media/Floumaart%20zu%20Schous.webp" class="events-background" alt="Floumaart zu Schous" loading="eager">
-                            <div class="events-overlay">
-                                <div class="events-copy">
-                                    <p class="eyebrow">Floumaart zu Schous</p>
-                                    <h2>Mir sinn dobäi!!</h2>
-                                </div>
+                        </div>
+                    </article>
+                    <article class="news-card news-slide-floumaart" aria-label="Floumaart zu Schous">
+                        <img src="assets/shared/media/Floumaart%20zu%20Schous.webp" class="news-card-bg" alt="Floumaart zu Schous" loading="eager">
+                        <div class="news-card-overlay">
+                            <div class="news-card-copy">
+                                <p class="eyebrow">Floumaart zu Schous</p>
+                                <h3>Mir sinn dobäi!!</h3>
                             </div>
-                        </article>
-
-                        <article class="news-slide events-section news-slide-save-date" aria-label="Save the Date" data-news-slide>
-                            <picture>
-    <source srcset="assets/pages/index/media/Save%20the%20Date.avif" type="image/avif">
-    <source srcset="assets/pages/index/media/Save%20the%20Date.webp" type="image/webp">
-    <img src="assets/pages/index/media/Save%20the%20Date.jpeg" class="events-background" loading="lazy">
-</picture>
-                            <div class="events-overlay">
-                                <div class="events-copy">
-                                    <p class="eyebrow">Save the Date · 20.09.2026</p>
-                                    <h2>Spannung !! ??</h2>
-                                </div>
+                        </div>
+                    </article>
+                    <article class="news-card news-slide-save-date" aria-label="Save the Date">
+                        <picture>
+                            <source srcset="assets/pages/index/media/Save%20the%20Date.avif" type="image/avif">
+                            <source srcset="assets/pages/index/media/Save%20the%20Date.webp" type="image/webp">
+                            <img src="assets/pages/index/media/Save%20the%20Date.jpeg" class="news-card-bg" alt="" loading="lazy">
+                        </picture>
+                        <div class="news-card-overlay">
+                            <div class="news-card-copy">
+                                <p class="eyebrow">Save the Date · 20.09.2026</p>
+                                <h3>Spannung !! ??</h3>
                             </div>
-                        </article>
-
-                        <article class="news-slide events-section news-slide-inaps" aria-label="FLH Schiedsrichter-Ausbildung" data-news-slide>
-                            <picture>
-    <source srcset="assets/shared/media/Handballfeld-mat-Draach-an-der-Perspectiv-scaled.avif" type="image/avif">
-    <source srcset="assets/shared/media/Handballfeld-mat-Draach-an-der-Perspectiv-scaled.webp" type="image/webp">
-    <img src="assets/shared/media/Handballfeld-mat-Draach-an-der-Perspectiv-scaled.png" class="events-background" loading="lazy">
-</picture>
-                            <div class="events-overlay">
-                                <div class="events-copy">
-                                    <p class="eyebrow" data-i18n="newsRefEyebrow">FLH · Cycle inférieur</p>
-                                    <h2 data-i18n="newsRefTitle">Jonk Schidsrichter: Aschreiwunge sinn op</h2>
-                                    <p data-i18n="newsRefBody">D'Formatioun fir jonk Schidsrichter am FLH Cycle inférieur ass online. Eng flott Geleeënheet fir déi nächst Generatioun, Verantwortung ze iwwerhuelen an de Handball aus enger neier Perspektiv kennenzeléieren.</p>
-                                    <div class="events-pill-row">
-                                        <span class="events-pill">📅 12.09.2026</span>
-                                        <span class="events-pill">📍 Sportlycée</span>
-                                        <span class="events-pill">📝 INAPS</span>
-                                    </div>
-                                    <div class="inline-action-row">
-                                        <a class="hero-button hero-button-primary" href="https://inaps.public.lu/fr/inscriptions/jugesarbitres/flhcycleinferieur0.html" target="_blank" rel="noopener" data-i18n="newsRefCta">Info & Aschreiwung</a>
-                                    </div>
-                                </div>
-                                <a class="events-main-link news-inaps-link" href="https://inaps.public.lu/fr/inscriptions/jugesarbitres/flhcycleinferieur0.html" target="_blank" rel="noopener">
-                                    <picture>
-    <source srcset="assets/shared/media/icons%20Useful%20Links/Logo%20INAPS%20Applestyle.avif" type="image/avif">
-    <source srcset="assets/shared/media/icons%20Useful%20Links/Logo%20INAPS%20Applestyle.webp" type="image/webp">
-    <img src="assets/shared/media/icons%20Useful%20Links/Logo%20INAPS%20Applestyle.png" alt="INAPS" loading="lazy">
-</picture>
-                                </a>
+                        </div>
+                    </article>
+                    <article class="news-card news-slide-inaps" aria-label="FLH Schiedsrichter-Ausbildung">
+                        <picture>
+                            <source srcset="assets/shared/media/Handballfeld-mat-Draach-an-der-Perspectiv-scaled.avif" type="image/avif">
+                            <source srcset="assets/shared/media/Handballfeld-mat-Draach-an-der-Perspectiv-scaled.webp" type="image/webp">
+                            <img src="assets/shared/media/Handballfeld-mat-Draach-an-der-Perspectiv-scaled.png" class="news-card-bg" alt="" loading="lazy">
+                        </picture>
+                        <div class="news-card-overlay">
+                            <div class="news-card-copy">
+                                <p class="eyebrow" data-i18n="newsRefEyebrow">FLH · Cycle inférieur</p>
+                                <h3 data-i18n="newsRefTitle">Jonk Schidsrichter: Aschreiwunge sinn op</h3>
+                                <a class="hero-button hero-button-primary" href="https://inaps.public.lu/fr/inscriptions/jugesarbitres/flhcycleinferieur0.html" target="_blank" rel="noopener" data-i18n="newsRefCta">Info & Aschreiwung</a>
                             </div>
-                        </article>
-
-                        <article class="news-slide events-section news-slide-seniors" aria-label="Hären Preparatioun 2026/2027" data-news-slide>
-                            <picture>
-    <source srcset="assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_S1_Saison%2025%3A26.avif" type="image/avif">
-    <source srcset="assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_S1_Saison%2025%3A26.webp" type="image/webp">
-    <img src="assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_S1_Saison%2025%3A26.webp" class="events-background news-men-background" loading="lazy">
-</picture>
-                            <div class="events-overlay">
-                                <div class="events-copy">
-                                    <p class="eyebrow" data-i18n="newsMenEyebrow">Hären · Preparatioun 26/27</p>
-                                    <h2 data-i18n="newsMenTitle">D'Häre leeën d'Basis fir déi nei Saison</h2>
-                                    <p data-i18n="newsMenBody">D'Pläng fir déi kommend Saison sinn nach net ganz ofgeschloss, mee d'Preparatioun leeft schonn: Bis den 12. August trainéieren eis Häre mat Lafunitéiten am Park, an ab dem 14. August geet et an der Hal um Krounebierg weider. Mat Ausdauer, Teamgeescht a Fokus leeë si elo d'Basis fir d'Saison 2026/2027. 💛💙</p>
-                                    <div class="events-pill-row">
-                                        <span class="events-pill" data-i18n="newsMenPillPark">🏃 Bis 12.08. · Park</span>
-                                        <span class="events-pill" data-i18n="newsMenPillHall">🤾 Ab 14.08. · Krounebierg</span>
-                                        <span class="events-pill" data-i18n="newsMenPillPreparation">💛💙 Preparatioun</span>
-                                    </div>
-                                    <div class="inline-action-row">
-                                        <a class="hero-button hero-button-primary" href="training.html">Zum Spillplang</a>
-                                    </div>
-                                </div>
+                        </div>
+                    </article>
+                    <article class="news-card news-slide-seniors" aria-label="Hären Preparatioun">
+                        <picture>
+                            <source srcset="assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_S1_Saison%2025%3A26.avif" type="image/avif">
+                            <source srcset="assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_S1_Saison%2025%3A26.webp" type="image/webp">
+                            <img src="assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_S1_Saison%2025%3A26.webp" class="news-card-bg" alt="" loading="eager">
+                        </picture>
+                        <div class="news-card-overlay">
+                            <div class="news-card-copy">
+                                <p class="eyebrow" data-i18n="newsMenEyebrow">Hären · Preparatioun 26/27</p>
+                                <h3 data-i18n="newsMenTitle">D'Häre leeën d'Basis fir déi nei Saison</h3>
+                                <a class="hero-button hero-button-primary" href="training.html">Zum Spillplang</a>
                             </div>
-                        </article>
-
-                        <article class="news-slide events-section news-slide-seniors" aria-label="Fraen Preparatioun 2026/2027" data-news-slide>
-                            <picture>
-    <source srcset="assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_FE%20Saison%2025%3A26.avif" type="image/avif">
-    <source srcset="assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_FE%20Saison%2025%3A26.webp" type="image/webp">
-    <img src="assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_FE%20Saison%2025%3A26.webp" class="events-background news-women-background" loading="lazy">
-</picture>
-                            <div class="events-overlay">
-                                <div class="events-copy">
-                                    <p class="eyebrow" data-i18n="newsWomenEyebrow">Fraen · Preparatioun 26/27</p>
-                                    <h2 data-i18n="newsWomenTitle">D'Frae starten de 24. August</h2>
-                                    <p data-i18n="newsWomenBody">Och bei de Frae ginn d'Pläng fir déi kommend Saison nach ausgeschafft. Hir Preparatioun fänkt de 24. August 2026 an der Sportshal an der Rue des Prés un. Do baut d'Ekipp Schrëtt fir Schrëtt Konditioun, Zesummespill a Rhythmus fir d'Saison 2026/2027 op. 💛💙</p>
-                                    <div class="events-pill-row">
-                                        <span class="events-pill">📅 24.08.2026</span>
-                                        <span class="events-pill">📍 Rue des Prés</span>
-                                        <span class="events-pill">🤾 Sportshal</span>
-                                    </div>
-                                    <div class="inline-action-row">
-                                        <a class="hero-button hero-button-primary" href="training.html">Zum Spillplang</a>
-                                    </div>
-                                </div>
+                        </div>
+                    </article>
+                    <article class="news-card news-slide-seniors" aria-label="Fraen Preparatioun">
+                        <picture>
+                            <source srcset="assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_FE%20Saison%2025%3A26.avif" type="image/avif">
+                            <source srcset="assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_FE%20Saison%2025%3A26.webp" type="image/webp">
+                            <img src="assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_FE%20Saison%2025%3A26.webp" class="news-card-bg" alt="" loading="eager">
+                        </picture>
+                        <div class="news-card-overlay">
+                            <div class="news-card-copy">
+                                <p class="eyebrow" data-i18n="newsWomenEyebrow">Fraen · Preparatioun 26/27</p>
+                                <h3 data-i18n="newsWomenTitle">D'Frae starten de 24. August</h3>
+                                <a class="hero-button hero-button-primary" href="training.html">Zum Spillplang</a>
                             </div>
-                        </article>
-
-                        <article class="news-slide events-section news-slide-u11 news-slide-youth-rotation" aria-label="Jugend Preparatioun 2026/2027" data-news-slide>
-                            <picture class="news-youth-background news-youth-background--u11">
-    <source srcset="assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_U11%20Saison%2025%3A26.avif" type="image/avif">
-    <source srcset="assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_U11%20Saison%2025%3A26.webp" type="image/webp">
-    <img src="assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_U11%20Saison%2025%3A26.webp" class="events-background news-u11-background" alt="" loading="eager">
-</picture>
-                            <picture class="news-youth-background news-youth-background--u13">
-    <source srcset="assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_U13%20Saison%2025%3A26.avif" type="image/avif">
-    <source srcset="assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_U13%20Saison%2025%3A26.webp" type="image/webp">
-    <img src="assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_U13%20Saison%2025%3A26.webp" class="events-background news-u13-background" alt="" loading="lazy">
-</picture>
-                            <picture class="news-youth-background news-youth-background--u15">
-    <source srcset="assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_U15%20Saison%2025%3A26.avif" type="image/avif">
-    <source srcset="assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_U15%20Saison%2025%3A26.webp" type="image/webp">
-    <img src="assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_U15%20Saison%2025%3A26.webp" class="events-background news-u15-background" alt="" loading="lazy">
-</picture>
-                            <div class="events-overlay">
-                                <div class="events-copy">
-                                    <p class="eyebrow" data-i18n="newsU11Eyebrow">Jugend · Preparatioun 26/27</p>
-                                    <h2 data-i18n="newsU11Title">U13 an U15 starte schonn de 17. August</h2>
-                                    <p data-i18n="newsU11Body">Eis U13 an U15 fänken de 17. August 2026 nees mat der Preparatioun un. Déi aner Jugendequippe starte vun Ufanks September un. Déi genee Trainingszäiten an d'Andeelung vun den Ekippe gi publizéiert, soubal d'Pläng komplett ofgeschloss sinn. 💛💙</p>
-                                    <div class="events-pill-row">
-                                        <span class="events-pill" data-i18n="newsYouthPillU13U15">📅 U13/U15 · 17.08.</span>
-                                        <span class="events-pill" data-i18n="newsYouthPillOthers">🤾 Aner Ekippen · September</span>
-                                        <span class="events-pill" data-i18n="newsYouthPillSeason">💛💙 Saison 26/27</span>
-                                    </div>
-                                    <div class="inline-action-row">
-                                        <a class="hero-button hero-button-primary" href="training.html">Zum Spillplang</a>
-                                    </div>
-                                </div>
+                        </div>
+                    </article>
+                    <article class="news-card news-slide-u11" aria-label="Jugend Preparatioun">
+                        <picture>
+                            <source srcset="assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_U11%20Saison%2025%3A26.avif" type="image/avif">
+                            <source srcset="assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_U11%20Saison%2025%3A26.webp" type="image/webp">
+                            <img src="assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_U11%20Saison%2025%3A26.webp" class="news-card-bg" alt="" loading="eager">
+                        </picture>
+                        <div class="news-card-overlay">
+                            <div class="news-card-copy">
+                                <p class="eyebrow" data-i18n="newsU11Eyebrow">Jugend · Preparatioun 26/27</p>
+                                <h3 data-i18n="newsU11Title">U13 an U15 starte schonn de 17. August</h3>
+                                <a class="hero-button hero-button-primary" href="training.html">Zum Spillplang</a>
                             </div>
-                        </article>
-
-                        <article class="news-slide events-section news-slide-ag" aria-label="Generalversammlung" data-news-slide>
-                            <picture>
-    <source srcset="assets/shared/media/Handballfeld-mat-Draach-an-der-Perspectiv-scaled.avif" type="image/avif">
-    <source srcset="assets/shared/media/Handballfeld-mat-Draach-an-der-Perspectiv-scaled.webp" type="image/webp">
-    <img src="assets/shared/media/Handballfeld-mat-Draach-an-der-Perspectiv-scaled.png" class="events-background" loading="lazy">
-</picture>
-                            <div class="events-overlay events-overlay-single">
-                                <div class="events-copy">
-                                    <p class="eyebrow" data-i18n="newsSiteEyebrow">Neie Look</p>
-                                    <h2 data-i18n="newsSiteTitle">D'Websäit erstrahlt an engem neie Liicht.</h2>
-                                    <p data-i18n="newsSiteBody">Frësch Optik, méi kloer Struktur a séier Navigatioun: déi nei Mersch75-Säit bréngt Spillplang, Statistiken an Infoen iwwersiichtlech zesummen.</p>
-                                    <div class="events-pill-row">
-                                        <span class="events-pill" data-i18n="newsSitePillDesign">Neit Design</span>
-                                        <span class="events-pill" data-i18n="newsSitePillFast">Méi séier</span>
-                                        <span class="events-pill" data-i18n="newsSitePillClear">Méi kloer</span>
-                                    </div>
-                                    <div class="inline-action-row">
-                                        <a class="hero-button hero-button-primary" href="live-center.html" data-i18n="newsSiteCta">Entdecken</a>
-                                    </div>
-                                </div>
+                        </div>
+                    </article>
+                    <article class="news-card news-slide-ag" aria-label="Generalversammlung">
+                        <picture>
+                            <source srcset="assets/shared/media/Handballfeld-mat-Draach-an-der-Perspectiv-scaled.avif" type="image/avif">
+                            <source srcset="assets/shared/media/Handballfeld-mat-Draach-an-der-Perspectiv-scaled.webp" type="image/webp">
+                            <img src="assets/shared/media/Handballfeld-mat-Draach-an-der-Perspectiv-scaled.png" class="news-card-bg" alt="" loading="lazy">
+                        </picture>
+                        <div class="news-card-overlay">
+                            <div class="news-card-copy">
+                                <p class="eyebrow" data-i18n="newsSiteEyebrow">Neie Look</p>
+                                <h3 data-i18n="newsSiteTitle">D'Websäit erstrahlt an engem neie Liicht.</h3>
+                                <a class="hero-button hero-button-primary" href="live-center.html" data-i18n="newsSiteCta">Entdecken</a>
                             </div>
-                        </article>
-
-                        <article class="news-slide events-section" aria-label="News 2" data-news-slide>
-                            <picture class="events-background events-background-picture">
-                                    <source srcset="assets/shared/media/Hauptseite/statistik-knaller-portrait.avif" type="image/avif" media="(orientation: portrait)">    <source srcset="assets/shared/media/Hauptseite/statistik-knaller-portrait.webp" type="image/webp" media="(orientation: portrait)"><source media="(orientation: portrait)" srcset="assets/shared/media/Hauptseite/statistik-knaller-portrait.png" type="image/png">
-                                    <source srcset="assets/shared/media/Hauptseite/statistik-knaller-ls.avif" type="image/avif" media="(orientation: landscape)">    <source srcset="assets/shared/media/Hauptseite/statistik-knaller-ls.webp" type="image/webp" media="(orientation: landscape)"><source media="(orientation: landscape)" srcset="assets/shared/media/Hauptseite/statistik-knaller-ls.png" type="image/png">
-                                <img src="assets/shared/media/Hauptseite/statistik-knaller-ls.png" alt loading="lazy">
-                            </picture>
-                            <div class="events-overlay">
-                                <div class="events-copy">
-                                    <p class="eyebrow" data-i18n="newsStatsEyebrow">Saisonstatistik 25/26</p>
-                                    <h2 data-i18n="newsStatsTitle">STATISTIKEN VUN EISEN EKIPPEN OP ENGER PLAZ</h2>
-                                    <p data-i18n="newsStatsBody">D'Saisonstatistik 2025/2026 ass live: Tabellen, Resultater an Torschützenlëschten fir Männer, Fraen, U15, U13 an U11 – iwwersiichtlech an aktuell.</p>
-                                    <div class="events-pill-row">
-                                        <a class="events-pill" href="statistics-25-26.html#men" data-i18n="newsStatsPillMen">Männer</a>
-                                        <a class="events-pill" href="statistics-25-26.html#women" data-i18n="newsStatsPillWomen">Fraen</a>
-                                        <a class="events-pill" href="statistics-25-26.html#u15">U15</a>
-                                        <a class="events-pill" href="statistics-25-26.html#u13">U13</a>
-                                        <a class="events-pill" href="statistics-25-26.html#u11">U11</a>
-                                    </div>
-                                    <div class="inline-action-row">
-                                        <a class="hero-button hero-button-primary" href="statistics-25-26.html" data-i18n="newsStatsCta">Statistik kucken</a>
-                                    </div>
-                                </div>
+                        </div>
+                    </article>
+                    <article class="news-card" aria-label="Saisonstatistik">
+                        <picture>
+                            <source srcset="assets/shared/media/Hauptseite/statistik-knaller-ls.avif" type="image/avif">
+                            <source srcset="assets/shared/media/Hauptseite/statistik-knaller-ls.webp" type="image/webp">
+                            <img src="assets/shared/media/Hauptseite/statistik-knaller-ls.png" class="news-card-bg" alt="" loading="lazy">
+                        </picture>
+                        <div class="news-card-overlay">
+                            <div class="news-card-copy">
+                                <p class="eyebrow" data-i18n="newsStatsEyebrow">Saisonstatistik 25/26</p>
+                                <h3 data-i18n="newsStatsTitle">STATISTIKEN VUN EISEN EKIPPEN OP ENGER PLAZ</h3>
+                                <a class="hero-button hero-button-primary" href="statistics-25-26.html" data-i18n="newsStatsCta">Statistik kucken</a>
                             </div>
-                        </article>
-
-                    </div>
+                        </div>
+                    </article>
                 </div>
-                <button class="news-arrow news-arrow-prev" type="button" aria-label="Zréck" data-news-prev>&#8249;</button>
-                <button class="news-arrow news-arrow-next" type="button" aria-label="Weider" data-news-next>&#8250;</button>
-                <div class="news-dots" role="tablist" aria-label="News" data-news-dots></div>
             </section>
             <footer class="site-page-footer">
                 <div class="site-page-footer-shell">
