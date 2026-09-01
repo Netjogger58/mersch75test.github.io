@@ -65,21 +65,13 @@
             <section class="poster-section poster-section-hero section-frame">
                 <div class="poster-shell poster-shell-hero">
                     <div class="poster-visual poster-visual-hero">
-                        <picture>
-                                <source srcset="assets/pages/index/media/Hauptseite/archive/Mersch75_Portrait14062026.avif" type="image/avif" media="(max-width: 900px) and (orientation: portrait)"><source media="(max-width: 900px) and (orientation: portrait)" srcset="assets/pages/index/media/Hauptseite/archive/Mersch75_Portrait14062026.webp" type="image/webp">
-                                <source srcset="assets/pages/index/media/Hauptseite/archive/Mersch75_Matchday_14062026.avif" type="image/avif" media="(orientation: landscape)"><source media="(orientation: landscape)" srcset="assets/pages/index/media/Hauptseite/archive/Mersch75_Matchday_14062026.webp" type="image/webp">
-                            <img src="assets/pages/index/media/Hauptseite/archive/Mersch75_Matchday_14062026.webp" alt="Mersch75 Matchposter" data-i18n-attr="alt:posterAlt" loading="eager">
-                        </picture>
+                        <img src="assets/THE Match.jpg" alt="Mersch75 Matchposter" data-i18n-attr="alt:posterAlt" loading="eager">
                     </div>
                 </div>
                 <div class="poster-actions" id="poster-actions">
-                    <a class="poster-action" href="assets/pages/index/media/Hauptseite/archive/Mersch75_Matchday_14062026.webp" download="Mersch75_Matchday_14062026.webp" title="Landscape herunterladen" data-i18n-attr="title:posterLandscapeTitle">
+                    <a class="poster-action" href="assets/THE Match.jpg" download="THE Match.jpg" title="Poster herunterladen" data-i18n-attr="title:posterLandscapeTitle">
                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20h14v-2H5v2zm7-18L5.33 8.67l1.42 1.42L11 5.83V16h2V5.83l4.25 4.26 1.42-1.42L12 2z"></path></svg>
-                        <span data-i18n="posterLandscapeLabel">Landscape</span>
-                    </a>
-                    <a class="poster-action" href="assets/pages/index/media/Hauptseite/archive/Mersch75_Portrait14062026.webp" download="Mersch75_Portrait14062026.webp" title="Portrait herunterladen" data-i18n-attr="title:posterPortraitTitle">
-                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20h14v-2H5v2zm7-18L5.33 8.67l1.42 1.42L11 5.83V16h2V5.83l4.25 4.26 1.42-1.42L12 2z"></path></svg>
-                        <span data-i18n="posterPortraitLabel">Portrait</span>
+                        <span data-i18n="posterLandscapeLabel">Download</span>
                     </a>
                     <button type="button" class="poster-action poster-action-primary" id="poster-share-btn" title="Poster teilen" data-i18n-attr="title:posterShareTitle">
                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92S19.61 16.08 18 16.08z"></path></svg>
@@ -522,8 +514,8 @@
     (function () {
         var btn = document.getElementById('poster-share-btn');
         if (!btn) return;
-        var landscapeUrl = new URL('assets/pages/index/media/Hauptseite/Final%20Matches%20LSP.webp', window.location.href).toString();
-        var portraitUrl  = new URL('assets/pages/index/media/Hauptseite/Final%20Matches.webp', window.location.href).toString();
+        var landscapeUrl = new URL('assets/THE Match.jpg', window.location.href).toString();
+        var portraitUrl  = new URL('assets/THE Match.jpg', window.location.href).toString();
         var pageUrl      = window.location.origin + window.location.pathname;
         var shareTexts = {
             lb: {
@@ -638,7 +630,7 @@
                     try {
                         var resp = await fetch(landscapeUrl, { cache: 'no-store' });
                         var blob = await resp.blob();
-                        var file = new File([blob], 'Mersch75-Matchposter.jpg', { type: blob.type || 'image/jpeg' });
+                        var file = new File([blob], 'THE Match.jpg', { type: blob.type || 'image/jpeg' });
                         if (navigator.canShare({ files: [file] })) {
                             await navigator.share({ files: [file], title: shareTitle, text: shareText });
                             return;
