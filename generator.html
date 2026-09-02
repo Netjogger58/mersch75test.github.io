@@ -579,8 +579,8 @@ const TEAM_PHOTOS = {
     's1':     'assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_S1_Saison%2025%3A26.webp',
     's2':     'assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_S1_Saison%2025%3A26.webp',
     'u15':    'assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_U15%20Saison%2025%3A26.webp',
-    'u13pe':  'assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_U13%20Saison%2025%3A26.webp',
-    'u13p3':  'assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_U13%20Saison%2025%3A26.webp',
+    'u13p1':  'assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_U13%20Saison%2025%3A26.webp',
+    'u13p2':  'assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_U13%20Saison%2025%3A26.webp',
     'u11MEL': 'assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_U11%20Saison%2025%3A26.webp',
     'u11MES': 'assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_U11%20Espoir%20Saison%2025%3A26.webp',
     'u9M':    'assets/shared/media/Ekippe%20Fotoen%20Saison%2025-26/M75_U9%20Saison%2025%3A26.webp',
@@ -618,6 +618,8 @@ const teams = {
     "-": "", 
     "Spielfrei": "assets/shared/media/M75_realistesche-3D-Ball-op-Mooss-1-2.png", 
     "Tournoi": "assets/shared/media/Logos%20FLH%20Eq/Logo-Mersch75-50-Joer-3D.png",
+    "Mersch75 1": "assets/shared/media/Logos%20FLH%20Eq/Logo-Mersch75%201.webp",
+    "Mersch75 2": "assets/shared/media/Logos%20FLH%20Eq/Logo-Mersch75%202.webp",
     "HB Bieles": "assets/shared/media/Logos%20FLH%20Eq/Handball-Bieles-1.jpg",
     "HC Berchem 1": "assets/shared/media/Logos%20FLH%20Eq/HC-Berchem-1.jpg",
     "HC Berchem 2": "assets/shared/media/Logos%20FLH%20Eq/HC-Berchem-2-1.jpg",
@@ -655,7 +657,7 @@ const teams = {
     "Mersch75 FE": "assets/shared/media/Logos%20FLH%20Eq/Logo-Mersch75_FE-1.jpg",
     "HB Pétange": "assets/shared/media/Logos%20FLH%20Eq/HBPeiteng-1.jpg",
     "HC Atert Redange": "assets/shared/media/Logos%20FLH%20Eq/HC-Reiden-1.jpg",
-    "HC Redange": "assets/shared/media/Logos%20FLH%20Eq/HC-Reiden-1.jpg",
+    "HC Redange": "assets/shared/media/Logos%20FLH%20Eq/HC-Reiden-1.webp",
     "Espérance Rumelange": "assets/shared/media/Logos%20FLH%20Eq/Esperance-Remeleng-1.jpg",
     "Esp Rumelange": "assets/shared/media/Logos%20FLH%20Eq/Esperance-Remeleng-1.jpg",
     "HBC Schifflange 1": "assets/shared/media/Logos%20FLH%20Eq/HBC-Schifflange-1001-1.jpg",
@@ -666,7 +668,8 @@ const teams = {
     "HB Esch 1": "assets/shared/media/Logos%20FLH%20Eq/HB-Esch-1.jpg",
     "HB Esch 2": "assets/shared/media/Logos%20FLH%20Eq/HB-Esch-2-1.jpg",
     "HB Esch 3": "assets/shared/media/Logos%20FLH%20Eq/HB-Esch-3-1.jpg",
-    "HB Esch": "assets/shared/media/Logos%20FLH%20Eq/HB-Esch-1.jpg"
+    "HB Esch": "assets/shared/media/Logos%20FLH%20Eq/HB-Esch-1.webp",
+    "Handball Esch": "assets/shared/media/Logos%20FLH%20Eq/HB-Esch-1.webp",
 };
 
 const aliases = {
@@ -742,46 +745,46 @@ function resolveTournamentPrimaryLogo(prefix, opponent, isHome, locationValue, d
 
 let allGamesData = [
     { team: "HERREN 1 (H-PRO)", datum: "20.09.26 18:15", heim: "Mersch75", gast: "HB Leideleng", score: "", sbo: "", rtl: "", nr: "29201002", halle: "290101" },
-    { team: "FRAUEN (D-PRO)", datum: "20.09.26 16:00", heim: "Mersch75", gast: "Bieles/Pétange", score: "", sbo: "", rtl: "", nr: "29701002", halle: "290101" },
+    { team: "FRAUEN (D-PRO)", datum: "20.09.26 16:00", heim: "Mersch75", gast: "HB Bieles/Pétange", score: "", sbo: "", rtl: "", nr: "29701002", halle: "290101" },
     { team: "HERREN 1 (H-PRO)", datum: "26.09.26 19:00", heim: "HC Redange", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29201006", halle: "290131" },
     { team: "HERREN 1 (H-PRO)", datum: "11.10.26 18:15", heim: "Mersch75", gast: "HB Museldall", score: "", sbo: "", rtl: "", nr: "29201009", halle: "290101" },
-    { team: "FRAUEN (D-PRO)", datum: "10.10.26 18:00", heim: "HBC Schiffl.", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29701006", halle: "290161" },
-    { team: "JUGEND: U15G", datum: "10.10.26 16:00", heim: "Red Boys Diff 2", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29151004", halle: "290141" },
+    { team: "FRAUEN (D-PRO)", datum: "10.10.26 18:00", heim: "HBC Schifflange", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29701006", halle: "290161" },
+    { team: "JUGEND: U15G", datum: "10.10.26 16:00", heim: "Red Boys Differdange 2", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29151004", halle: "290141" },
     { team: "JUGEND: U13M-P1", datum: "11.10.26 13:15", heim: "Mersch75 2", gast: "HC Berchem", score: "", sbo: "", rtl: "", nr: "29501101", halle: "290101" },
     { team: "JUGEND: U13M-P2", datum: "11.10.26 15:00", heim: "Mersch75", gast: "CHEV Diekirch 2", score: "", sbo: "", rtl: "", nr: "29501202", halle: "290101" },
-    { team: "HERREN 1 (H-PRO)", datum: "18.10.26 18:15", heim: "Mersch75", gast: "HB Petange", score: "", sbo: "", rtl: "", nr: "29201012", halle: "290101" },
+    { team: "HERREN 1 (H-PRO)", datum: "18.10.26 18:15", heim: "Mersch75", gast: "HB Pétange", score: "", sbo: "", rtl: "", nr: "29201012", halle: "290101" },
     { team: "FRAUEN (D-PRO)", datum: "18.10.26 16:00", heim: "Mersch75", gast: "HC Redange", score: "", sbo: "", rtl: "", nr: "29701008", halle: "290101" },
-    { team: "JUGEND: U15G", datum: "18.10.26 14:00", heim: "Mersch75", gast: "Käerjeng/Esch 2", score: "", sbo: "", rtl: "", nr: "29151006", halle: "290101" },
+    { team: "JUGEND: U15G", datum: "18.10.26 14:00", heim: "Mersch75", gast: "Käerjeng/Esch", score: "", sbo: "", rtl: "", nr: "29151006", halle: "290101" },
     { team: "JUGEND: U13M-P1", datum: "17.10.26 16:15", heim: "Handball Esch", gast: "Mersch75 2", score: "", sbo: "", rtl: "", nr: "29501105", halle: "290211" },
     { team: "JUGEND: U13M-P2", datum: "18.10.26 12:30", heim: "Mersch75", gast: "HC Berchem 2", score: "", sbo: "", rtl: "", nr: "29501205", halle: "290101" },
-    { team: "HERREN 1 (H-PRO)", datum: "24.10.26 20:15", heim: "HBC Schiffl.", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29201014", halle: "290161" },
+    { team: "HERREN 1 (H-PRO)", datum: "24.10.26 20:15", heim: "HBC Schifflange", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29201014", halle: "290161" },
     { team: "FRAUEN (D-PRO)", datum: "23.10.26 20:30", heim: "Handball Esch", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29701010", halle: "290211" },
     { team: "JUGEND: U15G", datum: "25.10.26 14:00", heim: "Mersch75", gast: "HC Redange", score: "", sbo: "", rtl: "", nr: "29151011", halle: "290101" },
     { team: "JUGEND: U13M-P1", datum: "25.10.26 14:30", heim: "HB Leideleng", gast: "Mersch75 2", score: "", sbo: "", rtl: "", nr: "29501108", halle: "290231" },
-    { team: "JUGEND: U13M-P2", datum: "24.10.26 16:00", heim: "HB Petange", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29501206", halle: "290121" },
-    { team: "FRAUEN (D-PRO)", datum: "14.11.26 18:00", heim: "Bieles/Pétange", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29701012", halle: "290032" },
+    { team: "JUGEND: U13M-P2", datum: "24.10.26 16:00", heim: "HB Pétange", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29501206", halle: "290121" },
+    { team: "FRAUEN (D-PRO)", datum: "14.11.26 18:00", heim: "HB Bieles/Pétange", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29701012", halle: "290032" },
     { team: "JUGEND: U15G", datum: "14.11.26 15:00", heim: "Esp Rumelange", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29151017", halle: "290151" },
     { team: "JUGEND: U13M-P1", datum: "15.11.26 13:15", heim: "Mersch75 2", gast: "HB Dudelange 2", score: "", sbo: "", rtl: "", nr: "29501111", halle: "290101" },
     { team: "JUGEND: U13M-P2", datum: "21.11.26 00:00", heim: "HB Dudelange", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29501214", halle: "" },
     { team: "HERREN 1 (H-PRO)", datum: "22.11.26 18:15", heim: "Mersch75", gast: "HC Redange", score: "", sbo: "", rtl: "", nr: "29201021", halle: "290101" },
     { team: "JUGEND: U15G", datum: "22.11.26 16:00", heim: "Mersch75", gast: "CHEV Diekirch", score: "", sbo: "", rtl: "", nr: "29151021", halle: "290101" },
     { team: "JUGEND: U13M-P1", datum: "22.11.26 14:00", heim: "Mersch75 2", gast: "CHEV Diekirch", score: "", sbo: "", rtl: "", nr: "29501113", halle: "290101" },
-    { team: "JUGEND: U13M-P2", datum: "24.10.26 16:00", heim: "HB Petange", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29501206", halle: "290121" },
+    { team: "JUGEND: U13M-P2", datum: "24.10.26 16:00", heim: "HB Pétange", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29501206", halle: "290121" },
     { team: "HERREN 1 (H-PRO)", datum: "28.11.26 16:30", heim: "HB Museldall", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29201024", halle: "290091" },
-    { team: "FRAUEN (D-PRO)", datum: "29.11.26 16:00", heim: "Mersch75", gast: "HBC Schiffl.", score: "", sbo: "", rtl: "", nr: "29701016", halle: "290101" },
-    { team: "JUGEND: U15G", datum: "29.11.26 17:00", heim: "HBC Schiffl.", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29151029", halle: "290161" },
+    { team: "FRAUEN (D-PRO)", datum: "29.11.26 16:00", heim: "Mersch75", gast: "HBC Schifflange", score: "", sbo: "", rtl: "", nr: "29701016", halle: "290101" },
+    { team: "JUGEND: U15G", datum: "29.11.26 17:00", heim: "HBC Schifflange", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29151029", halle: "290161" },
     { team: "JUGEND: U13M-P1", datum: "28.11.26 14:00", heim: "HC Berchem", gast: "Mersch75 2", score: "", sbo: "", rtl: "", nr: "29501116", halle: "290021" },
     { team: "JUGEND: U13M-P2", datum: "29.11.26 12:30", heim: "CHEV Diekirch 2", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29501217", halle: "290041" },
-    { team: "HERREN 1 (H-PRO)", datum: "06.12.26 18:30", heim: "HB Petange", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29201027", halle: "290121" },
+    { team: "HERREN 1 (H-PRO)", datum: "06.12.26 18:30", heim: "HB Pétange", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29201027", halle: "290121" },
     { team: "FRAUEN (D-PRO)", datum: "05.12.26 18:00", heim: "HC Redange", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29701018", halle: "290131" },
     { team: "JUGEND: U15G", datum: "06.12.26 16:00", heim: "Mersch75", gast: "HC Standard", score: "", sbo: "", rtl: "", nr: "29151031", halle: "290101" },
     { team: "JUGEND: U13M-P1", datum: "06.12.26 14:00", heim: "Mersch75 2", gast: "Handball Esch", score: "", sbo: "", rtl: "", nr: "29501120", halle: "290101" },
     { team: "JUGEND: U13M-P2", datum: "05.12.26 15:30", heim: "HC Berchem 2", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29501220", halle: "290021" },
-    { team: "HERREN 1 (H-PRO)", datum: "13.12.26 18:15", heim: "Mersch75", gast: "HBC Schiffl.", score: "", sbo: "", rtl: "", nr: "29201029", halle: "290101" },
+    { team: "HERREN 1 (H-PRO)", datum: "13.12.26 18:15", heim: "Mersch75", gast: "HBC Schifflange", score: "", sbo: "", rtl: "", nr: "29201029", halle: "290101" },
     { team: "FRAUEN (D-PRO)", datum: "13.12.26 16:00", heim: "Mersch75", gast: "Handball Esch", score: "", sbo: "", rtl: "", nr: "29701020", halle: "290101" },
     { team: "JUGEND: U15G", datum: "13.12.26 16:00", heim: "HB Museldall", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29151037", halle: "290091" },
     { team: "JUGEND: U13M-P1", datum: "13.12.26 11:30", heim: "Mersch75 2", gast: "HB Leideleng", score: "", sbo: "", rtl: "", nr: "29501123", halle: "290101" },
-    { team: "JUGEND: U13M-P2", datum: "13.12.26 14:00", heim: "Mersch75", gast: "HB Petange", score: "", sbo: "", rtl: "", nr: "29501221", halle: "290101" },
+    { team: "JUGEND: U13M-P2", datum: "13.12.26 14:00", heim: "Mersch75", gast: "HB Pétange", score: "", sbo: "", rtl: "", nr: "29501221", halle: "290101" },
     { team: "JUGEND: U15G", datum: "20.12.26 14:00", heim: "Mersch75", gast: "HC Standard 2", score: "", sbo: "", rtl: "", nr: "29151041", halle: "290101" },
     { team: "JUGEND: U13M-P1", datum: "09.01.27 00:00", heim: "HB Dudelange 2", gast: "Mersch75 2", score: "", sbo: "", rtl: "", nr: "29501126", halle: "" },
     { team: "JUGEND: U13M-P2", datum: "09.01.27 14:00", heim: "HC Standard", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29501224", halle: "290181" },
@@ -1177,8 +1180,8 @@ function getNormalizedGeneratorTeamKey(teamName) {
     if (normalized.indexOf('U11') !== -1 && normalized.indexOf('TOURNOI') !== -1) return 'u11MES';
     if (normalized.indexOf('U11') !== -1) return 'u11MEL';
     if (normalized.indexOf('U15') !== -1) return 'u15';
-    if (normalized.indexOf('U13M-P3') !== -1) return 'u13p3';
-    if (normalized.indexOf('U13') !== -1) return 'u13pe';
+    if (normalized.indexOf('U13M-P2') !== -1) return 'u13p2';
+    if (normalized.indexOf('U13M-P1') !== -1) return 'u13p1';
     if (normalized.indexOf('D-PRO') !== -1 || normalized.indexOf('FRAUEN') !== -1 || normalized.indexOf('DAMES') !== -1) return 'fe';
     if (normalized.indexOf('H-PRO') !== -1 || normalized.indexOf('MÄNNER') !== -1 || normalized.indexOf('HOMMES') !== -1) return 's1';
 
@@ -1306,8 +1309,8 @@ function magicScan() {
             else if (ul.indexOf("U11M-E") !== -1 || ul.indexOf("U11ME") !== -1 || ul.indexOf("ELITE") !== -1) p = 'u11MEL';
             else if (ul.indexOf("U11") !== -1) p = 'u11MEL'; 
             else if (ul.indexOf("U15") !== -1) p = 'u15';
-            else if (ul.indexOf("U13M-P3") !== -1) p = 'u13p3';
-            else if (ul.indexOf("U13") !== -1) p = 'u13pe';
+            else if (ul.indexOf("U13M-P2") !== -1) p = 'u13p2';
+            else if (ul.indexOf("U13M-P1") !== -1) p = 'u13p1';
             else if (ul.indexOf("D-PRO") !== -1 || ul.indexOf("FRAUEN") !== -1 || ul.indexOf("DAMES") !== -1 || ul.indexOf("D-SEN") !== -1 || ul.indexOf("D-C-LN") !== -1) p = 'fe';
             else if (/\bH2\b/.test(ul) || ul.indexOf("HERREN 2") !== -1 || ul.indexOf("H-SEN-2") !== -1 || ul.indexOf("H2-") !== -1 || /MERSCH(?:75)?\s*2\b/.test(ul) || ul.indexOf("HOMMES 2") !== -1) p = 's2';
             else if (ul.indexOf("H-AXA") !== -1 || ul.indexOf("MÄNNER") !== -1 || ul.indexOf("HOMMES") !== -1 || ul.indexOf("H-SEN") !== -1 || ul.indexOf("H-C-LN") !== -1 || ul.indexOf("H-PRO") !== -1) p = 's1';
@@ -1620,8 +1623,8 @@ const LANDSCAPE_PHOTO_TITLES = {
     's1': 'H1 Saison 2026/27',
     's2': 'H2 Saison 2026/27',
     'u15': 'U15 Saison 2026/27',
-    'u13pe': 'U13 Saison 2026/27',
-    'u13p3': 'U13 Saison 2026/27',
+    'u13p1': 'U13 Saison 2026/27',
+    'u13p2': 'U13 Saison 2026/27',
     'u11MEL': 'U11 Elite Saison 2026/27',
     'u11MES': 'U11 Espoir Saison 2026/27',
     'u9M': 'U9 Saison 2026/27',
@@ -1637,7 +1640,7 @@ function buildLandscapePhotoOnlyAssignments(activeTeams) {
     });
     
     // Maximal 6 Fotoen erlaabt - Priorität: FE, S1, S2, U15, U13, U11 Elite, U11 Espoir, U9, U7, U4
-    const priorityOrder = ['fe', 's1', 's2', 'u15', 'u13pe', 'u11MEL', 'u11MES', 'u9M', 'u7M', 'u4M'];
+    const priorityOrder = ['fe', 's1', 's2', 'u15', 'u13p1', 'u13p2', 'u11MEL', 'u11MES', 'u9M', 'u7M', 'u4M'];
     const selectedTeams = [];
     
     for (let i = 0; i < priorityOrder.length && selectedTeams.length < 6; i++) {
@@ -1761,8 +1764,8 @@ function updateLandscapePreview() {
         return;
     }
 
-    const hasU13Game1 = !!getGameFieldValue('u13pe', 'date', 1);
-    const hasU13Game2 = hasSecondGameConfigured('u13pe');
+    const hasU13Game1 = !!getGameFieldValue('u13p1', 'date', 1);
+    const hasU13Game2 = hasSecondGameConfigured('u13p1');
     const isEnglishWeekYouthMode =
         selectedWeek === 'w_07_06_26' &&
         hasU13Game1 &&
@@ -1782,8 +1785,8 @@ function updateLandscapePreview() {
         const u11Top = 350;
 
         renderLandscapeGame({ id: 'u15', gameSlot: 1 }, { type: 'big', top: 350, left: 36 }, cont, teamHasConfiguredGame('u15'));
-        renderLandscapeGame({ id: 'u13pe', gameSlot: 1 }, { type: 'big', top: 350, left: 570 }, cont, true);
-        renderLandscapeGame({ id: 'u13pe', gameSlot: 2 }, { type: 'big', top: u13Top, left: stackedLeft }, cont, true);
+        renderLandscapeGame({ id: 'u13p1', gameSlot: 1 }, { type: 'big', top: 350, left: 570 }, cont, true);
+        renderLandscapeGame({ id: 'u13p2', gameSlot: 2 }, { type: 'big', top: u13Top, left: stackedLeft }, cont, true);
 
         const u11Active = document.getElementById('u11MEL-land-show') && document.getElementById('u11MEL-land-show').checked;
         if (u11Active) {
@@ -1841,7 +1844,7 @@ function updateLandscapePreview() {
         return;
     }
 
-    if (ht && !ym && allActive.length > 0 && allActive.length <= 3 && allActive.every(function(team) { return ['u15', 'u13pe', 'u13p3', 'u11MEL'].indexOf(team.id) !== -1; })) {
+    if (ht && !ym && allActive.length > 0 && allActive.length <= 3 && allActive.every(function(team) { return ['u15', 'u13p1', 'u13p2', 'u11MEL'].indexOf(team.id) !== -1; })) {
         const youthGamesForMainSlots = topTier.concat(lowTier);
         let centerSlots = [];
         if (youthGamesForMainSlots.length === 3) {
@@ -2058,7 +2061,7 @@ function updateLandscapePreview() {
         }
     }
 
-    if (!ym && teamHasConfiguredGame('u11MES') && allActive.every(function(team) { return ['u15', 'u13pe', 'u13p3', 'u11MEL'].indexOf(team.id) !== -1; })) {
+    if (!ym && teamHasConfiguredGame('u11MES') && allActive.every(function(team) { return ['u15', 'u13p1', 'u13p2', 'u11MEL'].indexOf(team.id) !== -1; })) {
         renderLandscapeU11EspoirTournamentFallback(cont);
     }
 }
@@ -2222,7 +2225,7 @@ function renderLandscapeGame(teamRef, sl, cont, hasGame) {
             th = '<span style="font-family:\'Barlow\',sans-serif;font-weight:800;color:' + lc + ';">' + ds + '</span><br><span style="font-family:\'Barlow\',sans-serif;font-weight:600;font-size:0.85em;color:' + lc + ';line-height:1.3;">' + ls + '</span>';
         } else {
             var baseDt = 11, baseLc = 10;
-            if (['u15', 'u13pe', 'u13p3', 'u11MEL', 'u11MES'].indexOf(prefix) !== -1) { 
+            if (['u15', 'u13p1', 'u13p2', 'u11MEL', 'u11MES'].indexOf(prefix) !== -1) { 
                 baseDt = 19; baseLc = 17;
             } else if (['u9M', 'u7M'].indexOf(prefix) !== -1) { 
                 baseDt = 9; baseLc = 9; 
@@ -2405,7 +2408,8 @@ function updatePortraitPreview() {
         's1': 'H1 Saison 2026/27', 
         's2': 'H2 Saison 2026/27',
         'u15': 'U15 Saison 2026/27', 
-        'u13pe': 'U13 Saison 2026/27', 
+        'u13p1': 'U13 Saison 2026/27', 
+        'u13p2': 'U13 Saison 2026/27',
         'u11MEL': 'U11 Elite Saison 2026/27', 
         'u11MES': 'U11 Espoir Saison 2026/27', 
         'u9M': 'U9 Saison 2026/27', 
