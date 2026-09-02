@@ -553,8 +553,8 @@ const TEAM_CONFIGS = [
     { id: "s2",     title: "HERREN 2 (H2)",      defaultTitle: "Season Games H2", defaultType: "Season Games" },
     { id: "fe",     title: "FRAUEN (D-PRO)",     defaultTitle: "Playoff Promotioun Fraen",         defaultType: "Season Games" },
     { id: "u15",    title: "JUGEND: U15G",        defaultTitle: "Season Games U15",            defaultType: "Season Games" },
-    { id: "u13pe",  title: "JUGEND: U13M-PE",     defaultTitle: "PlayOff U13",    defaultType: "PlayOff" },
-    { id: "u13p3",  title: "JUGEND: U13M-P3",     defaultTitle: "Quali U13",    defaultType: "Season Games" },
+    { id: "u13p1",  title: "JUGEND: U13M-P1",     defaultTitle: "Season Games U13M-P1",    defaultType: "Season Games" },
+    { id: "u13p2",  title: "JUGEND: U13M-P2",     defaultTitle: "Season Games U13M-P2",    defaultType: "Season Games" },
     { id: "u11MEL", title: "JUGEND: U11M-Elite",  defaultTitle: "Season Games U11",              defaultType: "PlayOff" },
     { id: "u11MES", title: "JUGEND: U11 Espoir", defaultTitle: "--- TOURNOI --- U11", defaultType: "Tournoi" },
     { id: "u9M",     title: "JUGEND: U9M",         defaultTitle: "--- TOURNOI --- U9",          defaultType: "Tournoi" },
@@ -563,14 +563,14 @@ const TEAM_CONFIGS = [
 ];
 
 const teamSuffixes = {
-    'u13pe': ' EL',
-    'u13p3': ' ES',
+    'u13p1': ' 1',
+    'u13p2': ' 2',
     'u11MEL': ' EL',
     'u11MES': ' ES'
 };
 
 const badgeLabels = {
-    'fe': 'FE', 's1': 'H1', 's2': 'H2', 'u15': 'U15', 'u13pe': 'U13', 'u13p3': 'U13',
+    'fe': 'FE', 's1': 'H1', 's2': 'H2', 'u15': 'U15', 'u13p1': 'U13', 'u13p2': 'U13',
     'u11MEL': 'U11', 'u11MES': 'U11', 'u9M': 'U9', 'u7M': 'U7', 'u4M': 'U4'
 };
 
@@ -600,8 +600,8 @@ const DEFAULT_TEAM_POSITIONS = {
     fe: 1,
     s1: 2,
     u15: 3,
-    u13pe: 4,
-    u13p3: 5,
+    u13p1: 4,
+    u13p2: 5,
     u11MEL: 6,
     s2: 7,
     u11MES: 8,
@@ -740,7 +740,54 @@ function resolveTournamentPrimaryLogo(prefix, opponent, isHome, locationValue, d
     return CONFIG.ballLogo;
 }
 
-let allGamesData = [];
+let allGamesData = [
+    { team: "HERREN 1 (H-PRO)", datum: "20.09.26 18:15", heim: "Mersch75", gast: "HB Leideleng", score: "", sbo: "", rtl: "", nr: "29201002", halle: "290101" },
+    { team: "FRAUEN (D-PRO)", datum: "20.09.26 16:00", heim: "Mersch75", gast: "Bieles/Pétange", score: "", sbo: "", rtl: "", nr: "29701002", halle: "290101" },
+    { team: "HERREN 1 (H-PRO)", datum: "26.09.26 19:00", heim: "HC Redange", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29201006", halle: "290131" },
+    { team: "HERREN 1 (H-PRO)", datum: "11.10.26 18:15", heim: "Mersch75", gast: "HB Museldall", score: "", sbo: "", rtl: "", nr: "29201009", halle: "290101" },
+    { team: "FRAUEN (D-PRO)", datum: "10.10.26 18:00", heim: "HBC Schiffl.", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29701006", halle: "290161" },
+    { team: "JUGEND: U15G", datum: "10.10.26 16:00", heim: "Red Boys Diff 2", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29151004", halle: "290141" },
+    { team: "JUGEND: U13M-P1", datum: "11.10.26 13:15", heim: "Mersch75 2", gast: "HC Berchem", score: "", sbo: "", rtl: "", nr: "29501101", halle: "290101" },
+    { team: "JUGEND: U13M-P2", datum: "11.10.26 15:00", heim: "Mersch75", gast: "CHEV Diekirch 2", score: "", sbo: "", rtl: "", nr: "29501202", halle: "290101" },
+    { team: "HERREN 1 (H-PRO)", datum: "18.10.26 18:15", heim: "Mersch75", gast: "HB Petange", score: "", sbo: "", rtl: "", nr: "29201012", halle: "290101" },
+    { team: "FRAUEN (D-PRO)", datum: "18.10.26 16:00", heim: "Mersch75", gast: "HC Redange", score: "", sbo: "", rtl: "", nr: "29701008", halle: "290101" },
+    { team: "JUGEND: U15G", datum: "18.10.26 14:00", heim: "Mersch75", gast: "Käerjeng/Esch 2", score: "", sbo: "", rtl: "", nr: "29151006", halle: "290101" },
+    { team: "JUGEND: U13M-P1", datum: "17.10.26 16:15", heim: "Handball Esch", gast: "Mersch75 2", score: "", sbo: "", rtl: "", nr: "29501105", halle: "290211" },
+    { team: "JUGEND: U13M-P2", datum: "18.10.26 12:30", heim: "Mersch75", gast: "HC Berchem 2", score: "", sbo: "", rtl: "", nr: "29501205", halle: "290101" },
+    { team: "HERREN 1 (H-PRO)", datum: "24.10.26 20:15", heim: "HBC Schiffl.", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29201014", halle: "290161" },
+    { team: "FRAUEN (D-PRO)", datum: "23.10.26 20:30", heim: "Handball Esch", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29701010", halle: "290211" },
+    { team: "JUGEND: U15G", datum: "25.10.26 14:00", heim: "Mersch75", gast: "HC Redange", score: "", sbo: "", rtl: "", nr: "29151011", halle: "290101" },
+    { team: "JUGEND: U13M-P1", datum: "25.10.26 14:30", heim: "HB Leideleng", gast: "Mersch75 2", score: "", sbo: "", rtl: "", nr: "29501108", halle: "290231" },
+    { team: "JUGEND: U13M-P2", datum: "24.10.26 16:00", heim: "HB Petange", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29501206", halle: "290121" },
+    { team: "FRAUEN (D-PRO)", datum: "14.11.26 18:00", heim: "Bieles/Pétange", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29701012", halle: "290032" },
+    { team: "JUGEND: U15G", datum: "14.11.26 15:00", heim: "Esp Rumelange", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29151017", halle: "290151" },
+    { team: "JUGEND: U13M-P1", datum: "15.11.26 13:15", heim: "Mersch75 2", gast: "HB Dudelange 2", score: "", sbo: "", rtl: "", nr: "29501111", halle: "290101" },
+    { team: "JUGEND: U13M-P2", datum: "21.11.26 00:00", heim: "HB Dudelange", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29501214", halle: "" },
+    { team: "HERREN 1 (H-PRO)", datum: "22.11.26 18:15", heim: "Mersch75", gast: "HC Redange", score: "", sbo: "", rtl: "", nr: "29201021", halle: "290101" },
+    { team: "JUGEND: U15G", datum: "22.11.26 16:00", heim: "Mersch75", gast: "CHEV Diekirch", score: "", sbo: "", rtl: "", nr: "29151021", halle: "290101" },
+    { team: "JUGEND: U13M-P1", datum: "22.11.26 14:00", heim: "Mersch75 2", gast: "CHEV Diekirch", score: "", sbo: "", rtl: "", nr: "29501113", halle: "290101" },
+    { team: "JUGEND: U13M-P2", datum: "24.10.26 16:00", heim: "HB Petange", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29501206", halle: "290121" },
+    { team: "HERREN 1 (H-PRO)", datum: "28.11.26 16:30", heim: "HB Museldall", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29201024", halle: "290091" },
+    { team: "FRAUEN (D-PRO)", datum: "29.11.26 16:00", heim: "Mersch75", gast: "HBC Schiffl.", score: "", sbo: "", rtl: "", nr: "29701016", halle: "290101" },
+    { team: "JUGEND: U15G", datum: "29.11.26 17:00", heim: "HBC Schiffl.", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29151029", halle: "290161" },
+    { team: "JUGEND: U13M-P1", datum: "28.11.26 14:00", heim: "HC Berchem", gast: "Mersch75 2", score: "", sbo: "", rtl: "", nr: "29501116", halle: "290021" },
+    { team: "JUGEND: U13M-P2", datum: "29.11.26 12:30", heim: "CHEV Diekirch 2", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29501217", halle: "290041" },
+    { team: "HERREN 1 (H-PRO)", datum: "06.12.26 18:30", heim: "HB Petange", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29201027", halle: "290121" },
+    { team: "FRAUEN (D-PRO)", datum: "05.12.26 18:00", heim: "HC Redange", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29701018", halle: "290131" },
+    { team: "JUGEND: U15G", datum: "06.12.26 16:00", heim: "Mersch75", gast: "HC Standard", score: "", sbo: "", rtl: "", nr: "29151031", halle: "290101" },
+    { team: "JUGEND: U13M-P1", datum: "06.12.26 14:00", heim: "Mersch75 2", gast: "Handball Esch", score: "", sbo: "", rtl: "", nr: "29501120", halle: "290101" },
+    { team: "JUGEND: U13M-P2", datum: "05.12.26 15:30", heim: "HC Berchem 2", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29501220", halle: "290021" },
+    { team: "HERREN 1 (H-PRO)", datum: "13.12.26 18:15", heim: "Mersch75", gast: "HBC Schiffl.", score: "", sbo: "", rtl: "", nr: "29201029", halle: "290101" },
+    { team: "FRAUEN (D-PRO)", datum: "13.12.26 16:00", heim: "Mersch75", gast: "Handball Esch", score: "", sbo: "", rtl: "", nr: "29701020", halle: "290101" },
+    { team: "JUGEND: U15G", datum: "13.12.26 16:00", heim: "HB Museldall", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29151037", halle: "290091" },
+    { team: "JUGEND: U13M-P1", datum: "13.12.26 11:30", heim: "Mersch75 2", gast: "HB Leideleng", score: "", sbo: "", rtl: "", nr: "29501123", halle: "290101" },
+    { team: "JUGEND: U13M-P2", datum: "13.12.26 14:00", heim: "Mersch75", gast: "HB Petange", score: "", sbo: "", rtl: "", nr: "29501221", halle: "290101" },
+    { team: "JUGEND: U15G", datum: "20.12.26 14:00", heim: "Mersch75", gast: "HC Standard 2", score: "", sbo: "", rtl: "", nr: "29151041", halle: "290101" },
+    { team: "JUGEND: U13M-P1", datum: "09.01.27 00:00", heim: "HB Dudelange 2", gast: "Mersch75 2", score: "", sbo: "", rtl: "", nr: "29501126", halle: "" },
+    { team: "JUGEND: U13M-P2", datum: "09.01.27 14:00", heim: "HC Standard", gast: "Mersch75", score: "", sbo: "", rtl: "", nr: "29501224", halle: "290181" },
+    { team: "JUGEND: U13M-P1", datum: "16.01.27 12:30", heim: "CHEV Diekirch", gast: "Mersch75 2", score: "", sbo: "", rtl: "", nr: "29501128", halle: "290041" },
+    { team: "JUGEND: U13M-P2", datum: "17.01.27 14:00", heim: "Mersch75", gast: "HB Dudelange", score: "", sbo: "", rtl: "", nr: "29501229", halle: "290101" }
+];
 
 let generatorDataRefreshPromise = null;
 let generatorDataRefreshedAt = 0;
