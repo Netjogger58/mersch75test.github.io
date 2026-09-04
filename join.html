@@ -3771,8 +3771,16 @@
             event.stopPropagation();
             openTarifModal();
         });
+        var closeButtons = tarifModal.querySelectorAll('[data-tarif-close]');
+        for (var i = 0; i < closeButtons.length; i++) {
+            closeButtons[i].addEventListener('click', function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                closeTarifModal();
+            });
+        }
         tarifModal.addEventListener('click', function(event) {
-            if (event.target === tarifModal || event.target.hasAttribute('data-tarif-close') || event.target.closest('[data-tarif-close]')) {
+            if (event.target === tarifModal) {
                 closeTarifModal();
             }
         });
