@@ -3753,6 +3753,11 @@
     // Tarif modal
     var tarifModal = document.getElementById('join-tarif-modal');
     var tarifTrigger = document.getElementById('joinTarifTrigger');
+    if (tarifModal) {
+        tarifModal.hidden = true;
+        tarifModal.style.display = 'none';
+    }
+    document.body.style.overflow = '';
     function closeTarifModal() {
         if (!tarifModal) return;
         tarifModal.hidden = true;
