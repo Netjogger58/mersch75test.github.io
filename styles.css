@@ -2505,6 +2505,17 @@ body.privacy-page {
     color: var(--muted);
 }
 
+.join-tarif-card-image {
+    width: 100%;
+    max-width: 160px;
+    height: auto;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 47, 101, 0.1);
+    box-shadow: 0 6px 14px rgba(0, 47, 101, 0.06);
+    display: block;
+    margin-top: 4px;
+}
+
 .join-family-section {
     display: flex;
     flex-direction: column;

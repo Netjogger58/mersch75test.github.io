@@ -1664,10 +1664,6 @@ function initializeSharedFooters() {
 }
 
 function initializeJoinUsForm() {
-    if (document.body.classList.contains('join-page')) {
-        return;
-    }
-
     const form = document.querySelector('#registrationForm');
 
     if (!form) {
