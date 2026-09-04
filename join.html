@@ -712,10 +712,10 @@
                             <button type="submit" id="submitBtn" class="join-submit-button">Schécken</button>
                         </form>
 
-                        <div id="join-tarif-modal" hidden style="position:fixed;inset:0;z-index:1200;display:flex;align-items:center;justify-content:center;padding:20px;">
-                            <div style="position:absolute;inset:0;background:rgba(5,17,48,0.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);" data-tarif-close></div>
-                            <div style="position:relative;z-index:1;width:min(940px,96vw);max-height:92vh;overflow-y:auto;background:rgba(255,255,255,0.96);border-radius:24px;padding:28px;box-shadow:0 30px 80px rgba(0,0,0,0.22);border:1px solid rgba(255,255,255,0.35);">
-                                <button type="button" data-tarif-close style="position:absolute;top:14px;right:18px;width:36px;height:36px;border-radius:50%;border:none;background:#f5f5f7;color:#6e6e73;font-size:22px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;">&times;</button>
+                        <div id="join-tarif-modal" class="join-tarif-modal" hidden>
+                            <div class="join-tarif-modal-backdrop" data-tarif-close></div>
+                            <div class="join-tarif-modal-dialog">
+                                <button type="button" class="join-tarif-modal-close" data-tarif-close aria-label="Close">&times;</button>
                                 <h2 style="margin:0 0 18px;font-size:clamp(20px,2.6vw,26px);color:#002f65;font-weight:700;">Memberskaart an Tariffer</h2>
                                 <div style="display:flex;justify-content:center;margin-bottom:18px;">
                                     <img src="assets/shared/media/M75_Logo_Memberskaart_Handball.webp" alt="Memberskaart" style="width:100%;max-width:520px;border-radius:14px;box-shadow:0 4px 18px rgba(0,47,101,0.08);">
@@ -3753,21 +3753,14 @@
     // Tarif modal
     var tarifModal = document.getElementById('join-tarif-modal');
     var tarifTrigger = document.getElementById('joinTarifTrigger');
-    if (tarifModal) {
-        tarifModal.hidden = true;
-        tarifModal.style.display = 'none';
-    }
-    document.body.style.overflow = '';
     function closeTarifModal() {
         if (!tarifModal) return;
         tarifModal.hidden = true;
-        tarifModal.style.display = 'none';
         document.body.style.overflow = '';
     }
     function openTarifModal() {
         if (!tarifModal) return;
         tarifModal.hidden = false;
-        tarifModal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
     }
     if (tarifModal && tarifTrigger) {
