@@ -811,9 +811,11 @@
 
     <script src="script.js?v=20260810nofeedback"></script>
     <script>
-    const MERSCH75_WEB3FORMS_MAIN_KEY = '15e3cc53-6864-47dd-bfaf-332cb4ca45e5';
+    const MERSCH75_WEB3FORMS_INFO_KEY = '98b978e9-f382-43c2-8d1a-42150566d577';
     const MERSCH75_WEB3FORMS_MAX_KEY = 'f748489b-abc6-4e37-bb82-860a82c91f4e';
     const MERSCH75_WEB3FORMS_TEST_KEY = '9f36724d-0d6c-4ac4-b325-11ce6f7d0a5b';
+    // Legacy alias fir al Code-Pfade (ongehëtzt).
+    const MERSCH75_WEB3FORMS_MAIN_KEY = MERSCH75_WEB3FORMS_INFO_KEY;
     const MERSCH75_WEB3FORMS_ENDPOINT = (window.M75_CONFIG && window.M75_CONFIG.WEB3FORMS_ENDPOINT) || 'https://api.web3forms.com/submit';
     const MERSCH75_SHEET_ENDPOINT = (window.M75_CONFIG && window.M75_CONFIG.SHEET_ENDPOINT) || '';
     const MERSCH75_MANAGER_ENDPOINT = (window.M75_CONFIG && window.M75_CONFIG.MANAGER_JOIN_ENDPOINT) || 'http://localhost:3000/api/joinus';
@@ -3634,22 +3636,25 @@
                 sheetPayload.members[0].qualificationDocumentLink = sheetPayload.qualificationDocumentLink;
             }
             const firstAccessKey = isTestMode ? MERSCH75_WEB3FORMS_TEST_KEY : MERSCH75_WEB3FORMS_MAIN_KEY;
-            const secondAccessKey = isTestMode ? MERSCH75_WEB3FORMS_TEST_KEY : MERSCH75_WEB3FORMS_MAX_KEY;
+            // Mannerjäreg Memberen → zousätzlech Kopie un Max (DE).
+            // Test-Modus → keng Max-Mail (just Test-Key).
+            const sendSecondMail = isMinor && !isTestMode;
+            const secondAccessKey = MERSCH75_WEB3FORMS_MAX_KEY;
             const firstSubject = isTestMode ? 'TEST - Nouvelle inscription Mersch 75' : 'Nouvelle inscription Mersch 75';
-            const secondSubject = isTestMode ? 'TEST - Neue Anmeldung Mersch 75' : ((isMinor ? 'MINDERJAEHRIG - ' : '') + 'Neue Anmeldung Mersch 75');
+            const secondSubject = (isMinor ? 'MINDERJAEHRIG - ' : '') + 'Neue Anmeldung Mersch 75';
 
-            // E-Mail 1: Französisch an Hauptschlüssel (inkl. Lizenz-Link für FLH)
+            // E-Mail 1: Französisch an Hauptschlüssel (info@mersch75.lu oder Test-Adresse) — ëmmer geschéckt.
             await sendToWeb3Forms(createCleanWeb3FormsData(
                 firstAccessKey,
                 firstSubject,
                 buildJoinMessage(true, 'fr')
             ));
 
-            if (isMinor || !isTestMode) {
+            if (sendSecondMail) {
                 // Sicherheits-Pause zur Umgehung von Web3Forms Anti-Spam-Filtern
                 await delay(3500);
 
-                // E-Mail 2: Deutsch an Sekundärschlüssel (interne Kopie, ohne Lizenz-Link)
+                // E-Mail 2: Deutsch an Sekundärschlüssel (Max, DE) — nëmmen bei mannerjähreg Memberen.
                 await sendToWeb3Forms(createCleanWeb3FormsData(
                     secondAccessKey,
                     secondSubject,
