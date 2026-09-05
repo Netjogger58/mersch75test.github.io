@@ -3032,6 +3032,10 @@
         if (cardIdValue) {
             lines.push((isFrenchMessage ? 'CARTE D\'IDENTITE' : 'ID-KARTE / CARTE D\'IDENTITE') + ': ' + cardIdValue);
         }
+        const cardInternalId = getValue('CardInternalId');
+        if (cardInternalId) {
+            lines.push((isFrenchMessage ? 'CARTE INTERNE' : 'CARD INTERN') + ': ' + cardInternalId);
+        }
         lines.push(text.birthDate + ': ' + getValue('DateNaissance'));
         lines.push('----------------------------------------');
         lines.push(text.email + ': ' + getValue('Email'));
