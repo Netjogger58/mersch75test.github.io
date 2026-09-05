@@ -1,0 +1,64 @@
+name: Lint & Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  js-syntax:
+    name: JS Syntax Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run JS linter
+        run: node tools/lint-js.cjs
+
+  html-validation:
+    name: HTML Quick Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check for orphaned closing braces in inline scripts
+        run: |
+          echo "Checking for unbalanced braces in HTML inline scripts..."
+          FAIL=0
+          for f in $(find . -maxdepth 3 -name "*.html" -not -path "*/node_modules/*" -not -path "*/.git/*"); do
+            # Extract all inline <script> blocks
+            python3 -c "
+          import re, sys
+          try:
+              html = open('$f').read()
+              blocks = re.findall(r'<script>([\s\S]*?)</script>', html)
+              for i, code in enumerate(blocks):
+                  # Strip strings and comments to count braces
+                  stripped = re.sub(r'//.*', '', code)
+                  stripped = re.sub(r'/\*[\s\S]*?\*/', '', stripped)
+                  stripped = re.sub(r\"'[^'\\\\]*(?:\\\\.[^'\\\\]*)*'\", \\\"''\\\", stripped)
+                  stripped = re.sub(r'\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"', '\\\"\\\"', stripped)
+                  stripped = re.sub(r'\`[^\`\\\\]*(?:\\\\.[^\`\\\\]*)*\`', '\\`\\`', stripped)
+                  open_b = stripped.count('{')
+                  close_b = stripped.count('}')
+                  if open_b != close_b:
+                      print(f'BRACE MISMATCH in $f block {i+1}: {open_b} open vs {close_b} close')
+                      sys.exit(1)
+          except Exception as e:
+              print(f'Parse error in $f: {e}')
+              sys.exit(1)
+          " || FAIL=1
+          done
+          if [ $FAIL -eq 1 ]; then
+            echo "Brace mismatches found."
+            exit 1
+          fi
+          echo "All inline scripts have balanced braces."

@@ -1,47 +1,63 @@
-# SBO-Archiv-Tools
+# mersch75.lu – Backup & CI
 
-Hält eng eege Kopie vun de Handball4All-SBO-Berichter (PDF), well d'FLH se net méi
-zouverlässeg uweist. Déi voll Dokumentatioun vum FLH-Archiv (Spillplang, Tabellen, SBO-PDFen) fënns du ënner [`docs/flh-archive.md`](../docs/flh-archive.md).
+## JS-Lint (lokal)
 
-Viraussetzung: **Node 18+** (built-in `fetch`). Fir d'Parsen: **Poppler** (`brew install poppler`).
-
-## Workflow (pro Spilldag, manuell)
+Vor jedem `git push` werden die JS-Syntax in allen HTML-Dateien und `.js`-Dateien geprüft. Wenn ein Fehler gefunden wird, bricht der Push ab.
 
 ```bash
-# 1) SBO-PDFen zéien + Index aktualiséieren  (scannt live-center.html)
-node tools/sbo-archive.mjs
-
-# 2) Kucken wat géif ëmgesat ginn (Dry-Run), dann applizéieren
-node tools/sbo-rewrite.mjs live-center.html
-node tools/sbo-rewrite.mjs live-center.html --write
-
-# 3) PDFen zu Text/Stats maachen (manuell kontrolléieren!)
-node tools/sbo-parse.mjs
-
-# 4) Committen + op Hetzner deployéieren (sbo-archiv/ muss mat!)
-git add sbo-archiv data live-center.html && git commit -m "SBO-Archiv aktualiséiert" && git push
+node tools/lint-js.cjs          # manueller Check
 ```
 
-## Wat wou landet
+Der `.git/hooks/pre-push` Hook ruft das automatisch vor jedem `git push` auf.
 
-| Pad | Inhalt |
-|-----|--------|
-| `sbo-archiv/2627/<sGID>.pdf` | Archivéiert PDFen (mat op Hetzner deployéieren) |
-| `sbo-archiv/2627/txt/<sGID>.txt` | Rohtext fir manuell Kontroll |
-| `data/sbo-index-2627.json` | sGID → {file, url, savedAt, bytes} |
-| `data/sbo-stats-2627.json` | Heuristesch Spiller-Reyen (`needsReview:true`) |
+Um den Hook zu umgehen (z.B. wenn du weißt was du tust):
+```bash
+git push --no-verify
+```
 
-## Datamodell am Live Center
+## GitHub Actions CI
 
-`sboCell(row)` (`live-center.html`) hëlt:
-- `row.sbo` = eis lokal/Hetzner-Kopie (prioritär) → Label **📄 SBO**
-- `row.sboLive` = Handball4All-Original (Fallback) → Label **📄 SBO (FLH)**
+Bei jedem Push auf `main` läuft automatisch:
+- `js-syntax`: prüft alle `<script>`-Blöcke und `.js` Dateien mit `node --check`
+- `html-validation`: prüft Klammern-Balance in inline-Scripts
 
-`js/flh-live-sync.js` iwwerschreift eng existent `sbo` (lokal Kopie) **net** méi mat
-Live-Donnéeën a match Spiller iwwer d'`sGID` (aus `sbo` oder `sboLive`).
+Status: <https://github.com/Netjogger58/mersch75test.github.io/actions>
 
-## Oppen Entscheedungen (kuck Plang, Kap. 13)
+## Hetzner Backup
 
-- **Hetzner-Deploy vun `sbo-archiv/`**: via GitHub-Deploy oder direkt SFTP/WebDAV?
-- **Rechtlech**: SBO-PDFen (mat Spillernimm) selwer archivéieren/uweisen — mat FLH ofklären.
-- **Automatiséierung**: manuell (aktuell) oder spéider GitHub Action / Cron.
+Für den Hetzner-Live-Server (nicht GitHub Pages) gibt es ein separates Backup-Skript:
+
+```bash
+# 1. Auf Hetzner-Server kopieren
+scp tools/hetzner-backup.sh root@<hetzner>:/opt/mersch75-backup/
+
+# 2. Auf dem Server anpassen (Pfade setzen) und ausführbar machen
+ssh root@<hetzner>
+chmod +x /opt/mersch75-backup/hetzner-backup.sh
+nano /opt/mersch75-backup/hetzner-backup.sh   # WEB_ROOT, DB_DIR anpassen
+
+# 3. Test-Backup
+/opt/mersch75-backup/hetzner-backup.sh backup
+
+# 4. Cron-Job einrichten (täglich 03:00)
+/opt/mersch75-backup/hetzner-backup.sh install-cron
+
+# 5. Status checken
+/opt/mersch75-backup/hetzner-backup.sh status
+```
+
+**Was gesichert wird:**
+- Web-Root (`/var/www/mersch75.lu`) — kompletter HTML/CSS/JS-Stand
+- SQLite-Datenbanken (`data.db`, `Sekretariat.db`) — atomar via `.backup`
+- Memberslëscht-Excel falls auf Server
+- Manifest mit Git-Commit, Datum, Hostname
+
+**Aufbewahrung:** 30 Tage (in `RETAIN_DAYS` änderbar)
+
+**Storage Box (optional):** In der Datei `STORAGE_BOX` und `RSYNC_PASS` einkommentieren und anpassen, dann werden Backups zusätzlich auf eine Hetzner Storage Box geschoben (Off-Site, ~€3.50/Monat).
+
+## Snapshot via Hetzner Cloud Panel
+
+Zusätzlich zum Skript-basieren Backup: im [Hetzner Cloud Console](https://console.hetzner.cloud/) einen **Server-Snapshot** erstellen. Das ist ein komplettes Disk-Image — bei einem großen Problem kann der gesamte Server in Minuten zurückgesetzt werden.
+
+**Empfehlung:** Snapshot **vor jedem größeren Update** manuell erstellen.
