@@ -2153,13 +2153,6 @@ function initializeJoinUsForm() {
             formData.set('Tuteur2', '-');
         }
 
-        formData.append('Mineur', elements.mineur.value);
-        formData.set('Categorie', elements.catDisplay.textContent.trim());
-
-        if (elements.parentIsole.value === 'OUI') {
-            formData.set('Tuteur2', '-');
-        }
-
         const isMinor = elements.mineur.value === 'OUI';
 
         formData.set('access_key', MERSCH75_WEB3FORMS_INFO_KEY);
