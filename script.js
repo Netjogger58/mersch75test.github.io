@@ -2159,7 +2159,7 @@ function initializeJoinUsForm() {
         formData.set('subject', `[Mersch75 Join Us] ${fullName}`);
         formData.set('from_name', 'Mersch75 Join Us');
         formData.set('name', fullName);
-        formData.set('email', String(formData.get('Email') || ''));
+        formData.set('email', 'info@mersch75.lu');
         formData.set('replyto', String(formData.get('Email') || ''));
         formData.set('redirect', 'false');
         formData.set('botcheck', elements.honeypot.value.trim());
@@ -2189,7 +2189,7 @@ function initializeJoinUsForm() {
                 formData2.set('subject', `MINDERJAEHRIG - Neue Anmeldung Mersch 75`);
                 formData2.set('from_name', 'Mersch75 Join Us');
                 formData2.set('name', fullName);
-                formData2.set('email', String(formData.get('Email') || ''));
+                formData2.set('email', 'max.hbm75@gmail.com');
                 formData2.set('replyto', String(formData.get('Email') || ''));
                 formData2.set('redirect', 'false');
                 formData2.set('botcheck', elements.honeypot.value.trim());
