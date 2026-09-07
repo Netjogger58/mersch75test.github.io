@@ -1672,9 +1672,6 @@ function initializeJoinUsForm() {
 
     const conditionsUrl = 'https://www.mersch75.lu/x2-terms-and-conditions/';
     const dataProtectionUrl = 'https://www.mersch75.lu/x3-dataprotection/';
-    const registrationEndpoint = (window.M75_CONFIG && window.M75_CONFIG.WEB3FORMS_ENDPOINT) || 'https://api.web3forms.com/submit';
-    const MERSCH75_WEB3FORMS_INFO_KEY = '2249c5c0-a5d9-464d-a753-5a9c5525b4ca';
-    const MERSCH75_WEB3FORMS_MAX_KEY = 'ae4baf1e-2a42-4438-9e92-a7ae3fa89eb0';
     const registrationMailbox = 'hbmersch75secretariat@gmail.com';
 
     const elements = {
@@ -2153,60 +2150,21 @@ function initializeJoinUsForm() {
             formData.set('Tuteur2', '-');
         }
 
-        const isMinor = elements.mineur.value === 'OUI';
-
-        formData.set('access_key', MERSCH75_WEB3FORMS_INFO_KEY);
-        formData.set('subject', `[Mersch75 Join Us] ${fullName}`);
-        formData.set('from_name', 'Mersch75 Join Us');
-        formData.set('name', fullName);
-        formData.set('email', 'info@mersch75.lu');
-        formData.set('replyto', String(formData.get('Email') || ''));
-        formData.set('redirect', 'false');
-        formData.set('botcheck', elements.honeypot.value.trim());
-        formData.set('message', buildRegistrationMessage(formData));
-
         elements.submitButton.textContent = 'Sending...';
         elements.submitButton.disabled = true;
 
         try {
-            const response1 = await fetch(registrationEndpoint, {
+            const response = await fetch('/api/joinus', {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json'
                 },
                 body: formData
             });
-            const payload1 = await response1.json();
+            const payload = await response.json();
 
-            if (!response1.ok || payload1.success !== true) {
-                throw new Error(payload1.message || 'submission-failed');
-            }
-
-            if (isMinor) {
-                await new Promise((resolve) => setTimeout(resolve, 3500));
-                const formData2 = new FormData(form);
-                formData2.set('access_key', MERSCH75_WEB3FORMS_MAX_KEY);
-                formData2.set('subject', `MINDERJAEHRIG - Neue Anmeldung Mersch 75`);
-                formData2.set('from_name', 'Mersch75 Join Us');
-                formData2.set('name', fullName);
-                formData2.set('email', 'max.hbm75@gmail.com');
-                formData2.set('replyto', String(formData.get('Email') || ''));
-                formData2.set('redirect', 'false');
-                formData2.set('botcheck', elements.honeypot.value.trim());
-                formData2.set('message', buildRegistrationMessage(formData2));
-
-                const response2 = await fetch(registrationEndpoint, {
-                    method: 'POST',
-                    headers: {
-                        Accept: 'application/json'
-                    },
-                    body: formData2
-                });
-                const payload2 = await response2.json();
-
-                if (!response2.ok || payload2.success !== true) {
-                    throw new Error(payload2.message || 'submission-failed');
-                }
+            if (!response.ok || payload.ok !== true) {
+                throw new Error(payload.message || 'submission-failed');
             }
 
             form.style.display = 'none';
