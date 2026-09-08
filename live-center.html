@@ -361,7 +361,7 @@ const viewConfig = {
     "Wochenübersicht": { h: 2500, top: -560, content: 4200, width: 1360, offsetX: 0 },
     "FLH Woche":       { h: 4300, top: -560, content: 7600, width: 1360, offsetX: 0 },
     "Aktuelle Runden": { h: 3200, top: -560, content: 5200, width: 1360, offsetX: 0 },
-    "Championnat":     { h: 5000, top: -560, content: 8000, width: 1360, offsetX: 0 },
+    "Championnat":     { h: 6000, top: 0, content: 6000, width: 820, offsetX: 0 },
     "Archiv":          { h: 4300, top: -560, content: 6800, width: 1360, offsetX: 0 },
 };
 
@@ -571,12 +571,9 @@ const NAV = {
     },
     "Championnat": {
         "section-champ": { "Championnat 2026/27": {
-            "Männer Promotioun": { t:"iframe", url:"https://www.flh.lu/championnat/#/league?ogId=95&lId=167931&tId=1509241", badge:"future", note:"Promotioun Männer - Hallenrunde 2026/2027" },
-            "Frauen Promotioun": { t:"iframe", url:"https://www.flh.lu/championnat/#/league?ogId=95&lId=168031&tId=1509616", badge:"future", note:"Promotioun Fraen - Hallenrunde 2026/2027" },
-            "U15 Jongen":        { t:"iframe", url:"https://www.flh.lu/championnat/#/league?ogId=95&lId=168871&tId=1515381", badge:"future", note:"U15 Jongen - Hallenrunde 2026/2027" },
-            "U13 Poule 1":       { t:"iframe", url:"https://www.flh.lu/championnat/#/league?ogId=95&lId=168526&tId=1510801", badge:"future", note:"U13 Mixte Poule 1 - Hallenrunde 2026/2027" },
-            "U13 Poule 2":       { t:"iframe", url:"https://www.flh.lu/championnat/#/league?ogId=95&lId=168531&tId=1510821", badge:"future", note:"U13 Mixte Poule 2 - Hallenrunde 2026/2027" }
+            "Hallenrunde & Coupe": { t:"iframe", url:"assets/Championnat%202026-2027.html", badge:"future", note:"Championnat 2026/2027 — Hallenrunde linken + Coupe de Luxembourg Finale" }
         }}
+    },
     },
     "Coupe": {
         "section-coupe": { "Coupe": { "Coupe": { t:"coupe" } }}
@@ -1184,7 +1181,7 @@ btn.classList.add("active");
 buildMenu(cat);
 }
 
-function loadLocalArchive(season) {
+function loadLocalArchive(season, skipGames) {
 if (!window.MerschFlhSync) return;
 Promise.all([
     window.MerschFlhSync.loadArchive(season),
@@ -1198,7 +1195,7 @@ Promise.all([
     if (archive.standingsByLabel) {
         window.__liveStandings = archive.standingsByLabel;
     }
-    if (archive.games && archive.games.length) {
+    if (!skipGames && archive.games && archive.games.length) {
         allGamesData = window.MerschFlhSync.mergeLiveSeasonGames(allGamesData, archive);
         applyLiveCenterCorrections();
         if (activeLiveCenterMode === 'static' && activeLiveCenterEntry && activeLiveCenterEntry.t === 'allgames') {
@@ -1223,7 +1220,7 @@ nav.appendChild(btn);
 });
 buildMenu(Object.keys(NAV)[0]);
 
-loadLocalArchive('2627');
+loadLocalArchive('2627', true);
 }
 
 function sboCell(row) {
