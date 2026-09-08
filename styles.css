@@ -1084,8 +1084,8 @@ body.menu-open {
 }
 
 .news-carousel-track .events-poster-image {
-    max-height: 90%;
-    max-width: 90%;
+    max-height: 95%;
+    max-width: 95%;
     object-fit: contain;
     border-radius: 8px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
@@ -1210,8 +1210,8 @@ body.menu-open {
 }
 
 .news-card-poster {
-    max-height: 90%;
-    max-width: 90%;
+    max-height: 95%;
+    max-width: 95%;
     object-fit: contain;
     border-radius: 8px;
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
