@@ -303,7 +303,7 @@
                 <picture>
     <source srcset="assets/shared/media/Hauptseite/archive/Logo%20Menu%20Mersch75%20Matchkalenner%20Applestyle.avif" type="image/avif">
     <source srcset="assets/shared/media/Hauptseite/archive/Logo%20Menu%20Mersch75%20Matchkalenner%20Applestyle.webp" type="image/webp">
-    <img src="assets/shared/media/Hauptseite/archive/Logo%20Menu%20Mersch75%20Matchkalenner%20Applestyle.png" alt="Mersch75 Matchkalenner 2025" class="lc-hero-logo" loading="lazy">
+    <img src="assets/shared/media/Hauptseite/archive/Logo%20Menu%20Mersch75%20Matchkalenner%20Applestyle.png" alt="Mersch75 Matchkalenner 2026" class="lc-hero-logo" loading="lazy">
 </picture>
                 <div class="lc-hero-copy">
                     <p class="eyebrow">Spillplang</p>
@@ -361,13 +361,23 @@ const viewConfig = {
     "Wochenübersicht": { h: 2500, top: -560, content: 4200, width: 1360, offsetX: 0 },
     "FLH Woche":       { h: 4300, top: -560, content: 7600, width: 1360, offsetX: 0 },
     "Aktuelle Runden": { h: 3200, top: -560, content: 5200, width: 1360, offsetX: 0 },
+    "Championnat":     { h: 5000, top: -560, content: 8000, width: 1360, offsetX: 0 },
     "Archiv":          { h: 4300, top: -560, content: 6800, width: 1360, offsetX: 0 },
 };
 
 let allGamesData = [];
 
-// FORWARD-FILL & MERGE ALGORITHMUS
+// FORWARD-FILL & MERGE ALGORITHMUS — Alle Spiele vu zenter Saison
 const rawFlhSchedule = ``;
+
+// Championnat 2026/2027 — direktt op FLH Championnat-Site
+const championnatLinks = [
+    { label: "Promotioun Männer - Hallenrunde",     url: "https://www.flh.lu/championnat/#/league?ogId=95&lId=167931&tId=1509241", badge: "future" },
+    { label: "Promotioun Fraen - Hallenrunde",       url: "https://www.flh.lu/championnat/#/league?ogId=95&lId=168031&tId=1509616", badge: "future" },
+    { label: "U15 Jongen - Hallenrunde",             url: "https://www.flh.lu/championnat/#/league?ogId=95&lId=168871&tId=1515381", badge: "future" },
+    { label: "U13 Mixte Poule 1 - Hallenrunde",      url: "https://www.flh.lu/championnat/#/league?ogId=95&lId=168526&tId=1510801", badge: "future" },
+    { label: "U13 Mixte Poule 2 - Hallenrunde",      url: "https://www.flh.lu/championnat/#/league?ogId=95&lId=168531&tId=1510821", badge: "future" }
+];
 
 function parseRawSchedule(rawText) {
     const lines = rawText.split('\n').map(line => line.trim()).filter(line => line !== '');
@@ -559,17 +569,20 @@ const NAV = {
             "Gesamttabelle": { t:"allgames" }
         }}
     },
+    "Championnat": {
+        "section-champ": { "Championnat 2026/27": {
+            "Männer Promotioun": { t:"iframe", url:"https://www.flh.lu/championnat/#/league?ogId=95&lId=167931&tId=1509241", badge:"future", note:"Promotioun Männer - Hallenrunde 2026/2027" },
+            "Frauen Promotioun": { t:"iframe", url:"https://www.flh.lu/championnat/#/league?ogId=95&lId=168031&tId=1509616", badge:"future", note:"Promotioun Fraen - Hallenrunde 2026/2027" },
+            "U15 Jongen":        { t:"iframe", url:"https://www.flh.lu/championnat/#/league?ogId=95&lId=168871&tId=1515381", badge:"future", note:"U15 Jongen - Hallenrunde 2026/2027" },
+            "U13 Poule 1":       { t:"iframe", url:"https://www.flh.lu/championnat/#/league?ogId=95&lId=168526&tId=1510801", badge:"future", note:"U13 Mixte Poule 1 - Hallenrunde 2026/2027" },
+            "U13 Poule 2":       { t:"iframe", url:"https://www.flh.lu/championnat/#/league?ogId=95&lId=168531&tId=1510821", badge:"future", note:"U13 Mixte Poule 2 - Hallenrunde 2026/2027" }
+        }}
+    },
     "Coupe": {
         "section-coupe": { "Coupe": { "Coupe": { t:"coupe" } }}
     },
     "M75 Events": {
         "section-m75": { "Mersch75 Events": { "Alle Events": { t:"m75" } }}
-    },
-    "U13": {
-        "section-youth": { "JUGEND: U13": { "U13M-P1": { t:"flh", filter: "all" }, "U13M-P2": { t:"flh", filter: "all" } }}
-    },
-    "U7": {
-        "section-youth": { "JUGEND: U7M": { "U7M Turniere": { t:"flh", filter: "all" } }}
     },
     "Archiv": {
         "section-archive": {
