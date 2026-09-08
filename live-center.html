@@ -525,6 +525,14 @@ let allStandingsData = [
     { label: "JUGEND: U13M-P2", place: "", team: "CHEV Diekirch 2", played: 0, won: 0, drawn: 0, lost: 0, goalsFor: 0, goalsAgainst: 0, pointsPlus: 0, pointsMinus: 0 }
 ];
 
+// Turnierdaten U9/U11/U7 (Turnier-Format, keine Championnat-Tabellen)
+const tournamentData = [
+    { team: "JUGEND: U9M", datum: "10.11.26 9:30", heim: "Mersch75", gast: "Turnier U9", score: "", bem: "Tournoi U9", sbo: "", rtl: "", nr: "", halle: "" },
+    { team: "JUGEND: U11M-1", datum: "10.11.26 9:30", heim: "Mersch75", gast: "Turnier U11", score: "", bem: "Tournoi U11", sbo: "", rtl: "", nr: "", halle: "" },
+    { team: "JUGEND: U7M", datum: "22.11.26 9:30", heim: "Mersch75", gast: "Plateau U7", score: "", bem: "Plateau U7", sbo: "", rtl: "", nr: "", halle: "" }
+];
+allGamesData = allGamesData.concat(tournamentData);
+
 function applyLiveCenterCorrections() {
 const corrections = [];
 allGamesData = allGamesData.filter(g => !(g.nr === "29503052" && (!g.score || !g.sbo)));
@@ -1040,7 +1048,15 @@ if (statusEl) {
         { key: 'future', label: 'Zukünfteg Matcher' },
         { key: 'past',   label: 'Gespillte Matcher' },
         { key: 'tabell', label: 'Tabell' }
-    ];
+];
+
+// Turnierdaten U9/U11/U7 (Turnier-Format, keine Championnat-Tabellen)
+const tournamentData = [
+    { team: "JUGEND: U9M", datum: "10.11.26 9:30", heim: "Mersch75", gast: "Turnier U9", score: "", bem: "Tournoi U9", sbo: "", rtl: "", nr: "", halle: "" },
+    { team: "JUGEND: U11M-1", datum: "10.11.26 9:30", heim: "Mersch75", gast: "Turnier U11", score: "", bem: "Tournoi U11", sbo: "", rtl: "", nr: "", halle: "" },
+    { team: "JUGEND: U7M", datum: "22.11.26 9:30", heim: "Mersch75", gast: "Plateau U7", score: "", bem: "Plateau U7", sbo: "", rtl: "", nr: "", halle: "" }
+];
+allGamesData = allGamesData.concat(tournamentData);
     let sbar = '';
     statusItems.forEach(it => {
         sbar += '<button type="button" class="agf-btn' + (activeStatus === it.key ? ' active' : '') + '" data-status="' + it.key + '">' + it.label + '</button>';
@@ -1227,26 +1243,31 @@ return;
 }
 
 let result;
-if      (entry.t === "coupe") result = renderCoupe();
-else if (entry.t === "m75")   result = renderM75();
-else if (entry.t === "flh")   result = renderFLH(entry.filter || "all");
-else if (entry.t === "allgames") result = renderAllGames();
-else if (entry.t === "u11-tournament")    result = renderU11Tournament();
-else if (entry.t === "stats-placeholder") result = renderStatsPlaceholder(entry);
-else if (entry.t === "tournament-info")   result = renderTournamentInfo(entry);
+    if      (entry.t === "coupe") result = renderCoupe();
+    else if (entry.t === "m75")   result = renderM75();
+    else if (entry.t === "flh")   result = renderFLH(entry.filter || "all");
+    else if (entry.t === "allgames") result = renderAllGames();
+    else if (entry.t === "u11-tournament")    result = renderU11Tournament();
+    else if (entry.t === "stats-placeholder") result = renderStatsPlaceholder(entry);
+    else if (entry.t === "tournament-info")   result = renderTournamentInfo(entry);
 
-document.getElementById("staticHead").innerHTML = result.head;
-document.getElementById("staticBody").innerHTML = result.rows;
-tbl.style.display   = "table";
-empty.style.display = "none";
+    document.getElementById("staticHead").innerHTML = result.head;
+    document.getElementById("staticBody").innerHTML = result.rows;
+    tbl.style.display   = "table";
+    empty.style.display = "none";
 
-if (entry.t === "allgames") {
-    renderStandingsPanel();
-    window.applyTabellViewMode();
-} else {
-    const sp = document.getElementById("standingsPanel");
-    if (sp) { sp.style.display = "none"; sp.innerHTML = ""; }
-}
+    if (entry.t === "allgames") {
+        // Alle Kategorien: nur Spiele, keine Tabellen
+        const sp = document.getElementById("standingsPanel");
+        if (sp) { sp.style.display = "none"; sp.innerHTML = ""; }
+    } else if (entry.t === "flh" && entry.kat) {
+        // Einzelne Kategorie: Tabellen für Kategorien mit Tabellen anzeigen
+        window.__allGamesFilter = entry.kat;
+        renderStandingsPanel();
+    } else {
+        const sp = document.getElementById("standingsPanel");
+        if (sp) { sp.style.display = "none"; sp.innerHTML = ""; }
+    }
 }
 
 const BADGE_HTML = {
