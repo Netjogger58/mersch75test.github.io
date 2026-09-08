@@ -875,7 +875,7 @@ body.menu-open {
     flex: 0 0 100%;
     width: 100%;
     min-width: 100%;
-    min-height: clamp(320px, 48vw, 520px);
+    min-height: clamp(240px, 36vw, 390px);
     border-radius: 0;
 }
 
@@ -1084,8 +1084,8 @@ body.menu-open {
 }
 
 .news-carousel-track .events-poster-image {
-    max-height: 95%;
-    max-width: 95%;
+    max-height: 80%;
+    max-width: 80%;
     object-fit: contain;
     border-radius: 8px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
@@ -1210,8 +1210,8 @@ body.menu-open {
 }
 
 .news-card-poster {
-    max-height: 95%;
-    max-width: 95%;
+    max-height: 85%;
+    max-width: 85%;
     object-fit: contain;
     border-radius: 8px;
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
