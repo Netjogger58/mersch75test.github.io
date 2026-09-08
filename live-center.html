@@ -1315,29 +1315,6 @@ btn.classList.add("active");
 buildMenu(cat);
 }
 
-function loadLocalArchive(season) {
-	if (!window.MerschFlhSync) return;
-	window.MerschFlhSync.loadSboIndex(season).then(function(entries) {
-		if (!window.__sboIndex) window.__sboIndex = {};
-		window.__sboIndex[season] = entries;
-	}).catch(function() {});
-	window.MerschFlhSync.loadArchive(season).then(function(archive) {
-		if (archive.standingsByLabel) {
-			window.__liveStandings = archive.standingsByLabel;
-		}
-		if (archive.games && archive.games.length) {
-			allGamesData = window.MerschFlhSync.mergeLiveSeasonGames(allGamesData, archive);
-			applyLiveCenterCorrections();
-			if (activeLiveCenterMode === 'static' && activeLiveCenterEntry && activeLiveCenterEntry.t === 'allgames') {
-				showStatic(activeLiveCenterEntry);
-			}
-		}
-	}).catch(function() {})
-	.finally(function() {
-		refreshLiveCenterScheduleData(false);
-	});
-}
-
 function initLiveCenter() {
 const nav = document.getElementById("categoryMenu");
 if (!nav) return;
