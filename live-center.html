@@ -852,34 +852,32 @@ function renderTournamentInfo(entry) {
     };
 }
 
-function renderFLH(filter) {
-if (typeof flhData === 'undefined') return { head: "", rows: "" };
-const sourceData = dedupeGameRows(flhData);
-let data;
-if (filter === "future")            data = sourceData.filter(r => r.future);
-else if (filter === "past")         data = sourceData.filter(r => !r.future);
-else if (filter === "nationalteam") data = sourceData.filter(r => /Quali/i.test(r.bem || ""));
-else                                data = [...sourceData];
+function renderFLH(kat) {
+    if (typeof allGamesData === 'undefined') return { head: "", rows: "" };
+    const sourceData = dedupeGameRows(allGamesData);
+    // Filter nach Kategorie (entry.kat, z.B. "JUGEND: U11M-1")
+    const data = sourceData.filter(r => normalizeTeamLabel(r.team || "") === normalizeTeamLabel(kat || ""));
+    data.sort((a, b) => parseDateStr(b.datum) - parseDateStr(a.datum));
 
-if (filter !== "nationalteam") data = data.filter(r => r.kat !== 'U9M');
-
-data.sort((a, b) => parseDateStr(b.datum) - parseDateStr(a.datum));
-
-return {
-head: "<tr><th>Kat.</th><th>Datum</th><th>Ort</th><th>Heim</th><th>Gast</th><th>Resultat</th><th>Event</th><th>SBO</th><th>RTL/YT</th></tr>",
-rows: data.map(r => {
-return `<tr>
-<td><span class="tag tag-flh">${r.kat}</span></td>
-<td style="white-space:nowrap">${r.datum}</td>
-<td style="color:#888">${r.ort}</td>
-<td><strong>${r.heim}</strong></td>
-<td>${r.gast}</td>
-<td class="score-cell">${r.score||'<span class="tag tag-future">▶ Kommend</span>'}</td>
-<td style="color:#888;font-size:0.8rem">${r.bem}</td>
-${sboCell(r)}${rtlCell("")}
-</tr>`;
-}).join("")
-};
+    return {
+        head: "<tr><th>Datum</th><th>Heim</th><th>Gast</th><th style='text-align:center;'>Resultat</th><th>SBO</th><th>RTL/YT</th><th class='col-bem'>Bemerkung</th></tr>",
+        rows: data.map(r => {
+            let scoreDisplay = "";
+            if (r.score && r.score !== "-") {
+                scoreDisplay = `<span class="score-cell ${scoreCSS(r.score,r.heim)}">${r.score}</span>`;
+            } else {
+                scoreDisplay = '<span class="tag tag-future" style="font-size:0.6rem;">▶ Kommend</span>';
+            }
+            return `<tr>
+            <td style="white-space:nowrap;font-weight:600;color:var(--mersch-blue);">${r.datum}</td>
+            <td><strong>${r.heim}</strong></td>
+            <td>${r.gast}</td>
+            <td style="text-align:center;">${scoreDisplay}</td>
+            ${sboCell(r)}${rtlCell(r.rtl || r.yt)}
+            <td class="col-bem">${r.bem || ""}</td>
+            </tr>`;
+        }).join("")
+    };
 }
 
 // Mapping: normalisierte Kategorie-Label (aus dem Spielplan) -> FLH-Sync Label
@@ -1245,7 +1243,7 @@ return;
 let result;
     if      (entry.t === "coupe") result = renderCoupe();
     else if (entry.t === "m75")   result = renderM75();
-    else if (entry.t === "flh")   result = renderFLH(entry.filter || "all");
+    else if (entry.t === "flh")   result = renderFLH(entry.kat || entry.filter || "all");
     else if (entry.t === "allgames") result = renderAllGames();
     else if (entry.t === "u11-tournament")    result = renderU11Tournament();
     else if (entry.t === "stats-placeholder") result = renderStatsPlaceholder(entry);
