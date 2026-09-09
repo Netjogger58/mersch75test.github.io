@@ -208,6 +208,7 @@
                                     <select id="OfficialRole" name="OfficialRole">
                                         <option value="">Wielt eng Funktioun</option>
                                         <option value="Trainer">Trainer</option>
+                                        <option value="Coach">Coach</option>
                                         <option value="Teamleader">Teambegleeder</option>
                                         <option value="Officiel">Offiziell</option>
                                     </select>
@@ -1137,9 +1138,9 @@
     };
     const MERSCH75_ROLE_TEXTS = {
         lu: {
-            officialRoleLabel: 'Ech sinn *',
-            officialRolePlaceholder: 'Wielt eng Funktioun',
-            trainer: 'Trainer',
+            officialRoleLabel: 'Ech sinn * (inkl. Trainer / Coach)',
+            officialRolePlaceholder: 'Wielt eng Funktioun (Coach)',
+            trainer: 'Trainer / Coach',
             teamleader: 'Teambegleeder',
             official: 'Offiziell',
             qualificationLegend: 'Trainer-Schäin *',
@@ -1158,9 +1159,9 @@
             documentType: 'Nëmme PDF-, JPG- oder PNG-Dateie sinn erlaabt.'
         },
         fr: {
-            officialRoleLabel: 'Je suis *',
-            officialRolePlaceholder: 'Choisir une fonction',
-            trainer: 'Entraîneur',
+            officialRoleLabel: 'Je suis * (incluant Coach)',
+            officialRolePlaceholder: 'Choisir une fonction (y compris Coach)',
+            trainer: 'Entraîneur / Coach',
             teamleader: 'Team leader',
             official: 'Officiel',
             qualificationLegend: 'Diplôme d’entraîneur *',
@@ -1179,9 +1180,9 @@
             documentType: 'Seuls les fichiers PDF, JPG ou PNG sont autorisés.'
         },
         de: {
-            officialRoleLabel: 'Ich bin *',
-            officialRolePlaceholder: 'Funktion wählen',
-            trainer: 'Trainer',
+            officialRoleLabel: 'Ich bin * (inkl. Trainer / Coach)',
+            officialRolePlaceholder: 'Funktion wählen (inkl. Coach)',
+            trainer: 'Trainer / Coach',
             teamleader: 'Teamleiter',
             official: 'Offiziell',
             qualificationLegend: 'Trainer-Schein *',
@@ -1200,9 +1201,9 @@
             documentType: 'Nur PDF-, JPG- oder PNG-Dateien sind erlaubt.'
         },
         en: {
-            officialRoleLabel: 'I am *',
-            officialRolePlaceholder: 'Choose a role',
-            trainer: 'Coach',
+            officialRoleLabel: 'I am * (inkl. Coach)',
+            officialRolePlaceholder: 'Choose a role (incl. Coach)',
+            trainer: 'Coach / Trainer',
             teamleader: 'Team leader',
             official: 'Official',
             qualificationLegend: 'Coaching qualification *',
@@ -2127,7 +2128,7 @@
         const documentInput = document.getElementById('TrainerQualificationDocument');
         const description = document.getElementById('OfficialQualificationDescription');
         const roleText = MERSCH75_ROLE_TEXTS[currentLang] || MERSCH75_ROLE_TEXTS.lu;
-        const isTrainer = roleType === 'Trainer';
+        const isTrainer = roleType === 'Trainer' || roleType === 'Coach';
         const needsDescription = roleType === 'Teamleader' || roleType === 'Officiel' || qualifications.includes('Autres');
         const file = documentInput.files && documentInput.files[0];
         const validTypes = ['application/pdf', 'image/jpeg', 'image/png'];
@@ -2150,7 +2151,7 @@
     function updateOfficialDetails() {
         const isOfficialProfile = currentJoinQuiz === 'official';
         const roleType = getValue('OfficialRole');
-        const isTrainer = isOfficialProfile && roleType === 'Trainer';
+        const isTrainer = isOfficialProfile && (roleType === 'Trainer' || roleType === 'Coach');
         const qualifications = getTrainerQualifications();
         const hasLuxqf = qualifications.some(function(value) { return value.indexOf('LUXQF') === 0; });
         const needsDescription = isOfficialProfile && (
