@@ -2857,6 +2857,63 @@ body.privacy-page {
     box-shadow: 0 12px 24px rgba(249, 214, 17, 0.35);
 }
 
+.join-trainer-code-box {
+    margin-top: 22px;
+    padding: 20px 24px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #e8f0fe 0%, #fef7e0 100%);
+    border: 2px solid #002f65;
+    text-align: center;
+}
+
+.join-trainer-code-head {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.join-trainer-code-label {
+    font-weight: 700;
+    color: #002b5c;
+    font-size: 1rem;
+}
+
+.join-trainer-code-copy {
+    background: rgba(0, 47, 101, 0.08);
+    border: 1px solid rgba(0, 47, 101, 0.15);
+    border-radius: 8px;
+    padding: 4px 12px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    color: #002f65;
+    transition: background-color 150ms ease;
+}
+
+.join-trainer-code-copy:hover {
+    background: rgba(0, 47, 101, 0.15);
+}
+
+.join-trainer-code-value {
+    display: inline-block;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: #002f65;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 10px 28px;
+    border-radius: 12px;
+    border: 1px dashed rgba(0, 47, 101, 0.2);
+}
+
+.join-trainer-code-hint {
+    margin-top: 10px;
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
 #website-field {
     display: none;
 }
