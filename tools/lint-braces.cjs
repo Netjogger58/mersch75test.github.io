@@ -15,37 +15,106 @@ const htmlFiles = execSync(
 
 let errors = 0;
 
-function stripStringsAndComments(code) {
+function stripStringsCommentsAndRegexes(code) {
     let out = '';
     let i = 0;
+    let previous = 'START';
+    const regexStarters = new Set([
+        'START', '(', '{', '[', ',', ';', ':', '=', '?', '!', '~', '+', '-', '*', '/', '%', '^', '&', '|',
+        '=>', 'return', 'case', 'throw', 'delete', 'void', 'typeof', 'instanceof', 'in', 'of', 'yield', 'await', 'else', 'do'
+    ]);
+
+    function skipQuotedString() {
+        const quote = code[i];
+        i++;
+        while (i < code.length) {
+            if (code[i] === '\\') {
+                i += 2;
+                continue;
+            }
+            if (code[i] === quote) {
+                i++;
+                return;
+            }
+            i++;
+        }
+    }
+
+    function readRegexLiteral() {
+        let end = i + 1;
+        let inCharacterClass = false;
+        while (end < code.length) {
+            const character = code[end];
+            if (character === '\n' || character === '\r') return -1;
+            if (character === '\\') {
+                end += 2;
+                continue;
+            }
+            if (character === '[') inCharacterClass = true;
+            else if (character === ']') inCharacterClass = false;
+            else if (character === '/' && !inCharacterClass) {
+                end++;
+                while (end < code.length && /[gimsuy]/.test(code[end])) end++;
+                return end;
+            }
+            end++;
+        }
+        return -1;
+    }
+
     while (i < code.length) {
-        const c = code[i];
-        const n = code[i + 1];
-        // Line comment
-        if (c === '/' && n === '/') {
+        const character = code[i];
+        const next = code[i + 1];
+
+        if (/\s/.test(character)) {
+            i++;
+            continue;
+        }
+        if (character === '/' && next === '/') {
             while (i < code.length && code[i] !== '\n') i++;
             continue;
         }
-        // Block comment
-        if (c === '/' && n === '*') {
+        if (character === '/' && next === '*') {
             i += 2;
             while (i < code.length && !(code[i] === '*' && code[i + 1] === '/')) i++;
             i += 2;
             continue;
         }
-        // Strings
-        if (c === '"' || c === "'" || c === '`') {
-            const quote = c;
-            i++;
-            while (i < code.length && code[i] !== quote) {
-                if (code[i] === '\\') i++;
-                i++;
-            }
-            i++;
+        if (character === '"' || character === "'" || character === '`') {
+            skipQuotedString();
+            previous = 'literal';
             continue;
         }
-        out += c;
-        i++;
+        if (character === '/' && regexStarters.has(previous)) {
+            const end = readRegexLiteral();
+            if (end !== -1) {
+                i = end;
+                previous = 'regex';
+                continue;
+            }
+        }
+        if (/[A-Za-z_$]/.test(character)) {
+            let end = i + 1;
+            while (end < code.length && /[A-Za-z0-9_$]/.test(code[end])) end++;
+            previous = code.slice(i, end);
+            i = end;
+            continue;
+        }
+        if (/[0-9]/.test(character) || (character === '.' && /[0-9]/.test(next || ''))) {
+            let end = i + 1;
+            while (end < code.length && /[A-Za-z0-9_.]/.test(code[end])) end++;
+            previous = 'number';
+            i = end;
+            continue;
+        }
+
+        const operator = code.slice(i, i + 2);
+        const token = ['===', '!==', '>>>', '<<=', '>>=', '=>', '==', '!=', '<=', '>=', '++', '--', '&&', '||', '??', '?.', '**', '<<', '>>', '+=', '-=', '*=', '/=', '%=', '&=', '|=', '^=', '...'].includes(operator)
+            ? operator
+            : character;
+        out += token;
+        previous = token;
+        i += token.length;
     }
     return out;
 }
@@ -56,7 +125,7 @@ for (const file of htmlFiles) {
     if (matches.length === 0) continue;
 
     matches.forEach((m, i) => {
-        const stripped = stripStringsAndComments(m[1]);
+        const stripped = stripStringsCommentsAndRegexes(m[1]);
         const openB = (stripped.match(/\{/g) || []).length;
         const closeB = (stripped.match(/\}/g) || []).length;
         const openP = (stripped.match(/\(/g) || []).length;
