@@ -1,0 +1,43 @@
+# MarkItDown Desktop v3.0 Requirements
+# Automatically installed when you run: python markitdown_desktop_v3.py
+
+# Core conversion engine with ALL features
+markitdown[all]>=0.0.1a4
+
+# GUI Framework (usually pre-installed with Python)
+# tkinter  # Uncomment if needed
+
+# ===========================================
+# AUTOMATIC INSTALLATION:
+# ===========================================
+# Just run: python markitdown_desktop_v3.py
+# All dependencies install automatically!
+#
+# MANUAL INSTALLATION:
+# pip install "markitdown[all]"
+#
+# WHAT GETS INSTALLED:
+# - PDF processing capabilities
+# - OCR for image text extraction  
+# - Audio transcription features
+# - Office document support
+# - Web and archive processing
+#
+# ===========================================
+# SYSTEM REQUIREMENTS:
+# ===========================================
+# Python: 3.7+
+# OS: Windows 10+, macOS 10.14+, Linux
+# RAM: 1GB minimum, 4GB recommended
+# Storage: 100MB for dependencies
+#
+# ===========================================
+# TROUBLESHOOTING:
+# ===========================================
+# If installation fails:
+# 1. Update pip: pip install --upgrade pip
+# 2. Install manually: pip install "markitdown[all]"
+# 3. Windows: Install Visual C++ Build Tools
+# 4. macOS: Install Xcode Command Line Tools
+# 5. Linux: sudo apt-get install build-essential
+#
