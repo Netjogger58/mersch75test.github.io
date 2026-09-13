@@ -547,18 +547,34 @@
                     }
 
                     function activate(btn) {
+                        var team = btn.getAttribute('data-stats-team');
+                        if (team === 'u15' || team === 'u13' || team === 'u11' || team === 'kids') {
+                            if (!checkTrainerstaffPassword()) return;
+                        }
                         buttons.forEach(function (b) {
                             var active = b === btn;
                             b.classList.toggle('is-active', active);
                             b.setAttribute('aria-selected', active ? 'true' : 'false');
                         });
-                        var team = btn.getAttribute('data-stats-team');
                         if (teamPhoto && teamPhotos[team]) {
                             teamPhoto.src = teamPhotos[team].src;
                             teamPhoto.alt = teamPhotos[team].alt;
                         }
                         if (team) history.replaceState(null, '', '#' + team);
                         render(team, btn.getAttribute('data-stats-target'));
+                    }
+
+                    function checkTrainerstaffPassword() {
+                        var saved = sessionStorage.getItem('trainerstaff_access');
+                        if (saved === 'granted') return true;
+                        var pwd = window.prompt('Trainerstaff-Zugriff — bitte Passwort eingeben:');
+                        if (pwd === null) return false;
+                        if (pwd === 'Mersch75LU@EUR') {
+                            sessionStorage.setItem('trainerstaff_access', 'granted');
+                            return true;
+                        }
+                        alert('Falsches Passwort.');
+                        return false;
                     }
 
                     buttons.forEach(function (btn) {
