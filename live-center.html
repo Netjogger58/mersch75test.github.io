@@ -69,27 +69,6 @@
 #m75-lc-wrapper .gen-icon { cursor: pointer; transition: transform 0.2s; }
 #m75-lc-wrapper .gen-icon:hover { transform: scale(1.1); }
 
-#m75-lc-wrapper .toggle-wrapper { display: flex; justify-content: center; margin-bottom: 20px; width: 100%; }
-#m75-lc-wrapper .toggle-container {
-    background: linear-gradient(180deg, #eef1f6 0%, #e3e7ee 100%);
-    padding: 6px; border-radius: 22px;
-    display: flex; flex-wrap: wrap; justify-content: center;
-    gap: 4px; box-shadow: inset 0 1px 2px rgba(0,0,0,0.04), 0 2px 10px rgba(0,0,0,0.05);
-    width: 100%; max-width: 1000px;
-}
-#m75-lc-wrapper .toggle-btn {
-    padding: 10px 20px; border-radius: 18px; border: none; background: transparent;
-    font-size: clamp(0.72rem, 1.9vw, 0.9rem); font-weight: 700;
-    cursor: pointer; color: #5a6578; transition: all 0.2s; white-space: nowrap;
-    flex: 1 1 auto; text-align: center; letter-spacing: 0.01em;
-}
-#m75-lc-wrapper .toggle-btn:hover:not(.active) { color: #002f65; background: rgba(255,255,255,0.5); }
-#m75-lc-wrapper .toggle-btn.active {
-    background: linear-gradient(180deg, #ffffff 0%, #f7f9fd 100%);
-    color: var(--mersch-blue);
-    box-shadow: 0 2px 6px rgba(0, 47, 101, 0.15), 0 1px 2px rgba(0, 47, 101, 0.1);
-}
-
 #m75-lc-wrapper #teamMenu { display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; width: 100%; }
 #m75-lc-wrapper .menu-section {
     background: rgba(255,255,255,0.75); padding: 12px 14px;
@@ -239,7 +218,6 @@
 
 @media (max-height: 600px) and (orientation: landscape) {
     #m75-lc-wrapper .header { margin-top: 12px; margin-bottom: 10px; }
-    #m75-lc-wrapper .toggle-wrapper { margin-bottom: 10px; }
     #m75-lc-wrapper #teamMenu { gap: 8px; margin-bottom: 10px; }
     #m75-lc-wrapper .menu-section { padding: 8px 12px; }
     #m75-lc-wrapper .section-title { margin-bottom: 6px; }
@@ -322,7 +300,6 @@
     </div>
 
     <div class="main-wrapper">
-        <div class="toggle-wrapper"><div class="toggle-container" id="categoryMenu"></div></div>
         <div id="teamMenu"></div>
         <div class="context-note" id="activeEntryNote"></div>
 
@@ -1279,23 +1256,8 @@ document.getElementById("teamMenu").appendChild(div);
 document.querySelector(".sub-btn")?.click();
 }
 
-function switchCat(cat, btn) {
-document.querySelectorAll(".toggle-btn").forEach(b => b.classList.remove("active"));
-btn.classList.add("active");
-buildMenu(cat);
-}
-
 function initLiveCenter() {
-const nav = document.getElementById("categoryMenu");
-if (!nav) return;
-Object.keys(NAV).forEach((cat, i) => {
-const btn = document.createElement("button");
-btn.className = "toggle-btn" + (i === 0 ? " active" : "");
-btn.innerText = cat;
-btn.onclick = () => switchCat(cat, btn);
-nav.appendChild(btn);
-});
-buildMenu(Object.keys(NAV)[0]);
+buildMenu("Alle Spiele");
 }
 
 function sboCell(row) {
