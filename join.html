@@ -824,7 +824,7 @@
     const MERSCH75_WEB3FORMS_MAIN_KEY = MERSCH75_WEB3FORMS_INFO_KEY;
     const MERSCH75_WEB3FORMS_ENDPOINT = (window.M75_CONFIG && window.M75_CONFIG.WEB3FORMS_ENDPOINT) || 'https://api.web3forms.com/submit';
     const MERSCH75_SHEET_ENDPOINT = (window.M75_CONFIG && window.M75_CONFIG.SHEET_ENDPOINT) || '';
-    const MERSCH75_MANAGER_ENDPOINT = (window.M75_CONFIG && window.M75_CONFIG.MANAGER_JOIN_ENDPOINT) || 'http://localhost:3000/api/joinus';
+    const MERSCH75_MANAGER_ENDPOINT = (window.M75_CONFIG && window.M75_CONFIG.MANAGER_JOIN_ENDPOINT) || 'https://m75manager.mersch75.lu/api/join';
     const MERSCH75_SHEET_TOKEN = 'm75-join-9f36-secure-2026';
     const MERSCH75_SHEET_PRODUCTION = false;
     const MERSCH75_LICENSE_LINK = 'https://submit.paperless.io/f/s4zaWnzHBwxcPK8jAkkbjPpVC1giUfr7';
@@ -3828,6 +3828,77 @@
                 closeTarifModal();
             }
         });
+
+        const joinApiUrl = 'https://m75manager.mersch75.lu/api/join';
+        const registrationForm = document.getElementById('registrationForm');
+        if (registrationForm) {
+            registrationForm.addEventListener('submit', function(event) {
+                const formData = new FormData(registrationForm);
+                const data = {};
+                formData.forEach(function(value, key) {
+                    if (data[key] !== undefined) {
+                        if (Array.isArray(data[key])) {
+                            data[key].push(value);
+                        } else {
+                            data[key] = [data[key], value];
+                        }
+                    } else {
+                        data[key] = value;
+                    }
+                });
+
+                const isMinor = document.getElementById('Mineur')?.value === 'OUI' || document.getElementById('Mineur')?.value === 'JO';
+                data.isMinor = isMinor ? 'OUI' : 'NON';
+
+                const languageSelect = document.getElementById('Langue');
+                if (languageSelect) data.Langue = languageSelect.value;
+
+                const roleSelect = document.getElementById('Role');
+                if (roleSelect) data.Role = roleSelect.value;
+
+                const officialRoleSelect = document.getElementById('OfficialRole');
+                if (officialRoleSelect) data.OfficialRole = officialRoleSelect.value;
+
+                const medicoSelect = document.getElementById('Medico');
+                if (medicoSelect) data.Medico = medicoSelect.value;
+
+                const licenceSelect = document.getElementById('Licence');
+                if (licenceSelect) data.Licence = licenceSelect.value;
+
+                const ancienClubSelect = document.getElementById('AncienClub');
+                if (ancienClubSelect) data.AncienClub = ancienClubSelect.value;
+
+                const familyStructureSelect = document.getElementById('FamilyStructure');
+                if (familyStructureSelect) data.FamilyStructure = familyStructureSelect.value;
+
+                const minorPlayerEmailChoice = document.getElementById('MinorPlayerEmailChoice');
+                if (minorPlayerEmailChoice) data.MinorPlayerEmailChoice = minorPlayerEmailChoice.value;
+
+                const familyRegistrationMode = document.getElementById('FamilyRegistrationMode');
+                if (familyRegistrationMode) data.FamilyRegistrationMode = familyRegistrationMode.value;
+
+                const nationalitySelect = document.getElementById('Nationalite');
+                if (nationalitySelect) data.Nationalite = nationalitySelect.value;
+
+                const correspondenceLanguageSelect = document.getElementById('CorrespondenceLanguage');
+                if (correspondenceLanguageSelect) data.CorrespondenceLanguage = correspondenceLanguageSelect.value;
+
+                const genderSelect = document.getElementById('Gender');
+                if (genderSelect) data.Gender = genderSelect.value;
+
+                const cnsCountrySelect = document.getElementById('CNSCountry');
+                if (cnsCountrySelect) data.CNSCountry = cnsCountrySelect.value;
+
+                fetch(joinApiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                    keepalive: true,
+                }).catch(function(err) {
+                    console.warn('Join API call failed:', err);
+                });
+            });
+        }
     }
     </script>
 </body>
