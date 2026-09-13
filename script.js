@@ -4,6 +4,19 @@ function syncCurrentYear() {
     });
 }
 
+function checkTrainerstaffPassword() {
+    var saved = sessionStorage.getItem('trainerstaff_access');
+    if (saved === 'granted') return true;
+    var pwd = window.prompt('Trainerstaff-Zugriff — bitte Passwort eingeben:');
+    if (pwd === null) return false;
+    if (pwd === 'Mersch75LU@EUR') {
+        sessionStorage.setItem('trainerstaff_access', 'granted');
+        return true;
+    }
+    alert('Falsches Passwort.');
+    return false;
+}
+
 function ensureSiteLanguageSwitcher() {
     // Wenn die Seite bereits einen Sprachumschalter mitbringt, nichts tun.
     if (document.querySelector('.site-language-switcher')) return;
@@ -1006,6 +1019,10 @@ function initializeSiteMenu() {
 
         if (href === 'training.html' || href === 'trainerstaff.html') {
             targetGroup = trainingPair;
+        }
+
+        if (href === 'trainerstaff.html') {
+            link.onclick = function() { return checkTrainerstaffPassword(); };
         }
 
         targetGroup.append(link);
