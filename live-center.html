@@ -361,8 +361,6 @@ const viewConfig = {
     "Wochenübersicht": { h: 2500, top: -560, content: 4200, width: 1360, offsetX: 0 },
     "FLH Woche":       { h: 4300, top: -560, content: 7600, width: 1360, offsetX: 0 },
     "Aktuelle Runden": { h: 3200, top: -560, content: 5200, width: 1360, offsetX: 0 },
-    "Championnat":     { h: 6000, top: 0, content: 6000, width: 820, offsetX: 0 },
-    "Archiv":          { h: 4300, top: -560, content: 6800, width: 1360, offsetX: 0 },
 };
 
 let allGamesData = [
@@ -411,7 +409,7 @@ let allGamesData = [
     { team: "JUGEND: U13M-P2", datum: "09.01.27 14:00", heim: "HC Standard", gast: "Mersch75", score: "", bem: " ", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=29501224", rtl: "", nr: "29501224", halle: "290181" },
     { team: "JUGEND: U13M-P1", datum: "16.01.27 12:30", heim: "CHEV Diekirch", gast: "Mersch75 2", score: "", bem: " ", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=29501128", rtl: "", nr: "29501128", halle: "290041" },
     { team: "JUGEND: U13M-P2", datum: "17.01.27 14:00", heim: "Mersch75", gast: "HB Dudelange", score: "", bem: " ", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=29501229", rtl: "", nr: "29501229", halle: "290101" },
-    { team: "JUGEND: U13M-P1", datum: "09.01.27", heim: "HB Dudelange 2", gast: "Mersch75 2", score: "", bem: " ", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=29501126", rtl: "", nr: "29501126", halle: "None" },
+    { team: "JUGEND: U13M-P1", datum: "09.01.27 13:00", heim: "HB Dudelange 2", gast: "Mersch75 2", score: "", bem: " ", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=29501126", rtl: "", nr: "29501126", halle: "None" },
     { team: "JUGEND: U13M-P2", datum: "21.11.26", heim: "HB Dudelange", gast: "Mersch75", score: "", bem: " ", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=29501214", rtl: "", nr: "29501214", halle: "None" }
 ];
 
@@ -659,52 +657,24 @@ const NAV = {
     "Alle Spiele": {
         "section-all": { "Kompletter Saison-Spielplan": {
             "Gesamttabelle": { t:"allgames" }
-        }}
-    },
-    "Championnat": {
+        }},
         "section-champ": { "Championnat 2026/27": {
-            "Hallenrunde & Coupe": { t:"iframe", url:"assets/Championnat%202026-2027.html", badge:"future", note:"Championnat 2026/2027 — Hallenrunde linken + Coupe de Luxembourg Finale" }
+            "Hallenrunde & Coupe": { t:"iframe", url:"assets/Championnat%202026-2027.html", badge:"future", note:"Championnat 2026/2027 — Hallenrunde linken + Coupe de Luxembourg Finale", viewConfig:{ h:6000, top:0, content:6000, width:820, offsetX:0 } }
+        }},
+        "section-maenner": { "Männer 1 (H-PRO)": { "Spiele": { t:"flh", filter:"all", kat:"MÄNNER 1 (H-PRO)" } }},
+        "section-frauen": { "Frauen (D-PRO)": { "Spiele": { t:"flh", filter:"all", kat:"FRAUEN (D-PRO)" } }},
+        "section-u15g": { "U15G": { "Spiele": { t:"flh", filter:"all", kat:"JUGEND: U15G" } }},
+        "section-u13p1": { "U13M Poule 1": { "Spiele": { t:"flh", filter:"all", kat:"JUGEND: U13M-P1" } }},
+        "section-u13p2": { "U13M Poule 2": { "Spiele": { t:"flh", filter:"all", kat:"JUGEND: U13M-P2" } }},
+        "section-u11m1": { "U11M 1 (Turnier)": { "Spiele": { t:"flh", filter:"all", kat:"JUGEND: U11M-1" } }},
+        "section-u11m2": { "U11M 2 (Turnier)": { "Spiele": { t:"flh", filter:"all", kat:"JUGEND: U11M-2" } }},
+        "section-u9m": { "U9M (Turnier)": { "Spiele": { t:"flh", filter:"all", kat:"JUGEND: U9M" } }},
+        "section-u7m": { "U7M (Turnier)": { "Spiele": { t:"flh", filter:"all", kat:"JUGEND: U7M" } }},
+        "section-coupe": { "Coupe": { "Coupe": { t:"coupe" } }},
+        "section-m75": { "Mersch75 Events": { "Alle Events": { t:"m75" } }},
+        "section-archive": { "Saison 2025/26": {
+            "Archiv 25/26 öffnen": { t:"iframe", url:"live-center-25-26.html", badge:"archive", viewConfig:{ h:4300, top:-560, content:6800, width:1360, offsetX:0 } }
         }}
-    },
-    "Männer": {
-        "section-maenner": { "Männer 1 (H-PRO)": { "Spiele": { t:"flh", filter:"all", kat:"MÄNNER 1 (H-PRO)" } }}
-    },
-    "Frauen": {
-        "section-frauen": { "Frauen (D-PRO)": { "Spiele": { t:"flh", filter:"all", kat:"FRAUEN (D-PRO)" } }}
-    },
-    "U15G": {
-        "section-u15g": { "U15G": { "Spiele": { t:"flh", filter:"all", kat:"JUGEND: U15G" } }}
-    },
-    "U13M-P1": {
-        "section-u13p1": { "U13M Poule 1": { "Spiele": { t:"flh", filter:"all", kat:"JUGEND: U13M-P1" } }}
-    },
-    "U13M-P2": {
-        "section-u13p2": { "U13M Poule 2": { "Spiele": { t:"flh", filter:"all", kat:"JUGEND: U13M-P2" } }}
-    },
-    "U11M-1": {
-        "section-u11m1": { "U11M 1 (Turnier)": { "Spiele": { t:"flh", filter:"all", kat:"JUGEND: U11M-1" } }}
-    },
-    "U11M-2": {
-        "section-u11m2": { "U11M 2 (Turnier)": { "Spiele": { t:"flh", filter:"all", kat:"JUGEND: U11M-2" } }}
-    },
-    "U9M": {
-        "section-u9m": { "U9M (Turnier)": { "Spiele": { t:"flh", filter:"all", kat:"JUGEND: U9M" } }}
-    },
-    "U7M": {
-        "section-u7m": { "U7M (Turnier)": { "Spiele": { t:"flh", filter:"all", kat:"JUGEND: U7M" } }}
-    },
-    "Coupe": {
-        "section-coupe": { "Coupe": { "Coupe": { t:"coupe" } }}
-    },
-    "M75 Events": {
-        "section-m75": { "Mersch75 Events": { "Alle Events": { t:"m75" } }}
-    },
-    "Archiv": {
-        "section-archive": {
-            "Saison 2025/26": {
-                "Archiv 25/26 öffnen": { t:"iframe", url:"live-center-25-26.html", badge:"archive" }
-            }
-        }
     }
 };
 
@@ -857,7 +827,7 @@ function renderFLH(kat) {
     const sourceData = dedupeGameRows(allGamesData);
     // Filter nach Kategorie (entry.kat, z.B. "JUGEND: U11M-1")
     const data = sourceData.filter(r => normalizeTeamLabel(r.team || "") === normalizeTeamLabel(kat || ""));
-    data.sort((a, b) => parseDateStr(b.datum) - parseDateStr(a.datum));
+    data.sort((a, b) => parseDateStr(a.datum) - parseDateStr(b.datum));
 
     return {
         head: "<tr><th>Datum</th><th>Heim</th><th>Gast</th><th style='text-align:center;'>Resultat</th><th>SBO</th><th>RTL/YT</th><th class='col-bem'>Bemerkung</th></tr>",
@@ -1101,7 +1071,7 @@ const sortedGames = [...filteredData].sort((a, b) => {
 const rankA = getRank(a.team);
 const rankB = getRank(b.team);
 if (rankA !== rankB) return rankA - rankB; 
-return parseDateStr(b.datum) - parseDateStr(a.datum); 
+  return parseDateStr(a.datum) - parseDateStr(b.datum);
 });
 
 // Erste Match vun der Placement-Ronn / Gruppephase pro Equipe.
@@ -1181,7 +1151,7 @@ rows: rows
 function showIframe(entry, cat) {
 activeLiveCenterEntry = entry;
 activeLiveCenterMode = 'iframe';
-const cfg = typeof viewConfig !== 'undefined' ? (viewConfig[cat] || viewConfig["Wochenübersicht"]) : { h: 1800, top: -560, content: 3000 };
+const cfg = (entry.viewConfig !== undefined) ? entry.viewConfig : (typeof viewConfig !== 'undefined' ? (viewConfig[cat] || viewConfig["Wochenübersicht"]) : { h: 1800, top: -560, content: 3000 });
 document.getElementById("staticView").style.display       = "none";
 document.getElementById("cropperContainer").style.display = "block";
 document.getElementById("loader").style.display           = "block";
@@ -1386,7 +1356,7 @@ return `<td class="link-cell"><a class="${cls}" href="${v}" target="_blank" rel=
                             <a href="index.html">Startseite</a>
                             <a href="live-center.html">Spillplang</a>
                             <a href="training.html">Training</a>
-                            <a href="trainerstaff.html">Trainerstaff</a>
+                            <span class="footer-link-disabled">Trainerstaff</span>
                             <a href="news.html">News</a>
                         </div>
                     </div>
