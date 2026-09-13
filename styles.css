@@ -3621,11 +3621,6 @@ body.privacy-page {
     color: var(--blue);
 }
 
-.footer-link-disabled {
-    color: #999;
-    cursor: default;
-}
-
 .site-page-footer-meta {
     display: flex;
     flex-wrap: wrap;
