@@ -1260,6 +1260,19 @@ function initLiveCenter() {
 buildMenu("Alle Spiele");
 }
 
+function checkTrainerstaffPassword() {
+    var saved = sessionStorage.getItem('trainerstaff_access');
+    if (saved === 'granted') return true;
+    var pwd = window.prompt('Trainerstaff-Zugriff — bitte Passwort eingeben:');
+    if (pwd === null) return false;
+    if (pwd === 'Mersch75LU@EUR') {
+        sessionStorage.setItem('trainerstaff_access', 'granted');
+        return true;
+    }
+    alert('Falsches Passwort.');
+    return false;
+}
+
 function sboCell(row) {
 // Ëmmt entweder e String (Original-URL) oder e Spill-Objet {sbo, sboLive}.
 // Prioritéit: eis archivéiert Kopie (sbo, z.B. sbo-archiv/2627/<gNo>.pdf op Hetzner),
@@ -1318,7 +1331,7 @@ return `<td class="link-cell"><a class="${cls}" href="${v}" target="_blank" rel=
                             <a href="index.html">Startseite</a>
                             <a href="live-center.html">Spillplang</a>
                             <a href="training.html">Training</a>
-                            <span class="footer-link-disabled">Trainerstaff</span>
+                            <a href="trainerstaff.html" onclick="return checkTrainerstaffPassword()" class="footer-link-locked">Trainerstaff</a>
                             <a href="news.html">News</a>
                         </div>
                     </div>
