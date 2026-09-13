@@ -3622,7 +3622,7 @@ body.privacy-page {
 }
 
 .footer-link-locked::after {
-    content: "\1F511";
+    content: "\1F512";
     margin-left: 4px;
     font-size: 0.75em;
     opacity: 0.6;

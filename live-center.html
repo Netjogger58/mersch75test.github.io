@@ -167,6 +167,21 @@
     border-color: #002f65;
     box-shadow: 0 2px 8px rgba(0, 47, 101, 0.25);
 }
+#m75-lc-wrapper .agf-special {
+    border-style: dashed;
+    border-color: #c0392b;
+    color: #c0392b;
+    background: rgba(192, 57, 43, 0.05);
+}
+#m75-lc-wrapper .agf-special:hover {
+    background: rgba(192, 57, 43, 0.12);
+    border-color: #a02c1b;
+}
+#m75-lc-wrapper .agf-special.active {
+    background: linear-gradient(135deg, #c0392b 0%, #a02c1b 100%);
+    color: white;
+    border-color: #a02c1b;
+}
 /* Segmented-control look for status filter */
 #m75-lc-wrapper .status-filter {
     background: #eef2f8;
@@ -634,23 +649,6 @@ const NAV = {
     "Alle Spiele": {
         "section-all": { "Kompletter Saison-Spielplan": {
             "Gesamttabelle": { t:"allgames" }
-        }},
-        "section-champ": { "Championnat 2026/27": {
-            "Hallenrunde & Coupe": { t:"iframe", url:"assets/Championnat%202026-2027.html", badge:"future", note:"Championnat 2026/2027 — Hallenrunde linken + Coupe de Luxembourg Finale", viewConfig:{ h:6000, top:0, content:6000, width:820, offsetX:0 } }
-        }},
-        "section-maenner": { "Männer 1 (H-PRO)": { "Spiele": { t:"flh", filter:"all", kat:"MÄNNER 1 (H-PRO)" } }},
-        "section-frauen": { "Frauen (D-PRO)": { "Spiele": { t:"flh", filter:"all", kat:"FRAUEN (D-PRO)" } }},
-        "section-u15g": { "U15G": { "Spiele": { t:"flh", filter:"all", kat:"JUGEND: U15G" } }},
-        "section-u13p1": { "U13M Poule 1": { "Spiele": { t:"flh", filter:"all", kat:"JUGEND: U13M-P1" } }},
-        "section-u13p2": { "U13M Poule 2": { "Spiele": { t:"flh", filter:"all", kat:"JUGEND: U13M-P2" } }},
-        "section-u11m1": { "U11M 1 (Turnier)": { "Spiele": { t:"flh", filter:"all", kat:"JUGEND: U11M-1" } }},
-        "section-u11m2": { "U11M 2 (Turnier)": { "Spiele": { t:"flh", filter:"all", kat:"JUGEND: U11M-2" } }},
-        "section-u9m": { "U9M (Turnier)": { "Spiele": { t:"flh", filter:"all", kat:"JUGEND: U9M" } }},
-        "section-u7m": { "U7M (Turnier)": { "Spiele": { t:"flh", filter:"all", kat:"JUGEND: U7M" } }},
-        "section-coupe": { "Coupe": { "Coupe": { t:"coupe" } }},
-        "section-m75": { "Mersch75 Events": { "Alle Events": { t:"m75" } }},
-        "section-archive": { "Saison 2025/26": {
-            "Archiv 25/26 öffnen": { t:"iframe", url:"live-center-25-26.html", badge:"archive", viewConfig:{ h:4300, top:-560, content:6800, width:1360, offsetX:0 } }
         }}
     }
 };
@@ -910,10 +908,6 @@ function renderStandingsPanel() {
     panel.innerHTML = renderOneTable(activeCat);
 }
 
-function renderAllGames() {
-if (typeof allGamesData === 'undefined') return { head: "", rows: "" };
-const sourceData = dedupeGameRows(allGamesData);
-
 const normalizeTeamLabel = t => {
     if(!t) return "";
     const cleaned = t.replace("JUGEND: ", "").replace(" (H-PRO)", "").replace(" (D-PRO)", "").trim();
@@ -930,9 +924,7 @@ const normalizeTeamLabel = t => {
     return cleaned;
 };
 
-const getTeamGroupKey = t => {
-    return normalizeTeamLabel(t);
-};
+const getTeamGroupKey = t => normalizeTeamLabel(t);
 
 const getRank = t => {
     if(!t) return 99;
@@ -945,44 +937,122 @@ const getRank = t => {
     if (up.includes("U11M-1")) return 6;
     if (up.includes("U11M-2")) return 7;
     if (up.includes("U9")) return 8;
-if (up.includes("U7")) return 9;
-if (up.includes("POKAL: MÄNNER 1")) return 10;
-if (up.includes("POKAL: FRAUEN")) return 11;
-if (up.includes("POKAL: U15")) return 12;
-if (up.includes("POKAL: U13")) return 13;
-return 99;
+    if (up.includes("U7")) return 9;
+    if (up.includes("POKAL: MÄNNER 1")) return 10;
+    if (up.includes("POKAL: FRAUEN")) return 11;
+    if (up.includes("POKAL: U15")) return 12;
+    if (up.includes("POKAL: U13")) return 13;
+    return 99;
 };
 
-// Build category list from the data
-const allCats = [];
-const catSeen = {};
-sourceData.forEach(r => {
-    const c = normalizeTeamLabel(r.team || "");
-    if (c && !catSeen[c]) { catSeen[c] = true; allCats.push(c); }
-});
-allCats.sort((a, b) => getRank(a) - getRank(b));
+function renderFilterBar(allCats, activeSpecial) {
+    const sourceData = dedupeGameRows(allGamesData);
+    const seen = {};
+    const cats = [];
+    sourceData.forEach(r => {
+        const c = normalizeTeamLabel(r.team || "");
+        if (c && !seen[c]) { seen[c] = true; cats.push(c); }
+    });
+    cats.sort((a, b) => getRank(a) - getRank(b));
 
-// Build category filter bar UI
-const filterEl = document.getElementById('allGamesFilter');
-if (filterEl) {
+    if (!cats.includes('U11M-2')) {
+        const idx = cats.indexOf('U11M-1');
+        if (idx >= 0) cats.splice(idx + 1, 0, 'U11M-2');
+        else cats.push('U11M-2');
+    }
+
+    const filterEl = document.getElementById('allGamesFilter');
+    if (!filterEl) return;
     const active = window.__allGamesFilter || 'all';
-    let bar = '<button type="button" class="agf-btn' + (active === 'all' ? ' active' : '') + '" data-cat="all">Alle Kategorien</button>';
-    allCats.forEach(c => {
-        bar += '<button type="button" class="agf-btn' + (active === c ? ' active' : '') + '" data-cat="' + c.replace(/"/g, '&quot;') + '">' + c + '</button>';
+    let bar = '<button type="button" class="agf-btn' + (active === 'all' ? ' active' : '') + '" data-cat="all" data-type="category">Alle Kategorien</button>';
+    cats.forEach(c => {
+        bar += '<button type="button" class="agf-btn' + (active === c ? ' active' : '') + '" data-cat="' + c.replace(/"/g, '&quot;') + '" data-type="category">' + c + '</button>';
+    });
+    const specials = [
+        { cat: 'coupe',   label: 'Coupe' },
+        { cat: 'm75',     label: 'Mersch75 Events' },
+        { cat: 'archive', label: 'Archiv 25/26' }
+    ];
+    specials.forEach(e => {
+        const isActive = activeSpecial === e.cat;
+        bar += '<button type="button" class="agf-btn agf-special' + (isActive ? ' active' : '') + '" data-cat="' + e.cat + '" data-type="special">' + e.label + '</button>';
     });
     filterEl.innerHTML = bar;
     filterEl.style.display = 'flex';
     Array.from(filterEl.querySelectorAll('.agf-btn')).forEach(btn => {
         btn.onclick = () => {
-            window.__allGamesFilter = btn.getAttribute('data-cat');
-            const result = renderAllGames();
-            document.getElementById("staticHead").innerHTML = result.head;
-            document.getElementById("staticBody").innerHTML = result.rows;
-            window.applyTabellViewMode();
-            renderStandingsPanel();
+            const type = btn.getAttribute('data-type');
+            const cat = btn.getAttribute('data-cat');
+            if (type === 'special') {
+                switchSpecialEntry(cat);
+            } else {
+                window.__allGamesFilter = cat;
+                window.__activeSpecial = '';
+                const result = renderAllGames();
+                document.getElementById("staticHead").innerHTML = result.head;
+                document.getElementById("staticBody").innerHTML = result.rows;
+                window.applyTabellViewMode();
+                renderStandingsPanel();
+            }
         };
     });
 }
+
+function switchSpecialEntry(cat) {
+    document.querySelectorAll('.agf-btn').forEach(b => b.classList.remove('active'));
+    const filtersCard = document.getElementById("filtersCard");
+    if (filtersCard) filtersCard.style.display = "";
+    const statusEl = document.getElementById("allGamesStatusFilter");
+    if (statusEl) { statusEl.innerHTML = ""; statusEl.style.display = 'none'; }
+    const tbl = document.getElementById("staticTable");
+    const empty = document.getElementById("emptyState");
+    let result;
+    let showStandings = false;
+    if (cat === 'coupe') {
+        result = renderCoupe();
+    } else if (cat === 'm75') {
+        result = renderM75();
+    } else if (cat === 'archive') {
+        const archEntry = { t:"iframe", url:"live-center-25-26.html", badge:"archive", viewConfig:{ h:4300, top:-560, content:6800, width:1360, offsetX:0 } };
+        showIframe(archEntry, "Alle Spiele");
+        return;
+    }
+    if (tbl) { tbl.style.display = "table"; empty.style.display = "none"; }
+    if (result) {
+        document.getElementById("staticHead").innerHTML = result.head;
+        document.getElementById("staticBody").innerHTML = result.rows;
+    }
+    const sp = document.getElementById("standingsPanel");
+    if (sp) {
+        if (showStandings) { renderStandingsPanel(); }
+        else { sp.style.display = "none"; sp.innerHTML = ""; }
+    }
+    window.__activeSpecial = cat;
+    renderFilterBar([], cat);
+}
+
+// Turnierdaten U9/U11/U7 (Turnier-Format, keine Championnat-Tabellen)
+allGamesData = allGamesData.concat([
+    { team: "JUGEND: U9M", datum: "10.11.26 9:30", heim: "Mersch75", gast: "Turnier U9", score: "", bem: "Tournoi U9", sbo: "", rtl: "", nr: "", halle: "" },
+    { team: "JUGEND: U11M-1", datum: "10.11.26 9:30", heim: "Mersch75", gast: "Turnier U11", score: "", bem: "Tournoi U11", sbo: "", rtl: "", nr: "", halle: "" },
+    { team: "JUGEND: U7M", datum: "22.11.26 9:30", heim: "Mersch75", gast: "Plateau U7", score: "", bem: "Plateau U7", sbo: "", rtl: "", nr: "", halle: "" }
+]);
+
+function renderAllGames() {
+if (typeof allGamesData === 'undefined') return { head: "", rows: "" };
+const sourceData = dedupeGameRows(allGamesData);
+
+// Build category list from the data
+    const allCats = [];
+    const catSeen = {};
+    sourceData.forEach(r => {
+        const c = normalizeTeamLabel(r.team || "");
+        if (c && !catSeen[c]) { catSeen[c] = true; allCats.push(c); }
+    });
+    allCats.sort((a, b) => getRank(a) - getRank(b));
+
+    renderFilterBar(allCats);
+
 
 // Build status filter bar UI (vergangen / kommend)
 const statusEl = document.getElementById('allGamesStatusFilter');
@@ -993,15 +1063,8 @@ if (statusEl) {
         { key: 'future', label: 'Zukünfteg Matcher' },
         { key: 'past',   label: 'Gespillte Matcher' },
         { key: 'tabell', label: 'Tabell' }
-];
+    ];
 
-// Turnierdaten U9/U11/U7 (Turnier-Format, keine Championnat-Tabellen)
-const tournamentData = [
-    { team: "JUGEND: U9M", datum: "10.11.26 9:30", heim: "Mersch75", gast: "Turnier U9", score: "", bem: "Tournoi U9", sbo: "", rtl: "", nr: "", halle: "" },
-    { team: "JUGEND: U11M-1", datum: "10.11.26 9:30", heim: "Mersch75", gast: "Turnier U11", score: "", bem: "Tournoi U11", sbo: "", rtl: "", nr: "", halle: "" },
-    { team: "JUGEND: U7M", datum: "22.11.26 9:30", heim: "Mersch75", gast: "Plateau U7", score: "", bem: "Plateau U7", sbo: "", rtl: "", nr: "", halle: "" }
-];
-allGamesData = allGamesData.concat(tournamentData);
     let sbar = '';
     statusItems.forEach(it => {
         sbar += '<button type="button" class="agf-btn' + (activeStatus === it.key ? ' active' : '') + '" data-status="' + it.key + '">' + it.label + '</button>';
@@ -1163,14 +1226,15 @@ activeLiveCenterMode = 'static';
 document.getElementById("cropperContainer").style.display = "none";
 document.getElementById("staticView").style.display       = "block";
 
-const tbl   = document.getElementById("staticTable");
-const empty = document.getElementById("emptyState");
-const filtersCard = document.getElementById("filtersCard");
-if (filtersCard) filtersCard.style.display = (entry.t === "allgames") ? "" : "none";
-const filterEl = document.getElementById("allGamesFilter");
-if (filterEl && entry.t !== "allgames") {
-    filterEl.innerHTML = "";
-}
+    const tbl   = document.getElementById("staticTable");
+    const empty = document.getElementById("emptyState");
+    const filtersCard = document.getElementById("filtersCard");
+    const keepFilter = (entry.t === "allgames" || entry.t === "coupe" || entry.t === "m75");
+    if (filtersCard) filtersCard.style.display = keepFilter ? "" : "none";
+    const filterEl = document.getElementById("allGamesFilter");
+    if (filterEl && !keepFilter) {
+        filterEl.innerHTML = "";
+    }
 const statusEl = document.getElementById("allGamesStatusFilter");
 if (statusEl && entry.t !== "allgames") {
     statusEl.innerHTML = "";
