@@ -7,6 +7,28 @@
     <meta name="description" content="Trainerstaff bei Mersch75: Coaches, Jugendkoordination und Verantwortliche im Überblick.">
     <link rel="stylesheet" href="styles.css?v=20260711trainers">
     <script src="consent.js"></script>
+    <script>
+    (function(){
+        var saved = sessionStorage.getItem('trainerstaff_access');
+        if (saved === 'granted') return;
+        var overlay = document.createElement('div');
+        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.9);z-index:99999;display:flex;align-items:center;justify-content:center;';
+        overlay.innerHTML = '<div style="color:#fff;text-align:center;"><h2>Trainerstaff</h2><p>Bitte Passwort eingeben:</p><input type="password" id="trainerstaff_pwd" placeholder="Passwort" style="padding:8px;font-size:16px;"><button id="trainerstaff_lock" style="margin-left:8px;padding:8px 16px;font-size:16px;">OK</button><div id="trainerstaff_err" style="color:#ff6b6b;margin-top:8px;display:none;">Falsches Passwort.</div></div>';
+        document.body.appendChild(overlay);
+        document.getElementById('trainerstaff_lock').onclick = function(){
+            var pwd = document.getElementById('trainerstaff_pwd').value;
+            if (pwd === 'Mersch75LU@EUR') {
+                sessionStorage.setItem('trainerstaff_access', 'granted');
+                document.body.removeChild(overlay);
+            } else {
+                document.getElementById('trainerstaff_err').style.display = 'block';
+            }
+        };
+        document.getElementById('trainerstaff_pwd').addEventListener('keyup', function(e){
+            if (e.key === 'Enter') document.getElementById('trainerstaff_lock').onclick();
+        });
+    })();
+    </script>
 </head>
 <body class="trainerstaff-page">
     <div class="site-shell">
