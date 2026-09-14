@@ -1332,7 +1332,7 @@ function initializeTrainingSchedule() {
         },
         {
             group: 'u13g',
-            trainers: 'Max Blanc (LUXQF4), Tel. 661 406 836',
+            trainers: 'Max Blanc (LUXQF4), Louis Van der Weken (LUXQF2Bis), Tel. 661 406 836',
             slots: [
                 { dayKey: 'mon', time: '17:30 - 19:00', location: LOC_OMNI + " (gedeelt)" },
                 { dayKey: 'wed', time: '18:30 - 20:00', location: LOC_OMNI }
@@ -1344,7 +1344,7 @@ function initializeTrainingSchedule() {
         },
         {
             group: 'u15',
-            trainers: 'Max Blanc (LUXQF4), Tel. 661 406 836',
+            trainers: 'Max Blanc (LUXQF4), Louis Van der Weken (LUXQF2Bis), Tel. 661 406 836',
             slots: [
                 { dayKey: 'mon', time: '19:00 - 20:30', location: LOC_OMNI },
                 { dayKey: 'fri', time: '19:00 - 20:30', location: LOC_KROU }
@@ -1378,7 +1378,7 @@ function initializeTrainingSchedule() {
         },
         {
             group: 'hommes',
-            trainers: '',
+            trainers: 'Adrien Deischter, Tel. 661 789 420',
             slots: [
                 { dayKey: 'mon', time: '20:00 - 21:30', location: LOC_OMNI },
                 { dayKey: 'wed', time: '20:00 - 21:30', location: LOC_OMNI },
