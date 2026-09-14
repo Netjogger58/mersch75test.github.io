@@ -1378,7 +1378,7 @@ function initializeTrainingSchedule() {
         },
         {
             group: 'hommes',
-            trainers: 'ab 10.8.26 Halle; vorher Laufen + TR im Merscher Park',
+            trainers: '',
             slots: [
                 { dayKey: 'mon', time: '20:00 - 21:30', location: LOC_OMNI },
                 { dayKey: 'wed', time: '20:00 - 21:30', location: LOC_OMNI },
