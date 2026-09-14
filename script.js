@@ -197,7 +197,9 @@ function initializeSiteLanguage() {
             footerTrainerstaff: 'Trainerteam',
             footerUsefulLinks: 'Nëtzlech Linken',
             footerLegalHint: 'Impressum an Dateschutz kommen als nächst statesch Servicessäiten derbäi.',
-            footerAdmin: 'Admin Login'
+            footerAdmin: 'Admin Login',
+            trialMessageSuccess: "Merci, fir ären Interessi um Handballsport, bis geschwënn an der Hal, a bréngt äert Sportsgezei mat! :-)",
+            trialMessageError: "Eppes ass schif gaangen. Probéiert et spéider nees."
         },
         fr: {
             pageTitle: 'Mersch75 Handball',
@@ -342,7 +344,9 @@ function initializeSiteLanguage() {
             footerTrainerstaff: 'Encadrement',
             footerUsefulLinks: 'Liens utiles',
             footerLegalHint: 'Mentions légales et protection des données seront ajoutées comme pages de service statiques.',
-            footerAdmin: 'Connexion admin'
+            footerAdmin: 'Connexion admin',
+            trialMessageSuccess: "Merci ! Nous vous enverrons les détails par e-mail.",
+            trialMessageError: "Une erreur est survenue. Veuillez réessayer plus tard."
         },
         de: {
             pageTitle: 'Mersch75 Handball',
@@ -487,7 +491,9 @@ function initializeSiteLanguage() {
             footerTrainerstaff: 'Trainerstaff',
             footerUsefulLinks: 'Nützliche Links',
             footerLegalHint: 'Impressum und Datenschutz werden als nächste statische Service-Seiten ergänzt.',
-            footerAdmin: 'Admin Login'
+            footerAdmin: 'Admin Login',
+            trialMessageSuccess: "Danke! Wir senden Ihnen die Details per E-Mail.",
+            trialMessageError: "Etwas ist schiefgelaufen. Bitte versuchen Sie es später erneut."
         },
         en: {
             pageTitle: 'Mersch75 Handball',
@@ -632,7 +638,9 @@ function initializeSiteLanguage() {
             footerTrainerstaff: 'Coaching Staff',
             footerUsefulLinks: 'Useful Links',
             footerLegalHint: 'Legal notice and data protection will be added next as static service pages.',
-            footerAdmin: 'Admin Login'
+            footerAdmin: 'Admin Login',
+            trialMessageSuccess: "Thank you! We'll send you the details by email.",
+            trialMessageError: "Something went wrong. Please try again later."
         },
         pt: {
             pageTitle: 'Mersch75 Handball',
@@ -777,7 +785,9 @@ function initializeSiteLanguage() {
             footerTrainerstaff: 'Equipa técnica',
             footerUsefulLinks: 'Links úteis',
             footerLegalHint: 'Aviso legal e proteção de dados serão adicionados em seguida como páginas estáticas de serviço.',
-            footerAdmin: 'Admin Login'
+            footerAdmin: 'Admin Login',
+            trialMessageSuccess: "Obrigado! Enviaremos os detalhes por e-mail.",
+            trialMessageError: "Algo correu mal. Tenta novamente mais tarde."
         }
     };
 
