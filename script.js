@@ -1320,7 +1320,7 @@ function initializeTrainingSchedule() {
         },
         {
             group: 'u13f',
-            trainers: 'Max Blanc (LUXQF4), Tel. 661 406 836',
+            trainers: 'Max Blanc (LUXQF4), Anne Bisenius Holm (LUXQF3), Tel. 661 406 836',
             slots: [
                 { dayKey: 'mon', time: '17:30 - 19:00', location: LOC_OMNI + " (gedeelt)" },
                 { dayKey: 'fri', time: '17:30 - 19:00', location: LOC_OMNI }
@@ -1356,7 +1356,7 @@ function initializeTrainingSchedule() {
         },
         {
             group: 'filles',
-            trainers: 'Max Blanc (LUXQF4), Tel. 661 406 836',
+            trainers: 'Max Blanc (LUXQF4), Anne Bisenius Holm (LUXQF3), Tel. 661 406 836',
             slots: [
                 { dayKey: 'fri', time: '16:30 - 17:00', location: LOC_OMNI }
             ],
@@ -1366,7 +1366,7 @@ function initializeTrainingSchedule() {
         },
         {
             group: 'femmes',
-            trainers: '',
+            trainers: 'Max Blanc (LUXQF4), Anne Bisenius Holm (LUXQF3), Tel. 661 406 836',
             slots: [
                 { dayKey: 'mon', time: '19:00 - 20:30', location: LOC_GARE },
                 { dayKey: 'fri', time: '19:00 - 20:30', location: LOC_OMNI }
