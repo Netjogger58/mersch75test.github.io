@@ -151,7 +151,7 @@
                                 <a href="index.html">Startseite</a>
                                 <a href="live-center.html">Spillplang</a>
                                 <a href="training.html">Training</a>
-                                <a href="trainerstaff.html">Trainerstaff</a>
+                                <a href="trainerstaff.html" onclick="return checkTrainerstaffPassword()">Trainerstaff</a>
                                 <a href="news.html">News</a>
                             </div>
                         </div>
@@ -301,17 +301,17 @@
                 });
                 const resp = await res.json();
                 if (resp.success) {
-                    msgEl.textContent = (translations && translations[document.documentElement.lang] && translations[document.documentElement.lang].trialMessageSuccess) || "Merci!";
+                    msgEl.textContent = (window.Mersch75I18n && window.Mersch75I18n.t && (window.Mersch75I18n.t('trialMessageSuccess'))) || "Merci!";
                     msgEl.style.color = "green";
                     form.reset();
                     updateTrainingTime();
                     updateParentField();
                 } else {
-                    msgEl.textContent = resp.message || ((translations && translations[document.documentElement.lang] && translations[document.documentElement.lang].trialMessageError) || "Fehler.");
+                    msgEl.textContent = resp.message || ((window.Mersch75I18n && window.Mersch75I18n.t && (window.Mersch75I18n.t('trialMessageError'))) || "Fehler.");
                     msgEl.style.color = "red";
                 }
             } catch (error) {
-                msgEl.textContent = (translations && translations[document.documentElement.lang] && translations[document.documentElement.lang].trialMessageError) || "Fehler.";
+                msgEl.textContent = (window.Mersch75I18n && window.Mersch75I18n.t && (window.Mersch75I18n.t('trialMessageError'))) || "Fehler.";
                 msgEl.style.color = "red";
             }
         });

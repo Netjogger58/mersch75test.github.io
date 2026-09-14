@@ -1366,7 +1366,7 @@ function initializeTrainingSchedule() {
         },
         {
             group: 'femmes',
-            trainers: 'Max Blanc (LUXQF4), Anne Bisenius Holm (LUXQF3), Tel. 661 406 836',
+            trainers: 'Anne Bisenius Holm (LUXQF3), Tel. 661 406 836',
             slots: [
                 { dayKey: 'mon', time: '19:00 - 20:30', location: LOC_GARE },
                 { dayKey: 'fri', time: '19:00 - 20:30', location: LOC_OMNI }
