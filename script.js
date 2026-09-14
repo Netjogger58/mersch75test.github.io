@@ -1274,7 +1274,7 @@ function initializeTrainingSchedule() {
     const hotspotGroupBase = [
         {
             group: 'u4',
-            trainers: 'Gina Dimola, Kevin Wolmering, Marc Jungels, Max Blanc (LUXQF4)',
+            trainers: 'Max Blanc (LUXQF4), Tel. 661 406 836',
             slots: [
                 { dayKey: 'sat', time: '10:00 - 11:00', location: LOC_ECOLE }
             ],
@@ -1284,7 +1284,7 @@ function initializeTrainingSchedule() {
         },
         {
             group: 'u7',
-            trainers: 'Max Blanc (LUXQF4), Anne Holm (LUXQF3)',
+            trainers: 'Max Blanc (LUXQF4), Tel. 661 406 836',
             slots: [
                 { dayKey: 'tue', time: '17:30 - 18:30', location: LOC_KROU },
                 { dayKey: 'fri', time: '16:30 - 17:30', location: LOC_KROU }
@@ -1296,7 +1296,7 @@ function initializeTrainingSchedule() {
         },
         {
             group: 'u9',
-            trainers: 'Max Blanc (LUXQF4), Louis Van der Weken (LUXQF2Bis)',
+            trainers: 'Max Blanc (LUXQF4), Tel. 661 406 836',
             slots: [
                 { dayKey: 'mon', time: '17:30 - 19:00', location: LOC_GARE },
                 { dayKey: 'thu', time: '17:30 - 19:00', location: LOC_KROU }
@@ -1308,7 +1308,7 @@ function initializeTrainingSchedule() {
         },
         {
             group: 'u11',
-            trainers: 'Max Blanc (LUXQF4), Elie Schuster, Grégory Redavid, Laurent Metzler',
+            trainers: 'Max Blanc (LUXQF4), Tel. 661 406 836',
             slots: [
                 { dayKey: 'wed', time: '17:00 - 18:30', location: LOC_OMNI },
                 { dayKey: 'fri', time: '17:30 - 19:00', location: LOC_KROU }
@@ -1320,7 +1320,7 @@ function initializeTrainingSchedule() {
         },
         {
             group: 'u13f',
-            trainers: 'Max Blanc (LUXQF4), Mathis Derneden',
+            trainers: 'Max Blanc (LUXQF4), Tel. 661 406 836',
             slots: [
                 { dayKey: 'mon', time: '17:30 - 19:00', location: LOC_OMNI + " (gedeelt)" },
                 { dayKey: 'fri', time: '17:30 - 19:00', location: LOC_OMNI }
@@ -1332,7 +1332,7 @@ function initializeTrainingSchedule() {
         },
         {
             group: 'u13g',
-            trainers: 'Max Blanc (LUXQF4), Mathis Derneden',
+            trainers: 'Max Blanc (LUXQF4), Tel. 661 406 836',
             slots: [
                 { dayKey: 'mon', time: '17:30 - 19:00', location: LOC_OMNI + " (gedeelt)" },
                 { dayKey: 'wed', time: '18:30 - 20:00', location: LOC_OMNI }
@@ -1344,7 +1344,7 @@ function initializeTrainingSchedule() {
         },
         {
             group: 'u15',
-            trainers: 'Max Blanc (LUXQF4), Mathis Derneden',
+            trainers: 'Max Blanc (LUXQF4), Tel. 661 406 836',
             slots: [
                 { dayKey: 'mon', time: '19:00 - 20:30', location: LOC_OMNI },
                 { dayKey: 'fri', time: '19:00 - 20:30', location: LOC_KROU }
@@ -1356,7 +1356,7 @@ function initializeTrainingSchedule() {
         },
         {
             group: 'filles',
-            trainers: 'Anne Bisenius Holm (LUXQF3)',
+            trainers: 'Max Blanc (LUXQF4), Tel. 661 406 836',
             slots: [
                 { dayKey: 'fri', time: '16:30 - 17:00', location: LOC_OMNI }
             ],
@@ -1366,7 +1366,7 @@ function initializeTrainingSchedule() {
         },
         {
             group: 'femmes',
-            trainers: 'Katarzyna Pietrasik',
+            trainers: '',
             slots: [
                 { dayKey: 'mon', time: '19:00 - 20:30', location: LOC_GARE },
                 { dayKey: 'fri', time: '19:00 - 20:30', location: LOC_OMNI }
