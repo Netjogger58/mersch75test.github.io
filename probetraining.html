@@ -110,6 +110,7 @@
                                 <option value="U9">U9</option>
                                 <option value="U11">U11</option>
                                 <option value="U13">U13</option>
+                                <option value="U13F">U13F</option>
                                 <option value="U15">U15</option>
                                 <option value="Seniors Femmes">Seniors Femmes</option>
                                 <option value="Seniors Hommes">Seniors Hommes</option>
@@ -207,6 +208,7 @@
             "U9":  "Dënschdeg 17h30 – 18h30 (Hall Lintgen Gare) a Donneschdeg 17h30 – 18h30 (Hall Omnisports Miersch)",
             "U11": "Donneschdeg 17h00 – 18h00 (Hall Omnisports Miersch), Freideg 17h00 – 18h00 (Hall Krounebierg) a Samedi 17h30 – 18h00 (Salle des Sports École fondamentale, Lintgen)",
             "U13": "Méindeg 17h30 – 18h30 (Hall Omnisports Miersch), Donneschdeg 18h00 – 19h00 (Hall Omnisports Miersch) a Freideg 17h30 – 18h30 (Hall Krounebierg)",
+            "U13F": "Méindeg 17h30 – 19h00 (Hall Omnisports Miersch, gedeelt), Freideg 17h30 – 19h00 (Hall Omnisports Miersch)",
             "U15": "Méindeg 19h00 – 20h00 (Hall Omnisports Miersch), Freideg 19h00 – 20h00 (Hall Krounebierg) a Samedi 19h00 – 20h00 (Salle des Sports École fondamentale, Lintgen)",
             "Seniors Femmes": "Méindeg 18h30 – 20h00, Dënschdeg 18h30 – 20h00, Mëttwoch 19h00 – 20h30 a Freideg 18h30 – 20h00",
             "Seniors Hommes": "Méindeg 20h00 – 21h30, Donneschdeg 19h30 – 21h00 a Samedi 20h30 – 21h30"
@@ -281,6 +283,7 @@
                 email: raw.email,
                 phone: raw.phone || '',
                 teamCategory: raw.teamCategory,
+                trainingTime: TRAINING_TIMES[raw.teamCategory] || '',
                 note: raw.note || '',
             };
             const msgEl = document.getElementById('trialMessage');
