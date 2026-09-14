@@ -105,15 +105,6 @@
                         <label><span data-i18n="trialLabelCategory">Kategorie</span>
                             <select name="teamCategory" id="teamCategory" required>
                                 <option value="">Automatesch erkennen</option>
-                                <option value="U4">U4</option>
-                                <option value="U7">U7</option>
-                                <option value="U9">U9</option>
-                                <option value="U11">U11</option>
-                                <option value="U13">U13</option>
-                                <option value="U13F">U13F</option>
-                                <option value="U15">U15</option>
-                                <option value="Seniors Femmes">Seniors Femmes</option>
-                                <option value="Seniors Hommes">Seniors Hommes</option>
                             </select>
                         </label>
 
@@ -252,8 +243,39 @@
             }
         }
 
+        function updateCategoryOptions() {
+            const gender = document.querySelector('[name="gender"]').value;
+            const catSelect = document.getElementById('teamCategory');
+            const currentValue = catSelect.value;
+
+            catSelect.innerHTML = '';
+
+            const autoOpt = document.createElement('option');
+            autoOpt.value = '';
+            autoOpt.textContent = 'Automatesch erkennen';
+            catSelect.appendChild(autoOpt);
+
+            const baseOptions = ['U4', 'U7', 'U9', 'U11', 'U13', 'U15'];
+            const femaleOptions = ['U13F', 'Seniors Femmes'];
+            const maleOptions = ['Seniors Hommes'];
+
+            const showFemale = gender !== 'male';
+            const showMale = gender !== 'female';
+
+            baseOptions.concat(
+                showFemale ? femaleOptions : [],
+                showMale ? maleOptions : []
+            ).forEach(function(value) {
+                const option = document.createElement('option');
+                option.value = value;
+                option.textContent = value;
+                if (value === currentValue) option.selected = true;
+                catSelect.appendChild(option);
+            });
+        }
+
         document.querySelector('[name="birthdate"]').addEventListener('change', updateTrainingTime);
-        document.querySelector('[name="gender"]').addEventListener('change', updateTrainingTime);
+        document.querySelector('[name="gender"]').addEventListener('change', function() { updateCategoryOptions(); updateTrainingTime(); updateParentField(); });
         document.getElementById('teamCategory').addEventListener('change', function() { updateTrainingTime(); updateParentField(); });
 
         function updateParentField() {
@@ -266,7 +288,8 @@
             parentInput.required = !isAdult;
             if (isAdult) parentInput.value = '';
         }
-
+        
+        updateCategoryOptions();
         updateParentField();
 
         document.getElementById('trialForm').addEventListener('submit', async function(e) {
