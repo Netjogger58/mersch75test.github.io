@@ -1378,7 +1378,7 @@ function initializeTrainingSchedule() {
         },
         {
             group: 'hommes',
-            trainers: 'Adrien Deischter, Tel. 661 789 420',
+            trainers: 'Adrien Deischter (LUXQF4), Tel. 661 789 420',
             slots: [
                 { dayKey: 'mon', time: '20:00 - 21:30', location: LOC_OMNI },
                 { dayKey: 'wed', time: '20:00 - 21:30', location: LOC_OMNI },
