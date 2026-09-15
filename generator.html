@@ -2683,20 +2683,15 @@ function downloadPosterWithFormat(fmt) {
                 pdf.addImage(c.toDataURL('image/png', 1.0), 'PNG', 0, 0, 1600, 838); 
                 pdf.save('Mersch75_Matchday.pdf');
             } else if (fmt === 'home' || fmt === 'publish') {
-                // Lokaler Publish-Flow: Landscape + Portrait mit den exakten
-                // Dateinamen erzeugen, die index.html referenziert. Der User
-                // muss sie nur noch nach Media/Hauptseite/ ziehen (ersetzen)
-                // und committen + pushen.
                 const stamp = pickPosterDateStamp();
                 const landscapeUrl = c.toDataURL('image/jpeg', 0.95);
-                triggerDownload(landscapeUrl, 'current-matchposter.jpg');
                 renderPortraitDataUrl().then(function (portraitUrl) {
                     setTimeout(function () {
-                        triggerDownload(portraitUrl, 'current-matchposter-portrait.jpg');
-                        openHomepageHandoffModal(stamp, true);
+                        savePostersToHomepage(landscapeUrl, portraitUrl, stamp);
                     }, 400);
                 }).catch(function (err) {
                     console.warn('Portrait-Render fehlgeschlagen, nur Landscape geladen:', err);
+                    triggerDownload(landscapeUrl, 'current-matchposter.jpg');
                     openHomepageHandoffModal(stamp, false);
                 });
             } else {
@@ -2739,13 +2734,70 @@ function triggerDownload(dataUrl, filename) {
     setTimeout(function () { try { document.body.removeChild(a); } catch (e) {} }, 100);
 }
 
-function openHomepageHandoffModal(stamp, hasPortrait) {
+function dataUrlToBlob(dataUrl) {
+    var parts = dataUrl.split(',');
+    var mime = parts[0].match(/:(.*?);/)[1];
+    var bin = atob(parts[1]);
+    var arr = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+    return new Blob([arr], { type: mime });
+}
+
+async function savePostersToHomepage(landscapeDataUrl, portraitDataUrl, stamp) {
+    if (!('showSaveFilePicker' in window)) {
+        triggerDownload(landscapeDataUrl, 'current-matchposter.jpg');
+        triggerDownload(portraitDataUrl, 'current-matchposter-portrait.jpg');
+        openHomepageHandoffModal(stamp, true);
+        return;
+    }
+    try {
+        var landscapeBlob = dataUrlToBlob(landscapeDataUrl);
+        var portraitBlob = dataUrlToBlob(portraitDataUrl);
+
+        var landscapeHandle = await window.showSaveFilePicker({
+            suggestedName: 'current-matchposter.jpg',
+            types: [{ description: 'JPEG Image', accept: { 'image/jpeg': ['.jpg'] } }]
+        });
+        var landscapeWritable = await landscapeHandle.createWritable();
+        await landscapeWritable.write(landscapeBlob);
+        await landscapeWritable.close();
+
+        var portraitHandle = await window.showSaveFilePicker({
+            suggestedName: 'current-matchposter-portrait.jpg',
+            types: [{ description: 'JPEG Image', accept: { 'image/jpeg': ['.jpg'] } }]
+        });
+        var portraitWritable = await portraitHandle.createWritable();
+        await portraitWritable.write(portraitBlob);
+        await portraitWritable.close();
+
+        openHomepageHandoffModalAuto(stamp, true);
+    } catch (e) {
+        if (e.name === 'AbortError') return;
+        console.error('Automatesch ofleeën fehlgeschlagen:', e);
+        triggerDownload(landscapeDataUrl, 'current-matchposter.jpg');
+        triggerDownload(portraitDataUrl, 'current-matchposter-portrait.jpg');
+        openHomepageHandoffModal(stamp, true);
+    }
+}
+
+function openHomepageHandoffModalAuto(stamp, hasPortrait) {
+    openHomepageHandoffModal(stamp, hasPortrait, true);
+}
+
+function openHomepageHandoffModal(stamp, hasPortrait, auto) {
     var existing = document.getElementById('home-handoff-modal');
     if (existing) existing.remove();
     var files = hasPortrait
         ? '<code>current-matchposter.jpg</code> + <code>current-matchposter-portrait.jpg</code>'
         : '<code>current-matchposter.jpg</code>';
     var gitMsg = 'Matchposter ' + stamp;
+    var autoBanner = auto
+        ? '<p style="font-size:0.92rem;color:#2e7d32;font-weight:700;margin:0 0 12px;">✅ Dateie goufe direkt gespaart</p>'
+        : '';
+    var olItems = auto
+        ? '<li>Git add + commit + push:</li>'
+        : '<li>Datei(en) an <code>Media/Hauptseite/</code> ofsetzen — bestehend Datei <strong>iwwerschreiwen</strong> (gläiche Numm).</li>'
+          + '<li>Git add + commit + push:</li>';
     var modal = document.createElement('div');
     modal.id = 'home-handoff-modal';
     modal.className = 'gen-modal';
@@ -2755,10 +2807,10 @@ function openHomepageHandoffModal(stamp, hasPortrait) {
         + '<div class="gen-modal-card" style="max-width:560px;">'
         +   '<button type="button" class="gen-modal-close" aria-label="Schliessen">&times;</button>'
         +   '<h2>Poster auf d\'Homepage</h2>'
-        +   '<p class="gen-modal-lead">' + files + ' goufen erofgeluede. Just 2 Schrëtt:</p>'
+        +   autoBanner
+        +   '<p class="gen-modal-lead">' + files + ' goufen erofgeluede.</p>'
         +   '<ol style="padding-left:20px;font-size:0.92rem;line-height:1.55;color:#333;margin:0 0 14px;">'
-        +     '<li>Datei(en) an <code>Media/Hauptseite/</code> ofsetzen — bestehend Datei <strong>iwwerschreiwen</strong> (gläiche Numm).</li>'
-        +     '<li>Commit + Push:</li>'
+        +   olItems
         +   '</ol>'
         +   '<pre style="background:#0f172a;color:#ffde00;padding:12px;border-radius:8px;font-size:11.5px;overflow-x:auto;margin:0 0 8px;"><code id="home-handoff-cmd">git add Media/Hauptseite/current-matchposter*.jpg &amp;&amp; git commit -m "' + gitMsg + '" &amp;&amp; git push</code></pre>'
         +   '<button type="button" class="gen-modal-cancel" id="home-handoff-copy" style="margin-bottom:14px;">Befehl kopéieren</button>'
