@@ -166,13 +166,13 @@
 
 #m75-gen-wrapper #p-dynamic-container { flex: 1; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; align-content: flex-start; gap: 35px 0; padding: 10px; box-sizing: border-box; width: 100%; z-index: 4; }
 #m75-gen-wrapper .p-game-block { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; box-sizing: border-box; padding: 0 15px; }
-#m75-gen-wrapper .p-game-title { font-family: 'Barlow', sans-serif; font-weight: 900; font-style: italic; color: var(--primary-blue); text-align: center; line-height: 1.15; margin-bottom: 10px; }
+#m75-gen-wrapper .p-game-title { font-family: 'Barlow', sans-serif; font-weight: 900; font-style: italic; color: var(--primary-yellow); text-align: center; line-height: 1.15; margin-bottom: 10px; }
 #m75-gen-wrapper .p-game-matchup { display: flex; align-items: center; justify-content: center; gap: 15px; }
 #m75-gen-wrapper .p-logo-box { background: white; border-radius: 15px; padding: 10px; box-shadow: 0 5px 20px rgba(0, 0, 0, .15); display: flex; justify-content: center; align-items: center; overflow: hidden; }
 #m75-gen-wrapper .p-logo-box img { width: 100%; height: 100%; object-fit: contain; }
 #m75-gen-wrapper .p-badge { background: var(--primary-blue); color: var(--primary-yellow); border-radius: 12px; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 5px 20px rgba(0, 0, 0, .25); text-align: center; }
-#m75-gen-wrapper .p-game-info { font-family: 'Barlow', sans-serif; font-weight: 700; color: #333; text-align: center; line-height: 1.25; margin-top: 12px; }
-#m75-gen-wrapper .p-game-info .date { font-weight: 900; color: var(--primary-blue); }
+#m75-gen-wrapper .p-game-info { font-family: 'Barlow', sans-serif; font-weight: 700; color: var(--primary-yellow); text-align: center; line-height: 1.25; margin-top: 12px; }
+#m75-gen-wrapper .p-game-info .date { font-weight: 900; color: var(--primary-yellow); }
 
 #m75-gen-wrapper .p-footer { height: 150px; width: 100%; background: white; display: flex; align-items: center; justify-content: space-between; padding: 0 40px !important; box-sizing: border-box; box-shadow: 0 -5px 20px rgba(0, 0, 0, .1); z-index: 10; flex-shrink: 0; margin-top: auto; }
 #m75-gen-wrapper .p-footer-50logo { width: 90px; height: auto; max-height: 80px; object-fit: contain; flex-shrink: 0; }
@@ -2457,7 +2457,7 @@ function updatePortraitPreview() {
                 for(let k = 0; k < parts.length; k++) { parts[k] = parts[k].trim(); }
                 ls = parts.join('<br>');
             }
-            ih2 = '<div class="p-game-info" style="font-family:\'Barlow\',sans-serif;font-size:' + sx + 'px;"><span class="date" style="font-weight:800;color:var(--primary-blue);">' + ds + '</span><br><span style="font-weight:600;color:#444;">' + ls + '</span></div>';
+            ih2 = '<div class="p-game-info" style="font-family:\'Barlow\',sans-serif;font-size:' + sx + 'px;"><span class="date" style="font-weight:800;color:var(--primary-yellow);">' + ds + '</span><br><span style="font-weight:600;color:var(--primary-yellow);">' + ls + '</span></div>';
         }
 
         const date2El = document.getElementById(prefix + '-date2');
@@ -2500,7 +2500,7 @@ function updatePortraitPreview() {
             ih2b += '<div class="p-badge" style="width:' + (bs*0.7) + 'px;height:' + (bs*0.7) + 'px;"><div class="sub" style="font-size:' + (bf*0.25*0.7) + 'px;">' + tv2c + '</div><div class="main" style="font-size:' + (bf*0.7) + 'px;">' + mb + '</div></div>';
             ih2b += '<div class="p-logo-box" style="width:' + (sl*0.7) + 'px;height:' + (sl*0.7) + 'px;"><img src="' + l2b + '" crossorigin="anonymous"></div>';
             ih2b += '</div>';
-            ih2b += '<div class="p-game-info" style="font-family:\'Barlow\',sans-serif;font-size:' + (sx*0.9) + 'px;"><span class="date" style="font-weight:800;color:var(--primary-blue);">' + ds2 + '</span><br><span style="font-weight:600;color:#444;">' + ls2 + '</span></div>';
+            ih2b += '<div class="p-game-info" style="font-family:\'Barlow\',sans-serif;font-size:' + (sx*0.9) + 'px;"><span class="date" style="font-weight:800;color:var(--primary-yellow);">' + ds2 + '</span><br><span style="font-weight:600;color:var(--primary-yellow);">' + ls2 + '</span></div>';
             ih2b += '</div>';
         }
         
