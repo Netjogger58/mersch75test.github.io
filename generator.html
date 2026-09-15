@@ -2018,13 +2018,15 @@ function renderLandscapeGame(teamRef, sl, cont, hasGame) {
     if (showPhoto) {
         // Titel fir Photo-Only aus LANDSCAPE_PHOTO_TITLES huelen
         const photoTitle = (!hasGame && LANDSCAPE_PHOTO_TITLES[prefix]) ? LANDSCAPE_PHOTO_TITLES[prefix] : ts;
+        const isMainTeam = (prefix === 'fe' || prefix === 's1');
+        const titleColor = isMainTeam ? '#FFDE00' : 'var(--primary-blue)';
         let pW, pH, pTop, pLeft;
         let titleHtml = '';
         
         if (sl.type === 'big') {
             // Grouss Fotoen (Männer/Fraen) - méi grouss fir besser Siichtbarkeet
             pW = sl.width || 480; pH = sl.height || 320; pTop = sl.top; pLeft = sl.left;
-            titleHtml = photoTitle ? '<div class="abs text-blue" style="top:' + (sl.top - 45) + 'px;left:' + sl.left + 'px;width:' + pW + 'px;height:40px;font-size:' + (32 * sclTi) + 'px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;line-height:1;display:flex;align-items:flex-end;justify-content:center;text-align:center;pointer-events:auto;color:var(--primary-blue);">' + photoTitle + '</div>' : '';
+            titleHtml = photoTitle ? '<div class="abs text-blue" style="top:' + (sl.top - 45) + 'px;left:' + sl.left + 'px;width:' + pW + 'px;height:40px;font-size:' + (32 * sclTi) + 'px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;line-height:1;display:flex;align-items:flex-end;justify-content:center;text-align:center;pointer-events:auto;color:' + titleColor + ';">' + photoTitle + '</div>' : '';
         } else if (sl.type === 'photoTop') {
             // Kleng Fotoen uewen (Jugend)
             pW = sl.width || 400; pH = sl.height || 200; pTop = sl.top + 30; pLeft = sl.left;
@@ -2049,9 +2051,11 @@ function renderLandscapeGame(teamRef, sl, cont, hasGame) {
 
     if (!hasGame) {
         let html = '';
+        const isMainTeam = (prefix === 'fe' || prefix === 's1');
+        const titleColor = isMainTeam ? '#FFDE00' : 'var(--primary-blue)';
         if (sl.type === 'big') {
             html += '<div class="abs game-layer" style="display:block;">';
-            html += '<div class="abs text-blue" style="top:' + sl.top + 'px;left:' + sl.left + 'px;width:458px;height:80px;font-size:' + (37 * sclTi) + 'px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;line-height:1.1;display:flex;align-items:flex-end;justify-content:center;text-align:center;pointer-events:auto;color:var(--primary-blue);">' + ts + '</div>';
+            html += '<div class="abs text-blue" style="top:' + sl.top + 'px;left:' + sl.left + 'px;width:458px;height:80px;font-size:' + (37 * sclTi) + 'px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;line-height:1.1;display:flex;align-items:flex-end;justify-content:center;text-align:center;pointer-events:auto;color:' + titleColor + ';">' + ts + '</div>';
             html += '<div class="abs logo-box" style="top:' + (sl.top + 95) + 'px;left:' + sl.left + 'px;width:150px;height:150px;border-radius:20px;padding:10px;transform: scale(' + sclL + '); transform-origin: top center;"><img src="' + ml + '" crossorigin="anonymous"></div>';
             html += '<div class="abs badge" style="top:' + (sl.top + 110) + 'px;left:' + (sl.left + 169) + 'px;width:120px;height:120px;border-radius:16px;transform: scale(' + sclL + '); transform-origin: top center;"><div class="sub" style="font-size:11px;margin-bottom:-2px;">' + tv + '</div><div class="main" style="font-size:50px;">' + mb + '</div></div>';
             html += '<div class="abs logo-box" style="top:' + (sl.top + 95) + 'px;left:' + (sl.left + 308) + 'px;width:150px;height:150px;border-radius:20px;padding:10px;transform: scale(' + sclL + '); transform-origin: top center;"><img src="' + CONFIG.ballLogo + '" crossorigin="anonymous"></div>';
@@ -2127,9 +2131,12 @@ function renderLandscapeGame(teamRef, sl, cont, hasGame) {
     }
     
     const lc = '#444';
+    const isMainTeam = (prefix === 'fe' || prefix === 's1');
+    const titleColor = isMainTeam ? '#FFDE00' : 'var(--primary-blue)';
+    const dateColor = isMainTeam ? '#FFDE00' : lc;
     if (ds || ls) {
         if (sl.type === 'big') { 
-            th = '<span style="font-family:\'Barlow\',sans-serif;font-weight:800;color:' + lc + ';">' + ds + '</span><br><span style="font-family:\'Barlow\',sans-serif;font-weight:600;font-size:0.85em;color:' + lc + ';line-height:1.3;">' + ls + '</span>';
+            th = '<span style="font-family:\'Barlow\',sans-serif;font-weight:800;color:' + dateColor + ';">' + ds + '</span><br><span style="font-family:\'Barlow\',sans-serif;font-weight:600;font-size:0.85em;color:' + dateColor + ';line-height:1.3;">' + ls + '</span>';
         } else {
             var baseDt = 11, baseLc = 10;
             if (['u15', 'u13p1', 'u13p2', 'u11MEL', 'u11MES'].indexOf(prefix) !== -1) { 
@@ -2137,14 +2144,14 @@ function renderLandscapeGame(teamRef, sl, cont, hasGame) {
             } else if (['u9M', 'u7M'].indexOf(prefix) !== -1) { 
                 baseDt = 14; baseLc = 12; 
             }
-            th = '<div style="font-family:\'Barlow\',sans-serif;font-weight:800;font-size:' + (baseDt * sclTe) + 'px;color:' + lc + ';">' + ds + '</div><div style="font-family:\'Barlow\',sans-serif;font-weight:600;font-size:' + (baseLc * sclTe) + 'px;color:' + lc + ';line-height:1.1;margin-top:2px;">' + ls + '</div>';
+            th = '<div style="font-family:\'Barlow\',sans-serif;font-weight:800;font-size:' + (baseDt * sclTe) + 'px;color:' + dateColor + ';">' + ds + '</div><div style="font-family:\'Barlow\',sans-serif;font-weight:600;font-size:' + (baseLc * sclTe) + 'px;color:' + dateColor + ';line-height:1.1;margin-top:2px;">' + ls + '</div>';
         }
     }
     
     let html = '';
     if (sl.type === 'big') {
         html += '<div class="abs game-layer" style="display:block;">';
-        html += '<div class="abs text-blue" style="top:' + sl.top + 'px;left:' + sl.left + 'px;width:458px;height:80px;font-size:' + (37 * sclTi) + 'px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;line-height:1.1;display:flex;align-items:flex-end;justify-content:center;text-align:center;pointer-events:auto;color:var(--primary-blue);">' + ts + '</div>';
+        html += '<div class="abs text-blue" style="top:' + sl.top + 'px;left:' + sl.left + 'px;width:458px;height:80px;font-size:' + (37 * sclTi) + 'px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;line-height:1.1;display:flex;align-items:flex-end;justify-content:center;text-align:center;pointer-events:auto;color:' + titleColor + ';">' + ts + '</div>';
         html += '<div class="abs logo-box" style="top:' + (sl.top + 95) + 'px;left:' + sl.left + 'px;width:150px;height:150px;border-radius:20px;padding:10px;transform: scale(' + sclL + '); transform-origin: top center;"><img src="' + l1 + '" crossorigin="anonymous"></div>';
         html += '<div class="abs badge" style="top:' + (sl.top + 110) + 'px;left:' + (sl.left + 169) + 'px;width:120px;height:120px;border-radius:16px;transform: scale(' + sclL + '); transform-origin: top center;"><div class="sub" style="font-size:11px;margin-bottom:-2px;">' + tv + '</div><div class="main" style="font-size:50px;">' + mb + '</div></div>';
         html += '<div class="abs logo-box" style="top:' + (sl.top + 95) + 'px;left:' + (sl.left + 308) + 'px;width:150px;height:150px;border-radius:20px;padding:10px;transform: scale(' + sclL + '); transform-origin: top center;"><img src="' + l2 + '" crossorigin="anonymous"></div>';
