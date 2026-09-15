@@ -65,7 +65,7 @@
             <section class="poster-section poster-section-hero section-frame">
                 <div class="poster-shell poster-shell-hero">
                     <div class="poster-visual poster-visual-hero">
-                        <picture>
+                        <picture id="landscape-poster-pic">
                                 <source media="(max-width: 900px) and (orientation: portrait)" srcset="assets/Mersch75_Portrait_200926.webp" type="image/webp">
                                 <source media="(orientation: landscape)" srcset="Media/Hauptseite/Current%20Matchday%20200926.webp" type="image/webp">
                             <img src="Media/Hauptseite/Current%20Matchday%20200926.webp" alt="Mersch75 Matchposter" data-i18n-attr="alt:posterAlt" loading="eager">
@@ -77,6 +77,7 @@
                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20h14v-2H5v2zm7-18L5.33 8.67l1.42 1.42L11 5.83V16h2V5.83l4.25 4.26 1.42-1.42L12 2z"></path></svg>
                         <span data-i18n="posterLandscapeLabel">Landscape</span>
                     </a>
+                    <button type="button" class="poster-action" id="poster-swap-btn" title="Matchday-Poster tauschen" style="background:var(--primary-blue);color:#fff;border:none;padding:8px 14px;border-radius:999px;cursor:pointer;font-size:12px;font-weight:700;letter-spacing:0.03em;">📸 Poster tauschen</button>
                     <a class="poster-action" href="assets/Mersch75_Portrait_200926.webp" download="Mersch75_Portrait_200926.webp" title="Portrait herunterladen" data-i18n-attr="title:posterPortraitTitle">
                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20h14v-2H5v2zm7-18L5.33 8.67l1.42 1.42L11 5.83V16h2V5.83l4.25 4.26 1.42-1.42L12 2z"></path></svg>
                         <span data-i18n="posterPortraitLabel">Portrait</span>
@@ -665,6 +666,56 @@
 
         btn.addEventListener('click', function (ev) {
             if (navigator.share) nativeShare(ev); else openShareMenu(ev);
+        });
+    })();
+
+    (function () {
+        var swapBtn = document.getElementById('poster-swap-btn');
+        if (!swapBtn) return;
+        var swapped = false;
+        swapBtn.addEventListener('click', function () {
+            swapped = !swapped;
+            var pic = document.getElementById('landscape-poster-pic');
+            if (!pic) return;
+            var img = pic.querySelector('img');
+            var sources = pic.querySelectorAll('source');
+            if (swapped) {
+                for (var i = 0; i < sources.length; i++) {
+                    var src = sources[i].getAttribute('srcset') || '';
+                    if (src.indexOf('Current%20Matchday') !== -1 || src.indexOf('Current Matchday') !== -1) {
+                        if (src.indexOf('avif') !== -1 || src.indexOf('AVIF') !== -1) {
+                            sources[i].setAttribute('srcset', src.replace(/Current%20Matchday[^\s]*/g, 'Mersch75_Matchday_4K_200926.avif').replace(/Current Matchday[^\s]*/g, 'Mersch75_Matchday_4K_200926.avif'));
+                        } else if (src.indexOf('webp') !== -1 || src.indexOf('WEBP') !== -1) {
+                            sources[i].setAttribute('srcset', src.replace(/Current%20Matchday[^\s]*/g, 'Mersch75_Matchday_4K_200926.avif').replace(/Current Matchday[^\s]*/g, 'Mersch75_Matchday_4K_200926.avif'));
+                        }
+                    }
+                }
+                if (img) {
+                    img.setAttribute('src', 'Media/Hauptseite/Mersch75_Matchday_4K_200926.avif');
+                    var downloadLink = document.querySelector('#poster-actions .poster-action[href*="Current%20Matchday"]');
+                    if (downloadLink) {
+                        downloadLink.setAttribute('href', 'Media/Hauptseite/Mersch75_Matchday_4K_200926.avif');
+                        downloadLink.setAttribute('download', 'Mersch75_Matchday_4K_200926.avif');
+                    }
+                }
+                swapBtn.textContent = '📸 Portrait-Poster zurückschalten';
+            } else {
+                for (var j = 0; j < sources.length; j++) {
+                    var src2 = sources[j].getAttribute('srcset') || '';
+                    if (src2.indexOf('Mersch75_Matchday_4K') !== -1) {
+                        sources[j].setAttribute('srcset', src2.replace(/Mersch75_Matchday_4K_200926[^\s]*/g, 'Current%20Matchday%20200926'));
+                    }
+                }
+                if (img) {
+                    img.setAttribute('src', 'Media/Hauptseite/Current%20Matchday%20200926.webp');
+                    var downloadLink2 = document.querySelector('#poster-actions .poster-action[href*="Mersch75_Matchday_4K"]');
+                    if (downloadLink2) {
+                        downloadLink2.setAttribute('href', 'Media/Hauptseite/Current%20Matchday%20200926.webp');
+                        downloadLink2.setAttribute('download', 'Current Matchday 200926.webp');
+                    }
+                }
+                swapBtn.textContent = '📸 Poster tauschen';
+            }
         });
     })();
 

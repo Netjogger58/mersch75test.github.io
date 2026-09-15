@@ -830,6 +830,7 @@ function renderLandscapeControls() {
     html += '<div class="slider-row"><span class="sl-lbl">50 Jahre</span><input type="range" id="l-scale-50years" min="50" max="300" value="82" oninput="this.nextElementSibling.innerText=this.value;updateLandscapePreview();"><span class="sl-val">82</span></div>';
     html += '</div></div>';
     grid.innerHTML = html;
+    bindNumericSliders(grid);
 }
 
 function renderPortraitControls() {
@@ -884,6 +885,7 @@ function renderPortraitControls() {
     html += '<div class="slider-row"><span class="sl-lbl">Matchd.</span><input type="range" id="p-scale-matchday" min="40" max="250" value="130" oninput="this.nextElementSibling.innerText=this.value;updatePortraitPreview();"><span class="sl-val">130</span></div>';
     html += '</div></div>';
     selector.innerHTML = html;
+    bindNumericSliders(selector);
 }
 
 function handleLandOrderChange(el) {
@@ -1458,6 +1460,46 @@ function scalePoster() {
         portWrap.style.height = Math.round(bh * scale) + 'px';
     }
 }
+
+function bindNumericSliders(container) {
+    if (!container) return;
+    const sliders = container.querySelectorAll('.slider-row input[type="range"]');
+    for (let i = 0; i < sliders.length; i++) {
+        const slider = sliders[i];
+        if (slider.dataset.bound === '1') continue;
+        slider.dataset.bound = '1';
+        const numInput = document.createElement('input');
+        numInput.type = 'number';
+        numInput.className = 'sl-num';
+        numInput.min = slider.min;
+        numInput.max = slider.max;
+        numInput.value = slider.value;
+        numInput.step = slider.step || '1';
+        numInput.setAttribute('style', 'width:50px;padding:2px 3px;font-size:11px;border:1px solid #ccc;border-radius:3px;text-align:center;margin:0;flex-shrink:0;');
+        const oninputAttr = slider.getAttribute('oninput') || '';
+        numInput.addEventListener('input', function () {
+            var v = parseFloat(this.value);
+            if (isNaN(v)) return;
+            var min = parseFloat(this.min);
+            var max = parseFloat(this.max);
+            if (v < min) { v = min; this.value = v; }
+            if (v > max) { v = max; this.value = v; }
+            slider.value = v;
+            if (slider.nextElementSibling) slider.nextElementSibling.innerText = v + (slider.dataset.suffix || '');
+            var oninputAttr = slider.getAttribute('oninput') || '';
+            if (oninputAttr) {
+                var fn = new Function('oninputAttr', 'sliderEl', 'return (function(){var this$s=sliderEl;' + oninputAttr.replace(/this\./g, 'this$s.') + ';}())');
+                try { fn(oninputAttr, slider); } catch (e) {}
+            }
+        });
+        slider.addEventListener('input', function () {
+            if (numInput !== document.activeElement) numInput.value = this.value;
+        });
+        slider.parentNode.appendChild(numInput);
+    }
+}
+
+
 </script>
 <script>
 function getAssignedPos(prefix) {
@@ -2307,6 +2349,13 @@ function updatePortraitPreview() {
         cont.innerHTML = '<h2 style="color:#002f65;text-align:center;width:100%;">Bitte wählen Sie<br>Teams aus.</h2>';
         scalePoster(); 
         return; 
+    }
+
+    if (ap.length === 2) {
+        var wSel0 = document.querySelector((ap[0].slot === 2 ? '.cb-width-extra' : '.cb-width') + '[data-team="' + ap[0].id + '"]');
+        var wSel1 = document.querySelector((ap[1].slot === 2 ? '.cb-width-extra' : '.cb-width') + '[data-team="' + ap[1].id + '"]');
+        if (wSel0) { wSel0.value = "50"; handleWidthToggle(wSel0); }
+        if (wSel1) { wSel1.value = "50"; handleWidthToggle(wSel1); }
     }
 
     ap.sort(function(a, b) { 
