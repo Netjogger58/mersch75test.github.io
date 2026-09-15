@@ -2061,7 +2061,7 @@ function renderLandscapeGame(teamRef, sl, cont, hasGame) {
         // Titel fir Photo-Only aus LANDSCAPE_PHOTO_TITLES huelen
         const photoTitle = (!hasGame && LANDSCAPE_PHOTO_TITLES[prefix]) ? LANDSCAPE_PHOTO_TITLES[prefix] : ts;
         const isMainTeam = (prefix === 'fe' || prefix === 's1');
-        const titleColor = isMainTeam ? '#FFDE00' : 'var(--primary-blue)';
+        const titleColor = '#FFDE00';
         let pW, pH, pTop, pLeft;
         let titleHtml = '';
         
@@ -2172,10 +2172,9 @@ function renderLandscapeGame(teamRef, sl, cont, hasGame) {
         ls = parts.join('<br>');
     }
     
-    const lc = '#444';
-    const isMainTeam = (prefix === 'fe' || prefix === 's1');
-    const titleColor = isMainTeam ? '#FFDE00' : 'var(--primary-blue)';
-    const dateColor = isMainTeam ? '#FFDE00' : lc;
+    const lc = '#FFDE00';
+    const titleColor = '#FFDE00';
+    const dateColor = '#FFDE00';
     if (ds || ls) {
         if (sl.type === 'big') { 
             th = '<span style="font-family:\'Barlow\',sans-serif;font-weight:800;color:' + dateColor + ';">' + ds + '</span><br><span style="font-family:\'Barlow\',sans-serif;font-weight:600;font-size:0.85em;color:' + dateColor + ';line-height:1.3;">' + ls + '</span>';
@@ -2358,11 +2357,21 @@ function updatePortraitPreview() {
         if (wSel1) { wSel1.value = "50"; handleWidthToggle(wSel1); }
     }
 
+    // Jugend vor Senioren, innerhalb nach Altersgruppe geordnet
+    const youthOrder = ['u15','u13p1','u13p2','u11MEL','u11MES','u9M','u7M','u4M'];
+    const isYouth = function(id) { return youthOrder.indexOf(id) !== -1; };
     ap.sort(function(a, b) { 
+        const aYouth = isYouth(a.id);
+        const bYouth = isYouth(b.id);
+        if (aYouth && !bYouth) return -1;
+        if (!aYouth && bYouth) return 1;
         const posAEl = document.querySelector((a.slot === 2 ? '.trigger-port-pos-extra' : '.trigger-port-pos') + '[data-team="' + a.id + '"]');
         const posBEl = document.querySelector((b.slot === 2 ? '.trigger-port-pos-extra' : '.trigger-port-pos') + '[data-team="' + b.id + '"]');
         const posA = posAEl ? parseInt(posAEl.value, 10) : 99; 
         const posB = posBEl ? parseInt(posBEl.value, 10) : 99; 
+        if (aYouth && bYouth) {
+            return youthOrder.indexOf(a.id) - youthOrder.indexOf(b.id);
+        }
         return posA - posB; 
     });
 
