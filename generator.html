@@ -2616,22 +2616,30 @@ function autoFitPortraitHeight() {
 function downloadPortraitImage() {
     const el = document.getElementById('poster-portrait');
     if (!el) return;
-    const orig = el.style.transform; 
+    const orig = el.style.transform;
     el.style.transform = 'none';
-    
+
     const wEl = document.getElementById('p-scale-width');
-    const w = wEl ? parseInt(wEl.value, 10) : 800; 
-    
+    const w = wEl ? parseInt(wEl.value, 10) : 800;
+
     const hEl = document.getElementById('p-scale-height');
     const h = hEl ? parseInt(hEl.value, 10) : 1180;
     document.fonts.ready.then(function() {
-        html2canvas(el, { scale: 3, useCORS: true, width: w, height: h, backgroundColor: null }).then(function(c) {
-            el.style.transform = orig; 
-            const a = document.createElement('a'); 
-            a.download = 'Mersch75_Portrait_Multi.png'; 
-            a.href = c.toDataURL('image/png'); 
+        html2canvas(el, { scale: 2, useCORS: true, width: w, height: h, backgroundColor: null }).then(function(c) {
+            el.style.transform = orig;
+            const a = document.createElement('a');
+            a.download = 'Mersch75_Portrait_Multi.png';
+            a.href = c.toDataURL('image/png');
             a.click();
+        }).catch(function(err) {
+            el.style.transform = orig;
+            console.error('Portrait-Render fehlgeschlagen:', err);
+            alert('Portrait-Download fehlgeschlagen: ' + (err && err.message ? err.message : err));
         });
+    }).catch(function(err) {
+        el.style.transform = orig;
+        console.error('Portrait-Download abgebrochen (Schrift nicht geladen):', err);
+        alert('Portrait-Download fehlgeschlagen (Schrift nicht geladen): ' + (err && err.message ? err.message : err));
     });
 }
 
@@ -2652,7 +2660,7 @@ function renderPortraitDataUrl() {
                 el.style.transform = origT;
                 try { resolve(c.toDataURL('image/jpeg', 0.92)); } catch (e) { reject(e); }
             }).catch(function (err) { el.style.transform = origT; reject(err); });
-        }).catch(reject);
+        }).catch(function (err) { el.style.transform = origT; reject(err); });
     });
 }
 
