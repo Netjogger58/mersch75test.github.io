@@ -104,11 +104,9 @@
 #m75-gen-wrapper .preview-wrapper { background: #e0e0e0; position: relative; overflow: hidden; border-radius: 12px; display: block; box-shadow: 0 10px 30px rgba(0, 0, 0, .2); min-height: 200px; }
 #m75-gen-wrapper #wrapper-landscape { width: 100%; max-width: 1600px; }
 
-#m75-gen-wrapper #poster { width: 1600px; min-width: 1600px; height: 838px; min-height: 838px; position: absolute; top: 0; left: 0; overflow: hidden; background: linear-gradient(105deg, #a2b9c7 0%, #d0dbe0 30%, #f4ebd4 65%, #faf5ce 100%); font-family: 'Exo 2', sans-serif; transform-origin: top left !important; -webkit-transform-origin: top left !important; image-rendering: high-quality; }
+#m75-gen-wrapper #poster { width: 1600px; min-width: 1600px; height: 838px; min-height: 838px; position: absolute; top: 0; left: 0; overflow: hidden; background: url('assets/shared/media/Matchday-Hintergrund-150926.webp') center/cover no-repeat; font-family: 'Exo 2', sans-serif; transform-origin: top left !important; -webkit-transform-origin: top left !important; image-rendering: high-quality; }
 #m75-gen-wrapper .abs { position: absolute; box-sizing: border-box; transition: all .5s ease; }
 #m75-gen-wrapper .game-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
-
-#m75-gen-wrapper .layer-combined { top: 8px; left: -2px; width: 1720px; height: 600px; background-image: url('assets/shared/media/Handballfeld-mat-Draach-an-der-Perspectiv-scaled.png'); background-size: 100% 100%; background-position: left top; background-repeat: no-repeat; z-index: 1; opacity: .25; mix-blend-mode: multiply; }
 
 #m75-gen-wrapper .mixvoip-left, #m75-gen-wrapper .mixvoip-right { top: 25px; z-index: 3; display: flex; align-items: center; }
 #m75-gen-wrapper .mixvoip-left { left: 108px; }
@@ -242,7 +240,6 @@
     <div class="preview-container" style="margin-bottom: 20px;">
         <div id="wrapper-landscape" class="preview-wrapper">
             <div id="poster">
-                <div class="abs layer-combined"></div>
                 <div class="abs mixvoip-left">
                     <picture>
     <source srcset="assets/shared/media/Sponsoring/Mixvoip.avif" type="image/avif">
