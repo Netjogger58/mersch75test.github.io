@@ -1921,7 +1921,7 @@ function updateLandscapePreview() {
         tc.innerHTML = '';
         if (at.length > 0) {
             const tcc = 'text-blue'; const tbg = 'var(--primary-blue)';
-            let th = '<div class="abs ' + tcc + '" style="top:' + tTop + 'px;left:' + tLeft + 'px;width:431px;height:30px;font-size:24px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;text-align:center;">--- TOURNOI ---</div>';
+            let th = '<div class="abs ' + tcc + '" style="top:' + tTop + 'px;left:' + tLeft + 'px;width:431px;height:30px;font-size:24px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;text-align:center;color:#FFDE00;">--- TOURNOI ---</div>';
             th += '<div class="abs" style="top:' + (tTop + 40) + 'px;left:' + (tLeft + 55) + 'px;width:320px;height:3px;background:' + tbg + ';"></div>';
             th += '<div class="abs" style="top:' + (tTop + 40) + 'px;left:' + (tLeft + 55) + 'px;width:3px;height:10px;background:' + tbg + ';"></div>';
             th += '<div class="abs" style="top:' + (tTop + 40) + 'px;left:' + (tLeft + 215) + 'px;width:3px;height:10px;background:' + tbg + ';"></div>';
@@ -1968,7 +1968,7 @@ function updateLandscapePreview() {
                     
                     if (col.active && showPhoto) {
                         th += '<div class="abs" style="top:' + (csl.top + 32) + 'px;left:' + csl.left + 'px;width:50px;height:50px;border-radius:8px;overflow:hidden;box-shadow: 0 5px 15px rgba(0,0,0,0.1); transform: scale(' + csclL + '); transform-origin: top center;"><img src="' + photoSrc + '" style="position:absolute;top:50%;left:50%;width:' + csclPhoto + '%;height:' + csclPhoto + '%;object-fit:cover;transform:translate(-50%,-50%);"></div>';
-                        th += '<div class="abs text-blue" style="top:' + (csl.top - 75) + 'px;left:' + (csl.left - 50) + 'px;width:150px;text-align:center;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;font-size:12px;">' + (document.getElementById(cp + '-land-title').value) + '</div>';
+                        th += '<div class="abs text-blue" style="top:' + (csl.top - 75) + 'px;left:' + (csl.left - 50) + 'px;width:150px;text-align:center;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;font-size:12px;color:#FFDE00;">' + (document.getElementById(cp + '-land-title').value) + '</div>';
                     } else if (col.active) {
                         th += '<div class="abs badge" style="top:' + csl.top + 'px;left:' + csl.left + 'px;width:50px;height:28px;border-radius:6px;transform: scale(' + csclL + '); transform-origin: top center;"><div class="sub" style="font-size:6px;">' + tv + '</div><div class="main" style="font-size:15px;font-weight:900;font-style:italic;">' + mb + '</div></div>';
                         var cOpp = getGameFieldValue(cp, 'opp', 1) || '-';
@@ -1992,7 +1992,7 @@ function updateLandscapePreview() {
                                 for (var ck = 0; ck < cParts.length; ck++) { cParts[ck] = cParts[ck].trim(); }
                                 cLs = cParts.join('<br>');
                             }
-                            var cLc = '#444';
+                            var cLc = '#FFDE00';
                             if (cDs) ctxh += '<div style="font-family:\'Barlow\',sans-serif;font-weight:800;color:' + cLc + ';font-size:' + (14 * csclTe) + 'px;line-height:1.1;">' + cDs + '</div>';
                             if (cLs) ctxh += '<div style="font-family:\'Barlow\',sans-serif;font-weight:600;color:' + cLc + ';font-size:' + (11 * csclTe) + 'px;line-height:1.1;margin-top:2px;">' + cLs + '</div>';
                         }
