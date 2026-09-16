@@ -104,7 +104,7 @@
 #m75-gen-wrapper .preview-wrapper { background: #e0e0e0; position: relative; overflow: hidden; border-radius: 12px; display: block; box-shadow: 0 10px 30px rgba(0, 0, 0, .2); min-height: 200px; }
 #m75-gen-wrapper #wrapper-landscape { width: 100%; max-width: 1600px; }
 
-#m75-gen-wrapper #poster { width: 1600px; min-width: 1600px; height: 838px; min-height: 838px; position: absolute; top: 0; left: 0; overflow: hidden; background: url('assets/shared/media/Matchday-Hintergrund-150926.webp') center/cover no-repeat; font-family: 'Exo 2', sans-serif; transform-origin: top left !important; -webkit-transform-origin: top left !important; image-rendering: high-quality; }
+#m75-gen-wrapper #poster { width: 1600px; min-width: 1600px; height: 838px; min-height: 838px; position: absolute; top: 0; left: 0; overflow: hidden; background: url('../assets/pages/generator/matchday-background.webp') center/cover no-repeat; font-family: 'Exo 2', sans-serif; transform-origin: top left !important; -webkit-transform-origin: top left !important; image-rendering: high-quality; }
 #m75-gen-wrapper .abs { position: absolute; box-sizing: border-box; transition: all .5s ease; }
 #m75-gen-wrapper .game-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
 
@@ -156,7 +156,7 @@
 #m75-gen-wrapper .portrait-controls-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 15px; flex-wrap: wrap; margin-bottom: 5px; }
 #m75-gen-wrapper .portrait-controls h3 { margin: 0 0 8px 0; color: var(--primary-blue); font-size: 18px; }
 
-#m75-gen-wrapper #poster-portrait { display: flex; flex-direction: column; width: 800px; min-width: 800px; position: absolute; top: 0; left: 0; overflow: hidden; background: linear-gradient(135deg, #a2b9c7 0%, #d0dbe0 30%, #f4ebd4 65%, #faf5ce 100%); font-family: 'Exo 2', sans-serif; transform-origin: top left !important; -webkit-transform-origin: top left !important; box-shadow: 0 10px 30px rgba(0, 0, 0, .3); border-radius: 12px; }
+#m75-gen-wrapper #poster-portrait { display: flex; flex-direction: column; width: 800px; min-width: 800px; position: absolute; top: 0; left: 0; overflow: hidden; background: url('../assets/pages/generator/portrait-background.webp') center/cover no-repeat; font-family: 'Exo 2', sans-serif; transform-origin: top left !important; -webkit-transform-origin: top left !important; box-shadow: 0 10px 30px rgba(0, 0, 0, .3); border-radius: 12px; }
 
 #m75-gen-wrapper .p-header-wrapper { display: flex; flex-direction: column; align-items: center; padding-top: 25px; width: 100%; z-index: 5; }
 #m75-gen-wrapper .p-header-top { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 0 40px; box-sizing: border-box; }
@@ -1496,8 +1496,8 @@ function bindNumericSliders(container) {
             if (isNaN(v)) return;
             var min = parseFloat(this.min);
             var max = parseFloat(this.max);
-            if (v < min) { v = min; this.value = v; }
-            if (v > max) { v = max; this.value = v; }
+            if (v < min) v = min;
+            if (v > max) v = max;
             slider.value = v;
             if (slider.nextElementSibling) slider.nextElementSibling.innerText = v + (slider.dataset.suffix || '');
             var oninputAttr = slider.getAttribute('oninput') || '';
@@ -1505,6 +1505,17 @@ function bindNumericSliders(container) {
                 var fn = new Function('oninputAttr', 'sliderEl', 'return (function(){var this$s=sliderEl;' + oninputAttr.replace(/this\./g, 'this$s.') + ';}())');
                 try { fn(oninputAttr, slider); } catch (e) {}
             }
+        });
+        numInput.addEventListener('change', function () {
+            var v = parseFloat(this.value);
+            if (isNaN(v)) return;
+            var min = parseFloat(this.min);
+            var max = parseFloat(this.max);
+            if (v < min) v = min;
+            if (v > max) v = max;
+            this.value = v;
+            slider.value = v;
+            if (slider.nextElementSibling) slider.nextElementSibling.innerText = v + (slider.dataset.suffix || '');
         });
         slider.addEventListener('input', function () {
             if (numInput !== document.activeElement) numInput.value = this.value;
@@ -2261,8 +2272,9 @@ function renderLandscapeGame(teamRef, sl, cont, hasGame) {
 </script>
 <script>
 function updatePortraitPreview() {
-    if (typeof _updatingPortrait !== 'undefined' && _updatingPortrait) return;
+    if (window._updatingPortrait) return;
     window._updatingPortrait = true;
+    try {
     const wEl = document.getElementById('p-scale-width');
     const w = wEl ? parseInt(wEl.value, 10) : 800; 
     
@@ -2595,7 +2607,9 @@ function updatePortraitPreview() {
             }
         }
     }
-    window._updatingPortrait = false;
+    } finally {
+        window._updatingPortrait = false;
+    }
 }
 
 function autoFitPortraitHeight() {
@@ -2646,8 +2660,8 @@ function downloadPortraitImage() {
         html2canvas(el, { scale: 2, useCORS: true, width: w, height: h, backgroundColor: null }).then(function(c) {
             el.style.transform = orig;
             const a = document.createElement('a');
-            a.download = 'Mersch75_Portrait_Multi.png';
-            a.href = c.toDataURL('image/png');
+            a.download = 'Mersch75_Portrait_Multi.webp';
+            a.href = c.toDataURL('image/webp', 0.92);
             a.click();
         }).catch(function(err) {
             el.style.transform = orig;
@@ -2661,7 +2675,7 @@ function downloadPortraitImage() {
     });
 }
 
-// Liefert ein Promise mit der Portrait-Variante als JPEG-DataURL — wird vom
+// Liefert ein Promise mit der Portrait-Variante als WebP-DataURL — wird vom
 // Direkt-Publish verwendet, damit die Homepage beide Formate anbieten kann.
 function renderPortraitDataUrl() {
     return new Promise(function (resolve, reject) {
@@ -2676,7 +2690,7 @@ function renderPortraitDataUrl() {
         document.fonts.ready.then(function () {
             html2canvas(el, { scale: 2, useCORS: true, width: w, height: h, backgroundColor: null }).then(function (c) {
                 el.style.transform = origT;
-                try { resolve(c.toDataURL('image/jpeg', 0.92)); } catch (e) { reject(e); }
+                try { resolve(c.toDataURL('image/webp', 0.92)); } catch (e) { reject(e); }
             }).catch(function (err) { el.style.transform = origT; reject(err); });
         }).catch(function (err) { el.style.transform = origT; reject(err); });
     });
@@ -2706,24 +2720,24 @@ function downloadPosterWithFormat(fmt) {
             
             if (fmt === 'pdf') {
                 const pdf = new window.jspdf.jsPDF({ orientation: 'landscape', unit: 'px', format: [1600, 838] });
-                pdf.addImage(c.toDataURL('image/png', 1.0), 'PNG', 0, 0, 1600, 838); 
+                pdf.addImage(c.toDataURL('image/webp', 1.0), 'WEBP', 0, 0, 1600, 838); 
                 pdf.save('Mersch75_Matchday.pdf');
             } else if (fmt === 'home' || fmt === 'publish') {
                 const stamp = pickPosterDateStamp();
-                const landscapeUrl = c.toDataURL('image/jpeg', 0.95);
+                const landscapeUrl = c.toDataURL('image/webp', 0.95);
                 renderPortraitDataUrl().then(function (portraitUrl) {
                     setTimeout(function () {
                         savePostersToHomepage(landscapeUrl, portraitUrl, stamp);
                     }, 400);
                 }).catch(function (err) {
                     console.warn('Portrait-Render fehlgeschlagen, nur Landscape geladen:', err);
-                    triggerDownload(landscapeUrl, 'current-matchposter.jpg');
+                    triggerDownload(landscapeUrl, 'current-matchposter.webp');
                     openHomepageHandoffModal(stamp, false);
                 });
             } else {
                 const a = document.createElement('a'); 
-                a.download = 'Mersch75_Matchday_4K.' + (fmt === 'jpeg' ? 'jpg' : 'png'); 
-                a.href = c.toDataURL('image/' + fmt, 1.0); 
+                a.download = 'Mersch75_Matchday_4K.' + (fmt === 'webp' ? 'webp' : 'png'); 
+                a.href = c.toDataURL(fmt === 'webp' ? 'image/webp' : 'image/png', 1.0);
                 a.click();
             }
         });
@@ -2771,8 +2785,8 @@ function dataUrlToBlob(dataUrl) {
 
 async function savePostersToHomepage(landscapeDataUrl, portraitDataUrl, stamp) {
     if (!('showSaveFilePicker' in window)) {
-        triggerDownload(landscapeDataUrl, 'current-matchposter.jpg');
-        triggerDownload(portraitDataUrl, 'current-matchposter-portrait.jpg');
+        triggerDownload(landscapeDataUrl, 'current-matchposter.webp');
+        triggerDownload(portraitDataUrl, 'current-matchposter-portrait.webp');
         openHomepageHandoffModal(stamp, true);
         return;
     }
@@ -2781,16 +2795,16 @@ async function savePostersToHomepage(landscapeDataUrl, portraitDataUrl, stamp) {
         var portraitBlob = dataUrlToBlob(portraitDataUrl);
 
         var landscapeHandle = await window.showSaveFilePicker({
-            suggestedName: 'current-matchposter.jpg',
-            types: [{ description: 'JPEG Image', accept: { 'image/jpeg': ['.jpg'] } }]
+            suggestedName: 'current-matchposter.webp',
+            types: [{ description: 'WebP Image', accept: { 'image/webp': ['.webp'] } }]
         });
         var landscapeWritable = await landscapeHandle.createWritable();
         await landscapeWritable.write(landscapeBlob);
         await landscapeWritable.close();
 
         var portraitHandle = await window.showSaveFilePicker({
-            suggestedName: 'current-matchposter-portrait.jpg',
-            types: [{ description: 'JPEG Image', accept: { 'image/jpeg': ['.jpg'] } }]
+            suggestedName: 'current-matchposter-portrait.webp',
+            types: [{ description: 'WebP Image', accept: { 'image/webp': ['.webp'] } }]
         });
         var portraitWritable = await portraitHandle.createWritable();
         await portraitWritable.write(portraitBlob);
@@ -2800,8 +2814,8 @@ async function savePostersToHomepage(landscapeDataUrl, portraitDataUrl, stamp) {
     } catch (e) {
         if (e.name === 'AbortError') return;
         console.error('Automatesch ofleeën fehlgeschlagen:', e);
-        triggerDownload(landscapeDataUrl, 'current-matchposter.jpg');
-        triggerDownload(portraitDataUrl, 'current-matchposter-portrait.jpg');
+        triggerDownload(landscapeDataUrl, 'current-matchposter.webp');
+        triggerDownload(portraitDataUrl, 'current-matchposter-portrait.webp');
         openHomepageHandoffModal(stamp, true);
     }
 }
@@ -2814,8 +2828,8 @@ function openHomepageHandoffModal(stamp, hasPortrait, auto) {
     var existing = document.getElementById('home-handoff-modal');
     if (existing) existing.remove();
     var files = hasPortrait
-        ? '<code>current-matchposter.jpg</code> + <code>current-matchposter-portrait.jpg</code>'
-        : '<code>current-matchposter.jpg</code>';
+        ? '<code>current-matchposter.webp</code> + <code>current-matchposter-portrait.webp</code>'
+        : '<code>current-matchposter.webp</code>';
     var gitMsg = 'Matchposter ' + stamp;
     var autoBanner = auto
         ? '<p style="font-size:0.92rem;color:#2e7d32;font-weight:700;margin:0 0 12px;">✅ Dateie goufe direkt gespaart</p>'
@@ -2838,7 +2852,7 @@ function openHomepageHandoffModal(stamp, hasPortrait, auto) {
         +   '<ol style="padding-left:20px;font-size:0.92rem;line-height:1.55;color:#333;margin:0 0 14px;">'
         +   olItems
         +   '</ol>'
-        +   '<pre style="background:#0f172a;color:#ffde00;padding:12px;border-radius:8px;font-size:11.5px;overflow-x:auto;margin:0 0 8px;"><code id="home-handoff-cmd">git add Media/Hauptseite/current-matchposter*.jpg &amp;&amp; git commit -m "' + gitMsg + '" &amp;&amp; git push</code></pre>'
+        +   '<pre style="background:#0f172a;color:#ffde00;padding:12px;border-radius:8px;font-size:11.5px;overflow-x:auto;margin:0 0 8px;"><code id="home-handoff-cmd">git add Media/Hauptseite/current-matchposter*.webp &amp;&amp; git commit -m "' + gitMsg + '" &amp;&amp; git push</code></pre>'
         +   '<button type="button" class="gen-modal-cancel" id="home-handoff-copy" style="margin-bottom:14px;">Befehl kopéieren</button>'
         +   '<p style="font-size:0.85rem;color:#555;margin:0;">D\'<code>index.html</code> verlinkt schonn op dës Dateinimm — keng weider Ännerung néideg.</p>'
         +   '<div class="gen-modal-actions"><button type="button" class="gen-modal-submit" id="home-handoff-ok">Verstanen</button></div>'
