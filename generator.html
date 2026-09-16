@@ -635,6 +635,20 @@ function resolveHostLogoFromLocation(locationValue) {
     return '';
 }
 
+function resolveOpponentAddress(opponent) {
+    if (!opponent || opponent === '-' || opponent === 'Spielfrei') return '';
+    const normalized = (typeof aliases !== 'undefined' && aliases[opponent]) ? aliases[opponent] : opponent;
+    if (typeof addresses !== 'undefined' && addresses[normalized]) return addresses[normalized];
+    if (typeof addresses !== 'undefined' && addresses[opponent]) return addresses[opponent];
+    const baseName = opponent.replace(/\s+\d+$/, '');
+    if (baseName !== opponent) {
+        if (typeof addresses !== 'undefined' && addresses[baseName]) return addresses[baseName];
+        const baseAlias = (typeof aliases !== 'undefined' && aliases[baseName]) ? aliases[baseName] : baseName;
+        if (typeof addresses !== 'undefined' && addresses[baseAlias]) return addresses[baseAlias];
+    }
+    return '';
+}
+
 function resolveTournamentPrimaryLogo(prefix, opponent, isHome, locationValue, defaultMerschLogo) {
     if (!prefix || (prefix !== 'u11MES' && prefix !== 'u9M' && prefix !== 'u7M')) {
         return defaultMerschLogo;
@@ -1406,7 +1420,7 @@ function autoFill(prefix, skipPreview) {
             if (ih) { locEl.value = (hs.value === 'home2') ? CONFIG.address2 : CONFIG.address1; } 
             else { 
                 if (opp === "Spielfrei" || opp === "-") { locEl.value = ""; } 
-                else { locEl.value = (typeof addresses !== 'undefined' && addresses[opp]) ? addresses[opp] : ""; }
+                else { locEl.value = resolveOpponentAddress(opp); }
             }
         }
         if (skipPreview !== true) { window.updateAllPreviews(); }
@@ -2247,6 +2261,8 @@ function renderLandscapeGame(teamRef, sl, cont, hasGame) {
 </script>
 <script>
 function updatePortraitPreview() {
+    if (typeof _updatingPortrait !== 'undefined' && _updatingPortrait) return;
+    window._updatingPortrait = true;
     const wEl = document.getElementById('p-scale-width');
     const w = wEl ? parseInt(wEl.value, 10) : 800; 
     
@@ -2347,14 +2363,15 @@ function updatePortraitPreview() {
     if (ap.length === 0) { 
         cont.innerHTML = '<h2 style="color:#002f65;text-align:center;width:100%;">Bitte wählen Sie<br>Teams aus.</h2>';
         scalePoster(); 
+        window._updatingPortrait = false;
         return; 
     }
 
     if (ap.length === 2) {
         var wSel0 = document.querySelector((ap[0].slot === 2 ? '.cb-width-extra' : '.cb-width') + '[data-team="' + ap[0].id + '"]');
         var wSel1 = document.querySelector((ap[1].slot === 2 ? '.cb-width-extra' : '.cb-width') + '[data-team="' + ap[1].id + '"]');
-        if (wSel0) { wSel0.value = "50"; handleWidthToggle(wSel0); }
-        if (wSel1) { wSel1.value = "50"; handleWidthToggle(wSel1); }
+        if (wSel0 && wSel0.value !== "50") { wSel0.value = "50"; handleWidthToggle(wSel0); }
+        if (wSel1 && wSel1.value !== "50") { wSel1.value = "50"; handleWidthToggle(wSel1); }
     }
 
     // Jugend vor Senioren, innerhalb nach Altersgruppe geordnet
@@ -2578,6 +2595,7 @@ function updatePortraitPreview() {
             }
         }
     }
+    window._updatingPortrait = false;
 }
 
 function autoFitPortraitHeight() {
@@ -3011,7 +3029,7 @@ function openHomepageHandoffModal(stamp, hasPortrait, auto) {
                 const ih2 = hs2.value.indexOf('home') === 0;
                 const opp2 = o2.value;
                 if (ih2) { l2.value = (hs2.value === 'home2') ? CONFIG.address2 : CONFIG.address1; }
-                else { l2.value = (typeof addresses !== 'undefined' && addresses[opp2]) ? addresses[opp2] : ''; }
+                else { l2.value = resolveOpponentAddress(opp2); }
                 window.updateAllPreviews();
             });
         });
