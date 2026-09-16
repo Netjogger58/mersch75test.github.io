@@ -104,7 +104,7 @@
 #m75-gen-wrapper .preview-wrapper { background: #e0e0e0; position: relative; overflow: hidden; border-radius: 12px; display: block; box-shadow: 0 10px 30px rgba(0, 0, 0, .2); min-height: 200px; }
 #m75-gen-wrapper #wrapper-landscape { width: 100%; max-width: 1600px; }
 
-#m75-gen-wrapper #poster { width: 1600px; min-width: 1600px; height: 838px; min-height: 838px; position: absolute; top: 0; left: 0; overflow: hidden; background: url('assets/pages/generator/matchday-background.webp') center/cover no-repeat; font-family: 'Exo 2', sans-serif; transform-origin: top left !important; -webkit-transform-origin: top left !important; image-rendering: high-quality; }
+#m75-gen-wrapper #poster { width: 1600px; min-width: 1600px; height: 838px; min-height: 838px; position: absolute; top: 0; left: 0; overflow: hidden; background: url('assets/shared/media/Matchday-Hintergrund-150926.webp') center/cover no-repeat; font-family: 'Exo 2', sans-serif; transform-origin: top left !important; -webkit-transform-origin: top left !important; image-rendering: high-quality; }
 #m75-gen-wrapper .abs { position: absolute; box-sizing: border-box; transition: all .5s ease; }
 #m75-gen-wrapper .game-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
 
@@ -156,7 +156,7 @@
 #m75-gen-wrapper .portrait-controls-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 15px; flex-wrap: wrap; margin-bottom: 5px; }
 #m75-gen-wrapper .portrait-controls h3 { margin: 0 0 8px 0; color: var(--primary-blue); font-size: 18px; }
 
-#m75-gen-wrapper #poster-portrait { display: flex; flex-direction: column; width: 800px; min-width: 800px; position: absolute; top: 0; left: 0; overflow: hidden; background: linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)), url('assets/pages/generator/portrait-background.webp') center/cover no-repeat; font-family: 'Exo 2', sans-serif; transform-origin: top left !important; -webkit-transform-origin: top left !important; box-shadow: 0 10px 30px rgba(0, 0, 0, .3); border-radius: 12px; }
+#m75-gen-wrapper #poster-portrait { display: flex; flex-direction: column; width: 800px; min-width: 800px; position: absolute; top: 0; left: 0; overflow: hidden; background: linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)), linear-gradient(135deg, #a2b9c7 0%, #d0dbe0 30%, #f4ebd4 65%, #faf5ce 100%); font-family: 'Exo 2', sans-serif; transform-origin: top left !important; -webkit-transform-origin: top left !important; box-shadow: 0 10px 30px rgba(0, 0, 0, .3); border-radius: 12px; }
 
 #m75-gen-wrapper .p-header-wrapper { display: flex; flex-direction: column; align-items: center; padding-top: 25px; width: 100%; z-index: 5; }
 #m75-gen-wrapper .p-header-top { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 0 40px; box-sizing: border-box; }
@@ -2726,7 +2726,7 @@ function downloadPosterWithFormat(fmt) {
             
             if (fmt === 'pdf') {
                 const pdf = new window.jspdf.jsPDF({ orientation: 'landscape', unit: 'px', format: [1600, 838] });
-                pdf.addImage(c.toDataURL('image/webp', 1.0), 'WEBP', 0, 0, 1600, 838); 
+                pdf.addImage(c.toDataURL('image/png', 1.0), 'PNG', 0, 0, 1600, 838); 
                 pdf.save('Mersch75_Matchday.pdf');
             } else if (fmt === 'home' || fmt === 'publish') {
                 const stamp = pickPosterDateStamp();
@@ -2742,8 +2742,8 @@ function downloadPosterWithFormat(fmt) {
                 });
             } else {
                 const a = document.createElement('a'); 
-                a.download = 'Mersch75_Matchday_4K.' + (fmt === 'webp' ? 'webp' : 'png'); 
-                a.href = c.toDataURL(fmt === 'webp' ? 'image/webp' : 'image/png', 1.0);
+                a.download = 'Mersch75_Matchday_4K.' + (fmt === 'jpeg' ? 'jpg' : 'png');
+                a.href = c.toDataURL('image/' + fmt, 1.0);
                 a.click();
             }
         });
