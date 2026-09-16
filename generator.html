@@ -2379,13 +2379,6 @@ function updatePortraitPreview() {
         return; 
     }
 
-    if (ap.length === 2) {
-        var wSel0 = document.querySelector((ap[0].slot === 2 ? '.cb-width-extra' : '.cb-width') + '[data-team="' + ap[0].id + '"]');
-        var wSel1 = document.querySelector((ap[1].slot === 2 ? '.cb-width-extra' : '.cb-width') + '[data-team="' + ap[1].id + '"]');
-        if (wSel0 && wSel0.value !== "50") { wSel0.value = "50"; handleWidthToggle(wSel0); }
-        if (wSel1 && wSel1.value !== "50") { wSel1.value = "50"; handleWidthToggle(wSel1); }
-    }
-
     // Jugend vor Senioren, innerhalb nach Altersgruppe geordnet
     const youthOrder = ['u15','u13p1','u13p2','u11MEL','u11MES','u9M','u7M','u4M'];
     const isYouth = function(id) { return youthOrder.indexOf(id) !== -1; };
