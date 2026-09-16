@@ -104,7 +104,7 @@
 #m75-gen-wrapper .preview-wrapper { background: #e0e0e0; position: relative; overflow: hidden; border-radius: 12px; display: block; box-shadow: 0 10px 30px rgba(0, 0, 0, .2); min-height: 200px; }
 #m75-gen-wrapper #wrapper-landscape { width: 100%; max-width: 1600px; }
 
-#m75-gen-wrapper #poster { width: 1600px; min-width: 1600px; height: 838px; min-height: 838px; position: absolute; top: 0; left: 0; overflow: hidden; background: url('../assets/pages/generator/matchday-background.webp') center/cover no-repeat; font-family: 'Exo 2', sans-serif; transform-origin: top left !important; -webkit-transform-origin: top left !important; image-rendering: high-quality; }
+#m75-gen-wrapper #poster { width: 1600px; min-width: 1600px; height: 838px; min-height: 838px; position: absolute; top: 0; left: 0; overflow: hidden; background: url('assets/pages/generator/matchday-background.webp') center/cover no-repeat; font-family: 'Exo 2', sans-serif; transform-origin: top left !important; -webkit-transform-origin: top left !important; image-rendering: high-quality; }
 #m75-gen-wrapper .abs { position: absolute; box-sizing: border-box; transition: all .5s ease; }
 #m75-gen-wrapper .game-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; }
 
@@ -156,7 +156,7 @@
 #m75-gen-wrapper .portrait-controls-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 15px; flex-wrap: wrap; margin-bottom: 5px; }
 #m75-gen-wrapper .portrait-controls h3 { margin: 0 0 8px 0; color: var(--primary-blue); font-size: 18px; }
 
-#m75-gen-wrapper #poster-portrait { display: flex; flex-direction: column; width: 800px; min-width: 800px; position: absolute; top: 0; left: 0; overflow: hidden; background: url('../assets/pages/generator/portrait-background.webp') center/cover no-repeat; font-family: 'Exo 2', sans-serif; transform-origin: top left !important; -webkit-transform-origin: top left !important; box-shadow: 0 10px 30px rgba(0, 0, 0, .3); border-radius: 12px; }
+#m75-gen-wrapper #poster-portrait { display: flex; flex-direction: column; width: 800px; min-width: 800px; position: absolute; top: 0; left: 0; overflow: hidden; background: linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)), url('assets/pages/generator/portrait-background.webp') center/cover no-repeat; font-family: 'Exo 2', sans-serif; transform-origin: top left !important; -webkit-transform-origin: top left !important; box-shadow: 0 10px 30px rgba(0, 0, 0, .3); border-radius: 12px; }
 
 #m75-gen-wrapper .p-header-wrapper { display: flex; flex-direction: column; align-items: center; padding-top: 25px; width: 100%; z-index: 5; }
 #m75-gen-wrapper .p-header-top { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 0 40px; box-sizing: border-box; }
@@ -167,7 +167,7 @@
 #m75-gen-wrapper #p-dynamic-container { flex: 1; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; align-content: flex-start; gap: 35px 0; padding: 10px; box-sizing: border-box; width: 100%; z-index: 4; }
 #m75-gen-wrapper .p-game-block { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; box-sizing: border-box; padding: 0 15px; }
 #m75-gen-wrapper .p-game-title { font-family: 'Barlow', sans-serif; font-weight: 900; font-style: italic; color: #FFFFFF; text-shadow: 0 0 3px rgba(0,0,0,0.7); text-align: center; line-height: 1.15; margin-bottom: 10px; }
-#m75-gen-wrapper .p-game-matchup { display: flex; align-items: center; justify-content: center; gap: 15px; }
+#m75-gen-wrapper .p-game-matchup { display: flex; align-items: center; justify-content: center; gap: 15px; width: 100%; }
 #m75-gen-wrapper .p-logo-box { background: white; border-radius: 15px; padding: 10px; box-shadow: 0 5px 20px rgba(0, 0, 0, .15); display: flex; justify-content: center; align-items: center; overflow: hidden; }
 #m75-gen-wrapper .p-logo-box img { width: 100%; height: 100%; object-fit: contain; }
 #m75-gen-wrapper .p-badge { background: var(--primary-blue); color: var(--primary-yellow); border-radius: 12px; display: flex; flex-direction: column; justify-content: center; align-items: center; box-shadow: 0 5px 20px rgba(0, 0, 0, .25); text-align: center; }
@@ -2588,10 +2588,16 @@ function updatePortraitPreview() {
         }
         
         const mt = !stt ? 'margin-top:10px;' : '';
-        gb.innerHTML = titleHtmlStr + '<div class="p-game-matchup" style="' + mt + '">' + lh + '</div>' + (showPhoto ? '' : ih2) + (showPhoto ? '' : ih2b);
+        gb.innerHTML = titleHtmlStr + '<div class="p-game-matchup" style="' + mt + '">' + lh + '</div>' + ih2 + ih2b;
         cont.appendChild(gb);
     }
-    
+
+    if (ap.length === 2) {
+        cont.style.paddingTop = '90px';
+    } else {
+        cont.style.paddingTop = '10px';
+    }
+
     autoFitPortraitHeight();
     scalePoster();
 
