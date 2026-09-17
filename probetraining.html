@@ -110,7 +110,6 @@
                                 <option value="fr">Français</option>
                                 <option value="de">Deutsch</option>
                                 <option value="en">English</option>
-                                <option value="pt">Português</option>
                             </select>
                         </label>
                         <label><span data-i18n="trialLabelCategory">Kategorie</span>
@@ -352,9 +351,10 @@
         updateParentField();
 
         (function setDefaultPreferredLanguage() {
-            const pref = document.getElementById('preferredLanguage');
+            var pref = document.getElementById('preferredLanguage');
             if (pref) {
-                const siteLang = (window.Mersch75I18n && window.Mersch75I18n.getLanguage) ? window.Mersch75I18n.getLanguage() : 'lb';
+                var siteLang = (window.Mersch75I18n && window.Mersch75I18n.getLanguage) ? window.Mersch75I18n.getLanguage() : 'lb';
+                if (['lb', 'fr', 'de', 'en'].indexOf(siteLang) === -1) siteLang = 'lb';
                 pref.value = siteLang;
             }
         })();
@@ -428,8 +428,12 @@
                     msgEl.textContent = (window.Mersch75I18n && window.Mersch75I18n.t && (window.Mersch75I18n.t('trialMessageSuccess'))) || "Merci fir ären Interessi!";
                     msgEl.style.color = "green";
                     form.reset();
-                    const pref = document.getElementById('preferredLanguage');
-                    if (pref) pref.value = siteLang;
+                    var pref = document.getElementById('preferredLanguage');
+                    if (pref) {
+                        var siteLang = (window.Mersch75I18n && window.Mersch75I18n.getLanguage) ? window.Mersch75I18n.getLanguage() : 'lb';
+                        if (['lb', 'fr', 'de', 'en'].indexOf(siteLang) === -1) siteLang = 'lb';
+                        pref.value = siteLang;
+                    }
                     updateTrainingTime();
                     updateParentField();
 
@@ -438,15 +442,13 @@
                         lb: "Probéiert Training: %s\nKategorie: %c\nTrainingszäit: %t\n\nMersch75 Handball – Mir schécken Iech d'Detailer per Mail. Eng Persoun riicht eng Kéier méi kennen un dech mellen fir d'Detailer ze soen an d'Plaz ze konfirméieren.",
                         fr: "Entraînement d'essai: %s\nCatégorie: %c\nHoraire d'entraînement: %t\n\nMersch75 Handball – Nous vous enverrons les détails par e-mail. Quelqu'un vous contactera prochainement pour vous communiquer les détails et confirmer votre place.",
                         de: "Probetraining: %s\nKategorie: %c\nTrainingszeit: %t\n\nMersch75 Handball – Wir senden Ihnen die Details per E-Mail. Eine Person von Mersch75 meldet sich in Kürze bei Ihnen, um Ihnen die Details mitzuteilen und Ihren Platz zu bestätigen.",
-                        en: "Trial training: %s\nCategory: %c\nTraining time: %t\n\nMersch75 Handball – We'll send you the details by email. Someone from Mersch75 will contact you soon to share the details and confirm your spot.",
-                        pt: "Treino experimental: %s\nCategoria: %c\nHorário de treino: %t\n\nMersch75 Handball – Enviamos os detalhes por e-mail. Alguém do Mersch75 entrará em contato em breve para compartilhar os detalhes e confirmar sua vaga."
+                        en: "Trial training: %s\nCategory: %c\nTraining time: %t\n\nMersch75 Handball – We'll send you the details by email. Someone from Mersch75 will contact you soon to share the details and confirm your spot."
                     };
                     const confirmSubjects = {
                         lb: "[Mersch75 Probetraining] Bestëttigung vun ärem Uboschreiwung",
                         fr: "[Mersch75 Entraînement d'essai] Confirmation de votre inscription",
                         de: "[Mersch75 Probetraining] Bestätigung Ihrer Anmeldung",
-                        en: "[Mersch75 Trial Training] Confirmation of your inquiry",
-                        pt: "[Mersch75 Treino Experimental] Confirmação do seu cadastro"
+                        en: "[Mersch75 Trial Training] Confirmation of your inquiry"
                     };
                     const confirmMsg = (confirmMessages[applicantLanguage] || confirmMessages.de)
                         .replace('%s', confirmName)
