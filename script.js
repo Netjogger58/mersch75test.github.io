@@ -1573,7 +1573,7 @@ function initializeTrainingSchedule() {
         },
         {
             group: 'femmes',
-            trainers: 'Anne Bisenius Holm (LUXQF3), Tel. 661 406 836',
+            trainers: 'Katarzyna Pietrasik, Tel. 661 406 836',
             slots: [
                 { dayKey: 'mon', time: '19:00 - 20:30', location: LOC_GARE },
                 { dayKey: 'fri', time: '19:00 - 20:30', location: LOC_OMNI }
@@ -1585,7 +1585,7 @@ function initializeTrainingSchedule() {
         },
         {
             group: 'hommes',
-            trainers: 'Adrien Deischter (LUXQF4), Tel. 661 789 420',
+            trainers: 'Sascha Marzadori (LUXQF4), Adrien Deischter, Tel. 661 789 420',
             slots: [
                 { dayKey: 'mon', time: '20:00 - 21:30', location: LOC_OMNI },
                 { dayKey: 'wed', time: '20:00 - 21:30', location: LOC_OMNI },
