@@ -382,8 +382,7 @@
                 lb: "Probéiert Training: %s\nTrainingszäit: %t\n\nMersch75 Handball – Ech schécken Iech d'Detailer per Mail.\nApplicant language: %l",
                 fr: "Entraînement d'essai: %s\nHoraire d'entraînement: %t\n\nMersch75 Handball – Nous vous envoyons les détails par e-mail.\nLangue du candidat: %l",
                 de: "Probetraining: %s\nTrainingszeit: %t\n\nMersch75 Handball – Wir senden Ihnen die Details per E-Mail.\nBewerbersprache: %l",
-                en: "Trial training: %s\nTraining time: %t\n\nMersch75 Handball – We'll send you the details by email.\nApplicant language: %l",
-                pt: "Treino experimental: %s\nHorário de treino: %t\n\nMersch75 Handball – Enviamos os detalhes por e-mail.\nIdioma do candidato: %l"
+                en: "Trial training: %s\nTraining time: %t\n\nMersch75 Handball – We'll send you the details by email.\nApplicant language: %l"
             };
             const msgTemplate = trialMessages[applicantLanguage] || trialMessages.de;
             const message = msgTemplate
@@ -430,9 +429,9 @@
                     form.reset();
                     var pref = document.getElementById('preferredLanguage');
                     if (pref) {
-                        var siteLang = (window.Mersch75I18n && window.Mersch75I18n.getLanguage) ? window.Mersch75I18n.getLanguage() : 'lb';
-                        if (['lb', 'fr', 'de', 'en'].indexOf(siteLang) === -1) siteLang = 'lb';
-                        pref.value = siteLang;
+                        var currentLang = (window.Mersch75I18n && window.Mersch75I18n.getLanguage) ? window.Mersch75I18n.getLanguage() : 'lb';
+                        if (['lb', 'fr', 'de', 'en'].indexOf(currentLang) === -1) currentLang = 'lb';
+                        pref.value = currentLang;
                     }
                     updateTrainingTime();
                     updateParentField();
