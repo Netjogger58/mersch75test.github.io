@@ -21,6 +21,8 @@
         .trial-break-notice { font-size: 0.95rem; font-style: italic; color: #555; margin-top: 0.25rem; }
         .trial-join-notice { font-size: 0.95rem; color: #333; margin-top: 0.5rem; }
         .trial-join-notice a { color: #0055a4; text-decoration: underline; }
+        .trial-flh-note { font-size: 0.85rem; margin: 0.75rem 0; }
+        .trial-flh-note a { color: #0055a4; text-decoration: underline; }
     </style>
     <script src="consent.js"></script>
 </head>
@@ -102,18 +104,29 @@
                         <label id="parentField" class="parent-field"><span data-i18n="trialLabelParent">Numm vum Erzéiungsberechtegten</span> <input type="text" name="parentName" required></label>
                         <label><span data-i18n="trialLabelEmail">E-Mail</span> <input type="email" name="email" required></label>
                         <label><span data-i18n="trialLabelPhone">Telefon</span> <input type="tel" name="phone"></label>
+                        <label><span data-i18n="trialLabelLanguage">Sprach fir d'Responn</span>
+                            <select name="preferredLanguage" id="preferredLanguage" required>
+                                <option value="lb">Lëtzebuergesch</option>
+                                <option value="fr">Français</option>
+                                <option value="de">Deutsch</option>
+                                <option value="en">English</option>
+                                <option value="pt">Português</option>
+                            </select>
+                        </label>
                         <label><span data-i18n="trialLabelCategory">Kategorie</span>
                             <select name="teamCategory" id="teamCategory" required>
                                 <option value="">Automatesch erkennen</option>
                             </select>
                         </label>
 
-                        <div class="trial-training-time" id="trainingTimeBox" style="display:none;">
-                            <strong data-i18n="trialTrainingTimeLabel">Däi Training:</strong>
-                            <div id="trainingTimeText"></div>
-                        </div>
+                         <div class="trial-training-time" id="trainingTimeBox" style="display:none;">
+                             <strong data-i18n="trialTrainingTimeLabel">Däi Training:</strong>
+                             <div id="trainingTimeText"></div>
+                         </div>
 
-                        <label><span data-i18n="trialLabelNote">Bemierkung</span> <textarea name="note" rows="3"></textarea></label>
+                         <p class="trial-flh-note"><small><a href="https://www.flh.lu/f-l-h/categories-dage" target="_blank" rel="noopener" data-i18n="trialFlhCategoriesLink">FLH Kategoriesse weiderkieën</a></small></p>
+
+                         <label><span data-i18n="trialLabelNote">Bemierkung</span> <textarea name="note" rows="3"></textarea></label>
                         <label class="checkbox-label">
                             <input type="checkbox" name="consent" required>
                             <span data-i18n="trialConsent">Ech erlaben d’Kontaktaufnahm per E-Mail / Telefon fir d’Organisatioun vum Probéieren-Training.</span>
@@ -338,6 +351,14 @@
         updateCategoryOptions();
         updateParentField();
 
+        (function setDefaultPreferredLanguage() {
+            const pref = document.getElementById('preferredLanguage');
+            if (pref) {
+                const siteLang = (window.Mersch75I18n && window.Mersch75I18n.getLanguage) ? window.Mersch75I18n.getLanguage() : 'lb';
+                pref.value = siteLang;
+            }
+        })();
+
         document.addEventListener('mersch75:languagechange', function(e) {
             var lang = e && e.detail ? e.detail.language : null;
             if (lang && TRAINING_TIMES_MAP[lang]) {
@@ -352,7 +373,8 @@
             const form = e.target;
             const raw = Object.fromEntries(new FormData(form));
             const isAdult = raw.teamCategory === 'Seniors Femmes' || raw.teamCategory === 'Seniors Hommes';
-            const applicantLanguage = (window.Mersch75I18n && window.Mersch75I18n.getLanguage) ? window.Mersch75I18n.getLanguage() : 'de';
+            const siteLang = (window.Mersch75I18n && window.Mersch75I18n.getLanguage) ? window.Mersch75I18n.getLanguage() : 'lb';
+            const applicantLanguage = raw.preferredLanguage || siteLang;
             const deTrainingTime = TRAINING_TIMES_DE[raw.teamCategory] || '';
             const msgEl = document.getElementById('trialMessage');
 
@@ -381,6 +403,7 @@
                 trainingTimeDE: deTrainingTime,
                 trainingTime: TRAINING_TIMES[raw.teamCategory] || '',
                 applicantLanguage: applicantLanguage,
+                preferredLanguage: raw.preferredLanguage || '',
                 note: raw.note || '',
             };
             const formData = new FormData();
@@ -405,8 +428,43 @@
                     msgEl.textContent = (window.Mersch75I18n && window.Mersch75I18n.t && (window.Mersch75I18n.t('trialMessageSuccess'))) || "Merci fir ären Interessi!";
                     msgEl.style.color = "green";
                     form.reset();
+                    const pref = document.getElementById('preferredLanguage');
+                    if (pref) pref.value = siteLang;
                     updateTrainingTime();
                     updateParentField();
+
+                    const confirmName = isAdult ? [raw.firstName, raw.childName].filter(Boolean).join(' ') : raw.childName;
+                    const confirmMessages = {
+                        lb: "Probéiert Training: %s\nKategorie: %c\nTrainingszäit: %t\n\nMersch75 Handball – Mir schécken Iech d'Detailer per Mail. Eng Persoun riicht eng Kéier méi kennen un dech mellen fir d'Detailer ze soen an d'Plaz ze konfirméieren.",
+                        fr: "Entraînement d'essai: %s\nCatégorie: %c\nHoraire d'entraînement: %t\n\nMersch75 Handball – Nous vous enverrons les détails par e-mail. Quelqu'un vous contactera prochainement pour vous communiquer les détails et confirmer votre place.",
+                        de: "Probetraining: %s\nKategorie: %c\nTrainingszeit: %t\n\nMersch75 Handball – Wir senden Ihnen die Details per E-Mail. Eine Person von Mersch75 meldet sich in Kürze bei Ihnen, um Ihnen die Details mitzuteilen und Ihren Platz zu bestätigen.",
+                        en: "Trial training: %s\nCategory: %c\nTraining time: %t\n\nMersch75 Handball – We'll send you the details by email. Someone from Mersch75 will contact you soon to share the details and confirm your spot.",
+                        pt: "Treino experimental: %s\nCategoria: %c\nHorário de treino: %t\n\nMersch75 Handball – Enviamos os detalhes por e-mail. Alguém do Mersch75 entrará em contato em breve para compartilhar os detalhes e confirmar sua vaga."
+                    };
+                    const confirmSubjects = {
+                        lb: "[Mersch75 Probetraining] Bestëttigung vun ärem Uboschreiwung",
+                        fr: "[Mersch75 Entraînement d'essai] Confirmation de votre inscription",
+                        de: "[Mersch75 Probetraining] Bestätigung Ihrer Anmeldung",
+                        en: "[Mersch75 Trial Training] Confirmation of your inquiry",
+                        pt: "[Mersch75 Treino Experimental] Confirmação do seu cadastro"
+                    };
+                    const confirmMsg = (confirmMessages[applicantLanguage] || confirmMessages.de)
+                        .replace('%s', confirmName)
+                        .replace('%c', raw.teamCategory)
+                        .replace('%t', deTrainingTime);
+                    const confirmSubject = confirmSubjects[applicantLanguage] || confirmSubjects.de;
+
+                    const confirmFormData = new FormData();
+                    confirmFormData.append('access_key', 'ae4baf1e-2a42-4438-9e92-a7ae3fa89eb0');
+                    confirmFormData.append('to_email', raw.email);
+                    confirmFormData.append('subject', confirmSubject);
+                    confirmFormData.append('from_name', 'Mersch75 Handball');
+                    confirmFormData.append('replyto', 'info@mersch75.lu');
+                    confirmFormData.append('message', confirmMsg);
+                    fetch('https://api.web3forms.com/submit', {
+                        method: "POST",
+                        body: confirmFormData
+                    }).catch(function() {});
                 } else {
                     msgEl.textContent = resp.message || ((window.Mersch75I18n && window.Mersch75I18n.t && (window.Mersch75I18n.t('trialMessageError'))) || "Fehler.");
                     msgEl.style.color = "red";
