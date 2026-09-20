@@ -5872,7 +5872,7 @@ body[data-gen-unlocked="1"] .poster-edit-overlay { display: inline-flex; }
     .poster-shell-hero picture {
         display: block;
         width: 100%;
-        height: auto;
+        height: 100%;
         min-height: 0;
     }
 
