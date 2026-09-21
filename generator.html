@@ -2783,39 +2783,45 @@ function dataUrlToBlob(dataUrl) {
 }
 
 async function savePostersToHomepage(landscapeDataUrl, portraitDataUrl, stamp) {
-    if (!('showSaveFilePicker' in window)) {
+    // Direkt-Publish: Speichere die Bilder direkt in die Projekt-Ordner, nicht in "Dokumente".
+    // Zeige dem Nutzer den Projektordner an und lasse ihn auswählen.
+    if (!('showDirectoryPicker' in window)) {
+        // Fallback: Browser-Download + manuelle Schritte
         triggerDownload(landscapeDataUrl, 'current-matchposter.webp');
-        triggerDownload(portraitDataUrl, 'current-matchposter-portrait.webp');
-        openHomepageHandoffModal(stamp, true);
+        triggerDownload(portraitDataUrl, 'portrait-poster-neu.png');
+        openHomepageHandoffModal(stamp, true, false);
         return;
     }
-    try {
-        var landscapeBlob = dataUrlToBlob(landscapeDataUrl);
-        var portraitBlob = dataUrlToBlob(portraitDataUrl);
 
-        var landscapeHandle = await window.showSaveFilePicker({
-            suggestedName: 'current-matchposter.webp',
-            types: [{ description: 'WebP Image', accept: { 'image/webp': ['.webp'] } }]
+    try {
+        const projectDir = await window.showDirectoryPicker({
+            mode: 'readwrite',
+            title: 'Projektordner auswählen'
         });
-        var landscapeWritable = await landscapeHandle.createWritable();
-        await landscapeWritable.write(landscapeBlob);
+
+        // Speichere Landscape direkt in Media/Hauptseite
+        const mediaDir = await projectDir.getDirectoryHandle('Media', { create: true });
+        const hauptseiteDir = await mediaDir.getDirectoryHandle('Hauptseite', { create: true });
+        const landscapeHandle = await hauptseiteDir.getFileHandle('current-matchposter.webp', { create: true });
+        const landscapeWritable = await landscapeHandle.createWritable();
+        await landscapeWritable.write(dataUrlToBlob(landscapeDataUrl));
         await landscapeWritable.close();
 
-        var portraitHandle = await window.showSaveFilePicker({
-            suggestedName: 'current-matchposter-portrait.webp',
-            types: [{ description: 'WebP Image', accept: { 'image/webp': ['.webp'] } }]
-        });
-        var portraitWritable = await portraitHandle.createWritable();
-        await portraitWritable.write(portraitBlob);
+        // Speichere Portrait direkt in assets
+        const assetsDir = await projectDir.getDirectoryHandle('assets', { create: true });
+        const portraitHandle = await assetsDir.getFileHandle('portrait-poster-neu.png', { create: true });
+        const portraitWritable = await portraitHandle.createWritable();
+        await portraitWritable.write(dataUrlToBlob(portraitDataUrl));
         await portraitWritable.close();
 
+        // Danach nur noch Git-Befehle kopieren
         openHomepageHandoffModalAuto(stamp, true);
     } catch (e) {
         if (e.name === 'AbortError') return;
         console.error('Automatesch ofleeën fehlgeschlagen:', e);
         triggerDownload(landscapeDataUrl, 'current-matchposter.webp');
-        triggerDownload(portraitDataUrl, 'current-matchposter-portrait.webp');
-        openHomepageHandoffModal(stamp, true);
+        triggerDownload(portraitDataUrl, 'portrait-poster-neu.png');
+        openHomepageHandoffModal(stamp, true, false);
     }
 }
 
@@ -2823,11 +2829,62 @@ function openHomepageHandoffModalAuto(stamp, hasPortrait) {
     openHomepageHandoffModal(stamp, hasPortrait, true);
 }
 
+async function copyToProjectFolder() {
+    if (!('showDirectoryPicker' in window)) {
+        // Fallback: simply proceed to normal download flow
+        // The user can then manually copy files if needed
+        return false;
+    }
+    try {
+        // Get current landscape data URL from the main poster
+        const landscapeEl = document.getElementById('poster');
+        if (!landscapeEl) throw new Error('Landscape poster not found');
+        
+        const landscapeCanvas = await html2canvas(landscapeEl, {
+            scale: 2,
+            useCORS: true,
+            backgroundColor: null
+        });
+        const landscapeDataUrl = landscapeCanvas.toDataURL('image/webp', 0.95);
+        
+        // Get current portrait data URL
+        const portraitDataUrl = await renderPortraitDataUrl();
+        
+        const projectDir = await window.showDirectoryPicker({
+            mode: 'readwrite',
+            title: 'Projektordner auswählen — Dateien werden direkt kopiert'
+        });
+        
+        // Copy landscape to Media/Hauptseite
+        const mediaDir = await projectDir.getDirectoryHandle('Media', { create: true });
+        const hauptseiteDir = await mediaDir.getDirectoryHandle('Hauptseite', { create: true });
+        const landscapeHandle = await hauptseiteDir.getFileHandle('current-matchposter.webp', { create: true });
+        const landscapeWritable = await landscapeHandle.createWritable();
+        await landscapeWritable.write(dataUrlToBlob(landscapeDataUrl));
+        await landscapeWritable.close();
+        
+        // Copy portrait to assets
+        const assetsDir = await projectDir.getDirectoryHandle('assets', { create: true });
+        const portraitHandle = await assetsDir.getFileHandle('portrait-poster-neu.png', { create: true });
+        const portraitWritable = await portraitHandle.createWritable();
+        await portraitWritable.write(dataUrlToBlob(portraitDataUrl));
+        await portraitWritable.close();
+        
+        openHomepageHandoffModalAuto(generateTimestamp(), true);
+        return true;
+    } catch (e) {
+        if (e.name === 'AbortError') return false;
+        console.error('Dateien konnten nicht direkt kopiert werden:', e);
+        openHomepageHandoffModal(generateTimestamp(), false, false);
+        return false;
+    }
+}
+
 function openHomepageHandoffModal(stamp, hasPortrait, auto) {
     var existing = document.getElementById('home-handoff-modal');
     if (existing) existing.remove();
     var files = hasPortrait
-        ? '<code>current-matchposter.webp</code> + <code>current-matchposter-portrait.webp</code>'
+        ? '<code>current-matchposter.webp</code> + <code>portrait-poster-neu.png</code>'
         : '<code>current-matchposter.webp</code>';
     var gitMsg = 'Matchposter ' + stamp;
     var autoBanner = auto
@@ -3086,10 +3143,23 @@ function openHomepageHandoffModal(stamp, hasPortrait, auto) {
                 dd.classList.remove('active');
             });
         }
-        const portraitBtn = document.getElementById('btn-dl-portrait-top');
-        if (portraitBtn) {
-            portraitBtn.addEventListener('click', function(e) { e.preventDefault(); downloadPortraitImage(); });
-        }
+        // "Auf Homepage übernehmen" – Dateien direkt in die Projekt-Ordner speichern
+const portraitBtn = document.getElementById('btn-dl-portrait-top');
+if (portraitBtn) {
+    portraitBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        // Versuche zuerst, die Dateien direkt in die Projekt-Ordner zu speichern
+        copyToProjectFolder();
+    });
+}
+
+// Alternative: Kopieren & hochladen in Projektordner (für bessere Benutzerführung)
+const copyBtn = document.getElementById('btn-copy-to-project');
+if (copyBtn) {
+    copyBtn.addEventListener('click', function() {
+        copyToProjectFolder();
+    });
+}
     }
 
     function wireWeekSelector() {
