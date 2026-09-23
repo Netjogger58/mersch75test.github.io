@@ -65,6 +65,13 @@ Das Bild `assets/portrait-poster-neu.png` war **kein leeres Hintergrundbild**, s
 - **Änderung:** `<picture id="landscape-poster-pic">` vereinacht zu einer einzigen WebP-Quelle + `<img>`-Fallback, beide = `Media/Hauptseite/Matchday 260926 LSP.webp`. Portrait-`<source>` (Mobil-Hochkant) und Portrait-Fallback entfernt. **Download-Buttons (Landscape/Portrait) unverändert.**
 - **Hinweis:** Auf dem Handy (Hochkant) wird das Landscape-Poster jetzt ebenfalls angezeigt (hochkant gedreht), statt des Portrait-Posters.
 
+#### Korrektur (gleicher Tag, finale Variante)
+- **User-Klärung:** gewünscht ist das responsive Original-Verhalten:
+  - Handy **Hochkant** (≤900px + portrait) → **Portrait**-Poster
+  - Handy **Querformat** → **Landscape**-Poster
+  - **PC** (jede Orientierung) → **nur Landscape**-Poster
+- **Finale Struktur:** Portrait-`<source>` mit `media="(max-width: 900px) and (orientation: portrait)"` zurück, Landscape als `<source>` (ohne media) und als `<img>`-Fallback (statt früher Portrait-Fallback). Der wirkungslose `type="image/avif"`-Source (zeigte auf .webp) entfällt.
+
 ### 2) Menü "geht nicht mehr auf" – Diagnose: Live funktioniert es
 - Headless-Chrome-Test von `https://mersch75.lu/`: **kein JS-Fehler**, `script.js` lädt, DOM enthält `site-menu-shell`/`site-menu-primary`/`site-menu-close` → `initializeSiteMenu()` läuft komplett durch; beide Poster-Pfade liefern HTTP 200.
 - Wahrscheinlichste Ursache beim Reporter: **Browser-Cache des defekten Zwischenstands `37d172a`** (index.html auf 155 Zeilen beschnitten, ohne `<script src="script.js">` → Menü konnte gar nicht funktionieren). Abhilfe: **hart neu laden** (Cmd+Shift+R / Safari: Website neu laden), HTML-Cache auf GitHub Pages läuft nach ≤10 min aus.
