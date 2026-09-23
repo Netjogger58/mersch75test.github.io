@@ -55,3 +55,21 @@ Das Bild `assets/portrait-poster-neu.png` war **kein leeres Hintergrundbild**, s
 - Portrait zeigt NUR dynamische Inhalte (neue Spiele), kein altes Hintergrundbild mehr
 - Bei genau einem Spiel → Block 50% Breite, zentriert
 - "Poster herunterladen" → sauberes Portrait ohne alte Spiele darunter
+
+---
+
+## 2026-09-23: Homepage-Poster + Menü-Diagnose
+
+### 1) Poster: Landscape statt Portrait auf index.html
+- **Wunsch:** Die erste Seite soll das Landscape-Poster zeigen, nicht das Portrait.
+- **Änderung:** `<picture id="landscape-poster-pic">` vereinacht zu einer einzigen WebP-Quelle + `<img>`-Fallback, beide = `Media/Hauptseite/Matchday 260926 LSP.webp`. Portrait-`<source>` (Mobil-Hochkant) und Portrait-Fallback entfernt. **Download-Buttons (Landscape/Portrait) unverändert.**
+- **Hinweis:** Auf dem Handy (Hochkant) wird das Landscape-Poster jetzt ebenfalls angezeigt (hochkant gedreht), statt des Portrait-Posters.
+
+### 2) Menü "geht nicht mehr auf" – Diagnose: Live funktioniert es
+- Headless-Chrome-Test von `https://mersch75.lu/`: **kein JS-Fehler**, `script.js` lädt, DOM enthält `site-menu-shell`/`site-menu-primary`/`site-menu-close` → `initializeSiteMenu()` läuft komplett durch; beide Poster-Pfade liefern HTTP 200.
+- Wahrscheinlichste Ursache beim Reporter: **Browser-Cache des defekten Zwischenstands `37d172a`** (index.html auf 155 Zeilen beschnitten, ohne `<script src="script.js">` → Menü konnte gar nicht funktionieren). Abhilfe: **hart neu laden** (Cmd+Shift+R / Safari: Website neu laden), HTML-Cache auf GitHub Pages läuft nach ≤10 min aus.
+- Reihenfolge in script.js geprüft: `initializeMobileMenu` (Z89) und `initializeSiteMenu` (Z2714) laufen **vor** `initializeNewsCarousel` (Z2718) – ein Carousel-Fehler könnte das Menü nicht brechen (und es gibt keinen).
+
+### Verification
+- `index.html`: 3 Artikel, 37/37 div, 5/5 section, endet `</html>`, 530 Zeilen.
+- Referenzen des geänderten picture-Blocks prüfen: `Matchday 260926 LSP.webp` → 200 live.
