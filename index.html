@@ -78,7 +78,7 @@
                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20h14v-2H5v2zm7-18L5.33 8.67l1.42 1.42L11 5.83V16h2V5.83l4.25 4.26 1.42-1.42L12 2z"></path></svg>
                         <span data-i18n="posterLandscapeLabel">Landscape</span>
                     </a>
-                    <button type="button" class="poster-action" id="poster-swap-btn" title="Matchday-Poster tauschen" style="background:var(--primary-blue);color:#fff;border:none;padding:8px 14px;border-radius:999px;cursor:pointer;font-size:12px;font-weight:700;letter-spacing:0.03em;">📸 Poster tauschen</button>
+                    <button type="button" class="poster-action" id="poster-set-btn" title="Neue Poster auf Webseite setzen" style="background:var(--primary-yellow);color:var(--primary-blue);border:none;padding:8px 14px;border-radius:999px;cursor:pointer;font-size:12px;font-weight:800;letter-spacing:0.03em;">📸 Neue Poster setzen</button>
                     <a class="poster-action" href="assets/portrait-poster-neu.png" download="portrait-poster-neu.png" title="Portrait herunterladen" data-i18n-attr="title:posterPortraitTitle">
                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20h14v-2H5v2zm7-18L5.33 8.67l1.42 1.42L11 5.83V16h2V5.83l4.25 4.26 1.42-1.42L12 2z"></path></svg>
                         <span data-i18n="posterPortraitLabel">Portrait</span>
@@ -641,52 +641,42 @@
     })();
 
     (function () {
-        var swapBtn = document.getElementById('poster-swap-btn');
-        if (!swapBtn) return;
-        var swapped = false;
-        swapBtn.addEventListener('click', function () {
-            swapped = !swapped;
+        var setPosterBtn = document.getElementById('poster-set-btn');
+        if (!setPosterBtn) return;
+        setPosterBtn.addEventListener('click', function () {
+            // Clear and update poster sources with cache-busting
             var pic = document.getElementById('landscape-poster-pic');
             if (!pic) return;
             var img = pic.querySelector('img');
             var sources = pic.querySelectorAll('source');
-            if (swapped) {
-                for (var i = 0; i < sources.length; i++) {
-                    var src = sources[i].getAttribute('srcset') || '';
-                    if (src.indexOf('current-matchposter') !== -1 && src.indexOf('portrait') === -1) {
-                        if (src.indexOf('avif') !== -1 || src.indexOf('AVIF') !== -1) {
-                            sources[i].setAttribute('srcset', src.replace(/current-matchposter[^\s]*/g, 'Mersch75_Matchday_4K_200926.avif'));
-                        } else if (src.indexOf('webp') !== -1 || src.indexOf('WEBP') !== -1) {
-                            sources[i].setAttribute('srcset', src.replace(/current-matchposter[^\s]*/g, 'Mersch75_Matchday_4K_200926.avif'));
-                        }
-                    }
+            
+            var ts = Date.now();
+            
+            // Update all sources with cache-busting
+            for (var i = 0; i < sources.length; i++) {
+                var src = sources[i].getAttribute('srcset') || '';
+                if (src.indexOf('portrait-poster-neu.png') !== -1) {
+                    sources[i].setAttribute('srcset', 'assets/portrait-poster-neu.png?t=' + ts);
+                } else if (src.indexOf('current-matchposter') !== -1) {
+                    sources[i].setAttribute('srcset', src + (src.indexOf('?') === -1 ? '?t=' + ts : '&t=' + ts));
                 }
-                if (img) {
-                    img.setAttribute('src', 'Media/Hauptseite/Mersch75_Matchday_4K_200926.avif');
-                    var downloadLink = document.querySelector('#poster-actions .poster-action[href*="current-matchposter"]');
-                    if (downloadLink) {
-                        downloadLink.setAttribute('href', 'Media/Hauptseite/Mersch75_Matchday_4K_200926.avif');
-                        downloadLink.setAttribute('download', 'Mersch75_Matchday_4K_200926.avif');
-                    }
-                }
-                swapBtn.textContent = '📸 Portrait-Poster zurückschalten';
-            } else {
-                for (var j = 0; j < sources.length; j++) {
-                    var src2 = sources[j].getAttribute('srcset') || '';
-                    if (src2.indexOf('Mersch75_Matchday_4K') !== -1) {
-                        sources[j].setAttribute('srcset', src2.replace(/Mersch75_Matchday_4K_200926[^\s]*/g, 'current-matchposter.webp'));
-                    }
-                }
-                if (img) {
-                    img.setAttribute('src', 'Media/Hauptseite/current-matchposter.webp');
-                    var downloadLink2 = document.querySelector('#poster-actions .poster-action[href*="Mersch75_Matchday_4K"]');
-                    if (downloadLink2) {
-                        downloadLink2.setAttribute('href', 'Media/Hauptseite/current-matchposter.webp');
-                        downloadLink2.setAttribute('download', 'current-matchposter.webp');
-                    }
-                }
-                swapBtn.textContent = '📸 Poster tauschen';
             }
+            
+            // Update the fallback img
+            if (img) {
+                img.setAttribute('src', 'assets/portrait-poster-neu.png?t=' + ts);
+            }
+            
+            // Show success message
+            var originalText = setPosterBtn.textContent;
+            setPosterBtn.textContent = '✅ Poster gesetzt';
+            setPosterBtn.style.background = 'var(--primary-blue)';
+            setPosterBtn.style.color = '#fff';
+            setTimeout(function() {
+                setPosterBtn.textContent = originalText;
+                setPosterBtn.style.background = 'var(--primary-yellow)';
+                setPosterBtn.style.color = 'var(--primary-blue)';
+            }, 3000);
         });
     })();
 
