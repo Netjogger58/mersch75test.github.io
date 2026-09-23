@@ -653,16 +653,16 @@
             // Create new sources based on orientation
             var newSources = '';
             if (isPortrait) {
-                newSources += '<source srcset="assets/portrait-poster-neu.png?t=' + ts + '" type="image/png">';
+                newSources += '<source srcset="Media/Hauptseite/Portrait 26092026.webp?t=' + ts + '" type="image/webp">';
             } else {
-                newSources += '<source srcset="Media/Hauptseite/current-matchposter.avif?t=' + ts + '" type="image/avif">';
-                newSources += '<source srcset="Media/Hauptseite/current-matchposter.webp?t=' + ts + '" type="image/webp">';
+                newSources += '<source srcset="Media/Hauptseite/Matchday 260926 LSP.webp?t=' + ts + '" type="image/avif">';
+                newSources += '<source srcset="Media/Hauptseite/Matchday 260926 LSP.webp?t=' + ts + '" type="image/webp">';
             }
 
             // Fallback img: portrait shows portrait poster, landscape shows LS poster
             var imgSrc = isPortrait 
-                ? 'assets/portrait-poster-neu.png?t=' + ts 
-                : 'Media/Hauptseite/current-matchposter.webp?t=' + ts;
+                ? 'Media/Hauptseite/Portrait 26092026.webp?t=' + ts 
+                : 'Media/Hauptseite/Matchday 260926 LSP.webp?t=' + ts;
 
             // Replace the entire picture element to force browser reload
             var newPic = document.createElement('picture');
