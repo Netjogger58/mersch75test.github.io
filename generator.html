@@ -1677,369 +1677,100 @@ function renderLandscapeU11EspoirTournamentFallback(cont) {
 
 function updateLandscapePreview() {
     const smLEl = document.getElementById('l-scale-mixvoip-l'); const smL = smLEl ? smLEl.value : 280;
-    const sdEl = document.getElementById('l-scale-matchday'); const sd = sdEl ? sdEl.value : 90; 
-    const smREl = document.getElementById('l-scale-mixvoip-r'); const smR = smREl ? smREl.value : 280; 
+    const sdEl = document.getElementById('l-scale-matchday'); const sd = sdEl ? sdEl.value : 90;
+    const smREl = document.getElementById('l-scale-mixvoip-r'); const smR = smREl ? smREl.value : 280;
     const s50El = document.getElementById('l-scale-50years'); const s50 = s50El ? s50El.value : 82;
-    
+
     const imgMixL = document.querySelector('.mixvoip-left img'); if (imgMixL) imgMixL.style.width = smL + 'px';
     const imgMixR = document.querySelector('.mixvoip-right img'); if (imgMixR) imgMixR.style.width = smR + 'px';
     const imgMatch = document.querySelector('.matchday-text img'); if (imgMatch) imgMatch.style.height = sd + 'px';
     const layer50L = document.querySelector('.layer-50years-left'); if (layer50L) { layer50L.style.width = s50 + 'px'; layer50L.style.height = s50 + 'px'; layer50L.style.display = 'flex'; }
     const layer50R = document.querySelector('.layer-50years-right'); if (layer50R) { layer50R.style.width = s50 + 'px'; layer50R.style.height = s50 + 'px'; layer50R.style.display = 'flex'; }
-    
-    const cont = document.getElementById('l-dynamic-main'); if (!cont) return;
+
+    const cont = document.getElementById('l-dynamic-main');
+    if (!cont) return;
     cont.innerHTML = '';
-    const ymEl = document.getElementById('toggle-youth-mode'); const ym = ymEl ? ymEl.checked : false;
-    
 
-    const sel = document.getElementById('week-selector');
-    const selectedWeek = sel ? sel.value : '';
-    let allActive = [], at = [];
+    const ymEl = document.getElementById('toggle-youth-mode');
+    const ym = ymEl ? ymEl.checked : false;
+
+    const seniorIds = ['s1', 'fe', 's2'];
+    const youthIds = ['u15', 'u13p1', 'u13p2', 'u11MEL', 'u9M', 'u7M', 'u4M'];
+    const tournoiIds = ['u11MES'];
+
+    const seniorTeams = [];
+    const youthTeams = [];
+    const tournoiTeams = [];
+
     for (let i = 0; i < TEAM_CONFIGS.length; i++) {
-        const p = TEAM_CONFIGS[i].id;
-        const show = document.getElementById(p + '-land-show');
-        if (show && show.checked) {
-            const hasPhoto = teamHasUploadedPhoto(p);
-            const hasGame = teamHasConfiguredGame(p);
-            if (!hasPhoto && !hasGame) continue;
-            if (p === 'u11MES' || p === 'u9M' || p === 'u7M') {
-                at.push({ id: p, hasGame: hasGame });
-            } else {
-                allActive.push({ id: p, hasGame: hasGame });
-            }
+        const id = TEAM_CONFIGS[i].id;
+        if (teamHasConfiguredGame(id) || teamHasUploadedPhoto(id)) {
+            if (seniorIds.includes(id)) seniorTeams.push(id);
+            else if (tournoiIds.includes(id)) tournoiTeams.push(id);
+            else if (youthIds.includes(id)) youthTeams.push(id);
         }
     }
-    if (teamHasConfiguredGame('u11MES') && !at.some(function(team) { return team.id === 'u11MES'; })) {
-        at.unshift({ id: 'u11MES', hasGame: true });
-    }
-    const sortFn = function(a, b) {
-        return getAssignedPos(a.id) - getAssignedPos(b.id);
-    };
-    allActive.sort(sortFn);
-    at.sort(sortFn);
-
-    // Photo-Only Mode: All Teams (allActive + at) hunn just Fotos ouni Spiller
-    const allPhotoTeams = allActive.concat(at).filter(function(team) {
-        return teamHasUploadedPhoto(team.id);
-    });
-    const photoOnlyMode = allPhotoTeams.length > 0 && allPhotoTeams.every(function(team) {
-        return teamHasUploadedPhoto(team.id) && !team.hasGame;
-    });
-
-    if (photoOnlyMode) {
-        // All Photo-Teams (allActive + at) fir d'6 Fotoen-Layout huelen
-        const photoAssignments = buildLandscapePhotoOnlyAssignments(allPhotoTeams);
-        for (let i = 0; i < photoAssignments.length; i++) {
-            renderLandscapeGame(photoAssignments[i].id, photoAssignments[i].slot, cont, false);
-        }
-
-        const tcPhotoOnly = document.getElementById('l-dynamic-tournoi');
-        if (tcPhotoOnly) tcPhotoOnly.innerHTML = '';
-        return;
-    }
-
-    const hasU13Game1 = !!getGameFieldValue('u13p1', 'date', 1);
-    const hasU13Game2 = hasSecondGameConfigured('u13p1');
-    const isEnglishWeekYouthMode =
-        selectedWeek === 'w_07_06_26' &&
-        hasU13Game1 &&
-        hasU13Game2 &&
-        document.getElementById('u15-land-show') &&
-        document.getElementById('u15-land-show').checked;
-
-    if (isEnglishWeekYouthMode) {
-        const tcSpecial = document.getElementById('l-dynamic-tournoi');
-        if (tcSpecial) tcSpecial.innerHTML = '';
-
-        // Vertikale Hierarchie wie im Referenzlayout:
-        // Turnier (oben) -> U13 (mitte) -> U11 Elite (unten rechts)
-        const stackedLeft = 1104;
-        const tournamentTop = 70;
-        const u13Top = 205;
-        const u11Top = 350;
-
-        renderLandscapeGame({ id: 'u15', gameSlot: 1 }, { type: 'big', top: 350, left: 36 }, cont, teamHasConfiguredGame('u15'));
-        renderLandscapeGame({ id: 'u13p1', gameSlot: 1 }, { type: 'big', top: 350, left: 570 }, cont, true);
-        renderLandscapeGame({ id: 'u13p2', gameSlot: 2 }, { type: 'big', top: u13Top, left: stackedLeft }, cont, true);
-
-        const u11Active = document.getElementById('u11MEL-land-show') && document.getElementById('u11MEL-land-show').checked;
-        if (u11Active) {
-            renderLandscapeGame({ id: 'u11MEL', gameSlot: 1 }, { type: 'big', top: u11Top, left: stackedLeft }, cont, teamHasConfiguredGame('u11MEL'));
-        }
-
-        const tournamentPriority = ['u11MES', 'u9M', 'u7M'];
-        let tournamentTeam = null;
-        for (let i = 0; i < tournamentPriority.length; i++) {
-            const id = tournamentPriority[i];
-            const showEl = document.getElementById(id + '-land-show');
-            if (showEl && showEl.checked) {
-                tournamentTeam = id;
-                break;
-            }
-        }
-        if (tournamentTeam) {
-            renderLandscapeGame({ id: tournamentTeam, gameSlot: 1 }, { type: 'small', top: tournamentTop, left: stackedLeft }, cont, teamHasConfiguredGame(tournamentTeam));
-        }
-        return;
-    }
-    
-    let tTop = 130; let tLeft = 1142; const ht = (at.length > 0);
-    
-    let topTier = []; let lowTier = [];
 
     if (ym) {
-        lowTier = allActive;
-    } else {
-        topTier = allActive.filter(t => getAssignedPos(t.id) <= 2);
-        lowTier = allActive.filter(t => getAssignedPos(t.id) > 2);
-    }
-
-    const regularSelectionCount = topTier.length + lowTier.length;
-
-    if (!ym && allActive.length === 1 && allActive[0].hasGame && hasSecondGameConfigured(allActive[0].id)) {
-        const teamId = allActive[0].id;
-        const u11MesShow = document.getElementById('u11MES-land-show');
-        const hasTournament = at.length > 0 || (u11MesShow && u11MesShow.checked);
-        if (hasTournament) {
-            renderLandscapeGame({ id: teamId, gameSlot: 1 }, { type: 'big', top: 350, left: 36 }, cont, true);
-            renderLandscapeGame({ id: teamId, gameSlot: 2 }, { type: 'big', top: 350, left: 570 }, cont, true);
-            const tournamentTeam = at.find(function(team) { return team.id === 'u11MES'; }) || at[0] || { id: 'u11MES', hasGame: teamHasConfiguredGame('u11MES') };
-            if (tournamentTeam) {
-                renderLandscapeGame({ id: tournamentTeam.id, gameSlot: 1 }, { type: 'big', top: 350, left: 1104 }, cont, tournamentTeam.hasGame);
-            } else {
-                renderLandscapeU11EspoirTournamentFallback(cont);
-            }
-        } else {
-            renderLandscapeGame({ id: teamId, gameSlot: 1 }, { type: 'big', top: 350, left: 260 }, cont, true);
-            renderLandscapeGame({ id: teamId, gameSlot: 2 }, { type: 'big', top: 350, left: 880 }, cont, true);
-        }
-        const tcSingleEnglishWeek = document.getElementById('l-dynamic-tournoi');
-        if (tcSingleEnglishWeek) tcSingleEnglishWeek.innerHTML = '';
-        return;
-    }
-
-    if (ht && !ym && allActive.length > 0 && allActive.length <= 3 && allActive.every(function(team) { return ['u15', 'u13p1', 'u13p2', 'u11MEL'].indexOf(team.id) !== -1; })) {
-        const youthGamesForMainSlots = topTier.concat(lowTier);
-        let centerSlots = [];
-        if (youthGamesForMainSlots.length === 3) {
-            centerSlots = [ { type: 'big', top: 350, left: 36 }, { type: 'big', top: 350, left: 570 }, { type: 'big', top: 350, left: 1104 } ];
-        } else if (youthGamesForMainSlots.length === 2) {
-            centerSlots = [ { type: 'big', top: 350, left: 260 }, { type: 'big', top: 350, left: 880 } ];
-        } else if (youthGamesForMainSlots.length === 1) {
-            centerSlots = [ { type: 'big', top: 350, left: 570 } ];
-        }
-
-        for (let i = 0; i < youthGamesForMainSlots.length; i++) {
-            renderLandscapeGame(youthGamesForMainSlots[i].id, centerSlots[i], cont, youthGamesForMainSlots[i].hasGame);
-        }
-
-        const u11EspoirTournament = at.find(function(team) { return team.id === 'u11MES'; }) || at[0];
-        if (u11EspoirTournament) {
-            renderLandscapeGame({ id: u11EspoirTournament.id, gameSlot: 1 }, { type: 'small', top: 610, left: 1130 }, cont, u11EspoirTournament.hasGame);
-        } else {
-            renderLandscapeU11EspoirTournamentFallback(cont);
-        }
-
-        const tcNoGrid = document.getElementById('l-dynamic-tournoi');
-        if (tcNoGrid) tcNoGrid.innerHTML = '';
-        scalePoster();
-        return;
-    }
-
-    if (ht) {
-        tTop = 110;
-        const youthStartY = 330; const rowHeight = 180; const colOffset1 = 8; const colOffset2 = 183; const colOffset3 = 328;
-        
-        if (topTier.length === 2) {
-            renderLandscapeGame(topTier[0].id, { type: 'big', top: 350, left: 19 }, cont, topTier[0].hasGame);
-            renderLandscapeGame(topTier[1].id, { type: 'big', top: 350, left: 571 }, cont, topTier[1].hasGame);
-        } else if (topTier.length === 1) {
-            renderLandscapeGame(topTier[0].id, { type: 'big', top: 350, left: 571 }, cont, topTier[0].hasGame);
-        }
-
-        const smallSlots = [
-            { type: 'youth3col', top: youthStartY, left: 1142, col1: colOffset1, col2: colOffset2, col3: colOffset3 },
-            { type: 'youth3col', top: youthStartY + rowHeight, left: 1142, col1: colOffset1, col2: colOffset2, col3: colOffset3 },
-            { type: 'youth3col', top: youthStartY + (rowHeight * 2), left: 1142, col1: colOffset1, col2: colOffset2, col3: colOffset3 }
+        const youthSlots = [
+            { type: 'big', top: 350, left: 36 },
+            { type: 'big', top: 350, left: 400 },
+            { type: 'big', top: 350, left: 780 },
+            { type: 'big', top: 350, left: 1160 }
         ];
-
-        for (let i = 0; i < lowTier.length && i < smallSlots.length; i++) {
-            renderLandscapeGame(lowTier[i].id, smallSlots[i], cont, lowTier[i].hasGame);
+        for (let i = 0; i < youthTeams.length && i < youthSlots.length; i++) {
+            renderLandscapeGame(youthTeams[i], youthSlots[i], cont, teamHasConfiguredGame(youthTeams[i]));
         }
-
-    } else {
-        tTop = 80; tLeft = 1142;
-
-        if (ym) {
-            let ySlots = [];
-            if (lowTier.length >= 4) { 
-                ySlots = [ { type: 'big', top: 350, left: 36 }, { type: 'big', top: 350, left: 400 }, { type: 'big', top: 350, left: 780 }, { type: 'big', top: 350, left: 1160 } ];
-            } else if (lowTier.length === 3) { 
-                ySlots = [ { type: 'big', top: 350, left: 36 }, { type: 'big', top: 350, left: 570 }, { type: 'big', top: 350, left: 1104 } ];
-            } else if (lowTier.length === 2) { 
-                ySlots = [ { type: 'big', top: 350, left: 260 }, { type: 'big', top: 350, left: 880 } ];
-            } else if (lowTier.length === 1) { 
-                ySlots = [ { type: 'big', top: 350, left: 570 } ];
-            }
-            for (let i = 0; i < lowTier.length; i++) {
-                renderLandscapeGame(lowTier[i].id, ySlots[i], cont, lowTier[i].hasGame);
-            }
-        } else {
-            if (regularSelectionCount === 3) {
-                const equalSlots = [
-                    { type: 'big', top: 350, left: 36 },
-                    { type: 'big', top: 350, left: 570 },
-                    { type: 'big', top: 350, left: 1104 }
-                ];
-                const equalGames = topTier.concat(lowTier);
-                for (let i = 0; i < equalGames.length; i++) {
-                    renderLandscapeGame(equalGames[i].id, equalSlots[i], cont, equalGames[i].hasGame);
-                }
-                lowTier = [];
-                topTier = [];
-            }
-
-            let baseLeft = 1142 + 33 - 130;
-            
-            if (topTier.length === 2) {
-                renderLandscapeGame(topTier[0].id, { type: 'big', top: 350, left: 19 }, cont, topTier[0].hasGame);
-                renderLandscapeGame(topTier[1].id, { type: 'big', top: 350, left: 571 }, cont, topTier[1].hasGame);
-            } else if (topTier.length === 1) {
-                renderLandscapeGame(topTier[0].id, { type: 'big', top: 350, left: 571 }, cont, topTier[0].hasGame);
-                baseLeft = 1130; 
-            } else if (topTier.length === 0 && lowTier.length <= 3 && lowTier.length > 0) {
-                let centerSlots = [];
-                if (lowTier.length === 3) {
-                    centerSlots = [ { type: 'big', top: 350, left: 36 }, { type: 'big', top: 350, left: 570 }, { type: 'big', top: 350, left: 1104 } ];
-                } else if (lowTier.length === 2) {
-                    centerSlots = [ { type: 'big', top: 350, left: 260 }, { type: 'big', top: 350, left: 880 } ];
-                } else if (lowTier.length === 1) {
-                    centerSlots = [ { type: 'big', top: 350, left: 570 } ];
-                }
-                for (let i = 0; i < lowTier.length; i++) {
-                    renderLandscapeGame(lowTier[i].id, centerSlots[i], cont, lowTier[i].hasGame);
-                }
-                lowTier = []; 
-            }
-
-            let s3 = 330, s4 = 465, s5 = 600, s6 = 735;
-            if (lowTier.length >= 4) { s3 = 250; s4 = 385; s5 = 520; s6 = 655; }
-            else if (lowTier.length === 3) { s3 = 330; s4 = 465; s5 = 600; }
-            else if (lowTier.length === 2) { s3 = 398; s4 = 533; }
-            else if (lowTier.length === 1) { s3 = 465; }
-
-            let smallSlots = [
-                { type: 'small', top: s3, left: baseLeft },
-                { type: 'small', top: s4, left: baseLeft },
-                { type: 'small', top: s5, left: baseLeft },
-                { type: 'small', top: s6, left: baseLeft }
-            ];
-
-            for (let i = 0; i < lowTier.length && i < smallSlots.length; i++) {
-                renderLandscapeGame(lowTier[i].id, smallSlots[i], cont, lowTier[i].hasGame);
-            }
-        }
+        const tc = document.getElementById('l-dynamic-tournoi');
+        if (tc) tc.innerHTML = '';
+        return;
     }
-    
-    const tc = document.getElementById('l-dynamic-tournoi');
-    if (tc) {
-        tc.innerHTML = '';
-        if (at.length > 0) {
-            const tcc = 'text-blue'; const tbg = 'var(--primary-blue)';
-            let th = '<div class="abs ' + tcc + '" style="top:' + tTop + 'px;left:' + tLeft + 'px;width:431px;height:30px;font-size:24px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;text-align:center;color:#FFFFFF;text-shadow:0 0 3px rgba(0,0,0,0.8);">--- TOURNOI ---</div>';
-            th += '<div class="abs" style="top:' + (tTop + 40) + 'px;left:' + (tLeft + 55) + 'px;width:320px;height:3px;background:' + tbg + ';"></div>';
-            th += '<div class="abs" style="top:' + (tTop + 40) + 'px;left:' + (tLeft + 55) + 'px;width:3px;height:10px;background:' + tbg + ';"></div>';
-            th += '<div class="abs" style="top:' + (tTop + 40) + 'px;left:' + (tLeft + 215) + 'px;width:3px;height:10px;background:' + tbg + ';"></div>';
-            th += '<div class="abs" style="top:' + (tTop + 40) + 'px;left:' + (tLeft + 375) + 'px;width:3px;height:10px;background:' + tbg + ';"></div>';
-            var ts2 = [ { top: tTop + 50, left: tLeft + 33 }, { top: tTop + 50, left: tLeft + 193 }, { top: tTop + 50, left: tLeft + 353 } ];
-            
-            var playingT = [];
-            for (var ti = 0; ti < at.length; ti++) { if (at[ti].hasGame) playingT.push(at[ti]); }
-            
-            var cols = [null, null, null];
-            if (playingT.length === 0) {
-                for (var ti = 0; ti < at.length && ti < 3; ti++) { cols[ti] = { id: at[ti].id, active: false }; }
-            } else if (playingT.length === 1) {
-                cols[0] = { id: null, active: false }; cols[1] = { id: playingT[0].id, active: true }; cols[2] = { id: null, active: false };
-            } else if (playingT.length === 2) {
-                cols[0] = { id: playingT[0].id, active: true }; cols[1] = { id: null, active: false }; cols[2] = { id: playingT[1].id, active: true };
-            } else {
-                for (var ti = 0; ti < 3; ti++) { cols[ti] = { id: playingT[ti].id, active: true }; }
-            }
-            
-            for (var ci = 0; ci < 3; ci++) {
-                var col = cols[ci];
-                if (!col) continue;
-                var csl = ts2[ci];
-                th += '<div class="abs game-layer" style="display:block;">';
-                if (col.id) {
-                    var cp = col.id;
-                    var typeEl = document.getElementById(cp + '-type');
-                    var tv = (typeEl ? typeEl.value : "Tournoi") + (teamSuffixes[cp] || '');
-                    var tGameNo = getGameNumber(cp, 1);
-                    if (col.active && tGameNo) tv += ' #' + tGameNo;
-                    var mb = badgeLabels[cp] || cp.replace('esp', '').toUpperCase();
-                    var csclLEl = document.querySelector('.land-scale-logo[data-team="' + cp + '"]');
-                    var csclL = (csclLEl ? parseInt(csclLEl.value, 10) : 100) / 100;
-                    var csclTeEl = document.querySelector('.land-scale-text[data-team="' + cp + '"]');
-                    var csclTe = (csclTeEl ? parseInt(csclTeEl.value, 10) : 100) / 100;
-                    var csclPhotoEl = document.querySelector('.land-scale-photo[data-team="' + cp + '"]');
-                    var csclPhoto = csclPhotoEl ? parseInt(csclPhotoEl.value, 10) : 100;
-                    if (isNaN(csclPhoto)) csclPhoto = 100;
-                    
-                    const photoToggle = document.querySelector('.trigger-photo-toggle[data-team="' + cp + '"]');
-                    const photoSrc = getTeamPhotoSource(cp);
-                    const showPhoto = photoToggle && photoToggle.checked && photoSrc;
-                    
-                    if (col.active && showPhoto) {
-                        th += '<div class="abs" style="top:' + (csl.top + 32) + 'px;left:' + csl.left + 'px;width:50px;height:50px;border-radius:8px;overflow:hidden;box-shadow: 0 5px 15px rgba(0,0,0,0.1); transform: scale(' + csclL + '); transform-origin: top center;"><img src="' + photoSrc + '" style="position:absolute;top:50%;left:50%;width:' + csclPhoto + '%;height:' + csclPhoto + '%;object-fit:cover;transform:translate(-50%,-50%);"></div>';
-                        th += '<div class="abs text-blue" style="top:' + (csl.top - 75) + 'px;left:' + (csl.left - 50) + 'px;width:150px;text-align:center;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;font-size:12px;color:#FFFFFF;text-shadow:0 0 3px rgba(0,0,0,0.8);">' + (document.getElementById(cp + '-land-title').value) + '</div>';
-                    } else if (col.active) {
-                        th += '<div class="abs badge" style="top:' + csl.top + 'px;left:' + csl.left + 'px;width:50px;height:28px;border-radius:6px;transform: scale(' + csclL + '); transform-origin: top center;"><div class="sub" style="font-size:6px;">' + tv + '</div><div class="main" style="font-size:15px;font-weight:900;font-style:italic;">' + mb + '</div></div>';
-                        var cOpp = getGameFieldValue(cp, 'opp', 1) || '-';
-                        var cHome = getGameFieldValue(cp, 'home', 1) || 'home1';
-                        var cIh = cHome.indexOf('home') === 0;
-                        var cLocVal = getGameFieldValue(cp, 'loc', 1) || '';
-                        var cl1 = resolveTournamentPrimaryLogo(cp, cOpp, cIh, cLocVal, CONFIG.merschLogo);
-                        th += '<div class="abs logo-box" style="top:' + (csl.top + 32) + 'px;left:' + csl.left + 'px;width:50px;height:50px;border-radius:8px;padding:4px; transform: scale(' + csclL + '); transform-origin: top center;"><img src="' + cl1 + '" crossorigin="anonymous"></div>';
-                        var ctxh = '';
-                        var cDateEl = document.getElementById(cp + '-date');
-                        var cDv = cDateEl ? cDateEl.value : "";
-                        var cTimeEl = document.getElementById(cp + '-time');
-                        var cTv = cTimeEl ? cTimeEl.value : "";
-                        var cLocEl = document.getElementById(cp + '-loc');
-                        var cLocVal = cLocEl ? cLocEl.value : "";
-                        if (cDv || cLocVal) {
-                            var cDs = cDv ? formatDate(cDv, cTv) : "";
-                            var cLs = "";
-                            if (cLocVal) {
-                                var cParts = cLocVal.split('|');
-                                for (var ck = 0; ck < cParts.length; ck++) { cParts[ck] = cParts[ck].trim(); }
-                                cLs = cParts.join('<br>');
-                            }
-                            var cLc = '#FFFFFF';
-                            if (cDs) ctxh += '<div style="font-family:\'Barlow\',sans-serif;font-weight:800;color:' + cLc + ';font-size:' + (14 * csclTe) + 'px;line-height:1.1;">' + cDs + '</div>';
-                            if (cLs) ctxh += '<div style="font-family:\'Barlow\',sans-serif;font-weight:600;color:' + cLc + ';font-size:' + (11 * csclTe) + 'px;line-height:1.1;margin-top:2px;">' + cLs + '</div>';
-                        }
-                        th += '<div class="abs" style="top:' + (csl.top + 88) + 'px;left:' + (csl.left - 85) + 'px;width:220px;height:auto;text-align:center;overflow:visible;display:flex;flex-direction:column;justify-content:flex-start;align-items:center;">' + ctxh + '</div>';
-                    } else {
-                        th += '<div class="abs badge" style="top:' + csl.top + 'px;left:' + csl.left + 'px;width:50px;height:28px;border-radius:6px;transform: scale(' + csclL + '); transform-origin: top center;"><div class="sub" style="font-size:6px;">' + tv + '</div><div class="main" style="font-size:15px;font-weight:900;font-style:italic;">' + mb + '</div></div>';
-                        th += '<div class="abs logo-box" style="top:' + (csl.top + 32) + 'px;left:' + csl.left + 'px;width:50px;height:50px;border-radius:8px;padding:4px; transform: scale(' + csclL + '); transform-origin: top center;"><img src="' + CONFIG.ballLogo + '" crossorigin="anonymous"></div>';
-                    }
-                } else {
-                    th += '<div class="abs logo-box" style="top:' + (csl.top + 32) + 'px;left:' + csl.left + 'px;width:50px;height:50px;border-radius:8px;padding:4px;"><img src="' + CONFIG.ballLogo + '" crossorigin="anonymous"></div>';
-                }
-                th += '</div>';
-            }
-            tc.innerHTML += th;
+
+    const seniorSlots = [
+        { type: 'big', top: 350, left: 20 },
+        { type: 'big', top: 350, left: 570 },
+        { type: 'big', top: 350, left: 1120 }
+    ];
+    for (let i = 0; i < seniorTeams.length && i < seniorSlots.length; i++) {
+        renderLandscapeGame(seniorTeams[i], seniorSlots[i], cont, teamHasConfiguredGame(seniorTeams[i]));
+    }
+
+    const tournoiPanel = document.getElementById('l-dynamic-tournoi');
+    if (tournoiPanel && tournoiTeams.length > 0) {
+        tournoiPanel.innerHTML = '';
+        const tTop = 350;
+        const tLeft = 1120;
+        let html = '<div style="position:absolute;top:' + tTop + 'px;left:' + tLeft + 'px;width:240px;">';
+        html += '<div style="font-size:14px;font-weight:600;color:#1E1E1E;text-align:center;margin-bottom:8px;">Tournoi</div>';
+        for (let i = 0; i < tournoiTeams.length; i++) {
+            const id = tournoiTeams[i];
+            const hasGame = teamHasConfiguredGame(id);
+            const oppEl = document.getElementById(id + '-opp');
+            const opp = oppEl ? oppEl.value : '';
+            html += '<div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;padding:6px;background:#F5F5F5;border-radius:8px;">';
+            html += '<div style="width:28px;height:28px;border-radius:50%;background:#E07856;display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-size:11px;font-weight:700;">' + id.toUpperCase().charAt(0) + '</div>';
+            html += '<div style="flex:1;font-size:11px;color:#1E1E1E;"><div style="font-weight:600;">' + (opp || 'Tournoi') + '</div></div>';
+            html += '<div style="font-size:11px;color:' + (hasGame ? '#1E7E34' : '#666666') + ';">' + (hasGame ? 'Teilgenommen' : 'Ausstehend') + '</div>';
+            html += '</div>';
+        }
+        html += '</div>';
+        tournoiPanel.innerHTML = html;
+    } else if (tournoiPanel) {
+        tournoiPanel.innerHTML = '';
+    }
+
+    const youthCols = [40, 500, 800, 1200];
+    for (let i = 0; i < youthTeams.length && i < youthCols.length; i++) {
+        renderLandscapeGame(youthTeams[i], { type: 'small', top: 600, left: youthCols[i] }, cont, teamHasConfiguredGame(youthTeams[i]));
+    }
+    if (youthTeams.length > 4) {
+        for (let i = 4; i < youthTeams.length && (i - 4) < youthCols.length; i++) {
+            renderLandscapeGame(youthTeams[i], { type: 'small', top: 660, left: youthCols[i - 4] }, cont, teamHasConfiguredGame(youthTeams[i]));
         }
     }
 
-    if (!ym && teamHasConfiguredGame('u11MES') && allActive.every(function(team) { return ['u15', 'u13p1', 'u13p2', 'u11MEL'].indexOf(team.id) !== -1; })) {
-        renderLandscapeU11EspoirTournamentFallback(cont);
-    }
+    scalePoster();
 }
-
 function renderLandscapeGame(teamRef, sl, cont, hasGame) {
     const teamData = (typeof teamRef === 'string')
         ? { id: teamRef, gameSlot: 1 }
@@ -2981,14 +2712,6 @@ function openHomepageHandoffModal(stamp, hasPortrait, auto) {
             landWrap.style.height = Math.round(bh * scale) + 'px';
         }
 
-
-    const toggleTeam = function(teamId, on) {
-        return window.toggleTeam(teamId, on);
-    };
-
-    const updateAllPreviews = function() {
-        return window.updateAllPreviews();
-    };
         const portWrap = document.getElementById('wrapper-portrait');
         const portPoster = document.getElementById('poster-portrait');
         if (portWrap && portPoster) {
