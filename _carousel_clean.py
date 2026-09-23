@@ -1,63 +1,58 @@
+"""Remove news carousel articles that are not in the keep list.
+
+Keeps exactly the target slides (coupe-fe, floumaart, ag) inside the
+news-carousel-track of index.html and leaves every other line of the
+file untouched (track/viewport closing divs, buttons, scripts, footer).
+
+Usage: python3 _carousel_clean.py
+"""
+
 import re
 import sys
 
+KEEP = {'news-slide-coupe-fe', 'news-slide-floumaart', 'news-slide-ag'}
+ARTICLE_START = re.compile(r'<article\s+class="([^"]*news-slide[^"]*)"')
+
 with open('index.html', 'r') as f:
-    html = f.read()
+    lines = f.readlines()
 
-marker = 'data-news-track'
-marker_pos = html.find(marker)
+out = []
+i = 0
+kept = 0
+removed = 0
 
-# Find the track div that contains the marker (not the viewport div)
-# The track div is the one with data-news-track attribute
-track_div_start = html.rfind('<div class="news-carousel-track"', 0, marker_pos)
-if track_div_start == -1:
-    print("ERROR: Could not find track div")
+while i < len(lines):
+    m = ARTICLE_START.search(lines[i])
+    if m:
+        start = i
+        depth = 1 if '</article>' not in lines[i] else 0
+        i += 1
+        while i < len(lines) and depth > 0:
+            if '<article' in lines[i] and '</article>' not in lines[i]:
+                depth += 1
+            if '</article>' in lines[i]:
+                depth -= 1
+            i += 1
+        block = lines[start:i]
+        classes = re.findall(r'news-slide-[A-Za-z0-9-]+', m.group(1))
+        if any(c in KEEP for c in classes):
+            out.extend(block)
+            kept += 1
+        else:
+            removed += 1
+            # Drop one trailing blank separator line after a removed article
+            if i < len(lines) and lines[i].strip() == '':
+                i += 1
+        continue
+    out.append(lines[i])
+    i += 1
+
+print('Keeping:', kept, 'Removing:', removed)
+
+if kept != len(KEEP):
+    print('ERROR: expected to keep %d articles, kept %d' % (len(KEEP), kept))
     sys.exit(1)
-
-# Find the closing > of the track div
-track_div_open_end = html.find('>', track_div_start)
-if track_div_open_end == -1:
-    print("ERROR: Could not find track div closing >")
-    sys.exit(1)
-
-track_content_start = track_div_open_end + 1
-
-# Find the news-arrow button after the track
-button_pos = html.find('<button class="news-arrow', track_content_start)
-if button_pos == -1:
-    print('ERROR: Could not find news-arrow button')
-    sys.exit(1)
-
-# Find the closing divs before the button
-prev_div = html.rfind('</div>', 0, button_pos)
-viewport_div = html.rfind('</div>', 0, prev_div - 1)
-track_end_pos = viewport_div + 6
-
-print('Track content:', track_content_start, 'to', track_end_pos)
-
-track = html[track_content_start:track_end_pos]
-articles = re.findall(r'<article\s+[^>]*class="[^"]*news-slide[^"]*"[^>]*>.*?</article>', track, re.DOTALL)
-print('Found', len(articles), 'articles')
-
-keep = {'news-slide-coupe-fe', 'news-slide-floumaart', 'news-slide-ag'}
-kept = []
-for a in articles:
-    cls_matches = re.findall(r'news-slide-\S+', a)
-    if cls_matches:
-        for cls_name in cls_matches:
-            if cls_name in keep:
-                kept.append(a)
-                break
-
-removed = [a for a in articles if a not in kept]
-print('Keeping:', len(kept), 'Removing:', len(removed))
-for a in removed:
-    m = re.search(r'class="[^"]*"', a)
-    print('  REMOVE:', m.group(0) if m else 'unknown')
-
-new_track = '\n' + '\n\n'.join(kept) + '\n                    '
-new_html = html[:track_content_start] + new_track + html[track_end_pos:]
 
 with open('index.html', 'w') as f:
-    f.write(new_html)
+    f.writelines(out)
 print('Done! index.html updated.')
