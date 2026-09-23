@@ -156,7 +156,7 @@
 #m75-gen-wrapper .portrait-controls-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 15px; flex-wrap: wrap; margin-bottom: 5px; }
 #m75-gen-wrapper .portrait-controls h3 { margin: 0 0 8px 0; color: var(--primary-blue); font-size: 18px; }
 
-#m75-gen-wrapper #poster-portrait { display: flex; flex-direction: column; width: 800px; min-width: 800px; position: absolute; top: 0; left: 0; overflow: hidden; background: #0d1b2a; font-family: 'Exo 2', sans-serif; transform-origin: top left !important; -webkit-transform-origin: top left !important; box-shadow: 0 10px 30px rgba(0, 0, 0, .3); border-radius: 12px; }
+#m75-gen-wrapper #poster-portrait { display: flex; flex-direction: column; width: 800px; min-width: 800px; position: absolute; top: 0; left: 0; overflow: hidden; background: url("assets/Portrait Poster hellerer Hintergrund.png") no-repeat center center / cover; font-family: 'Exo 2', sans-serif; transform-origin: top left !important; -webkit-transform-origin: top left !important; box-shadow: 0 10px 30px rgba(0, 0, 0, .3); border-radius: 12px; }
 
 #m75-gen-wrapper .p-header-wrapper { display: flex; flex-direction: column; align-items: center; padding-top: 25px; width: 100%; z-index: 5; }
 #m75-gen-wrapper .p-header-top { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 0 40px; box-sizing: border-box; }
@@ -1731,8 +1731,13 @@ function updateLandscapePreview() {
         { type: 'big', top: 350, left: 570 },
         { type: 'big', top: 350, left: 1120 }
     ];
-    for (let i = 0; i < seniorTeams.length && i < seniorSlots.length; i++) {
-        renderLandscapeGame(seniorTeams[i], seniorSlots[i], cont, teamHasConfiguredGame(seniorTeams[i]));
+    // Bei genau einem Senior-Team: mittig zentrieren
+    const seniorSlotCentered = seniorTeams.length === 1
+        ? { type: 'big', top: 350, left: 620 }
+        : seniorSlots[0];
+    const singleGameSlots = seniorTeams.length === 1 ? [seniorSlotCentered] : seniorSlots;
+    for (let i = 0; i < seniorTeams.length && i < singleGameSlots.length; i++) {
+        renderLandscapeGame(seniorTeams[i], singleGameSlots[i], cont, teamHasConfiguredGame(seniorTeams[i]));
     }
 
     const tournoiPanel = document.getElementById('l-dynamic-tournoi');
@@ -2421,7 +2426,7 @@ function renderPortraitDataUrl() {
         var hEl = document.getElementById('p-scale-height');
         var h = hEl ? parseInt(hEl.value, 10) : 1180;
         
-        // Wait for fonts and images to load
+        // Wait for fonts, images, and background image to load
         Promise.all([
             document.fonts.ready,
             new Promise(function (imgResolve) {
@@ -2448,6 +2453,13 @@ function renderPortraitDataUrl() {
                     }
                 });
                 if (loaded === images.length) imgResolve();
+            }),
+            new Promise(function (bgResolve) {
+                // Wait for background image to load
+                var bg = new Image();
+                bg.onload = function () { bgResolve(); };
+                bg.onerror = function () { bgResolve(); };
+                bg.src = 'assets/Portrait Poster hellerer Hintergrund.png';
             })
         ]).then(function () {
             html2canvas(el, { scale: 2, useCORS: true, width: w, height: h, backgroundColor: null }).then(function (c) {
