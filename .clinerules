@@ -1,0 +1,9 @@
+## Memory Bank Protocol – mersch75test.github.io (mersch75.lu)
+
+You must manage project knowledge through the `memory-bank/` directory.
+
+1. At the beginning of every task, read all files in `memory-bank/`.
+2. `memory-bank/integrationContext.md` contains all dependencies related to `Vereins-OS`, hosting parameters for Hetzner and GitHub Pages, and `M75-VideoStudio`.
+3. When changing frontend components that consume data from `Vereins-OS`, verify the endpoints in the `Vereins-OS/` directory.
+4. After completing a work step, update `memory-bank/progress.md`.
+5. Do not load video or large image files from `M75-VideoStudio` into context, to stay within the 200k-token limit.

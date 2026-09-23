@@ -44,6 +44,50 @@ function ensureSiteLanguageSwitcher() {
     }
 }
 
+function initializeMobileMenu() {
+    const navToggle = document.querySelector('.nav-toggle');
+    const nav = document.querySelector('.site-nav');
+    const navClose = nav ? nav.querySelector('.site-menu-close') : null;
+
+    if (!navToggle || !nav) return;
+
+    navToggle.addEventListener('click', function () {
+        const isOpen = nav.classList.contains('is-open');
+        nav.classList.toggle('is-open', !isOpen);
+        navToggle.setAttribute('aria-expanded', !isOpen ? 'true' : 'false');
+        navToggle.textContent = !isOpen ? 'Menü schließen' : 'Menü';
+    });
+
+    if (navClose) {
+        navClose.addEventListener('click', function () {
+            nav.classList.remove('is-open');
+            navToggle.setAttribute('aria-expanded', 'false');
+            navToggle.textContent = 'Menü';
+        });
+    }
+
+    // Close menu when clicking a link (mobile UX)
+    nav.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', function () {
+            nav.classList.remove('is-open');
+            navToggle.setAttribute('aria-expanded', 'false');
+            navToggle.textContent = 'Menü';
+        });
+    });
+
+    // Close menu on ESC key
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && nav.classList.contains('is-open')) {
+            nav.classList.remove('is-open');
+            navToggle.setAttribute('aria-expanded', 'false');
+            navToggle.textContent = 'Menü';
+        }
+    });
+}
+
+// Initialize mobile menu on page load
+initializeMobileMenu();
+
 function initializeSiteLanguage() {
     const languageButtons = Array.from(document.querySelectorAll('[data-site-lang-button]'));
     const storageKey = 'mersch75-language';
