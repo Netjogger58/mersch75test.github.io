@@ -66,20 +66,20 @@
                 <div class="poster-shell poster-shell-hero">
                     <div class="poster-visual poster-visual-hero">
                         <picture id="landscape-poster-pic">
-                                <source media="(max-width: 900px) and (orientation: portrait)" srcset="assets/portrait-poster-neu.png" type="image/png">
-                                <source media="(orientation: landscape)" srcset="Media/Hauptseite/current-matchposter.avif" type="image/avif">
-                                <source media="(orientation: landscape)" srcset="Media/Hauptseite/current-matchposter.webp" type="image/webp">
-                            <img src="assets/portrait-poster-neu.png" alt="Mersch75 Matchposter" data-i18n-attr="alt:posterAlt" loading="eager">
+                                <source media="(max-width: 900px) and (orientation: portrait)" srcset="Media/Hauptseite/Portrait 26092026.webp" type="image/webp">
+                                <source media="(orientation: landscape)" srcset="Media/Hauptseite/Matchday 260926 LSP.webp" type="image/avif">
+                                <source media="(orientation: landscape)" srcset="Media/Hauptseite/Matchday 260926 LSP.webp" type="image/webp">
+                            <img src="Media/Hauptseite/Portrait 26092026.webp" alt="Mersch75 Matchposter" data-i18n-attr="alt:posterAlt" loading="eager">
                         </picture>
                     </div>
                 </div>
                 <div class="poster-actions" id="poster-actions">
-                    <a class="poster-action" href="Media/Hauptseite/current-matchposter.webp" download="current-matchposter.webp" title="Herunterladen" data-i18n-attr="title:posterLandscapeTitle">
+                    <a class="poster-action" href="Media/Hauptseite/Matchday 260926 LSP.webp" download="Matchday 260926 LSP.webp" title="Herunterladen" data-i18n-attr="title:posterLandscapeTitle">
                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20h14v-2H5v2zm7-18L5.33 8.67l1.42 1.42L11 5.83V16h2V5.83l4.25 4.26 1.42-1.42L12 2z"></path></svg>
                         <span data-i18n="posterLandscapeLabel">Landscape</span>
                     </a>
                     <button type="button" class="poster-action" id="poster-set-btn" title="Neue Poster auf Webseite setzen" style="background:var(--primary-yellow);color:var(--primary-blue);border:none;padding:8px 14px;border-radius:999px;cursor:pointer;font-size:12px;font-weight:800;letter-spacing:0.03em;">📸 Neue Poster setzen</button>
-                    <a class="poster-action" href="assets/portrait-poster-neu.png" download="portrait-poster-neu.png" title="Portrait herunterladen" data-i18n-attr="title:posterPortraitTitle">
+                    <a class="poster-action" href="Media/Hauptseite/Portrait 26092026.webp" download="Portrait 26092026.webp" title="Portrait herunterladen" data-i18n-attr="title:posterPortraitTitle">
                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20h14v-2H5v2zm7-18L5.33 8.67l1.42 1.42L11 5.83V16h2V5.83l4.25 4.26 1.42-1.42L12 2z"></path></svg>
                         <span data-i18n="posterPortraitLabel">Portrait</span>
                     </a>
@@ -641,43 +641,58 @@
     })();
 
     (function () {
-        var setPosterBtn = document.getElementById('poster-set-btn');
-        if (!setPosterBtn) return;
-        setPosterBtn.addEventListener('click', function () {
-            // Clear and update poster sources with cache-busting
+        function setPoster(forceType) {
             var pic = document.getElementById('landscape-poster-pic');
             if (!pic) return;
-            var img = pic.querySelector('img');
-            var sources = pic.querySelectorAll('source');
-            
+
             var ts = Date.now();
-            
-            // Update all sources with cache-busting
-            for (var i = 0; i < sources.length; i++) {
-                var src = sources[i].getAttribute('srcset') || '';
-                if (src.indexOf('portrait-poster-neu.png') !== -1) {
-                    sources[i].setAttribute('srcset', 'assets/portrait-poster-neu.png?t=' + ts);
-                } else if (src.indexOf('current-matchposter') !== -1) {
-                    sources[i].setAttribute('srcset', src + (src.indexOf('?') === -1 ? '?t=' + ts : '&t=' + ts));
-                }
+            var isPortrait = forceType === 'portrait' || 
+                (window.innerWidth <= 900 && window.innerHeight > window.innerWidth);
+            var isLandscape = forceType === 'landscape' || !isPortrait;
+
+            // Create new sources based on orientation
+            var newSources = '';
+            if (isPortrait) {
+                newSources += '<source srcset="assets/portrait-poster-neu.png?t=' + ts + '" type="image/png">';
+            } else {
+                newSources += '<source srcset="Media/Hauptseite/current-matchposter.avif?t=' + ts + '" type="image/avif">';
+                newSources += '<source srcset="Media/Hauptseite/current-matchposter.webp?t=' + ts + '" type="image/webp">';
             }
+
+            // Fallback img: portrait shows portrait poster, landscape shows LS poster
+            var imgSrc = isPortrait 
+                ? 'assets/portrait-poster-neu.png?t=' + ts 
+                : 'Media/Hauptseite/current-matchposter.webp?t=' + ts;
+
+            // Replace the entire picture element to force browser reload
+            var newPic = document.createElement('picture');
+            newPic.id = 'landscape-poster-pic';
+            newPic.innerHTML = newSources + '<img src="' + imgSrc + '" alt="Mersch75 Matchposter" data-i18n-attr="alt:posterAlt" loading="eager">';
             
-            // Update the fallback img
-            if (img) {
-                img.setAttribute('src', 'assets/portrait-poster-neu.png?t=' + ts);
-            }
-            
+            pic.parentNode.replaceChild(newPic, pic);
+
             // Show success message
-            var originalText = setPosterBtn.textContent;
-            setPosterBtn.textContent = '✅ Poster gesetzt';
-            setPosterBtn.style.background = 'var(--primary-blue)';
-            setPosterBtn.style.color = '#fff';
-            setTimeout(function() {
-                setPosterBtn.textContent = originalText;
-                setPosterBtn.style.background = 'var(--primary-yellow)';
-                setPosterBtn.style.color = 'var(--primary-blue)';
-            }, 3000);
-        });
+            var setPosterBtn = document.getElementById('poster-set-btn');
+            if (setPosterBtn) {
+                setPosterBtn.textContent = '✅ Poster gesetzt';
+                setPosterBtn.style.background = 'var(--primary-blue)';
+                setPosterBtn.style.color = '#fff';
+                setTimeout(function() {
+                    setPosterBtn.textContent = '📸 Neue Poster setzen';
+                    setPosterBtn.style.background = 'var(--primary-yellow)';
+                    setPosterBtn.style.color = 'var(--primary-blue)';
+                }, 3000);
+            }
+        }
+
+        var setPosterBtn = document.getElementById('poster-set-btn');
+        if (setPosterBtn) {
+            setPosterBtn.addEventListener('click', function () {
+                // Auto-detect orientation: portrait → portrait poster, landscape → LS poster
+                var isPortrait = window.innerWidth <= 900 && window.innerHeight > window.innerWidth;
+                setPoster(isPortrait ? 'portrait' : 'landscape');
+            });
+        }
     })();
 
     // Passwuert Modal fir Wëllkomm Mapp
