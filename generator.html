@@ -156,7 +156,7 @@
 #m75-gen-wrapper .portrait-controls-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 15px; flex-wrap: wrap; margin-bottom: 5px; }
 #m75-gen-wrapper .portrait-controls h3 { margin: 0 0 8px 0; color: var(--primary-blue); font-size: 18px; }
 
-#m75-gen-wrapper #poster-portrait { display: flex; flex-direction: column; width: 800px; min-width: 800px; position: absolute; top: 0; left: 0; overflow: hidden; background: linear-gradient(rgba(255,255,255,0.5), rgba(255,255,255,0.5)), linear-gradient(135deg, #a2b9c7 0%, #d0dbe0 30%, #f4ebd4 65%, #faf5ce 100%); font-family: 'Exo 2', sans-serif; transform-origin: top left !important; -webkit-transform-origin: top left !important; box-shadow: 0 10px 30px rgba(0, 0, 0, .3); border-radius: 12px; }
+#m75-gen-wrapper #poster-portrait { display: flex; flex-direction: column; width: 800px; min-width: 800px; position: absolute; top: 0; left: 0; overflow: hidden; background: url("assets/portrait-poster-neu.png") no-repeat center center / cover; font-family: 'Exo 2', sans-serif; transform-origin: top left !important; -webkit-transform-origin: top left !important; box-shadow: 0 10px 30px rgba(0, 0, 0, .3); border-radius: 12px; }
 
 #m75-gen-wrapper .p-header-wrapper { display: flex; flex-direction: column; align-items: center; padding-top: 25px; width: 100%; z-index: 5; }
 #m75-gen-wrapper .p-header-top { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 0 40px; box-sizing: border-box; }
@@ -2417,7 +2417,43 @@ function renderPortraitDataUrl() {
         var w = wEl ? parseInt(wEl.value, 10) : 800;
         var hEl = document.getElementById('p-scale-height');
         var h = hEl ? parseInt(hEl.value, 10) : 1180;
-        document.fonts.ready.then(function () {
+        
+        // Wait for fonts, images, and background image to load
+        Promise.all([
+            document.fonts.ready,
+            new Promise(function (imgResolve) {
+                // Wait for all images in the poster to load
+                var images = el.querySelectorAll('img');
+                if (images.length === 0) {
+                    imgResolve();
+                    return;
+                }
+                var loaded = 0;
+                images.forEach(function (img) {
+                    if (img.complete) {
+                        loaded++;
+                        if (loaded === images.length) imgResolve();
+                    } else {
+                        img.addEventListener('load', function () {
+                            loaded++;
+                            if (loaded === images.length) imgResolve();
+                        });
+                        img.addEventListener('error', function () {
+                            loaded++; // Count errors as loaded to avoid hanging
+                            if (loaded === images.length) imgResolve();
+                        });
+                    }
+                });
+                if (loaded === images.length) imgResolve();
+            }),
+            new Promise(function (bgResolve) {
+                // Wait for background image to load
+                var bg = new Image();
+                bg.onload = function () { bgResolve(); };
+                bg.onerror = function () { bgResolve(); };
+                bg.src = 'assets/portrait-poster-neu.png';
+            })
+        ]).then(function () {
             html2canvas(el, { scale: 2, useCORS: true, width: w, height: h, backgroundColor: null }).then(function (c) {
                 el.style.transform = origT;
                 try { resolve(c.toDataURL('image/webp', 0.92)); } catch (e) { reject(e); }
