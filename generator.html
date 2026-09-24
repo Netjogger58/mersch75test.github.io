@@ -23,7 +23,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="js/generator-gate.js?v=20260519c" defer></script>
-    <script src="js/flh-live-sync.js?v=20260714a" defer></script>
+    <script src="js/flh-live-sync.js?v=20260924a" defer></script>
 
 <style>
 :root {
@@ -161,8 +161,6 @@
 #m75-gen-wrapper .p-header-wrapper { display: flex; flex-direction: column; align-items: center; padding-top: 25px; width: 100%; z-index: 5; }
 #m75-gen-wrapper .p-header-top { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 0 40px; box-sizing: border-box; }
 #m75-gen-wrapper .p-header-top .img-50 { object-fit: contain; width: auto; height: auto; max-width: 100%; }
-#m75-gen-wrapper .p-matchday-banner { text-align: center; margin-top: 5px; }
-#m75-gen-wrapper .p-matchday-banner img { object-fit: contain; margin-bottom: -4px; width: auto; height: auto; max-width: 100%; }
 
 #m75-gen-wrapper #p-dynamic-container { flex: 1; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; align-content: flex-start; gap: 35px 0; padding: 10px; box-sizing: border-box; width: 100%; z-index: 4; }
 #m75-gen-wrapper .p-game-block { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; box-sizing: border-box; padding: 0 15px; }
@@ -287,32 +285,9 @@
     <img src="assets/shared/media/Logos%20FLH%20Eq/Logo%20Leder%20Mersch75%20ohne%20Hintergrund.png" alt="Mersch75" class="img-50" loading="lazy">
 </picture>
                             <picture>
-    <source srcset="assets/shared/media/Sponsoring/Mixvoip.avif" type="image/avif">
-        <source srcset="assets/shared/media/Sponsoring/Mixvoip.avif" type="image/avif"><source srcset="assets/shared/media/Sponsoring/Mixvoip.webp" type="image/webp">
-    <img src="assets/shared/media/Sponsoring/Mixvoip.png" alt="Mixvoip" class="img-mixvoip" loading="lazy">
-</picture>
-                            <picture>
     <source srcset="assets/shared/media/Logos%20FLH%20Eq/Logo%20Leder%20Mersch75%20ohne%20Hintergrund.avif" type="image/avif">
         <source srcset="assets/shared/media/Logos%20FLH%20Eq/Logo%20Leder%20Mersch75%20ohne%20Hintergrund.avif" type="image/avif"><source srcset="assets/shared/media/Logos%20FLH%20Eq/Logo%20Leder%20Mersch75%20ohne%20Hintergrund.webp" type="image/webp">
     <img src="assets/shared/media/Logos%20FLH%20Eq/Logo%20Leder%20Mersch75%20ohne%20Hintergrund.png" alt="Mersch75" class="img-50" loading="lazy">
-</picture>
-                        </div>
-                        
-                        <div class="p-matchday-banner" style="display:flex;align-items:center;justify-content:center;gap:12px;">
-                            <picture>
-    <source srcset="assets/shared/media/Sponsoring/Mixvoip.avif" type="image/avif">
-        <source srcset="assets/shared/media/Sponsoring/Mixvoip.avif" type="image/avif"><source srcset="assets/shared/media/Sponsoring/Mixvoip.webp" type="image/webp">
-    <img src="assets/shared/media/Sponsoring/Mixvoip.png" alt="Mixvoip" class="img-matchday-logo-left" style="height:auto;object-fit:contain;" loading="lazy">
-</picture>
-                            <picture>
-    <source srcset="assets/shared/media/Matchday2.avif" type="image/avif">
-        <source srcset="assets/shared/media/Matchday2.avif" type="image/avif"><source srcset="assets/shared/media/Matchday2.webp" type="image/webp">
-    <img src="assets/shared/media/Matchday2.png" alt="Matchday" loading="lazy">
-</picture>
-                            <picture>
-    <source srcset="assets/shared/media/Sponsoring/Mixvoip.avif" type="image/avif">
-        <source srcset="assets/shared/media/Sponsoring/Mixvoip.avif" type="image/avif"><source srcset="assets/shared/media/Sponsoring/Mixvoip.webp" type="image/webp">
-    <img src="assets/shared/media/Sponsoring/Mixvoip.png" alt="Mixvoip" class="img-matchday-logo-right" style="height:auto;object-fit:contain;" loading="lazy">
 </picture>
                         </div>
                     </div>
@@ -327,11 +302,6 @@
 </picture>
                         <div class="p-footer-sponsors">
                             <div class="p-footer-row p-footer-row-top">
-                                <div class="p-footer-sp"><picture>
-    <source srcset="assets/shared/media/Sponsoring/Mixvoip.avif" type="image/avif">
-        <source srcset="assets/shared/media/Sponsoring/Mixvoip.avif" type="image/avif"><source srcset="assets/shared/media/Sponsoring/Mixvoip.webp" type="image/webp">
-    <img src="assets/shared/media/Sponsoring/Mixvoip.png" alt="Mixvoip" loading="lazy">
-</picture></div>
                                 <div class="p-footer-sp"><picture>
     <source srcset="assets/shared/media/Sponsoring/PetersSports.avif" type="image/avif">
         <source srcset="assets/shared/media/Sponsoring/PetersSports.avif" type="image/avif"><source srcset="assets/shared/media/Sponsoring/PetersSports.webp" type="image/webp">
@@ -719,6 +689,9 @@ let generatorDataRefreshedAt = 0;
 function applyGeneratorLiveGames(livePayload) {
     if (!window.MerschFlhSync || !livePayload || !Array.isArray(livePayload.games) || !livePayload.games.length) return false;
     allGamesData = window.MerschFlhSync.mergeLiveSeasonGames(allGamesData, livePayload);
+    if (typeof window.MerschFlhSync.dedupeByGameNumber === 'function') {
+        allGamesData = window.MerschFlhSync.dedupeByGameNumber(allGamesData);
+    }
     generatorDataRefreshedAt = Date.now();
     return true;
 }
@@ -895,8 +868,6 @@ function renderPortraitControls() {
     html += '<div class="slider-row"><span class="sl-lbl">Poster H.</span><input type="range" id="p-scale-height" min="866" max="2500" value="1180" oninput="this.nextElementSibling.innerText=this.value;var af=document.getElementById(\'p-autofit-height\');if(af)af.checked=false;updatePortraitPreview();"><span class="sl-val">1180</span></div>';
     html += '<div class="slider-row" style="justify-content:flex-start;gap:8px;"><label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--primary-blue);cursor:pointer;"><input type="checkbox" id="p-autofit-height" checked onchange="updatePortraitPreview();"> Höhe autom. an Teams anpassen</label></div>';
     html += '<div class="slider-row"><span class="sl-lbl">50 J.</span> <input type="range" id="p-scale-50years" min="40" max="150" value="100" oninput="this.nextElementSibling.innerText=this.value;updatePortraitPreview();"><span class="sl-val">100</span></div>';
-    html += '<div class="slider-row"><span class="sl-lbl">MixVoip</span><input type="range" id="p-scale-mixvoip" min="100" max="400" value="280" oninput="this.nextElementSibling.innerText=this.value;updatePortraitPreview();"><span class="sl-val">280</span></div>';
-    html += '<div class="slider-row"><span class="sl-lbl">Matchd.</span><input type="range" id="p-scale-matchday" min="40" max="250" value="130" oninput="this.nextElementSibling.innerText=this.value;updatePortraitPreview();"><span class="sl-val">130</span></div>';
     html += '</div></div>';
     selector.innerHTML = html;
     bindNumericSliders(selector);
@@ -975,13 +946,10 @@ function resetLandTeamSettings(id) {
 
 function resetHeaderSettings() {
     const w = document.getElementById('p-scale-width'); const h = document.getElementById('p-scale-height');
-    const f = document.getElementById('p-scale-50years'); const m = document.getElementById('p-scale-mixvoip');
-    const d = document.getElementById('p-scale-matchday');
+    const f = document.getElementById('p-scale-50years');
     if (w) { w.value = 800; w.nextElementSibling.innerText = "800"; }
     if (h) { h.value = 1060; h.nextElementSibling.innerText = "1060"; }
     if (f) { f.value = 100; f.nextElementSibling.innerText = "100"; }
-    if (m) { m.value = 280; m.nextElementSibling.innerText = "280"; }
-    if (d) { d.value = 130; d.nextElementSibling.innerText = "130"; }
     updatePortraitPreview();
 }
 
@@ -2057,36 +2025,15 @@ function updatePortraitPreview() {
     }
 
     const s50El = document.getElementById('p-scale-50years');
-    const s50 = s50El ? s50El.value : 100; 
-    
-    const smEl = document.getElementById('p-scale-mixvoip');
-    const sm = smEl ? smEl.value : 280; 
-    
-    const sdEl = document.getElementById('p-scale-matchday');
-    const sd = sdEl ? sdEl.value : 130;
-    
+    const s50 = s50El ? s50El.value : 100;
+
     const top50 = document.querySelectorAll('.p-header-top .img-50');
-    for (let i = 0; i < top50.length; i++) { 
+    for (let i = 0; i < top50.length; i++) {
         top50[i].style.width = s50 + 'px';
-        top50[i].style.height = 'auto'; 
+        top50[i].style.height = 'auto';
     }
-    
-    const im = document.querySelector('.p-header-top .img-mixvoip');
-    if (im) im.style.width = sm + 'px';
-    
-    const id = document.querySelector('.p-matchday-banner img:not(.img-matchday-logo-left):not(.img-matchday-logo-right)'); 
-    if (id) id.style.height = sd + 'px';
-    const logoML = document.querySelector('.img-matchday-logo-left');
-    const logoMR = document.querySelector('.img-matchday-logo-right');
-    const h1Extra = document.getElementById('extra-s1');
-    const h2Extra = document.getElementById('extra-s2');
-    const h1Has2 = !!(h1Extra && h1Extra.style.display !== 'none' && document.getElementById('s1-date2') && document.getElementById('s1-date2').value);
-    const h2Has2 = !!(h2Extra && h2Extra.style.display !== 'none' && document.getElementById('s2-date2') && document.getElementById('s2-date2').value);
-    const showSideLogos = h1Has2 || h2Has2;
-    const logoSide = Math.round(parseInt(sd, 10) * 0.85);
-    if (logoML) { logoML.style.height = logoSide + 'px'; logoML.style.display = showSideLogos ? 'block' : 'none'; }
-    if (logoMR) { logoMR.style.height = logoSide + 'px'; logoMR.style.display = showSideLogos ? 'block' : 'none'; }
-    const cont = document.getElementById('p-dynamic-container'); 
+
+    const cont = document.getElementById('p-dynamic-container');
     if (!cont) return;
     cont.innerHTML = '';
     const englishWeekCards = document.querySelectorAll('.english-week-portrait-card');

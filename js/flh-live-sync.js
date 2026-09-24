@@ -1,18 +1,15 @@
 (function() {
     const API_BASE = 'https://spo.handball4all.de/service/if_g_json.php';
     const ORG_ID = '95';
-    const CURRENT_PERIOD_ID = '137';
+    const CURRENT_PERIOD_ID = '142'; // Saison 26/27 ("142" laut FLH po-Menü; "137" =25/26)
+    // Saison-Start 26/27: alles davor gehéiert net méi zum Live-Center (Archiv bleift onberéiert)
+    const SEASON_START = new Date(2026, 7, 15); // 15.08.2026
     const REQUESTS = [
-        { key: 's1', cl: '153713', label: 'MÄNNER 1 (H-PRO)' },
-        { key: 'fe', cl: '152653', label: 'FRAUEN (D-PRO)' },
-        { key: 'u15', cl: '156341', label: 'JUGEND: U15G' },
-        { key: 'u15fin', cl: '162361', label: 'JUGEND: U15G' },
-        { key: 'u13pe', cl: '152106', label: 'JUGEND: U13M-PE' },
-        { key: 'u11el', cl: '152529', label: 'JUGEND: U11 Elite', replaces: ['JUGEND: U11 Elite', 'JUGEND: U11M-EL', 'JUGEND: U11M-EPF5-10'] },
-        { key: 'u11elpf', cl: '158596', label: 'JUGEND: U11 Elite', replaces: ['JUGEND: U11 Elite', 'JUGEND: U11M-EL', 'JUGEND: U11M-EPF5-10'] },
-        { key: 'u11es', cl: '153409', label: 'JUGEND: U11 Espoirs', replaces: ['JUGEND: U11 Espoirs', 'JUGEND: U11M-ES'], allowCommentMatch: true },
-        { key: 'u9', cl: '151356', label: 'JUGEND: U9M', allowCommentMatch: true },
-        { key: 'u7', cl: '152096', label: 'JUGEND: U7M', allowCommentMatch: true }
+        { key: 's1', cl: '167931', label: 'MÄNNER 1 (H-PRO)' },
+        { key: 'fe', cl: '168031', label: 'FRAUEN (D-PRO)' },
+        { key: 'u15', cl: '168871', label: 'JUGEND: U15G' },
+        { key: 'u13p1', cl: '168526', label: 'JUGEND: U13M-P1' },
+        { key: 'u13p2', cl: '168531', label: 'JUGEND: U13M-P2' }
     ];
 
     function buildUrl(config) {
@@ -76,23 +73,54 @@
             .trim();
     }
 
-    function buildMergeKey(game) {
-        if (!game) return '';
+    // E Spill kann iwwer méi Schlësselen identifizéiert ginn (Spillnummer gNo + sGID).
+    // Sou gëtt et och gematcht, wann eng Säit (statësch/Live) just ee vun de Wäerter korrekt huet.
+    function buildMergeKeys(game) {
+        if (!game) return [];
+
+        const keys = [];
+        const number = trimValue(game.nr);
+        if (number) keys.push('nr|' + number);
 
         const raw = trimValue(game.sboLive) || trimValue(game.sbo);
         const sgid = raw.match(/sGID=(\d+)/);
-        if (sgid) return 'sbo|' + sgid[1];
+        if (sgid) keys.push('sbo|' + sgid[1]);
 
-        const number = trimValue(game.nr);
-        if (number) return 'nr|' + number;
+        if (!keys.length) {
+            keys.push([
+                'fallback',
+                trimValue(game.team),
+                trimValue(game.datum),
+                normalizeClubName(game.heim),
+                normalizeClubName(game.gast)
+            ].join('|'));
+        }
 
-        return [
-            'fallback',
-            trimValue(game.team),
-            trimValue(game.datum),
-            normalizeClubName(game.heim),
-            normalizeClubName(game.gast)
-        ].join('|');
+        return keys;
+    }
+
+    // Zesummegehéierend Spiller mat gläicher Spillnummer (gNo), z.B. wann
+    // statësch a Live-Donnéeën dat't selwecht Spill mat ënnerschiddleche
+    // sGID-Wiërderen hunn. Reihenfolg vum éischten Aam bleift, Resultater ginn iwwerholl.
+    function dedupeByGameNumber(rows) {
+        if (!Array.isArray(rows)) return rows;
+        const byNumber = new Map();
+        const result = [];
+        rows.forEach(function(row) {
+            const number = trimValue(row && row.nr);
+            if (!number) { result.push(row); return; }
+            const existing = byNumber.get(number);
+            if (!existing) { byNumber.set(number, row); result.push(row); return; }
+            const hasScore = function(r) { return trimValue(r.score) && r.score !== '-'; };
+            const keep = (!hasScore(existing) && hasScore(row)) ? row : existing;
+            const drop = keep === row ? existing : row;
+            if (keep !== existing) result[result.indexOf(existing)] = keep;
+            byNumber.set(number, keep);
+            ['datum', 'heim', 'gast', 'score', 'sbo', 'rtl', 'yt', 'halle', 'bem', 'team'].forEach(function(field) {
+                if (!trimValue(keep[field]) && trimValue(drop[field])) keep[field] = drop[field];
+            });
+        });
+        return result;
     }
 
     function mergeGameDetails(baseGame, incomingGame) {
@@ -206,6 +234,13 @@
                 .map(function(game) { return mapGame(config, game); })
                 .filter(function(game) { return !isExcludedLiveGame(config, game); })
                 .filter(function(game) { return game.datum && game.heim; })
+                .filter(function(game) {
+                    // Saison-Schutz: Resultater vun virun 15.08.2026 (lescht Saison) net importéieren.
+                    // Entfällt für onparsebar Datën (gëtt behalen, fir keng Donnéen ze verléieren).
+                    const date = parseLuxDateTime(game.datum);
+                    if (!date) return true;
+                    return date >= SEASON_START;
+                })
         );
         const standings = extractGames(content.score).map(mapStandingRow).filter(function(row) { return row.team; });
         return { games: games, standings: standings };
@@ -275,18 +310,53 @@
         const liveGames = livePayload && Array.isArray(livePayload.games) ? livePayload.games : [];
         const preservedGames = Array.isArray(staticGames) ? staticGames : [];
 
-        const mergedByKey = new Map();
+        const entries = [];
+        const indexByKey = new Map();
+
+        function findMatches(keys) {
+            const matched = [];
+            keys.forEach(function(key) {
+                const index = indexByKey.get(key);
+                if (index !== undefined && matched.indexOf(index) === -1) matched.push(index);
+            });
+            return matched;
+        }
+
         preservedGames.concat(liveGames).forEach(function(game) {
-            const key = buildMergeKey(game);
-            if (!key) return;
-            if (!mergedByKey.has(key)) {
-                mergedByKey.set(key, Object.assign({}, game));
-                return;
+            const keys = buildMergeKeys(game);
+            if (!keys.length) return;
+
+            const matches = findMatches(keys);
+            let targetIndex;
+
+            if (!matches.length) {
+                targetIndex = entries.length;
+                entries.push({ game: Object.assign({}, game), keys: keys.slice(), removed: false });
+            } else {
+                targetIndex = matches[0];
+                const target = entries[targetIndex];
+                target.game = mergeGameDetails(target.game, game);
+
+                for (let index = 1; index < matches.length; index++) {
+                    const other = entries[matches[index]];
+                    target.game = mergeGameDetails(target.game, other.game);
+                    target.keys = target.keys.concat(other.keys);
+                    other.removed = true;
+                }
+
+                keys.forEach(function(key) {
+                    if (target.keys.indexOf(key) === -1) target.keys.push(key);
+                });
             }
-            mergedByKey.set(key, mergeGameDetails(mergedByKey.get(key), game));
+
+            entries[targetIndex].keys.forEach(function(key) {
+                indexByKey.set(key, targetIndex);
+            });
         });
 
-        return Array.from(mergedByKey.values());
+        return entries
+            .filter(function(entry) { return !entry.removed; })
+            .map(function(entry) { return entry.game; });
     }
 
     function loadArchive(season) {
@@ -342,6 +412,7 @@
     window.MerschFlhSync = {
         fetchAllGames: fetchAllGames,
         mergeLiveSeasonGames: mergeLiveSeasonGames,
+        dedupeByGameNumber: dedupeByGameNumber,
         loadArchive: loadArchive,
         loadSboIndex: loadSboIndex,
         resolveSboLink: resolveSboLink

@@ -347,7 +347,7 @@
         </div>
     </div>
 </div>
-<script src="js/flh-live-sync.js?v=20260714a"></script>
+<script src="js/flh-live-sync.js?v=20260924a"></script>
 <script>
 const viewConfig = {
     "Wochenübersicht": { h: 2500, top: -560, content: 4200, width: 1360, offsetX: 0 },
@@ -356,8 +356,8 @@ const viewConfig = {
 };
 
 let allGamesData = [
-    { team: "FRAUEN (D-PRO)", datum: "20.09.26 16:00", heim: "Mersch75", gast: "Bieles/P\u00e9tange", score: "", bem: " ", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3276105", rtl: "", yt: "https://youtu.be/um-D8j-4_-s", nr: "29701002", halle: "290101" },
-    { team: "M\u00c4NNER 1 (H-PRO)", datum: "20.09.26 18:15", heim: "Mersch75", gast: "HB Leideleng", score: "", bem: " ", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3357291", rtl: "", yt: "https://youtu.be/WGL3u94-yp8", nr: "29201002", halle: "290101" },
+    { team: "FRAUEN (D-PRO)", datum: "20.09.26 16:00", heim: "Mersch75", gast: "Bieles/P\u00e9tange", score: "", bem: " ", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3504081", rtl: "", yt: "https://youtu.be/um-D8j-4_-s", nr: "29701002", halle: "290101" },
+    { team: "M\u00c4NNER 1 (H-PRO)", datum: "20.09.26 18:15", heim: "Mersch75", gast: "HB Leideleng", score: "", bem: " ", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=3504641", rtl: "", yt: "https://youtu.be/WGL3u94-yp8", nr: "29201002", halle: "290101" },
     { team: "M\u00c4NNER 1 (H-PRO)", datum: "26.09.26 19:00", heim: "HC Redange", gast: "Mersch75", score: "", bem: " ", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=29201006", rtl: "", nr: "29201006", halle: "290131" },
     { team: "JUGEND: U15G", datum: "10.10.26 16:00", heim: "Red Boys Diff 2", gast: "Mersch75", score: "", bem: " ", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=29151004", rtl: "", nr: "29151004", halle: "290141" },
     { team: "FRAUEN (D-PRO)", datum: "10.10.26 18:00", heim: "HBC Schiffl.", gast: "Mersch75", score: "", bem: " ", sbo: "https://spo.handball4all.de/misc/sboPublicReports.php?sGID=29701006", rtl: "", nr: "29701006", halle: "290161" },
@@ -526,6 +526,9 @@ allGamesData = allGamesData.concat(tournamentData);
 function applyLiveCenterCorrections() {
 const corrections = [];
 allGamesData = allGamesData.filter(g => !(g.nr === "29503052" && (!g.score || !g.sbo)));
+if (window.MerschFlhSync && typeof window.MerschFlhSync.dedupeByGameNumber === 'function') {
+    allGamesData = window.MerschFlhSync.dedupeByGameNumber(allGamesData);
+}
 corrections.forEach(c => {
     const idx = allGamesData.findIndex(g => (c.nr && g.nr === c.nr) || (c.sbo && g.sbo === c.sbo));
     if (idx >= 0) allGamesData[idx] = Object.assign({}, allGamesData[idx], c);
@@ -866,7 +869,13 @@ function renderStandingsPanel() {
         if (STANDINGS_NO_TABLE[cat]) {
             return '<h3>Tabell – ' + cat + '</h3><div class="standings-empty">Fir dës Altersklass féiert d\u2019FLH keng offiziell Tabell (Spillfest-Format).</div>';
         }
-        const rows = (typeof allStandingsData !== 'undefined') ? allStandingsData.filter(r => r.label === cat) : [];
+        // FLH-Label aus der Zuordnung (z.B. 'MÄNNER' -> 'MÄNNER 1 (H-PRO)')
+        const liveLabel = STANDINGS_LABEL_MAP[cat] || cat;
+        // Live-Tabelle vun der FLH-Sync bevorzugen, soss statësch Astellung als Fallback
+        const liveRows = (window.__liveStandings && window.__liveStandings[liveLabel]) || null;
+        const rows = (liveRows && liveRows.length)
+            ? liveRows
+            : ((typeof allStandingsData !== 'undefined') ? allStandingsData.filter(r => r.label === liveLabel) : []);
         if (!rows || !rows.length) {
             return '<h3>Tabell – ' + cat + '</h3><div class="standings-empty">Tabell gëtt geluede vun der FLH... oder ass nach net publizéiert.</div>';
         }
@@ -906,9 +915,14 @@ function renderStandingsPanel() {
 
     if (activeCat === 'all') {
         // Bei "Alle Kategorien" alle verfügbaren Tabellen untereinander zeigen
-        const all = (typeof allStandingsData !== 'undefined')
-            ? [...new Set(allStandingsData.map(r => r.label))]
-            : Object.keys(STANDINGS_LABEL_MAP);
+        const labelSet = new Set();
+        if (typeof allStandingsData !== 'undefined') {
+            allStandingsData.forEach(r => labelSet.add(r.label));
+        }
+        if (window.__liveStandings) {
+            Object.keys(window.__liveStandings).forEach(label => labelSet.add(label));
+        }
+        const all = Array.from(labelSet);
         panel.innerHTML = all.map(renderOneTable).join('<div style="height:18px;"></div>');
         return;
     }

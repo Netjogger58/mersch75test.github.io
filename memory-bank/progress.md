@@ -1,3 +1,43 @@
+## Live-Center: Alte Resultate (vor 15.08.2026) entfernt – 2026-09-24
+
+### Problem
+Live-Center zeigte wieder Resultate aus der Vorsaison (25/26, Spiele Feb–Mai 2026), obwohl nur 2 Spiele (20.09.26) gespielt waren.
+
+### Root Cause (in `js/flh-live-sync.js`)
+1. `CURRENT_PERIOD_ID = '137'` = **Saison 25/26**; laut FLH-`po`-Menü ist die aktuelle Periode **142** (26/27).
+2. `REQUESTS` nutzten noch die **alten `cl`-Klassen-IDs** der Saison 25/26 (153713, 152653, …).
+3. Folge: `fetchAllGames()` holte 70 Alt-Spiele (mit Resultaten) und `mergeLiveSeasonGames()` mischte sie in `allGamesData` → Anzeige vor dem Saisonstart.
+4. Zusätzlich: falsche `sGID`-Werte bei den 2 gespielten Spielen (3276105/3357291 = Vorsaison-Spiele) → Merge über sGID schlug fehl bzw. verlinkte falsche SBO-Berichte.
+
+### Fix (neue `cl`-IDs via FLH-API verifiziert; 5 Kategorien)
+| Kategorie | alt `cl` | **neu `cl`** |
+|---|---|---|
+| Männer (H-PRO) | 153713 | **167931** |
+| Frauen (D-PRO) | 152653 | **168031** |
+| U15G | 156341 | **168871** |
+| U13M-P1 | 152106 (PE) | **168526** |
+| U13M-P2 | – | **168531** |
+- `CURRENT_PERIOD_ID` `'137'` → `'142'`.
+- Turnier-Requests (u15fin, u11el, u11elpf, u11es, u9, u7) entfernt – Tournoi hat keine Resultate/Tabellen (Aussage Nutzer).
+- **Saison-Guard** `SEASON_START = 15.08.2026` in `fetchCompetitionGames`: Live-Spiele davor werden verworfen (unparsebare Daten bleiben erhalten).
+- `buildMergeKey` → `buildMergeKeys` (Mehrfach-Schlüssel `nr|` **und** `sbo|sGID`) + `mergeLiveSeasonGames` merged über beliebigen Treffer.
+- Neu exportiert: `MerschFlhSync.dedupeByGameNumber()` (führt statisch/Live über `gNo` zusammen, behält Eintrag mit Resultat) – aufgerufen in `live-center.html` (`applyLiveCenterCorrections`) und `generator.html` (`applyGeneratorLiveGames`).
+- `live-center.html`: sGID der 2 gespielten Spiele korrigiert → `3504081` (Frauen) / `3504641` (Männer).
+- `renderStandingsPanel()` nutzt jetzt die **Live-Tabellen** (`window.__liveStandings`) statt nur der statischen Null-Astellung; Fallback bleibt.
+- Cache-Bust: `flh-live-sync.js?v=20260714a` → `?v=20260924a` (live-center.html, generator.html).
+
+### Verifikation (Node-Tests gegen echte FLH-API)
+- Live-Payload: **47 Spiele, 0 vor 15.08.2026, 0 Fehler**; 5 Tabellen (Männer/Frauen/U15G/U13-P1/U13-P2).
+- Merge+Saisonfilter Live-Center: **50 Einträge, 0 Duplikate, 0 Alt-Spiele**; Resultate: Frauen 25:22, Männer 29:27 (20.09.26).
+- Generator: **47 Einträge, 0 Duplikate, 0 Alt-Spiele**.
+- Archiv (`live-center-25-26.html` + `data/flh-archive-2526.json`): Merge-Ausgabe **identisch zu vorher** (148 Einträge) – **Archiv unberührt** (`git status` sauber für `data/`, `sbo-archiv/`, `live-center-25-26.html`).
+- `node --check js/flh-live-sync.js` OK; alle Inline-Scripts in `live-center.html`/`generator.html` syntaktisch OK.
+
+### Nicht angefasst (Anweisung Nutzer)
+- `data/flh-archive-*.json`, `data/sbo-index-*.json`, `sbo-archiv/**`, `live-center-25-26.html` (Archiv).
+
+---
+
 ## News-Carousel Cleanup (index.html) – 2026-09-23
 
 ### Goal
