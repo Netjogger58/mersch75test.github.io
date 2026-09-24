@@ -80,3 +80,7 @@ Das Bild `assets/portrait-poster-neu.png` war **kein leeres Hintergrundbild**, s
 ### Verification
 - `index.html`: 3 Artikel, 37/37 div, 5/5 section, endet `</html>`, 530 Zeilen.
 - Referenzen des geänderten picture-Blocks prüfen: `Matchday 260926 LSP.webp` → 200 live.
+## 2026-09-23 – Alte Portrait-Bilder endgültig entfernt
+- `assets/Portrait Poster hellerer Hintergrund.png`, `assets/portrait-poster-neu.png`, `assets/assets/portrait-poster-neu.png` gelöscht (git rm), verschachtelter `assets/assets/`-Ordner entfernt.
+- Repo-weit (ohne .kilo/.git) null Referenzen auf alte Bilder; einzige Quellen: CSS Zeile 159 + Export `renderPortraitDataUrl()` Zeile 2462 → `assets/PortraitBild mit hellem Hintergrund23092026.webp`.
+- Achtung: Browser-Cache – Seite mit Hard-Reload (Strg/Cmd+Shift+R) neu laden.
