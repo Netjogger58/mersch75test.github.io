@@ -1,3 +1,12 @@
+## Agent 10 – i18n & Mehrsprachigkeit – 2026-09-25
+
+- Sprachmatrix für LB/FR/DE/EN/PT geprüft; `misc-i18n.js` enthält die neuen Galerie-, Memories- und Legal-Schlüssel in allen fünf Sprachen.
+- `script.js` um `navMemories` in allen fünf Sprachpaketen ergänzt; dynamisches Agent-4-Menü enthält jetzt `memories.html` neben `gallery.html` und aktualisiert Labels beim Sprachwechsel.
+- Fallback-Kette in `script.js` implementiert: gewählte Sprache → LB → FR → EN → DE → PT; unbekannte Sprachwerte werden auf LB normalisiert.
+- `gallery.html` und `memories.html` starten mit korrektem `lang="lb-LU"`; Sprachwechsler aktualisiert das `html.lang` zur Laufzeit.
+- `hallo_agent10.txt` erstellt; i18n-Syntax- und Diff-Prüfung erfolgreich.
+
+
 ## Agent 9 – Performance & Asset-Optimierung – 2026-09-25
 
 ### 1. Bild-Optimierung (LCP/CLS)

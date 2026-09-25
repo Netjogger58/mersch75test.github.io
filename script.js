@@ -117,6 +117,7 @@ function initializeSiteLanguage() {
             navInside: 'Inside',
             navNextgen: 'NEXTGEN',
             navCommunity: 'Communauté',
+            navMemories: 'Memories',
             usefulFanshopTitle: 'Mersch75 Fanshop',
             usefulFanshopMeta: 'Hoodies, T-Shirts & Fanartikelen',
             usefulLuxLinksTitle: 'LËTZEBUERG Handball & Sport',
@@ -303,6 +304,7 @@ function initializeSiteLanguage() {
             navInside: 'Inside',
             navNextgen: 'NEXTGEN',
             navCommunity: 'Communauté',
+            navMemories: 'Memories',
             usefulFanshopTitle: 'Fanshop Mersch75',
             usefulFanshopMeta: 'Hoodies, T-shirts & articles supporters',
             usefulLuxLinksTitle: 'Handball & Sport luxembourgeois',
@@ -489,6 +491,7 @@ function initializeSiteLanguage() {
             navInside: 'Inside',
             navNextgen: 'NEXTGEN',
             navCommunity: 'Community',
+            navMemories: 'Memories',
             usefulFanshopTitle: 'Mersch75 Fanshop',
             usefulFanshopMeta: 'Hoodies, T-Shirts & Fanartikel',
             usefulLuxLinksTitle: 'Luxemburg Handball & Sport',
@@ -675,6 +678,7 @@ function initializeSiteLanguage() {
             navInside: 'Inside',
             navNextgen: 'NEXTGEN',
             navCommunity: 'Community',
+            navMemories: 'Memories',
             usefulFanshopTitle: 'Mersch75 Fanshop',
             usefulFanshopMeta: 'Hoodies, T-shirts & fan items',
             usefulLuxLinksTitle: 'Luxembourg Handball & Sport',
@@ -861,6 +865,7 @@ function initializeSiteLanguage() {
             navInside: 'Inside',
             navNextgen: 'NEXTGEN',
             navCommunity: 'Comunidade',
+            navMemories: 'Memories',
             usefulFanshopTitle: 'Fanshop Mersch75',
             usefulFanshopMeta: 'Hoodies, T-shirts & artigos de adepto',
             usefulLuxLinksTitle: 'Andebol & Desporto Luxemburguês',
@@ -1001,7 +1006,30 @@ function initializeSiteLanguage() {
             trialTrainingTimeLabel: "O teu treino:",
             trialNoTrainingTime: "Escolhe a data de nascimento e o género para veres o horário.",
             trialGenderMale: "Masculino",
-            trialGenderFemale: "Feminino"
+            trialGenderFemale: "Feminino",
+            // Agent 10: Galerie/Mannschaften + Legal-Pages direkt im Kern (misc-i18n.js greift ohne window.translations nie).
+            galleryPageTitle: "Galeria | Mersch75 Handball",
+            galleryMetaDesc: "Galeria e visão geral dos média do Mersch75 Handball.",
+            galleryBadge: "Em breve",
+            galleryTitle: "Galeria",
+            galleryDesc: "A galeria está em construção. Em breve encontrará aqui fotos e vídeos dos jogos, torneios e eventos do Mersch75.",
+            galleryTeamsBadge: "Equipas · Época 25/26",
+            galleryTeamsTitle: "As Nossas Equipas",
+            galleryTeamsDesc: "Fotos de equipa da época 2025/26.",
+            memoriesPageTitle: "Memories | Mersch75 Handball",
+            memoriesMetaDesc: "Mersch75 Memories — retrospetiva dos momentos altos e histórias do clube.",
+            memoriesBadge: "Em breve",
+            memoriesTitle: "Memories",
+            memoriesDesc: "Estamos a recolher fotos, vídeos e histórias das últimas décadas. Em breve encontrará aqui uma viagem pela história do Mersch75.",
+            impressumPageTitle: "Impressum | Mersch75 Handball",
+            impressumMetaDesc: "Impressum / Aviso legal do Mersch75 Handball.",
+            impressumHeroTitle: "Impressum & Aviso Legal",
+            dataprotectionPageTitle: "Proteção de Dados | Mersch75 Handball",
+            dataprotectionMetaDesc: "Declaração de proteção de dados do Mersch75 Handball.",
+            dataprotectionHeroTitle: "Declaração de Proteção de Dados",
+            termsPageTitle: "Termos e Condições | Mersch75 Handball",
+            termsMetaDesc: "Termos e condições gerais do site do Mersch75 Handball.",
+            termsHeroTitle: "Termos e Condições Gerais"
         }
     };
 
@@ -1011,9 +1039,14 @@ function initializeSiteLanguage() {
 
     const getTranslation = (lang, key) => {
         const resolvedLanguage = resolveLanguage(lang);
-        return (translations[resolvedLanguage] && translations[resolvedLanguage][key])
-            || (translations[fallbackLanguage] && translations[fallbackLanguage][key])
-            || '';
+        // Fallback-Kette: gewählte Sprache → LU (lb) → FR → EN → DE → PT (Agent 10).
+        const chain = [resolvedLanguage, fallbackLanguage, 'fr', 'en', 'de', 'pt'];
+        for (const candidate of chain) {
+            if (candidate && translations[candidate] && translations[candidate][key]) {
+                return translations[candidate][key];
+            }
+        }
+        return '';
     };
 
     const applyLanguage = (lang) => {
