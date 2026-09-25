@@ -1,3 +1,12 @@
+## Generator – U11-Turnier 18.10. ergänzt + doppelter Wochenend-Button entfernt – 2026-09-25
+
+- `allGamesData` ergänzt um `JUGEND: U11 Espoir`, `18.10.26 09:30`, Heimspiel `Mersch75 - Tournoi`, Halle `290101`, Nr. `U11T181026`.
+- Der Wochenend-Loader (12.10.–18.10.26) erzeugt daraus `JUGEND: U11 Espoir 18.10.26 09:30 290101 Mersch75 - Tournoi`; der magische Scanner setzt U11 Espoir korrekt auf Kategorie `Tournoi`, Gegner `Tournoi`, Datum `2026-10-18`, Zeit `09:30`, Heim `home1`.
+- Im Landscape-Poster erscheint das U11-Turnier in der rechten Turniergrafik mit Badge `U11`, Datum `SO - 18.10.2026 - 09h30` und Mersch-Logo (Heimturnier).
+- Doppelter Button `#btn-weekend-next` („Nächstes Wochenende laden“) aus `generator.html` entfernt; es existiert nur noch ein Button mit dieser ID.
+- Verifikation: jsdom-Test für den kompletten Ablauf (Wochenauswahl → Scanner → Landscape-Vorschau) erfolgreich; alle 10 Inline-Skripte `node --check`, `git diff --check` sauber.
+
+
 ## Generator – Landscape-Aufteilung neu (Frauen links, Männer Mitte, rechte Spalte) – 2026-09-25
 
 - Ursache des Durcheinanders: Commit `d2b2eea` hatte die alte, flexible Landscape-Slot-Logik durch feste Positionen ersetzt; dadurch überlappten die Jugendblöcke und der Turnierbereich verschwand je nach Auswahl.
