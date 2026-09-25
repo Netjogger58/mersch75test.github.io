@@ -1740,46 +1740,70 @@ function renderLandscapeU11EspoirTournamentFallback(cont) {
     renderLandscapeGame({ id: 'u11MES', gameSlot: 1 }, { type: 'big', top: 350, left: 1104 }, cont, teamHasConfiguredGame('u11MES'));
 }
 
-// Der Turnierbereich bleibt im Meisterschafts-Poster immer sichtbar.
-// Ohne aktives Turnier zeigt er konsequent den 3D-Ball als Platzhalter.
-function renderLandscapeTournoiPanel(tournoiTeams) {
-    const tournoiPanel = document.getElementById('l-dynamic-tournoi');
-    if (!tournoiPanel) return;
+// Einheitliche Prüfung, ob ein Team im Landscape-Poster sichtbar ist
+// (Sichtbarkeit + Spielart-Filter + konfiguriertes Spiel oder Foto).
+function isLandscapeTeamActive(id) {
+    const visibility = document.getElementById(id + '-land-show');
+    if (visibility && !visibility.checked) return false;
+    const typeEl = document.getElementById(id + '-type');
+    if (typeEl && !isGameTypeVisible('landscape', typeEl.value)) return false;
+    return !!(teamHasConfiguredGame(id) || teamHasUploadedPhoto(id));
+}
 
-    const activeTeams = (tournoiTeams || []).filter(function(id) {
-        const visibility = document.getElementById(id + '-land-show');
+// Grafik + U9/U11/U7 im rechten oberen Posterbereich.
+// Ohne aktives Turnier erscheint der 3D-Ball als Platzhalter.
+function renderLandscapeTournamentStrip(cont, top) {
+    if (!cont) return;
+    const left = 1140;
+    const width = 360;
+    const ids = ['u9M', 'u11MES', 'u7M'];
+    if (isLandscapeTeamActive('u4M')) ids.push('u4M');
+
+    let html = '<div class="abs game-layer" style="display:block;pointer-events:none;">';
+    html += '<div class="abs" style="top:' + top + 'px;left:' + left + 'px;width:' + width + 'px;height:30px;font-size:24px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;text-align:center;color:#FFFFFF;text-shadow:0 0 3px rgba(0,0,0,0.8);">--- TOURNOI ---</div>';
+    const lineTop = top + 34;
+    html += '<div class="abs" style="top:' + lineTop + 'px;left:' + (left + 16) + 'px;width:' + (width - 32) + 'px;height:3px;background:var(--primary-blue);"></div>';
+    html += '<div class="abs" style="top:' + lineTop + 'px;left:' + (left + 16) + 'px;width:3px;height:10px;background:var(--primary-blue);"></div>';
+    html += '<div class="abs" style="top:' + lineTop + 'px;left:' + (left + width - 19) + 'px;width:3px;height:10px;background:var(--primary-blue);"></div>';
+
+    const colTop = top + 40;
+    const colWidth = width / ids.length;
+    for (let i = 0; i < ids.length; i++) {
+        const id = ids[i];
+        const colLeft = left + (i * colWidth);
+        const center = colLeft + (colWidth / 2);
+        const active = isLandscapeTeamActive(id);
+        const hasGame = active && teamHasConfiguredGame(id);
         const typeEl = document.getElementById(id + '-type');
-        const isTournamentType = !typeEl || typeEl.value === 'Tournoi';
-        return isTournamentType && teamHasConfiguredGame(id) && (!visibility || visibility.checked);
-    });
+        let tv = (typeEl ? typeEl.value : 'Tournoi') + (teamSuffixes[id] || '');
+        if (hasGame) tv += ' #' + getGameNumber(id, 1);
+        const mb = badgeLabels[id] || id.toUpperCase();
 
-    const tTop = 350;
-    const tLeft = 1120;
-    let html = '<div style="position:absolute;top:' + tTop + 'px;left:' + tLeft + 'px;width:240px;">';
+        let logo = CONFIG.ballLogo;
+        if (hasGame) {
+            const opp = getGameFieldValue(id, 'opp', 1) || '-';
+            const homeValue = getGameFieldValue(id, 'home', 1) || 'home1';
+            const ih = homeValue.indexOf('home') === 0;
+            const locVal = getGameFieldValue(id, 'loc', 1) || '';
+            logo = resolveTournamentPrimaryLogo(id, opp, ih, locVal, CONFIG.merschLogo) || CONFIG.ballLogo;
+        }
 
-    if (activeTeams.length === 0) {
-        html += '<div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px;background:rgba(255,255,255,.92);border-radius:12px;box-shadow:0 5px 15px rgba(0,0,0,.15);">';
-        html += '<img src="' + CONFIG.ballLogo + '" alt="Kein Turnier aktiv" style="width:110px;height:110px;object-fit:contain;">';
-        html += '<div style="font-size:13px;font-weight:800;color:#1E1E1E;text-align:center;">Kein Turnier aktiv</div>';
-        html += '</div>';
-        html += '</div>';
-        tournoiPanel.innerHTML = html;
-        return;
-    }
+        let dateHtml = '';
+        if (hasGame) {
+            const dv = getGameFieldValue(id, 'date', 1);
+            const tm = getGameFieldValue(id, 'time', 1);
+            const ds = dv ? formatDate(dv, tm) : '';
+            if (ds) dateHtml = '<div style="font-family:\'Barlow\',sans-serif;font-weight:800;font-size:12px;line-height:1.1;color:#FFFFFF;text-shadow:0 0 3px rgba(0,0,0,0.8);">' + ds + '</div>';
+        }
 
-    html += '<div style="font-size:14px;font-weight:600;color:#1E1E1E;text-align:center;margin-bottom:8px;">Tournoi</div>';
-    for (let i = 0; i < activeTeams.length; i++) {
-        const id = activeTeams[i];
-        const oppEl = document.getElementById(id + '-opp');
-        const opp = oppEl ? oppEl.value : '';
-        html += '<div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;padding:6px;background:#F5F5F5;border-radius:8px;">';
-        html += '<div style="width:28px;height:28px;border-radius:50%;background:#E07856;display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-size:11px;font-weight:700;">' + id.toUpperCase().charAt(0) + '</div>';
-        html += '<div style="flex:1;font-size:11px;color:#1E1E1E;"><div style="font-weight:600;">' + (opp || 'Tournoi') + '</div></div>';
-        html += '<div style="font-size:11px;color:#1E7E34;">Teilgenommen</div>';
-        html += '</div>';
+        html += '<div class="abs badge" style="top:' + colTop + 'px;left:' + (center - 35) + 'px;width:70px;height:26px;border-radius:6px;"><div class="sub" style="font-size:6px;">' + tv + '</div><div class="main" style="font-size:15px;font-weight:900;font-style:italic;">' + mb + '</div></div>';
+        html += '<div class="abs logo-box" style="top:' + (colTop + 32) + 'px;left:' + (center - 27) + 'px;width:54px;height:54px;border-radius:8px;padding:4px;"><img src="' + logo + '" crossorigin="anonymous"></div>';
+        if (dateHtml) {
+            html += '<div class="abs" style="top:' + (colTop + 90) + 'px;left:' + colLeft + 'px;width:' + colWidth + 'px;text-align:center;">' + dateHtml + '</div>';
+        }
     }
     html += '</div>';
-    tournoiPanel.innerHTML = html;
+    cont.innerHTML += html;
 }
 
 function updateLandscapePreview() {
@@ -1797,29 +1821,19 @@ function updateLandscapePreview() {
     const cont = document.getElementById('l-dynamic-main');
     if (!cont) return;
     cont.innerHTML = '';
+    const tournoiCont = document.getElementById('l-dynamic-tournoi');
+    if (tournoiCont) tournoiCont.innerHTML = '';
 
     const ymEl = document.getElementById('toggle-youth-mode');
     const ym = ymEl ? ymEl.checked : false;
 
-    const seniorIds = ['s1', 'fe', 's2'];
     const youthIds = ['u15', 'u13p1', 'u13p2', 'u11MEL', 'u9M', 'u7M', 'u4M'];
-
-    const seniorTeams = [];
     const youthTeams = [];
-    const tournoiTeams = [];
 
     for (let i = 0; i < TEAM_CONFIGS.length; i++) {
         const id = TEAM_CONFIGS[i].id;
-        const visibility = document.getElementById(id + '-land-show');
-        if (visibility && !visibility.checked) continue;
-        const typeEl = document.getElementById(id + '-type');
-        if (typeEl && !isGameTypeVisible('landscape', typeEl.value)) continue;
-        if (teamHasConfiguredGame(id) || teamHasUploadedPhoto(id)) {
-            // Alles mit Kategorie „Tournoi“ gehört in den Turnierbereich.
-            if (typeEl && typeEl.value === 'Tournoi') tournoiTeams.push(id);
-            else if (seniorIds.includes(id)) seniorTeams.push(id);
-            else if (youthIds.includes(id)) youthTeams.push(id);
-        }
+        if (!isLandscapeTeamActive(id)) continue;
+        if (youthIds.includes(id)) youthTeams.push(id);
     }
 
     if (ym) {
@@ -1860,33 +1874,56 @@ function updateLandscapePreview() {
         return;
     }
 
-    const seniorSlots = [
-        { type: 'big', top: 350, left: 20 },
-        { type: 'big', top: 350, left: 570 },
-        { type: 'big', top: 350, left: 1120 }
+    // --- Landscape-Aufteilung (Meisterschaft) -----------------------
+    // Links: Frauen (groß) · Mitte: Männer (groß)
+    // Rechts: Grafik -> U9/U11/U7 -> U13-P1 -> U13-P2 -> U15
+    const leftMain = isLandscapeTeamActive('fe') ? 'fe' : (isLandscapeTeamActive('s2') ? 's2' : null);
+    const centerMain = isLandscapeTeamActive('s1') ? 's1' : null;
+
+    if (leftMain) {
+        renderLandscapeGame(leftMain, { type: 'big', top: 350, left: 20 }, cont, teamHasConfiguredGame(leftMain));
+    }
+    if (centerMain) {
+        renderLandscapeGame(centerMain, { type: 'big', top: 350, left: leftMain ? 570 : 620 }, cont, teamHasConfiguredGame(centerMain));
+    }
+
+    // Zusatzteams (H2, U11 Elite) in der freien linken Spalte über den Frauen.
+    const leftExtras = [];
+    if (isLandscapeTeamActive('s2') && leftMain === 'fe') leftExtras.push('s2');
+    if (isLandscapeTeamActive('u11MEL')) leftExtras.push('u11MEL');
+    let extraTop = 90;
+    for (let i = 0; i < leftExtras.length; i++) {
+        const id = leftExtras[i];
+        renderLandscapeGame(id, {
+            type: 'small', top: extraTop, left: 20,
+            logoSize: 80, badgeW: 90, badgeH: 38,
+            dateFont: 14, locFont: 12, titleFont: 14
+        }, cont, teamHasConfiguredGame(id));
+        extraTop += 125;
+    }
+
+    // Grafik + U9/U11/U7 immer oben rechts (ohne Turnier mit 3D-Ball).
+    renderLandscapeTournamentStrip(cont, 95);
+
+    // Rechte Spalte: U13-P2 über U15, U13-P1 über U13-P2, U15 unten.
+    const rightStack = [
+        { id: 'u13p1', top: 275 },
+        { id: 'u13p2', top: 425 },
+        { id: 'u15', top: 575 }
     ];
-    // Bei genau einem Senior-Team: mittig zentrieren
-    const seniorSlotCentered = seniorTeams.length === 1
-        ? { type: 'big', top: 350, left: 620 }
-        : seniorSlots[0];
-    const singleGameSlots = seniorTeams.length === 1 ? [seniorSlotCentered] : seniorSlots;
-    for (let i = 0; i < seniorTeams.length && i < singleGameSlots.length; i++) {
-        renderLandscapeGame(seniorTeams[i], singleGameSlots[i], cont, teamHasConfiguredGame(seniorTeams[i]));
-    }
-
-    // Turnierbereich immer im Meisterschafts-Poster anzeigen;
-    // ohne aktives Turnier übernimmt der Helfer automatisch den 3D-Ball.
-    renderLandscapeTournoiPanel(tournoiTeams);
-
-    // Vier Jugendblöcke ohne Überlappung: Slotbreite ist ca. 360px.
-    const youthCols = [40, 440, 840, 1240];
-    for (let i = 0; i < youthTeams.length && i < youthCols.length; i++) {
-        renderLandscapeGame(youthTeams[i], { type: 'small', top: 600, left: youthCols[i] }, cont, teamHasConfiguredGame(youthTeams[i]));
-    }
-    if (youthTeams.length > 4) {
-        for (let i = 4; i < youthTeams.length && (i - 4) < youthCols.length; i++) {
-            renderLandscapeGame(youthTeams[i], { type: 'small', top: 660, left: youthCols[i - 4] }, cont, teamHasConfiguredGame(youthTeams[i]));
-        }
+    for (let i = 0; i < rightStack.length; i++) {
+        const item = rightStack[i];
+        if (!isLandscapeTeamActive(item.id)) continue;
+        const isU15 = item.id === 'u15';
+        renderLandscapeGame(item.id, {
+            type: 'small', top: item.top, left: 1140,
+            logoSize: isU15 ? 100 : 80,
+            badgeW: isU15 ? 100 : 90,
+            badgeH: isU15 ? 45 : 38,
+            dateFont: isU15 ? 20 : 16,
+            locFont: isU15 ? 16 : 13,
+            titleFont: isU15 ? 16 : 14
+        }, cont, teamHasConfiguredGame(item.id));
     }
 
     scalePoster();
@@ -2067,6 +2104,8 @@ function renderLandscapeGame(teamRef, sl, cont, hasGame) {
             } else if (['u9M', 'u7M'].indexOf(prefix) !== -1) { 
                 baseDt = 14; baseLc = 12; 
             }
+            if (sl.dateFont) baseDt = sl.dateFont;
+            if (sl.locFont) baseLc = sl.locFont;
             th = '<div style="font-family:\'Barlow\',sans-serif;font-weight:800;font-size:' + (baseDt * sclTe) + 'px;color:' + dateColor + ';">' + ds + '</div><div style="font-family:\'Barlow\',sans-serif;font-weight:600;font-size:' + (baseLc * sclTe) + 'px;color:' + dateColor + ';line-height:1.1;margin-top:2px;">' + ls + '</div>';
         }
     }
@@ -2108,22 +2147,25 @@ function renderLandscapeGame(teamRef, sl, cont, hasGame) {
         }
         html += '</div>';
     } else {
-        const logoSize = 90;
-        const badgeW = 100;
-        const badgeH = 45;
+        const logoSize = sl.logoSize || 90;
+        const badgeW = sl.badgeW || 100;
+        const badgeH = sl.badgeH || 45;
+        const badgeTop = (sl.badgeTop != null) ? sl.badgeTop : 20;
+        const badgeFont = sl.badgeFont || 22;
+        const gap = (sl.gap != null) ? sl.gap : 40;
         
         const heimLeft = sl.left; 
-        const badgeLeft = sl.left + 130; 
-        const gastLeft = sl.left + 260;
-        const totalWidth = 360;
+        const badgeLeft = sl.left + logoSize + gap;
+        const gastLeft = badgeLeft + badgeW + gap;
+        const totalWidth = gastLeft + logoSize - sl.left;
         
-        const titleHtml = ts ? '<div class="abs text-blue" style="top:' + (sl.top - 32) + 'px;left:' + heimLeft + 'px;width:' + totalWidth + 'px;height:25px;font-size:' + (18 * sclTi) + 'px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;line-height:1;display:flex;align-items:flex-end;justify_content:center;text-align:center;pointer-events:auto;color:#FFFFFF;text-shadow:0 0 3px rgba(0,0,0,0.8);">' + ts + '</div>' : '';
+        const titleHtml = ts ? '<div class="abs text-blue" style="top:' + (sl.top - 32) + 'px;left:' + heimLeft + 'px;width:' + totalWidth + 'px;height:25px;font-size:' + ((sl.titleFont || 18) * sclTi) + 'px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;line-height:1;display:flex;align-items:flex-end;justify_content:center;text-align:center;pointer-events:auto;color:#FFFFFF;text-shadow:0 0 3px rgba(0,0,0,0.8);">' + ts + '</div>' : '';
         const dateTop = sl.top + badgeH + 45;
         
         html += '<div class="abs game-layer" style="display:block;">';
         html += titleHtml;
         html += '<div class="abs logo-box" style="top:' + sl.top + 'px;left:' + heimLeft + 'px;width:' + logoSize + 'px;height:' + logoSize + 'px;border-radius:12px;padding:6px;transform: scale(' + sclL + '); transform-origin: top center;"><img src="' + l1 + '" crossorigin="anonymous"></div>';
-        html += '<div class="abs badge" style="top:' + (sl.top + 20) + 'px;left:' + badgeLeft + 'px;width:' + badgeW + 'px;height:' + badgeH + 'px;border-radius:8px;transform: scale(' + sclL + '); transform-origin: top center;"><div class="sub" style="font-size:8px;">' + tv + '</div><div class="main" style="font-size:22px;">' + mb + '</div></div>';
+        html += '<div class="abs badge" style="top:' + (sl.top + badgeTop) + 'px;left:' + badgeLeft + 'px;width:' + badgeW + 'px;height:' + badgeH + 'px;border-radius:8px;transform: scale(' + sclL + '); transform-origin: top center;"><div class="sub" style="font-size:8px;">' + tv + '</div><div class="main" style="font-size:' + badgeFont + 'px;">' + mb + '</div></div>';
         html += '<div class="abs logo-box" style="top:' + sl.top + 'px;left:' + gastLeft + 'px;width:' + logoSize + 'px;height:' + logoSize + 'px;border-radius:12px;padding:6px;transform: scale(' + sclL + '); transform-origin: top center;"><img src="' + l2 + '" crossorigin="anonymous"></div>';
         html += '<div class="abs" style="top:' + dateTop + 'px;left:' + heimLeft + 'px;width:' + totalWidth + 'px;height:auto;text-align:center;overflow:visible;line-height:1.2;">' + th + '</div>';
         html += '</div>';

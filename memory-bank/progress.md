@@ -1,3 +1,17 @@
+## Generator – Landscape-Aufteilung neu (Frauen links, Männer Mitte, rechte Spalte) – 2026-09-25
+
+- Ursache des Durcheinanders: Commit `d2b2eea` hatte die alte, flexible Landscape-Slot-Logik durch feste Positionen ersetzt; dadurch überlappten die Jugendblöcke und der Turnierbereich verschwand je nach Auswahl.
+- Neue feste Aufteilung im Meisterschafts-Poster:
+  - **Links:** Frauen groß (`top:350px;left:20px`)
+  - **Mitte:** Männer groß (`top:350px;left:570px`, bei fehlenden Frauen mittig)
+  - **Rechts oben:** Turniergrafik `--- TOURNOI ---` plus U9/U11/U7 (`top:95px;left:1140px`)
+  - **Rechts darunter:** U13-P1 (`top:275px`), U13-P2 (`top:425px`), U15 (`top:575px`) – U15 immer unten
+- Turniergrafik nutzt echte Turnierlogos und zeigt ohne aktives Turnier für U9/U11/U7 konsequent den 3D-Ball (`renderLandscapeTournamentStrip()`).
+- Zusatzteams H2 und U11 Elite landen in der freien linken Spalte oberhalb der Frauen, damit nichts verloren geht oder die rechte Spalte sprengt.
+- `renderLandscapeGame()` akzeptiert jetzt Slot-Overrides (`logoSize`, `badgeW`, `badgeH`, `badgeFont`, `titleFont`, `dateFont`, `locFont`, `gap`) für kompakte rechte Blöcke.
+- Verifikation: 18.10.-Spieltag in echter DOM-Umgebung (jsdom) gerendert – Frauen links, Männer mittig, U13-P1 → U13-P2 → U15 rechts, Turniergrafik mit U9/U11/U7, ohne Turnier 3× 3D-Ball; alle 10 Inline-Skripte `node --check`, `git diff --check` sauber.
+
+
 ## Generator – Meisterschaft & Turnier-Anzeige bereinigt – 2026-09-25
 
 - Spieltag 17./18.10.2026 (2 Senior- + 3 Jugendspiele) als Referenz geprüft.
