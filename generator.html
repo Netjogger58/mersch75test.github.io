@@ -1347,6 +1347,7 @@ function magicScan() {
                 else if (ul.indexOf("PLAYOFF") !== -1 || ul.indexOf("-PO") !== -1 || ul.indexOf("-PE") !== -1 || ul.indexOf("PROMOTIOUN") !== -1 || ul.indexOf("PROM") !== -1) c = "Playoff";
                 else if (ul.indexOf("CHAMPIONNAT") !== -1 || ul.indexOf("-CH") !== -1) c = "Championnat";
                 else if (ul.indexOf("TOURNOI") !== -1 || ul.indexOf("ESPOIR") !== -1) c = "Tournoi";
+                if (c === "Tournoi" && !parsedLocationValue && game.halle && typeof hallCodes !== 'undefined' && hallCodes[game.halle]) { parsedLocationValue = hallCodes[game.halle]; }
                 else c = "Season Games";
                 if (c) ti.value = c;
             }
@@ -1861,7 +1862,7 @@ function updateLandscapePreview() {
     });
     if (coupePosterTeams.length > 0) {
         const coupeSlots = [
-            { type: 'big', top: 350, left: 20 },
+            { type: 'big', top: 350, left: 90 },
             { type: 'big', top: 350, left: 570 },
             { type: 'big', top: 350, left: 1120 }
         ];
@@ -1881,7 +1882,7 @@ function updateLandscapePreview() {
     const centerMain = isLandscapeTeamActive('s1') ? 's1' : null;
 
     if (leftMain) {
-        renderLandscapeGame(leftMain, { type: 'big', top: 350, left: 20 }, cont, teamHasConfiguredGame(leftMain));
+        renderLandscapeGame(leftMain, { type: 'big', top: 350, left: 90 }, cont, teamHasConfiguredGame(leftMain));
     }
     if (centerMain) {
         renderLandscapeGame(centerMain, { type: 'big', top: 350, left: leftMain ? 570 : 620 }, cont, teamHasConfiguredGame(centerMain));
@@ -1895,7 +1896,7 @@ function updateLandscapePreview() {
     for (let i = 0; i < leftExtras.length; i++) {
         const id = leftExtras[i];
         renderLandscapeGame(id, {
-            type: 'small', top: extraTop, left: 20,
+            type: 'small', top: extraTop, left: 90,
             logoSize: 80, badgeW: 90, badgeH: 38,
             dateFont: 14, locFont: 12, titleFont: 14
         }, cont, teamHasConfiguredGame(id));
