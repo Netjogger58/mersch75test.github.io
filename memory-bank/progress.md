@@ -1,3 +1,45 @@
+## Agent 8 – Git-Management & Konfliktauflösung – 2026-09-25
+
+### Konfliktanalyse
+- `git status`: uncommittet waren `gallery.html`, `misc-i18n.js`, `memory-bank/progress.md` (Agent-6-Arbeit) + untracked `assets/Unbenannt-1.psd` (13 MB, NICHT committet), `hallo_agent6.txt`.
+- Konfliktmarker-Scan (`<<<<<<<`/`>>>>>>>`/`=======`) in `generator.html`, `index.html`, `script.js`, `styles.css`: **0 Treffer — keine Merge-Konflikte**.
+- `git diff --check`: sauber (keine Whitespace-Fehler). Keine unmerged Pfade (`git ls-files -u` leer), kein Stash, Branch `main` synchron mit `origin/main`.
+- Code-Zusammenführung: nichts zusammenzuführen nötig — `generator.html`/`index.html`/`script.js`/`styles.css` sind unverändert gegenüber HEAD (`a445abc`); parallele Agenten-Änderungen (Galerie/i18n) überschneiden sich nicht mit Generator/Carousel/Live-Center/Menü.
+
+### Commit-Struktur (atomar)
+- `ffb583b feat(gallery): Mannschaftsbilder-Bereich Saison 25/26 + i18n (Agent 6)` — `gallery.html`, `misc-i18n.js`, `hallo_agent6.txt`.
+- Folgend: `chore(agent8): Git-Status verifiziert + hallo_agent8.txt` — dieser Eintrag + `hallo_agent8.txt`.
+- Bewusst NICHT committet: `assets/Unbenannt-1.psd` (13 MB Arbeitsdatei, kein Deployment-Asset).
+
+### Deployment-Check (GitHub Pages)
+- `CNAME` = `mersch75.lu` ✓, `.nojekyll` vorhanden ✓, `index.html` im Root ✓.
+- Kein `.github/workflows/` nötig (Pages via Branch-Deploy); kein Buildschritt (statisches HTML/CSS/JS).
+- `index.html`-Referenzen: lokale `src`/`href` lösen auf (`?v=`-Query ausgenommen, ok); externe Links (flh.lu, Social, ehftv) unverändert.
+- Validierung: `node --check misc-i18n.js` OK, `gallery.html` HTML-Parse OK, alle 14 `src` auf Disk (2× `?v=`-Cache-Buster ausgenommen = erwartet).
+- `hallo_agent8.txt` = `Cline ist startklar!` ✓
+
+---
+
+## Agent 6 – Galerie-Ordner + Mannschaftsbilder – 2026-09-25
+
+### Aufgabe
+1. Auf `gallery.html` einen Folder/Bereich für Mannschaftsbilder anlegen (Bilder der Equippen einsetzen können).
+2. Zusatz: `hallo_agent6.txt` im Root mit Inhalt `Cline ist startklar!`.
+3. NICHT anfassen: `generator.html`, `live-center.html`, `_carousel_clean.py`, `js/flh-live-sync.js` (Generator-Bildkoordination daher bewusst NICHT umgesetzt — Eingriff wäre gegen die Vorgabe).
+
+### Umsetzung
+- Neuer Ordner `assets/pages/gallery/` (Repo-Konvention: page-spezifische Assets; keine Duplikate — Teamfotos bleiben Single-Source in `assets/shared/media/Ekippe Fotoen Saison 25-26/`, Galerie referenziert sie nur).
+- `gallery.html`: neue responsive Sektion `gallery-teams` (Badge/Titel/Beschreibung + 9 Karten FE/H1/U15/U13/U11/U11-Espoir/U9/U7/U4, `loading="lazy"`, Grid 3→2→1 Spalten). Bestehende Coming-soon-Karte bleibt erhalten.
+- `misc-i18n.js`: neue Keys `galleryTeamsBadge/Title/Desc` in allen 5 Sprachen (lb/fr/de/en/pt), an bestehende `galleryBadge/Title/Desc` angehängt.
+
+### Verification
+- `node --check misc-i18n.js` + `node --check script.js` OK; HTML-Parse OK.
+- Alle 14 `src`-Referenzen in `gallery.html` lösen URL-dekodiert auf Disk auf (0 missing).
+- `hallo_agent6.txt` = `Cline ist startklar!` ✓
+- `git status`: nur `gallery.html`, `misc-i18n.js` modifiziert + `assets/pages/gallery/`, `hallo_agent6.txt` neu; Generator/Live-Dateien unberührt.
+
+---
+
 ## NEXTGEN-Slide + Menü-Fix – 2026-09-25
 
 ### Aufgabe
