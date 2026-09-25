@@ -241,7 +241,6 @@
     <div class="preview-container" style="margin-bottom: 20px;">
         <div id="wrapper-landscape" class="preview-wrapper">
             <div id="poster">
-                <img class="coupe-trophy" src="assets/Coupe%20de%20Luxembourg2026.webp" alt="Pokal Coupe de Luxembourg 2026" crossorigin="anonymous">
                 <div id="l-dynamic-main"></div>
                 <div id="l-dynamic-tournoi"></div>
             </div>
@@ -1796,23 +1795,22 @@ function updateLandscapePreview() {
         return;
     }
 
-    // Coupe-Poster: feste Reihenfolge Frauen – Männer – U15 von links nach rechts.
-    const coupePosterTeams = ['fe', 's1', 'u15'];
-    const hasThreeCoupeGames = coupePosterTeams.every(function(id) {
+    // Coupe wird als eigener Postermodus behandelt und nie in die Meisterschaft eingemischt.
+    // Die feste Reihenfolge bleibt Frauen – Männer – U15 von links nach rechts.
+    const coupePosterTeams = ['fe', 's1', 'u15'].filter(function(id) {
         const typeEl = document.getElementById(id + '-type');
-        return teamHasConfiguredGame(id) && typeEl && typeEl.value === 'Coupe';
+        const visibility = document.getElementById(id + '-land-show');
+        return teamHasConfiguredGame(id) && typeEl && typeEl.value === 'Coupe' &&
+            isGameTypeVisible('landscape', 'Coupe') && (!visibility || visibility.checked);
     });
-    if (hasThreeCoupeGames) {
+    if (coupePosterTeams.length > 0) {
         const coupeSlots = [
             { type: 'big', top: 350, left: 20 },
             { type: 'big', top: 350, left: 570 },
             { type: 'big', top: 350, left: 1120 }
         ];
         for (let i = 0; i < coupePosterTeams.length; i++) {
-            const teamId = coupePosterTeams[i];
-            const visibility = document.getElementById(teamId + '-land-show');
-            if (visibility && !visibility.checked) continue;
-            renderLandscapeGame(teamId, coupeSlots[i], cont, true);
+            renderLandscapeGame(coupePosterTeams[i], coupeSlots[i], cont, true);
         }
         scalePoster();
         return;
@@ -2046,6 +2044,10 @@ function renderLandscapeGame(teamRef, sl, cont, hasGame) {
     if (sl.type === 'big') {
         html += '<div class="abs game-layer" style="display:block;">';
         html += '<div class="abs text-blue" style="top:' + sl.top + 'px;left:' + sl.left + 'px;width:458px;height:80px;font-size:' + (37 * sclTi) + 'px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;line-height:1.1;display:flex;align-items:flex-end;justify-content:center;text-align:center;pointer-events:auto;color:' + titleColor + ';">' + ts + '</div>';
+        if (prefix === 'u15' && tv.indexOf('Coupe') === 0) {
+            html += '<img class="coupe-trophy" src="assets/Coupe%20de%20Luxembourg2026.webp" alt="Pokal Coupe de Luxembourg 2026" crossorigin="anonymous" style="top:' + (sl.top - 78) + 'px;left:' + (sl.left + 154) + 'px;width:150px;height:76px;">';
+        }
+
         html += '<div class="abs logo-box" style="top:' + (sl.top + 95) + 'px;left:' + sl.left + 'px;width:150px;height:150px;border-radius:20px;padding:10px;transform: scale(' + sclL + '); transform-origin: top center;"><img src="' + l1 + '" crossorigin="anonymous"></div>';
         html += '<div class="abs badge" style="top:' + (sl.top + 110) + 'px;left:' + (sl.left + 169) + 'px;width:120px;height:120px;border-radius:16px;transform: scale(' + sclL + '); transform-origin: top center;"><div class="sub" style="font-size:11px;margin-bottom:-2px;">' + tv + '</div><div class="main" style="font-size:50px;">' + mb + '</div></div>';
         html += '<div class="abs logo-box" style="top:' + (sl.top + 95) + 'px;left:' + (sl.left + 308) + 'px;width:150px;height:150px;border-radius:20px;padding:10px;transform: scale(' + sclL + '); transform-origin: top center;"><img src="' + l2 + '" crossorigin="anonymous"></div>';

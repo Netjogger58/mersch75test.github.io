@@ -1,3 +1,10 @@
+## Generator – Coupe als eigener Postermodus – 2026-09-25
+- Coupe-Spiele werden im Landscape-Poster nicht mehr zusammen mit Meisterschafts-/Season-Games gerendert; sobald mindestens ein sichtbares Coupe-Spiel vorhanden ist, gilt der separate Coupe-Zweig.
+- Reihenfolge im Coupe-Zweig bleibt Frauen – Männer – U15; die Spielart-Checkbox „Coupe“ gilt weiterhin für beide Vorschau- und Exportlogik.
+- Der Pokal ist kein globales, absolut positioniertes Element mehr, sondern wird relativ im blauen U15-Coupe-Block mittig über dessen Badge/Titel erzeugt und verkleinert dargestellt.
+- Entfernt wurde die alte globale Trophy-Positionierung; das bestehende Coupe-Asset bleibt `assets/Coupe de Luxembourg2026.webp`.
+
+
 ## Agent 11 – Strukturierung & Cleanup – 2026-09-25
 ## Generator – Coupe-Spiele integriert – 2026-09-25
 
