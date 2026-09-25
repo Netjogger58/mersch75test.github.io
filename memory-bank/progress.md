@@ -1,3 +1,22 @@
+## NEXTGEN-Slide + Menü-Fix – 2026-09-25
+
+### Aufgabe
+1. `Media/Hauptseite/Nextgen Poster.webp` (3548×1787, Landscape) als neuen Carousel-Slide in `index.html` **und** als Karte in `news.html` einbauen, Klick → `nextgen.html`. Poster an Carousel-Dimensionen anpassen, nicht umgekehrt.
+2. Menü-Button („Menü" klick → nichts geschieht) reparieren.
+
+### Umsetzung
+- Poster-Datei als Repo-Asset aufgenommen: `Media/Hauptseite/Nextgen Poster.webp` (`git add`), referenziert als `Media/Hauptseite/Nextgen%20Poster.webp`.
+- `index.html`: neuer erster Slide `news-slide-nextgen` mit `<a class="news-slide-link" href="nextgen.html">` um das Poster-Bild. Bild nutzt bestehende Carousel-Geometrie (`flex: 0 0 100%`, `min-height: clamp(240px, 36vw, 390px)`) + neu `object-fit: contain` (Klassen `.events-background-contain`/`.news-nextgen-image`, Link-Block `.news-slide-link`) → Poster passt sich der Box an.
+- `news.html`: neue Karte `<a class="news-card news-card-link news-slide-nextgen" href="nextgen.html">` vor der Hero-Karte, mit `.news-card-link` (Block, ohne Deko) + `.news-card-bg-contain` (`object-fit: contain`) in `styles.css`.
+- `KEEP` in `_carousel_clean.py`/`_clean_v2.py` um `news-slide-nextgen` ergänzt → Skript: `Keeping: 3 / Removing: 0`, exit 0.
+- Menü-Root-Cause: **2 konkurrierende Click-Handler** auf `.nav-toggle` – `initializeMobileMenu()` (Zeile 89, toggelt nur `.site-nav.is-open`) und `initializeSiteMenu()` (Zeile 2714, toggelt `.site-nav.is-open` + `.site-menu-backdrop.is-open` + `body.menu-open`) hoben sich gegenseitig auf → Klick = No-Op. **Fix:** doppelten Toggle-Handler aus `initializeMobileMenu()` entfernt (nur ESC-Schließlogik bleibt); Öffnen/Schließen läuft ausschließlich über `initializeSiteMenu()`.
+
+### Verification
+- `node --check script.js` OK; lokaler Server + headless Chrome: `site-menu-shell/-primary/-secondary/-close/-backdrop` vorhanden, simulierter Menü-Klick → `CLICKRESULT:OPEN-OK|aria=true|backdrop=1|body=true`, keine JS-Fehler.
+- `index.html`: 3 `<article>` (nextgen/coupe-fe/ag), divs 35/35, endet `</html>`; `nextgen.html` live HTTP 200.
+
+---
+
 ## Floumaart-Slide entfernt (index.html) – 2026-09-25
 
 ### Aufgabe

@@ -1197,6 +1197,16 @@ body.menu-open {
     padding: 4px 8px;
 }
 
+.news-card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.news-card-bg-contain {
+    object-fit: contain;
+}
+
 /* Hero card spans 2 columns */
 .news-card-hero {
     grid-column: span 2;
@@ -1279,6 +1289,18 @@ body.menu-open {
 .news-carousel-track .events-copy .hero-button-primary {
     background: var(--yellow);
     color: var(--blue);
+}
+
+.news-carousel-track .events-background-contain,
+.news-carousel-track .news-nextgen-image {
+    object-fit: contain;
+    object-position: center;
+}
+
+.news-carousel-track .news-slide-link {
+    display: block;
+    width: 100%;
+    height: 100%;
 }
 
 .news-carousel-track .events-pill-row {

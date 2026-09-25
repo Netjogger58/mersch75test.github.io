@@ -3,7 +3,7 @@ import re
 with open('index.html', 'r') as f:
     lines = f.readlines()
 
-KEEP = {'news-slide-coupe-fe', 'news-slide-ag'}
+KEEP = {'news-slide-coupe-fe', 'news-slide-ag', 'news-slide-nextgen'}
 ARTICLE_START = re.compile(r'<article\s+class="([^"]*news-slide[^"]*)"')
 
 out = []
