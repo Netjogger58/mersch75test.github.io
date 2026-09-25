@@ -1,3 +1,18 @@
+## Floumaart-Slide entfernt (index.html) – 2026-09-25
+
+### Aufgabe
+Slide mit Floumaart-zu-Schous-Poster (blauer Kasten, „Mir sinn dobäi!!") aus dem News-Carousel entfernen.
+
+### Umsetzung
+- `<article class="… news-slide-floumaart …">`-Block (inkl. Bild `assets/shared/media/Floumaart zu Schous.webp`) aus `index.html` entfernt → Carousel hat jetzt **2 Slides** (`news-slide-coupe-fe`, `news-slide-ag`). Datei-Bild bleibt auf Disk erhalten; `news.html` nutzt es weiterhin (5 Treffer dort, bewusst nicht angefasst).
+- Zugehörige, nun verwaiste CSS-Regeln in `styles.css` entfernt (7 Block-Regeln: Desktop-Block + Mobile-Media-Query) → 0 Treffer `news-slide-floumaart` in `index.html`/`styles.css`.
+- `KEEP`-Listen in `_carousel_clean.py` und `_clean_v2.py` auf `{'news-slide-coupe-fe', 'news-slide-ag'}` aktualisiert (Guard bleibt konsistent: Skriptlauf = `Keeping: 2 / Removing: 0`, exit 0).
+
+### Verification
+- `index.html`: 2 `<article>`, divs 35/35, sections 5/5, endet mit `</html>`.
+
+---
+
 ## Carousel-Skript + 3-Slides-Verifikation – 2026-09-25
 
 ### Befund

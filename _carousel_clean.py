@@ -10,7 +10,7 @@ Usage: python3 _carousel_clean.py
 import re
 import sys
 
-KEEP = {'news-slide-coupe-fe', 'news-slide-floumaart', 'news-slide-ag'}
+KEEP = {'news-slide-coupe-fe', 'news-slide-ag'}
 ARTICLE_START = re.compile(r'<article\s+class="([^"]*news-slide[^"]*)"')
 
 with open('index.html', 'r') as f:
