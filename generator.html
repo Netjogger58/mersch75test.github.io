@@ -1427,6 +1427,7 @@ function magicScan() {
                         const n1 = n1El ? parseInt(n1El.value, 10) : 1;
                         n2El.value = String((!isNaN(n1) && n1 > 0) ? n1 + 1 : 2);
                     }
+                    const l1El = document.getElementById(p + '-loc'); if (l1El && !l1El.value && parsedLocationValue) l1El.value = parsedLocationValue;
                     const l2El = document.getElementById(p + '-loc2');
                     if (l2El) l2El.value = parsedLocationValue || (document.getElementById(p + '-loc') ? document.getElementById(p + '-loc').value : '');
                 }
@@ -1593,6 +1594,11 @@ function bindNumericSliders(container) {
 
 </script>
 <script>
+function getOrderedTeams(ids) {
+    const copy = (ids || []).slice();
+    copy.sort(function (a, b) { return getAssignedPos(a) - getAssignedPos(b); });
+    return copy;
+}
 function getAssignedPos(prefix) {
     const el = document.getElementById(prefix + '-land-pos');
     return el ? parseInt(el.value, 10) : 99;
@@ -1799,8 +1805,16 @@ function renderLandscapeTournamentStrip(cont, top) {
 
         html += '<div class="abs badge" style="top:' + colTop + 'px;left:' + (center - 35) + 'px;width:70px;height:26px;border-radius:6px;"><div class="sub" style="font-size:6px;">' + tv + '</div><div class="main" style="font-size:15px;font-weight:900;font-style:italic;">' + mb + '</div></div>';
         html += '<div class="abs logo-box" style="top:' + (colTop + 32) + 'px;left:' + (center - 27) + 'px;width:54px;height:54px;border-radius:8px;padding:4px;"><img src="' + logo + '" crossorigin="anonymous"></div>';
-        if (dateHtml) {
-            html += '<div class="abs" style="top:' + (colTop + 90) + 'px;left:' + colLeft + 'px;width:' + colWidth + 'px;text-align:center;">' + dateHtml + '</div>';
+        var locHtml = '';
+        if (hasGame) {
+            var lv = getGameFieldValue(id, 'loc', 1) || '';
+            if (!lv && typeof hallCodes !== 'undefined') { var hv = getGameFieldValue(id, 'hall', 1) || ''; if (hv && hallCodes[hv]) lv = hallCodes[hv]; }
+            if (!lv && typeof resolveOpponentAddress === 'function') { var oh = getGameFieldValue(id, 'opp', 1) || ''; lv = resolveOpponentAddress(oh); }
+            if (lv) { var lpp = String(lv).split('|'); for (var li2 = 0; li2 < lpp.length; li2++) { lpp[li2] = lpp[li2].trim(); } lv = lpp.join('<br>');
+                locHtml = '<div style="font-family:Barlow,sans-serif;font-weight:600;font-size:10px;line-height:1.15;color:#FFE45C;text-shadow:0 0 3px rgba(0,0,0,0.8);margin-top:2px;">' + lv + '</div>'; }
+        }
+        if (dateHtml || locHtml) {
+            html += '<div class="abs" style="top:' + (colTop + 90) + 'px;left:' + colLeft + 'px;width:' + colWidth + 'px;text-align:center;">' + dateHtml + locHtml + '</div>';
         }
     }
     html += '</div>';
@@ -1862,12 +1876,13 @@ function updateLandscapePreview() {
     });
     if (coupePosterTeams.length > 0) {
         const coupeSlots = [
-            { type: 'big', top: 350, left: 90 },
+            { type: 'big', top: 350, left: 200 },
             { type: 'big', top: 350, left: 570 },
             { type: 'big', top: 350, left: 1120 }
         ];
-        for (let i = 0; i < coupePosterTeams.length; i++) {
-            renderLandscapeGame(coupePosterTeams[i], coupeSlots[i], cont, true);
+        const coupeOrdered = getOrderedTeams(coupePosterTeams); // Switch Pos 1&2: Pos-Feld entscheidet
+        for (let i = 0; i < coupeOrdered.length; i++) {
+            renderLandscapeGame(coupeOrdered[i], coupeSlots[i], cont, true);
         }
         const coupeTournoiPanel = document.getElementById('l-dynamic-tournoi');
         if (coupeTournoiPanel) coupeTournoiPanel.innerHTML = '';
@@ -1878,11 +1893,12 @@ function updateLandscapePreview() {
     // --- Landscape-Aufteilung (Meisterschaft) -----------------------
     // Links: Frauen (groß) · Mitte: Männer (groß)
     // Rechts: Grafik -> U9/U11/U7 -> U13-P1 -> U13-P2 -> U15
-    const leftMain = isLandscapeTeamActive('fe') ? 'fe' : (isLandscapeTeamActive('s2') ? 's2' : null);
-    const centerMain = isLandscapeTeamActive('s1') ? 's1' : null;
+    const orderedSenior = getOrderedTeams(['fe', 's1'].filter(function (id) { return isLandscapeTeamActive(id); })); // Switch Pos 1&2: Pos-Feld entscheidet
+    const leftMain = orderedSenior[0] || null;
+    const centerMain = orderedSenior[1] || null;
 
     if (leftMain) {
-        renderLandscapeGame(leftMain, { type: 'big', top: 350, left: 90 }, cont, teamHasConfiguredGame(leftMain));
+        renderLandscapeGame(leftMain, { type: 'big', top: 350, left: 200 }, cont, teamHasConfiguredGame(leftMain));
     }
     if (centerMain) {
         renderLandscapeGame(centerMain, { type: 'big', top: 350, left: leftMain ? 570 : 620 }, cont, teamHasConfiguredGame(centerMain));
@@ -1890,13 +1906,13 @@ function updateLandscapePreview() {
 
     // Zusatzteams (H2, U11 Elite) in der freien linken Spalte über den Frauen.
     const leftExtras = [];
-    if (isLandscapeTeamActive('s2') && leftMain === 'fe') leftExtras.push('s2');
+    if (isLandscapeTeamActive('s2') && leftMain !== 's2') leftExtras.push('s2');
     if (isLandscapeTeamActive('u11MEL')) leftExtras.push('u11MEL');
     let extraTop = 90;
     for (let i = 0; i < leftExtras.length; i++) {
         const id = leftExtras[i];
         renderLandscapeGame(id, {
-            type: 'small', top: extraTop, left: 90,
+            type: 'small', top: extraTop, left: 200,
             logoSize: 80, badgeW: 90, badgeH: 38,
             dateFont: 14, locFont: 12, titleFont: 14
         }, cont, teamHasConfiguredGame(id));

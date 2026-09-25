@@ -1,3 +1,10 @@
+## Generator – Frauen-Block zentrierter + U11-Tournoi-Adresse – 2026-09-25
+
+- Frauen-Block (links, inkl. Coupe-Slot und Zusatzteams) von `left:20` auf `left:90` gerückt: weiter weg vom linken Posterrand, näher ans Männer-Spiel in der Mitte.
+- Tournoi-Adresse: Der magische Scanner setzt bei Kategorie `Tournoi` jetzt einen Hallencode-Fallback (`hallCodes[game.halle]`), sodass das U11-Heimturnier (Halle 290101) die Adresse `21, rue des Prés | L-7561 Mersch` im Landscape-Poster (Datum+Adresse unter dem Block) und Portrait anzeigt.
+- Verifikation: alle 6 Inline-Skripte `node --check`, `git diff --check` sauber; gepusht (`ea4ada8`).
+
+
 ## Generator – U11-Turnier 18.10. ergänzt + doppelter Wochenend-Button entfernt – 2026-09-25
 
 - `allGamesData` ergänzt um `JUGEND: U11 Espoir`, `18.10.26 09:30`, Heimspiel `Mersch75 - Tournoi`, Halle `290101`, Nr. `U11T181026`.
