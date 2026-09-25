@@ -1709,12 +1709,31 @@ function updateLandscapePreview() {
         return;
     }
 
+    // Coupe-Poster: feste Reihenfolge Frauen – Männer – U15 von links nach rechts.
+    const coupePosterTeams = ['fe', 's1', 'u15'];
+    const hasThreeCoupeGames = coupePosterTeams.every(function(id) {
+        const typeEl = document.getElementById(id + '-type');
+        return teamHasConfiguredGame(id) && typeEl && typeEl.value === 'Coupe';
+    });
+    if (hasThreeCoupeGames) {
+        const coupeSlots = [
+            { type: 'big', top: 350, left: 20 },
+            { type: 'big', top: 350, left: 570 },
+            { type: 'big', top: 350, left: 1120 }
+        ];
+        for (let i = 0; i < coupePosterTeams.length; i++) {
+            renderLandscapeGame(coupePosterTeams[i], coupeSlots[i], cont, true);
+        }
+        scalePoster();
+        return;
+    }
+
     const seniorSlots = [
         { type: 'big', top: 350, left: 20 },
         { type: 'big', top: 350, left: 570 },
         { type: 'big', top: 350, left: 1120 }
     ];
-    // Drei Coupe-Spiele werden bewusst in drei gleich breite Spalten gesetzt.
+    // Bei genau einem Senior-Team: mittig zentrieren
     const seniorSlotCentered = seniorTeams.length === 1
         ? { type: 'big', top: 350, left: 620 }
         : seniorSlots[0];
