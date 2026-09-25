@@ -17,6 +17,13 @@
 - Syntaxprüfung aller Inline-Skripte, FLH-Sync-Prüfung und `git diff --check` erfolgreich.
 
 
+## Generator – Pokalposition LS-Poster – 2026-09-25
+- Coupe-Pokal im LS-/Landscape-Poster aus der mittigen Position entfernt.
+- Rechts mittig über dem U15-Spiel platziert und von 230×290 px auf 300×375 px vergrößert.
+- Asset-Pfad `assets/Coupe de Luxembourg2026.webp` geprüft; Vorschau-/Export-Logik unverändert.
+- `node --check` für FLH-Sync und Inline-Skripte sowie `git diff --check` erfolgreich.
+
+
 - Homepage-Navigation inventarisiert und eine rückwärtskompatible Zielstruktur unter `docs/structure/pages/` dokumentiert.
 - Kategorien für Home, Live-Center, Training, Club, News, Community, Media, Kontakt/Service, Rechtliches, Verwaltung und Shared angelegt.
 - Aktive Root-Dateien nicht verschoben: GitHub Pages liefert aus dem Root aus und die bestehenden URLs/Referenzen wären sonst gebrochen.
