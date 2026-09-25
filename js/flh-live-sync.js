@@ -9,7 +9,13 @@
         { key: 'fe', cl: '168031', label: 'FRAUEN (D-PRO)' },
         { key: 'u15', cl: '168871', label: 'JUGEND: U15G' },
         { key: 'u13p1', cl: '168526', label: 'JUGEND: U13M-P1' },
-        { key: 'u13p2', cl: '168531', label: 'JUGEND: U13M-P2' }
+        { key: 'u13p2', cl: '168531', label: 'JUGEND: U13M-P2' },
+        // Coupe-Spillplä vun der FLH (dynamesch Kategorie-ID aus dem FLH-Menü)
+        { key: 'cupMenLN', cl: '169141', label: 'COUPE: MÄNNER (H-C-LN)' },
+        { key: 'cupWomenLN', cl: '169136', label: 'COUPE: FRAUEN (D-C-LN)' },
+        { key: 'cupMenFLH', cl: '169146', label: 'COUPE: MÄNNER (H-C-FLH)' },
+        { key: 'cupU15', cl: '169156', label: 'COUPE: U15 JONGEN (U15G-C)' },
+        { key: 'cupU13', cl: '169151', label: 'COUPE: U13 MIXTE (U13M-C)' }
     ];
 
     function buildUrl(config) {

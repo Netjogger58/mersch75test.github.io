@@ -254,3 +254,9 @@ Das Bild `assets/portrait-poster-neu.png` war **kein leeres Hintergrundbild**, s
 - `assets/Portrait Poster hellerer Hintergrund.png`, `assets/portrait-poster-neu.png`, `assets/assets/portrait-poster-neu.png` gelöscht (git rm), verschachtelter `assets/assets/`-Ordner entfernt.
 - Repo-weit (ohne .kilo/.git) null Referenzen auf alte Bilder; einzige Quellen: CSS Zeile 159 + Export `renderPortraitDataUrl()` Zeile 2462 → `assets/PortraitBild mit hellem Hintergrund23092026.webp`.
 - Achtung: Browser-Cache – Seite mit Hard-Reload (Strg/Cmd+Shift+R) neu laden.
+
+## FLH-Cup-Synchronisierung (Agent 13)
+- `js/flh-live-sync.js` lädt zusätzlich die aktuellen Coupe-Klassen der FLH: H-C-LN, D-C-LN, H-C-FLH, U15G-C und U13M-C.
+- Coupe-Spiele werden als markierte Datensätze in den bestehenden Live-Sync aufgenommen; der Bereich „Coupe“ in `live-center.html` ersetzt seine bisherigen statischen Platzhalter durch die aktuellen FLH-Daten, sofern welche geliefert werden.
+- Bestehende statische Coupe-Einträge bleiben als Fallback erhalten, wenn die FLH-Schnittstelle nicht erreichbar ist.
+- Validiert mit `node --check` und `git diff --check`.

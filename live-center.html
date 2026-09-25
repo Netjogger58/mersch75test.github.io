@@ -542,6 +542,18 @@ const coupeData = [
     { kat: "Männer", datum: "04.10.26", score: "", heim: "Mersch75", gast: "HC Redange", sbo: "", rtl: "", nr: "290101", bem: "" }
 ];
 
+function mergeCoupeDataFromLive(livePayload) {
+    if (!livePayload || !Array.isArray(livePayload.games)) return;
+    const liveCoupe = livePayload.games
+        .filter(function(game) { return String(game.team || '').indexOf('COUPE:') === 0; })
+        .map(function(game) {
+            const label = String(game.team || '').replace('COUPE:', '').trim();
+            const category = label.indexOf('U15') === 0 ? 'U15' : label.indexOf('U13') === 0 ? 'U13' : label.indexOf('FRAUEN') === 0 || label.indexOf('Fraen') === 0 ? 'Fraen' : 'Männer';
+            return { kat: category, datum: game.datum, heim: game.heim, gast: game.gast, score: game.score || '', sbo: game.sbo || '', rtl: game.rtl || game.yt || '', nr: game.nr || '', bem: game.bem || '' };
+        });
+    if (liveCoupe.length) coupeData.splice(0, coupeData.length, ...liveCoupe);
+}
+
 const m75Data = [];
 
 const flhData = [];
@@ -629,6 +641,7 @@ if (livePayload && livePayload.standingsByLabel) {
 }
 if (Array.isArray(livePayload.games) && livePayload.games.length) {
 allGamesData = window.MerschFlhSync.mergeLiveSeasonGames(allGamesData, livePayload);
+        mergeCoupeDataFromLive(livePayload);
 applyLiveCenterCorrections();
 if (activeLiveCenterMode === 'static' && activeLiveCenterEntry && activeLiveCenterEntry.t === 'allgames') {
 showStatic(activeLiveCenterEntry);
