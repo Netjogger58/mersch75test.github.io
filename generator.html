@@ -116,7 +116,7 @@
 
 #m75-gen-wrapper .matchday-text { top: 15px; left: 50%; transform: translateX(-50%); font-size: 75px; font-weight: 900; font-style: italic; color: var(--primary-blue); z-index: 3; display: flex; align-items: flex-end; letter-spacing: -2px; }
 #m75-gen-wrapper .matchday-text img { height: 90px; width: auto; object-fit: contain; }
-#m75-gen-wrapper .coupe-trophy { position: absolute; top: 145px; left: 1395px; transform: translateX(-50%); width: 300px; height: 375px; object-fit: contain; object-position: center top; z-index: 9; pointer-events: none; filter: drop-shadow(0 5px 7px rgba(0,0,0,.30)); }
+#m75-gen-wrapper .coupe-trophy { position: absolute; top: 155px; left: 1300px; transform: translateX(-50%); width: 150px; height: 188px; object-fit: contain; object-position: center top; z-index: 9; pointer-events: none; filter: drop-shadow(0 5px 7px rgba(0,0,0,.30)); }
 
 #m75-gen-wrapper .layer-50years-left { top: 16px; left: 430px; width: 82px; height: 82px; background-color: transparent !important; z-index: 8; display: flex; justify-content: center; align-items: center; }
 #m75-gen-wrapper .layer-50years-right { top: 16px; left: 1088px; width: 82px; height: 82px; background-color: transparent !important; z-index: 8; display: flex; justify-content: center; align-items: center; }
@@ -829,6 +829,42 @@ function restorePosterVisibility() {
     });
 }
 
+
+const POSTER_GAME_TYPE_STORAGE_KEY = 'mersch75-generator-poster-game-types-v1';
+const GENERATOR_GAME_TYPES = ['Season Games', 'Play-Off AXA League', 'Play-Off Championnat', 'Coupe', 'Coupe Final 4'];
+
+function getStoredGameTypeVisibility() {
+    try {
+        const stored = JSON.parse(localStorage.getItem(POSTER_GAME_TYPE_STORAGE_KEY) || '{}');
+        return stored && typeof stored === 'object' ? stored : {};
+    } catch (e) { return {}; }
+}
+
+function isGameTypeVisible(scope, type) {
+    const state = getStoredGameTypeVisibility();
+    const key = scope + ':' + (type || 'Season Games');
+    return state[key] !== false;
+}
+
+function renderGameTypeControls(scope) {
+    const state = getStoredGameTypeVisibility();
+    return '<div class="game-type-filter" data-scope="' + scope + '"><strong>Welche Spielarten anzeigen?</strong>' +
+        GENERATOR_GAME_TYPES.map(function(type) {
+            const checked = state[scope + ':' + type] !== false;
+            return '<label><input type="checkbox" class="trigger-game-type" data-scope="' + scope + '" value="' + type + '"' + (checked ? ' checked' : '') + '> ' + type + '</label>';
+        }).join('') + '</div>';
+}
+
+function persistGameTypeVisibility() {
+    try {
+        const state = {};
+        document.querySelectorAll('.trigger-game-type').forEach(function(cb) {
+            state[cb.dataset.scope + ':' + cb.value] = cb.checked;
+        });
+        localStorage.setItem(POSTER_GAME_TYPE_STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {}
+}
+
 function renderLandscapeControls() {
     const grid = document.getElementById('landscape-settings-grid');
     if (!grid) return;
@@ -865,6 +901,7 @@ function renderLandscapeControls() {
     html += '<div class="slider-row"><span class="sl-lbl">MixVoip R</span><input type="range" id="l-scale-mixvoip-r" min="100" max="500" value="280" oninput="this.nextElementSibling.innerText=this.value;updateLandscapePreview();"><span class="sl-val">280</span></div>';
     html += '<div class="slider-row"><span class="sl-lbl">50 Jahre</span><input type="range" id="l-scale-50years" min="50" max="300" value="82" oninput="this.nextElementSibling.innerText=this.value;updateLandscapePreview();"><span class="sl-val">82</span></div>';
     html += '</div></div>';
+    html += renderGameTypeControls('landscape');
     grid.innerHTML = html;
     bindNumericSliders(grid);
 }
@@ -918,6 +955,7 @@ function renderPortraitControls() {
     html += '<div class="slider-row" style="justify-content:flex-start;gap:8px;"><label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--primary-blue);cursor:pointer;"><input type="checkbox" id="p-autofit-height" checked onchange="updatePortraitPreview();"> Höhe autom. an Teams anpassen</label></div>';
     html += '<div class="slider-row"><span class="sl-lbl">50 J.</span> <input type="range" id="p-scale-50years" min="40" max="150" value="100" oninput="this.nextElementSibling.innerText=this.value;updatePortraitPreview();"><span class="sl-val">100</span></div>';
     html += '</div></div>';
+    html += renderGameTypeControls('portrait');
     selector.innerHTML = html;
     bindNumericSliders(selector);
 }
@@ -1734,6 +1772,8 @@ function updateLandscapePreview() {
         const id = TEAM_CONFIGS[i].id;
         const visibility = document.getElementById(id + '-land-show');
         if (visibility && !visibility.checked) continue;
+        const typeEl = document.getElementById(id + '-type');
+        if (typeEl && !isGameTypeVisible('landscape', typeEl.value)) continue;
         if (teamHasConfiguredGame(id) || teamHasUploadedPhoto(id)) {
             if (seniorIds.includes(id)) seniorTeams.push(id);
             else if (tournoiIds.includes(id)) tournoiTeams.push(id);
@@ -2186,6 +2226,7 @@ function updatePortraitPreview() {
         const hasGame = teamObj.hasGame;
         
         const typeEl = document.getElementById(prefix + '-type');
+        if (typeEl && !isGameTypeVisible('portrait', typeEl.value)) continue;
         let tv = typeEl ? typeEl.value : "Season Games";
         const suffix = teamSuffixes[prefix] || '';
         tv += suffix;
@@ -2909,6 +2950,15 @@ function openHomepageHandoffModal(stamp, hasPortrait, auto) {
 
         qsa('.trigger-text').forEach(function(el) {
             el.addEventListener('input', function() { window.updateAllPreviews(); scalePoster(); });
+        });
+
+        qsa('.trigger-game-type').forEach(function(el) {
+            el.addEventListener('change', function() {
+                persistGameTypeVisibility();
+                updateLandscapePreview();
+                updatePortraitPreview();
+                scalePoster();
+            });
         });
 
         qsa('.trigger-land-show').forEach(function(el) {
