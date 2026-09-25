@@ -8,6 +8,15 @@
 - Syntaxprüfung für `js/flh-live-sync.js` und alle Inline-Skripte in `generator.html` sowie `git diff --check` erfolgreich.
 
 
+## Generator – Sichtbarkeit der Posterbereiche – 2026-09-25
+
+- Checkboxen im LS-/Landscape- und Portrait-Poster ermöglichen, einzelne Mannschaften/Spielblöcke ein- oder auszublenden.
+- Auswahl wird unter `mersch75-generator-poster-visibility-v1` im Local Storage gespeichert und beim Neuladen wiederhergestellt.
+- Landscape-Rendering berücksichtigt die Checkboxen auch im Coupe-Zweig; die feste Reihenfolge Frauen – Männer – U15 bleibt erhalten.
+- Portrait-Haupt- und Zusatzspiele verwenden dieselbe Checkbox-Auswahl; Vorschau und Export folgen der Auswahl.
+- Syntaxprüfung aller Inline-Skripte, FLH-Sync-Prüfung und `git diff --check` erfolgreich.
+
+
 - Homepage-Navigation inventarisiert und eine rückwärtskompatible Zielstruktur unter `docs/structure/pages/` dokumentiert.
 - Kategorien für Home, Live-Center, Training, Club, News, Community, Media, Kontakt/Service, Rechtliches, Verwaltung und Shared angelegt.
 - Aktive Root-Dateien nicht verschoben: GitHub Pages liefert aus dem Root aus und die bestehenden URLs/Referenzen wären sonst gebrochen.

@@ -784,6 +784,51 @@ function renderFormBlocks() {
     grid.innerHTML = html;
 }
 
+const POSTER_VISIBILITY_STORAGE_KEY = 'mersch75-generator-poster-visibility-v1';
+
+function getStoredPosterVisibility() {
+    try {
+        const stored = JSON.parse(localStorage.getItem(POSTER_VISIBILITY_STORAGE_KEY) || '{}');
+        return stored && typeof stored === 'object' ? stored : {};
+    } catch (e) {
+        return {};
+    }
+}
+
+function persistPosterVisibility() {
+    try {
+        const state = {};
+        document.querySelectorAll('.trigger-land-show').forEach(function(cb) {
+            state['land:' + cb.dataset.team] = cb.checked;
+        });
+        document.querySelectorAll('.cb-portrait').forEach(function(cb) {
+            state['portrait:' + cb.value] = cb.checked;
+        });
+        document.querySelectorAll('.cb-portrait-extra').forEach(function(cb) {
+            state['portrait-extra:' + cb.dataset.team] = cb.checked;
+        });
+        localStorage.setItem(POSTER_VISIBILITY_STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+        // Private Mode oder blockierter Speicher darf die Vorschau nicht verhindern.
+    }
+}
+
+function restorePosterVisibility() {
+    const state = getStoredPosterVisibility();
+    document.querySelectorAll('.trigger-land-show').forEach(function(cb) {
+        const key = 'land:' + cb.dataset.team;
+        if (Object.prototype.hasOwnProperty.call(state, key)) cb.checked = state[key] !== false;
+    });
+    document.querySelectorAll('.cb-portrait').forEach(function(cb) {
+        const key = 'portrait:' + cb.value;
+        if (Object.prototype.hasOwnProperty.call(state, key)) cb.checked = state[key] !== false;
+    });
+    document.querySelectorAll('.cb-portrait-extra').forEach(function(cb) {
+        const key = 'portrait-extra:' + cb.dataset.team;
+        if (Object.prototype.hasOwnProperty.call(state, key)) cb.checked = state[key] !== false;
+    });
+}
+
 function renderLandscapeControls() {
     const grid = document.getElementById('landscape-settings-grid');
     if (!grid) return;
@@ -1687,6 +1732,8 @@ function updateLandscapePreview() {
 
     for (let i = 0; i < TEAM_CONFIGS.length; i++) {
         const id = TEAM_CONFIGS[i].id;
+        const visibility = document.getElementById(id + '-land-show');
+        if (visibility && !visibility.checked) continue;
         if (teamHasConfiguredGame(id) || teamHasUploadedPhoto(id)) {
             if (seniorIds.includes(id)) seniorTeams.push(id);
             else if (tournoiIds.includes(id)) tournoiTeams.push(id);
@@ -1722,7 +1769,10 @@ function updateLandscapePreview() {
             { type: 'big', top: 350, left: 1120 }
         ];
         for (let i = 0; i < coupePosterTeams.length; i++) {
-            renderLandscapeGame(coupePosterTeams[i], coupeSlots[i], cont, true);
+            const teamId = coupePosterTeams[i];
+            const visibility = document.getElementById(teamId + '-land-show');
+            if (visibility && !visibility.checked) continue;
+            renderLandscapeGame(teamId, coupeSlots[i], cont, true);
         }
         scalePoster();
         return;
@@ -2861,8 +2911,28 @@ function openHomepageHandoffModal(stamp, hasPortrait, auto) {
             el.addEventListener('input', function() { window.updateAllPreviews(); scalePoster(); });
         });
 
+        qsa('.trigger-land-show').forEach(function(el) {
+            el.addEventListener('change', function() {
+                persistPosterVisibility();
+                updateLandscapePreview();
+                scalePoster();
+            });
+        });
+
         qsa('.cb-portrait').forEach(function(el) {
-            el.addEventListener('change', function() { updatePortraitPreview(); scalePoster(); });
+            el.addEventListener('change', function() {
+                persistPosterVisibility();
+                updatePortraitPreview();
+                scalePoster();
+            });
+        });
+
+        qsa('.cb-portrait-extra').forEach(function(el) {
+            el.addEventListener('change', function() {
+                persistPosterVisibility();
+                updatePortraitPreview();
+                scalePoster();
+            });
         });
 
         qsa('.cb-title').forEach(function(el) {
@@ -2980,6 +3050,7 @@ if (copyBtn) {
         safeCall(function() { renderFormBlocks(); });
         safeCall(function() { renderLandscapeControls(); });
         safeCall(function() { renderPortraitControls(); });
+        safeCall(function() { restorePosterVisibility(); });
 
         for (let i = 0; i < TEAM_CONFIGS.length; i++) {
             const t = TEAM_CONFIGS[i]; window.toggleTeam(t.id, true);
@@ -3017,6 +3088,7 @@ if (copyBtn) {
             if (typeof renderLandscapeControls === 'function') renderLandscapeControls();
             if (typeof renderPortraitControls === 'function') renderPortraitControls();
         }
+        if (typeof restorePosterVisibility === 'function') restorePosterVisibility();
 
         const weekSelector = document.getElementById('week-selector');
         if (weekSelector && !weekSelector.dataset.fallbackBound) {
