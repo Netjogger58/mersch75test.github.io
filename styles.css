@@ -1203,6 +1203,12 @@ body.menu-open {
     color: inherit;
 }
 
+/* CLS: Hintergrundbilder reservieren Platz vor dem Laden (LCP/CLS-Schutz) */
+.news-card-bg,
+.news-card-poster {
+    aspect-ratio: 16 / 9;
+}
+
 .news-card-bg-contain {
     object-fit: contain;
 }

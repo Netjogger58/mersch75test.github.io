@@ -1,3 +1,31 @@
+## Agent 9 – Performance & Asset-Optimierung – 2026-09-25
+
+### 1. Bild-Optimierung (LCP/CLS)
+- Bestand: 232× WebP + 207× AVIF bereits modern; 131× PNG / 66× JPG bleiben nur dort, wo sie aktiv referenziert sind (keine Duplikate angelegt, keine Dateien umbenannt — AGENTS.md-konform).
+- `picture`-Elemente mit AVIF→WebP→PNG-Fallback existieren bereits (z. B. Ball, Teamfotos, Zesumme-Staark-Logo in `news.html`).
+- LCP (Hero-Poster `index.html`): `fetchpriority="high"` + `decoding="async"` auf Hero-`<img>` (statisch + dynamisch via `setPoster()` neu erzeugtes Bild) + `<link rel="preload" as="image">` für `Matchday 260926 LSP.webp`.
+- `loading="lazy"` nachgerüstet: `join.html` (2× unterhalb Viewport: Memberskaart-Modal, Footer-Logo; Hero-Logo bewusst `eager`), `statistics-25-26.html` (4× JS-generierte Kids-Teamfotos), `news.html` (alle Feed-Cards unterhalb der ersten auf `lazy` + `decoding="async"`; nur NEXTGEN-Hero bleibt `eager`).
+- CLS: neue Regel `.news-card-bg, .news-card-poster { aspect-ratio: 16/9 }` in `styles.css` reserviert Bildplatz vor dem Laden. Hero-`.news-card-hero` hatte bereits `aspect-ratio: 16/9`.
+- Korrigiert: falscher MIME-Typ `type="image/avif"` auf einer `.webp`-Source im dynamischen `setPoster()` entfernt (verhinderte ggf. Preload-Miss).
+- `generator.html`-Canvas-Bilder bewusst ohne `loading` (Export-Logik, `crossorigin` nötig) — nicht angefasst.
+
+### 2. DOM-Reduzierung (konservativ, kein Risiko)
+- CSS-Klassen-Scan (449 definierte Klassen): 69 nur 1× gefunden — fast alle sind JS-Toggles (`is-open`, `menu-open`), seitenweite Klassen oder i18n-Ziele → **keine Klasse gelöscht** (Löschen wäre DRY-Verstoß-Risiko ohne RUM-Daten).
+- Stattdessen: 1 toter HTML-Kommentar (zeitgesteuerte Slide-Vorlage in `index.html`, historisch überholt) — bewusst BEHALTEN, da aktive Dokumentation für Redakteure. Keine auskommentierten Legacy-Blöcke in `styles.css` (nur 1-zeilige Sektions-Header).
+- Echte Redundanz entfernt: doppelte AVIF-`<source>`-Zeile auf `.webp`-Datei im `setPoster()`-JS (siehe oben).
+
+### 3. Caching-Logik
+- `generator.html` Portrait-Hintergrund: CSS-`background:url(...)` + JS-Preload `bg.src` bekamen Cache-Buster `?v=20260925a9` → neue Hintergrunddatei erscheint ohne Hard-Reload; Version bumpbar pro Poster-Update.
+- `index.html` Poster-Refresh (`#poster-set-btn`): nutzt bereits `?t=Date.now()`-Buster auf beiden Orientierungen (Portrait + Landscape) — verifiziert, unverändert korrekt.
+- JS/CSS-Buster (`script.js?v=...`, `styles.css?v=...`) seitenweit vorhanden — unverändert.
+
+### Verification
+- `git diff --check` sauber; `loading=`-Counts: index 16 / news 16 / join 5 / stats 3→7; alle geänderten `src` lösen auf Disk auf.
+- `hallo_agent9.txt` = `Cline ist startklar!` ✓
+- Commits: `perf(...)` (Bilder/LCP/CLS) — PSD `assets/Unbenannt-1.psd` (13 MB) bewusst NICHT committet.
+
+---
+
 ## Agent 8 – Git-Management & Konfliktauflösung – 2026-09-25
 
 ### Konfliktanalyse
