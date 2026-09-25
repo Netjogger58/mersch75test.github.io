@@ -116,6 +116,7 @@
 
 #m75-gen-wrapper .matchday-text { top: 15px; left: 50%; transform: translateX(-50%); font-size: 75px; font-weight: 900; font-style: italic; color: var(--primary-blue); z-index: 3; display: flex; align-items: flex-end; letter-spacing: -2px; }
 #m75-gen-wrapper .matchday-text img { height: 90px; width: auto; object-fit: contain; }
+#m75-gen-wrapper .coupe-trophy { position: absolute; top: 112px; left: 50%; transform: translateX(-50%); width: 118px; height: 150px; object-fit: contain; object-position: center top; z-index: 9; pointer-events: none; filter: drop-shadow(0 4px 5px rgba(0,0,0,.28)); }
 
 #m75-gen-wrapper .layer-50years-left { top: 16px; left: 430px; width: 82px; height: 82px; background-color: transparent !important; z-index: 8; display: flex; justify-content: center; align-items: center; }
 #m75-gen-wrapper .layer-50years-right { top: 16px; left: 1088px; width: 82px; height: 82px; background-color: transparent !important; z-index: 8; display: flex; justify-content: center; align-items: center; }
@@ -240,6 +241,7 @@
     <div class="preview-container" style="margin-bottom: 20px;">
         <div id="wrapper-landscape" class="preview-wrapper">
             <div id="poster">
+                <img class="coupe-trophy" src="assets/Coupe%20de%20Luxembourg2026.webp" alt="Pokal Coupe de Luxembourg 2026" crossorigin="anonymous">
                 <div id="l-dynamic-main"></div>
                 <div id="l-dynamic-tournoi"></div>
             </div>
@@ -1712,7 +1714,7 @@ function updateLandscapePreview() {
         { type: 'big', top: 350, left: 570 },
         { type: 'big', top: 350, left: 1120 }
     ];
-    // Bei genau einem Senior-Team: mittig zentrieren
+    // Drei Coupe-Spiele werden bewusst in drei gleich breite Spalten gesetzt.
     const seniorSlotCentered = seniorTeams.length === 1
         ? { type: 'big', top: 350, left: 620 }
         : seniorSlots[0];

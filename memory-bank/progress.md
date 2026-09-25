@@ -268,3 +268,11 @@ Das Bild `assets/portrait-poster-neu.png` war **kein leeres Hintergrundbild**, s
 - Coupe-Spiele werden als markierte Datensätze in den bestehenden Live-Sync aufgenommen; der Bereich „Coupe“ in `live-center.html` ersetzt seine bisherigen statischen Platzhalter durch die aktuellen FLH-Daten, sofern welche geliefert werden.
 - Bestehende statische Coupe-Einträge bleiben als Fallback erhalten, wenn die FLH-Schnittstelle nicht erreichbar ist.
 - Validiert mit `node --check` und `git diff --check`.
+
+
+
+## 2026-09-25: Coupe-Poster und LS-Poster
+- Drei Coupe-/Senior-Spiele werden im Landscape-Poster nebeneinander in drei gleich breiten Spalten dargestellt.
+- Das Desktop-Asset `Coupe de Luxembourg2026.png` wurde als optimiertes WebP nach `assets/Coupe de Luxembourg2026.webp` übernommen.
+- Der Pokal ist im Landscape-/LS-Poster zentriert über dem Spielbereich eingebunden und für den Canvas-Export mit `crossorigin="anonymous"` markiert.
+- Bestehende Ein-Spiel-Zentrierung und Spiellogik bleiben erhalten.
