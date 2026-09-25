@@ -1740,6 +1740,48 @@ function renderLandscapeU11EspoirTournamentFallback(cont) {
     renderLandscapeGame({ id: 'u11MES', gameSlot: 1 }, { type: 'big', top: 350, left: 1104 }, cont, teamHasConfiguredGame('u11MES'));
 }
 
+// Der Turnierbereich bleibt im Meisterschafts-Poster immer sichtbar.
+// Ohne aktives Turnier zeigt er konsequent den 3D-Ball als Platzhalter.
+function renderLandscapeTournoiPanel(tournoiTeams) {
+    const tournoiPanel = document.getElementById('l-dynamic-tournoi');
+    if (!tournoiPanel) return;
+
+    const activeTeams = (tournoiTeams || []).filter(function(id) {
+        const visibility = document.getElementById(id + '-land-show');
+        const typeEl = document.getElementById(id + '-type');
+        const isTournamentType = !typeEl || typeEl.value === 'Tournoi';
+        return isTournamentType && teamHasConfiguredGame(id) && (!visibility || visibility.checked);
+    });
+
+    const tTop = 350;
+    const tLeft = 1120;
+    let html = '<div style="position:absolute;top:' + tTop + 'px;left:' + tLeft + 'px;width:240px;">';
+
+    if (activeTeams.length === 0) {
+        html += '<div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px;background:rgba(255,255,255,.92);border-radius:12px;box-shadow:0 5px 15px rgba(0,0,0,.15);">';
+        html += '<img src="' + CONFIG.ballLogo + '" alt="Kein Turnier aktiv" style="width:110px;height:110px;object-fit:contain;">';
+        html += '<div style="font-size:13px;font-weight:800;color:#1E1E1E;text-align:center;">Kein Turnier aktiv</div>';
+        html += '</div>';
+        html += '</div>';
+        tournoiPanel.innerHTML = html;
+        return;
+    }
+
+    html += '<div style="font-size:14px;font-weight:600;color:#1E1E1E;text-align:center;margin-bottom:8px;">Tournoi</div>';
+    for (let i = 0; i < activeTeams.length; i++) {
+        const id = activeTeams[i];
+        const oppEl = document.getElementById(id + '-opp');
+        const opp = oppEl ? oppEl.value : '';
+        html += '<div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;padding:6px;background:#F5F5F5;border-radius:8px;">';
+        html += '<div style="width:28px;height:28px;border-radius:50%;background:#E07856;display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-size:11px;font-weight:700;">' + id.toUpperCase().charAt(0) + '</div>';
+        html += '<div style="flex:1;font-size:11px;color:#1E1E1E;"><div style="font-weight:600;">' + (opp || 'Tournoi') + '</div></div>';
+        html += '<div style="font-size:11px;color:#1E7E34;">Teilgenommen</div>';
+        html += '</div>';
+    }
+    html += '</div>';
+    tournoiPanel.innerHTML = html;
+}
+
 function updateLandscapePreview() {
     const smLEl = document.getElementById('l-scale-mixvoip-l'); const smL = smLEl ? smLEl.value : 280;
     const sdEl = document.getElementById('l-scale-matchday'); const sd = sdEl ? sdEl.value : 90;
@@ -1761,7 +1803,6 @@ function updateLandscapePreview() {
 
     const seniorIds = ['s1', 'fe', 's2'];
     const youthIds = ['u15', 'u13p1', 'u13p2', 'u11MEL', 'u9M', 'u7M', 'u4M'];
-    const tournoiIds = ['u11MES'];
 
     const seniorTeams = [];
     const youthTeams = [];
@@ -1774,8 +1815,9 @@ function updateLandscapePreview() {
         const typeEl = document.getElementById(id + '-type');
         if (typeEl && !isGameTypeVisible('landscape', typeEl.value)) continue;
         if (teamHasConfiguredGame(id) || teamHasUploadedPhoto(id)) {
-            if (seniorIds.includes(id)) seniorTeams.push(id);
-            else if (tournoiIds.includes(id)) tournoiTeams.push(id);
+            // Alles mit Kategorie „Tournoi“ gehört in den Turnierbereich.
+            if (typeEl && typeEl.value === 'Tournoi') tournoiTeams.push(id);
+            else if (seniorIds.includes(id)) seniorTeams.push(id);
             else if (youthIds.includes(id)) youthTeams.push(id);
         }
     }
@@ -1812,6 +1854,8 @@ function updateLandscapePreview() {
         for (let i = 0; i < coupePosterTeams.length; i++) {
             renderLandscapeGame(coupePosterTeams[i], coupeSlots[i], cont, true);
         }
+        const coupeTournoiPanel = document.getElementById('l-dynamic-tournoi');
+        if (coupeTournoiPanel) coupeTournoiPanel.innerHTML = '';
         scalePoster();
         return;
     }
@@ -1830,31 +1874,12 @@ function updateLandscapePreview() {
         renderLandscapeGame(seniorTeams[i], singleGameSlots[i], cont, teamHasConfiguredGame(seniorTeams[i]));
     }
 
-    const tournoiPanel = document.getElementById('l-dynamic-tournoi');
-    if (tournoiPanel && tournoiTeams.length > 0) {
-        tournoiPanel.innerHTML = '';
-        const tTop = 350;
-        const tLeft = 1120;
-        let html = '<div style="position:absolute;top:' + tTop + 'px;left:' + tLeft + 'px;width:240px;">';
-        html += '<div style="font-size:14px;font-weight:600;color:#1E1E1E;text-align:center;margin-bottom:8px;">Tournoi</div>';
-        for (let i = 0; i < tournoiTeams.length; i++) {
-            const id = tournoiTeams[i];
-            const hasGame = teamHasConfiguredGame(id);
-            const oppEl = document.getElementById(id + '-opp');
-            const opp = oppEl ? oppEl.value : '';
-            html += '<div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;padding:6px;background:#F5F5F5;border-radius:8px;">';
-            html += '<div style="width:28px;height:28px;border-radius:50%;background:#E07856;display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-size:11px;font-weight:700;">' + id.toUpperCase().charAt(0) + '</div>';
-            html += '<div style="flex:1;font-size:11px;color:#1E1E1E;"><div style="font-weight:600;">' + (opp || 'Tournoi') + '</div></div>';
-            html += '<div style="font-size:11px;color:' + (hasGame ? '#1E7E34' : '#666666') + ';">' + (hasGame ? 'Teilgenommen' : 'Ausstehend') + '</div>';
-            html += '</div>';
-        }
-        html += '</div>';
-        tournoiPanel.innerHTML = html;
-    } else if (tournoiPanel) {
-        tournoiPanel.innerHTML = '';
-    }
+    // Turnierbereich immer im Meisterschafts-Poster anzeigen;
+    // ohne aktives Turnier übernimmt der Helfer automatisch den 3D-Ball.
+    renderLandscapeTournoiPanel(tournoiTeams);
 
-    const youthCols = [40, 500, 800, 1200];
+    // Vier Jugendblöcke ohne Überlappung: Slotbreite ist ca. 360px.
+    const youthCols = [40, 440, 840, 1240];
     for (let i = 0; i < youthTeams.length && i < youthCols.length; i++) {
         renderLandscapeGame(youthTeams[i], { type: 'small', top: 600, left: youthCols[i] }, cont, teamHasConfiguredGame(youthTeams[i]));
     }
@@ -1998,7 +2023,8 @@ function renderLandscapeGame(teamRef, sl, cont, hasGame) {
     const tv2 = getGameFieldValue(prefix, 'time', gameSlot);
     const locVal = getGameFieldValue(prefix, 'loc', gameSlot);
     
-    const isTournamentTeam = (prefix === 'u11MES' || prefix === 'u9M' || prefix === 'u7M');
+    const isTournamentTeam = (prefix === 'u11MES' || prefix === 'u9M' || prefix === 'u7M') &&
+        typeEl && typeEl.value === 'Tournoi';
     let l1, l2, th = '';
     if (isTournamentTeam) {
         l1 = resolveTournamentPrimaryLogo(prefix, opp, ih, locVal, ml);
@@ -2007,12 +2033,17 @@ function renderLandscapeGame(teamRef, sl, cont, hasGame) {
         } else {
             l2 = ih ? ol : ml;
         }
+        // Kein gegnerisches Turnier-Logo verfügbar → 3D-Ball statt leerem Feld.
+        if (!l1) l1 = CONFIG.ballLogo;
+        if (!l2) l2 = CONFIG.ballLogo;
     } else if (opp === "-" || opp === "Spielfrei") {
         l1 = ml;
         l2 = CONFIG.ballLogo;
     } else {
         l1 = ih ? ml : ol;
         l2 = ih ? ol : ml;
+        if (!l1) l1 = CONFIG.ballLogo;
+        if (!l2) l2 = CONFIG.ballLogo;
     }
     
     const ds = dv ? formatDate(dv, tv2) : "";
@@ -2246,7 +2277,9 @@ function updatePortraitPreview() {
         const homeEl = document.getElementById(prefix + (isExtraSlot ? '-home2' : '-home'));
         const ih = homeEl ? (homeEl.value.indexOf('home') === 0) : true;
         let itour = false;
-        if (prefix === 'u11MES' || prefix === 'u9M' || prefix === 'u7M') itour = true;
+        if (prefix === 'u11MES' || prefix === 'u9M' || prefix === 'u7M') {
+            itour = !!typeEl && typeEl.value === 'Tournoi';
+        }
         const titleCb = isExtraSlot
             ? document.querySelector('.cb-title-extra[data-team="' + prefix + '"]')
             : document.querySelector('.cb-title[value="' + prefix + '"]');
@@ -2278,7 +2311,7 @@ function updatePortraitPreview() {
         if (!hasGame) {
             l1 = ml; l2 = CONFIG.ballLogo;
         } else if (itour) { 
-            l1 = ih ? CONFIG.merschLogo : ((opp !== "-" && opp !== "Spielfrei") ? ol : CONFIG.ballLogo); l2 = "";
+            l1 = ih ? CONFIG.merschLogo : ((opp !== "-" && opp !== "Spielfrei") ? ol : CONFIG.ballLogo); l2 = CONFIG.ballLogo;
         } else { 
             if (opp === "-" || opp === "Spielfrei") { l1 = ml; l2 = CONFIG.ballLogo; } 
             else { l1 = ih ? ml : ol; l2 = ih ? ol : ml; } 
@@ -2327,7 +2360,9 @@ function updatePortraitPreview() {
             const l1b = itour
                 ? resolveTournamentPrimaryLogo(prefix, opp2, ih2b_home, loc2Val, ml2)
                 : (ih2b_home ? ml2 : ol2);
-            const l2b = ih2b_home ? ol2 : ml2;
+            let l2b = ih2b_home ? ol2 : ml2;
+            if (!l1b) l1b = CONFIG.ballLogo;
+            if (!l2b) l2b = CONFIG.ballLogo;
             const typeEl2 = document.getElementById(prefix + '-type');
             let tv2c = typeEl2 ? typeEl2.value : 'Season Games';
             tv2c += (teamSuffixes[prefix] || '');
@@ -2354,7 +2389,7 @@ function updatePortraitPreview() {
             // Photo Scale flexibel: max-width:100% fir 50% Layout, awer Skaléierung erlaaben
             lh += '<div style="width:100%; display:flex; justify-content:center; overflow:visible; border-radius:15px;"><img src="' + photoSrc + '" style="width:' + photoScale + '%; max-width:100%; height:auto; border-radius:15px; box-shadow: 0 5px 20px rgba(0,0,0,0.15); object-fit:contain;"></div>';
         } else {
-            if (itour) {
+            if (itour && hasGame) {
                 lh += '<div class="p-logo-box" style="width:' + sl + 'px;height:' + sl + 'px;"><img src="' + l1 + '" crossorigin="anonymous"></div>';
                 lh += '<div class="p-badge" style="width:' + bs + 'px;height:' + bs + 'px;"><div class="sub" style="font-size:' + (bf * 0.25) + 'px;">' + tv + '</div><div class="main" style="font-size:' + bf + 'px;">' + mainContent + '</div></div>';
             } else {

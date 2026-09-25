@@ -1,3 +1,13 @@
+## Generator – Meisterschaft & Turnier-Anzeige bereinigt – 2026-09-25
+
+- Spieltag 17./18.10.2026 (2 Senior- + 3 Jugendspiele) als Referenz geprüft.
+- Jugend-Slots im Landscape-Poster von `[40, 500, 800, 1200]` auf `[40, 440, 840, 1240]` korrigiert; die ca. 360px breiten Blöcke überlappen sich dadurch nicht mehr.
+- Der Turnierbereich wird im Meisterschafts-Poster immer gerendert; ohne aktives Turnier zeigt `renderLandscapeTournoiPanel()` konsequent den 3D-Ball mit „Kein Turnier aktiv“.
+- Alles mit Kategorie `Tournoi` wird dem Turnierbereich zugeordnet; Coupe-Zweig und Youth-Modus leeren den Turnierbereich weiterhin getrennt.
+- Landscape und Portrait verwenden denselben Fallback: fehlende bzw. leere Turnier-Logos werden durch `CONFIG.ballLogo` ersetzt; leere Portrait-Logo-Felder (`l2 = ""`) sind entfernt.
+- Verifikation: 10 Inline-Skripte via `node --check`, `js/flh-live-sync.js`, Turnierverhalten (aktiv/inaktiv), Slot-Geometrie, 3D-Ball-Asset und `git diff --check` erfolgreich.
+
+
 ## Generator – Coupe als eigener Postermodus – 2026-09-25
 - Coupe-Spiele werden im Landscape-Poster nicht mehr zusammen mit Meisterschafts-/Season-Games gerendert; sobald mindestens ein sichtbares Coupe-Spiel vorhanden ist, gilt der separate Coupe-Zweig.
 - Reihenfolge im Coupe-Zweig bleibt Frauen – Männer – U15; die Spielart-Checkbox „Coupe“ gilt weiterhin für beide Vorschau- und Exportlogik.
