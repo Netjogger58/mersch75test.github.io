@@ -1,3 +1,10 @@
+## Agent 11 – Strukturierung & Cleanup – 2026-09-25
+
+- Homepage-Navigation inventarisiert und eine rückwärtskompatible Zielstruktur unter `docs/structure/pages/` dokumentiert.
+- Kategorien für Home, Live-Center, Training, Club, News, Community, Media, Kontakt/Service, Rechtliches, Verwaltung und Shared angelegt.
+- Aktive Root-Dateien nicht verschoben: GitHub Pages liefert aus dem Root aus und die bestehenden URLs/Referenzen wären sonst gebrochen.
+- `hallo_agent11.txt` erstellt; Struktur-Dokumentation und Verzeichnisse validiert.
+
 ## Agent 10 – i18n & Mehrsprachigkeit – 2026-09-25
 
 - Sprachmatrix für LB/FR/DE/EN/PT geprüft; `misc-i18n.js` enthält die neuen Galerie-, Memories- und Legal-Schlüssel in allen fünf Sprachen.
