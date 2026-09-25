@@ -1,4 +1,12 @@
 ## Agent 11 – Strukturierung & Cleanup – 2026-09-25
+## Generator – Coupe-Spiele integriert – 2026-09-25
+
+- `generator.html`: Separate Schaltfläche „Coupe dieses Wochenende laden“ ergänzt.
+- `js/flh-live-sync.js`: Coupe-Kategorien (`H-C-LN`, `D-C-LN`, `H-C-FLH`, `U15G-C`, `U13M-C`) liefern gemeinsam `COUPE:`-markierte Spiele an den Generator.
+- Generator trennt Coupe- und Championship-Spiele beim Wochenende-Laden; Coupe-Spiele werden in den magischen Scanner mit Kategorie `Coupe` und passender Mannschafts-ID (`s1`, `fe`, `u15`, `u13p1`) übergeben.
+- Bestehende Championship-/M75-Daten bleiben unverändert und werden nicht ersetzt.
+- Syntaxprüfung für `js/flh-live-sync.js` und alle Inline-Skripte in `generator.html` sowie `git diff --check` erfolgreich.
+
 
 - Homepage-Navigation inventarisiert und eine rückwärtskompatible Zielstruktur unter `docs/structure/pages/` dokumentiert.
 - Kategorien für Home, Live-Center, Training, Club, News, Community, Media, Kontakt/Service, Rechtliches, Verwaltung und Shared angelegt.

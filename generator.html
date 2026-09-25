@@ -208,6 +208,8 @@
                 <div class="weekend-button-row">
                     <button class="btn-weekend" id="btn-weekend-current">Dieses Wochenende automatisch laden</button>
                     <button class="btn-weekend alt" id="btn-weekend-next">Nächstes Wochenende laden</button>
+                    <button class="btn-weekend alt" id="btn-weekend-next">Nächstes Wochenende laden</button>
+                    <button class="btn-weekend" id="btn-coupe-weekend" style="background: var(--primary-yellow); color: var(--primary-blue);">🏆 Coupe dieses Wochenende laden</button>
                 </div>
                 <div class="weekend-status" id="weekend-status">Saisonspiele für Mersch sind bereits vorbereitet. Die App kann das passende Wochenende direkt vorladen.</div>
             </div>
@@ -1085,6 +1087,28 @@ function isGeneratorGameExcluded(game) {
     return key === 'u11MEL' && dt && dt > new Date(2026, 5, 7, 23, 59, 59);
 }
 
+function isGeneratorCoupeGame(game) {
+    return /^COUPE:/i.test(String(game && game.team || '').trim());
+}
+
+function getGeneratorCoupeTeamKey(game) {
+    const label = String(game && game.team || '').toUpperCase();
+    if (label.indexOf('FRAUEN') !== -1 || label.indexOf('D-C-LN') !== -1) return 'fe';
+    if (label.indexOf('U15') !== -1) return 'u15';
+    if (label.indexOf('U13') !== -1) return 'u13p1';
+    return 's1';
+}
+
+function buildCoupeRawScheduleText(games) {
+    return games.map(function(game) {
+        const hallSuffix = game.halle ? ' ' + game.halle : '';
+        const team = 'COUPE: ' + (getGeneratorCoupeTeamKey(game) === 'fe' ? 'D-PRO' :
+            getGeneratorCoupeTeamKey(game) === 'u15' ? 'U15G' :
+            getGeneratorCoupeTeamKey(game) === 'u13p1' ? 'U13M-P1' : 'H-PRO');
+        return team + ' ' + game.datum + hallSuffix + ' ' + game.heim + ' - ' + game.gast;
+    }).join('\n');
+}
+
 function setWeekendStatus(message, isError) {
     const status = document.getElementById('weekend-status');
     if (!status) return;
@@ -1109,41 +1133,29 @@ function getWeekendRange(offsetWeeks) {
     return { start: friday, end: sunday };
 }
 
-async function loadWeekendSchedule(offsetWeeks) {
+async function loadWeekendSchedule(offsetWeeks, coupeOnly) {
     await ensureGeneratorScheduleDataFresh();
     const range = getWeekendRange(offsetWeeks || 0);
     const uniqueKeys = new Set();
     const filteredGames = (typeof allGamesData !== 'undefined' ? allGamesData : []).filter(function(game) {
-        if (isGeneratorGameExcluded(game)) {
-            return false;
-        }
-
+        if (isGeneratorGameExcluded(game)) return false;
+        if (coupeOnly && !isGeneratorCoupeGame(game)) return false;
+        if (!coupeOnly && isGeneratorCoupeGame(game)) return false;
         const gameDate = parseGameDateValue(game);
-        if (!gameDate || gameDate < range.start || gameDate > range.end) {
-            return false;
-        }
-
-        const uniqueKey = getNormalizedGeneratorTeamKey(game.team) + '|' + game.datum;
-        if (uniqueKeys.has(uniqueKey)) {
-            return false;
-        }
-
+        if (!gameDate || gameDate < range.start || gameDate > range.end) return false;
+        const uniqueKey = getNormalizedGeneratorTeamKey(game.team) + '|' + game.datum + '|' + (coupeOnly ? 'coupe' : 'championship');
+        if (uniqueKeys.has(uniqueKey)) return false;
         uniqueKeys.add(uniqueKey);
         return true;
-    }).sort(function(a, b) {
-        return parseGameDateValue(a) - parseGameDateValue(b);
-    });
+    }).sort(function(a, b) { return parseGameDateValue(a) - parseGameDateValue(b); });
 
     if (!filteredGames.length) {
-        setWeekendStatus('Keine Mersch-Spiele für dieses Wochenende in der Saisonliste gefunden.', true);
+        setWeekendStatus(coupeOnly ? 'Keine Coupe-Spiele für dieses Wochenende gefunden.' : 'Keine Mersch-Spiele für dieses Wochenende in der Saisonliste gefunden.', true);
         return;
     }
-
-    const txtArea = document.getElementById('magic-text');
-    if (!txtArea) return;
-
-    txtArea.value = buildRawScheduleText(filteredGames);
-    setWeekendStatus(filteredGames.length + ' Spiele automatisch für ' + range.start.toLocaleDateString('de-DE') + ' bis ' + range.end.toLocaleDateString('de-DE') + ' geladen.', false);
+    const txtArea = document.getElementById('magic-text'); if (!txtArea) return;
+    txtArea.value = coupeOnly ? buildCoupeRawScheduleText(filteredGames) : buildRawScheduleText(filteredGames);
+    setWeekendStatus(filteredGames.length + (coupeOnly ? ' Coupe-Spiele' : ' Spiele') + ' automatisch für ' + range.start.toLocaleDateString('de-DE') + ' bis ' + range.end.toLocaleDateString('de-DE') + ' geladen.', false);
     setTimeout(function() { magicScan(); }, 80);
 }
 
@@ -1214,6 +1226,7 @@ function magicScan() {
             }
 
             const primaryDateEl = document.getElementById(p + '-date');
+            const isCoupeLine = /^COUPE:/i.test(line);
             const hadPrimaryDateBeforeLine = !!(primaryDateEl && primaryDateEl.value);
             const primaryTypeEl = document.getElementById(p + '-type');
             const primaryTypeBeforeLine = primaryTypeEl ? primaryTypeEl.value : '';
@@ -2899,6 +2912,11 @@ if (copyBtn) {
                 loadWeekendSchedule(1);
             });
         }
+        const coupeButton = document.getElementById('btn-coupe-weekend');
+        if (coupeButton) coupeButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            loadWeekendSchedule(0, true);
+        });
     }
 
     function wireMagicScan() {
@@ -3000,6 +3018,15 @@ if (copyBtn) {
             nextButton.addEventListener('click', function (e) {
                 e.preventDefault();
                 loadWeekendSchedule(1);
+            });
+        }
+
+        const coupeButton = document.getElementById('btn-coupe-weekend');
+        if (coupeButton && !coupeButton.dataset.fallbackBound) {
+            coupeButton.dataset.fallbackBound = '1';
+            coupeButton.addEventListener('click', function (e) {
+                e.preventDefault();
+                loadWeekendSchedule(0, true);
             });
         }
 
