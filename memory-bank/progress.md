@@ -1,3 +1,13 @@
+## Carousel-Skript + 3-Slides-Verifikation – 2026-09-25
+
+### Befund
+- `_carousel_clean.py` läuft **fehlerfrei** (`Keeping: 3 / Removing: 0`, exit 0); der gemeldete Bug (nicht definierte `track_content_start`/`track_end_pos`) ist **nicht mehr vorhanden** – auch `_clean_v2.py` enthält diese Variablen nicht (grep: 0 Treffer). Beide Skripte sind zeilenweise + idempotent umgesetzt, Guard `kept != 3` vorhanden.
+- `index.html`: genau **3 `<article>`** (`news-slide-floumaart`, `news-slide-coupe-fe`, `news-slide-ag`), Datei endet mit `</html>`; kein Bezug mehr auf entfernte Slides (z. B. `news-slide-luxqf3`).
+- `hallo_agent2.txt` = `Cline ist startklar!` ✓
+- Live-Check lief bereits idempotent (`diff` nach Skriptlauf: identisch) → keine Änderung, **kein Commit/Push nötig**; HEAD == origin/main (`5426786`). Einzig untracked: `assets/Unbenannt-1.psd` (nicht Teil der Aufgabe, liegen gelassen).
+
+---
+
 ## Live-Center: Alte Resultate (vor 15.08.2026) entfernt – 2026-09-24
 
 ### Problem
