@@ -1973,7 +1973,8 @@ function renderLandscapeGame(teamRef, sl, cont, hasGame) {
     const sclTi = (sclTiEl ? parseInt(sclTiEl.value, 10) : 100) / 100;
     
     const sclTeEl = document.querySelector('.land-scale-text[data-team="' + prefix + '"]');
-    const sclTe = (sclTeEl ? parseInt(sclTeEl.value, 10) : 100) / 100;
+    var sclTe = (sclTeEl ? parseInt(sclTeEl.value, 10) : 100) / 100;
+    if (['u15', 'u13p1', 'u13p2', 'u11MEL', 'u11MES', 'u9M', 'u7M', 'u4M'].indexOf(prefix) !== -1) sclTe *= 0.9; // Jugend-Texte 90%
 
     const sclPhotoEl = document.querySelector('.land-scale-photo[data-team="' + prefix + '"]');
     let sclPhoto = sclPhotoEl ? parseInt(sclPhotoEl.value, 10) : 100;
@@ -2176,7 +2177,8 @@ function renderLandscapeGame(teamRef, sl, cont, hasGame) {
         const totalWidth = gastLeft + logoSize - sl.left;
         
         const titleHtml = ts ? '<div class="abs text-blue" style="top:' + (sl.top - 32) + 'px;left:' + heimLeft + 'px;width:' + totalWidth + 'px;height:25px;font-size:' + ((sl.titleFont || 18) * sclTi) + 'px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;line-height:1;display:flex;align-items:flex-end;justify_content:center;text-align:center;pointer-events:auto;color:#FFFFFF;text-shadow:0 0 3px rgba(0,0,0,0.8);">' + ts + '</div>' : '';
-        const dateTop = sl.top + badgeH + 45;
+        const boxBottom = sl.top + Math.max(logoSize, ((sl.badgeTop != null) ? sl.badgeTop : 20) + badgeH);
+        const dateTop = boxBottom + 8; // 0,2cm unter Box-Unterkante
         
         html += '<div class="abs game-layer" style="display:block;">';
         html += titleHtml;
