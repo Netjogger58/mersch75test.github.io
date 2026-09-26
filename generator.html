@@ -2185,8 +2185,8 @@ function renderLandscapeGame(teamRef, sl, cont, hasGame) {
         const totalWidth = gastLeft + logoSize - sl.left;
         
         const titleHtml = ts ? '<div class="abs text-blue" style="top:' + (sl.top - 32) + 'px;left:' + heimLeft + 'px;width:' + totalWidth + 'px;height:25px;font-size:' + ((sl.titleFont || 18) * sclTi) + 'px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;line-height:1;display:flex;align-items:flex-end;justify_content:center;text-align:center;pointer-events:auto;color:#FFFFFF;text-shadow:0 0 3px rgba(0,0,0,0.8);">' + ts + '</div>' : '';
-        const boxBottom = sl.top + Math.max(logoSize, ((sl.badgeTop != null) ? sl.badgeTop : 20) + badgeH);
-        const dateTop = boxBottom + 8; // 0,2cm unter Box-Unterkante
+        const boxBottom = sl.top + ((sl.badgeTop != null) ? sl.badgeTop : 20) + badgeH; // Unterkante BLAUE Box
+        const dateTop = boxBottom + 8; // 2mm unter blauer Box
         
         html += '<div class="abs game-layer" style="display:block;">';
         html += titleHtml;
