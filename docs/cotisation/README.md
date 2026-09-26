@@ -9,11 +9,11 @@ Berechnet die Mitgliedsbeiträge in **Spalte L** der Mitgliederliste
 * Datei: `Vereins-OS/docs/GC 2026-09-24 MEMBERSLESCHT 2026-2027.csv`, 771 Datenzeilen → Excel-Zeilen 2–772
 * Spalten: `J` Naissance · `K` Alterskategorie (SEN/U25/?) · `L` Cotisatioun (Ziel) ·
   `M` Spielen J/R/N · `N` code courrier (alt) · `O` Code Courrier neu (**Familien-ID**) ·
-  `AG` Spielerlizenz · `AH/AI/AJ` Offizier-/ZS-/Schiri-Lizenz · `BB` Officiel
+  `AG` Spielerlizenz · `AH/AI/AJ` Offizielle-/ZS-/SR-Lizenz · `BB` Officiel
 * Spalte L enthält 233 Werte der **Saison 2025/26** (alte Handeingabe)
 * **Achtung:** Es gibt **keine Excel-Tabelle (ListObject)** in der Datei, daher normale Bereichsverweise.
 * **Achtung:** Die .xlsm-Version hat ein anderes Layout (dort: C=Alterskategorie, D=Cotisatioun,
-  M=Code Courrier neu, AE=Spielerlizenz, AF/AG/AH=Offizier, AO=Geburtsdatum) und **keine Spalte
+  M=Code Courrier neu, AE=Spielerlizenz, AF/AG/AH=Offizielle, AO=Geburtsdatum) und **keine Spalte
   „Spielen J/R/N"**. Vor dem Einfügen prüfen, welches Layout offen ist.
 
 ## Trefferquote der Logik
@@ -40,7 +40,7 @@ lassen sich aus keiner Spalte ableiten → dafür ist die Spalte `Manuell` gedac
 | GAJGL | 0 | Fixbetrag, pro Zeile | | | |
 | ZusatzBeiFamilie | NEIN | 384 ist das Maximum → kein +50 auf 384 | | | |
 | TraegerRegel | Erste | Erste = erste Zeile · Aelteste = ältestes Geburtsdatum | | | |
-| ZusatzAuchOfficiel | NEIN | Offiziersrolle auch in Spalte BB werten | | | |
+| ZusatzAuchOfficiel | NEIN | Rolle als Offizieller auch in Spalte BB werten | | | |
 
 B7/B8/B9 als **Text** eingeben (`NEIN`, `Erste`) – die Formel vergleicht mit `=`.
 
@@ -105,7 +105,7 @@ BU2  =WENN(Cotisation!$B$8="Aelteste";$BO2=$BP2;ZÄHLENWENNS($BN$2:$BN2;$BN2)=Z�
 4. nicht Rechnungsträger → leer
 5. Name in der Ausnahmentabelle → fester Wert (z. B. `Don?+0+50`)
 6. Tarif: 384 bei ≥2 Spielern oder SEN+U25, sonst 300 (SEN) bzw. 210 (U25)
-7. Zusatz `+50` **pauschal pro Familie** bei Offizier ohne Spielerlizenz oder Status N/R –
+7. Zusatz `+50` **pauschal pro Familie** bei einem Offiziellen ohne Spielerlizenz oder Status N/R –
    **nicht** bei Tarif 384 (Maximum) und **nicht** pro Person
    (CLEMENT/METZLER: zwei Offizielle → trotzdem `(0+50)`)
 

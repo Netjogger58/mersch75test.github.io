@@ -11,7 +11,7 @@ Bildet exakt die Excel-Logik aus docs/cotisation/cotisation-formeln.md ab:
   3. namentliche Ausnahmen (Tiny-Tabelle) -> fester Ausgabewert
   4. Rechnungstraeger = aeltestes Familienmitglied (Geburtsdatum, Gleichstand -> kleinste Zeile)
   5. Tarife: SEN 300 / U25 210 / Familie ab 2 Spielern oder SEN+U25 384
-  6. Zusatz: Offizier ohne Spielerlizenz oder Status N/R -> " (+0+50)"
+  6. Zusatz: Offizieller ohne Spielerlizenz oder Status N/R -> " (+0+50)"
 
 Aufruf:
     python3 docs/cotisation/pruef_cotisation.py
@@ -62,7 +62,7 @@ ZUSATZ_BEI_FAMILIE_STD = False
 #                      urspruenglichen Anforderung). Umschalten ueber
 #                      tarife-cotisation.csv -> TraegerRegel.
 TRAEGER_REGEL_STD = "Erste"
-# Zuschlag auch dann, wenn die Offiziersrolle nur in der Spalte "Officiel" steht
+# Zuschlag auch dann, wenn die Rolle als Offizieller nur in der Spalte "Officiel" steht
 # (ohne Lizenznummer in AH/AI/AJ)
 OFFICIEL_ACHZ_STD = False
 XSEUL_CODE, GAJGL_CODE = "XSEUL", "GAJGL"
@@ -245,7 +245,7 @@ def berechne(zeilen, ausnahmen, tarife, zusatz_bei_familie, traeger_regel="Erste
         elif tarif == 0 and zusatz == 0:
             wert, grund = "", "kein Spielertarif, kein Zusatz"
         elif tarif == 0:
-            wert, grund = f"(0+{zusatz})", "nur Offiziers-/Zusatzkosten"
+            wert, grund = f"(0+{zusatz})", "nur Offizielle-/Zusatzkosten"
         else:
             wert = f"{tarif} (+0+{zusatz})" if zusatz else str(tarif)
             grund = f"Tarif {tarif}"
@@ -293,7 +293,7 @@ def main() -> int:
     print(f"Tarife            : {tarife}  Zusatz@Familie={zusatz_bei_familie}  Officiel={officiel_auch}")
     print(f"Ausnahmen         : {len(ausnahmen)}")
 
-    # Vergleich beider Rechnungstraeger-Regeln (mit aktiver Offiziers-Erkennung)
+    # Vergleich beider Rechnungstraeger-Regeln (mit aktiver Offizielle-Erkennung)
     for regel in ("Erste", "Aelteste"):
         erg = berechne(zeilen, ausnahmen, tarife, zusatz_bei_familie, regel, officiel_auch)
         ab = [e for e in erg if e["bestehend"] != e["neu"]]
