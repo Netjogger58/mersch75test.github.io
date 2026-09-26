@@ -338,4 +338,11 @@ Das Bild `assets/portrait-poster-neu.png` war **kein leeres Hintergrundbild**, s
 - Drei Coupe-/Senior-Spiele werden im Landscape-Poster nebeneinander in drei gleich breiten Spalten dargestellt.
 - Das Desktop-Asset `Coupe de Luxembourg2026.png` wurde als optimiertes WebP nach `assets/Coupe de Luxembourg2026.webp` übernommen.
 - Der Pokal ist im Landscape-/LS-Poster zentriert über dem Spielbereich eingebunden und für den Canvas-Export mit `crossorigin="anonymous"` markiert.
+
+## 2026-09-25 (Folz): Coupe-Layout finalisiert
+- Coupe-Poster: alle drei Spiele (Frauen/Männer/U15) rendern dank `forceBig` im großen Senioren-Zweig (150px-Icons, 120px-Badge) in einer Reihe bei `left: 76 / 570 / 1064`.
+- Coupe-Pokal: ein Pokal-Image (`coupe-trophy`) rechts im freien Bereich über dem letzten Block (`top: 150`, Mitte = Blockmitte 1293 dank CSS `translateX(-50%)`); Per-Team-Pokal im `big`-Zweig nur noch ohne `forceBig`.
+- Tournoi-Strip (Landscape) wird jetzt nur gerendert, wenn mindestens ein aktives Team (U11 Espoir/U9/U7/U4) den Typ „Tournoi“ hat — bei Coupe und Meisterschaft ohne Tournoi bleibt der Bereich leer.
+- Validiert mit `node --check` (alle 6 Inline-Skripte) und `git diff --check`; Commits `b970092` und `d0614a8` gepusht.
+
 - Bestehende Ein-Spiel-Zentrierung und Spiellogik bleiben erhalten.
