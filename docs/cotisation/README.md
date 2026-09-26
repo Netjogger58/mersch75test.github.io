@@ -61,7 +61,8 @@ Tarife in A/B ab Zeile 1, Ausnahmen in D/F, Schlüsselspalte G (automatisch):
 | TraegerRegel | Erste | `Erste` = erste Zeile des Blocks · `Aelteste` = ältestes Geburtsdatum | | | | |
 | ZusatzAuchOfficiel | NEIN | Rolle als Offizieller auch in Spalte BB werten | | | | |
 | ReservistenWert | (0+50) | Wert für Spieler mit Status **R** oder Code **GAJGL** | | | | |
-| GrenzjahrU25 | 2001 | Geburtsjahr ab dem U25 gilt – wer im Lauf der Saison 25 wird, bleibt U25 | | | | |
+| SaisonStichtag | 01.08.2026 | Saisonbeginn – das Alter wird an diesem Tag gemessen | | | | |
+| U25MaxAlter | 25 | Wer am Stichtag noch keine 25 Jahre alt ist, bleibt die ganze Saison U25 | | | | |
 
 B7/B8/B9 als **Text** eingeben (`NEIN`, `Erste`). Neue Ausnahme: Zeile in D/E/F
 eintragen, G ergänzt sich selbst – Zeile 200 der Schlüsselspalte ist vorbereitet.
@@ -173,37 +174,45 @@ anderen Wert eintragen.
 
 ## Die U25-Regel (Alter)
 
-**Wer im Laufe der Saison 25 Jahre alt wird, zählt die ganze Saison zu U25 und zahlt
-210 €.** Das Geburtsdatum entscheidet also einmal zu Saisonbeginn, nicht monatlich.
+**U25 heißt: am Saisonbeginn noch keine 25 Jahre alt sein.** Wer zu Beginn der Saison
+24 ist und im Laufe des Jahres 25 wird, bleibt die ganze Saison U25 und zahlt 210 €.
+Wer am Saisonbeginn **schon 25** ist, zahlt ab sofort 300 € – auch wenn er erst im
+Februar 25 wurde.
 
 Die Spalte **K** (`Alterskategorie`) im Blatt ist genau das: die einmal pro Saison
-festgelegte Einstufung des Sekretariats. Belegt in den Daten – die Trennlinie liegt
-sauber beim **Grenzgeburtsjahr 2001**:
+festgelegte Einstufung des Sekretariats. Belegt in den Daten – die Regel
+„Alter am Stichtag 01.08.2026 < 25 = U25" passt auf **alle 329** Mitglieder mit
+SEN oder U25, ohne eine einzige Abweichung:
 
-| Geburtsjahr | SEN | U25 |
+| Stichtag | Abweichungen |
+|---|---|
+| 01.07.2026 | 0 |
+| **01.08.2026** | **0** |
+| 01.09.2026 | 0 |
+| 01.01.2026 | 2 |
+
+Die Grenzfälle zeigen, warum ein **Geburtsjahr** als Kriterium nicht taugt – zwei
+Personen aus demselben Jahr landen in verschiedenen Kategorien:
+
+| Geburtstag | K | Alter am 01.08.2026 |
 |---|---|---|
-| 2002 und jünger | 0 | 172 |
-| **2001** | **2** | **2** |
-| 2000 und älter | 91 | 0 |
+| 2001-05-12 ANSAY Luka | SEN | 25 |
+| 2001-06-16 SYLVESTER Destiny | SEN | 25 |
+| 2001-10-04 AMADOR FORTES Fabio Daniel | U25 | 24 |
+| 2001-12-04 VAN DER WEKEN Louis | U25 | 24 |
 
-Die zwei Grenzjahr-Ausreißer sind **bewusste Einstufungen**, keine Fehler:
+Damit gilt: **25 Jahre oder jünger am Saisonbeginn = U25**, älter = SEN. Stichtag und
+Grenzalter stehen in `Cotisation!B11` und `B12` – für die nächste Saison wird nur der
+Stichtag weitergerückt, die Logik bleibt.
 
-| Person | geboren | K | spielt | Grund |
-|---|---|---|---|---|
-| ANSAY Luka | 12.05.2001 | SEN | J | Senior-Lizenz |
-| SYLVESTER Destiny Emmanuel | 16.06.2001 | SEN | R | Reserve/Senior |
+Spalte **CB** (`Altersprüfung`) rechnet das Alter am Stichtag nach und schreibt
+`PRUEFEN`, wenn Spalte K und Geburtsdatum auseinanderlaufen. Nachgerechnet über alle
+329 Zeilen: **0 Treffer** – die Einstufung im Blatt ist also vollständig konsistent.
 
-Damit gilt die Regel: **25 Jahre oder jünger = U25 (210)**, älter = SEN (300). Ein
-Spieler, der im Laufe der Saison 26 wird, bleibt für diese Saison U25 – er wird erst
-zur nächsten Saison umgestuft.
-
-Spalte **CB** (`Altersprüfung`) vergleicht K mit dem Geburtsdatum und schreibt
-`PRUEFEN`, wenn die beiden auseinanderlaufen. Im aktuellen Bestand markiert sie genau
-die zwei oben genannten Personen – die also weiterhin bewusst bleiben sollten.
-
-> In der App (`Vereins-OS`) wird das Alter seit diesem Stand am **Stichtag 1. August**
-> gerechnet (`SAISON_STICH_TAG`), nicht am laufenden Datum. Vorher wäre ein Spieler
-> mitten in der Saison von 210 auf 300 € gesprungen.
+> In der App (`Vereins-OS`) wird das Alter am **Stichtag 1. August** gerechnet
+> (`SAISON_STICH_TAG`) statt am laufenden Datum, und der Vergleich lautet
+> `alter < 25` (nicht `> 25`). Vorher wäre ein Spieler mitten in der Saison von 210
+> auf 300 € gesprungen.
 
 ## Abgleich mit App und Join-Formular
 

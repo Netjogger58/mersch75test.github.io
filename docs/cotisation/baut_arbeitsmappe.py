@@ -54,7 +54,8 @@ TARIFE = [
     ("TraegerRegel", "Erste", "Erste = erste Zeile des Blocks | Aelteste = aeltestes Geburtsdatum"),
     ("ZusatzAuchOfficiel", "NEIN", "Rolle als Offizieller auch in Spalte BB werten"),
     ("ReservistenWert", "(0+50)", "Wert fuer Spieler mit Status R oder Code GAJGL, gilt auf der Zeile"),
-    ("GrenzjahrU25", 2001, "Geburtsjahr ab dem U25 gilt. Wer im Lauf der Saison 25 wird, bleibt U25"),
+    ("SaisonStichtag", "01.08.2026", "Saisonbeginn - das Alter wird an diesem Tag gemessen"),
+    ("U25MaxAlter", 25, "Wer am Stichtag noch keine 25 Jahre alt ist, bleibt die ganze Saison U25"),
 ]
 
 AUSNAHMEN = [
@@ -98,11 +99,13 @@ HELFER = [
     (SP["CA"], "Personenwert",
      '=IF($BY{r}>0,INDEX(Cotisation!$F$2:$F$200,$BY{r}),'
      'IF(AND($AG{r}<>"",OR($M{r}="R",$O{r}="GAJGL")),Cotisation!$B$10,""))'),
-    # Alterspruefung: U25 = Geburtsjahr >= GrenzjahrU25 (Config B11).
-    # Wer im Lauf der Saison 25 wird, bleibt U25. "PRUEFEN" = bewusste Abweichung.
+    # Alterspruefung: U25 = am Saisonbeginn (Cotisation!B11) noch keine 25 Jahre alt
+    # sein (Cotisation!B12). EDATE(J;12*Alter) ist der Geburtstag im Alter X: liegt
+    # er nach dem Stichtag, ist die Person noch U25. Belegt: 0 Abweichungen ueber 329.
     (SP["CB"], "Alterspruefung",
-     '=IFERROR(IF(IF(YEAR(IF(ISNUMBER($J{r}),$J{r},DATEVALUE($J{r},"DD.MM.YYYY")))'
-     '>=Cotisation!$B$11,"U25","SEN")<>$K{r},"PRUEFEN",""),"")'),
+     '=IFERROR(IF(IF(EDATE(IF(ISNUMBER($J{r}),$J{r},DATEVALUE($J{r},"DD.MM.YYYY")),'
+     '12*Cotisation!$B$12)>DATEVALUE(Cotisation!$B$11;"DD.MM.YYYY"),"U25","SEN")'
+     '<>$K{r},"PRUEFEN",""),"")'),
 ]
 
 # Ausgabe in L - reine Anzeige, klassische Funktionen, keine Sonderpraefixe
