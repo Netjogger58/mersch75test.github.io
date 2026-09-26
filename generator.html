@@ -1884,6 +1884,10 @@ function updateLandscapePreview() {
         for (let i = 0; i < coupeOrdered.length; i++) {
             renderLandscapeGame({ id: coupeOrdered[i], forceBig: true }, coupeSlots[i], cont, true); // Coupe: alle Icons M-S-Groesse in einer Reihe
         }
+        // Coupe-Pokal: rechts im freien Bereich ueber der letzten (dritten) Mannschaft.
+        if (coupeOrdered.length > 0) {
+            cont.innerHTML += '<img class="coupe-trophy" src="assets/Coupe%20de%20Luxembourg2026.webp" alt="Pokal Coupe de Luxembourg 2026" crossorigin="anonymous" style="top:150px;left:' + (coupeSlots[coupeOrdered.length - 1].left + 229) + 'px;width:150px;height:76px;">'; // translateX(-50%) aus CSS: left = Mitte
+        }
         const coupeTournoiPanel = document.getElementById('l-dynamic-tournoi');
         if (coupeTournoiPanel) coupeTournoiPanel.innerHTML = '';
         scalePoster();
@@ -1919,16 +1923,19 @@ function updateLandscapePreview() {
         extraTop += 125;
     }
 
-    // Grafik + U9/U11/U7 immer oben rechts (ohne Turnier mit 3D-Ball). Tournoi-Box 1cm hoch.
-    // Einzelspiel: Tournoi-Strip mit Iconen ausblenden (nur 1 konfiguriertes Spiel, kein Tournoi).
-    var _totalGames = 0, _onlyTournoi = false;
+    // Grafik + U9/U11/U7 oben rechts (ohne Turnier mit 3D-Ball). Tournoi-Box 1cm hoch.
+    // Tournoi-Strip nur anzeigen, wenn mindestens ein aktives Team als Tournoi spielt.
+    var _anyTournoi = false;
     (function () {
-        var ids = ['fe', 's1', 's2', 'u11MEL', 'u15', 'u13p1', 'u13p2', 'u11MES', 'u9M', 'u7M', 'u4M'];
-        var last = null;
-        for (var k = 0; k < ids.length; k++) { if (isLandscapeTeamActive(ids[k]) && teamHasConfiguredGame(ids[k])) { _totalGames++; last = ids[k]; } }
-        _onlyTournoi = (last === 'u11MES' || last === 'u9M' || last === 'u7M' || last === 'u4M');
+        var tids = ['u11MES', 'u9M', 'u7M', 'u4M'];
+        for (var k = 0; k < tids.length; k++) {
+            if (!isLandscapeTeamActive(tids[k])) continue;
+            var ttEl = document.getElementById(tids[k] + '-type');
+            var tt = ttEl ? ttEl.value : 'Tournoi';
+            if (tt === 'Tournoi') { _anyTournoi = true; break; }
+        }
     })();
-    if (!(_totalGames === 1 && !_onlyTournoi)) renderLandscapeTournamentStrip(cont, 57);
+    if (_anyTournoi) renderLandscapeTournamentStrip(cont, 57); // Tournoi-Bereich nur bei echtem Tournoi
 
     // Rechte Spalte: U13-P2 über U15, U13-P1 über U13-P2, U15 unten.
     const rightStack = [
@@ -2141,7 +2148,7 @@ function renderLandscapeGame(teamRef, sl, cont, hasGame) {
     if (sl.type === 'big') {
         html += '<div class="abs game-layer" style="display:block;">';
         html += '<div class="abs text-blue" style="top:' + sl.top + 'px;left:' + sl.left + 'px;width:458px;height:80px;font-size:' + (37 * sclTi) + 'px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;line-height:1.1;display:flex;align-items:flex-end;justify-content:center;text-align:center;pointer-events:auto;color:' + titleColor + ';">' + ts + '</div>';
-        if (prefix === 'u15' && tv.indexOf('Coupe') === 0) {
+        if (!forceBig && prefix === 'u15' && tv.indexOf('Coupe') === 0) {
             html += '<img class="coupe-trophy" src="assets/Coupe%20de%20Luxembourg2026.webp" alt="Pokal Coupe de Luxembourg 2026" crossorigin="anonymous" style="top:' + (sl.top - 78) + 'px;left:' + (sl.left + 154) + 'px;width:150px;height:76px;">';
         }
 
