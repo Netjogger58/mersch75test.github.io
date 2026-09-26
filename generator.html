@@ -1920,7 +1920,15 @@ function updateLandscapePreview() {
     }
 
     // Grafik + U9/U11/U7 immer oben rechts (ohne Turnier mit 3D-Ball). Tournoi-Box 1cm hoch.
-    renderLandscapeTournamentStrip(cont, 57);
+    // Einzelspiel: Tournoi-Strip mit Iconen ausblenden (nur 1 konfiguriertes Spiel, kein Tournoi).
+    var _totalGames = 0, _onlyTournoi = false;
+    (function () {
+        var ids = ['fe', 's1', 's2', 'u11MEL', 'u15', 'u13p1', 'u13p2', 'u11MES', 'u9M', 'u7M', 'u4M'];
+        var last = null;
+        for (var k = 0; k < ids.length; k++) { if (isLandscapeTeamActive(ids[k]) && teamHasConfiguredGame(ids[k])) { _totalGames++; last = ids[k]; } }
+        _onlyTournoi = (last === 'u11MES' || last === 'u9M' || last === 'u7M' || last === 'u4M');
+    })();
+    if (!(_totalGames === 1 && !_onlyTournoi)) renderLandscapeTournamentStrip(cont, 57);
 
     // Rechte Spalte: U13-P2 über U15, U13-P1 über U13-P2, U15 unten.
     const rightStack = [
