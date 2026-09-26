@@ -1761,7 +1761,7 @@ function isLandscapeTeamActive(id) {
 // Ohne aktives Turnier erscheint der 3D-Ball als Platzhalter.
 function renderLandscapeTournamentStrip(cont, top) {
     if (!cont) return;
-    const left = 1140;
+    const left = 1155; // Tournoi 0,4cm rechts
     const width = 360;
     const ids = ['u9M', 'u11MES', 'u7M'];
     if (isLandscapeTeamActive('u4M')) ids.push('u4M');
@@ -1933,7 +1933,7 @@ function updateLandscapePreview() {
         if (!isLandscapeTeamActive(item.id)) continue;
         const isU15 = item.id === 'u15';
         renderLandscapeGame(item.id, {
-            type: 'small', top: item.top, left: 1140,
+            type: 'small', top: item.top, left: 1155, // Tournoi-Spalte 0,4cm rechts
             logoSize: isU15 ? 100 : 80,
             badgeW: isU15 ? 100 : 90,
             badgeH: isU15 ? 45 : 38,
