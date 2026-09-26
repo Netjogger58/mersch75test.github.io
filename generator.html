@@ -1931,15 +1931,14 @@ function updateLandscapePreview() {
     for (let i = 0; i < rightStack.length; i++) {
         const item = rightStack[i];
         if (!isLandscapeTeamActive(item.id)) continue;
-        const isU15 = item.id === 'u15';
         renderLandscapeGame(item.id, {
-            type: 'small', top: item.top, left: 1155, // Tournoi-Spalte 0,4cm rechts
-            logoSize: isU15 ? 100 : 80,
-            badgeW: isU15 ? 100 : 90,
-            badgeH: isU15 ? 45 : 38, badgeTop: 1, // blaue Box 0,5cm hoch = Icon-Oberkante
-            dateFont: isU15 ? 20 : 16,
-            locFont: isU15 ? 16 : 13,
-            titleFont: isU15 ? 16 : 14
+            type: 'small', top: item.top, left: 1170, // Badge-Mitte = Tournoi-U11-Mitte (1335)
+            logoSize: 80, // alle Jugend-Icons einheitlich wie U13
+            badgeW: 90,
+            badgeH: 38, badgeTop: 1, // blaue Box 0,5cm hoch = Icon-Oberkante
+            dateFont: 16,
+            locFont: 13,
+            titleFont: 14
         }, cont, teamHasConfiguredGame(item.id));
     }
 
