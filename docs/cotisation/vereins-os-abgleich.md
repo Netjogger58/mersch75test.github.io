@@ -44,7 +44,7 @@ Definitioun-Coden net separat drifte loossen"*.
 | 2 | **Jugendtarif** | 210 | 210 | **200** (C0007, C0008, C0010) | nicht erwähnt |
 | 3 | **Senior** | 300 (K = SEN) | 300 (`age > 25`) | 300 (C0009) | C0009 |
 | 4 | **Offizielle** | `(+0+50)`, freiwillig | *„min. €50"* | 50 (C0012) | C0012 |
-| 5 | **Alter statt Kategorie** | Spalte K (SEN/U25) | `age > 25` aus CNS | `age < 12 / < 18` | CAT-Codes |
+| 5 | **Alter statt Kategorie** | Spalte K (SEN/U25, Grenzjahr 2001) | Alter am Stichtag 1.8. (`age > 25`) | `age < 12 / < 18` | CAT-Codes |
 | 6 | **Reserve (M=R) / GAJGL** | `(0+50)` | fehlt | fehlt | fehlt |
 | 7 | **U4 / Kidssport** | fehlt | 10 € pro Einheit | C0006 *„Pro Training"* | C0006 |
 | 8 | **Trainer** | fehlt | 0 € (Comité 50) | 7 Codes *„individuell ausgehandelt"* (C0015–21) | C0015–21 |

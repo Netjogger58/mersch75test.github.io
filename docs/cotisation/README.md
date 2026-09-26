@@ -61,6 +61,7 @@ Tarife in A/B ab Zeile 1, Ausnahmen in D/F, Schlüsselspalte G (automatisch):
 | TraegerRegel | Erste | `Erste` = erste Zeile des Blocks · `Aelteste` = ältestes Geburtsdatum | | | | |
 | ZusatzAuchOfficiel | NEIN | Rolle als Offizieller auch in Spalte BB werten | | | | |
 | ReservistenWert | (0+50) | Wert für Spieler mit Status **R** oder Code **GAJGL** | | | | |
+| GrenzjahrU25 | 2001 | Geburtsjahr ab dem U25 gilt – wer im Lauf der Saison 25 wird, bleibt U25 | | | | |
 
 B7/B8/B9 als **Text** eingeben (`NEIN`, `Erste`). Neue Ausnahme: Zeile in D/E/F
 eintragen, G ergänzt sich selbst – Zeile 200 der Schlüsselspalte ist vorbereitet.
@@ -83,6 +84,7 @@ eintragen, G ergänzt sich selbst – Zeile 200 der Schlüsselspalte ist vorbere
 | BY | AusnahmeNr | ZeilenNr der Ausnahme oder 0 |
 | BZ | Zuschlag | 50 oder 0 |
 | CA | Personenwert | Wert, der **auf dieser Zeile** steht: Ausnahme (z. B. Bourg) oder Spieler mit Status R / Code GAJGL |
+| CB | Altersprüfung | `PRUEFEN`, wenn Spalte K vom Geburtsdatum abweicht – siehe unten |
 
 ## Die Formeln (deutsche Schreibweise, wie sie in Excel erscheinen)
 
@@ -168,6 +170,40 @@ Gegenüber den 233 bisherigen Werten ändern sich 66 Zeilen – davon **43 gewol
 Die 23 XSEUL-Reservisten sind der einzige Punkt mit echter finanzieller Wirkung: sie
 fallen von 300 auf 50 €. Falls das **nicht** gewollt ist, in `Cotisation!B10` einen
 anderen Wert eintragen.
+
+## Die U25-Regel (Alter)
+
+**Wer im Laufe der Saison 25 Jahre alt wird, zählt die ganze Saison zu U25 und zahlt
+210 €.** Das Geburtsdatum entscheidet also einmal zu Saisonbeginn, nicht monatlich.
+
+Die Spalte **K** (`Alterskategorie`) im Blatt ist genau das: die einmal pro Saison
+festgelegte Einstufung des Sekretariats. Belegt in den Daten – die Trennlinie liegt
+sauber beim **Grenzgeburtsjahr 2001**:
+
+| Geburtsjahr | SEN | U25 |
+|---|---|---|
+| 2002 und jünger | 0 | 172 |
+| **2001** | **2** | **2** |
+| 2000 und älter | 91 | 0 |
+
+Die zwei Grenzjahr-Ausreißer sind **bewusste Einstufungen**, keine Fehler:
+
+| Person | geboren | K | spielt | Grund |
+|---|---|---|---|---|
+| ANSAY Luka | 12.05.2001 | SEN | J | Senior-Lizenz |
+| SYLVESTER Destiny Emmanuel | 16.06.2001 | SEN | R | Reserve/Senior |
+
+Damit gilt die Regel: **25 Jahre oder jünger = U25 (210)**, älter = SEN (300). Ein
+Spieler, der im Laufe der Saison 26 wird, bleibt für diese Saison U25 – er wird erst
+zur nächsten Saison umgestuft.
+
+Spalte **CB** (`Altersprüfung`) vergleicht K mit dem Geburtsdatum und schreibt
+`PRUEFEN`, wenn die beiden auseinanderlaufen. Im aktuellen Bestand markiert sie genau
+die zwei oben genannten Personen – die also weiterhin bewusst bleiben sollten.
+
+> In der App (`Vereins-OS`) wird das Alter seit diesem Stand am **Stichtag 1. August**
+> gerechnet (`SAISON_STICH_TAG`), nicht am laufenden Datum. Vorher wäre ein Spieler
+> mitten in der Saison von 210 auf 300 € gesprungen.
 
 ## Abgleich mit App und Join-Formular
 

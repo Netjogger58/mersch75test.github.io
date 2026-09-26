@@ -40,7 +40,7 @@ BLATT = "Membres 2026_2027"
 ERSTE, LETZTE = 2, 773          # Datenzeilen (Blatt hat 773 Zeilen inkl. Kopf)
 
 SP = dict(BN=66, BO=67, BP=68, BQ=69, BR=70, BS=71, BT=72, BU=73, BV=74,
-          BW=75, BX=76, BY=77, BZ=78, CA=79)
+          BW=75, BX=76, BY=77, BZ=78, CA=79, CB=80)
 
 # Tarife und Schalter: Schluessel, Wert, Bedeutung (Zeile = Position in A/B)
 TARIFE = [
@@ -54,6 +54,7 @@ TARIFE = [
     ("TraegerRegel", "Erste", "Erste = erste Zeile des Blocks | Aelteste = aeltestes Geburtsdatum"),
     ("ZusatzAuchOfficiel", "NEIN", "Rolle als Offizieller auch in Spalte BB werten"),
     ("ReservistenWert", "(0+50)", "Wert fuer Spieler mit Status R oder Code GAJGL, gilt auf der Zeile"),
+    ("GrenzjahrU25", 2001, "Geburtsjahr ab dem U25 gilt. Wer im Lauf der Saison 25 wird, bleibt U25"),
 ]
 
 AUSNAHMEN = [
@@ -97,6 +98,11 @@ HELFER = [
     (SP["CA"], "Personenwert",
      '=IF($BY{r}>0,INDEX(Cotisation!$F$2:$F$200,$BY{r}),'
      'IF(AND($AG{r}<>"",OR($M{r}="R",$O{r}="GAJGL")),Cotisation!$B$10,""))'),
+    # Alterspruefung: U25 = Geburtsjahr >= GrenzjahrU25 (Config B11).
+    # Wer im Lauf der Saison 25 wird, bleibt U25. "PRUEFEN" = bewusste Abweichung.
+    (SP["CB"], "Alterspruefung",
+     '=IFERROR(IF(IF(YEAR(IF(ISNUMBER($J{r}),$J{r},DATEVALUE($J{r},"DD.MM.YYYY")))'
+     '>=Cotisation!$B$11,"U25","SEN")<>$K{r},"PRUEFEN",""),"")'),
 ]
 
 # Ausgabe in L - reine Anzeige, klassische Funktionen, keine Sonderpraefixe

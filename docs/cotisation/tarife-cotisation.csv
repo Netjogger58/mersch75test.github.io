@@ -9,3 +9,4 @@ ZusatzBeiFamilie;NEIN;Zuschlag +50 (pauschal pro Familie) bei Tarif 210/300 - NE
 TraegerRegel;Erste;Rechnungstraeger: Erste = erste Zeile des Familienblocks (100 % Trefferquote), Aelteste = aeltestes Geburtsdatum (37 %)
 ZusatzAuchOfficiel;NEIN;Rolle als Offizieller auch in Spalte Officiel (BB) statt nur in den Lizenzspalten AH/AI/AJ (netto kein Gewinn, daher aus)
 ReservistenWert;(0+50);Wert fuer Spieler mit Status R (Reserve) oder Familiencode GAJGL - gilt auf der jeweiligen Zeile
+GrenzjahrU25;2001;Geburtsjahr ab dem U25 gilt - wer im Lauf der Saison 25 wird, bleibt U25
