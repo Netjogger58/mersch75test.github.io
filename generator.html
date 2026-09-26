@@ -1878,11 +1878,11 @@ function updateLandscapePreview() {
         const coupeSlots = [
             { type: 'big', top: 350, left: 76 }, // Frauen: Icon-Kante 2cm vom linken Rand
             { type: 'big', top: 350, left: 570 },
-            { type: 'big', top: 350, left: 1120 }
+            { type: 'big', top: 350, left: 1064 }
         ];
         const coupeOrdered = getOrderedTeams(coupePosterTeams); // Switch Pos 1&2: Pos-Feld entscheidet
         for (let i = 0; i < coupeOrdered.length; i++) {
-            renderLandscapeGame(coupeOrdered[i], coupeSlots[i], cont, true);
+            renderLandscapeGame({ id: coupeOrdered[i], forceBig: true }, coupeSlots[i], cont, true); // Coupe: alle Icons M-S-Groesse in einer Reihe
         }
         const coupeTournoiPanel = document.getElementById('l-dynamic-tournoi');
         if (coupeTournoiPanel) coupeTournoiPanel.innerHTML = '';
@@ -1958,6 +1958,8 @@ function renderLandscapeGame(teamRef, sl, cont, hasGame) {
         : { id: teamRef.id, gameSlot: teamRef.gameSlot || 1 };
     const prefix = teamData.id;
     const gameSlot = teamData.gameSlot;
+    const forceBig = !!(teamRef && teamRef.forceBig); // Coupe: Jugend wie Senioren gross
+    if (forceBig) sl = { type: 'big', top: sl.top, left: sl.left }; // Coupe: alle Icons M-S-Groesse in einer Reihe
 
     const opp = getGameFieldValue(prefix, 'opp', gameSlot) || '-';
     const homeValue = getGameFieldValue(prefix, 'home', gameSlot) || 'home1';
