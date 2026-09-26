@@ -1876,7 +1876,7 @@ function updateLandscapePreview() {
     });
     if (coupePosterTeams.length > 0) {
         const coupeSlots = [
-            { type: 'big', top: 350, left: 200 },
+            { type: 'big', top: 350, left: 105 },
             { type: 'big', top: 350, left: 570 },
             { type: 'big', top: 350, left: 1120 }
         ];
@@ -1898,7 +1898,7 @@ function updateLandscapePreview() {
     const centerMain = orderedSenior[1] || null;
 
     if (leftMain) {
-        renderLandscapeGame(leftMain, { type: 'big', top: 350, left: 200 }, cont, teamHasConfiguredGame(leftMain));
+        renderLandscapeGame(leftMain, { type: 'big', top: 350, left: 105 }, cont, teamHasConfiguredGame(leftMain));
     }
     if (centerMain) {
         renderLandscapeGame(centerMain, { type: 'big', top: 350, left: leftMain ? 570 : 620 }, cont, teamHasConfiguredGame(centerMain));
@@ -1912,7 +1912,7 @@ function updateLandscapePreview() {
     for (let i = 0; i < leftExtras.length; i++) {
         const id = leftExtras[i];
         renderLandscapeGame(id, {
-            type: 'small', top: extraTop, left: 200,
+            type: 'small', top: extraTop, left: 105,
             logoSize: 80, badgeW: 90, badgeH: 38,
             dateFont: 14, locFont: 12, titleFont: 14
         }, cont, teamHasConfiguredGame(id));
