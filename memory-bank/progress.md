@@ -1,3 +1,18 @@
+## Cotisation-Formel (Spalte L) – Bausatz + Prüfskript – 2026-09-26
+
+- Neuer Ordner `docs/cotisation/`: `README.md` (fertige Excel-Formeln zum Copy-Paste), `tarife-cotisation.csv` (Tarife + Schalter), `ausnahmen-cotisation.csv` (Bourg-Ausnahmen), `pruef_cotisation.py` (Python-Nachbau der Formel + Diff gegen die Mitgliederliste).
+- **Datenlage geklärt:** Spalte L = Cotisatioun (Ziel), M = Spielen J/R/N, **O = Code Courrier neu = Familien-ID** (N = alter code courrier), K = Alterskategorie (SEN/U25/?), J = Geburtsdatum, AG = Spielerlizenz, AH/AI/AJ = Offizier-/ZS-/Schiri-Lizenz, BB = Officiel. Quelle: `Vereins-OS/docs/GC 2026-09-24 MEMBERSLESCHT 2026-2027.csv`, 771 Datenzeilen.
+- **Achtung Layout:** Die .xlsm (`GC 2026-09-24 …xlsm`) hat ein **anderes Spaltenlayout** (C=Alterskategorie, D=Cotisatioun, M=Code Courrier neu, AE=Spielerlizenz, AF/AG/AH=Offizier, AO=Geburtsdatum) und **keine Spalte „Spielen J/R/N"**. Die Formeln im README gelten für das CSV-Layout. Vor dem Einfügen prüfen, welche Datei offen ist.
+- **Empirische Befunde aus 348 Familien / 771 Zeilen:**
+  - `XSEUL` (74) und `GAJGL` (15) werden **pro Zeile** ausgewertet, nicht als Familie (ANSAY Luka SEN und Mathis U25 haben beide 300 unter demselben Code).
+  - Rechnungsträger ist in der Praxis die **erste Zeile des Familienblocks** (144/144 = 100 %), nicht das älteste Geburtsdatum (82 %). Beides per Schalter `TraegerRegel` wählbar, Standard `Erste`.
+  - 166 Zeilen haben **keine** Familien-ID, aber Spielstatus `J` → sie brauchen eine Ersatz-ID (`@ZEILE`), sonst bleiben sie unkotiert.
+  - 257 Zeilen haben `///` als Geburtsdatum, 442 haben `K='?'` → Fallback-Datum 73415 (31.12.2100) nötig.
+  - `+50` ist **pauschal pro Familie**, nicht pro Person (CLEMENT/METZLER: 2 Offizielle → `(0+50)`), und **entfällt beim Tarif 384** (384 ist Maximum).
+- **Ergebnis:** 747/771 = **96,9 %** Übereinstimmung mit der bestehenden Spalte L; davon sind 18 Abweichungen „bisher leer" (Vervollständigung) und 5 freiwillige Offiziersbeiträge, die nicht ableitbar sind → dafür Spalte `Manuell`.
+- **8 Fehler der alten LET-Formel behoben:** Zirkelbezug (`B_E;$M$2:$M$5000` las die eigene Spalte), Zeilenversatz `A4`/`B5`, Ältesten-Konflikt (`J5=Aeltester` UND `ZÄHLENWENNS($O$2:$O5)=1` → bei Gleichstand gar keine Ausgabe), Doppelrechnung ohne Geburtsdatum, `MINWENNS` über `///`-Text, 4× `SUMMENPRODUKT` über 4999 Zeilen (Performance), Tarife/Namen fest im Formeltext.
+- Verifikation: `python3 docs/cotisation/pruef_cotisation.py` läuft fehlerfrei; alle 9 Excel-Formeln aus dem README maschinell auf Klammerbalance und deutsche Funktionsnamen geprüft.
+
 ## Generator – Frauen-Block zentrierter + U11-Tournoi-Adresse – 2026-09-25
 
 - Frauen-Block (links, inkl. Coupe-Slot und Zusatzteams) von `left:20` auf `left:90` gerückt: weiter weg vom linken Posterrand, näher ans Männer-Spiel in der Mitte.

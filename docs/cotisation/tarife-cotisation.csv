@@ -1,0 +1,10 @@
+Schlüssel;Wert;Bemerkung
+SEN;300;Einzelner Senior
+U25;210;Einzelner U25-Jugendspieler
+Familie;384;ab 2 aktiven Spielern oder gemischt SEN + U25
+Zusatz;50;je Person mit Offizier-, N- oder R-Status
+XSEUL;300;Fixbetrag bei Familiencode XSEUL (pro Zeile)
+GAJGL;0;Fixbetrag bei Familiencode GAJGL (pro Zeile)
+ZusatzBeiFamilie;NEIN;Zuschlag +50 (pauschal pro Familie) bei Tarif 210/300 - NEIN = kein Zuschlag auf 384, da 384 das Maximum ist
+TraegerRegel;Erste;Rechnungstraeger: Erste = erste Zeile des Familienblocks (100 % Trefferquote), Aelteste = aeltestes Geburtsdatum (37 %)
+ZusatzAuchOfficiel;NEIN;Offiziersrolle auch in Spalte Officiel (BB) statt nur in den Lizenzspalten AH/AI/AJ (netto kein Gewinn, daher aus)
