@@ -1898,7 +1898,7 @@ function updateLandscapePreview() {
     const centerMain = orderedSenior[1] || null;
 
     if (leftMain) {
-        renderLandscapeGame(leftMain, { type: 'big', top: 350, left: 105 }, cont, teamHasConfiguredGame(leftMain));
+        renderLandscapeGame(leftMain, { type: 'big', top: 350, left: centerMain ? 105 : 570 }, cont, teamHasConfiguredGame(leftMain)); // Einzelspiel: mittig
     }
     if (centerMain) {
         renderLandscapeGame(centerMain, { type: 'big', top: 350, left: leftMain ? 570 : 620 }, cont, teamHasConfiguredGame(centerMain));
