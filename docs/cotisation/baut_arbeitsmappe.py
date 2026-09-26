@@ -26,6 +26,7 @@ Aufruf:
 """
 from __future__ import annotations
 
+import csv
 import pathlib
 import shutil
 import sys
@@ -40,32 +41,44 @@ BLATT = "Membres 2026_2027"
 ERSTE, LETZTE = 2, 773          # Datenzeilen (Blatt hat 773 Zeilen inkl. Kopf)
 
 SP = dict(BN=66, BO=67, BP=68, BQ=69, BR=70, BS=71, BT=72, BU=73, BV=74,
-          BW=75, BX=76, BY=77, BZ=78, CA=79, CB=80)
+          BW=75, BX=76, BY=77, BZ=78, CA=79, CB=80, CC=81)
 
-# Tarife und Schalter: Schluessel, Wert, Bedeutung (Zeile = Position in A/B)
-TARIFE = [
-    ("SEN", 300, "Einzelner Senior"),
-    ("U25", 210, "Einzelner U25-Jugendspieler"),
-    ("Familie", 384, "ab 2 aktiven Spielern oder gemischt SEN + U25"),
-    ("Zusatz", 50, "Offizielle (AH/AI/AJ) oder Status N/R - freiwillig, Stimmrecht AG"),
-    ("XSEUL", 300, "Fixbetrag, pro Zeile"),
-    ("GAJGL", 0, "Fixbetrag, pro Zeile"),
-    ("ZusatzBeiFamilie", "NEIN", "384 ist das Maximum -> kein +50 auf 384"),
-    ("TraegerRegel", "Erste", "Erste = erste Zeile des Blocks | Aelteste = aeltestes Geburtsdatum"),
-    ("ZusatzAuchOfficiel", "NEIN", "Rolle als Offizieller auch in Spalte BB werten"),
-    ("ReservistenWert", "(0+50)", "Wert fuer Spieler mit Status R oder Code GAJGL, gilt auf der Zeile"),
-    ("SaisonStichtag", "01.08.2026", "Saisonbeginn - das Alter wird an diesem Tag gemessen"),
-    ("U25MaxAlter", 25, "Wer am Stichtag noch keine 25 Jahre alt ist, bleibt die ganze Saison U25"),
-]
+CONFIG = pathlib.Path("/Users/netjogger58/CascadeProjects/mersch75test.github.io/docs/cotisation")
 
-AUSNAHMEN = [
-    ("Bourg", "Jeannot", "Don ? +(0 +50)"),
-    ("Bourg-Thielen", "Gaby", "Don ? +(0 +50)"),
-]
+
+def liese_config(datei: pathlib.Path) -> list[tuple[str, object, str]]:
+    """Liest eine Config-CSV (Schluessel;Wert;Bemerkung) als Liste von Tripeln.
+    Die CSV ist die einzige Quelle - der Bausatz pflegt keine eigene Liste mehr."""
+    if not datei.exists():
+        raise SystemExit(f"! Config fehlt: {datei}")
+    with open(datei, encoding="utf-8-sig", newline="") as fh:
+        zeilen = [r for r in csv.reader(fh, delimiter=";") if any(c.strip() for c in r)]
+    out = []
+    for row in zeilen[1:]:
+        row = (row + ["", "", ""])[:3]          # auf 3 Spalten auffuellen
+        k, w, b = (x.strip() for x in row)
+        if w.lstrip("-").isdigit():
+            w = int(w)
+        out.append((k, w, b))
+    return out
+
+# Tarife, Schalter, Ausnahmen und Haushalte kommen aus den CSV-Dateien nebenan
+TARIFE = liese_config(CONFIG / "tarife-cotisation.csv")
+AUSNAHMEN = [(n.strip(), p.strip(), a.strip()) for n, p, a in
+             liese_config(CONFIG / "ausnahmen-cotisation.csv")]
+HAUSHALTE = [(n.strip(), str(p).strip()) for n, p, _b in
+             liese_config(CONFIG / "haushalte-cotisation.csv")]
 
 # Helfer: Spalte, Titel, Formelvorlage.  {r}=Zeile, {e}=erste, {l}=letzte
 HELFER = [
-    (SP["BN"], "FamID", '=IF($O{r}="","@"&ROW(),$O{r})'),
+    # Haushaltsschluessel: normalerweise der Familiencode O. Steht die Adresse in der
+    # Haushaltsliste (Cotisation!I2:I50), ist der ganze Haushalt eine Einheit - auch
+    # wenn die Mitglieder verschiedene Codes haben (z. B. ANSAY-Brueder, beide XSEUL).
+    (SP["BN"], "FamID",
+     '=IF($O{r}="","@"&ROW(),IF(SUMPRODUCT(--('
+     'SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(UPPER(Cotisation!$I$2:$I$50)," ",""),".",""),"\'","")'
+     '=SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(UPPER($G{r})," ",""),".",""),"\'","")))>0,'
+     '"ADR:"&SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(UPPER($G{r})," ",""),".",""),"\'",""),$O{r}))'),
     (SP["BO"], "Schluessel",
      '=IF(ISNUMBER($J{r}),$J{r},IFERROR(DATEVALUE($J{r},"DD.MM.YYYY"),73415))-ROW()/1000000'),
     # kleinster Schluessel der Familie - SUMPRODUCT erzwingt die Array-Auswertung
@@ -106,6 +119,11 @@ HELFER = [
      '=IFERROR(IF(IF(EDATE(IF(ISNUMBER($J{r}),$J{r},DATEVALUE($J{r},"DD.MM.YYYY")),'
      '12*Cotisation!$B$12)>DATEVALUE(Cotisation!$B$11;"DD.MM.YYYY"),"U25","SEN")'
      '<>$K{r},"PRUEFEN",""),"")'),
+    # XSEUL 300 - aber nur, wenn der Haushalt nicht schon 2 aktive Spieler hat.
+    # Sonst greift der Familientarif 384 (ANSAY-Brueder: 1x 384 statt 2x 300).
+    (SP["CC"], "XSEULwert",
+     '=IF($O{r}<>"XSEUL";"",IF(AND(LEFT($BN{r},4)="ADR:";$BQ{r}>=2);"",'
+     'TEXT(Cotisation!$B$5;"0")))'),
 ]
 
 # Ausgabe in L - reine Anzeige, klassische Funktionen, keine Sonderpraefixe
@@ -113,7 +131,7 @@ FORMEL_L = (
     '=IF(AND($O{r}="",$M{r}=""),"",'
     'IF($BV{r}<>"",$BV{r}&"",'
     'IF($CA{r}<>"",$CA{r},'
-    'IF($O{r}="XSEUL",TEXT(Cotisation!$B$5,"0"),'
+    'IF($CC{r}<>"",$CC{r},'
     'IF($O{r}="GAJGL",TEXT(Cotisation!$B$6,"0"),'
     'IF(NOT($BU{r}),"",'
     'IF($BX{r}+$BZ{r}=0,"",'
@@ -157,7 +175,15 @@ def baue() -> int:
         cfg.cell(i, 7, f'=$D{i}&"|"&$E{i}').font = fett
     for i in range(len(AUSNAHMEN) + 2, 201):     # Schluesselbereich offen halten
         cfg.cell(i, 7, f'=$D{i}&"|"&$E{i}')
-    for col, breite in (("A", 20), ("B", 10), ("C", 58), ("D", 18), ("E", 18), ("F", 18), ("G", 30)):
+
+    # Spalten I/J: gleiche Adresse = ein Haushalt
+    for j, t in enumerate(["Adresse gleicher Haushalt", "Bemerkung"], start=9):
+        cfg.cell(1, j, t).font = fett
+    for i, (adresse, bemerkung) in enumerate(HAUSHALTE, start=2):
+        cfg.cell(i, 9, adresse)
+        cfg.cell(i, 10, bemerkung)
+    for col, breite in (("A", 20), ("B", 10), ("C", 58), ("D", 18), ("E", 18), ("F", 18),
+                        ("G", 30), ("I", 28), ("J", 60)):
         cfg.column_dimensions[col].width = breite
 
     # 2) bisherige Ergebnisse aus L nach BW sichern

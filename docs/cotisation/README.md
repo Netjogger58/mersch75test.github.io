@@ -67,7 +67,30 @@ Tarife in A/B ab Zeile 1, Ausnahmen in D/F, Schlüsselspalte G (automatisch):
 B7/B8/B9 als **Text** eingeben (`NEIN`, `Erste`). Neue Ausnahme: Zeile in D/E/F
 eintragen, G ergänzt sich selbst – Zeile 200 der Schlüsselspalte ist vorbereitet.
 
-## Helfer-Spalten BN:CA
+| D | Adresse gleicher Haushalt | J | Bemerkung |
+|---|---|---|---|
+| 1, Medernacherstrooss | | | ANSAY Luka + Mathis – gleiche Adresse, 2 Spieler, 1× 384, Rechnung an den Ältesten |
+
+Weitere Zeilen in I/J = weitere Haushalte, die trotz verschiedener Familiencodes als
+Einheit kotiert werden (z. B. Geschwister, die beide `XSEUL` haben).
+
+**Warum eine Liste statt automatischer Adress-Gruppierung?** Die Daten sind für eine
+automatische Zusammenfassung nicht geeignet:
+
+* **187 von 771 Zeilen** haben gar keine Adresse
+* **10 Familiencodes** sind über mehrere Adressen verteilt (getrennte Eltern,
+  Pension, Ferienwohnung)
+* Adressen sind uneinheitlich geschrieben (`22, RUE DE COLMAR-BERG` und
+  `22,RUE DE COLMAR-BERG` sind dieselbe)
+* `34, RUE PRINCIPALE` existiert in **zwei verschiedenen Orten** (Bigonville und
+  Schrondweiler) – ein Schreibfehler, der beim Gruppieren falsche Verwandte
+  zusammengezogen hätte
+
+Die Liste entscheidet also bewusst, nicht die Formel. Für die ANSAYs gilt: Luka ist
+sowohl der Älteste (12.05.2001) als auch die erste Zeile des Haushalts – beide
+Trägerregenzen kommen dort zum selben Ergebnis.
+
+## Helfer-Spalten BN:CC
 
 | Spalte | Titel | Aufgabe |
 |---|---|---|
@@ -86,6 +109,7 @@ eintragen, G ergänzt sich selbst – Zeile 200 der Schlüsselspalte ist vorbere
 | BZ | Zuschlag | 50 oder 0 |
 | CA | Personenwert | Wert, der **auf dieser Zeile** steht: Ausnahme (z. B. Bourg) oder Spieler mit Status R / Code GAJGL |
 | CB | Altersprüfung | `PRUEFEN`, wenn Spalte K vom Geburtsdatum abweicht – siehe unten |
+| CC | XSEULwert | 300 für `XSEUL`, außer der Haushalt aus Spalte I hat 2+ Spieler |
 
 ## Die Formeln (deutsche Schreibweise, wie sie in Excel erscheinen)
 

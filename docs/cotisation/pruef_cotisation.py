@@ -44,6 +44,7 @@ SPALTEN = {
     "liz_sr": "Licences SR (arbitre)",
     "officiel": "Officiel",  # optionale Zusatzspalte
     "manuell": "Manuell",  # optionale Spalte, gewinnt immer
+    "adresse": "Adresse",  # nur fuer die Haushaltsliste (Spalte I im Blatt Cotisation)
 }
 
 # ------------------------------------------------------------------- Vorgabewerte
@@ -129,19 +130,32 @@ def lade_tarife(pfad: pathlib.Path) -> tuple[dict, bool, str, bool, str]:
     return tarife, zusatz_bei_familie, traeger_regel, officiel_auch, reservisten_wert
 
 
-def lade_ausnahmen(pfad: pathlib.Path) -> dict[tuple[str, str], str]:
+def lade_ausnahmen(pfad: pathlib.Path) -> tuple[dict[tuple[str, str], str], list[str]]:
     ausnahmen: dict[tuple[str, str], str] = {}
+    haushalte: list[str] = []
     if not pfad.exists():
-        return ausnahmen
+        return ausnahmen, haushalte
     for nom, vorname, ausgabe in lade_csv(pfad)[1:]:
         if ausgabe.strip():
             ausnahmen[(nom.strip().upper(), vorname.strip().upper())] = ausgabe.strip()
-    return ausnahmen
+    # gleiche Adresse = ein Haushalt (z. B. ANSAY-Brueder, beide Code XSEUL)
+    haushaltdatei = pfad.parent / "haushalte-cotisation.csv"
+    if haushaltdatei.exists():
+        for adresse, _besch in lade_csv(haft:=haushaltdatei)[1:]:
+            if adresse.strip():
+                haushalte.append(normalisiere_adresse(adresse))
+    return ausnahmen, haushalte
+
+
+def normalisiere_adresse(a: str) -> str:
+    """Adressen fuer den Vergleich vereinheitlichen: Gross/Klein egal, Leerzeichen und
+    Punkte raus. '22, RUE DE COLMAR-BERG' und '22,RUE DE COLMAR-BERG' sind dann gleich."""
+    return "".join(a.upper().split()).replace(".", "").replace("'", "")
 
 
 # ------------------------------------------------------------------ Kernlogik
 def berechne(zeilen, ausnahmen, tarife, zusatz_bei_familie, traeger_regel="Erste",
-             officiel_auch=False, reservisten_wert=RESERVISTEN_WERT_STD):
+             officiel_auch=False, reservisten_wert=RESERVISTEN_WERT_STD, haushalte=()):
     """Gibt je Zeile ein Ergebnis-Dict zurueck - 1:1 die Excel-Formel."""
     kopf = [c.strip() for c in zeilen[0]]
 
@@ -171,7 +185,13 @@ def berechne(zeilen, ausnahmen, tarife, zusatz_bei_familie, traeger_regel="Erste
     for i, z in enumerate(daten):
         excel_zeile = ERSTE_DATENZEILE + i
         fam = zelle(z, "fam")
-        famkey.append(fam if fam else f"@{excel_zeile}")
+        if not fam:
+            key = f"@{excel_zeile}"
+        else:
+            # gleiche Adresse = ein Haushalt, auch wenn die Codes verschieden sind
+            adr = normalisiere_adresse(zelle(z, "adresse"))
+            key = ("ADR:" + adr) if adr in haushalte else fam
+        famkey.append(key)
         d = parse_datum(zelle(z, "naissance"))
         basis = FALLBACK_SERIAL if d is None else d
         schluessel.append(basis - excel_zeile / STUFE)
@@ -250,8 +270,13 @@ def berechne(zeilen, ausnahmen, tarife, zusatz_bei_familie, traeger_regel="Erste
         # 3) Ausnahme oder Reservist/GAJGL-Spieler - gilt auf dieser Zeile
         elif personenwert:
             wert, grund = personenwert, personen_grund
-        # 4) Sondercodes - pro Zeile, keine Familiengruppierung
-        elif fam == XSEUL_CODE:
+        # 4) Sondercodes - pro Zeile, keine Familiengruppierung.
+        #    XSEUL entfaellt nur, wenn die Person in einem GELISTETEN Haushalt
+        #    (Spalte G) mit mindestens 2 aktiven Spielern sitzt - z. B. die
+        #    ANSAY-Brueder: gleiche Adresse, beide XSEUL, also 1x 384.
+        #    Wichtig: XSEUL selbst ist KEIN Familiencode (72 Einzelpersonen),
+        #    darum darf die 300er-Regel nicht pauschal wegfallen.
+        elif fam == XSEUL_CODE and not (key.startswith("ADR:") and sp_gesamt >= 2):
             wert, grund = str(tarife["xseul"]), "Sondercode XSEUL"
         elif fam == GAJGL_CODE:
             wert, grund = str(tarife["gajgl"]), "Sondercode GAJGL"
@@ -304,18 +329,19 @@ def main() -> int:
 
     tarife, zusatz_bei_familie, traeger_regel, officiel_auch, reservisten_wert = lade_tarife(
         hier / "tarife-cotisation.csv")
-    ausnahmen = lade_ausnahmen(hier / "ausnahmen-cotisation.csv")
+    ausnahmen, haushalte = lade_ausnahmen(hier / "ausnahmen-cotisation.csv")
     zeilen = lade_csv(args.quelle)
 
     print(f"Quelle            : {args.quelle.name}")
     print(f"Tarife            : {tarife}  Zusatz@Familie={zusatz_bei_familie}  Officiel={officiel_auch}")
     print(f"Ausnahmen         : {len(ausnahmen)}")
     print(f"Reservistenwert   : {reservisten_wert}")
+    print(f"Haushalte (Adresse): {len(haushalte)} {haushalte}")
 
     # Vergleich beider Rechnungstraeger-Regeln (mit aktiver Offizielle-Erkennung)
     for regel in ("Erste", "Aelteste"):
         erg = berechne(zeilen, ausnahmen, tarife, zusatz_bei_familie, regel, officiel_auch,
-                      reservisten_wert)
+                      reservisten_wert, haushalte)
         ab = [e for e in erg if e["bestehend"] != e["neu"]]
         quote = (len(erg) - len(ab)) / len(erg) * 100
         marke = "  <- aktiv" if regel == traeger_regel else ""
