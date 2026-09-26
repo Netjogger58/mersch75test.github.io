@@ -66,6 +66,10 @@ TRAEGER_REGEL_STD = "Erste"
 # (ohne Lizenznummer in AH/AI/AJ)
 OFFICIEL_ACHZ_STD = False
 XSEUL_CODE, GAJGL_CODE = "XSEUL", "GAJGL"
+AUSNAHMEN_STD = {("BOURG", "JEANNOT"): "Don ? +(0 +50)",
+                ("BOURG-THIELEN", "GABY"): "Don ? +(0 +50)"}
+# Spieler mit Status R (Reserve) oder Familiencode GAJGL zahlen 0 + 50
+RESERVISTEN_WERT_STD = "(0+50)"
 FALLBACK_SERIAL = 73415   # 31.12.2100 -> "///" und Leerwerte landen am Tabellenende
 ERSTE_DATENZEILE = 2      # Excel-Zeilenummer der ersten Datenzeile
 STUFE = 1000000.0         # Zeilen-Nachschlag = ZEILE()/1000000
@@ -99,19 +103,22 @@ def parse_datum(wert: str):
     return None
 
 
-def lade_tarife(pfad: pathlib.Path) -> tuple[dict, bool, str, bool]:
+def lade_tarife(pfad: pathlib.Path) -> tuple[dict, bool, str, bool, str]:
     tarife = dict(TARIFE_STD)
     zusatz_bei_familie = ZUSATZ_BEI_FAMILIE_STD
     traeger_regel = TRAEGER_REGEL_STD
     officiel_auch = OFFICIEL_ACHZ_STD
+    reservisten_wert = RESERVISTEN_WERT_STD
     if not pfad.exists():
-        return tarife, zusatz_bei_familie, traeger_regel, officiel_auch
+        return tarife, zusatz_bei_familie, traeger_regel, officiel_auch, reservisten_wert
     for key, wert, _bem in lade_csv(pfad)[1:]:
         key, wert = key.strip().lower(), wert.strip()
         if key == "zusatzbeifamilie":
             zusatz_bei_familie = wert.upper().startswith(("J", "Y", "W"))
         elif key == "zusatzauschofficiel":
             officiel_auch = wert.upper().startswith(("J", "Y", "W"))
+        elif key == "reservistenwert":
+            reservisten_wert = wert
         elif key == "traegerregel":
             traeger_regel = wert if wert[:1].upper() in ("E", "A") else TRAEGER_REGEL_STD
         elif key in tarife:
@@ -119,7 +126,7 @@ def lade_tarife(pfad: pathlib.Path) -> tuple[dict, bool, str, bool]:
                 tarife[key] = int(float(wert))
             except ValueError:
                 print(f"! Tarif '{key}' ist keine Zahl: {wert!r}", file=sys.stderr)
-    return tarife, zusatz_bei_familie, traeger_regel, officiel_auch
+    return tarife, zusatz_bei_familie, traeger_regel, officiel_auch, reservisten_wert
 
 
 def lade_ausnahmen(pfad: pathlib.Path) -> dict[tuple[str, str], str]:
@@ -134,7 +141,7 @@ def lade_ausnahmen(pfad: pathlib.Path) -> dict[tuple[str, str], str]:
 
 # ------------------------------------------------------------------ Kernlogik
 def berechne(zeilen, ausnahmen, tarife, zusatz_bei_familie, traeger_regel="Erste",
-             officiel_auch=False):
+             officiel_auch=False, reservisten_wert=RESERVISTEN_WERT_STD):
     """Gibt je Zeile ein Ergebnis-Dict zurueck - 1:1 die Excel-Formel."""
     kopf = [c.strip() for c in zeilen[0]]
 
@@ -223,24 +230,34 @@ def berechne(zeilen, ausnahmen, tarife, zusatz_bei_familie, traeger_regel="Erste
         zusatz = tarife["zusatz"] if (zusatz_pers
                                       and (zusatz_bei_familie or tarif != tarife["familie"])) else 0
 
+        # Personenbezogener Wert: gilt auf DIESER Zeile, unabhaengig vom Rechnungstraeger
+        ausnahme = ausnahmen.get((zelle(z, "nom").upper(), zelle(z, "vorname").upper()))
+        if ausnahme:
+            personenwert, personen_grund = ausnahme, "namentliche Ausnahme"
+        elif liz_sp and (spielt == "R" or fam == GAJGL_CODE):
+            personenwert = reservisten_wert
+            personen_grund = ("Spieler mit Status R" if spielt == "R"
+                              else "Spieler mit Code GAJGL")
+        else:
+            personenwert, personen_grund = "", ""
+
         # 1) komplett leere Zeile
         if not fam and not spielt:
             wert, grund = "", "leer (kein Code, kein Status)"
-        # 2) Sondercodes - pro Zeile, keine Familiengruppierung
+        # 2) manuelle Vorgabe - gewinnt immer
+        elif zelle(z, "manuell"):
+            wert, grund = zelle(z, "manuell"), "manuelle Vorgabe"
+        # 3) Ausnahme oder Reservist/GAJGL-Spieler - gilt auf dieser Zeile
+        elif personenwert:
+            wert, grund = personenwert, personen_grund
+        # 4) Sondercodes - pro Zeile, keine Familiengruppierung
         elif fam == XSEUL_CODE:
             wert, grund = str(tarife["xseul"]), "Sondercode XSEUL"
         elif fam == GAJGL_CODE:
             wert, grund = str(tarife["gajgl"]), "Sondercode GAJGL"
-        # 3) nur beim Rechnungstraeger
+        # 5) nur beim Rechnungstraeger
         elif i != traeger[key]:
             wert, grund = "", "nicht Rechnungstraeger"
-        # 4) manuelle Vorgabe
-        elif zelle(z, "manuell"):
-            wert, grund = zelle(z, "manuell"), "manuelle Vorgabe"
-        # 5) namentliche Ausnahme
-        elif (zelle(z, "nom").upper(), zelle(z, "vorname").upper()) in ausnahmen:
-            wert = ausnahmen[(zelle(z, "nom").upper(), zelle(z, "vorname").upper())]
-            grund = "namentliche Ausnahme"
         # 6) Regeltarif
         elif tarif == 0 and zusatz == 0:
             wert, grund = "", "kein Spielertarif, kein Zusatz"
@@ -285,17 +302,20 @@ def main() -> int:
         print(f"! Quelldatei nicht gefunden: {args.quelle}", file=sys.stderr)
         return 2
 
-    tarife, zusatz_bei_familie, traeger_regel, officiel_auch = lade_tarife(hier / "tarife-cotisation.csv")
+    tarife, zusatz_bei_familie, traeger_regel, officiel_auch, reservisten_wert = lade_tarife(
+        hier / "tarife-cotisation.csv")
     ausnahmen = lade_ausnahmen(hier / "ausnahmen-cotisation.csv")
     zeilen = lade_csv(args.quelle)
 
     print(f"Quelle            : {args.quelle.name}")
     print(f"Tarife            : {tarife}  Zusatz@Familie={zusatz_bei_familie}  Officiel={officiel_auch}")
     print(f"Ausnahmen         : {len(ausnahmen)}")
+    print(f"Reservistenwert   : {reservisten_wert}")
 
     # Vergleich beider Rechnungstraeger-Regeln (mit aktiver Offizielle-Erkennung)
     for regel in ("Erste", "Aelteste"):
-        erg = berechne(zeilen, ausnahmen, tarife, zusatz_bei_familie, regel, officiel_auch)
+        erg = berechne(zeilen, ausnahmen, tarife, zusatz_bei_familie, regel, officiel_auch,
+                      reservisten_wert)
         ab = [e for e in erg if e["bestehend"] != e["neu"]]
         quote = (len(erg) - len(ab)) / len(erg) * 100
         marke = "  <- aktiv" if regel == traeger_regel else ""

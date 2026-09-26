@@ -60,11 +60,12 @@ Tarife in A/B ab Zeile 1, Ausnahmen in D/F, Schlüsselspalte G (automatisch):
 | ZusatzBeiFamilie | NEIN | 384 ist das Maximum → kein +50 auf 384 | | | | |
 | TraegerRegel | Erste | `Erste` = erste Zeile des Blocks · `Aelteste` = ältestes Geburtsdatum | | | | |
 | ZusatzAuchOfficiel | NEIN | Rolle als Offizieller auch in Spalte BB werten | | | | |
+| ReservistenWert | (0+50) | Wert für Spieler mit Status **R** oder Code **GAJGL** | | | | |
 
 B7/B8/B9 als **Text** eingeben (`NEIN`, `Erste`). Neue Ausnahme: Zeile in D/E/F
 eintragen, G ergänzt sich selbst – Zeile 200 der Schlüsselspalte ist vorbereitet.
 
-## Helfer-Spalten BN:BZ
+## Helfer-Spalten BN:CA
 
 | Spalte | Titel | Aufgabe |
 |---|---|---|
@@ -81,6 +82,7 @@ eintragen, G ergänzt sich selbst – Zeile 200 der Schlüsselspalte ist vorbere
 | BX | Tarif | 384 / 300 / 210 / 0 |
 | BY | AusnahmeNr | ZeilenNr der Ausnahme oder 0 |
 | BZ | Zuschlag | 50 oder 0 |
+| CA | Personenwert | Wert, der **auf dieser Zeile** steht: Ausnahme (z. B. Bourg) oder Spieler mit Status R / Code GAJGL |
 
 ## Die Formeln (deutsche Schreibweise, wie sie in Excel erscheinen)
 
@@ -101,62 +103,89 @@ BX2  =WENN(ODER($BQ2>=2;UND($BR2>=1;$BS2>=1));Cotisation!$B$3;
       WENN($BR2>=1;Cotisation!$B$1;WENN($BS2>=1;Cotisation!$B$2;0)))
 BY2  =WENNFEHLER(VERGLEICH($A2&"|"&$B2;Cotisation!$G$2:$G$200;0);0)
 BZ2  =WENN(UND($BT2>=1;ODER(Cotisation!$B$7="JA";$BX2<>Cotisation!$B$3));Cotisation!$B$4;0)
+CA2  =WENN($BY2>0;INDEX(Cotisation!$F$2:$F$200;$BY2);
+      WENN(UND($AG2<>"";ODER($M2="R";$O2="GAJGL"));Cotisation!$B$10;""))
 ```
 
 Spalte **L** – reine Anzeige, alle Werte kommen aus den Helfern:
 
 ```excel
-=WENN(UND($O2="";$M2="");"";
- WENN($O2="XSEUL";TEXT(Cotisation!$B$5;"0");
-  WENN($O2="GAJGL";TEXT(Cotisation!$B$6;"0");
-   WENN(NOT($BU2);"";
-    WENN($BV2<>"";$BV2&"";
-     WENN($BY2>0;INDEX(Cotisation!$F$2:$F$200;$BY2);
-      WENN($BX2+$BZ2=0;"";
-       WENN($BX2=0;"(0+"&TEXT($BZ2;"0")&")";
-        TEXT($BX2;"0")&WENN($BZ2>0;" (+0+"&TEXT($BZ2;"0")&")";"")))))))))
+=WENN(UND($O2="";$M2="");"";WENN($BV2<>"";$BV2&"";WENN($CA2<>"";$CA2;WENN($O2="XSEUL";TEXT(Cotisation!$B$5;"0");WENN($O2="GAJGL";TEXT(Cotisation!$B$6;"0");WENN(NICHT($BU2);"";WENN($BX2+$BZ2=0;"";WENN($BX2=0;"(0+"&TEXT($BZ2;"0")&")";TEXT($BX2;"0")&WENN($BZ2>0;" (+0+"&TEXT($BZ2;"0")&")";"")))))))))
 ```
 
 ## Reihenfolge der Prüfungen
 
 1. `O` **und** `M` leer → leer
-2. `O` = XSEUL → 300 · `O` = GAJGL → 0 – **je Zeile, ohne Familiengruppierung**
-   (belegt: ANSAY Luka (SEN) und Mathis (U25) haben beide 300 unter demselben Code)
-3. nicht Rechnungsträger (`BU` = falsch) → leer
-4. `BV Manuell` ausgefüllt → dieser Wert
-5. Name in der Ausnahmentabelle → fester Wert (z. B. `Don?+0+50`)
-6. Tarif: 384 bei ≥2 Spielern oder SEN+U25, sonst 300 (SEN) bzw. 210 (U25)
-7. Zuschlag `+50` **pauschal pro Familie** bei einem Offiziellen ohne Spielerlizenz oder
+2. `BV Manuell` ausgefüllt → dieser Wert (gilt immer und zuerst)
+3. **Personenwert `CA`** → gilt auf **dieser Zeile**, unabhängig vom Rechnungsträger:
+   * Name in der Ausnahmentabelle → fester Wert (Bourg/Jeannot **und**
+     Bourg-Thielen/Gaby → beide `Don ? +(0 +50)`)
+   * Spieler mit Spielerlizenz und Status **R** (Reserve) oder Code **GAJGL** → `(0+50)`
+4. `O` = XSEUL → 300 (je Zeile; ANSAY Luka und Mathis haben beide 300 unter demselben Code)
+5. `O` = GAJGL ohne Spielerlizenz → 0
+6. nicht Rechnungsträger (`BU` = falsch) → leer
+7. Tarif: 384 bei ≥2 Spielern oder SEN+U25, sonst 300 (SEN) bzw. 210 (U25)
+8. Zuschlag `+50` **pauschal pro Familie** bei einem Offiziellen ohne Spielerlizenz oder
    Status N/R – **nicht** bei Tarif 384 (Maximum) und **nicht** pro Person
    (CLEMENT/METZLER: zwei Offizielle → trotzdem `(0+50)`)
+
+Spieler mit Antwort **N**, die freiwillig (0+50) zahlen wollen, kommen in Spalte **BV
+Manuell** – 50 € sind ein freiwilliger Beitrag mit Stimmrecht an der AG und stehen in
+keiner Spalte der Liste.
 
 ## Selbsttest nach dem Öffnen
 
 In der erzeugten Datei müssen diese Zellen so aussehen:
 
-| Zeile | Person | Erwartet in L |
+| Zeile | Person | M | Erwartet in L |
+|---|---|---|---|
+| 2 | AAMODT Astrid (F0096) | N | `210` |
+| 5 | AKIKAWA Marie (F0103, 2 Spieler) | J | `384` |
+| 11 | AMADOR FORTES Fabio Daniel (XSEUL) | J | `300` |
+| 27 | ASSEL Leo (GAJGL) | N | `(0+50)` |
+| 57 | BINGEN Fränk (F0015) | **R** | `(0+50)` |
+| 64 | BISENIUS Ben (F0059) | **R** | `(0+50)` |
+| 72 | BOURG Jeannot (F0006) | N | `Don ? +(0 +50)` |
+| 73 | BOURG-THIELEN Gaby (F0006) | N | `Don ? +(0 +50)` |
+| 134 | DIEDENHOFEN Alex (F0013) | J | `210 (+0+50)` |
+
+Spalte **BW** daneben zeigt, was die alte Formel geliefert hat.
+
+## Auswirkung der neuen Regeln auf die Saison 2025/26
+
+Gegenüber den 233 bisherigen Werten ändern sich 66 Zeilen – davon **43 gewollt**:
+
+| Änderung | Zeilen | Grund |
 |---|---|---|
-| 2 | AAMODT Astrid (F0096) | `210` |
-| 5 | AKIKAWA Marie (F0103, 2 Spieler) | `384` |
-| 11 | AMADOR FORTES Fabio Daniel (XSEUL) | `300` |
-| 27 | ASSEL Leo (GAJGL) | `0` |
-| 57 | BINGEN Fränk (F0015) | `210 (+0+50)` |
-| 72 | BOURG Jeannot (F0006) | `Don?+0+50` |
+| `300` → `(0+50)` | 23 | Spieler mit Status R unter Code XSEUL |
+| `0` → `(0+50)` | 15 | Spieler mit Code GAJGL |
+| `210 (+0+50)` → `(0+50)` | 1 | BINGEN Fränk |
+| `(0+50)` → `Don ? +(0 +50)` | 1 | BOURG Jeannot |
+| leer → `Don ? +(0 +50)` | 1 | BOURG-THIELEN Gaby (zweite Ausnahme) |
+| leer → `(0+50)` | 2 | BISENIUS Ben, SERRES Sven (Status R) |
+| **Rest** | 23 | Tarife, die die Liste 2025/26 noch nicht enthielt |
 
-Die Spalte **BW** daneben zeigt, was die alte Formel geliefert hat – Abweichungen
-sind in `pruef_cotisation.py` begründet.
+Die 23 XSEUL-Reservisten sind der einzige Punkt mit echter finanzieller Wirkung: sie
+fallen von 300 auf 50 €. Falls das **nicht** gewollt ist, in `Cotisation!B10` einen
+anderen Wert eintragen.
 
+## Abgleich mit App und Join-Formular
+
+Die Regeln werden an drei Stellen gepflegt. Die Widersprüche, der Abgleich und der
+Vorschlag für eine gemeinsame Quelle stehen in
+[`vereins-os-abgleich.md`](vereins-os-abgleich.md).
 ## Trefferquote der Logik
 
-| Variante | Übereinstimmung mit den bisherigen Werten in L |
+| Variante | Übereinstimmung mit den 233 Werten der Saison 2025/26 |
 |---|---|
-| Rechnungsträger = **erste Zeile des Familienblocks** | **747/771 = 96,9 %** |
-| Rechnungsträger = ältestes Geburtsdatum | 631/771 = 81,8 % |
+| Rechnungsträger = **erste Zeile des Familienblocks** | 705/771 = 91,4 % |
+| Rechnungsträger = ältestes Geburtsdatum | 591/771 = 76,7 % |
 
-Von den 24 verbleibenden Abweichungen sind **18 „bisher leer"** (die Liste war noch
-nicht ausgefüllt) – das ist Vervollständigung, kein Fehler. Die 5 Fälle
-`210 (+0+50)` sind **freiwillige Beiträge** (Offizielle zahlen 0 oder 50 € für das
-Stimmrecht an der AG) und lassen sich aus keiner Spalte ableiten → Spalte `BV`.
+Die 66 Abweichungen bestehen aus **43 gewollten Änderungen** (siehe Tabelle oben) und
+**23 Tarifen, die die Liste 2025/26 noch nicht enthielt** – also Vervollständigung,
+kein Fehler. Die 5 Fälle `210 (+0+50)` sind **freiwillige Beiträge** (Offizielle zahlen
+0 oder 50 € für das Stimmrecht an der AG) und lassen sich aus keiner Spalte ableiten →
+Spalte `BV Manuell`.
 
 ## Behobene Fehler der alten Formel
 

@@ -8,3 +8,4 @@ GAJGL;0;Fixbetrag bei Familiencode GAJGL (pro Zeile)
 ZusatzBeiFamilie;NEIN;Zuschlag +50 (pauschal pro Familie) bei Tarif 210/300 - NEIN = kein Zuschlag auf 384, da 384 das Maximum ist
 TraegerRegel;Erste;Rechnungstraeger: Erste = erste Zeile des Familienblocks (100 % Trefferquote), Aelteste = aeltestes Geburtsdatum (37 %)
 ZusatzAuchOfficiel;NEIN;Rolle als Offizieller auch in Spalte Officiel (BB) statt nur in den Lizenzspalten AH/AI/AJ (netto kein Gewinn, daher aus)
+ReservistenWert;(0+50);Wert fuer Spieler mit Status R (Reserve) oder Familiencode GAJGL - gilt auf der jeweiligen Zeile

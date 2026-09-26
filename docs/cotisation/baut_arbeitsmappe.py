@@ -40,7 +40,7 @@ BLATT = "Membres 2026_2027"
 ERSTE, LETZTE = 2, 773          # Datenzeilen (Blatt hat 773 Zeilen inkl. Kopf)
 
 SP = dict(BN=66, BO=67, BP=68, BQ=69, BR=70, BS=71, BT=72, BU=73, BV=74,
-          BW=75, BX=76, BY=77, BZ=78)
+          BW=75, BX=76, BY=77, BZ=78, CA=79)
 
 # Tarife und Schalter: Schluessel, Wert, Bedeutung (Zeile = Position in A/B)
 TARIFE = [
@@ -53,11 +53,12 @@ TARIFE = [
     ("ZusatzBeiFamilie", "NEIN", "384 ist das Maximum -> kein +50 auf 384"),
     ("TraegerRegel", "Erste", "Erste = erste Zeile des Blocks | Aelteste = aeltestes Geburtsdatum"),
     ("ZusatzAuchOfficiel", "NEIN", "Rolle als Offizieller auch in Spalte BB werten"),
+    ("ReservistenWert", "(0+50)", "Wert fuer Spieler mit Status R oder Code GAJGL, gilt auf der Zeile"),
 ]
 
 AUSNAHMEN = [
-    ("Bourg", "Jeannot", "Don?+0+50"),
-    ("Bourg-Thielen", "Gaby", "Don?+0+50"),
+    ("Bourg", "Jeannot", "Don ? +(0 +50)"),
+    ("Bourg-Thielen", "Gaby", "Don ? +(0 +50)"),
 ]
 
 # Helfer: Spalte, Titel, Formelvorlage.  {r}=Zeile, {e}=erste, {l}=letzte
@@ -92,16 +93,20 @@ HELFER = [
      '=IFERROR(MATCH($A{r}&"|"&$B{r},Cotisation!$G$2:$G$200,0),0)'),
     (SP["BZ"], "Zuschlag",
      '=IF(AND($BT{r}>=1,OR(Cotisation!$B$7="JA",$BX{r}<>Cotisation!$B$3)),Cotisation!$B$4,0)'),
+    # Personenwert: Ausnahme (je Zeile) oder Spieler mit Status R / Code GAJGL
+    (SP["CA"], "Personenwert",
+     '=IF($BY{r}>0,INDEX(Cotisation!$F$2:$F$200,$BY{r}),'
+     'IF(AND($AG{r}<>"",OR($M{r}="R",$O{r}="GAJGL")),Cotisation!$B$10,""))'),
 ]
 
 # Ausgabe in L - reine Anzeige, klassische Funktionen, keine Sonderpraefixe
 FORMEL_L = (
     '=IF(AND($O{r}="",$M{r}=""),"",'
+    'IF($BV{r}<>"",$BV{r}&"",'
+    'IF($CA{r}<>"",$CA{r},'
     'IF($O{r}="XSEUL",TEXT(Cotisation!$B$5,"0"),'
     'IF($O{r}="GAJGL",TEXT(Cotisation!$B$6,"0"),'
     'IF(NOT($BU{r}),"",'
-    'IF($BV{r}<>"",$BV{r}&"",'
-    'IF($BY{r}>0,INDEX(Cotisation!$F$2:$F$200,$BY{r}),'
     'IF($BX{r}+$BZ{r}=0,"",'
     'IF($BX{r}=0,"(0+"&TEXT($BZ{r},"0")&")",'
     'TEXT($BX{r},"0")&IF($BZ{r}>0," (+0+"&TEXT($BZ{r},"0")&")","")))))))))'

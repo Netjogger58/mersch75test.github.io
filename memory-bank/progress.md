@@ -1,6 +1,22 @@
+## Cotisation – neue Regeln (R/GAJGL/Ausnahmen) + Abgleich Vereins-OS – 2026-09-26
+
+- **Neue Personenregeln** in Spalte L, umgesetzt in `pruef_cotisation.py` und `baut_arbeitsmappe.py`:
+  - Spieler mit Spielerlizenz und Status **M = R** (Reserve) **oder** Familiencode **GAJGL** → `(0+50)` **auf der eigenen Zeile** (neue Helfer-Spalte `CA Personenwert`, Config `Cotisation!B10`).
+  - Namentliche Ausnahmen gelten **pro Zeile**, nicht mehr nur auf dem Rechnungsträger: BOURG Jeannot **und** BOURG-THIELEN Gaby → beide `Don ? +(0 +50)` (Leerzeichen exakt wie Vorgabe).
+  - Reihenfolge: leer → `BV Manuell` → `CA Personenwert` → XSEUL 300 → GAJGL 0 → nicht Träger → Familientarif.
+  - Spieler mit Antwort N entscheiden freiwillig über `BV Manuell` (50 € = Stimmrecht AG, in keiner Spalte ableitbar).
+- **Auswirkung:** 66 Zeilen weichen von den 233 Werten der Saison 2025/26 ab, davon 43 gewollt (23× 300→(0+50) XSEUL-Reservisten, 15× 0→(0+50) GAJGL, BINGEN Fränk, beide Bourg, BISENIUS/SERRES). Offen: fallen die 23 XSEUL-Reservisten finanziell von 300 auf 50?
+- **Vereins-OS-Abgleich** (`docs/cotisation/vereins-os-abgleich.md`): Beitraglogik existiert an 3 Stellen, C-Code-Liste an 3 weiteren. Zwei echte Fehler gefunden und behoben:
+  - `client/src/lib/registrationLogic.ts` `getCotisation()`: **`playerCount` war Parameter, wurde aber nie benutzt** → Familientarif 384 fehlte in der App. Jetzt `playerCount >= 2` → 384, Tarife als `COTISATION_RATES` exportiert, Notation vereinheitlicht. `tsc --noEmit` fehlerfrei.
+  - `join.html`: C0007/C0008/C0010 zeigten **200 €** für Jugendliche, App und Excel rechnen **210 €**. Angepasst (sichtbare Anzeige im Anmeldeformular).
+- **Kernerkenntnis zu den Codes:** AC-Codes (Berechtigung), CAT-Codes (FLH-Kategorie) und C-Codes (Tarifdefinition) sind **keine** Doppelung – sie beantworten drei verschiedene Fragen. Empfehlung: umbenennen (Rollenprofil / Tarifdefinition) + Zuordnungstabelle, **keine** Datenmigration.
+- Vereins-OS-Aufgaben `code-list-improvement-plan.csv` CL-02/CL-05/CL-10 sind mit dem Abgleich adressiert; offen bleiben Alterslogik (Kategorie K vs. CNS-Alter), Trainer-Codes (7 C vs. 5 AC) und U4/Kidssport.
+
+
+
 ## Cotisation-Formel (Spalte L) – Bausatz + Prüfskript – 2026-09-26
 
-- Neuer Ordner `docs/cotisation/`: `README.md` (fertige Excel-Formeln zum Copy-Paste), `tarife-cotisation.csv` (Tarife + Schalter), `ausnahmen-cotisation.csv` (Bourg-Ausnahmen), `pruef_cotisation.py` (Python-Nachbau der Formel + Diff gegen die Mitgliederliste).
+- Neuer Ordner `docs/cotisation/`:
 - **Datenlage geklärt:** Spalte L = Cotisatioun (Ziel), M = Spielen J/R/N, **O = Code Courrier neu = Familien-ID** (N = alter code courrier), K = Alterskategorie (SEN/U25/?), J = Geburtsdatum, AG = Spielerlizenz, AH/AI/AJ = Offizielle-/ZS-/SR-Lizenz, BB = Officiel. Quelle: `Vereins-OS/docs/GC 2026-09-24 MEMBERSLESCHT 2026-2027.csv`, 771 Datenzeilen.
 - **Achtung Layout:** Die .xlsm (`GC 2026-09-24 …xlsm`) hat ein **anderes Spaltenlayout** (C=Alterskategorie, D=Cotisatioun, M=Code Courrier neu, AE=Spielerlizenz, AF/AG/AH=Offizielle, AO=Geburtsdatum) und **keine Spalte „Spielen J/R/N"**. Die Formeln im README gelten für das CSV-Layout. Vor dem Einfügen prüfen, welche Datei offen ist.
 - **Empirische Befunde aus 348 Familien / 771 Zeilen:**
