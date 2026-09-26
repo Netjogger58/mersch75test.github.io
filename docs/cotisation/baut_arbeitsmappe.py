@@ -191,22 +191,22 @@ def spalte_liste(i: int) -> str:
 
 # ---------------------------------------------------------------- neues Blatt
 def baue_config_sheet() -> str:
+    # Wichtig: Die Tarife stehen ab Zeile 1, weil die Formeln auf
+    # Cotisation!$B$1 ... $B$12 verweisen. Die Ueberschriften fuer die
+    # Ausnahmen stehen deshalb in derselben Zeile, in den Spalten D bis J.
     zeilen = {}
     for i, (k, v, b) in enumerate(TARIFE, start=1):
-        teile = [zelle_text(f"A{i}", k), zelle_text(f"B{i}", v), zelle_text(f"C{i}", b)]
-        if isinstance(v, int):
-            teile[1] = f'<c r="B{i}"><v>{v}</v></c>'
-        zeilen[i] = teile
-    kopf = [zelle_text("A1", "Tarif"), zelle_text("B1", "Wert"), zelle_text("C1", "Bedeutung"),
-            zelle_text("D1", "Nom"), zelle_text("E1", "Prénom"), zelle_text("F1", "Ausgabe"),
-            zelle_text("G1", "Schlüssel (automatisch)"),
-            zelle_text("I1", "Adresse gleicher Haushalt"), zelle_text("J1", "Bemerkung")]
-    zeilen[1] = kopf
+        wert = f'<c r="B{i}"><v>{v}</v></c>' if isinstance(v, int) else zelle_text(f"B{i}", v)
+        zeilen[i] = [zelle_text(f"A{i}", k), wert, zelle_text(f"C{i}", b)]
+    zeilen[1].extend([
+        zelle_text("D1", "Nom"), zelle_text("E1", "Prénom"), zelle_text("F1", "Ausgabe"),
+        zelle_text("G1", "Schlüssel (automatisch)"),
+        zelle_text("I1", "Adresse gleicher Haushalt"), zelle_text("J1", "Bemerkung")])
     for i, (nom, vorname, ausgabe) in enumerate(AUSNAHMEN, start=2):
         zeilen.setdefault(i, []).extend([zelle_text(f"D{i}", nom), zelle_text(f"E{i}", vorname),
                                          zelle_text(f"F{i}", ausgabe),
                                          zelle_formel(f"G{i}", f'=$D{i}&"|"&$E{i}')])
-    for i in range(len(AUSNAHMEN) + 2, 60):        # Schluesselbereich offen halten
+    for i in range(max(len(AUSNAHMEN) + 2, len(TARIFE) + 2), 200):
         zeilen.setdefault(i, []).append(zelle_formel(f"G{i}", f'=$D{i}&"|"&$E{i}'))
     for i, (adresse, bemerkung) in enumerate(HAUSHALTE, start=2):
         zeilen.setdefault(i, []).extend([zelle_text(f"I{i}", adresse), zelle_text(f"J{i}", bemerkung)])
@@ -339,7 +339,31 @@ def baue() -> int:
                     'officedocument.spreadsheetml.worksheet+xml"/></Types>')
     teile["[Content_Types].xml"] = ct.encode("utf-8")
 
-    # 3) calcChain loeschen: die Formeln haben sich geaendert, Excel baut sie neu auf
+    # 3b) docProps/app.xml: Anzahl der Arbeitsblaetter und Titel nachziehen.
+    #     Excel prueft diese Datei gegen das Workbook - ein alter Stand fuehrt zur
+    #     Meldung "Problem bei einigen Inhalten erkannt".
+    if "docProps/app.xml" in teile:
+        app = teile["docProps/app.xml"].decode("utf-8")
+        vorhandene_blaetter = re.findall(r'<sheet name="([^"]+)"', wb)
+        alt = len(vorhandene_blaetter) - 1
+        titel_liste = re.findall(r"<vt:lpstr>([^<]*)</vt:lpstr>",
+                                 re.search(r"<TitlesOfParts>(.*?)</TitlesOfParts>", app, re.S).group(1))
+        app = re.sub(r"(<vt:lpstr>Arbeitsblätter</vt:lpstr></vt:variant><vt:variant><vt:i4>)\d+(</vt:i4>)",
+                     lambda m: m.group(1) + str(alt + 1) + m.group(2), app, count=1)
+        app = re.sub(r'(<TitlesOfParts><vt:vector size=")(\d+)(")',
+                     lambda m: m.group(1) + str(int(m.group(2)) + 1) + m.group(3), app, count=1)
+        # Der neue Blattname muss direkt hinter dem LETZTEN Blatt stehen und
+        # vor den benannten Bereichen - sonst meckert Excel ueber die Datei.
+        letztes_blatt = None
+        for name in reversed(titel_liste):
+            if name in vorhandene_blaetter:
+                letztes_blatt = name
+                break
+        app = app.replace(f"<vt:lpstr>{letztes_blatt}</vt:lpstr>",
+                          f"<vt:lpstr>{letztes_blatt}</vt:lpstr><vt:lpstr>{CONFIG_BLATT}</vt:lpstr>", 1)
+        teile["docProps/app.xml"] = app.encode("utf-8")
+
+    # 4) calcChain loeschen: die Formeln haben sich geaendert, Excel baut sie neu auf
     teile.pop("xl/calcChain.xml", None)
     reihenfolge = [n for n in reihenfolge if n != "xl/calcChain.xml"]
 
