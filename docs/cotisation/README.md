@@ -229,6 +229,21 @@ Damit gilt: **25 Jahre oder jünger am Saisonbeginn = U25**, älter = SEN. Stich
 Grenzalter stehen in `Cotisation!B11` und `B12` – für die nächste Saison wird nur der
 Stichtag weitergerückt, die Logik bleibt.
 
+**Jahrgang 2002 = U25, und zwar bis zum Ende der Saison.** Alle drei Mitglieder aus
+diesem Jahrgang stehen im Blatt auf U25, auch die beiden, die im Februar bzw. März
+2027 **25 Jahre alt werden**:
+
+| Geburtstag | Alter am 01.08.2026 | Alter am 31.05.2027 | K |
+|---|---|---|---|
+| 2002-02-21 PIRES MARTINS Jordan | 24 | 25 | U25 |
+| 2002-03-06 DIEDENHOFEN Alex | 24 | 25 | U25 |
+| 2002-12-18 FORTES Florian | 23 | 24 | U25 |
+
+Das funktioniert, weil das Alter **nur** vom Geburtsdatum und dem Stichtag abhängt –
+nicht vom heutigen Tag. Die Einstufung kann sich mitten in der Saison gar nicht ändern.
+Eine Berechnung „Alter heute" würde genau diese beiden im Februar/März auf Senior
+umstellen.
+
 Spalte **CB** (`Altersprüfung`) rechnet das Alter am Stichtag nach und schreibt
 `PRUEFEN`, wenn Spalte K und Geburtsdatum auseinanderlaufen. Nachgerechnet über alle
 329 Zeilen: **0 Treffer** – die Einstufung im Blatt ist also vollständig konsistent.
