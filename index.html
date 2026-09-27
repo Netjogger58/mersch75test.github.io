@@ -6,7 +6,7 @@
     <title data-i18n="pageTitle">Mersch75 Handball</title>
     <meta name="description" content="Mersch75 Handball: Vereinsübersicht, Matchcenter, Training, News, Galerie und Mitmachen." data-i18n-attr="content:pageDescription">
     <link rel="stylesheet" href="styles.css?v=20260920portrait-fix2">
-    <link rel="preload" as="image" href="Media/Hauptseite/Matchday 260926 LSP.webp" fetchpriority="high">
+    <link rel="preload" as="image" href="Media/Hauptseite/Matchday Coupe 041026.webp" fetchpriority="high">
     <script src="js/generator-gate.js?v=20260519c" defer></script>
     <script src="consent.js"></script>
 </head>
@@ -68,13 +68,13 @@
                     <div class="poster-visual poster-visual-hero">
                         <picture id="landscape-poster-pic">
                                 <source media="(max-width: 900px) and (orientation: portrait)" srcset="Media/Hauptseite/Portrait 26092026.webp" type="image/webp">
-                                <source srcset="Media/Hauptseite/Matchday 260926 LSP.webp" type="image/webp">
-                            <img src="Media/Hauptseite/Matchday 260926 LSP.webp" alt="Mersch75 Matchposter" data-i18n-attr="alt:posterAlt" loading="eager" fetchpriority="high" decoding="async">
+                                <source srcset="Media/Hauptseite/Matchday Coupe 041026.webp" type="image/webp">
+                            <img src="Media/Hauptseite/Matchday Coupe 041026.webp" alt="Mersch75 Matchposter" data-i18n-attr="alt:posterAlt" loading="eager" fetchpriority="high" decoding="async">
                         </picture>
                     </div>
                 </div>
                 <div class="poster-actions" id="poster-actions">
-                    <a class="poster-action" href="Media/Hauptseite/Matchday 260926 LSP.webp" download="Matchday 260926 LSP.webp" title="Herunterladen" data-i18n-attr="title:posterLandscapeTitle">
+                    <a class="poster-action" href="Media/Hauptseite/Matchday Coupe 041026.webp" download="Matchday Coupe 041026.webp" title="Herunterladen" data-i18n-attr="title:posterLandscapeTitle">
                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20h14v-2H5v2zm7-18L5.33 8.67l1.42 1.42L11 5.83V16h2V5.83l4.25 4.26 1.42-1.42L12 2z"></path></svg>
                         <span data-i18n="posterLandscapeLabel">Landscape</span>
                     </a>
@@ -468,13 +468,13 @@
             if (isPortrait) {
                 newSources += '<source srcset="Media/Hauptseite/Portrait 26092026.webp?t=' + ts + '" type="image/webp">';
             } else {
-                newSources += '<source srcset="Media/Hauptseite/Matchday 260926 LSP.webp?t=' + ts + '" type="image/webp">';
+                newSources += '<source srcset="Media/Hauptseite/Matchday Coupe 041026.webp?t=' + ts + '" type="image/webp">';
             }
 
             // Fallback img: portrait shows portrait poster, landscape shows LS poster
             var imgSrc = isPortrait 
                 ? 'Media/Hauptseite/Portrait 26092026.webp?t=' + ts 
-                : 'Media/Hauptseite/Matchday 260926 LSP.webp?t=' + ts;
+                : 'Media/Hauptseite/Matchday Coupe 041026.webp?t=' + ts;
 
             // Replace the entire picture element to force browser reload
             var newPic = document.createElement('picture');
