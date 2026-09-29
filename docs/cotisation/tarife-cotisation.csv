@@ -6,8 +6,9 @@ Zusatz;50;Offizielle (Lizenz AH/AI/AJ) oder Status N/R - freiwilliger Beitrag, S
 XSEUL;300;Fixbetrag bei Familiencode XSEUL (pro Zeile)
 GAJGL;0;Fixbetrag bei Familiencode GAJGL (pro Zeile)
 ZusatzBeiFamilie;NEIN;Zuschlag +50 (pauschal pro Familie) bei Tarif 210/300 - NEIN = kein Zuschlag auf 384, da 384 das Maximum ist
-TraegerRegel;Erste;Rechnungstraeger: Erste = erste Zeile des Familienblocks (100 % Trefferquote), Aelteste = aeltestes Geburtsdatum (37 %)
+TraegerRegel;Aelteste;Rechnungstraeger: Aelteste = aeltestes Familienmitglied (Geburtsdatum, Gleichstand oder unbekannt = oberste Zeile) - so die fachliche Regel, z.B. QUINN Nicole (Jg. 1976) statt Ruben (Jg. 2011). Erste = erste Zeile des Familienblocks (144/144 Treffer mit der Altdatei, aber fachlich falsch)
 ZusatzAuchOfficiel;NEIN;Rolle als Offizieller auch in Spalte Officiel (BB) statt nur in den Lizenzspalten AH/AI/AJ (netto kein Gewinn, daher aus)
 ReservistenWert;(0+50);Wert fuer Spieler mit Status R (Reserve) oder Familiencode GAJGL - gilt auf der jeweiligen Zeile
 SaisonStichtag;01.08.2026;Saisonbeginn - das Alter wird an diesem Tag gemessen
 U25MaxAlter;25;Wer am Stichtag noch keine 25 Jahre alt ist, bleibt die ganze Saison U25
+MedicoJahr;2026;Spielberechtigung: Status J zaehlt nur mit echtem Pass (Spalte AO) UND Medico (Spalte AX) >= dieser Jahreszahl. AX enthaelt das Jahr BIS WANN gueltig, nicht das Untersuchungsjahr. XXX in AO = Lizenz beantragt, existiert noch nicht. STEHT AUCH in der Excel-Mappe: Cotisation!B13 - am 01.01.2027 dort UND hier auf 2027 setzen.

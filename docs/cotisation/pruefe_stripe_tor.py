@@ -1,0 +1,44 @@
+"""Verifiziert das Rechnungs-TOR in der gebauten Mappe (nicht nur im Modell).
+
+Liest Spalte A/Formel aus Stripe_Export im erzeugten File und vergleicht die
+Bedingung mit dem Python-Referenzmodell aus pruef_cotisation.
+"""
+import pathlib
+import re
+import sys
+import zipfile
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import mappe           # noqa: E402
+import pruefe_stripe_export as p  # noqa: E402
+
+Z = mappe.ziel()
+with zipfile.ZipFile(Z) as z:
+    s14 = z.read("xl/worksheets/sheet14.xml").decode("utf-8")
+
+a_formeln = re.findall(r'<c r="A(\d+)"[^>]*><f>(.*?)</f></c>', s14, re.S)
+print("Stripe_Export Spalte A: Formeln in", len(a_formeln), "Zeilen")
+print("Bedingung (Zeile 2):")
+print("   ", a_formeln[0][1][:400].replace("&quot;", '"').replace("&lt;", "<")
+      .replace("&gt;", ">").replace("&amp;", "&"))
+
+# 1) Das Tor muss im File genau die Helfer BX/CB/CD + BW nennen.
+tor = a_formeln[0][1]
+for teile in ("$BW", "$BX", "$CB", "$CD", "$Q", "GAJGL"):
+    print(f"   {teile:<5} im Tor: {teile in tor}")
+
+# 2) Erwartete Rechnungen aus dem Modell
+ergebnis, _ = p.lade_modell()
+soll = [x for x in ergebnis
+        if p.echter_betrag(x["neu"]) and x["fam"] != "GAJGL"]
+traeger = {x["excel_zeile"] for x in ergebnis if x["ist_traeger"]}
+xseul = {x["excel_zeile"] for x in soll if x["fam"] == "XSEUL"}
+print()
+print("Modell-Soll (Zeilen mit Betrag, ohne GAJGL):", len(soll))
+print("  davon Traeger (BW):", len(soll and [x for x in soll if x["ist_traeger"]]))
+print("  davon XSEUL:", len(xseul))
+print("  Rechnungen, die NUR ueber BX/CB/CD kommen:",
+      len([x for x in soll if not x["ist_traeger"]]))
+ok_gate = all(t in tor for t in ("$BW", "$BX", "$CB", "$CD"))
+print()
+print("ERGEBNIS:", "Tor im File korrekt verbaut" if ok_gate else "Tor FEHLT")

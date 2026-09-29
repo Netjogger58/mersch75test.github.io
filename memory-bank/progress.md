@@ -1,3 +1,156 @@
+## Spielberechtigung (Pass + Medico) – Regel dokumentiert, Auswirkung gemessen – 2026-09-27
+
+- **Vorgabe des Users:** Ohne Spielerpass darf niemand spielen. `XXX` im Spielerpass = Antrag an die FLH geschickt, **Lizenz existiert noch nicht**. Ein vorhandener Pass braucht ein vorhandenes Medico. Medico und Lizenz sind **jahres-, nicht saisonabhängig**: 2026/27 braucht AX ≥ **2026** (gültig bis 31.12.2026), ab 1.1.2027 muss **2027** stehen.
+- **Wichtige Erkenntnis zur Spalte AX:** Sie enthält **2031, 2035, 2028 …** – also das **Jahr BIS WANN gültig**, nicht das Jahr der Untersuchung. Meine erste Prüfung suchte die Zeichenkette „2026“ und ergab deshalb 21 statt 193 Treffer. Richtig ist der **Vergleich `int(AX) >= 2026`**. In AX kommen auch Nicht-Jahre vor (`Apte`).
+- **Bestand:** Von **417** Personen mit Status `J` sind nach dieser Regel nur **182** spielberecht. 180 haben weder Pass noch Medico (167 davon: beide Felder leer), 44 haben Pass aber abgelaufenes Medico (2021–2025), 11 haben Medico aber keinen Pass, 13 haben `XXX`.
+- **Auswirkung, wenn eingebaut:** **52 von 181 Haushalten** wechseln den Tarif, zusammen **11.556 €**: 37 × 210 → 0, 9 × 384 → 210, 5 × 384 → 0, 1 × 300 → 0. Betroffen sind offenbar aktive Familien (ROLLINGER Medico 2023/2024, HERMES 2021, KASEL 2022) – die Daten wirken **veraltet gepflegt**, nicht wie eine bewusste Spielverbotsliste.
+- **Entscheidung deshalb offen gelassen** und in `ANLEITUNG-Cotisation-Tresorier.md` unter „Offene Punkte“ vermerkt, mit dem ausdrücklichen Hinweis, dass die Regel **noch nicht eingebaut** ist. Nicht eigenmächtig umgesetzt – 11.500 € und 52 Familien sind keine Detailfrage.
+- **Anleitung ergänzt** (246 Zeilen): neuer Abschnitt „Wer darf spielen“ (Pass, `XXX`, Medico als Gültigkeitsjahr, `///`, Wanderung der Jahresgrenze ab 1.1.2027) + Tabelle „Offene Punkte“ mit Spielberechtigung, Ehrenmitgliedern, Jahresgrenze und XSEUL-Reservisten.
+
+
+## Anleitung für den Tresorierer aktualisiert – 2026-09-27
+
+- `Vereins-OS/docs/ANLEITUNG-Cotisation-Tresorier.md` von 107 auf 206 Zeilen ergänzt. **Achtung: mehrere Angaben waren veraltet und sind jetzt korrigiert:**
+  - **`X` war als Tippfehler dokumentiert** („löscht im Extremfall eine Rechnung über 384 €“). Tatsächlich ist `X` ein **gültiger Status** („ungeklärt“, ergibt 0 €). Text ersetzt, plus Hinweis dass `X` nirgends als Reserve gewertet wird.
+  - **Spielerlizenz stand auf `AI`** – in der Mappe ist `AI` die Alterskategorie `U9F`; die Lizenz sitzt in **`AO`**. **E-Mail stand auf `AX`** – das ist inzwischen `Prochain Médico`; E-Mail ist **`BD`**. Warnhinweis ergänzt („im Zweifel die Kopfzeile prüfen, nicht dem Buchstaben trauen“).
+  - **Hilfsspalten „BP bis CE“** → richtig ist **`BV` bis `CJ`**; `BP` ist die Quellspalte „Aktives Profil“. `CD (Manuell)` als einzige **Eingabe**-Spalte benannt (aktuell leer), `Z`–`AM` als Formelspalten.
+  - **„Ab Zeile 774“** → Daten enden in **591**, Hilfsformeln laufen bis **903**.
+  - **„Blatt Stripe_Export, 234 Posten“** → **235 Posten / 53.846 €**; ergänzt, dass das Skript **nur neue Links anlegt und bestehende nie aktualisiert** (Link bei Stripe muss bei Betragsänderung von Hand geändert werden).
+- **Neuer Abschnitt „Die Regeln im Überblick“:** Tarife, Bedeutung der Notation `(0+50)`, 384 als Maximum, **XSEUL nach Spielstatus** (J=300, R/N=(0+50), X/leer=0) samt ADR-Ausnahme und „kein Spielerpass → kein 300“, **Comité-Mindestbetrag 50** mit den drei Ausnahmen (selbst spielen / Rechnungsträger mit Tarif / Zuschlag wird echt addiert → SCHUSTER Jeff 260), sowie **Ehrenmitglieder als offene Frage** (3 Personen mit `Membre honoraire`, bisher ohne eigene Regel).
+
+
+## Cotisation – Zuschlag beim Comité-Mitglied wird real berechnet (SCHUSTER Jeff) – 2026-09-27
+
+- **Regel:** Ein **Comité-Mitglied** zahlt den Zuschlag **echt**: 210 (Sohn Elie, U25) + 50 = **260**. Das Maximum 384 wird nicht erreicht, deshalb 260. Für **alle ohne Comité** bleibt die Notation „210 (+0+50)“ und der Stripe-Parser liest weiter nur die Zahl davor → **210**.
+- **Fehler, den ich gemacht habe:** Ich hatte zuerst im **Parser** (`betrag_zahl`) generell „X (+0+Y) = X+Y“ eingebaut. Das traf **6 Posten** (DIEDENHOFEN, EYDT, QUINN, SCHILT, SCHUSTER, SKOVGAARD) statt nur einen – 300 € zu viel, davon 250 € bei fremden Mitgliedern. Zurückgenommen, Parser liest wieder nur die Zahl vor `(`.
+- **Richtige Umsetzung an der Quelle, nicht im Parser:** In `pruef_cotisation` wird die Ausgabe für Comité-Mitglieder **selbst** zur Summe: `wert = "210 (+0+50)"` → `"260"`. Damit stimmen Beschriftung und Betrag überein und der Parser braucht keine Sonderlogik. Entsprechend in `pruefe_abgleich.py` und in der **Excel-Formel L** (`TEXT($CE+$CG)` im Träger-Zweig, Bedingung `$BI<>"" & $O<>"J" & $CE>0 & $CG>0`).
+- **Kontrolle über den Stripe-Weg (235 Posten, 53.846,00 €):** SCHUSTER Jeff **260,00** (L=260) · DIEDENHOFEN 210 · EYDT 210 · QUINN 210 · SCHILT 210 · SKOVGAARD 210 (alle unverändert, L zeigt weiter „210 (+0+50)“) · BISENIUS Ben 384 · BLANC Max und DIDELOT-SCHOEN 50 (L=(0+50)).
+- **Merksatz:** Eine Ausnahme ist keine Generalregel. Vor dem Umstellen einer Sonderregel auf „alle“ immer die betroffene Gruppe auflisten und rückfragen.
+- **Verifikation:** `pruefe_abgleich.py` → 0 Abweichungen (772), `pruefe_formeln.py` → 0 Fehler, `test_betrag_parse.py` grün, Klammern L 20/20, 0 Zellen mit `=` im `<f>`, ZIP intakt. Sicherung `…regeln-2026-09-27_2323.xlsm`.
+
+
+## Kopfzeile O1 = „Spielt J/R/N/X“ – 2026-09-27
+
+- **Vorgabe:** Spalte 14 (O) soll im Titel **J/R/N/X** führen – **X** dokumentiert den Status „ungeklärt“, der unter XSEUL mit 0 € abrechnet.
+- **Vorher:** `'Spielt            J/R/N'` – 12 Leerzeichen innen, dazu ohne X. Deshalb fand `berechne().spalte()` die Spalte nicht.
+- **Zwei Stellen mussten angepasst werden, sonst wäre es zweimal kaputt gewesen:**
+  1. **Titel in der Mappe** → `'Spielt J/R/N/X'` (Sicherheitsregel: der SharedString 7964 wird von **genau einer** Zelle benutzt – O1 – deshalb durfte er direkt geändert werden; das Skript prüft das und bricht sonst ab).
+  2. **`SPALTEN_ALT`** in `pruef_cotisation.py` um `'Spielt J/R/N/X'` ergänzt. Ohne diesen Eintrag wäre die Auflösung wieder gescheitert und der Stripe-Lauf mit `FEHLENDE SPALTEN` abgebrochen – der Titel hätte den Fehler also nur verlagert.
+- **Skript:** `kopf_setzen.py` (Sicherung, XML-Validierung, Referenzprüfung, Probelauf ohne `--apply`).
+- **Verifikation:** Stripe läuft wieder (235 Posten, 53.796,00 €), `pruefe_abgleich.py` → 0 Abweichungen (772), `pruefe_formeln.py` → 0 Fehler, ZIP intakt, `vbaProject.bin` erhalten, 39 Teile. Sicherung `…kopf-2026-09-27_2306.xlsm`.
+
+
+## Stripe – Lauf war blockiert, jetzt läuft er – 2026-09-27
+
+- **Befund:** `stripe_sync.py` brach sofort ab: `FEHLENDE SPALTEN in der Quelldatei: Spieler J/R/N`. **Kein Stripe-Lauf möglich, also auch kein „auf dem letzten Stand“.**
+- **Nicht selbst verursacht:** Der Fehler tritt identisch auf der unberührten Sicherung `…alterskat-2026-09-27_1852.xlsm` (18:50, vor allen heutigen Arbeiten) auf. Er bestand bereits.
+- **Ursache:** Der Spaltenkopf im Blatt lautet `'Spielt            J/R/N'` (12 Leerzeichen), der Code erwartete exakt `'Spielt J/R/N'` bzw. den CSV-Namen `'Spielen J/R/N'`. `kopf.strip()` entfernt nur Randleerzeichen, nicht die inneren.
+- **Fix:** In `berechne().spalte()` zusätzlich der Vergleich **ohne Leerraum** (`" ".join(s.split())`) über Name und alle `SPALTEN_ALT`-Varianten. Damit ist die Auflösung robust gegen Formatierungs-Abweichungen zwischen CSV und Blatt.
+- **Zweiter, wichtiger Befund:** Es existiert **keine `.stripe-status.json`** – `mappe.datenquelle()` verweist auf die Arbeitsmappe, also wurde über dieses Skript **noch nie** ein Link erzeugt. Die im Stripe-Dashboard sichtbaren Posten stammen aus einem anderen Weg und tragen **alte Beträge**.
+- **Verhalten des Skripts beachten:** Zeilen, die schon in der Statusdatei stehen, werden **übersprungen** – es aktualisiert bestehende Payment Links **nie**. Betroffene Links müssen in Stripe von Hand geändert oder gelöscht und neu erzeugt werden.
+- **Kontrolle über den echten Stripe-Weg (`sammle_rechnungen`):** 235 Positionen, 53.796,00 € offen. BISENIUS Ben **384** · BLANC Max **50** · CASTELLANO **50** · DEISCHTER **50** · DIDELOT-SCHOEN **50** · METZLER Bernard **50** · VAN DER WEKEN **50** · CLEMENT Liliane **50** (`(0+50)`) · MAQUIL **384** · SCHUSTER **210** · DA CONCEICAO **384**. EPPS Charly erscheint **nicht** – er ist über F0039 abgedeckt und erzeugt bewusst keine eigene Rechnung.
+- **Zeilennummern:** Die Arbeitsmappe ist gegenüber der CSV sortiert (BISENIUS Ben steht in der Mappe in **Z60**, in der CSV in Z64). Stripe rechnet auf der **Mappe**, `pruef_cotisation` beim Prüfen auf der **CSV** – bei Rückfragen immer die Quelle nennen.
+
+
+## Cotisation – EPPS-Ausnahme: Comité-Mitglied, das selbst spielt – 2026-09-27
+
+- **Befund:** `EPPS Charly` (Z163) war durch die Comité-Regel von `F0039` auf **50** gesetzt worden. Richtig ist **F0039** – er ist aktiver Spieler und über seinen Haushalt abgedeckt.
+- **Haushalt F0039 („6, im Batz“):** EPPS Thomas (J, lizenziert, nicht Träger) → F0039 · **EPPS Charly (J, lizenziert, nicht Träger, Comité)** → F0039 · PIRSON Isabelle (Mutter, N, **Trägerin**) → **384**. Zwei aktive Spieler ⇒ Familientarif, die Mutter zahlt ihn.
+- **Korrektur:** Die Comité-Mindestregel gilt nur, wenn die Person **nicht selbst spielt**. Bedingung: `ist_comite and spielt != "J" and (Wert ist "", "0", Haushaltscode oder "(0+50)")`. Damit bleibt EPPS bei F0039, METZLER Bernard (Status N) weiter bei 50.
+- **Unterschied zu METZLER ist also genau der Status:** EPPS = **J** (Spieler, abgedeckt) gegenüber METZLER = **N** (spielt nicht, deshalb Mindestbetrag).
+- **Endstand der 10 (unverändert sind 4 Träger):** BISENIUS Ben 384 · CASTELLANO 50 · DA CONCEICAO 384 · DEISCHTER 50 · DIDELOT Loïc 50 · **EPPS Charly F0039** · MAQUIL Xavier 384 · METZLER Bernard 50 · SCHUSTER Jeff 210 (+0+50) · VAN DER WEKEN 50. CLEMENT Liliane (kein Comité) bleibt (0+50).
+- **Excel:** Ausnahme in `CH` und `L` über `$O{r}<>"J"`; `CJ` braucht sie nicht, dort wird vorher schon auf N/R geprüft. Die Klammerzahl in L stieg dadurch 16 → 17.
+- **Verifikation:** `pruefe_abgleich.py` → 0 Abweichungen (772), `pruefe_formeln.py` → 0 Fehler, 0 Zellen mit `=` im `<f>`, ZIP intakt. Sicherung `…regeln-2026-09-27_2301.xlsm`.
+
+
+## Cotisation – Comité-Mindestbetrag 50 € – 2026-09-27
+
+- **Vorgabe:** Wer im Comité sitzt, zahlt **mindestens 50 €** – also **nicht** `(0+50)` und **nicht** der Haushaltscode eines anderen. `METZLER Bernard` (2019, Secrétaire technique) zeigte nur `F0026`, jetzt **50**. `CLEMENT Liliane` (T=4, kein Comité) bleibt **(0+50)**.
+- **Marker – und eine Fehleinschätzung meinerseits:** Zuerst hatte ich 11 Personen (Spalte T = 1). Richtig sind **10**; `KREMER Philippe` hat zwar T=1, aber kein Comité-Eintrag. Verlässlich ist die **Spalte `Comité`** (CSV) bzw. **BI** in der Mappe – alle drei Marker (`Comité`, BI, T=1) treffen exakt dieselben 10. Der CAT-Code unterscheidet sich zwischen CSV (Export 24.09.) und Mappe (26.09.) – deshalb auf `Comité` gestützt, nicht auf den Zahlencode.
+- **Umsetzung als *Mindestbetrag*, nicht als fester Betrag:** trifft nur, wenn das Ergebnis bisher `""`, `"0"`, der Haushaltscode oder `(0+50)` war. Ein Rechnungsträger im Comité zahlt weiter seinen Tarif: BISENIUS Ben 384, DA CONCEICAO 384, MAQUIL 384, SCHUSTER 210 (+0+50).
+- **Wirkung: 6 Zeilen, +100 €** (die 4 übrigen sind nur Notationswechsel `(0+50)` → `50`): CASTELLANO, DEISCHTER, DIDELOT, EPPS, METZLER, VAN DER WEKEN.
+- **Excel: die Regel musste in DREI Spalten.** Die Ausgabekette `L` fragt nacheinander `CD` (Manuell) → `CH` → `CJ` → Träger/Familiencode ab. Nur eine zu ändern hieße: Excel ≠ `pruef_cotisation`.
+  - `CH` (Personenwert): im Reservisten-Zweig Committee+kein Träger → 50 statt `(0+50)`
+  - `CJ` (XSEULwert): bei Status N/R Committee+kein Träger → 50 statt `(0+50)`
+  - `L` (Cotisatioun): im Nicht-Träger-Zweig `IF($BI<>"","50",…)`
+- **Neue Schranke im Schreibskript:** Klammerbalance. Die neue L-Formel hatte zunächst 16 öffnende / 17 schließende Klammern – `pruefe_formeln.py` hätte es erst beim Öffnen gezeigt. `cotisation_regeln_setzen.py` prüft das jetzt vor dem Schreiben.
+- **Nebenbefund:** Die geteilten Formeln fielen von 210 auf 88 Master, weil **Excel die Datei am 27.09. um 22:46 selbst gespeichert** hat (mein letzter Schreibvorgang war 22:30) und dabei Gruppen aufgelöst hat. Nebeneffekt: die Mappe **öffnet nachweislich ohne Reparatur-Dialog**. Vor dem Schreiben per `~$`-Sperrdatei geprüft, dass sie nicht offen war.
+- **Verifikation:** `pruefe_abgleich.py` → 0 Abweichungen (772 Zeilen), `pruefe_formeln.py` → 0 Fehler, 0 Zellen mit `=` im `<f>`, Klammern 16/16, ZIP intakt, `CD` (Manuell) unangetastet, 590 Namen. Sicherung `…regeln-2026-09-27_2252.xlsm`.
+
+
+## Cotisation – Status X: Spalte darf nur J/R/N/X enthalten – 2026-09-27
+
+- **Vorgabe:** In „Spielt J/R/N“ stehen ausschließlich **J, R, N oder X**. X ist der Status für „nicht spielt, ungeklärt“ und ergibt unter XSEUL **0**.
+- **Gefundene Fehlwirkung:** Die Personenwert-Formel prüfte `AND($L<>"J";$L<>"N";$AH<>"")`. Das trifft **jeden** Wert außer J und N – also auch **X** und jeden Tippfehler. Ein X-Spieler hätte in Excel den **Reservistenwert (0+50)** bekommen, während Python (`spielt == "R"`) korrekt leer lässt. Excel und Python wären auseinandergegangen, sobald X in der Spalte steht.
+- **Fix:** Prüfung auf **exakt `="R"`** statt „<>J und <>N“. Gleiche Stelle in `baut_arbeitsmappe.py` (Spalte `CB`) und in der Live-Mappe (Spalte `CH`).
+- **Bestand in der Mappe (Spalte O, Zeilen 2–903):** J 418 · N 313 · R 26 · **leer 145** · X 0. Es gibt also **kein X** – die Spalte ist noch nicht vollständig.
+- **Die 17 leeren Zellen mit Datenbezug** (CSV-Zeilen 590–606, Haushaltscodes F0165–F0181) sind **Platzhalter**: kein Name, keine Lizenz, keine Kategorie, kein Geburtsdatum. Sie sind Rechnungsträger und ergeben „kein Spielertarif, kein Zusatz“. Die restlichen ~128 Leerzellen liegen hinter dem Datenbereich.
+- **Wirkung des X-Fixes auf die Ausgabe: keine** – heute steht kein X in der Spalte. Die Änderung ist reine Absicherung für den Fall, dass X nachgetragen wird. Soll ich die 17 Platzhalterzeilen mit **X** füllen (rein kosmetisch, ohne Betragswirkung)? Die ~128 Zellen hinter dem Datenbereich würde ich **nicht** anfassen – das sind Vorlagenzeilen.
+- **Verifikation:** `pruefe_abgleich.py` → 0 Abweichungen, `pruefe_formeln.py` → 0 Fehler, 0 Zellen mit `=` im `<f>`, ZIP intakt. Sicherung `…regeln-2026-09-27_2230.xlsm`.
+
+
+## Cotisation – XSEUL nach Spielstatus statt nach Lizenz – 2026-09-27
+
+- **Vorgabe:** XSEUL gilt **300 bei Status J**, **(0+50) bei R und N**, **0 bei sonst**. Damit ist die Lizenz irrelevant – der Code entscheidet der Spielstatus (Spalte `O` / CSV `Spielen J/R/N`).
+- **Damit ist auch die offene Frage vom 26.09. beantwortet:** die **23 XSEUL-Reservisten** (Status R) bleiben bei `(0+50)` statt 300. Die 5.750 € sind damit entschieden – es fließt **kein** 300 für Reservisten.
+- **Wirkung gegenüber der vorherigen Lizenz-Regel: 4 Zeilen, −1.000 €** – die XSEUL-Leute mit Status N, die zusätzlich einen Spielerpass hatten und deshalb noch 300 bekamen: GOERENS Yves (Z211), PETOUO Berthold (Z418), PETTINGER Kim (Z420), WELSCH Mike (Z568).
+- **Endverteilung XSEUL (74 Zeilen):** 35 × 300 (Status J) · 37 × (0+50) (Status N/R) · 1 × 384 (ANSAY) · 1 × „XSEUL“ (Nicht-Träger, zeigt nur den Code). XSEUL-Summe **12.734 €**.
+- **ADR-Ausnahme bleibt bestehen:** die ANSAY-Brüder teilen eine gelistete Adresse und sind beide Status J → **1× 384** statt 2× 300. Das ist der Familientarif für einen echten Haushalt, kein XSEUL-Sonderfall.
+- **Umsetzung:** `pruef_cotisation.py`, `pruefe_abgleich.py` und Spalte `CD` in `baut_arbeitsmappe.py`; in der Live-Mappe Spalte **CJ** (nicht CD – CD ist „Manuell“).
+- **Formel CJ (Live-Mappe):** `=IF($Q{r}<>"XSEUL","",IF(AND(LEFT($BV{r},4)="ADR:",$BY{r}>=2),"",IF($O{r}="J",TEXT(Cotisation!$B$5,"0"),IF(OR($O{r}="N",$O{r}="R"),"(0+"&TEXT(Cotisation!$B$4,"0")&")","0"))))`
+- **Verifikation:** `pruefe_abgleich.py` → 0 Abweichungen (772 Zeilen), `pruefe_formeln.py` → 0 Fehler (26.014 Zellen). Skript `cotisation_regeln_setzen.py` mit Schranken für Zellreihenfolge, Duplikate und geteilte Formeln; **0 Zellen mit `=` im `<f>`** (das war ein eigener Fehler, der den Reparatur-Dialog ausgelöst hätte).
+
+
+## Cotisation – XSEUL 300 gilt nur für Spieler (Offizielle → 0+50) – 2026-09-27
+
+- **Befund aus Stripe:** `BLANC Max` (Z66, Trainer) hatte **300** statt `(0+50)`. Er hat Status `N` und **nur eine Offiziellenlizenz** (6846), keinen Spielerpass.
+- **Regel-Lücke:** `XSEUL;300` wurde **pauschal pro Zeile** vergeben, unabhängig von der Rolle. In einer normalen Familie bekommt ein Offizieller sauber `(0+50)` – unter XSEUL dagegen 300. XSEUL ist damit faktisch ein Spieler-Pauschbetrag, wurde aber für alle vergeben.
+- **Fix:** Der XSEUL-Zweig prüft jetzt die Rolle.
+  - Spielerlizenz (`liz_sp`) → 300 wie bisher
+  - **nur Offiziellenlizenz** → `(0+50)` (Zuschlag-Regel, wie in normalen Familien)
+  - keine Lizenz → 300 wie bisher (siehe unten, warum)
+  - Betroffen in `pruef_cotisation.py`, `baut_arbeitsmappe.py` Spalte `CD` und `pruefe_abgleich.py`.
+- **Wirkung exakt 7 Zeilen, −1.750 €** (300 → 50): BLANC Max (Z66), CASTELLANO Virginio (Z93), FRANTZEN Garry (Z195), KREMER Armand (Z296), PIETRASIK Katarzyna (Z423), STREITZ Eliane (Z523), WOLMERING Kevin (Z573). XSEUL-Summe 15.084 → 13.334 €.
+- **Wichtig – die 3 ohne jede Lizenz bleiben bei 300:** `DIDELOT-SCHOEN Arsène` (Z133, **Träger** der XSEUL-Gruppe), `KREMER Billy` (Z295), `MARZADORI Sascha` (Z357). Lässt man sie durchfallen, wird der Träger zum Regeltarif gezogen und bekäme **384** – ein Artefakt der Gruppierung, weil alle 74 XSEUL-Personen in einer Gruppe stecken. Deshalb bewusst konservativ.
+- **Excel-Formel `CD` (XSEULwert), Baustein neu:**
+  `=IF($P{r}<>"XSEUL","",IF(AND(LEFT($BP{r},4)="ADR:",$BS{r}>=2),"",IF(AND($AH{r}<>"",$AH{r}<>"///"),TEXT(Cotisation!$B$5,"0"),IF(COUNTIFS($AI{r}:$AK{r},"<>",$AI{r}:$AK{r},"<>///")>0,"(0+"&TEXT(Cotisation!$B$4,"0")&")",TEXT(Cotisation!$B$5,"0")))))`
+  Offiziellen-Lizenzspalten laut `SP_LIZ_OFF = ("AI","AJ","AK")`; `///` zählt wie in `BV`/`ist_lizenz` als leer.
+- **Verifikation:** `pruefe_abgleich.py` → **0 Abweichungen** (772 Zeilen), `pruefe_formeln.py` → **0 Fehler** (26.014 Zellen, 43 Muster).
+- **Weiterhin offen:** die **23 XSEUL-Reservisten** (Spielerlizenz + Status R) bekommen `(0+50)` statt 300 = **5.750 €** — Entscheidung vom 26.09. war bewusst, ist aber als offen notiert.
+- **Falle bei eigenen Prüfskripten:** Spaltennamen im CSV (`GC 2026-09-24 …csv`) weichen ab (`Spielen J/R/N` statt `Spieler J/R/N`) — die Auflösung gehört aus `pruef_cotisation` (`SPALTEN_ALT`), eigenes Nachschlagen liefert leere Werte. Außerdem **keine Namenskollision**: eine Hilfsfunktion `z()` überschrieb einmal die Zusatz-Regel und machte sie truthy → Ausgaben um 50 € zu hoch.
+
+
+## Cotisation – Personenwert vs. Familientarif 384 (BISENIUS Ben Z64) – 2026-09-27
+
+- **Befund aus Stripe:** Familie BISENIUS (Haushalt **F0059**, 5 Mitglieder, 4 aktiv lizenziert) zahlte **50** statt **384**. Ursache: Rechnungsträger BEN (Z64) hat Status `R` (Reserve) → die Regel *Personenwert `(0+50)`* griff und lief der Familientarif-Prüfung **vor**, obwohl `tarif` intern korrekt 384 war.
+- **Regel-Lücke:** Der Code kannte das Prinzip „384 ist Maximum“ nur für den **Zuschlag** (`ZusatzBeiFamilie=NEIN`, Formel `CA`/`BY`). Für den **Personenwert** fehlte es – ein Reservist im Haushalt drückte die ganze Familie auf 50.
+- **Fix (3 Stellen, damit Python und Excel identisch rechnen):**
+  - `pruef_cotisation.py`: neue Schranke `familienmax = (tarif == tarife["familie"] and fam not in (XSEUL_CODE, GAJGL_CODE))`; die beiden Reservisten-/GAJGL-Zweige greifen nur noch bei `not familienmax`. **Namentliche Ausnahmen (BOURG) bleiben unberührt.**
+  - `baut_arbeitsmappe.py`, Spalte `CB` (Personenwert): `AND($BY<>Cotisation!$B$3, OR($P="XSEUL",$P="GAJGL"), …)` als zusätzliche Bedingung.
+  - `pruefe_abgleich.py`: dieselbe Schranke in der Excel-Nachbildung.
+- **Wirkung exakt 1 Zeile:** Z64 BISENIUS Ben `(0+50)` → **384**. Summe +334 €.
+- **Bewusst NICHT geändert (Gegenprobe):**
+  - `BINGEN Fränk` Z57 (F0015, nur **1** aktiv lizenziert) bleibt `(0+50)` – Familientarif greift nicht.
+  - Die **23 XSEUL-Reservisten** bleiben `(0+50)`. XSEUL ist kein Familiencode, sondern ein Fixbetrag 300 pro Zeile; die offene Frage aus dem 26.09. („fallen die 23 finanziell von 300 auf 50?“) ist damit **weiterhin offen** = 23 × 250 € = 5.750 €. Eine zu grobe Fassung (`personenwert and tarif != familie`) hätte genau diese 23 auf 300 zurückfallen lassen – deshalb die zusätzliche XSEUL/GAJGL-Ausnahme.
+  - **Achtung Datenmodell:** alle 72 XSEUL-Personen landen in **einer** Gruppe (`famkey == "XSEUL"`), weil Zeile `pruef_cotisation.py` den Code als Gruppenschlüssel nutzt. Dadurch ist `sp_gesamt = 35` und `tarif` intern 384, obwohl der Wert nie ausgegeben wird. Bei zukünftigen Regeln nicht auf dieses `tarif` verlassen.
+- **Verifikation:** `pruef_cotisation.py` läuft, `pruefe_abgleich.py` → **0 Abweichungen** Python ↔ Excel (772 Zeilen), `pruefe_formeln.py` → **0 Fehler** in 26.014 Formelzellen.
+- **Offen:** Die Live-Mappe `GC 2026-09-26 …mit-Cotisation.xlsm` hat die alte Regel noch in **CH** (Personenwert, 902 Formeln, **0 geteilte Formeln** → chirurgisch ersetzbar). Stripe rechnet über `pruef_cotisation.py` und ist dadurch bereits korrekt.
+
+
+## Cotisation – Excel-Reparatur behoben & Finale Arbeitsmappe erstellt – 2026-09-26
+
+- **Ursache der Reparaturmeldung exakt isoliert:**
+  - Standardfunktion `DATEVALUE(date_text)` erwartet in Microsoft Excel genau 1 Argument.
+  - In den Formelvorlagen für `BQ` (Schluessel) und `CC` (Alterspruefung) war ein zweites Datumsformat-Argument angegeben: `DATEVALUE($J{r},"DD.MM.YYYY")` bzw. `DATEVALUE(Cotisation!$B$11,"DD.MM.YYYY")`.
+  - Excel wertete dies beim Öffnen als unzulässige Syntax einer nativen Funktion und triggerte den Reparatur-Dialog in allen betroffenen Dateien (H1 und H2).
+- **Verifikation via Testserie I:**
+  - Bereinigte Testdateien in `_testbausteine_i/` mit 1-Argument-`DATEVALUE` öffneten in Excel ausnahmslos ohne Fehlermeldung (`I4_nur-BQ-korrigiert`, `I5_nur-CC-korrigiert`, `I1_Gruppe-A`, `I2_Gruppe-B`, `I3_alle_korrigiert`).
+- **Finale Arbeitsmappe aktualisiert:**
+  - Fix fest in `docs/cotisation/baut_arbeitsmappe.py` übernommen.
+  - `Vereins-OS/docs/GC 2026-09-24 MEMBERSLESCHT 2026-2027_mit-Cotisation.xlsm` neu gebaut (14 Helfer + Ausgabeformel M + Config-Blatt `Cotisation`).
+  - Prüfskripte `pruefe_formeln.py` (19.839 Formelzellen syntaktisch sauber) und `pruefe_abgleich.py` (0 Abweichungen Python <-> Excel) erfolgreich bestanden.
+
+
 ## Cotisation – neue Regeln (R/GAJGL/Ausnahmen) + Abgleich Vereins-OS – 2026-09-26
 
 - **Neue Personenregeln** in Spalte L, umgesetzt in `pruef_cotisation.py` und `baut_arbeitsmappe.py`:
@@ -380,3 +533,812 @@ Das Bild `assets/portrait-poster-neu.png` war **kein leeres Hintergrundbild**, s
 - Validiert mit `node --check` (alle 6 Inline-Skripte) und `git diff --check`; Commits `b970092` und `d0614a8` gepusht.
 
 - Bestehende Ein-Spiel-Zentrierung und Spiellogik bleiben erhalten.
+
+## 2026-09-26: Cotisation – Spaltenumbau, Älteste-Regel, Reparatur-Fix
+
+**Auslöser:** Der Benutzer hat die Mitgliederliste in Excel umgebaut –
+`Spielen J/R/N` → `Spieler J/R/N` und nach **Spalte L** verschoben,
+`Cotisatioun` jetzt in **M**, neue Eingabespalte **N `BEZAHLT J/N`**
+(771 Zeilen vorbelegt mit `N`) für den Kassierer. Seine Arbeitsfassung ist
+`TEST1_nur-calcchain.xlsm`; dort öffnet die Datei **ohne** Reparatur-Meldung,
+also ist das Entfernen von `xl/calcChain.xml` harmlos.
+
+**Neue Spaltenordnung (Blatt `Membres 2026_2027`):**
+`J` Geburt · `K` Alterskategorie · `L` Spieler J/R/N · `M` Cotisatioun (Ziel) ·
+`N` BEZAHLT J/N · `P` Code Courrier neu (Haushalt) · `AH` Spielerlizenz ·
+`AI/AJ/AK` Offizielle-/ZS-/SR-Lizenz · letzte Datenspalte `BN` (66).
+Helfer deshalb ab `BP` (68) bis `CE` (83).
+
+**Quinn-Fall (vom Benutzer gemeldet):** Ruben (Jg. 2011, Spieler, Zeile 5)
+hatte keinen Betrag, Nicole (Jg. 1976, Offizielle, Zeile 7) sollte
+`210 (+0+50)` tragen. Ursache: `TraegerRegel` stand auf `Erste` – das trifft
+die Altdatei zwar in 144/144 Fällen, ist aber fachlich falsch.
+**Umgestellt auf `Aelteste`** (`tarife-cotisation.csv` → `TraegerRegel;Aelteste`).
+Jetzt: Ruben → `F0002`, Robert → `F0002`, Nicole → `210 (+0+50)`.
+
+**Familiencode statt Leerzelle:** Zeilen ohne eigenen Betrag zeigen jetzt den
+Haushaltscode `Fxxxx` (335 Zeilen), damit die Zugehörigkeit auf einen Blick
+sichtbar ist. 184 Zeilen bleiben leer – das sind Phantomzeilen ohne Namen,
+Geburtsdatum und Lizenz.
+
+**Reparatur-Meldung: Ursache gefunden und behoben.** In der ersten Fassung
+wurden die Zellen jeder Zeile per Regex neu ausgelesen und zusammengesetzt;
+dabei gingen `t="array" ref="…"` und `cm="1"` verloren. Jetzt wird nur die
+Zelle **M** an ihrer Stelle per Textersatz ersetzt (Stil `s=` bleibt), die
+Helfer werden hinten angehängt und sortiert, **keine** andere Zelle wird
+angefasst. Neu: `pruefe_datei.py` prüft Wohlgeformtheit aller XML-Teile,
+aufsteigende Spaltenfolge (773/773), unveränderte Übernahme aller
+
+## 2026-09-26 (Nachtrag): Reparatur-Meldung gefunden, Abgleich Python ↔ Excel
+
+**Ursache der „Problem bei einigen Inhalten"-Meldung:** in der Kopfzeile
+wurden die Zeilen-Attribute vertauscht. Der Quelltext jeder Zeile beginnt
+`<row r="1" spans="1:66" ht="54" customHeight="1" x14ac:dyDescent="0.2">`;
+im Bausatz stand `m1.group(2)` (der Zellinhalt) an der Stelle der Attribute.
+Ergebnis: `<row r="1"> spans="1:66" ht="54" … <c r="A1"…` – die Attribute
+lagen als **Text in der Zeile**. Das ist schema-widrig, aber XML-noch
+wohlgeformt, deshalb hat es der Wohlgeformtheits-Test nicht gesehen.
+`pruefe_datei.py` prüft jetzt zusätzlich Punkt 3b „Fremde Inhalte in `<row>`",
+und `regression_row1.py` erzeugt die kaputte Fassung absichtlich – der Test
+schlägt darauf an, die neue Fassung ist sauber.
+
+**Nichts entfernt:** `pruefe_spalten.py` belegt es – 66 Spalten in beiden
+Dateien, 0 fehlend, 0 Zellen der Quelle ohne Wert mehr in der Datei.
+
+**Abgleich Python ↔ Excel** (`pruefe_abgleich.py`, 772 Zeilen, **0 Abweichungen**)
+hat drei echte Fehler aufgedeckt, die vorher in der Datei standen:
+1. `parse_datum` gab für Excel-Serienzahlen `None` zurück. Spalte J enthält fast
+   nur Zahlen (ANSAY Luka = 37023) → alle numerischen Daten bekamen 73415 und
+   „Älteste" wurde zu „letzte Zeile des Blocks". Jetzt: `12.05.2001` und `37023`
+
+## 2026-09-26 (Nachtrag 2): Excel repariert weiterhin – Bisektionsserie
+
+Der Attribut-Fehler in Zeile 1 war **eine** Ursache, aber nicht die einzige:
+Excel meldet weiterhin „Wir haben ein Problem bei einigen Inhalten erkannt".
+
+**Alle Offline-Prüfungen bestehen:**
+- `pruefe_alle_blaetter.py`: alle 13 Worksheet-XML schema-konform – aufsteigende
+  Spalten, keine Dubletten, `r`-Attribute passend, `<c>`-Kinder in der
+  Reihenfolge `f` → `v`/`is`, `<worksheet>`-Elemente in Schema-Reihenfolge
+- `pruefe_formeln.py`: **16 850 Formelzellen, 32 Muster, 0 Fehler** – Klammern
+  balanciert, bekannte Funktionen, Bereichsbezüge in richtiger Richtung.
+  (Der erste Lauf meldete 9 Fehler – das war mein eigener Extraktor, der an
+  `<f t="shared" si="…"/>` zerbrach; jetzt wird mit XML geparst.)
+- `diff_paket.py`: `[Content_Types].xml`, `workbook.xml`, `workbook.xml.rels`
+  und `app.xml` unterscheiden sich nur in den vier erwarteten Zeilen
+- Paket: 37 Einträge in beiden Dateien, `[Content_Types].xml` zuerst, keine
+  Verzeichnis-Einträge, `macroEnabled`-ContentType, `vbaProject.bin` vorhanden,
+  keine Namenskollision mit `Cotisation`, `localSheetId` 0/1/2/8 unverändert
+
+Damit ist der Fehler offline nicht auffindbar. `testbausteine.py` erzeugt
+deshalb eine **Bisektionsserie** in `Vereins-OS/docs/_testbausteine/`, die von
+`TEST1_nur-calcchain.xlsm` (nachweislich sauber) ausgehend jeweils **genau eine**
+Änderung einführt:
+
+| Datei | Änderung | kaputt ⇒ Ursache |
+|---|---|---|
+| B0 | nur calcChain entfernt | Kontrolle |
+| B1 | + Blatt 1 (M, Helfer, Kopf) | Werkzeugblatte |
+| B2 | + neues Blatt Cotisation | workbook/rels/Content_Types |
+| B3 | + nur `app.xml` | app.xml |
+| B4 | + nur `fullCalcOnLoad` | calcPr |
+| B5 | alles zusammen (muss die Meldung zeigen) | erst die Kombination |
+
+   liefern dieselbe Serienzahl.
+2. `Schluessel − ZEILE()/1000000` ließ bei gleichem Geburtsdatum die *spätere*
+   Zeile gewinnen → `+ ZEILE()/1000000`.
+3. Doppeltes `[1:]` auf Config-CSV verlor `BOURG Jeannot` und den einzigen
+   Haushalt `1, Medernacherstrooss` → BOURG zeigte `F0006` statt
+   `Don ? +(0 +50)`, ANSAY je 300 statt einmal 384. Neu: `pruef_cotisation.
+   liese_config()` erkennt vorhandene Kopfzeilen selbst.
+4. Der Zweig „Tarif 0" ging beim Umbau verloren: Offizielle zeigten
+   `0 (+0+50)` statt `(0+50)`, leere Zeilen `0` statt nichts.
+5. `XSEUL` wirkt **pro Zeile** → der Zweig steht vor der Träger-Prüfung.
+
+**Stichproben jetzt:** BOURG Jeannot `Don ? +(0 +50)` · ANSAY **Luka 384**,
+Mathis `XSEUL` · QUINN Nicole `210 (+0+50)`, Ruben/Robert `F0002` ·
+FERNANDEZ `(0+50)` · Phantomzeilen leer.
+**Korrigierte Summe:** **57.728 €** (251 Betragszeilen). Früher genannte
+Werte (86.074 / 86.319 / 86.324 €) waren **falsch** – da summierte das
+Prüfskript auch die Ziffern der Haushaltscodes `F0002` mit.
+Verteilung: 104× 210 · 53× 300 · 42× 384 · 44× (0+50) · 6× 210(+0+50) · 2× Don.
+
+
+## 2026-09-26 (Nachtrag 3): Übersicht als Dauerwerkzeug
+
+**Meldung:** „BRÜCK und BÜCHLER haben keine Cotisation, obwohl Spielerlizenz
+vorhanden." Prüfung per `erkl_zeile.py`: die Werte **sind** vorhanden –
+BÜCHLER Z155 Maxime = 384, BRÜCK Z225 Felix = 384. Die anderen Familienmitglieder
+zeigen den Haushaltscode, weil nur EINE Zeile pro Haushalt die Rechnung trägt
+(sonst wären es 2× 384). Der Fehler lag also nicht in der Berechnung.
+
+**Neu:** `docs/cotisation/uebersicht.py` – schreibt
+`docs/cotisation/Cotisation-UEBERSICHT.csv` (771 Zeilen × 13 Spalten, inkl.
+„Rechnung traegt" und „Begruendung") und meldet auf der Konsole unter anderem:
+
+* **Echte Lücken: KEINE** – jeder Haushalt, in dem jemand mit Lizenz spielt,
+  trägt in *irgendeiner* Zeile einen Betrag. Das ist die Prüfung, die genau
+  diesen Meldungsfall automatisch findet.
+* 69 Spieler mit Lizenz zeigen den Haushaltscode statt eines Betrags
+  (Erklärung steht in der Spalte „Rechnung traegt").
+* 183 leere Zeilen = Phantomzeilen ohne Namen/Geburtsdatum/Lizenz,
+  aber z. T. mit Spalte `L = J` – **Datenpflege-Kandidaten**.
+* 23 von 181 Haushalten ohne Spieler mit Lizenz.
+
+`erkl_zeile.py <ZeilenNr>` zeigt den kompletten Rechenweg einer Familie
+(Personen, Spieler mit Lizenz, Tarif, Träger).
+
+**Wichtig für den Wahrheitswert:** Die Werte stehen in der gebauten Datei als
+`<v>` drin – wenn sie in Excel nach der Reparatur leer sind, **frisst die
+Reparatur sie**. Deshalb bleibt die Bisektionsserie B0–B5 der entscheidende
+nächste Schritt.
+
+Originalzellen (0 fehlend, 0 verändert) sowie `app.xml` und `calcChain`.
+
+**Wert-Rückfallebene:** Der Bausatz liest das Blatt der Quelldatei selbst
+(`liese_blatt`) – der CSV-Export hat wegen der Umsortierung eine andere
+Zeilenreihenfolge – und schreibt das Ergebnis des Python-Referenzmodells als
+`<v>` in jede M-Zelle. Die Mappe zeigt also schon vor der Neuberechnung durch
+Excel die richtigen Werte.
+
+## 2026-09-26 (Nachtrag 4): Bisektionsergebnis B0–B5 und Unterspalte B1
+
+**Ergebnis der ersten Serie (vom Benutzer getestet):** nur **B1** und **B5**
+zeigen die Reparatur-Meldung. B0 (nur calcChain), B2 (nur neues Blatt
+`Cotisation`), B3 (nur `app.xml`) und B4 (nur `fullCalcOnLoad`) sind **sauber**.
+
+⇒ Die Ursache steckt ausschließlich in den Änderungen an **Blatt 1**
+(`Membres 2026_2027`). Die Paket-Schritte (workbook.xml, rels,
+Content_Types, app.xml) und `fullCalcOnLoad` sind nachweislich unschuldig.
+
+**Hypothese `metadata.xml` verworfen:** `cm=` kommt in Blatt 1 (771×),
+Blatt 2 (772×) und Blatt 3 (299×) vor, zusammen 1.842. Nach dem Ersetzen der
+M-Zellen bleiben 1.071 auf Blatt 2/3 – `metadata.xml` ist also weiterhin
+referenziert, kein verwaister Teil.
+
+**Zwei Korrekturen im Bausatz:**
+
+1. **`t="str"` nur noch für echte Texte.** Bisher bekam *jede* M-Zelle mit
+   Inhalt `t="str"` – auch bei numerischem Wert (`<c r="M155" t="str">…<v>384</v>`).
+   Das ist eine Typabweichung und ein plausibler Reparaturgrund. Zahlen kommen
+   jetzt ohne `t`-Attribut, Texte (Familiencodes, `Don ? +(0 +50)`) weiter mit
+   `t="str"`.
+2. **`spans` wird pro Zeile berechnet** statt pauschal 1:83 – eine Zeile ohne
+   Helferzellen hätte sonst einen falschen Hinweis bekommen.
+
+**Eigener Fehler, vom Validator gefangen:** beim Einbau von `spans_anpassen`
+fehlte das schließende `</row>`; `pruefe_datei.py` und
+`pruefe_alle_blaetter.py` meldeten sofort „mismatched tag" für alle Varianten.
+Nach der Korrektur sind alle vier Unterspalten strukturell sauber.
+
+**Neue Testserie** `testbausteine_b1.py` → `Vereins-OS/docs/_testbausteine_b1/`,
+schaltet die drei Bestandteile der Blatt-1-Änderung einzeln zu
+(`baue_membres_sheet(xml, werte, mit_m, mit_helper, mit_kopf)`):
+
+| Datei | M-Zellen | Helfer BP:CE | Kopfzeile BP1:CE1 | Zellen Zeile 1/2 |
+|---|---|---|---|---|
+| B1a | neu | nein | nein | 66 / 66 |
+| B1b | alt | ja | nein | 66 / 82 |
+| B1c | alt | nein | ja | 82 / 66 |
+| B1d | neu | ja | ja | 82 / 82 |
+
+Wichtig: B1d entspricht dem alten B1, enthält aber die `t="str"`-Korrektur.
+Ist B1d **jetzt sauber**, war die Typabweichung die Ursache.
+
+
+**Ergebnis:** 253 Beträge, 335 Familiencodes, 184 leer, **Summe 86.319 €**.
+
+
+## 2026-09-26 (Nachtrag 5): B1b ist die Stelle, AutoFilter entdeckt
+
+**Neues Testergebnis des Benutzers:** B1a (nur M-Zellen ersetzen) **sauber**,
+B1c (nur Kopfzeile) **sauber**, **B1b und B1d zeigen die Meldung**.
+⇒ Die Ursache sitzt eindeutig in den **angehängten Helferzellen BP:CE** in den
+Datenzeilen 2–773. Der Ersatz der M-Formeln und die Kopfzeile sind unschuldig.
+
+**Neuer Befund im Blatt 1 — AutoFilter mit Sortierzustand:**
+
+```xml
+<autoFilter ref="A1:BN772" xr:uid="{00000000-0009-0000-0000-000000000000}">
+  <sortState ref="A2:BN772" xmlns:xlrd2="…/2017/richdata2">
+    <sortCondition ref="P1:P772"/>
+  </sortState>
+</autoFilter>
+```
+
+Der Filter endet bei **BN/Zeile 772**, die Dimension der Quelle bei **Zeile 773**
+– die Quelldatei öffnet trotzdem sauber, die Ungereimtheit ist also nicht allein
+fatal. Sie wird durch die Erweiterung bis **CE** aber verschärft.
+Auch die `xr:uid`-Werte sind auffällig (mehrfach identisch) – die Datei ist
+offenbar durch ein Fremdwerkzeug gelaufen (Google-Sheets-Export o. ä.).
+
+**Neu in `pruefe_alle_blaetter.py`:** Prüfung 4 „Bereichs-Ungereimtheiten" –
+vergleicht `dimension`, `autoFilter`, `sortState` und `mergeCells`. Sie meldet
+in der gebauten Datei „autoFilter endet in Zeile 772, dimension in Zeile 773";
+die Quelldatei hat denselben Befund, weitere Blätter (sheet2) ebenfalls
+(pre-existing, tolerated).
+
+**Eskalationsserie** `testbausteine_b1b.py` → `_testbausteine_b1b/`, acht Dateien,
+die das Anhängen schrittweise aufbauen und die Filterfrage klären:
+
+| Datei | Inhalt |
+|---|---|
+| E1 | 1 Zelle BP als Konstante |
+| E2 | 1 Zelle BP als Formel |
+| E3 | nur eine leere Zelle `<c r="BXn"/>` |
+| E4 | alle Helfer als Konstanten |
+| E5 | alle Helfer als Formeln (= B1b) |
+| E6 | E5 + AutoFilter/sortState auf CE erweitert |
+| E7 | E5 ohne AutoFilter |
+| E8 | E5 + Filter auf CE **und** Zeile 772 (vollständig konsistent) |
+
+Alle acht sind strukturell sauber (Validator). Interpretation:
+E1/E2 kaputt → Anhängen bzw. Formel · E3 kaputt → leere Zelle ·
+E4 sauber/E5 kaputt → Formelinhalte · E6/E7/E8 sauber → AutoFilter-Bereich.
+
+**Offen:** In Excel öffnen und bestätigen, dass keine Reparatur-Meldung mehr
+kommt; danach entscheiden, ob `TEST1_nur-calcchain.xlsm` oder die Datei vom
+24.09. die kanonische Basis wird und die Vereins-OS-Skripte darauf zeigt.
+
+## Cotisation – Blatt Stripe_Export + Stripe-Brücke – 2026-09-27
+
+- **Neues Blatt `Stripe_Export`** in `…_mit-Cotisation.xlsm` (sheet14, A1:M773):
+  - Eine Zeile pro Membres-Zeile, zeigt nur `TRAEGER`-Haushalte mit Betrag, sonst leer.
+  - `A` FamID · `B` Rechnung_trägt · `C` Betrag_EUR (Zahl, `VALUE(L)`) ·
+    `D` Betrag_Text (Rohtext, zeigt auch `(0+50)`/`Don ? …`) · `E` Email (AX) ·
+    `F/G` Nom/Prenom · `H` Adresse · `I` Mitglieder (`COUNTIF`) ·
+    `J` Bezahlt_JN (N) · `K/L/M` manuell: Stripe_Status, Stripe_Link, Bemerkung.
+  - Nur einfache Zeilenformeln (keine Matrix) → läuft in Excel **und** Google Sheets.
+  - Validierung: 26.788 Formelzellen / 38 Muster / 0 Fehler; Paket-Check unverändert
+    (nur vorbestehende Filter-Befunde 772 vs. 773).
+- **Stripe-Brücke** `scripts/google-apps-script-stripe-bridge.js` (Google-Sheet-Spiegel):
+  - `syncStripe()` erzeugt pro offener Zeile (Betrag>0, Bezahlt≠J, Status leer) einen
+    Stripe **Payment Link** (`STRIPE_MODE=payment_link`) oder eine **Invoice**
+    (`STRIPE_MODE=invoice`, Versand via Stripe), schreibt Status+Link zurück.
+  - Setup: `STRIPE_SECRET_KEY` als Script-Eigenschaft, Zeit-Trigger täglich 06:00,
+    Menü „M75 Stripe → Jetzt synchronisieren".
+- **Offen:** Spiegel Excel→Google Sheet einrichten (Import/Sync); `Bezahlt J/N`
+  (N) ↔ Export-Spalte J abgleichen; Entscheidung Payment Link vs. Invoice pro Saison.
+- **Spalte N mit „N" vorbefüllt (27.09.):** `N2:N773` enthalten jetzt überall ein
+  `N` (zentriert, Inline-Text). Der Tresorier ändert bezahlte Zeilen manuell auf
+  `J`. Hellblau-Markierung und Stripe-Export (`Bezahlt_JN`) laufen unverändert
+  weiter. Validiert: 26.788 Zellen / 0 Fehler.
+
+- **Hellblau-Markierung Spalte N (27.09.):** Bedingte Formatierung `N2:N773` —
+  hellblau (`FFBDD7EE`), sobald `L` derselben Zeile einen Betrag/Derivat enthält
+  (`384`, `210`, `300`, `(0+50)`, `Don ? …`). `Fxxxx`-Codes, `XSEUL`/`GAJGL` und
+  leere Zellen bleiben weiss. Formel: `AND($L2<>"",LEFT($L2,1)<>"F",…)`.
+  Validiert: 26.788 Zellen / 0 Fehler, keine neuen Paket-Befunde.
+
+- **GAJGL ausgenommen (27.09.):** `Stripe_Export`-Spalte A zeigt keine Zeilen mit
+  `Q="GAJGL"` mehr (reine Info-Zeilen der Mitgliederliste, 15 Zeilen mit `(0+50)`).
+  Formel: `AND(BW=TRAEGER, L<>"", Q<>"GAJGL")`. Validiert: 26.788 Zellen / 0 Fehler.
+
+
+## Cotisation auf Dauerbetrieb – Kapazität, Rename, Stripe-Sync (2026-09-27)
+
+Die Mappe war auf eine Einmal-Berechnung ausgelegt (alles fest auf Zeile 773).
+Drei Nacharbeiten für den laufenden Betrieb:
+
+- **Kapazität `KAPAZITAET = 900` (127 Reservezeilen über den 772 Datenzeilen):**
+  - Neue Konstante in `build_perfect_workbook.py`; `LETZTE` bleibt die belegte
+    Datenzeile der Quelle, `KAPAZITAET` ist das Formelende.
+  - `fuege_reserve_zeilen_hinzu()` erzeugt Zeilen 774–900 mit L-Formel, `N`="N"
+    und allen Helfern `BP:CE` (ohne `<v>`-Cache, `fullCalcOnLoad` rechnet).
+  - Alle Bereichsverweise der Helfer (`{l}`) zeigen jetzt auf `KAPAZITAET`, damit
+    Neuzugänge in `COUNTIFS`/`SUMPRODUCT` (Haushaltsgrösse) mitzählen.
+  - `dimension`, `autoFilter`, `sortState`, `_FilterDatabase` und beide CF-Blöcke
+    auf 900 gestreckt. Vorher stand `autoFilter`/`sortState` auf **772** obwohl
+    Daten bis 773 reichen — dieser Alt-Befund ist damit weg.
+  - `Stripe_Export` führt 1:1 bis Zeile 900 mit (Spalte I `COUNTIF` bis 900).
+- **Blattname dynamisch (`blattname_lesen()`):** Der Build liest den Namen des
+  Datenblatts (sheet1.xml) aus `xl/workbook.xml` + Rels. Wird das Blatt in Excel
+  umbenannt, bauen alle Formeln auf den neuen Namen. Weicht er von
+  `BLATT_ERWARTET` ab, gibt das Skript eine Warnung aus. Leerzeichen werden
+  automatisch quotiert. `Cotisation` und `Stripe_Export` bleiben fest benannt.
+- **Farblogik in beiden Blättern, mit Bezahlt-Quittung:**
+  - Datenblatt `N2:N900`: offen = **hellblau** (dxfId 2), `N`="J" = **grün**
+    (dxfId 0, der vorhandene Grün-Eintrag), `stopIfTrue` auf der grünen Regel.
+  - `Stripe_Export` `J2:J900`: gleiche Logik, aber nur wenn `A` (FamID) gefüllt
+    ist — leere Zeilen bleiben weiss.
+  - Formel offen: `AND($L2<>"",LEFT($L2,1)<>"F",$L2<>"XSEUL",$L2<>"GAJGL",$N2<>"J")`.
+- **Bug behoben: Phantom-FamID in leeren Zeilen.** `BP` lieferte bei leerem
+  Haushaltscode `"@"&ROW()`; in den 167 leeren Zeilen 607–773 hätte Excel damit
+  `BW`="TRAEGER" und Text `@774` in `L` erzeugt und Stripe-Rechnungen ausgelöst.
+  Jetzt `IF($Q="","",…)` → leere Zeilen bleiben vollständig stumm. Kein
+  bestehender Datenwert ändert sich (kein `Q`-Leerwert in 2–606).
+- **Doku:** `docs/cotisation/README.md`, neuer Abschnitt „Blatt umbenannt /
+  neue Mitglieder“ mit den Betriebsregeln. Hinweise zu Neuzugängen und
+  Umbenennungen im Apps-Script ergänzt (liest `getLastRow`, keine festen Zeilen).
+- **Validierung:** 29.963 Formelzellen / 38 Muster / **0 Fehler**; Paket-Check
+  12 Befunde (3 Typen), alle in **Altblättern** (`sheet2` Cotisations-Filter,
+  `sheet10` ohne `_rels`) — **keine** in den bearbeiteten Blättern; openpyxl
+  liest 14 Blätter, CF in beiden Blättern korrekt erkannt.
+- **Datei umbenannt (27.09.):** Der Tresorier hat die fertige Mappe in
+  `GC 2026-09-26 MEMBERSLESCHT 2026-2027_mit-Cotisation.xlsm` umbenannt
+  (reiner Rename, keine Excel-Bearbeitung — Grösse/Zeitstempel identisch zum
+  Build). Konsequenz: Der Zielpfad war in **16 Skripten** hart kodiert, ein
+  späterer Build hätte eine zweite Datei mit dem alten Namen erzeugt.
+  - Neu `docs/cotisation/mappe.py`: einzige Quelle für Pfade.
+    `quelle()` = Original (nie anfassen), `ziel()` = Standardname, sonst
+    **neueste** `*_mit-Cotisation*.xlsm` (umbenannt erkannt), sonst Abbruch.
+    Excel-Sperrdateien `~$…` werden ausgeschlossen.
+  - `build_perfect_workbook.py`, `pruefe_formeln.py`, `pruefe_alle_blaetter.py`
+    nutzen jetzt `mappe.ziel()`; Pfad weiterhin per `sys.argv[1]` überschreibbar.
+  - Fallback-Logik getestet: umbenannte Datei erkannt, Standardname hat Vorrang,
+    leerer Ordner bricht mit klarer Meldung ab.
+  - Regel: nur **eine** `*_mit-Cotisation*.xlsm` im Docs-Ordner halten, sonst
+    ist „die neueste“ mehrdeutig (im README dokumentiert).
+
+## Stripe-Export: 71 XSEUL-Rechnungen fehlten (2026-09-27)
+
+- **Symptom:** „Ich sehe bei Stripe nicht viele XSEUL, das kann doch nicht sein?“
+- **Ursache:** Das Tor in `Stripe_Export` Spalte A verlangte `BW="TRAEGER"`.
+  `XSEUL` ist aber **kein Haushaltscode**, sondern ein Status für
+  Einzelpersonen: alle 74 XSEUL-Zeilen bekommen in `BP` denselben Wert
+  `"XSEUL"` (der `ADR:`-Zweig greift nur bei Adressen aus
+  `haushalte-cotisation.csv`, und dort steht genau **eine** Adresse).
+  → eine 74-köpfige Pseudo-Gruppe → **genau ein** Träger → 1 statt 73 Rechnungen.
+- **Messung** (neu `docs/cotisation/pruefe_stripe_export.py`, Soll/Ist gegen
+  `pruef_cotisation.berechne()`): Soll **234** Rechnungen (Zeilen mit echtem
+  Betrag, ohne GAJGL), vorher im Export **163** → **+71** fehlend, davon
+  49 × 300 € („Sondercode XSEUL“) und 23 × `(0+50)` („Spieler mit Status R“).
+- **Fix** in `baue_stripe_sheet()`: zweites Tor über die zeilen-eigenen
+  Beträge, die das Python-Modell ebenfalls kennt:
+  `AND(L<>"", Q<>"GAJGL", OR(BW="TRAEGER", BX<>"", CB<>"", CD<>""))`
+  → `BX` manuell, `CB` Personenwert/Ausnahme, `CD` XSEULwert.
+  Ergebnis: **234 = 234**, keine F-Code-Angehörigen und keine GAJGL im Export.
+- **Farbregel nachgezogen:** `$Q2<>"GAJGL"` in beiden CF-Regeln — die 15
+  GAJGL-Zeilen waren trotz Ausschluss im Stripe-Export blau markiert
+  („einzeln“), was der Realität widersprach.
+- **`syncStripe()`:** offene Posten ohne reinen Zahlenbetrag (`(0+50)` → Spalte C
+  leer) erzeugten bisher **keinen** Link und wurden kommentarlos übersprungen.
+  Sie landen jetzt im Ausführungsprotokoll als
+  `ACHTUNG – N offene Posten … manuell in Stripe anlegen`.
+- **Neue Prüfskripte:** `pruefe_stripe_export.py` (Soll/Ist, Exit-Code 1 bei
+  Verlust), `pruefe_stripe_tor.py` (liest das Tor aus der gebauten Datei).
+## Spalte O: undefinierter Wert "X" loescht still eine Rechnung (2026-09-27)
+
+- **Symptom:** „Wenn ich in Spalte O ein X einsetze, wird L = 0.– und es wird
+  kein Beleg bei Stripe angelegt.“
+- **Befund (empirisch, `docs/cotisation/test_spielt_x.py`, Ist 234 Rechnungen /
+  55 428 €):** Das ist **kein Absturz, sondern die dokumentierte Tariflogik** —
+  aber die Falle ist teuer und bisher unsichtbar.
+  - `O` kennt genau drei Werte: `J` (300/210/384), `R` (0+50), `N` (kein
+    Spielertarif). **`X` kommt in keiner einzigen Formel vor** und wird wie
+    „leer" behandelt: die Person ist weder Spieler noch Reserve.
+  - Folge 1: ist noch ein lizenzierter Spieler im Haushalt, fällt 384 € auf
+    210/300 € und der Betrag wandert auf die **andere** Zeile (44 Haushalte
+    betroffen). Folge 2: ist sie der einzige lizenzierte Spieler, sind Tarif
+    und Zuschlag 0 → `L` wird **leer** (nicht „0.–") und der Haushalt
+    verliert die Rechnung komplett (Beispiel Z12 ANDRADE SOUSA 210 € → keine
+    Rechnung). Im Mittel **−129 €** pro `X`, im Extremfall −384 €.
+  - Nebenwirkung: `N` bedeutet „spielt nicht" und ergibt `(0+50)`, `X` ergibt
+    **gar nichts** — ein Tippfehler kostet also eine ganze Rechnung, ohne
+    jede Rückmeldung in der Mappe.
+- **Fix:** neue CF-Regel `O2:O900` mit neuem dxf (rot `FFFFC7CE`, Text
+  `FF9C0006`): `AND($O2<>"",$O2<>"J",$O2<>"R",$O2<>"N")` → jeder undefinierte
+  Wert ist jetzt sofort rot sichtbar. Am Betrag ändert sich **nichts** (keine
+  Fachlogik-Anderung ohne Freigabe).
+- **Doku:** README-Abschnitt „Spalte O – was die Werte J / R / N / X bedeuten“
+  mit der Empfehlung `R` (0+50) bzw. `BX` (Manuell) statt `X`.
+- **Validierung:** 30.641 Formelzellen / 38 Muster / 0 Fehler; Paket-Check 12
+  Befunde (unverändert Altblätter); Stripe-Logik 234 = 234; CF in openpyxl:
+  `N2:N900` → dxf 0 + 2, `O2:O900` → dxf 3.
+- **Offen (Fachentscheidung):** soll `X` künftig eine eigene Bedeutung
+  bekommen (z. B. wie `N`, oder wie `R`)? Bewusst **nicht** eigenmächtig
+  umgesetzt, weil das die Beträge des Clubs verändert.
+
+## Stripe_Export Spalte C war bei 34 Rechnungen leer (2026-09-27)
+
+- **Symptom:** „Im Stripe_Export steht kein Betrag, was die Person zu zahlen
+  hat – warum?“
+- **Ursache:** Spalte C war `IFERROR(VALUE(L),"")`. `VALUE` kann nur reine
+  Zahlen — und `L` enthält an **34 von 234** Rechnungszeilen **Text**:
+  28 × `(0+50)` und 6 × `210 (+0+50)`. `VALUE` scheiterte, `IFERROR` lieferte
+  `""` → Betrag leer → `syncStripe()` übersprang die Zeile
+  (`!(betrag > 0)`), also **kein Beleg**. Weitere 2 Zeilen (`Don ?`) sind
+  bewusst nicht im Export, der Betrag steht dort fachlich nicht fest.
+- **Fix:** Parser in Spalte C statt reinem `VALUE`:
+  `"384"`→384 · `"(0+50)"`→**50** (0 Basis + 50 Zuschlag) ·
+  `"210 (+0+50)"`→**210** (die +50 sind Bestandteil, nicht zusätzlich) ·
+  `"Don ? …"`→leer. Alles in `IFERROR`, bleibt Excel- und Google-Sheets-tauglich.
+  Spalte **D** behält den Rohtext zur Kontrolle.
+- **Ergebnis:** **234/234** Rechnungen mit Betrag, Summe **56.828 €**
+  (vorher 200 mit Betrag). `pruefe_stripe_export.py` misst die Abdeckung
+  jetzt mit und gibt die Summe aus.
+- **Test:** neu `docs/cotisation/test_betrag_parse.py` (10 Fälle inkl.
+  `F0001`/`XSEUL`/leer, die weiterhin leer bleiben müssen) — 0 Abweichungen
+  zur Excel-Formel. Parser als Python-Pendant in `pruefe_stripe_export.py`
+  (`betrag_zahl()`), damit Modell und Datei dieselbe Logik messen.
+- **Fehler dabei behoben:** erste Einfügung landete mitten in der
+  `zellen`-Liste → `SyntaxError` im Build; Parse-Ausdruck jetzt vor der Liste.
+- **Validierung:** 30.641 Formelzellen / 38 Muster / 0 Fehler; Paket-Check 12
+  Befunde (unverändert Altblätter); Stripe-Tor korrekt; JS-Syntax ok.
+
+## Stripe ohne Google: Direktweg Excel -> Stripe (2026-09-27)
+
+- **Auslöser:** „Du sprichst von Google Sheet, aber das haben wir noch nicht,
+  nur Excel, oder?" — korrekt, es gibt **kein** Google-Sheet. Der
+  Google-Spiegel war eine Option von mir, nicht eine Gegebenheit.
+- **Konsequenz:** `scripts/google-apps-script-stripe-bridge.js` war damit
+  **nicht lauffähig** (es liest ein Blatt `Stripe_Export` in einer
+  Google-Datei, die es nicht gibt). Statt eine neue Infrastruktur
+  vorauszusetzen, jetzt der Direktweg ohne Google.
+- **Neu `docs/cotisation/stripe_sync.py`:** liest dieselbe Quelle wie der Build
+  und rechnet mit `pruef_cotisation` (nachgebautes, gegen die Mappe
+  geprüftes Modell), legt pro offener Zeile einen Stripe Payment Link an
+  (`metadata[famid]`, `metadata[excel_zeile]`, `metadata[saison]`) und
+  schreibt den Stand in `…_mit-Cotisation.stripe-status.json` neben der
+  Mappe — **nicht** in die Mappe, damit keine Excel-Bearbeitung verloren geht.
+  Bereits angelegte Zeilen werden nie erneut gebucht.
+- **Sicherheitsnetze (alle getestet):** ohne `--apply` nur Vorschau und **kein**
+  Stripe-Kontakt; `--apply` ohne `STRIPE_SECRET_KEY` bricht ab; ein
+  `sk_live_…`-Key bricht ohne `M75_LIVE_OK=1` ab; Key nur aus der
+  Umgebungsvariable, nie aus dem Repo. Statusdatei entsteht nur nach echtem
+  Lauf (verifiziert: nach den Abbruchtests keine Datei vorhanden).
+- **Probelauf:** 234 Rechnungen, 234 offen, Summe **56.828,00 €**, 2 ohne
+  E-Mail. Die FamIDs der Vorschau bestätigen die Gruppierung: `F0103`, `XSEUL`
+  und `ADR:1,MEDERNACHERSTROOSS` (der einzige konfigurierte Haushalt).
+- **Modell erweitert:** `pruef_cotisation.berechne()` liefert jetzt zusätzlich
+  `famkey` (Wert der Excel-Hilfe `BP`/FamID) im Ergebnis-Dict — additiv, die
+  bestehenden Auswertungen bleiben unverändert.
+- **Was der Benutzer noch braucht:** verifiziertes Stripe-Konto
+  (Vereinsname, Adresse, IBAN, RCS, Ausweis) und den Secret Key
+  (`sk_test_…` zuerst) als Umgebungsvariable. Für den E-Mail-Absender später
+  eine verifizierte Stripe-Domain.
+- **Doku:** README-Abschnitt „Stripe starten – ganz ohne Google“ inkl.
+  Sicherheitstabelle und dem Hinweis **nur einen der beiden Wege** benutzen
+  (sonst doppelte Links).
+- **Sicherheitsbefund (gemeldet, nicht geändert):** in
+  `scripts/google-apps-script-join-webapp.js` steht der Token
+  `m75-join-9f36-secure-2026` im Klartext im öffentlichen GitHub-Pages-Repo.
+  Vor dem Stripe-Key rotieren.
+
+## Drittperson: Sicherung vor dem Überschreiben (2026-09-27)
+
+- **Frage:** „Wenn eine Drittperson, also der Tresorier, alles von Stripe hat,
+  kann er mit dieser Excel Sheet arbeiten?“
+- **Klärung (im README dokumentiert):** Er kann mit der Datei arbeiten
+  (Mitglieder eintragen ab Zeile 774, `N` = `J` markieren, `Stripe_Export`
+  prüfen) — die **Payment Links kann er nicht selbst erzeugen**, das läuft über
+  `stripe_sync.py` auf dem Mac. Rollen getrennt: Tresorier markiert, ich
+  buche.
+- **Rechtefrage ausdrücklich benannt:** `sk_live_…` ist kein teilbares
+  Passwort, sondern Vollzugriff auf das Konto (Kundendaten, Rückerstattungen,
+  Preise). Empfehlung: eigener Stripe-Zugang mit beschränkten Rollen statt
+  Key teilen. Alternative für „ohne Mac": Google-Weg mit Trigger — dort
+  braucht er denselben Key, also dieselbe Entscheidung.
+- **Gefundene Falle, sofort entschärft:** `build_perfect_workbook.py` erzeugt die
+  Mappe **immer neu aus dem Original**. Sämtliche `J`-Markierungen und neu
+  eingetragenen Mitglieder des Tresoriers lägen ausschliesslich in der
+  bisherigen Datei und wären beim nächsten Build spurlos weg.
+  → Der Build legt jetzt vorher eine Sicherung mit Zeitstempel ab:
+  `…_mit-Cotisation.backup-<Jahr-MM-DD_hhmm>.xlsm` (verifiziert, erste
+  Sicherung `…backup-2026-09-27_1148.xlsm` entstanden).
+- **Folge mitbedacht:** Die Sicherungen passen auf das Namensmuster
+  `*_mit-Cotisation*.xlsm` und wären damit Kandidaten für `mappe.ziel()`.
+  `mappe.ziel()` schliesst jetzt `*.backup-*` aus (ebenso wie `~$…`).
+  Verifiziert: Standardname wird weiterhin korrekt erkannt.
+- **Fehler dabei behoben:** `import datetime` + `datetime.now()` →
+  `AttributeError` (die Klasse heisst `datetime.datetime`). Jetzt
+  `from datetime import datetime`.
+
+## Betrieb mit Google-Drive-Kopie beim Tresorier (2026-09-27)
+
+- **Klarstellung:** Die Arbeitsmappe liegt beim Tresorier in **Google Drive**,
+  er hat **keinen** Stripe-Key und kommt nicht an den Mac. Auf diesem Rechner
+  gibt es kein Google Drive — es existieren also **zwei Stände**, die
+  auseinanderlaufen können. Genau das ist im README als Ablauf festgelegt:
+  *Er* lädt herunter, arbeitet in Excel, lädt hoch; *ich* verarbeite die
+  hochgeladene Datei und lade das Ergebnis zurück.
+- **Werkzeuge pfad-unabhängig gemacht:** `mappe.py` kennt jetzt
+  `set_ziel(pfad)` (fest verankerte Arbeitsdatei) und `DOCS` ist über
+  `M75_COTISATION_DOCS` überschreibbar. `build_perfect_workbook.py` und
+  `stripe_sync.py` haben `--datei <pfad>`.
+  **Verifiziert** mit einer Kopie in `/tmp/m75-drive-test/`: Build und Sync
+  verarbeiteten die fremde Datei, die Sicherungskopie entstand dort korrekt,
+  danach Testordner aufgeräumt. Standardpfad danach unverändert geprüft.
+- **Kritische Warnung dokumentiert:** Die `.xlsm` darf **nicht** in Google
+  Sheets geöffnet werden — das zerlegt bedingte Formatierungen, Helfer-Spalten
+  `BP:CE` und das Blatt `Stripe_Export`. Drive ist die **Ablage**, Sheets ist
+  **nicht** die Arbeitsumgebung.
+- **Weiterhin geltend:** nur eine `…_mit-Cotisation.xlsm` in Bearbeitung;
+  `.backup-<Zeitstempel>`-Dateien sind Archive, keine Arbeitsdateien.
+- **Validierung nach den Umbauten:** 30.641 Formelzellen / 0 Fehler;
+  Paket-Check 12 Befunde (Altblätter); Stripe-Logik 234 = 234.
+
+## Neue Mitglieder wurden NICHT berücksichtigt – behoben (2026-09-27)
+
+- **Frage:** „Wenn ich neue Mitglieder in das Excel setze, würden die
+  automatisch berücksichtigt?“ — **Nein, es gab drei echte Brüche in der Kette.**
+- **Bruch 1 – falsche Datei:** `stripe_sync.py` und `pruefe_stripe_export.py`
+  lasen `QUELLE` (das **Original** vom 24.09.), nicht die Arbeitsdatei. Ein in
+  Zeile 774 eingetragenes Mitglied wäre im Excel sichtbar, aber **nie** in
+  Stripe gelandet. → Neu `mappe.datenquelle()`: rechnet auf der Arbeitsdatei
+  (`ziel()`), fällt nur auf das Original zurück, wenn es keine gibt.
+- **Bruch 2 – Zeilenleser endete bei 773:** `ba.liese_blatt()` lieferte
+  Zeilen 2–773 fest; die Reservezeilen 774–900 waren für das Modell unsichtbar.
+  → Liest jetzt bis zur letzten vorhandenen Zeile.
+- **Bruch 3 – Inline-Text wurde nicht gelesen:** der Zeilenleser kannte nur
+  `t="s"` (Shared Strings) und `<v>`. Der Build schreibt die Kopfzeilen der
+  neuen Spalten M/N/O sowie alle Texte als `t="inlineStr"` (damit die
+  String-Tabelle unangetastet bleibt) → die Kopfzeile **Spielt J/R/N** kam als
+  **leer** an, das Modell brach mit „FEHLENDE SPALTEN“ ab. → `inlineStr`-Zweig
+  ergänzt; zusätzlich `Spielt J/R/N` als Alias in `SPALTEN_ALT`.
+- **End-to-End-Test** `docs/cotisation/test_neues_mitglied.py`: schreibt ein
+  Testmitglied direkt ins XML (Inline-Text/Zahlen, aufsteigende
+  Spaltenreihenfolge, vorhandene Zellen werden *ersetzt* statt verdoppelt) und
+  ruft dasselbe Modell auf wie der Sync.
+  Ergebnis: `Zeile 774 TESTFALL Neumitglied`, famkey `F9999`, **L = 300**
+  (Tarif SEN), Traeger ja, rechnungsfähig ja.
+  Zwei eigene Testfehler dabei gefunden und behoben: doppelte Zelle `O774`
+  (die bestehende leere Zelle gewann beim Lesen) und ein `str`/`bytes`-Fehler.
+- **Fachbefund für den Betrieb:** ohne **`K` = Alterskategorie (`SEN`/`U25`)**
+  gibt es **keinen** Tarif, `L` bleibt leer und es entsteht **keine Rechnung** —
+  bei einem neuen Mitglied also das wichtigste Pflichtfeld. Im README als
+  Pflichtfeld-Tabelle dokumentiert.
+- **Regel dokumentiert:** Für die laufende Saison ist **kein Build nötig**
+  (L und `Stripe_Export` rechnen live). Ein Build aus dem Original **würde
+  Neuzugänge verwerfen** — sie blieben nur in der Sicherung. Deshalb nach
+  Neuzugängen: Datei sichern, Build nur wenn die Zeilen auch ins Original
+  übernommen werden sollen.
+- **Bestand unverändert:** 234 Rechnungen / 56.828 €, 0 Formelfehler,
+  Paket-Check 12 Befunde (Altblätter).
+
+## Spalte AI „Bénévole (B)" automatisch setzen (2026-09-27)
+
+- **Auftrag:** In Spalte AI ein „B“ setzen, wenn ein Name in A steht, die
+  Spalten AH, AI, AJ, AK, AL, AM, AN alle leer sind und kein GAJGL in P/Q steht.
+- **Wichtig:** Der Benutzer hat die Arbeitsmappe in Excel bearbeitet und
+  **selbst eine Spalte eingefügt** (AI „Bénévole (B)“), wodurch alle Spalten ab
+  AI um eine Position gewandert sind. Ohne erneutes Lesen wäre jede
+  Spaltenannahme falsch gewesen. Stand bei zwei Analyse-Runden unterschiedlich
+  (13:57: Spalte Y / AI = U13F; 14:20: AI = Bénévole) — Regel: nach jeder
+  Excel-Bearbeitung den Ist-Stand neu lesen, nicht zwischenspeichern.
+- **GAJGL steht in Q („Code Courrier neu“, 15 Zeilen), in P kommt es nie vor.**
+  Die Sperre wurde auf **beide** Spalten gelegt, damit sie unabhängig von der
+  Spaltenbenennung trägt.
+- **Ergebnis:** 590 Zeilen mit Namen, davon **200** erfüllen die Regel →
+  200 Zellen in AI auf „B“ gesetzt. Im Blatt waren bereits **57 eigene B’s**
+  vom Benutzer vorhanden (Zeilen ab 27) → gesamt **260**.
+- **Rahmenlinien:** Spalte AI hatte sie schon vollständig (775 Zellen wie AH/AK).
+  Beim Setzen bleibt das Formatattribut `s="58“` erhalten — **260/260 B-Zellen
+  haben volle Rahmenlinien** (lrtb), nachgeprüft.
+- **Skript `docs/cotisation/benevole_setzen.py`:** zählt erst (`--apply`
+  schreibt), chirurgisches XML-Schreiben, Sicherungskopie mit Zeitstempel,
+  XML-Validierung vor dem Schreiben, idempotent (zweiter Lauf findet 0 neue
+  Zeilen, weil AI dann nicht mehr leer ist).
+
+### Zwei eigene Fehler (beide gefunden und behoben)
+
+1. **Datei kurzzeitig zerstört:** Der Zell-Ersetzungsausdruck übernahm das
+   `r="…“`-Attribut mit (`<c r="AI2"r="AI2" …>`) **und** die Offsets des
+   Zellen-Treffers wurden auf `m.group(0)` statt auf `m.group(3)` angewandt —
+   damit wurde jede bearbeitete Zeile vorn abgeschnitten. Symptom:
+   `ParseError: not well-formed`. **Kein Datenverlust:** Die vom Skript
+   automatisch angelegte Sicherung hat den 14:20-Stand wiederhergestellt.
+   Lehre: XML vor dem Schreiben validieren (ist jetzt eingebaut) und
+   Offsets immer auf derselben Gruppe anwenden.
+2. **`--datei` wurde ignoriert:** `mappe.set_ziel()` wertet nur
+   `build_perfect_workbook.py` aus. Beim Test mit Kopie schrieb das Skript in
+   die **echte** Datei. Am Auffallen der Kontrollzahl (0 statt 200 B in der
+   Kopie) erkannt. Jetzt wertet `benevole_setzen.py` `--datei` selbst aus.
+
+
+
+## Cotisation – finales Spaltenlayout L/M/N/O + saubere Neuberechnung – 2026-09-27
+
+- **Ziel-Layout umgesetzt** (`docs/cotisation/build_perfect_workbook.py`, neu):
+  - `L` = `Cotisatioun` (NEU berechnet, 772 Formelzellen + vorberechnete `<v>`-Werte)
+  - `M` = `Cotisation 2` (manuelle J/N/R-Werte 1:1 erhalten: 417× J, 311× N, 26× R)
+  - `N` = `Bezahlt J/N` (neu, leer für Kassierer – 772/772 leer)
+  - `O` = `Spielt J/R/N` (neu, exakte Kopie von M – 772/772 identisch, steuert die Formeln)
+  - `P`/`Q`+ = alte Spalten N+ um 2 nach rechts (`code courrier`→P, `Code Courrier neu`→Q,
+    Lizenzen AG:AJ→AI:AL, Fragen AW:AZ→AY:BB, letzte Datenspalte BM→BO)
+  - Helfer BP:CE (68–83) mit expliziten `<cols>`-Breiten angehängt.
+- **Bugs gefunden & behoben** (alle hätten Excel-Reparatur oder falsche Werte bedeutet):
+  - `shift_cell_ref` traf auch String-Literale (`DATE(2001,7,17)` → `W25`) und Funktionsnamen →
+    jetzt nur echte Zellbezüge ausserhalb von `"…"`.
+  - `parse_cells`-Regex schluckte den Body der Folgezelle bei `<c …/>` → Phantom-Duplikat
+    BX2/BY2; `check_all_circ.py` meldete dadurch fälschlich `BX → BS/BT/BU` und `V → V`.
+  - `<cols>`-Bereiche, die die Einfügegrenze überspannten (16–32, 36–47), wurden still
+    fallengelassen → jetzt einzelspalten-genau aufgeteilt.
+  - `app.xml`-Blattname landete vor den benannten Bereichen statt hinter dem letzten Blatt;
+    `_FilterDatabase` (BM772), `autoFilter`/`sortState` (BM772) und Hyperlink-Anker (AV→AX)
+    werden jetzt konsistent auf BO mitgezogen.
+- **Validierung der gebauten Mappe** (`…_mit-Cotisation.xlsm`, 3.777.180 Bytes):
+  - `pruefe_formeln.py`: **19.068 Formelzellen, 32 Muster, 0 Fehler**.
+  - Zirkelbezugs-Check mit korrektem Parser: **keine Selbstreferenzen** (L hängt nur von
+    BW/BX/CA/CB/CD ab, keine Zyklen).
+  - `pruefe_alle_blaetter.py`: nur noch vorbestehende Befunde (Filter endet 772 vs.
+    Dimension 773 – identisch in der Quelldatei; sheet10 ohne `_rels`).
+- **Hausputz:** One-Shot-Skripte (`_val1.py`, `check_i3.py`, `test_fast_shift*.py`,
+  `test_openpyxl_*.py`, `update_arbeitsmappe.py`) gelöscht; Rest (`baut_arbeitsmappe.py`
+  vs. `build_perfect_workbook.py`) noch nicht zusammengeführt.
+- **Offen:** Datei in Excel öffnen und bestätigen, dass keine Reparatur-Meldung kommt;
+  danach `baut_arbeitsmappe.py` auf das neue Layout umstellen bzw. ersetzen.
+
+## 2026-09-28 — Spielberechtigung (Spielerpass + Medico) durchgesetzt
+
+**Entscheidung des Benutzers:** Die Daten sind der Ist-Zustand; die Leute sind
+noch in der Datenbank, spielen aber nicht. Die Regel wird kostenwirksam
+umgesetzt, nicht nur gewarnt.
+
+**Regel:** Status `J` zählt nur mit
+1. echtem Spielerpass in `AO` (`XXX` = Antrag bei der FLH, Lizenz existiert
+   noch nicht → zählt nicht; alle 19 Vorkommen sind exakt `xxx`), und
+2. Medico in `AX` ≥ Jahresgrenze. `AX` enthält das **Jahr bis wann gültig**,
+   nicht das Untersuchungsjahr (`///` und Text wie `Apte` zählen nicht).
+
+**Umsetzung:**
+- `pruef_cotisation.py`: neue Hilfsfunktion `spielberecht()`, benutzt an allen
+  drei Stellen, an denen „J" als Spieler gewertet wurde — Spielerzählung für
+  den Familientarif, XSEUL-Zweig, Comité-Mindestbetrag. `TARIFE_STD` bekam
+  `medicojahr`.
+- `pruefe_abgleich.py`: dieselbe Regel in der Excel-Nachbildung.
+- `cotisation_regeln_setzen.py`: neue Hilfsspalte **`CL (Spielberecht)`** mit
+  `=IF(AND($O="J",$AO<>"",$AO<>"xxx",ISNUMBER($AX),$AX>=Cotisation!$B$13),1,0)`.
+  `BY`/`BZ`/`CA` (SpielerGes/SEN/U25) zählen jetzt über `$CL=1`. `CJ` und `L`
+  und `CH` nutzen `$CL` statt `$O="J"`.
+- Jahresgrenze an **einer** Stelle: `Cotisation!B13` (Blatt `Cotisation`,
+  Zeile 13, neu) und `tarife-cotisation.csv` als `MedicoJahr`. Am 01.01.2027
+  an beiden Stellen auf 2027 setzen.
+- `spielberechtung_liste.py` (neu) schreibt
+  `Vereins-OS/docs/cotisation/spielberechtung-ohne-pass.md`.
+
+**Zwei echte Fehler, die dabei auffielen und behoben sind:**
+- Beim Ersetzen einer **geteilten** Formel wurde das Attribut `ref="…"`
+  entfernt. Damit ist die Zelle kein Master mehr, die Follower zeigen ins
+  Leere → genau die Reparatur-Meldung von damals. Jetzt bleiben `t="shared"`,
+  `ref` und `si` **alle** erhalten, ersetzt wird nur der Formeltext.
+- `colpos()` bekam den Zellbezug `"Z776"` statt des Spaltennamens → 667 statt 26,
+  keine Einfügeposition, Zelle hing ans Zeilenende. `zelle_einfuegen()` ist jetzt
+  dokumentiert und prüft beide Fälle.
+
+**Wirkung:** 235 Posten / 53.846 € → **192 Posten / 40.706 €** (−13.140 €).
+250 Mitglieder mit Status `J`, davon **182 spielberecht**, 57 Haushalte betroffen.
+
+**Offen:** Die Mappe enthält für die geänderten Zellen keine gelesenen Werte
+mehr (`<v>` entfernt, damit Excel neu rechnet). `pruefe_abgleich.py` meldet
+deshalb bis zum Öffnen+Speichern in Excel ~122 Abweichungen — das sind
+veraltete Cache-Werte, keine Fehler. Danach erneut laufen lassen.
+
+## 2026-09-29 — Status X, Prüfwerkzeug, Rückabwicklung eines Fehlerschlusses
+
+**Korrektur an der Diagnose vom 28.09.** Die 122 „Abweichungen" waren **keine
+veralteten Cache-Werte**, sondern zwei Fehler in `pruefe_abgleich.py`:
+1. Die Datei verglich gegen `TEST1_nur-calcchain.xlsm` vom 27.09. (alte
+   Arbeitsfassung) statt gegen die Live-Mappe.
+2. `ba.rechne_werte()` liest die Mappe **überhaupt nicht** — es rechnet selbst
+   mit dem Python-Modell nach. Das Skript verglich also zwei Python-Implementierungen
+   und konnte eine falsche Excel-Formel prinzipiell nicht finden.
+
+**Neu: `pruefe_excel_gegen_python.py`** vergleicht die Werte, die **Excel
+selbst** berechnet und gespeichert hat, mit der Python-Referenz. Damit kamen
+28 echte Abweichungen heraus — und **zwei echte Fehler**, die behoben sind:
+- `210 (+0+50)260` bei SCHUSTER Jeff: der Comité-Zuschlag wurde an den String
+  *angehängt* statt ersetzt. Der Stripe-Parser hätte 210 statt 260 gelesen.
+- ~310 Leerzeilen unter den Daten bekamen über `CH="0"` eine Rechnung `"0"`.
+  Die erste Schranke in L prüft jetzt zusätzlich `$A`.
+
+**Excel ist per AppleScript steuerbar** (`osascript`, Excel läuft bereits).
+Ablauf: `calculate full rebuild` + `save`. Vorsicht: `cotisation_regeln_setzen.py`
+ersetzt die Datei auf der Platte, während Excel sie offen hat — Excel muss dann
+neu **geöffnet** werden, sonst speichert es die alte Fassung über die neue.
+
+**Status X — Regelsatz vom Benutzer:**
+> Alle mit X in Spalte O dürfen **nicht** in Stripe erscheinen, **außer** sie
+> gehören zu einem Haushalt, wo ein Betrag fällig wäre.
+
+Messung: **64 X-Personen, davon 32 Rechnungsträger.** Ein erster Versuch, X
+per Formel auf „0" zu setzen, kostete **32 Haushaltsrechnungen**, weil der
+Rechnungsträger dann 0 € trug. Zurückgenommen — die X-Schranke gehört **nicht**
+in die L-Formel. Umsetzung stattdessen nur im Export:
+`pruefe_stripe_export.echter_betrag()` gibt für `"0"` `False` zurück, damit
+0-€-Posten nicht entstehen. Haushaltsbeträge auf X-Rechnungsträgern bleiben
+unberührt. `pruefe_x_personen.py` prüft das und meldet Verstöße.
+
+**Stand:** 181 Posten / 38.898 €, 8 echte Excel-gegen-Python-Unterschiede offen.
+Die Differenz zu den früher genannten 40.706 € ist **nicht aufgeklärt** und
+vor dem Export zu klären.
+
+
+
+
+---
+
+## 2026-09-29 — Reparatur der Mappe + Card-IDs ergänzt
+
+**Reparatur-Ursache (aufgeklärt):** `cotisation_regeln_setzen.py` wurde mit
+`--apply` ausgeführt, während die Mappe **noch in Excel offen war** (Sperrdatei
+`~$…xlsm`). Zusätzlich fasst das Skript `calcChain.xml` nicht an. Beim
+nächsten Speichern setzte Excel seine veraltete In-Memory-Version durch und
+**verwarf die 6 neu eingefügten Formelzellen `CC583…CE585`** — das war die
+Meldung „Inhalte reparieren". Genau die Zellen fehlten danach auch im
+Vergleich mit der Sicherung.
+
+**Wiederherstellung:**
+1. beschädigte Datei als `…REPARIERT-verdacht-2026-09-29_0800.xlsm` gesichert
+2. Stand `…regeln-2026-09-29_0758.xlsm` zurückgespielt
+3. `calcChain.xml` samt Content-Type- und Relationship-Eintrag entfernt
+4. Excel öffnete die Mappe **ohne** Reparatur, baute die Kette neu auf
+
+**Offene Regel-Lücke:** `--apply` verlangt weiterhin, dass die Mappe in Excel
+**geschlossen** ist. Das ist bisher nur dokumentiert, nicht erzwungen.
+
+
+**Card-IDs ergänzt** (`docs/cotisation/cardids_generieren.py`) in der Datei
+`GC 2026-09-29 MEMBERSLESCHT 2026-2027_mit-Cotisation.xlsm`
+(umbenannt von `…2026-09-26…`; `mappe.py` `ZIEL_NAME` und 4 Skripte
+mit hartem Pfad wurden mitgezogen):
+- Spalte D = `Card-ID`, 8 Zeichen aus `ABCDEFGHJKLMNPQRSTUVWXYZ23456789`
+- Uniqueness gegen xlsm (580) + `data.db` (580) + `Sekretariat.db` (0) = 585
+- **10 Mitglieder** ohne ID: Zeilen 180, 188, 201, 462, 464, 523, 534, 535,
+  584, 586 — davon STREITZ Eliane (Z523), die `.kilo/agent/
+  memberslescht-sync.md` als „Spezialfall (manuell)" führt; auf Rückfrage
+  trotzdem generiert.
+- Sicherung: `…cardids-2026-09-29_0954.xlsm`
+- vor dem Schreiben geprüft: XML, Zellreihenfolge, doppelte Zellen,
+  geteilte Formeln (426/370 unverändert); danach in Excel neu gerechnet
+- **Stand: 0 fehlende Card-IDs** in den echten Datenzeilen 2..591
+
+**Auffällig, NICHT geändert:** `VU4AUkF6` (Z12 ANDRADE SOUSA Matilde) —
+Kleinschreibung, das einzige musterabweichende Vorkommen. Bewusst
+überlassen, weil es eine **bestehende** ID ist.
+
+**Noch offen:**
+- die 10 neuen IDs sind **nur im xlsm**, nicht in `data.db` / `Sekretariat.db`
+- 5 echte Excel-gegen-Python-Unterschiede (RESSEL, ROCHA MAJERUS, ZEBROWSKY
+  Silvia, ZELLER Sarah, ZELLER Mortitz)
+- Stripe-Payment-Links unverändert; **kein** `--apply`-Lauf, kein Secret Key
+
+**Bisheriger Prüfstand:** 181 Posten / 39.218 €. Die früher genannten
+40.706 € und die in einem Zwischenbericht genannten „320 € aus KREMER +
+KRIER" sind **nicht belegt** — der Betragseffekt der Python-Korrektur wurde
+nie gemessen.
+
+---
+
+## 2026-09-29 (II) — Defekte Pfade repariert, Ordner aufgeräumt
+
+**Umbenennung der Mappe** durch den Tresorier:
+`GC 2026-09-26 …_mit-Cotisation.xlsm` → `GC 2026-09-29 …_mit-Cotisation.xlsm`.
+
+**Folge: 15 hartkodierte Pfade in 14 Skripten waren tot.** Sie erwarteten
+`GC 2026-09-24 …_mit-Cotisation.xlsm`, das es schon lange nicht mehr gab.
+Betroffen u. a. `pruefe_datei.py`, `pruefe_spalten.py`, `lese_m.py`,
+`baut_arbeitsmappe.py`. Alle auf den neuen Namen gesetzt.
+
+**`mappe.py` ist die zentrale Stelle** (`ZIEL_NAME` + Fallback auf die
+neueste `*_mit-Cotisation*.xlsm`). Der Fallback prüfte vorher nur gegen
+`.backup-` — Sicherungen mit `.regeln-`, `.cardids-`, `.alterskat-`,
+`.kopf-`, `.benevole-`, `.REPARIERT-` hätten als Arbeitsdatei gewählt
+werden können. Jetzt werden alle Sicherungssuffixe ausgeschlossen.
+
+**Neu: `docs/cotisation/pfadcheck.py`** meldet bei der nächsten Umbenennung
+sofort, welche Skripte brechen (unterscheidet Eingaben von selbst erzeugten
+Dateien). Stand: `KAPUTT (0)`.
+
+### Aufräumen — verschieben, nicht löschen
+
+`*.xlsm` steht in `.gitignore` → **es gibt kein Rettungsnetz.**
+`docs/cotisation/archivieren.py` prüft vor dem Umzug, welche xlsm Skripte
+**lesen**, bricht bei Kollision, nimmt Pflichtdateien explizit aus der
+Liste und führt danach den Pfadcheck erneut aus.
+
+**29 Dateien → `Vereins-OS/docs/_archiv/` (113 MB)**
+(22 Sicherungen, TEST2a/b/c, `_temp_shifted.xlsm`, 3 veraltete `~$`)
+
+**Bleiben (5, alle Pflicht):**
+
+- `GC 2026-09-29 …_mit-Cotisation.xlsm` (Live)
+- `GC 2026-09-24 MEMBERSLESCHT 2026-2027.xlsm` (**QUELLE** — `mappe.py` +
+  `baut_arbeitsmappe.py`)
+- `GC MEMBERSLESCHT 2026-2027.xlsm` (ältestes Original, 17.09.)
+- `TEST1_nur-calcchain.xlsm` (13 Skripte)
+- `TEST2_nur-blatt1.xlsm` (`check_backups.py`)
+
+**Endabnahme:** 5 echte Excel-gegen-Python-Unterschiede · Stripe 181 /
+39.218 € · X-Regel hält · Pfadcheck `KAPUTT (0)` — alles **unverändert**.
+

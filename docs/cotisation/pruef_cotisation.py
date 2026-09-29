@@ -23,6 +23,7 @@ import argparse
 import collections
 import csv
 import pathlib
+import re
 import sys
 import datetime
 
@@ -36,7 +37,9 @@ SPALTEN = {
     "naissance": "Naissance (JJ/MM/AA)",
     "kategorie": "Alterskategorie",
     "cotis": "Cotisatioun",
-    "spielt": "Spielen J/R/N",
+    # Kopfzeile wurde am 26.09.2026 umbenannt: "Spielen J/R/N" -> "Spieler J/R/N".
+    # Beide Namen werden akzeptiert, siehe SPALTEN_ALT.
+    "spielt": "Spieler J/R/N",
     "fam": "Code Courrier neu",
     "liz_sp": "Pass Nummer (Licences Joueurs / Joueuses)",
     "liz_off": "Licences Off (officiels)",
@@ -45,6 +48,27 @@ SPALTEN = {
     "officiel": "Officiel",  # optionale Zusatzspalte
     "manuell": "Manuell",  # optionale Spalte, gewinnt immer
     "adresse": "Adresse",  # nur fuer die Haushaltsliste (Spalte I im Blatt Cotisation)
+    # Spalten AW:AZ - steht in einer davon "FRAGEN", ist die Person eine
+    #_spielerin mit Lizenz und offener Frage, also (0+50) auf der eigenen Zeile
+    "frage1": "Email",
+    "frage2": "@mersch75.lu",
+    "frage3": "Communicateur",
+    "frage4": "Membres commission des jeunes",
+    # Comite-Mitgliedschaft. In der CSV und in der Live-Mappe fuellt genau
+    # dieselben 10 Personen (geprueft 2026-09-27): die Spalte 'Comite' in der
+    # CSV entspricht BI in der Mappe, der CAT-Code 1 steht dort fuer T.
+    "comite": "Comité",
+    # Spielberechtigung: AX = "Prochain Medico", enthaelt das Gueltigkeitsjahr.
+    "medico": "Prochain \nMédico",
+}
+# Alternativ-Namen fuer Kopfzeilen, die zwischenzeitlich umbenannt wurden.
+SPALTEN_ALT = {
+    # "Spielt J/R/N/X" ist die Fassung im Blatt seit 2026-09-27 (X = Status
+    # ungeklaert). Ohne diesen Eintrag faellt die Spaltenauflosung zurueck und
+    # der komplette Stripe-Lauf bricht mit 'FEHLENDE SPALTEN' ab.
+    "Spieler J/R/N": ("Spielen J/R/N", "Spieler J/R/N", "Spielt J/R/N",
+                      "Spielt J/R/N/X"),
+    "BEZAHLT J/N": ("BEZAHLT J/N", "Bezahlt J/N"),
 }
 
 # ------------------------------------------------------------------- Vorgabewerte
@@ -55,14 +79,26 @@ TARIFE_STD = {
     "zusatz": 50,
     "xseul": 300,
     "gajgl": 0,
+    # Spielberechtigung: Spalte AX ("Prochain Medico") enthaelt das JAHR BIS
+    # WANN gueltig, nicht das Jahr der Untersuchung. Wer drin steht, darf
+    # spielen; alles darunter ist abgelaufen.
+    # ACHTUNG: wandert jedes Kalenderjahr um eins - am 01.01.2027 auf 2027
+    # setzen, sonst ist ab dem Neujahr niemand mehr spielberecht.
+    "medicojahr": 2026,
 }
 ZUSATZ_BEI_FAMILIE_STD = False
-# Rechnungstraeger: "Erste"   -> erste Zeile des Familienblocks (entspricht 144/144 = 100 %
-#                      der bestehenden Datei) oder "Aelteste" -> aeltestes Geburtsdatum
-#                      (entspricht 86/233 = 37 % der bestehenden Datei, entspricht der
-#                      urspruenglichen Anforderung). Umschalten ueber
-#                      tarife-cotisation.csv -> TraegerRegel.
-TRAEGER_REGEL_STD = "Erste"
+# Rechnungstraeger: "Aelteste" (Standard) -> aeltestes Familienmitglied nach Geburtsdatum,
+#                      Gleichstand/Geburtsdatum unbekannt -> oberste Zeile des Blocks.
+#                      Beispiel QUINN: Ruben (Jg. 2011, Spieler) steht in Zeile 5, Nicole
+#                      (Jg. 1976, Offizielle) in Zeile 7 -> 210 (+0+50) steht auf Nicole.
+#                   "Erste"    -> erste Zeile des Familienblocks (entspricht 144/144 = 100 %
+#                      der bisherigen Datei, aber nicht der fachlichen Regel).
+# Umschalten ueber tarife-cotisation.csv -> TraegerRegel.
+TRAEGER_REGEL_STD = "Aelteste"
+# Nicht-Receiver-Zeilen (z. B. Familienangehoerige ohne eigenen Tarif) zeigen den
+# Familiencode Fxxxx an, damit die Zugehoerigkeit auf einen Blick sichtbar ist.
+# Der Wert wird erst bei BEZAHLT = J durch den tatsaechlichen Betrag ersetzt.
+NICHTTRAEGER_CODE_ANZEIGEN = True
 # Zuschlag auch dann, wenn die Rolle als Offizieller nur in der Spalte "Officiel" steht
 # (ohne Lizenznummer in AH/AI/AJ)
 OFFICIEL_ACHZ_STD = False
@@ -83,10 +119,22 @@ def lade_csv(pfad: pathlib.Path, trenner: str = ";") -> list[list[str]]:
 
 
 def parse_datum(wert: str):
-    """DD.MM.YYYY / DD/MM/YYYY -> Excel-Serialzahl. Sonst None."""
+    """Gibt die Excel-Serienzahl zurueck (Textdatum oder schon numerisch).
+
+    WICHTIG: in der Mitgliederliste liegt das Geburtsdatum meist als Excel-
+    Serienzahl vor (z. B. ANSAY Luka = 37023, QUINN Nicole = 28106), nicht als
+    Text "12.05.2001". Die alte Fassung gab fuer Zahlen None zurueck - damit
+    bekamen alle numerischen Daten den Ersatzwert 73415 und die Regel
+    "Rechnungstraeger = Aelteste" wurde faktisch zu "letzte Zeile des Blocks".
+    Das trifft die uebrige Spalte J mit Zahlen."""
     s = (wert or "").strip()
     if not s or set(s) <= set("/-."):
         return None
+    # Schon eine Excel-Serialzahl: nur Ziffern mit hoechstens einem Punkt
+    # (37023 / 40675.0). Ein Textdatum hat mindestens zwei Trenner und faellt
+    # damit durch - "12.05.2001" darf NICHT als Zahl gelesen werden.
+    if re.fullmatch(r"\d{1,6}(\.\d+)?", s):
+        return float(s)
     for trenner in (".", "/", "-"):
         if trenner in s:
             teile = s.split(trenner)
@@ -153,8 +201,44 @@ def normalisiere_adresse(a: str) -> str:
     return "".join(a.upper().split()).replace(".", "").replace("'", "")
 
 
+KOPF_MARKER = ("schlüssel", "nom", "prénom", "adresse", "bemerkung", "wert")
+
+
+def ist_kopfzeile(zeile: list[str]) -> bool:
+    """Erkennt, ob die erste Zeile einer Config-CSV wirklich eine Kopfzeile ist.
+
+    WICHTIG: `ausnahmen-cotisation.csv` und `haushalte-cotisation.csv` haben
+    KEINE Kopfzeile, `tarife-cotisation.csv` schon. Ein blindes `[1:]` hat
+    deshalb previously die erste Ausnahme (BOURG Jeannot) und den einzigen
+    Haushalt (ANSAY, 1 Medernacherstrooss) verschluckt - die Datei zeigte
+    deshalb bei ANSAY zweimal 300 statt einmal 384."""
+    zellen = [c.strip().lower() for c in zeile]
+    return any(c in KOPF_MARKER for c in zellen)
+
+
+def liese_config(pfad) -> list[list[str]]:
+    """Liest eine Config-CSV und ueberspringt die Kopfzeile NUR, wenn eine da ist."""
+    pfad = pathlib.Path(pfad)
+    if not pfad.exists():
+        return []
+    with open(pfad, encoding="utf-8-sig", newline="") as fh:
+        zeilen = [r for r in csv.reader(fh, delimiter=";") if any(c.strip() for c in r)]
+    return zeilen[1:] if zeilen and ist_kopfzeile(zeilen[0]) else zeilen
+
+
+def ist_lizenz(wert: str) -> bool:
+
+    """Entspricht der Excel-Bedingung  <spalte><>"<>;  <spalte><>"///"  in der
+    Helferformel BV: eine Lizenz zaehlt nur, wenn wirklich eine Nummer steht.
+    In der Mitgliederliste steht in ungepflegten Zeilen der Platzhalter /// -
+    der wuerde sonst bei jedem Offiziellen ohne Spielerlizenz einen Zuschlag
+    von 50 EUR ausloesen. Wichtig fuer den Abgleich Python <-> Excel."""
+    s = (wert or "").strip()
+    return bool(s) and s != "///"
+
+
 # ------------------------------------------------------------------ Kernlogik
-def berechne(zeilen, ausnahmen, tarife, zusatz_bei_familie, traeger_regel="Erste",
+def berechne(zeilen, ausnahmen, tarife, zusatz_bei_familie, traeger_regel=TRAEGER_REGEL_STD,
              officiel_auch=False, reservisten_wert=RESERVISTEN_WERT_STD, haushalte=()):
     """Gibt je Zeile ein Ergebnis-Dict zurueck - 1:1 die Excel-Formel."""
     kopf = [c.strip() for c in zeilen[0]]
@@ -163,10 +247,27 @@ def berechne(zeilen, ausnahmen, tarife, zusatz_bei_familie, traeger_regel="Erste
         try:
             return kopf.index(name)
         except ValueError:
+            for alt in SPALTEN_ALT.get(name, ()):  # umbenannte Kopfzeilen
+                if alt in kopf:
+                    return kopf.index(alt)
+            # Leerraum ignorieren: im Blatt heisst die Spalte
+            # 'Spielt            J/R/N' (12 Leerzeichen), erwartet wird
+            # 'Spielt J/R/N'. Ohne das bricht der komplette Stripe-Lauf ab -
+            # es gab dafuer keinen Statusdatei-Eintrag, weil nie ein Link
+            # erzeugt wurde. Geprueft 2026-09-27, Fehler war schon vorher da.
+            def norm(s: str) -> str:
+                return " ".join(s.split())
+
+            for kandidat in (name,) + SPALTEN_ALT.get(name, ()):
+                for i, k in enumerate(kopf):
+                    if norm(k) == norm(kandidat):
+                        return i
             return -1
 
     idx = {k: spalte(v) for k, v in SPALTEN.items()}
-    fehlend = [v for k, v in SPALTEN.items() if k not in ("manuell", "cotis") and idx[k] < 0]
+    fehlend = [v for k, v in SPALTEN.items()
+               if k not in ("manuell", "cotis") and not k.startswith("frage")
+               and idx[k] < 0]
     if fehlend:
         raise SystemExit(
             "FEHLENDE SPALTEN in der Quelldatei: " + ", ".join(fehlend) +
@@ -194,7 +295,10 @@ def berechne(zeilen, ausnahmen, tarife, zusatz_bei_familie, traeger_regel="Erste
         famkey.append(key)
         d = parse_datum(zelle(z, "naissance"))
         basis = FALLBACK_SERIAL if d is None else d
-        schluessel.append(basis - excel_zeile / STUFE)
+        # + statt - : bei gleichem Geburtsdatum gewinnt die OBERSTE Zeile.
+        # Mit "-" hat spaeteren Zeilen der kleinere Schluessel und damit das
+        # Mandat - genau umgekehrt (ANSAY: Luka Z534, Mathis Z535).
+        schluessel.append(basis + excel_zeile / STUFE)
         exrow.append(excel_zeile)
 
     gruppen: dict[str, list[int]] = collections.defaultdict(list)
@@ -216,14 +320,30 @@ def berechne(zeilen, ausnahmen, tarife, zusatz_bei_familie, traeger_regel="Erste
         key = famkey[i]
         idxs = gruppen[key]
         fam, spielt, kat = zelle(z, "fam"), zelle(z, "spielt"), zelle(z, "kategorie")
+        ist_comite = bool(zelle(z, "comite"))
         liz_sp = bool(zelle(z, "liz_sp"))
-        liz_off = any(zelle(z, k) for k in ("liz_off", "liz_zs", "liz_sr"))
+        liz_off = any(ist_lizenz(zelle(z, k)) for k in ("liz_off", "liz_zs", "liz_sr"))
         officiel = zelle(z, "officiel")
         grp = [daten[j] for j in idxs]
 
+        def spielberecht(other) -> bool:
+            """Ohne Spielerpass darf niemand spielen, und ein vorhandener
+            Pass braucht ein gueltiges Medico (Spalte AX = Gueltigkeitsjahr).
+
+            - Pass: echte Nummer. 'XXX' = Antrag an die FLH geschickt, die
+              Lizenz existiert noch nicht -> zaehlt nicht.
+            - Medico: AX ist das Jahr BIS WANN gueltig. '///', leer oder ein
+              Wert kleiner als medicojahr = abgelaufen.
+            """
+            p = zelle(other, "liz_sp")
+            if not p or p.upper().startswith("XXX"):
+                return False
+            m = zelle(other, "medico")
+            return m.isdigit() and int(m) >= tarife["medicojahr"]
+
         def spielt_und_hat_lizenz(other, kategorie=None):
             return (zelle(other, "spielt") == "J"
-                    and bool(zelle(other, "liz_sp"))
+                    and spielberecht(other)
                     and (kategorie is None or zelle(other, "kategorie") == kategorie))
 
         sp_gesamt = sum(1 for o in grp if spielt_und_hat_lizenz(o))
@@ -231,7 +351,7 @@ def berechne(zeilen, ausnahmen, tarife, zusatz_bei_familie, traeger_regel="Erste
         sp_u25 = sum(1 for o in grp if spielt_und_hat_lizenz(o, "U25"))
         zusatz_pers = sum(
             1 for o in grp
-            if (not zelle(o, "liz_sp") and (any(zelle(o, k) for k in ("liz_off", "liz_zs", "liz_sr"))
+            if (not zelle(o, "liz_sp") and (any(ist_lizenz(zelle(o, k)) for k in ("liz_off", "liz_zs", "liz_sr"))
                                             or (officiel_auch and zelle(o, "officiel"))))
             or (bool(zelle(o, "liz_sp")) and zelle(o, "spielt") in ("N", "R"))
         )
@@ -251,13 +371,27 @@ def berechne(zeilen, ausnahmen, tarife, zusatz_bei_familie, traeger_regel="Erste
                                       and (zusatz_bei_familie or tarif != tarife["familie"])) else 0
 
         # Personenbezogener Wert: gilt auf DIESER Zeile, unabhaengig vom Rechnungstraeger
-        ausnahme = ausnahmen.get((zelle(z, "nom").upper(), zelle(z, "vorname").upper()))
+        # 384 ist das Maximum (siehe ZusatzBeiFamilie): zahlt der Haushalt den
+        # Familientarif, faellt der Personenwert weg. Sonst wuerde ein Reservist
+        # im Haushalt die ganze Familie auf 50 druecken - BISENIUS Ben Z64:
+        # 5 Mitglieder, 4 aktiv lizenziert, er ist Rechnungstraeger.
+        # XSEUL/GAJGL sind Sondercodes, keine Familientarife - dort bleibt es.
+        familienmax = (tarif == tarife["familie"]
+                       and fam not in (XSEUL_CODE, GAJGL_CODE))
+        ausnahme = ausnahmen.get((zelle(z, "nom").upper(),
+                                  zelle(z, "vorname").upper()))
         if ausnahme:
             personenwert, personen_grund = ausnahme, "namentliche Ausnahme"
-        elif liz_sp and (spielt == "R" or fam == GAJGL_CODE):
+        elif (not familienmax and liz_sp
+              and fam in (XSEUL_CODE, GAJGL_CODE)
+              and (spielt == "R" or fam == GAJGL_CODE
+                   or any(zelle(z, k) == "FRAGEN"
+                          for k in ("frage1", "frage2", "frage3", "frage4")))):
             personenwert = reservisten_wert
-            personen_grund = ("Spieler mit Status R" if spielt == "R"
-                              else "Spieler mit Code GAJGL")
+            personen_grund = (
+                ("Spieler mit Status R" if spielt == "R"
+                 else "Sondercode GAJGL" if fam == GAJGL_CODE
+                 else "Spieler mit Lizenz und offener Frage (AW:AZ)"))
         else:
             personenwert, personen_grund = "", ""
 
@@ -277,12 +411,36 @@ def berechne(zeilen, ausnahmen, tarife, zusatz_bei_familie, traeger_regel="Erste
         #    Wichtig: XSEUL selbst ist KEIN Familiencode (72 Einzelpersonen),
         #    darum darf die 300er-Regel nicht pauschal wegfallen.
         elif fam == XSEUL_CODE and not (key.startswith("ADR:") and sp_gesamt >= 2):
-            wert, grund = str(tarife["xseul"]), "Sondercode XSEUL"
+            # XSEUL richtet sich nach dem Spielstatus, nicht nach der Lizenz:
+            #   J        -> 300  (der Fixbetrag fuer Spieler)
+            #   R oder N -> (0+50)
+            #   sonst     -> 0
+            # BLANC Max (nur Offiziellenlizenz) und DIDELOT-SCHOEN (keine
+            # Lizenz) sind beide Status N und landen damit bei (0+50).
+            # Kein Durchfallen bei "kein Status": sonst wuerde der Traeger der
+            # 74-kopfigen XSEUL-Gruppe den Familientarif 384 bekommen.
+            if spielt == "J" and spielberecht(z):
+                wert, grund = str(tarife["xseul"]), "Sondercode XSEUL (Status J)"
+            elif spielt == "J":
+                wert, grund = ("0",
+                               "Sondercode XSEUL, kein gültiger Spielerpass "
+                               "oder Medico abgelaufen")
+            elif spielt in ("N", "R"):
+                wert, grund = (f"(0+{tarife['zusatz']})",
+                               f"Sondercode XSEUL, Status {spielt}")
+            else:
+                wert, grund = "0", "Sondercode XSEUL, kein Spielstatus"
         elif fam == GAJGL_CODE:
             wert, grund = str(tarife["gajgl"]), "Sondercode GAJGL"
         # 5) nur beim Rechnungstraeger
         elif i != traeger[key]:
-            wert, grund = "", "nicht Rechnungstraeger"
+            # Nicht-Receiver-Zeilen: Familiencode anzeigen statt Leerklick, damit sofort
+            # erkennbar ist, zu welchem Haushalt die Person gehoert (Spalte BEZAHLT = J
+            # blendet das spaeter durch den echten Betrag ersetzen bzw. ausblenden).
+            if NICHTTRAEGER_CODE_ANZEIGEN and fam and not fam.startswith("ADR:"):
+                wert, grund = fam, f"nicht Rechnungstraeger (Familie {fam})"
+            else:
+                wert, grund = "", "nicht Rechnungstraeger"
         # 6) Regeltarif
         elif tarif == 0 and zusatz == 0:
             wert, grund = "", "kein Spielertarif, kein Zusatz"
@@ -294,11 +452,45 @@ def berechne(zeilen, ausnahmen, tarife, zusatz_bei_familie, traeger_regel="Erste
             if zusatz:
                 grund += f" + {zusatz} Zuschlag (pauschal, {zusatz_pers} Person/en)"
 
+        # Comite-Zusatzregel: wer im Comite sitzt (Spalte 'Comite' in der CSV,
+        # BI bzw. CAT-Code 1 in der Mappe) zahlt mindestens 50 - Stimmrecht an
+        # der AG. Also NIE "(0+50)" und NIE der Haushaltscode eines anderen.
+        # METZLER Bernard (Sekretaer) zeigte vorher nur F0026, jetzt 50.
+        # AUSNAHME: wer aktiv SPIELT (Status J), ist ueber seinen Haushalt
+        # abgedeckt und zeigt weiter den Familiencode - EPPS Charly Z163 ist
+        # Spieler in F0039, das 384 zahlt (Bruder Thomas + Mutter PIRSON
+        # Isabelle als Traegerin). Er darf nicht auf 50 heruntergesetzt werden.
+        # Ein Traeger, der selbst 210/300/384 zahlt, bleibt ohnehin unberuehrt.
+        # CLEMENT Liliane ist nicht im Comite und bleibt bei (0+50).
+        if (ist_comite and not (spielt == "J" and spielberecht(z))
+                and (wert in ("", "0") or wert == fam
+                     or wert.startswith("(0+"))):
+            wert, grund = str(tarife["zusatz"]), "Comité-Mitglied, Minimum 50"
+        elif ist_comite and "(+0+" in wert and wert.endswith(")"):
+            # Comite-Mitglied: der Zuschlag wird WIRKLICH berechnet, nicht nur
+            # notiert - SCHUSTER Jeff (Praesident): Sohn Elie spielt U25 = 210,
+            # plus 50 = 260. Er erreicht das Maximum 384 nicht, also 260.
+            # Fuer alle ohne Comite bleibt die Notation "(0+50)" stehen und
+            # der Parser liest weiter nur die Zahl davor (also 210).
+            basis = wert.split("(")[0].strip()
+            zusatz = wert.rsplit("+", 1)[1].rstrip(")").strip()
+            try:
+                summe = int(float(basis) + float(zusatz))
+            except ValueError:
+                summe = None
+            if summe is not None:
+                wert, grund = str(summe), (
+                    f"Tarif {basis} + {zusatz} Zuschlag, Comité-Mitglied")
+
         ergebnis.append({
             "excel_zeile": excel_zeile,
             "nom": zelle(z, "nom"),
             "vorname": zelle(z, "vorname"),
             "fam": fam or "(einzeln)",
+            # famkey = Wert der Excel-Hilfe BP (FamID). Wird fuer den
+            # Stripe-Abgleich gebraucht: das ist die Rechnungsadresse, nicht
+            # der Rohcode aus Q. Leerer Code ergibt "@<Zeile>" (Phantomzeile).
+            "famkey": key,
             "kategorie": kat,
             "spielt": spielt,
             "bestehend": zelle(z, "cotis"),
