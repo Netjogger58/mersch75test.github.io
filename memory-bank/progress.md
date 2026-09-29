@@ -1342,3 +1342,39 @@ Liste und führt danach den Pfadcheck erneut aus.
 **Endabnahme:** 5 echte Excel-gegen-Python-Unterschiede · Stripe 181 /
 39.218 € · X-Regel hält · Pfadcheck `KAPUTT (0)` — alles **unverändert**.
 
+
+
+---
+
+## 2026-09-29 (III) — Commits und Push
+
+**Repo `mersch75test.github.io`** — `46acd25` (57 Dateien, 7694 Zeilen)
+> fix(cotisation): veraltete xlsm-Pfade reparieren, Pfadcheck + Archiv-Tool
+> ergaenzen
+
+Erfasst: die komplette Werkzeugkette in `docs/cotisation/` (51 Skripte waren
+nie versioniert), die Pfad-Korrekturen, `pfadcheck.py`, `archivieren.py`,
+`cardids_generieren.py`, sowie `memory-bank/progress.md`.
+
+**Repo `Vereins-OS`** — `d7105e6` (5 Dateien, 370 Zeilen)
+> docs(cotisation): Anleitung + Integration Context erfassen, xlsm-Sicherungen
+> sperren
+
+- `ANLEITUNG-Cotisation-Tresorier.md` nannte noch `GC 2026-09-26 …` → korrigiert
+- `spielberechtung-ohne-pass.md`, `memory-bank/integrationContext.md`,
+  `.clinerules` erstmals versioniert
+- `.gitignore`: `*.xlsm.bak*` (die `…bak-ohne-Formeln` ist eine Memberslescht
+  und fiel vorher **nicht** unter `*.xlsm` — DSGVO-Lücke geschlossen),
+  dazu `playwright-report/`, `test-results/`
+
+**Vorher geprüft:** Secret-Scan beider Repos (nur Platzhalter wie
+`sk_test_...`, keine echten Keys) · alle `.py` kompilierbar · Pfadcheck
+`KAPUTT (0)`.
+
+**Beide Pushes bestätigt** (lokal == origin). GitHub Pages: `status: built`
+auf `46acd25`, `mersch75.lu/` und `/join.html` → HTTP 200.
+
+**Bewusst nicht committet:** `hallo.txt` (Testdatei), `_agent10_check.py`,
+`assets/Unbenannt-1.psd`, `assets/assets/`, `docs/pruefe-fanshop-slide.py`,
+`scripts/google-apps-script-stripe-bridge.js` — alle unabhängig von dieser
+Arbeit.
