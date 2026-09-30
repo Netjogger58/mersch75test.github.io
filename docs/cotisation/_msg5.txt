@@ -1,0 +1,31 @@
+fix(cotisation): eine Klammer zu viel in BV, Mappe an der Quelle orientiert
+
+Der Reparatur-Dialog blieb trotz behobener Entities und trotz t="str".
+Alle meine Pruefungen meldeten gruen - und waren es auch.
+
+Ich hatte die BV-Formel neu KONSTRUIERT statt sie zu AENDERN. Dabei ist
+an Zeichen 189 eine Klammer dazugekommen:
+
+  funktionierend  ..."'",""))))>0,"ADR:"&
+  kaputt          ..."'",""))))>0),"ADR:"&
+
+Beide sind fuer sich ausgeglichen, deshalb haben Klammerpruefung,
+XML-Pruefung und Entity-Pruefung nichts gemeldet. Klammerbalance
+beweist nur, dass die Gesamtzahl stimmt - nicht, dass die Formel
+dieselbe ist. Der zeichengenaue Vergleich mit dem Original hat es
+aufgedeckt.
+
+Loesung: BV wird nicht mehr gebaut, sondern aus der Originalformel
+abgeleitet - die XSEUL-Verzweigung als reine Einfuegung, ohne eine
+Klammer zu beruehren. Die Formel steht als eine einzige Python-Zeile in
+FORMELN; als verkettete Literale hatte Python hier schon zweimal still
+ein Tupel aufgesplittet (4 statt 3 Elemente), wodurch nur der letzte
+Teil als Formel galt.
+
+Neu: formeln_gegen_datei_pruefen.py vergleicht FORMELN zeichengenau mit
+dem, was in der Mappe steht. Gegen die kaputte Fassung meldet es
+Zeichen 189 - genau die Stelle, an der Excel gescheitert ist.
+
+Zwischenloesung: Weil die Ursache nicht sicher war, wurde die Mappe auf
+den byte-identischen Sicherungsstand zurueckgesetzt (per cmp geprueft).
+Die E7/E8-Fassung liegt als ...mit-E7E8-2026-09-30.xlsm daneben.

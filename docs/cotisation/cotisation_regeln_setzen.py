@@ -109,17 +109,18 @@ FORMELN = [
      'Cotisation!$B$10),""))'),
     ("BV", "FamID",
      # E8: XSEUL ist KEIN Haushalt, sondern ein Sammelcode fuer
-     # Einzelpersonen. Ohne eigenen Schluessel teilen sich alle 72 Mitglieder
-     # den Schluessel "XSEUL" und liegen im Stripe-Abgleich in EINER
-     # Rechnungseenheit (61 Posten in einem Schluessel). Jedes bekommt jetzt
-     # "XS:<Card-ID>" (Spalte D). Die Adresspruefung steht bewusst VOR der
-     # XSEUL-Pruefung: die ANSAY-Brueder teilen eine gelistete Adresse und
-     # muessen als 1x 384 behandelt werden, nicht als 2x 300.
-     '=IF($Q{r}="","",IF(SUMPRODUCT(--(SUBSTITUTE(SUBSTITUTE('
-     'SUBSTITUTE(UPPER(Cotisation!$I$2:$I$50)," ",""),".",""),"\'","")'
-     '=SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(UPPER($G{r})," ",""),".",""),"\'","")))'
-     '>0),"ADR:"&SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(UPPER($G{r})," ",""),".",""),"\'",""),'
-     'IF($Q{r}="XSEUL","XS:"&$D{r},$Q{r}))'),
+     # Einzelpersonen. Ohne eigenen Schluessel teilen sich alle 72
+     # Mitglieder den Schluessel "XSEUL" und liegen im Stripe-Abgleich
+     # in EINER Rechnungseenheit. Jedes bekommt jetzt "XS:<Card-ID>".
+     # Die Adresspruefung steht bewusst VOR der XSEUL-Pruefung: sonst
+     # waeren die ANSAY-Brueder zwei Einzelpersonen statt eines
+     # Haushalts mit 384.
+     #
+     # ACHTUNG: eine einzige Zeile, bewusst. Als mehrere verkettete
+     # Literale hat Python hier schon zweimal ein Tupel aufgesplittet,
+     # woraufhin nur der letzte Teil als Formel galt.
+     # ACHTUNG 2: hier stehen ROHE Zeichen, esc() escaped beim Schreiben.
+     '=IF($Q{r}="","",IF(SUMPRODUCT(--(SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(UPPER(Cotisation!$I$2:$I$50)," ",""),".",""),"\'","")=SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(UPPER($G{r})," ",""),".",""),"\'","")))>0,"ADR:"&SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(UPPER($G{r})," ",""),".",""),"\'",""),IF($Q{r}="XSEUL","XS:"&$D{r},$Q{r})))'),
     ("CJ", "XSEULwert",
      # E7: der Comite-Zweig sitzt jetzt IN CJ statt in einer Traeger-
      # Ausnahme. Seit E8 ist jedes XSEUL-Mitglied sein eigener Rechnungs-

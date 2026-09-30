@@ -1,3 +1,15 @@
+## Zweite Ursache gefunden: eine Klammer zu viel in BV – 2026-09-30
+
+- **Symptom:** Der Reparatur-Dialog blieb trotz behobener Entities und trotz `t="str"`. Meine Prüfungen meldeten alles grün.
+- **Ursache:** Ich hatte die BV-Formel beim Neuaufbau **neu konstruiert** statt zu ändern. Dabei ist an Zeichen 189 eine Klammer dazugekommen: `..."'",""))))>0,"ADR:"&` (funktionierend) wurde zu `..."'",""))))>0),"ADR:"&`. Beide sind für sich **ausgeglichen** – deshalb haben Klammerprüfung, XML-Prüfung und Entity-Prüfung alle nichts gemeldet. Excel lehnt die Datei aber ab.
+- **Merksatz:** Klammerbalance beweist nur, dass die Gesamtzahl stimmt. Sie sagt nichts darüber, ob die Formel **dieselbe** ist. Erst der zeichengenaue Vergleich mit dem Original hat es aufgedeckt.
+- **Lösung:** BV wird nicht mehr neu gebaut, sondern **aus der Originalformel abgeleitet**: die XSEUL-Verzweigung wird als reine Einfügung vor `,$Q{r}))` eingesetzt, ohne eine einzige Klammer zu berühren. Formel steht jetzt als **eine einzige** Python-Zeile in FORMELN – als verkettete Literale hatte Python hier schon zweimal still ein Tupel aufgesplittet (4 statt 3 Elemente), wodurch nur der letzte Teil als Formel galt.
+- **Neu: `formeln_gegen_datei_pruefen.py`** vergleicht FORMELN zeichengenau mit dem, was tatsächlich in der Mappe steht, und gibt den Abstand zum Original aus. Gegen die kaputte Fassung meldet es Zeichen 189 – also genau die Stelle, an der Excel gescheitert ist.
+- **Zwischenlösung:** Weil die Ursache nicht sicher war, wurde die Mappe zwischenzeitlich auf den **byte-identischen** Sicherungsstand zurückgesetzt (byteweise per `cmp` geprüft). Die E7/E8-Fassung liegt als `…mit-E7E8-2026-09-30.xlsm` daneben.
+- **Verifikation:** `mappe_pruefen.py` grün, `formeln_gegen_datei_pruefen.py` grün (10/10 Spalten identisch, Abstand zum Original wie erwartet), `pruefe_formeln.py` 0 Fehler, `spec_pruefen.py` 19/19, `pruefe_stripe_tor.py` grün.
+- **Lehre für die weitere Arbeit:** Vor jedem Schreibvorgang in eine `.xlsm` muss ein Test laufen, der die **geschriebene Datei** gegen die **bekannt gute Vorlage** stellt – nicht gegen die eigenen Prüfkriterien. Drei Fehler in Folge (Entities, Zelltyp, Klammerlage) waren alle nur so auffindbar.
+
+
 ## Excel-Reparatur-Dialog: doppelt escapte Entities in BV und CJ – 2026-09-30
 
 - **Symptom:** Excel öffnet die Arbeitsmappe nicht mehr, sondern fragt „Wir haben ein Problem bei einigen Inhalten … Sollen wir so viel wie möglich wiederherstellen?"
