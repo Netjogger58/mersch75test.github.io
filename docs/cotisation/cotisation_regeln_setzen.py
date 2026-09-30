@@ -403,7 +403,18 @@ def main() -> int:
                 angelegt += 1
                 continue
             attr = re.sub(r'\s*r="[^"]*"', "", alt.group(1)).strip()
-            attr = re.sub(r'\s*t="[^"]*"', "", attr)
+            # WICHTIG: das Attribut t="..." MUSS ERHALTEN BLEIBEN.
+            # Es deklariert den Zelltyp. Die Formeln in BV, CJ, CH, L, CC
+            # liefern TEXT ("F0103", "300", "TRAEGER"), die Zellen sind
+            # deshalb t="str". Ohne das Attribut nimmt Excel einen
+            # numerischen Zell an, findet Text vor und entfernt die Formel -
+            # der Reparatur-Dialog ist die Folge. Genau das ist am
+            # 30.09.2026 passiert: 5 Spalten verloren dabei ihr t.
+            # Ein vorhandenes t wird daher uebernommen, nur ein veraltetes
+            # t="e" (Fehlerzelle) wird entfernt, weil eine korrekte Formel
+            # keinen Fehlercache mehr traegt.
+            if re.search(r'\st="e"', attr):
+                attr = re.sub(r'\s*t="e"', "", attr)
             # In OOXML steht die Formel OHNE fuehrendes "=" - Excel wuerde
             # die Datei sonst als Inhaltsfehler bemecken.
             f = esc(formel.format(r=r, e=ERSTE, l=LETZTE).lstrip("="))

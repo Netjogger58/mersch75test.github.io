@@ -1,0 +1,28 @@
+fix(cotisation): Zelltyp t="str" ging verloren, calcChain entfernt
+
+Excel meldete nun auch "Entfernte Datensätze: Formel von sheet1.xml".
+
+Hauptursache war ein Fehler in meinem eigenen Skript: beim Ersetzen einer
+Formel wurde das Zellattribut t="..." per Regex entfernt. Die Formeln in
+L, BV, CJ, CH und CC liefern aber TEXT ("F0103", "300", "TRAEGER"). Ohne
+t="str" nimmt Excel einen numerischen Zell an, findet Text vor und
+entfernt die Formel - genau das war die Meldung.
+
+Fix: ein vorhandenes t wird uebernommen, nur ein veraltetes t="e"
+(Errorzelle) wird entfernt, weil eine korrekte Formel keinen Fehlercache
+mehr traegt.
+
+Zusaetzlich die calcChain.xml entfernt (50.617 Eintraege, 1 MB). Sie ist
+ein reiner Reihenfolge-Cache und passt nach dem Ersetzen von 8.997
+Formelzellen nicht mehr. Excel baut sie beim naechsten Speichern neu auf;
+die Zellaenge aendert sich nicht. Neues Skript calcchain_entfernen.py
+entfernt Teil, Beziehung und Content-Type-Eintrag.
+
+mappe_pruefen.py prueft jetzt auch den Zelltyp. Erwartungswerte stammen
+aus der Sicherung ..._vor-E7E8.xlsm: L/BV/CJ/CC mit t="str", CH 590
+Zellen damit (Zeilen 2-591) und 310 ohne (592-901, der nie berechnete
+Bereich - im Original ebenfalls ohne, also kein Schaden).
+
+Wirksamkeitsnachweis: gegen die kaputte Fassung meldet der Pruefer 4491
+doppelt escapte Entities, 3414 Zellen ohne t="str" und 0 statt 590
+CH-Zellen. Gegen die aktuelle Mappe: alles gruen.

@@ -13,7 +13,7 @@ sys.path.insert(0, '/Users/netjogger58/CascadeProjects/mersch75test.github.io/do
 import mappe  # noqa: E402
 
 DOPPELT = re.compile(r'&amp;(?:amp|gt|lt|quot);')
-ZELLE = re.compile(r'<c r="([A-Z]+)(\d+)"[^>]*><f[^>]*>(.*?)</f>', re.S)
+ZELLE = re.compile(r'<c r="([A-Z]+)(\d+)"([^>]*)>(.*?)</c>', re.S)
 
 
 def main() -> int:
@@ -49,20 +49,53 @@ def main() -> int:
                 doppelt += n
         print('doppelt escapte Entities:', doppelt)
 
-        # 3) Formelzellen: Klammerbalance nach dem Auslesen
+        # 3) Formelzellen: Klammerbalance nach dem Auslesen UND Zelltyp.
+        # Der Zelltyp t="str" ist Pflicht, sobald die Formel Text liefert.
+        # Ohne das Attribut entfernt Excel die Formel und zeigt den
+        # Reparatur-Dialog - am 30.09.2026 bei 5 Spalten passiert.
         x = z.read('xl/worksheets/sheet1.xml').decode('utf-8')
         kaputt = 0
+        fehlend_t = 0
+        ch_mit_t = 0
         gesamt = 0
+        # Spalten, die nachweislich TEXT liefern und daher t="str" brauchen.
+        # Verifiziert gegen die Sicherung ..._vor-E7E8.xlsm:
+        #   L, BV, CJ, CC  -> dort 900/897/900/900 Zellen mit t="str"
+        #   CH              -> 590 mit t="str" (Zeilen 2-591), 310 OHNE
+        #                      (Zeilen 592-901, der nie berechnete Bereich -
+        #                      das ist so im Original und kein Schaden)
+        # CE, CG und CL liefern Zahlen und hatten nie ein t.
+        TEXT_SPALTEN = ('L', 'BV', 'CJ', 'CC')
+        # CH: 590 Zeilen erwarten t="str", 310 sind vorbestehend ohne.
+        CH_ERWARTET = 590
         for m in ZELLE.finditer(x):
+            inhalt = m.group(4)
+            if '<f' not in inhalt:
+                continue
             gesamt += 1
-            f = (m.group(3).replace('&gt;', '>').replace('&lt;', '<')
+            ref = m.group(1) + m.group(2)
+            attr = m.group(3)
+            fm = re.search(r'<f[^>]*>(.*?)</f>', inhalt, re.S)
+            f = (fm.group(1).replace('&gt;', '>').replace('&lt;', '<')
                  .replace('&quot;', '"').replace('&amp;', '&'))
             if f.count('(') != f.count(')'):
                 kaputt += 1
                 if kaputt <= 5:
-                    fehler.append(f'{m.group(1)}{m.group(2)}: Klammern '
-                                  f'{f.count("(")}/{f.count(")")}')
-        print(f'Formelzellen: {gesamt} | unbalanciert: {kaputt}')
+                    fehler.append(f'{ref}: Klammern {f.count("(")}/'
+                                  f'{f.count(")")}')
+            if m.group(1) in TEXT_SPALTEN and 't="str"' not in attr:
+                fehlend_t += 1
+                if fehlend_t <= 5:
+                    fehler.append(f'{ref}: Spalte {m.group(1)} verliert t="str"')
+            if m.group(1) == 'CH' and 't="str"' in attr:
+                ch_mit_t += 1
+        print(f'Formelzellen: {gesamt} | unbalanciert: {kaputt} '
+              f'| ohne t="str": {fehlend_t}')
+        if ch_mit_t != CH_ERWARTET:
+            fehler.append(f'CH: {ch_mit_t} Zellen mit t="str", '
+                          f'erwartet {CH_ERWARTET}')
+        else:
+            print(f'CH-Zellen mit t="str": {ch_mit_t} (erwartet {CH_ERWARTET})')
 
     print()
     if fehler:
