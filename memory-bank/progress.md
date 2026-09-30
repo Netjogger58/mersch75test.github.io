@@ -1,3 +1,15 @@
+## U11-Turniere waren unsichtbar – Phantom-Filter gefunden und entschärft – 2026-09-30
+
+- **Symptom:** Im Live Center waren **5 U9-Turniere und 0 U11-Turniere** sichtbar, obwohl 4 U11-Termine korrekt in den Daten standen. Die Rohdaten waren zu jedem Zeitpunkt richtig – der Fehler lag **ausschließlich in der Anzeige**.
+- **Ursache:** In `renderAllGames` unterdrückte ein alter Phantom-Zeilen-Filter jede Zeile, auf die `/Turn.?ier\s*U11/i` auf **`heim` UND `gast`** passte. Er war für eine alte Platzhalter-Zeile gedacht, hat aber jede echte U11-Turnierzeile (`gast: "Turnier U11"`) mit weggenommen. U9 war nicht betroffen, weil das Muster nur „U11" kennt – daher genau „5 U9, 0 U11".
+- **Fix:** Der Filter unterdrückt jetzt nur noch Zeilen **ohne Team UND ohne Ergebnis**. Die 4 U11-Turniere erscheinen wieder.
+- **Der eigentliche Fehler war meiner:** Ich hatte die Turnierdaten korrekt eingetragen, `node --check` war grün und mein Sichtbarkeitstest war ebenfalls grün – weil er nur die **Daten** prüfte, nicht den **Anzeigefilter**. Die Prüfung muss die Seite nachbilden, nicht nur die Daten lesen.
+- **Test erweitert:** `tourer_sichtbarkeit_pruefen.py` sucht jetzt **alle** Zeilen-Unterdrücker der Form `if (…) return;` im `renderAllGames`-Block, wertet jeden gegen die echten Turnierdaten aus und meldet jeden, der ein Turnier verschluckt. Er verdrahtet **keinen** aktuellen Filter fest, sondern findet neue automatisch. Optionaler Pfad-Parameter erlaubt den Lauf gegen einen alten Stand.
+- **Wirksamkeitsbeweis:** Gegen den gepushten Commit `d5f8b83` (mit dem Fehler) meldet der Test **4 unterdrückte Turniere** namentlich: 10.11., 11.10., 18.10. und 25.10.26. Gegen den aktuellen Stand: grün. Erst dieser Vergleich macht den Test glaubwürdig.
+- **Generator geprüft:** dort tritt der Fehler nicht auf – es gibt keinen solchen Filter, und die 7 Zeilen bleiben nach der Deduplizierung erhalten (`generator_tour_pruefen.py` grün).
+- **Verifikation:** `live-center.html` mit `node --check` gültig, beide Turnier-Tests grün, Debug-Skript entfernt.
+
+
 ## Anleitung, Stripe-Test und Live-Center-Turniere – 2026-09-30
 
 - **`ANLEITUNG-Cotisation-Tresorier.md` überarbeitet** (829 Zeilen, 6.113 Wörter, 19 Kapitel): neues Kapitel **19 „Die Prüfskripte"**, neuer Rubrik-Abschnitt **„Ein Haushalt, eine Rechnung"** (E7), Checkliste um „kein Haushalt hat zwei Posten" ergänzt, Kapitel 11 um `XS:<Card-ID>` erweitert, Kapitel 12 an E7 angepasst, Kapitel 7 stellt klar dass das Stripe-Tor auf **`$CC`** beruht (nicht `$BW`).

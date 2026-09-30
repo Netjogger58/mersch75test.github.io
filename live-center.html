@@ -1262,8 +1262,15 @@ let currentPhase = "";
 
 sortedGames.forEach(r => {
 try {
-// Phantom-Zeile "Turnéier U11" (ohne Resultat -> "Kommend") nicht anzeigen
-if (/Turn.?ier\s*U11/i.test(r.heim || "") || /Turn.?ier\s*U11/i.test(r.gast || "")) return;
+// Alte Phantom-Zeile "Tournoi U11" ausblenden: sie hatte weder Ergebnis noch
+// Ort und war nur ein Platzhalter.
+// ACHTUNG: der alte Filter lief auf /Turn.?ier\s*U11/ gegen heim UND gast.
+// Meine echten U11-Turniere haben gast = "Turnier U11" und wurden dadurch
+// komplett ausgeblendet - 5 U9-Turniere sichtbar, 0 U11. Jetzt wird nur noch
+// eine Zeile ohne Team UND ohne Ergebnis unterdrueckt.
+const ohneTeam = !trimText(r.team);
+const ohneErgebnis = !trimText(r.score) || trimText(r.score) === '-';
+if (ohneTeam && ohneErgebnis && /Turn.?ier/i.test((r.heim || '') + ' ' + (r.gast || ''))) return;
 let cleanTeam = normalizeTeamLabel(r.team || "");
 let groupKey = getTeamGroupKey(r.team || "");
 if (groupKey !== currentCat) {

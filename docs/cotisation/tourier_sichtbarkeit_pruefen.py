@@ -8,6 +8,7 @@ fuehrt dieselben Funktionen in Node aus, die auch die Seite benutzt.
 import re
 import pathlib
 import subprocess
+import sys
 
 SEITE = pathlib.Path(__file__).resolve().parents[2] / 'live-center.html'
 
@@ -99,6 +100,49 @@ zeilen.filter(function(r) { return !istTurnier(r); }).forEach(function(r) {
     });
 });
 
+// 4) KRITISCH: die Seite enthaelt in renderAllGames einen Filter, der Zeilen
+//    per "return" unterdrueckt. Genau dort sind die U11-Turniere am
+//    30.09.2026 verschwunden: der alte Phantom-Filter /Turn.?ier\s*U11/
+//    lief gegen heim UND gast und hat jede echte U11-Turnierzeile
+//    weggeworfen (5 U9 sichtbar, 0 U11).
+//    Dieser Test sucht ALLE solchen Filter in der Seite und prueft jeden
+//    gegen die echten Daten - statt den aktuellen Filter zu verdrahten.
+function trimT(v) { return typeof v === 'string' ? v.trim() : (v == null ? '' : String(v).trim()); }
+
+// Zeilen-Unterdruecker aus der Seite einsammeln:
+//   if (<Bedingung>) return;   innerhalb der forEach-Schleife von renderAllGames
+const startFn = s.indexOf('sortedGames.forEach');
+const endFn = s.indexOf('const emptyState', startFn);
+const rumpf = s.slice(startFn, endFn > startFn ? endFn : startFn + 20000);
+
+const filterQuelle = rumpf.match(/if\s*\(([^\n]*?)\)\s*return\s*;/g) || [];
+console.log('\nGefundene Zeilen-Unterdruecker:', filterQuelle.length);
+
+filterQuelle.forEach(function(code) {
+    const kontext = code.slice(0, 110).replace(/\s+/g, ' ');
+    const bedingung = code.replace(/^if\s*\(/, '').replace(/\)\s*return\s*;$/, '');
+    let fn;
+    try {
+        fn = new Function('r', 'normalizeTeamLabel', 'trimText', 'trimT',
+            'return (' + bedingung + ');');
+    } catch (e) {
+        return;   // Bedingung laesst sich nicht isoliert auswerten
+    }
+    const opfer = zeilen.filter(function(r) {
+        try { return fn(r, normalizeTeamLabel, trimText, trimT); } catch (e) { return false; }
+    });
+    const opferTurnier = opfer.filter(istTurnier);
+    if (opfer.length) {
+        console.log('  -> ' + kontext);
+        console.log('     unterdrueckt ' + opfer.length + ' Zeilen, davon '
+            + opferTurnier.length + ' Turniere');
+    }
+    opferTurnier.forEach(function(t) {
+        fehler.push('FILTER VERSCHLUCKT TURNIER: ' + t.datum + ' ' + t.team
+            + ' ' + t.heim + '  durch  ' + kontext);
+    });
+});
+
 console.log('\nPruefungen:');
 console.log(fehler.length
     ? '  FEHLER:\n   ' + fehler.join('\n   ')
@@ -113,9 +157,18 @@ process.exit(fehler.length ? 1 : 0);
 
 
 def main() -> int:
+    # Optionaler Pfad, damit man den Test GEGEN einen alten Stand laufen
+    # lassen kann. Nur so laesst sich beweisen, dass er den Fehler ueberhaupt
+    # faengt - ein Test, der nur gegen den aktuellen Stand gruen wird,
+    # beweist nichts.
+    seite = pathlib.Path(sys.argv[1]) if len(sys.argv) > 1 else SEITE
+    if not seite.exists():
+        print('Datei nicht gefunden:', seite)
+        return 2
+    print('Geprueft:', seite.name)
     pfad = pathlib.Path('/tmp/lc_tour_test.js')
     pfad.write_text(TEST, encoding='utf-8')
-    r = subprocess.run(['node', str(pfad), str(SEITE)],
+    r = subprocess.run(['node', str(pfad), str(seite)],
                        capture_output=True, text=True)
     print(r.stdout or r.stderr)
     return r.returncode
