@@ -35,7 +35,10 @@ import mappe  # noqa: E402
 
 SHEET = "xl/worksheets/sheet1.xml"
 CONFIG = "xl/worksheets/sheet13.xml"     # Blatt "Cotisation"
-ERSTE, LETZTE = 2, 902
+ERSTE, LETZTE = 2, 901
+# LETZTE war 902, diese Zeile existiert im Blatt aber nicht (Luecke 902-908,
+# danach nur verwaiste BZ-Zellen in 909-911) - die Vorpruefung brach darauf ab.
+# Letzte vollstaendige Zeile mit A..L und allen Helfern BV..CL ist 901.
 NEUE_SPALTE = "CL"          # Spielberecht - wird einmalig angelegt
 # Fehlende Zellen in den Hilfsspalten ergaenzen (fuer neue Mitglieder).
 # Nur mit --ergaenzen, damit ein normaler Lauf die Blattstruktur nicht
@@ -98,18 +101,61 @@ FORMELN = [
      'OR(AND($O{r}="R",$AO{r}<>""),'
      'AND($AO{r}<>"",COUNTIF($BE{r}:$BH{r},"FRAGEN")>0),'
      '$Q{r}="GAJGL")),'
-     'IF(AND($BI{r}<>"",$CC{r}<>"TRAEGER",$CL{r}=0),TEXT(Cotisation!$B$4,"0"),'
+     # E7: Comite-Mindestbetrag 50 nur noch fuer den Rechnungstraeger
+     # (oder GAJGL als Sammelcode). Vorher stand hier $CC<>"TRAEGER", das
+     # jedem Comite-Mitglied eine eigene Rechnung gab.
+     'IF(AND($BI{r}<>"",$CL{r}=0,OR($CC{r}="TRAEGER",$Q{r}="GAJGL")),'
+     'TEXT(Cotisation!$B$4,"0"),'
      'Cotisation!$B$10),""))'),
+    ("BV", "FamID",
+     # E8: XSEUL ist KEIN Haushalt, sondern ein Sammelcode fuer
+     # Einzelpersonen. Ohne eigenen Schluessel teilen sich alle 72 Mitglieder
+     # den Schluessel "XSEUL" und liegen im Stripe-Abgleich in EINER
+     # Rechnungseenheit (61 Posten in einem Schluessel). Jedes bekommt jetzt
+     # "XS:<Card-ID>" (Spalte D). Die Adresspruefung steht bewusst VOR der
+     # XSEUL-Pruefung: die ANSAY-Brueder teilen eine gelistete Adresse und
+     # muessen als 1x 384 behandelt werden, nicht als 2x 300.
+     '=IF($Q{r}="","",IF(SUMPRODUCT(--(SUBSTITUTE(SUBSTITUTE('
+     'SUBSTITUTE(UPPER(Cotisation!$I$2:$I$50)," ",""),".",""),"\'","")'
+     '=SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(UPPER($G{r})," ",""),".",""),"\'","")))'
+     '&gt;0),"ADR:"&amp;SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(UPPER($G{r})," ",""),".",""),"\'",""),'
+     'IF($Q{r}="XSEUL","XS:"&amp;$D{r},$Q{r}))'),
     ("CJ", "XSEULwert",
+     # E7: der Comite-Zweig sitzt jetzt IN CJ statt in einer Traeger-
+     # Ausnahme. Seit E8 ist jedes XSEUL-Mitglied sein eigener Rechnungs-
+     # traeger, die alte Bedingung $CC<>"TRAEGER" waere also immer wahr und
+     # wuerde die 50 EUR an alle geben. Die Reihenfolge unten bildet genau
+     # pruef_cotisation ab: 300 bei gueltigem Pass, sonst (0+50) bei N/R,
+     # sonst 0 - und der Comite-Mindestbetrag 50 ueberschreibt alles, SOFERN
+     # keine gueltige Spielberechtigung vorliegt (CL=1).
      '=IF($Q{r}<>"XSEUL","",IF(AND(LEFT($BV{r},4)="ADR:",$BY{r}>=2),"",'
      'IF($CL{r}=1,TEXT(Cotisation!$B$5,"0"),'
-     'IF(OR($O{r}="N",$O{r}="R"),'
-     'IF(AND($BI{r}<>"",$CC{r}<>"TRAEGER"),TEXT(Cotisation!$B$4,"0"),'
-     '"(0+"&TEXT(Cotisation!$B$4,"0")&")"),"0"))))'),
+     'IF($BI{r}<>"",TEXT(Cotisation!$B$4,"0"),'
+     'IF(OR($O{r}="N",$O{r}="R"),"(0+"&amp;TEXT(Cotisation!$B$4,"0")&amp;")","0")))))'),
+    # ---------------------------------------------------------------- E7
+    # "Nur der Rechnungstraeger bekommt einen Posten." Ein Offizieller, der
+    # NICHT Traeger ist, darf keine eigene Rechnung erzeugen - die 50 EUR
+    # stecken dann im Betrag des Traegers. Der Fehler war F0026: CLEMENT
+    # Liliane (0+50) und METZLER Bernard 50 = zwei Posten fuer EINEN Haushalt
+    # (100 EUR). Seit E8 ist jedes XSEUL-Mitglied sein eigener Traeger
+    # (eigener Schluessel XS:<Card-ID> in BV), die alte Ausnahme
+    # $CC<>"TRAEGER" fuer XSEUL ist damit gegenstandslos und muss raus,
+    # sonst verliert VAN DER WEKEN Louis (XSEUL, Comite, R) seine 50 EUR.
+    # GAJGL bleibt ausgenommen: Sammelcode ohne Haushaltsbezug, pro Zeile.
+    # CH wird VOR CC geprueft, deshalb muss die Comite-Mindestregel dort UND
+    # in L sitzen - sonst weicht die Mappe von pruef_cotisation ab.
     ("L", "Cotisatioun",
      # erste Schranke braucht auch den Namen: sonst liefern die ~310 Leerzeilen
      # unter den Daten ueber CH="0" eine Rechnung "0" (z. B. Zeile 592).
-     '=IF(OR($BV{r}="",$A{r}=""),"",'
+     # Status P (frueher X, seit 29.09.2026): ein P-Mitglied ohne jeden
+     # spielberechtigen Haushaltsmitglied (BY = SpielerGes = 0) ergibt 0.
+     # Vorher lieferte der Zweig "CE=0 und CG>0" dort "(0+50)", weil der
+     # Zuschlag-Helper CB auch bei P anloest (RESSEL Z458, ROCHA MAJERUS
+     # Z468). BY>=1 -> ganz normal weiter: wer Traeger eines Haushalts
+     # MIT Spieler ist, zahlt den Haushaltsbetrag (BINGEN Z58 = 210,
+     # MARCK Z351 = 384). Ohne diese Schranke wuerden 1.434 EUR
+     # Haushaltsguthaben ersatzlos auf 0 gehen.
+     '=IF(OR($BV{r}="",$A{r}=""),"",IF(AND($O{r}="P",$BY{r}=0),"0",'
      'IF($CD{r}<>"",$CD{r}&"",IF($CH{r}<>"",$CH{r}&"",'
      'IF($CJ{r}<>"",$CJ{r}&"",IF($CC{r}="TRAEGER",'
      # Komite-Mitglied mit eigenem Tarif: der Zuschlag wird DAZUGEREchnet und
@@ -119,8 +165,13 @@ FORMELN = [
      'IF(AND($BI{r}<>"",$CL{r}=0,$CE{r}>0,$CG{r}>0),TEXT($CE{r}+$CG{r},"0"),'
      'IF($CE{r}=0,IF($CG{r}>0,"(0+"&TEXT($CG{r},"0")&")",""),'
      'TEXT($CE{r},"0")&IF($CG{r}>0," (+0+"&TEXT($CG{r},"0")&")",""))),'
-     'IF(AND($BI{r}<>"",$CL{r}=0),"50",'
-     'IF(LEFT($BV{r},4)="ADR:",$Q{r}&"",$BV{r}&"")))))))'),
+     # E7: Nicht-Traeger bekommen KEINE eigene Rechnung mehr. METZLER
+     # Bernard (F0026, Comite) zeigte hier 50, obwohl CLEMENT Liliane den
+     # Haushalt bereits mit (0+50) abrechnet - 100 EUR fuer eine Familie.
+     # Der Comite-Mindestbetrag gilt nur noch fuer den Rechnungstraeger.
+     'IF(AND($BI{r}<>"",$CL{r}=0,OR($CC{r}="TRAEGER",$Q{r}="GAJGL")),'
+     'TEXT(Cotisation!$B$4,"0"),'
+     'IF(LEFT($BV{r},4)="ADR:",$Q{r}&"",$BV{r}&""))))))))'),
 ]
 
 
@@ -412,6 +463,26 @@ def main() -> int:
         ET.fromstring(cfg_neu)
         teile[CONFIG] = cfg_neu.encode("utf-8")
         print("Config: Cotisation!A13/B13 = MedicoJahr / 2026 gesetzt")
+
+    # Excel muss beim Oeffnen VOLLSTAENDIG neu rechnen. Dieses Skript ersetzt
+    # 8.100 Formelzellen und entfernt dabei die gecachten <v>-Werte. Ohne
+    # fullCalcOnLoad zeigte die Mappe beim Oeffnen ueberall leer, bis
+    # jemand manuell Strg+Alt+F9 gedrueckt haette. Gleiches Muster wie in
+    # build_perfect_workbook.py:203.
+    wb = teile["xl/workbook.xml"].decode("utf-8")
+    wb_neu, n_calc = re.subn(
+        r"<calcPr", '<calcPr fullCalcOnLoad="1"', wb, count=1)
+    if n_calc != 1:
+        # calcPr fehlt: direkt vor </workbook> einfuegen
+        wb_neu, n_calc = re.subn(r"</workbook>",
+                                '<calcPr fullCalcOnLoad="1"/></workbook>',
+                                wb, count=1)
+    if n_calc != 1:
+        raise SystemExit("ABBRUCH: calcPr/workbook.xml nicht gefunden. "
+                         "Es wurde nichts geschrieben.")
+    ET.fromstring(wb_neu)
+    teile["xl/workbook.xml"] = wb_neu.encode("utf-8")
+    print("calcPr: fullCalcOnLoad=1 gesetzt (Excel rechnet beim Oeffnen)")
 
     tmp = pfad.with_suffix(".tmp")
     with zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED) as out:

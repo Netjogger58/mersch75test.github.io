@@ -516,10 +516,24 @@ let allStandingsData = [
 ];
 
 // Turnierdaten U9/U11/U7 (Turnier-Format, keine Championnat-Tabellen)
+//
+// Format: heim = Ausrichter bzw. Spielort, gast = "Turnier <Alter>", damit die
+// Zeile in team-JUGEND-Boxen (u9mNext/u11m1Next/u7mNext) gefunden wird und in
+// "Alle Spiele" erscheint. score bleibt leer bis das Ergebnis feststeht.
+// Datum "DD.MM.YY H:MM" - die Anzeige parst genau dieses Format.
 const tournamentData = [
     { team: "JUGEND: U9M", datum: "10.11.26 9:30", heim: "Mersch75", gast: "Turnier U9", score: "", bem: "Tournoi U9", sbo: "", rtl: "", nr: "", halle: "" },
     { team: "JUGEND: U11M-1", datum: "10.11.26 9:30", heim: "Mersch75", gast: "Turnier U11", score: "", bem: "Tournoi U11", sbo: "", rtl: "", nr: "", halle: "" },
-    { team: "JUGEND: U7M", datum: "22.11.26 9:30", heim: "Mersch75", gast: "Plateau U7", score: "", bem: "Plateau U7", sbo: "", rtl: "", nr: "", halle: "" }
+    { team: "JUGEND: U7M", datum: "22.11.26 9:30", heim: "Mersch75", gast: "Plateau U7", score: "", bem: "Plateau U7", sbo: "", rtl: "", nr: "", halle: "" },
+    // --- Saison 2026/27: Turnier-Termine (vom User am 30.09.2026 gemeldet) ---
+    // Nach Datum sortiert - sonst stehen die Turniere in falscher Reihenfolge.
+    { team: "JUGEND: U11M-1", datum: "11.10.26 9:30", heim: "HB Esch", gast: "Turnier U11", score: "", bem: "Tournoi U11", sbo: "", rtl: "", nr: "", halle: "" },
+    { team: "JUGEND: U9M", datum: "11.10.26 9:30", heim: "Mersch75", gast: "Turnier U9", score: "", bem: "Tournoi U9", sbo: "", rtl: "", nr: "", halle: "" },
+    { team: "JUGEND: U11M-1", datum: "18.10.26 9:30", heim: "Mersch75", gast: "Turnier U11", score: "", bem: "Tournoi U11", sbo: "", rtl: "", nr: "", halle: "" },
+    { team: "JUGEND: U9M", datum: "25.10.26 9:30", heim: "HB Pétange", gast: "Turnier U9", score: "", bem: "Tournoi U9", sbo: "", rtl: "", nr: "", halle: "" },
+    { team: "JUGEND: U11M-1", datum: "25.10.26 9:30", heim: "Mersch75", gast: "Turnier U11", score: "", bem: "Tournoi U11", sbo: "", rtl: "", nr: "", halle: "" },
+    { team: "JUGEND: U9M", datum: "15.11.26 9:30", heim: "HB Dudelange", gast: "Turnier U9", score: "", bem: "Tournoi U9", sbo: "", rtl: "", nr: "", halle: "" },
+    { team: "JUGEND: U9M", datum: "29.11.26 9:30", heim: "HB Museldall", gast: "Turnier U9", score: "", bem: "Tournoi U9", sbo: "", rtl: "", nr: "", halle: "" }
 ];
 allGamesData = allGamesData.concat(tournamentData);
 
@@ -816,8 +830,9 @@ function renderTournamentInfo(entry) {
 function renderFLH(kat) {
     if (typeof allGamesData === 'undefined') return { head: "", rows: "" };
     const sourceData = dedupeGameRows(allGamesData);
-    // Filter nach Kategorie (entry.kat, z.B. "JUGEND: U11M-1")
-    const data = sourceData.filter(r => normalizeTeamLabel(r.team || "") === normalizeTeamLabel(kat || ""));
+    // Filter nach Kategorie (entry.kat, z.B. "JUGEND: U11M-1").
+    // Turniere erscheinen in JEDER Jugend-Kategorie - siehe passtZurKategorie.
+    const data = sourceData.filter(r => passtZurKategorie(r, kat));
     data.sort((a, b) => parseDateStr(a.datum) - parseDateStr(b.datum));
 
     return {
@@ -996,6 +1011,15 @@ function renderFilterBar(allCats, activeSpecial) {
         else cats.push('U11M-2');
     }
 
+    // Turnier-Ansicht: alle Turnierzeilen aller Altersklassen an einem Ort.
+    // Ohne das muesste man jede Jugend-Kategorie einzeln durchklicken.
+    const turnierCats = [];
+    sourceData.forEach(r => {
+        if (!istTurnier(r)) return;
+        const c = normalizeTeamLabel(r.team || '');
+        if (c && turnierCats.indexOf(c) === -1) turnierCats.push(c);
+    });
+
     const filterEl = document.getElementById('allGamesFilter');
     if (!filterEl) return;
     const active = window.__allGamesFilter || 'all';
@@ -1004,6 +1028,7 @@ function renderFilterBar(allCats, activeSpecial) {
         bar += '<button type="button" class="agf-btn' + (active === c ? ' active' : '') + '" data-cat="' + c.replace(/"/g, '&quot;') + '" data-type="category">' + c + '</button>';
     });
     const specials = [
+        { cat: 'turniere', label: 'Turniere' },
         { cat: 'coupe',   label: 'Coupe' },
         { cat: 'm75',     label: 'Mersch75 Events' },
         { cat: 'archive', label: 'Archiv 25/26' }
@@ -1043,7 +1068,9 @@ function switchSpecialEntry(cat) {
     const empty = document.getElementById("emptyState");
     let result;
     let showStandings = false;
-    if (cat === 'coupe') {
+    if (cat === 'turniere') {
+        result = renderTurniere();
+    } else if (cat === 'coupe') {
         result = renderCoupe();
     } else if (cat === 'm75') {
         result = renderM75();
@@ -1066,12 +1093,74 @@ function switchSpecialEntry(cat) {
     renderFilterBar([], cat);
 }
 
-// Turnierdaten U9/U11/U7 (Turnier-Format, keine Championnat-Tabellen)
-allGamesData = allGamesData.concat([
-    { team: "JUGEND: U9M", datum: "10.11.26 9:30", heim: "Mersch75", gast: "Turnier U9", score: "", bem: "Tournoi U9", sbo: "", rtl: "", nr: "", halle: "" },
-    { team: "JUGEND: U11M-1", datum: "10.11.26 9:30", heim: "Mersch75", gast: "Turnier U11", score: "", bem: "Tournoi U11", sbo: "", rtl: "", nr: "", halle: "" },
-    { team: "JUGEND: U7M", datum: "22.11.26 9:30", heim: "Mersch75", gast: "Plateau U7", score: "", bem: "Plateau U7", sbo: "", rtl: "", nr: "", halle: "" }
-]);
+// --- Turniere in ALLEN Kategorien sichtbar machen ------------------------
+// Ein Turnier ist kein Meisterschaftsspiel: die Mannschaft wechselt je
+// Turnier, der Ausrichter wechselt, und es gibt keinen einzigen
+// "Heim"-Verein. Deshalb darf eine Turnierzeile NICHT an genau einer
+// Kategorie hängen - sonst sieht man das Turnier nur, wenn man zufällig
+// die richtige Altersklasse wählt.
+//
+// Diese Funktion hängt jede Turnierzeile an ALLE Alterskategorien, in denen
+// die Mannschaft auftreten kann. Umsetzung: die Zeile bekommt das Feld
+// tournament:true, und der Kategorie-Filter unten prüft darauf.
+const TOURNAMENT_GAST = /^(Turnier|Tournoi|Plateau)\b/;
+
+function istTurnier(row) {
+    if (!row) return false;
+    if (row.tournament === true) return true;
+    return TOURNAMENT_GAST.test(trimText(row.gast));
+}
+
+function trimText(v) {
+    return typeof v === 'string' ? v.trim() : (v == null ? '' : String(v).trim());
+}
+
+// Kategorien, in denen eine Turnierzeile zusaetzlich erscheinen soll.
+// U11-Espoir-Turniere zB. auch unter "U11M-1" und "U11M-2", U9-Turniere
+// unter "U9M" - die Liste nennt die JUGEND-Mannschaften, die im Turnier
+// antreten. Ein Turnier wird damit in jeder passenden Kategorie gefunden.
+// Passt die Zeile zum gewaehlten Filter?
+//   * normale Spiele: nur zu ihrer eigenen Kategorie
+//   * Turniere: zu JEDER Jugend-Kategorie, denn eine Turniermannschaft ist
+//     nicht dauerhaft einer Altersklasse zugeordnet. Sonst sieht man ein
+//     Turnier nur, wenn man zufaellig die richtige Altersklasse waehlt.
+function passtZurKategorie(row, kat) {
+    if (!kat || kat === 'all') return true;
+    if (istTurnier(row)) {
+        const eigene = normalizeTeamLabel(row.team || '');
+        if (eigene && eigene === normalizeTeamLabel(kat)) return true;
+        return istJugendKategorie(kat);
+    }
+    return normalizeTeamLabel(row.team || '') === normalizeTeamLabel(kat);
+}
+
+// Jugend-Kategorie = Bezeichnung enthaelt "U" gefolgt von einer Ziffer
+// (U7, U9M, U11M-1, U13M-P2, U15G). Herren und Frauen fallen durch.
+function istJugendKategorie(kat) {
+    return /U\s?\d/.test(normalizeTeamLabel(kat || '').toUpperCase());
+}
+
+
+// --- Ansicht "Turniere": alle Turnierzeilen aller Altersklassen ---------
+// Eine Turniermannschaft wechselt je Turnier, deshalb ist eine Turnierzeile
+// nicht dauerhaft einer Kategorie zugeordnet. Diese Ansicht sammelt sie ein,
+// damit man nicht jede Jugend-Kategorie einzeln durchklicken muss.
+function renderTurniere() {
+    if (typeof allGamesData === 'undefined') return { head: "", rows: "" };
+    const sourceData = dedupeGameRows(allGamesData).filter(istTurnier);
+    const data = [...sourceData].sort((a, b) => parseDateStr(a.datum) - parseDateStr(b.datum));
+    return {
+        head: "<tr><th>Datum</th><th>Kategorie</th><th>Austragungsort</th><th>Turnier</th><th style='text-align:center;'>Resultat</th><th class='col-bem'>Bemerkung</th></tr>",
+        rows: data.length ? data.map(r => `<tr>
+<td style="white-space:nowrap;font-weight:600;color:var(--mersch-blue);">${r.datum}</td>
+<td><span class="tag">${r.team || ""}</span></td>
+<td><strong>${r.heim}</strong></td>
+<td>${r.gast}</td>
+<td style="text-align:center;">${r.score && r.score !== "-" ? `<span class="score-cell ${scoreCSS(r.score, r.heim)}">${r.score}</span>` : '<span class="tag tag-future" style="font-size:0.6rem;">&#9654; Kommend</span>'}</td>
+<td class="col-bem">${r.bem || ""}</td>
+</tr>`).join("") : '<tr><td colspan="6" style="padding:24px;text-align:center;color:#666;">Keng Turnier an dech aktueller Saisong agestrukt.</td></tr>'
+    };
+}
 
 function renderAllGames() {
 if (typeof allGamesData === 'undefined') return { head: "", rows: "" };
@@ -1133,9 +1222,12 @@ const isFutureGame = (r) => {
     if (!t || t >= 9999999999000) return false;
     return t >= todayStart;
 };
+// Kategorie-Filter. Turnierzeilen passen zu JEDER Jugend-Kategorie, damit
+// man sie nicht verpasst, nur weil man eine andere Altersklasse waehlt
+// (siehe passtZurKategorie weiter oben).
 const categoryFiltered = filter === 'all'
     ? sourceData
-    : sourceData.filter(r => normalizeTeamLabel(r.team || "") === filter);
+    : sourceData.filter(r => passtZurKategorie(r, filter));
 const filteredData = statusFilter === 'future'
     ? categoryFiltered.filter(isFutureGame)
     : statusFilter === 'past'

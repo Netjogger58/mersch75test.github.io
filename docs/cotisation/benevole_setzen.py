@@ -1,10 +1,18 @@
-"""Setzt in Spalte AI ("Bénévole (B)") ein "B" nach der Vereinsregel.
+"""Setzt in Spalte AN ("Bénévole (B)") ein "B" nach der Vereinsregel.
 
-Regel (vom 27.09.2026):
+Regel (vom 27.09.2026, Spalten am 29.09.2026 an das neue Layout angepasst):
   1. In Spalte A steht ein Name,
-  2. die Spalten AH, AI, AJ, AK, AL, AM, AN sind alle LEER,
+  2. keine Lizenz-/Rollen-Spalte ist gefuellt:
+       AG..AM  (Jugendkategorien U11F, U9H, U9F, U7H, U7F, U4H, U4F) und
+       AO..AS  (Spielerpass, Off, ZS, SR, Carte de Legitimation),
   3. in P und Q steht kein GAJGL.
-  -> dann bekommt die Zeile in AI ein "B".
+  -> dann bekommt die Zeile in AN ein "B".
+
+Frueher stand "Benevole" in Spalte AI. Das Layout hat sich verschoben: AI heisst
+jetzt "U9F" (eine Jugendlizenz) und "Benevole (B)" liegt in AN. Ein Lauf auf AI
+haette Lizenznummern in U9F mit "B" ueberschrieben - genau der Bug, der die
+alten "253 Verletzungen" erzeugt hatte (dort wurde ausserdem AN, das Ziel selbst,
+mitgeprueft). Die Zielspalte steht darum nicht mehr in der Pruefmenge.
 
 Zu 3: GAJGL steht nachweislich in Q ("Code Courrier neu", 15 Zeilen), in P
 ("code courrier") kommt es kein einziges Mal vor. Die Sperre wird deshalb auf
@@ -12,8 +20,11 @@ BEIDE Spalten gelegt - so ist sie unabhaengig davon, welche der beiden Spalten
 mal umbenannt wird.
 
 Das Schreiben passiert chirurgisch im XML: es wird ausschliesslich der Inhalt
-der AI-Zellen ersetzt, das Formatattribut "s" bleibt unangetastet. Formeln,
+der AN-Zellen ersetzt, das Formatattribut "s" bleibt unangetastet. Formeln,
 Rahmenlinien, Ausrichtung und alles Weitere bleiben, wie es war.
+
+Das Skript SETZT "B" nur neu - es entfernt niemals ein vorhandenes "B". Wer die
+Liste der Benevole ausduennt, macht das von Hand (Benevole-Durchsicht.csv).
 
 Aufruf:
   python3 docs/cotisation/benevole_setzen.py            # nur zaehlen
@@ -29,8 +40,12 @@ from datetime import datetime
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import mappe  # noqa: E402
 
-PRUEF = ["AH", "AI", "AJ", "AK", "AL", "AM", "AN"]
-ZIEL_SPALTE = "AI"
+# Lizenz-/Rollen-Spalten, die fuer ein "B" alle leer sein muessen. Die
+# Ziel-Zeile AN selbst gehoert NICHT dazu - sonst wuerde ein zweiter Lauf die
+# bereits gesetzten B-Zeilen wieder verwerfen.
+PRUEF = ["AG", "AH", "AI", "AJ", "AK", "AL", "AM",
+         "AO", "AP", "AQ", "AR", "AS"]
+ZIEL_SPALTE = "AN"
 SHEET = "xl/worksheets/sheet1.xml"
 
 
@@ -112,7 +127,7 @@ def main() -> int:
         kandidaten.append(r)
 
     print(f"Zeilen mit Name (Spalte A)             : {mit_name}")
-    print(f"davon AH..AN leer und kein GAJGL      : {len(kandidaten)}"
+    print(f"davon alle Lizenzspalten leer, kein GAJGL: {len(kandidaten)}"
           f"   (GAJGL ausgeschlossen: {gajgl_aus})")
     print(f"erste Zielzeilen                       : {kandidaten[:8]}")
 

@@ -34,6 +34,10 @@ import datetime
 SPALTEN = {
     "nom": "Nom(s)",
     "vorname": "Prénom(s)",
+    # Card-ID: stabile Kennung fuer E8 (eigener Haushaltsschluessel je
+    # XSEUL-Mitglied, "XS:<Card-ID>"). In beiden Layouts vorhanden
+    # (Spalte D) - ohne sie faellt nur die Schluesselvergabe auf die Zeilennummer.
+    "cardid": "Card-ID",
     "naissance": "Naissance (JJ/MM/AA)",
     "kategorie": "Alterskategorie",
     "cotis": "Cotisatioun",
@@ -67,7 +71,7 @@ SPALTEN_ALT = {
     # ungeklaert). Ohne diesen Eintrag faellt die Spaltenauflosung zurueck und
     # der komplette Stripe-Lauf bricht mit 'FEHLENDE SPALTEN' ab.
     "Spieler J/R/N": ("Spielen J/R/N", "Spieler J/R/N", "Spielt J/R/N",
-                      "Spielt J/R/N/X"),
+                      "Spielt J/R/N/X", "Spielt J/R/N/P"),
     "BEZAHLT J/N": ("BEZAHLT J/N", "Bezahlt J/N"),
 }
 
@@ -103,6 +107,11 @@ NICHTTRAEGER_CODE_ANZEIGEN = True
 # (ohne Lizenznummer in AH/AI/AJ)
 OFFICIEL_ACHZ_STD = False
 XSEUL_CODE, GAJGL_CODE = "XSEUL", "GAJGL"
+# Status in Spalte O (Kopf "Spielt J/R/N/P"), der seit 29.09.2026 das
+# fruehere X abloest: "spielt nicht / ungeklaert". Ein P-Mitglied ist kein
+# Spieler, zahlt aber 0 statt gar nichts, solange sein Haushalt selbst
+# keinen spielberechtigen Spieler hat.
+NICHT_SPIELER_CODE = "P"
 AUSNAHMEN_STD = {("BOURG", "JEANNOT"): "Don ? +(0 +50)",
                 ("BOURG-THIELEN", "GABY"): "Don ? +(0 +50)"}
 # Spieler mit Status R (Reserve) oder Familiencode GAJGL zahlen 0 + 50
@@ -292,6 +301,17 @@ def berechne(zeilen, ausnahmen, tarife, zusatz_bei_familie, traeger_regel=TRAEGE
             # gleiche Adresse = ein Haushalt, auch wenn die Codes verschieden sind
             adr = normalisiere_adresse(zelle(z, "adresse"))
             key = ("ADR:" + adr) if adr in haushalte else fam
+            # E8 (Umsetzung): XSEUL ist KEIN Haushalt, sondern ein Sammelcode
+            # fuer Einzelpersonen. Trotzdem bekommen alle 72 denselben
+            # Schluessel "XSEUL" und liegen damit im Stripe-Abgleich in EINER
+            # Rechnungseenheit. Jedes Mitglied bekommt deshalb einen eigenen
+            # Schluessel "XS:<Card-ID>".
+            # Wichtig: die Adress-Haushalte (Spalte G/I, ANSAY-Brueder) bleiben
+            # unangetastet - die Adresspruefung oben hat schon VOR hier zu
+            # "ADR:..." aufgeloest, und Zweig 4 braucht genau dieses Praefix, um
+            # die beiden XSEUL-Bruder als 1x 384 zu behandeln statt als 2x 300.
+            if fam == XSEUL_CODE and not key.startswith("ADR:"):
+                key = "XS:" + (zelle(z, "cardid") or str(excel_zeile))
         famkey.append(key)
         d = parse_datum(zelle(z, "naissance"))
         basis = FALLBACK_SERIAL if d is None else d
@@ -443,7 +463,18 @@ def berechne(zeilen, ausnahmen, tarife, zusatz_bei_familie, traeger_regel=TRAEGE
                 wert, grund = "", "nicht Rechnungstraeger"
         # 6) Regeltarif
         elif tarif == 0 and zusatz == 0:
-            wert, grund = "", "kein Spielertarif, kein Zusatz"
+            # Status P heisst "spielt nicht / ungeklaert". Ein P-Mitglied
+            # erhaelt daher AUSDRUECKLICH 0 und nicht etwa ein leeres Feld -
+            # so steht es auch in den uebrigen Faellen (XSEUL ohne Status).
+            # Voraussetzung ist, dass der HAUSHALT keinen echten Spieler hat:
+            # ist jemand aus der Familie spielberecht (J + Pass + Medico),
+            # zahlt der Traeger den Haushaltsbetrag - auch wenn er selbst P
+            # ist (BINGEN Fränk Z58 = Traeger, BINGEN Dani Z57 = Spieler,
+            # 210). Nur eine Familie ganz ohne Spieler faellt auf 0.
+            if spielt == NICHT_SPIELER_CODE and not sp_gesamt:
+                wert, grund = "0", "Status P, kein Spielertarif im Haushalt"
+            else:
+                wert, grund = "", "kein Spielertarif, kein Zusatz"
         elif tarif == 0:
             wert, grund = f"(0+{zusatz})", "nur Offizielle-/Zusatzkosten"
         else:
@@ -462,7 +493,17 @@ def berechne(zeilen, ausnahmen, tarife, zusatz_bei_familie, traeger_regel=TRAEGE
         # Isabelle als Traegerin). Er darf nicht auf 50 heruntergesetzt werden.
         # Ein Traeger, der selbst 210/300/384 zahlt, bleibt ohnehin unberuehrt.
         # CLEMENT Liliane ist nicht im Comite und bleibt bei (0+50).
+        # E7 (Umsetzung): Ein Offizieller, der NICHT Rechnungstraeger ist,
+        # bekommt KEINE eigene Rechnung; die 50 EUR stecken dann im Betrag des
+        # Traegers. Genau das war der Fehler in F0026: CLEMENT Liliane (0+50)
+        # und METZLER Bernard 50 = zwei Posten fuer EINEN Haushalt (100 EUR).
+        # Die Ausnahme gilt nur fuer GAJGL: das ist wie XSEUL ein Sammelcode
+        # ohne Haushaltsbezug, dort bleibt die Pro-Zeile-Berechnung. XSEUL
+        # braucht die Ausnahme nicht mehr - seit E8 (eigener Schluessel
+        # "XS:<Card-ID>") ist jedes XSEUL-Mitglied sein eigener Traeger und
+        # faellt damit ganz normal unter die Traeger-Regel.
         if (ist_comite and not (spielt == "J" and spielberecht(z))
+                and (i == traeger[key] or fam == GAJGL_CODE)
                 and (wert in ("", "0") or wert == fam
                      or wert.startswith("(0+"))):
             wert, grund = str(tarife["zusatz"]), "Comité-Mitglied, Minimum 50"
