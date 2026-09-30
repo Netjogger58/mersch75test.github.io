@@ -209,6 +209,7 @@
                 <div class="weekend-button-row">
                     <button class="btn-weekend" id="btn-weekend-current">Dieses Wochenende automatisch laden</button>
                     <button class="btn-weekend alt" id="btn-weekend-next">Nächstes Wochenende laden</button>
+                    <button class="btn-weekend" id="btn-tournoi-all" style="background: var(--primary-red, #c62828); color: white;">🏆 Alle Turniere laden</button>
                     <button class="btn-weekend" id="btn-coupe-weekend" style="background: var(--primary-yellow); color: var(--primary-blue);">🏆 Coupe dieses Wochenende laden</button>
                 </div>
                 <div class="weekend-status" id="weekend-status">Saisonspiele für Mersch sind bereits vorbereitet. Die App kann das passende Wochenende direkt vorladen.</div>
@@ -652,7 +653,6 @@ let allGamesData = [
     // Doppelerkennungen verwirft. halle leer bei Auswaerts-Turnieren - die
     // Halle kennt nur Mersch75 (290101).
     { team: "JUGEND: U11 Espoir", datum: "11.10.26 09:30", heim: "HB Esch", gast: "Tournoi", score: "", sbo: "", rtl: "", nr: "U11T111026", halle: "" },
-    { team: "JUGEND: U9M", datum: "11.10.26 09:30", heim: "Mersch75", gast: "Tournoi", score: "", sbo: "", rtl: "", nr: "U9MT111026", halle: "290101" },
     { team: "JUGEND: U11 Espoir", datum: "18.10.26 09:30", heim: "Mersch75", gast: "Tournoi", score: "", sbo: "", rtl: "", nr: "U11T181026", halle: "290101" },
     { team: "JUGEND: U9M", datum: "25.10.26 09:30", heim: "HB Pétange", gast: "Tournoi", score: "", sbo: "", rtl: "", nr: "U9MT251026", halle: "" },
     { team: "JUGEND: U11 Espoir", datum: "25.10.26 09:30", heim: "Mersch75", gast: "Tournoi", score: "", sbo: "", rtl: "", nr: "U11T251026", halle: "290101" },
@@ -1255,6 +1255,48 @@ async function loadWeekendSchedule(offsetWeeks, coupeOnly) {
     setTimeout(function() { magicScan(); }, 80);
 }
 
+// Alle kommenden Turniere auf einmal laden.
+//
+// Warum eigener Knopf: loadWeekendSchedule laedt nur Freitag bis Sonntag
+// eines Wochenendes. Die Turniertermine liegen ueber die ganze Saison
+// verteilt (11.10. bis 29.11.2026) - mit "dieses Wochenende" oder
+// "naechstes Wochenende" war KEIN einziger davon zu finden.
+//
+// Beschraenkung auf kommende Termine: vergangene Turniere wuerden sonst
+// beim naechsten Aufruf erneut in die Felder geschrieben und beim
+// Aktualisieren alte Eintraege ueberschreiben.
+async function loadAllTournaments() {
+    await ensureGeneratorScheduleDataFresh();
+    const uniqueKeys = new Set();
+    const heute = new Date();
+    heute.setHours(0, 0, 0, 0);
+
+    const turniere = (typeof allGamesData !== 'undefined' ? allGamesData : [])
+        .filter(function(game) {
+            if (!/^Tournoi$/i.test(String(game && game.gast || '').trim())) return false;
+            if (isGeneratorGameExcluded(game)) return false;
+            const gameDate = parseGameDateValue(game);
+            if (!gameDate || gameDate < heute) return false;
+            const uniqueKey = getNormalizedGeneratorTeamKey(game.team) + '|' + game.datum;
+            if (uniqueKeys.has(uniqueKey)) return false;
+            uniqueKeys.add(uniqueKey);
+            return true;
+        })
+        .sort(function(a, b) { return parseGameDateValue(a) - parseGameDateValue(b); });
+
+    if (!turniere.length) {
+        setWeekendStatus('Keine kommenden Turniere in der Saisonliste gefunden.', true);
+        return;
+    }
+    const txtArea = document.getElementById('magic-text');
+    if (!txtArea) return;
+    txtArea.value = buildRawScheduleText(turniere);
+    setWeekendStatus(turniere.length + ' Turniere geladen: '
+        + turniere.map(function(g) { return g.datum.split(' ')[0]; }).join(', ')
+        + '.', false);
+    setTimeout(function() { magicScan(); }, 80);
+}
+
 function magicScan() {
     const txtArea = document.getElementById('magic-text'); if (!txtArea) return; const rawText = txtArea.value;
     if (!rawText || !rawText.trim() || typeof teams === 'undefined' || typeof aliases === 'undefined') return;
@@ -1359,8 +1401,17 @@ function magicScan() {
                 else if (ul.indexOf("PLAYOFF") !== -1 || ul.indexOf("-PO") !== -1 || ul.indexOf("-PE") !== -1 || ul.indexOf("PROMOTIOUN") !== -1 || ul.indexOf("PROM") !== -1) c = "Playoff";
                 else if (ul.indexOf("CHAMPIONNAT") !== -1 || ul.indexOf("-CH") !== -1) c = "Championnat";
                 else if (ul.indexOf("TOURNOI") !== -1 || ul.indexOf("ESPOIR") !== -1) c = "Tournoi";
-                if (c === "Tournoi" && !parsedLocationValue && game.halle && typeof hallCodes !== 'undefined' && hallCodes[game.halle]) { parsedLocationValue = hallCodes[game.halle]; }
-                else c = "Season Games";
+                // ACHTUNG: hier stand urspruenglich
+                //   if (c === "Tournoi" && !parsedLocationValue && game.halle && ...) { ... } else { c = "Season Games"; }
+                // Das war doppelt schlecht:
+                //  1. Im Zeilen-Loop gibt es keine Variable "game" und
+                //     "parsedLocationValue" wird erst 40 Zeilen spaeter per
+                //     "let" deklariert -> sobald eine Turnierzeile kam, warf
+                //     magicScan einen ReferenceError ab und es wurde
+                //     ueberhaupt nichts in die Felder geschrieben.
+                //  2. Das "else" haette JEDEM Turnier ohne Halle den Typ
+                //     "Season Games" gegeben.
+                // Der Ort wird weiter unten aus hallCodes aufgeloest.
                 if (c) ti.value = c;
             }
             
@@ -3183,6 +3234,11 @@ if (copyBtn) {
         if (coupeButton) coupeButton.addEventListener('click', function(e) {
             e.preventDefault();
             loadWeekendSchedule(0, true);
+        });
+        const tournoiButton = document.getElementById('btn-tournoi-all');
+        if (tournoiButton) tournoiButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            loadAllTournaments();
         });
     }
 

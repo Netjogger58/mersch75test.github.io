@@ -1,3 +1,15 @@
+## Turniere im Generator waren unerreichbar, magicScan stuerzte ab – 2026-09-30
+
+- **Symptom:** Im Generator war kein einziges Turnier zu finden.
+- **Ursache 1 – kein Knopf passte:** `loadWeekendSchedule` lädt nur **Freitag bis Sonntag** eines Wochenendes. Die Turniertermine liegen über die ganze Saison verteilt (11.10. bis 29.11.). Am 30.09. erreicht keiner der Knöpfe ("dieses"/"nächstes Wochenende") einen einzigen Termin.
+- **Neu: Knopf „Alle Turniere laden"** lädt alle **kommenden** Turniertermine auf einmal, sortiert nach Datum, mit Datumsliste in der Statuszeile. Beschränkung auf kommende Termine ist Absicht: sonst würden beim nächsten Aufruf alte Einträge die Felder überschreiben.
+- **Ursache 2 – magicScan stürzte ab (schwerwiegender):** In der Typ-Erkennung stand ein Ausdruck mit `game.halle` und der erst 40 Zeilen später per `let` deklarierten Variablen `parsedLocationValue`. Im Zeilen-Loop gibt es **keine Variable `game`**, `parsedLocationValue` liegt in der TDZ. Sobald eine Turnierzeile gelesen wurde, warf die Funktion einen **ReferenceError** – es landete überhaupt nichts in den Feldern. Zusätzlich hätte das `else` jedem Turnier **ohne Halle** den Typ „Season Games" gegeben. Zeile entfernt; der Ort wird weiter unten korrekt aus `hallCodes` aufgelöst.
+- **Neu: `generator_magicscan_pruefen.py`** führt magicScan mit den echten Turnierdaten aus und prüft Typ-Erkennung, Reichweite der Oberfläche und Abdeckung durch den neuen Knopf. Der Test reproduziert die alte Zeile und belegt den ReferenceError.
+- **Entfernt: U9-Turnier am 11.10.2026 (Mersch75)** auf Wunsch des Users, in `generator.html` und `live-center.html`. Das U11-Turnier am selben Tag (HB Esch) bleibt. Stand: 6 Turniere im Generator, 8 im Live Center (davon 2 ältere aus der Vorsaison: 10.11. und 22.11.).
+- **Eigener Testfehler unterwegs:** Der Datums-Parser im Test (`split(".").reverse().join("-")`) erzeugte ein ungültiges Datum, der Test meldete deshalb „0 Turniere". Durch echtes Zerlegen von Tag/Monat/Jahr ersetzt.
+- **Verifikation:** `generator_tour_pruefen.py` grün, `tourer_sichtbarkeit_pruefen.py` grün, `generator_magicscan_pruefen.py` grün, beide JS-Blöcke mit `node --check` gültig.
+
+
 ## U11-Turniere waren unsichtbar – Phantom-Filter gefunden und entschärft – 2026-09-30
 
 - **Symptom:** Im Live Center waren **5 U9-Turniere und 0 U11-Turniere** sichtbar, obwohl 4 U11-Termine korrekt in den Daten standen. Die Rohdaten waren zu jedem Zeitpunkt richtig – der Fehler lag **ausschließlich in der Anzeige**.
