@@ -1531,3 +1531,60 @@ auf `46acd25`, `mersch75.lu/` und `/join.html` → HTTP 200.
 `assets/Unbenannt-1.psd`, `assets/assets/`, `docs/pruefe-fanshop-slide.py`,
 `scripts/google-apps-script-stripe-bridge.js` — alle unabhängig von dieser
 Arbeit.
+
+## 2026-10-01 — Vier Medico-Spalten, Dateiname `GC 2026-10-01`
+
+**Datei:** `GC 2026-10-01 MEMBERSLESCHT 2026-2027_mit-Cotisation.xlsm`
+(`mappe.py` erkennt den Namenswechsel und warnt).
+
+**Der Kern dieser Sitzung:** Nach vier eingefügten Spalten
+(`AY` Medico apte J/N, `AZ` Apte temporaire, `BA` Inapte, `BB` Inapte
+temporaire) liegen **alle Spalten ab `AY` vier Positionen weiter rechts**.
+Damit sind auch die Rechenspalten von `BV`–`CL` nach **`BZ`–`CP`**
+gewandert. Eine Formel, die auf den alten Buchstaben zeigt, ist
+syntaktisch völlig in Ordnung und inhaltlich falsch — sie trifft eine
+andere, existierende Spalte. Drei Stellen mussten umgestellt werden:
+`FORMELN` in `cotisation_regeln_setzen.py`, `NEUE_SPALTE` und die
+fest verdrahteten Spaltenlisten in den Prüfern.
+
+**Regel:** `BA` und `BB` sperren die Spielberechtigung. `AY` und `AZ` sind
+nach Auskunft des Users **reine Information** und fließen nicht in die
+Rechnung ein. Eine Sperre wird nicht gegen ein Datum gerechnet, sondern
+nur daran erkannt, dass etwas dasteht — eine ärztliche Sperre ist kein
+abgelaufenes Dokument. Sie wird erst durch Leeren der Zelle aufgehoben.
+
+**Wirksamkeitsnachweis:** KNABBEN Joost (Z283) trägt ein `x` in `BA`, hat
+aber gar kein Medico-Jahr in `AX` und wäre also auch ohne die Sperre
+nicht berechtigt — an ihm lässt sich die Regel **nicht** belegen.
+`inapte_regel_pruefen.py` setzt die Markierung deshalb testweise bei einem
+**nachweislich berechtigten** Spieler (AMADOR FORTES): 300 → 0.
+
+**Falle, die Zeit gekostet hat:** Die Zuordnung über Spaltennamen scheitert
+an `Tarif` — es gibt **zwei** Spalten namens `Tarif` (eine des Users, eine
+Rechenspalte). Der Namensvergleich schickte `CE` nach `BX` statt `CI`.
+Aufgelöst über die Formeln, die Excel beim Einfügen selbst angepasst hat;
+`formeln_gegen_excel_pruefen.py` vergleicht die Umschreibung damit.
+
+**Zweite Falle:** Ein einmaliges `re.sub` über eine Liste von Spalten
+kaskadiert — `BV`→`BZ` erzeugt ein `BZ`, das die nächste Regel `BZ`→`CD`
+wieder einsammelt. Ersetzungen müssen **gleichzeitig** erfolgen.
+
+**Verloren:** Die ausführliche Fassung von
+`ANLEITUNG-Cotisation-Tresorier.md` (829 Zeilen) wurde beim
+`git checkout` im Vereins-OS-Repo verworfen, weil sie dort nie committet
+war. Neu aufgebaut, diesmal mit den Korrekturen von Anfang an und sofort
+committet.
+
+**Stand der Zahlen:** 180 Posten über 39.168 €, Stripe-Tor grün,
+Mappe strukturell in Ordnung.
+
+**Dritte Falle:** Mehrzeilige Formeln sind ein Python-String aus
+verketteten Literalen. Nur die *erste* Zeile beginnt mit `'=`. Wer nur
+sie umschreibt, laesst die Fortsetzungszeilen auf alten Spalten stehen und
+bekommt eine halb umgestellte Formel. Betraf hier: 7 statt 25 Zeilen.
+
+**Praxisregel daraus:** Spaltenbezuege in Formeln nie per Buchstabe
+festverdrahten, sondern per SpaltenNAME (oder zumindest gegen die
+Kopfzeile gegenpruefen). Der Waechter in `cotisation_regeln_setzen.py`
+hat den Falschzugriff von `CL` auf `CP` sofort gemeldet und abgebrochen,
+bevor etwas in die falsche Spalte geschrieben wurde.
