@@ -64,6 +64,12 @@ SPALTEN = {
     "comite": "Comité",
     # Spielberechtigung: AX = "Prochain Medico", enthaelt das Gueltigkeitsjahr.
     "medico": "Prochain \nMédico",
+    # NEU seit 01.10.2026: vier Medico-Spalten nach AX eingefuegt.
+    # BA und BB sperren die Spielberechtigung (aerztliche Sperre). AY
+    # "Medico apte J/N" und AZ "Apte temporaire" sind nach Auskunft des
+    # Users REINE INFORMATION und werden hier bewusst NICHT ausgewertet.
+    "inapte": "Inapte",
+    "inapte_temp": "Inapte temporaire (Date)",
 }
 # Alternativ-Namen fuer Kopfzeilen, die zwischenzeitlich umbenannt wurden.
 SPALTEN_ALT = {
@@ -274,8 +280,14 @@ def berechne(zeilen, ausnahmen, tarife, zusatz_bei_familie, traeger_regel=TRAEGE
             return -1
 
     idx = {k: spalte(v) for k, v in SPALTEN.items()}
+    # OPTIONAL: fehlen sie, gilt das Feld als leer. "inapte" und
+    # "inapte_temp" sind seit 01.10.2026 neu - aeltere CSV-Exporte vom
+    # 24.09.2026 kennen sie nicht. Sie duerfen den Lauf nicht abbrechen;
+    # sie wuerden dort nur als "keine Sperre" behandelt, was fuer die
+    # aelteren Daten auch stimmt.
+    optional = {"manuell", "cotis", "inapte", "inapte_temp"}
     fehlend = [v for k, v in SPALTEN.items()
-               if k not in ("manuell", "cotis") and not k.startswith("frage")
+               if k not in optional and not k.startswith("frage")
                and idx[k] < 0]
     if fehlend:
         raise SystemExit(
@@ -354,7 +366,16 @@ def berechne(zeilen, ausnahmen, tarife, zusatz_bei_familie, traeger_regel=TRAEGE
               Lizenz existiert noch nicht -> zaehlt nicht.
             - Medico: AX ist das Jahr BIS WANN gueltig. '///', leer oder ein
               Wert kleiner als medicojahr = abgelaufen.
+            - Inapte (BA) und Inapte temporaire (BB): NEU seit 01.10.2026.
+              Steht dort etwas, ist der Spieler gesperrt - unabhaengig von
+              Pass und Medico. Eine aerztliche Sperre ist kein abgelaufenes
+              Dokument, deshalb wird kein Datum gerechnet, nur auf einen
+              Eintrag geprueft.
             """
+            # Sperre zuerst: sie gilt auch dann, wenn Pass und Medico
+            # in Ordnung sind.
+            if zelle(other, "inapte").strip() or zelle(other, "inapte_temp").strip():
+                return False
             p = zelle(other, "liz_sp")
             if not p or p.upper().startswith("XXX"):
                 return False

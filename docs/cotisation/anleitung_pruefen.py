@@ -1,51 +1,68 @@
-import pathlib, re, urllib.parse
+"""Prueft die Anleitung gegen die tatsaechliche Kopfzeile.
 
-p = pathlib.Path('/Users/netjogger58/CascadeProjects/Vereins-OS/docs/'
+Der Fehler, den man an einer Anleitung nicht sieht: ein Verweis, der auf
+eine existierende, aber ANDERE Spalte zeigt. Er liest sich vollstaendig
+korrekt und fuehrt trotzdem in die Irre - nach dem Einfuegen der vier
+Medico-Spalten zeigen die alten Buchstaben genau dorthin.
+
+Geprueft wird gegen die Kopfzeile, nicht gegen eine Liste, was "richtig"
+sein sollte. Die Kopfzeile ist die Wahrheit.
+"""
+import pathlib
+import re
+import sys
+import zipfile
+
+sys.path.insert(0, '/Users/netjogger58/CascadeProjects/mersch75test.github.io/'
+                   'docs/cotisation')
+import mappe  # noqa: E402
+import baut_arbeitsmappe as ba  # noqa: E402
+
+P = pathlib.Path('/Users/netjogger58/CascadeProjects/Vereins-OS/docs/'
                  'ANLEITUNG-Cotisation-Tresorier.md')
-s = p.read_text()
 
-print('Zeilen :', len(s.splitlines()))
-print('Wörter :', len(s.split()))
+with zipfile.ZipFile(mappe.datenquelle()) as z:
+    teile = {n: z.read(n) for n in z.namelist()}
+kopf = [c.strip() for c in ba.liese_blatt(teile, 'xl/worksheets/sheet1.xml')[0]]
 
-# 1) Kapitel vs Inhaltsverzeichnis
-kap = re.findall(r'^## (\d+)\. (.+)$', s, re.M)
-iv = re.findall(r'^(\d+)\. \[(.+?)\]\(#', s, re.M)
-print(f'\nKapitel im Referenzteil : {len(kap)}')
-print(f'Einträge im Inhaltsverzeichnis: {len(iv)}')
-print('Kapitel ohne IV-Eintrag :', [n for n, _ in kap if n not in [i for i, _ in iv]])
-print('IV ohne Kapitel        :', [i for i, _ in iv if i not in [n for n, _ in kap]])
 
-# 2) Anker pruefen (GitHub-Regel: Kleinbuchstaben, Leerzeichen -> '-',
-#    Sonderzeichen weg, Umlaute bleiben)
-def anker(t):
-    t = t.strip().lower()
-    t = re.sub(r'[`*]', '', t)
-    t = re.sub(r'[^\w\sÀ-ÿ-]', '', t, flags=re.U)
-    return t.replace(' ', '-') if '%' not in t else t.replace(' ', '-')
+def buchstabe(i):
+    s = ''
+    n = i + 1
+    while n:
+        n, r = divmod(n - 1, 26)
+        s = chr(65 + r) + s
+    return s
 
-links = {urllib.parse.unquote(a) for a in re.findall(r'\]\(#([^)]+)\)', s)}
-fehlend = [a for a in links if a not in {anker(f'{n}. {t}') for n, t in kap}]
-print('\nLinks ohne Ziel        :', fehlend or 'keine')
 
-# 3) Tabellen: jede Zeile gleich viele Spalten wie die Kopfzeile
-print('\nUnvollstaendige Tabellenzeilen:')
-bad = 0
-zeilen = s.splitlines()
-i = 0
-while i < len(zeilen):
-    if zeilen[i].startswith('|') and i + 1 < len(zeilen) and re.match(r'^\|[\s:|-]+\|$', zeilen[i + 1]):
-        n = zeilen[i].count('|')
-        j = i + 2
-        while j < len(zeilen) and zeilen[j].startswith('|'):
-            if zeilen[j].count('|') != n:
-                print(f'   Z{j + 1}: {zeilen[j][:70]}')
-                bad += 1
-            j += 1
-        i = j
-    else:
-        i += 1
-print('   ', bad, 'auffaellig' if bad else 'keine')
+inhalt = {buchstabe(i): h.replace('\n', ' ') for i, h in enumerate(kopf) if h}
 
-# 4) Rubrik steht vor dem Referenzteil?
-print('\nRubrik vor Referenzteil :',
-      s.index('# 🔴 Rubrik') < s.index('# 📘 Referenz'))
+text = P.read_text()
+geprueft = 0
+fehler = []
+for nr, zeile in enumerate(text.split('\n'), start=1):
+    # Tabellenzeilen der Hilfsspalten: | **BX** | `Comite` | ... |
+    for m in re.finditer(r'\| \*\*([A-Z]{1,2})\*\* \| `([^`]+)`', zeile):
+        sp, name = m.group(1), m.group(2)
+        geprueft += 1
+        ist = inhalt.get(sp, '(leer)')
+        if name[:12].lower() not in ist.lower():
+            fehler.append(f'Zeile {nr}: {sp} heisst "{ist}", '
+                          f'nicht "{name}"')
+
+print(f'Geprueft: {geprueft} Spaltenangaben der Form "**XX** | `Name`"')
+if fehler:
+    print('ABWEICHUNGEN:')
+    for f in fehler:
+        print('  -', f)
+else:
+    print('alle stimmen mit der Kopfzeile ueberein')
+
+alt = 'GC 2026-09-29 MEMBERSLESCHT 2026-2027_mit-Cotisation.xlsm'
+if alt in text:
+    print('WARNUNG: veralteter Dateiname noch in der Anleitung')
+    fehler.append('veralteter Dateiname')
+elif 'GC 2026-10-01' in text:
+    print('Dateiname: aktuell')
+
+raise SystemExit(1 if fehler else 0)

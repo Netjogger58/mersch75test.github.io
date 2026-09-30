@@ -11,8 +11,20 @@ import xml.etree.ElementTree as ET
 
 sys.path.insert(0, '/Users/netjogger58/CascadeProjects/mersch75test.github.io/docs/cotisation')
 import mappe  # noqa: E402
+import baut_arbeitsmappe as ba  # noqa: E402
 
 DOPPELT = re.compile(r'&amp;(?:amp|gt|lt|quot);')
+def spaltenname(i):
+    s = ''
+    i += 1
+    while i:
+        i, r = divmod(i - 1, 26)
+        s = chr(65 + r) + s
+    return s
+
+
+SHEET = 'xl/worksheets/sheet1.xml'
+
 ZELLE = re.compile(r'<c r="([A-Z]+)(\d+)"([^>]*)>(.*?)</c>', re.S)
 
 
@@ -58,24 +70,38 @@ def main() -> int:
         fehlend_t = 0
         ch_mit_t = 0
         gesamt = 0
-        # Spalten, die nachweislich TEXT liefern und daher t="str" brauchen.
-        # Verifiziert gegen die Sicherung ..._vor-E7E8.xlsm:
-        #   L, BV, CJ, CC  -> dort 900/897/900/900 Zellen mit t="str"
-        #   CH              -> 590 mit t="str" (Zeilen 2-591), 310 OHNE
-        #                      (Zeilen 592-901, der nie berechnete Bereich -
-        #                      das ist so im Original und kein Schaden)
-        # CE, CG und CL liefern Zahlen und hatten nie ein t.
-        TEXT_SPALTEN = ('L', 'BV', 'CJ', 'CC')
-        # CH: 590 Zeilen erwarten t="str", 310 sind vorbestehend ohne.
-        CH_ERWARTET = 590
+        # Spalten, die TEXT liefern, brauchen t="str". Bestimmt ueber den
+        # KOPFZEILENTEXT, nicht ueber einen fest verdrahteten Buchstaben -
+        # nach dem Einfuegen der vier Medico-Spalten sind alle Buchstaben
+        # um vier gewandert, eine feste Liste waere dann still falsch.
+        mit = zipfile.ZipFile(pfad)
+        roh = {n: mit.read(n) for n in mit.namelist()}
+        kopf = [c.strip() for c in ba.liese_blatt(roh, SHEET)[0]]
+        TEXT_KOEPFE = ('Cotisatioun', 'FamID', 'XSEULwert', 'Traeger',
+                       'Personenwert')
+        text_spalten = {i for i, h in enumerate(kopf) if h in TEXT_KOEPFE}
+        print('Textspalten laut Kopfzeile:',
+              ', '.join(spaltenname(i) for i in sorted(text_spalten)))
+
+        def num(b):
+            n = 0
+            for c in b:
+                n = n * 26 + (ord(c) - 64)
+            return n
+
+        kaputt = 0
+        fehlend_t = 0
+        gesamt = 0
         for m in ZELLE.finditer(x):
             inhalt = m.group(4)
-            if '<f' not in inhalt:
+            fm = re.search(r'<f[^>]*>(.*?)</f>', inhalt, re.S)
+            if '<f' not in inhalt or not fm:
+                # geteilte Formel (t="shared" si=..) ohne eigenen Text:
+                # der steht in der Master-Zelle und wird dort geprueft
                 continue
             gesamt += 1
             ref = m.group(1) + m.group(2)
             attr = m.group(3)
-            fm = re.search(r'<f[^>]*>(.*?)</f>', inhalt, re.S)
             f = (fm.group(1).replace('&gt;', '>').replace('&lt;', '<')
                  .replace('&quot;', '"').replace('&amp;', '&'))
             if f.count('(') != f.count(')'):
@@ -83,19 +109,33 @@ def main() -> int:
                 if kaputt <= 5:
                     fehler.append(f'{ref}: Klammern {f.count("(")}/'
                                   f'{f.count(")")}')
-            if m.group(1) in TEXT_SPALTEN and 't="str"' not in attr:
+            if (num(m.group(1)) - 1 in text_spalten and 't="str"' not in attr
+                    and not (kopf[num(m.group(1)) - 1] == 'Personenwert'
+                        and int(m.group(2)) >= 592)):
                 fehlend_t += 1
                 if fehlend_t <= 5:
-                    fehler.append(f'{ref}: Spalte {m.group(1)} verliert t="str"')
-            if m.group(1) == 'CH' and 't="str"' in attr:
-                ch_mit_t += 1
+                    fehler.append(f'{ref}: Spalte {m.group(1)} '
+                                  f'({kopf[num(m.group(1)) - 1]}) verliert t="str"')
         print(f'Formelzellen: {gesamt} | unbalanciert: {kaputt} '
               f'| ohne t="str": {fehlend_t}')
-        if ch_mit_t != CH_ERWARTET:
-            fehler.append(f'CH: {ch_mit_t} Zellen mit t="str", '
-                          f'erwartet {CH_ERWARTET}')
-        else:
-            print(f'CH-Zellen mit t="str": {ch_mit_t} (erwartet {CH_ERWARTET})')
+        # 310 Zellen der Spalte Personenwert (Zeilen 592-901) haben auch in
+        # der Sicherung KEIN t="str": das ist der Bereich, der nie berechnet
+        # wurde, und es ist so im Original. Ohne diese Grundlage wuerde der
+        # Pruefer dauerhaft einen Fehler melden, den es nicht gibt.
+        for i in sorted(text_spalten):
+            sp = spaltenname(i)
+            if kopf[i] != 'Personenwert':
+                continue
+            mit_t = 0
+            for m in ZELLE.finditer(x):
+                if num(m.group(1)) - 1 == i and 't="str"' in m.group(3):
+                    mit_t += 1
+            if mit_t != 590:
+                fehler.append(f'{sp} (Personenwert): {mit_t} Zellen mit '
+                              f't="str", erwartet 590 (Altstand)')
+            else:
+                print(f'{sp} (Personenwert): 590 mit t="str" wie im Altstand, '
+                      f'310 ohne (Zeilen 592-901, nie berechnet)')
 
     print()
     if fehler:

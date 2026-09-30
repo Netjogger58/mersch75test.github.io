@@ -39,16 +39,23 @@ ERSTE, LETZTE = 2, 901
 # LETZTE war 902, diese Zeile existiert im Blatt aber nicht (Luecke 902-908,
 # danach nur verwaiste BZ-Zellen in 909-911) - die Vorpruefung brach darauf ab.
 # Letzte vollstaendige Zeile mit A..L und allen Helfern BV..CL ist 901.
-NEUE_SPALTE = "CL"          # Spielberecht - wird einmalig angelegt
+NEUE_SPALTE = "CP"          # Spielberecht - wird einmalig angelegt
+# Stand 01.10.2026: die Hilfsspalten liegen nach dem Einfuegen der vier
+# Medico-Spalten bei BZ..CP, zuvor bei BV..CL.
 # Fehlende Zellen in den Hilfsspalten ergaenzen (fuer neue Mitglieder).
 # Nur mit --ergaenzen, damit ein normaler Lauf die Blattstruktur nicht
 # ungefragt veraendert.
 ZEILEN_ERGAENZEN = "--ergaenzen" in sys.argv
 
 # (Spalte, Kuerzel, Formel). {r} = Zeilennummer.
-# Die Bezuege sind die der LIVE-Mappe; das Layout weicht vom Baustein-Skript
-# ab: Q = Code Courrier neu, BV = FamID, BY = SpielerGes, AO = Spielerpass,
-# BI = Comite, CC = Traeger, CD = Manuell, CG = Zuschlag, CE = Tarif.
+# WICHTIG: Der erste Wert ist der SPALTENBUCHSTABE in der aktuellen Datei.
+# Nach dem Einfuegen der vier Medico-Spalten am 01.10.2026 liegen die
+# Rechenspalten vier Positionen weiter rechts als zuvor:
+#   CL->CP (Spielberecht), BY->CC, BZ->CD, CA->CE, CE->CI, CC->CG,
+#   CH->CL, BV->BZ, CJ->CN.  Spalte L ist unveraendert.
+# Steht hier ein alter Buchstabe, meldet das Skript beim Lauf
+# "CL1 existiert, traegt aber nicht 'Spielberecht'" und bricht ab - es
+# schreibt also nie in die falsche Spalte.
 #
 # Die Comite-Regel (Mindestbetrag 50) muss in DREI Spalten sitzen, weil die
 # Ausgabekette L nacheinander CD (Manuell), CH, CJ, dann Traeger/Familien-
@@ -71,43 +78,51 @@ FORMELN = [
     # Untersuchung. 'XXX' = Antrag an die FLH geschickt, Lizenz existiert
     # noch nicht. Die Jahresgrenze steht in Cotisation!B13 und wandert jedes
     # Kalenderjahr um eins - am 01.01.2027 dort 2027 eintragen.
-    ("CL", "Spielberecht",
-     '=IF(AND($O{r}="J",$AO{r}<>"",$AO{r}<>"xxx",ISNUMBER($AX{r}),'
-     '$AX{r}>=Cotisation!$B$13),1,0)'),
-    ("BY", "SpielerGes",
-     '=COUNTIFS($BV${e}:$BV${l},$BV{r},$CL${e}:$CL${l},1)'),
-    ("BZ", "SpielerSEN",
-     '=COUNTIFS($BV${e}:$BV${l},$BV{r},$CL${e}:$CL${l},1,'
+    #
+    # NEU seit 01.10.2026: Spalten BA "Inapte" und BB "Inapte temporaire"
+    # sperren die Spielberechtigung. Ein Eintrag dort hebt J, Pass und
+    # gueltiges Medico auf - eine aerztliche Sperre ist kein abgelaufenes
+    # Dokument, deshalb wird hier nicht gegen ein Jahr gerechnet, sondern
+    # nur geprueft, ob etwas dasteht.
+    # AY "Medico apte J/N" und AZ "Apte temporaire" sind nach Auskunft des
+    # Users REINE INFORMATION und fliessen bewusst NICHT in die Rechnung.
+    ("CP", "Spielberecht",
+     '=IF(AND($O{r}="J",$AO{r}<>"",$AO{r}<>"xxx",$BA{r}="",$BB{r}="",'
+     'ISNUMBER($AX{r}),$AX{r}>=Cotisation!$B$13),1,0)'),
+    ("CC", "SpielerGes",
+     '=COUNTIFS($BZ${e}:$BZ${l},$BZ{r},$CP${e}:$CP${l},1)'),
+    ("CD", "SpielerSEN",
+     '=COUNTIFS($BZ${e}:$BZ${l},$BZ{r},$CP${e}:$CP${l},1,'
      '$K${e}:$K${l},"SEN")'),
-    ("CA", "SpielerU25",
-     '=COUNTIFS($BV${e}:$BV${l},$BV{r},$CL${e}:$CL${l},1,'
+    ("CE", "SpielerU25",
+     '=COUNTIFS($BZ${e}:$BZ${l},$BZ{r},$CP${e}:$CP${l},1,'
      '$K${e}:$K${l},"U25")'),
-    ("CE", "Tarif",
-     '=IF(OR($BY{r}>=2,AND($BZ{r}>=1,$CA{r}>=1)),Cotisation!$B$3,'
-     'IF($BZ{r}>=1,Cotisation!$B$1,'
-     'IF($CA{r}>=1,Cotisation!$B$2,0)))'),
+    ("CI", "Tarif",
+     '=IF(OR($CC{r}>=2,AND($CD{r}>=1,$CE{r}>=1)),Cotisation!$B$3,'
+     'IF($CD{r}>=1,Cotisation!$B$1,'
+     'IF($CE{r}>=1,Cotisation!$B$2,0)))'),
     # CC (Rechnungstraeger) und CE (Tarif) waren nur bis Zeile 582 gefuellt.
     # Ohne sie bekommen die neuen Mitglieder (ab 583) keinen Tarif und
     # L bleibt leer - ZELLER Sarah/Felicitas/Mortitz waren dadurch unsichtbar.
     # Beide Formeln sind zeilenweise gleich, nur mit eigener Zeilennummer.
-    ("CC", "Rechnung traegt",
-     '=IF($BV{r}="","",IF(Cotisation!$B$8<>"Aelteste",'
-     'IF(COUNTIFS($BV${e}:$BV{r},$BV{r})=1,"TRAEGER",""),'
-     'IF($BX{r}>=73415,IF(COUNTIFS($BV${e}:$BV{r},$BV{r})=1,"TRAEGER",""),'
-     'IF($BW{r}=$BX{r},"TRAEGER",""))))'),
-    ("CH", "Personenwert",
-     '=IF($CF{r}>0,INDEX(Cotisation!$F$2:$F$200,$CF{r}),'
-     'IF(AND($CE{r}<>Cotisation!$B$3,OR($Q{r}="XSEUL",$Q{r}="GAJGL"),'
+    ("CG", "Rechnung traegt",
+     '=IF($BZ{r}="","",IF(Cotisation!$B$8<>"Aelteste",'
+     'IF(COUNTIFS($BZ${e}:$BZ{r},$BZ{r})=1,"TRAEGER",""),'
+     'IF($CB{r}>=73415,IF(COUNTIFS($BZ${e}:$BZ{r},$BZ{r})=1,"TRAEGER",""),'
+     'IF($CA{r}=$CB{r},"TRAEGER",""))))'),
+    ("CL", "Personenwert",
+     '=IF($CJ{r}>0,INDEX(Cotisation!$F$2:$F$200,$CJ{r}),'
+     'IF(AND($CI{r}<>Cotisation!$B$3,OR($Q{r}="XSEUL",$Q{r}="GAJGL"),'
      'OR(AND($O{r}="R",$AO{r}<>""),'
-     'AND($AO{r}<>"",COUNTIF($BE{r}:$BH{r},"FRAGEN")>0),'
+     'AND($AO{r}<>"",COUNTIF($BI{r}:$BL{r},"FRAGEN")>0),'
      '$Q{r}="GAJGL")),'
      # E7: Comite-Mindestbetrag 50 nur noch fuer den Rechnungstraeger
      # (oder GAJGL als Sammelcode). Vorher stand hier $CC<>"TRAEGER", das
      # jedem Comite-Mitglied eine eigene Rechnung gab.
-     'IF(AND($BI{r}<>"",$CL{r}=0,OR($CC{r}="TRAEGER",$Q{r}="GAJGL")),'
+     'IF(AND($BM{r}<>"",$CP{r}=0,OR($CG{r}="TRAEGER",$Q{r}="GAJGL")),'
      'TEXT(Cotisation!$B$4,"0"),'
      'Cotisation!$B$10),""))'),
-    ("BV", "FamID",
+    ("BZ", "FamID",
      # E8: XSEUL ist KEIN Haushalt, sondern ein Sammelcode fuer
      # Einzelpersonen. Ohne eigenen Schluessel teilen sich alle 72
      # Mitglieder den Schluessel "XSEUL" und liegen im Stripe-Abgleich
@@ -121,7 +136,7 @@ FORMELN = [
      # woraufhin nur der letzte Teil als Formel galt.
      # ACHTUNG 2: hier stehen ROHE Zeichen, esc() escaped beim Schreiben.
      '=IF($Q{r}="","",IF(SUMPRODUCT(--(SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(UPPER(Cotisation!$I$2:$I$50)," ",""),".",""),"\'","")=SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(UPPER($G{r})," ",""),".",""),"\'","")))>0,"ADR:"&SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(UPPER($G{r})," ",""),".",""),"\'",""),IF($Q{r}="XSEUL","XS:"&$D{r},$Q{r})))'),
-    ("CJ", "XSEULwert",
+    ("CN", "XSEULwert",
      # E7: der Comite-Zweig sitzt jetzt IN CJ statt in einer Traeger-
      # Ausnahme. Seit E8 ist jedes XSEUL-Mitglied sein eigener Rechnungs-
      # traeger, die alte Bedingung $CC<>"TRAEGER" waere also immer wahr und
@@ -129,9 +144,9 @@ FORMELN = [
      # pruef_cotisation ab: 300 bei gueltigem Pass, sonst (0+50) bei N/R,
      # sonst 0 - und der Comite-Mindestbetrag 50 ueberschreibt alles, SOFERN
      # keine gueltige Spielberechtigung vorliegt (CL=1).
-     '=IF($Q{r}<>"XSEUL","",IF(AND(LEFT($BV{r},4)="ADR:",$BY{r}>=2),"",'
-     'IF($CL{r}=1,TEXT(Cotisation!$B$5,"0"),'
-     'IF($BI{r}<>"",TEXT(Cotisation!$B$4,"0"),'
+     '=IF($Q{r}<>"XSEUL","",IF(AND(LEFT($BZ{r},4)="ADR:",$CC{r}>=2),"",'
+     'IF($CP{r}=1,TEXT(Cotisation!$B$5,"0"),'
+     'IF($BM{r}<>"",TEXT(Cotisation!$B$4,"0"),'
      'IF(OR($O{r}="N",$O{r}="R"),"(0+"&TEXT(Cotisation!$B$4,"0")&")","0")))))'),
     # ---------------------------------------------------------------- E7
     # "Nur der Rechnungstraeger bekommt einen Posten." Ein Offizieller, der
@@ -156,23 +171,23 @@ FORMELN = [
      # MIT Spieler ist, zahlt den Haushaltsbetrag (BINGEN Z58 = 210,
      # MARCK Z351 = 384). Ohne diese Schranke wuerden 1.434 EUR
      # Haushaltsguthaben ersatzlos auf 0 gehen.
-     '=IF(OR($BV{r}="",$A{r}=""),"",IF(AND($O{r}="P",$BY{r}=0),"0",'
-     'IF($CD{r}<>"",$CD{r}&"",IF($CH{r}<>"",$CH{r}&"",'
-     'IF($CJ{r}<>"",$CJ{r}&"",IF($CC{r}="TRAEGER",'
+     '=IF(OR($BZ{r}="",$A{r}=""),"",IF(AND($O{r}="P",$CC{r}=0),"0",'
+     'IF($CH{r}<>"",$CH{r}&"",IF($CL{r}<>"",$CL{r}&"",'
+     'IF($CN{r}<>"",$CN{r}&"",IF($CG{r}="TRAEGER",'
      # Komite-Mitglied mit eigenem Tarif: der Zuschlag wird DAZUGEREchnet und
      # die Schreibweise weggelassen. Vorher stand beides hintereinander und
      # ergab "210 (+0+50)260" - eine unlesbare Summe, aus der der
      # Stripe-Parser die 210 statt der 260 gelesen haette.
-     'IF(AND($BI{r}<>"",$CL{r}=0,$CE{r}>0,$CG{r}>0),TEXT($CE{r}+$CG{r},"0"),'
-     'IF($CE{r}=0,IF($CG{r}>0,"(0+"&TEXT($CG{r},"0")&")",""),'
-     'TEXT($CE{r},"0")&IF($CG{r}>0," (+0+"&TEXT($CG{r},"0")&")",""))),'
+     'IF(AND($BM{r}<>"",$CP{r}=0,$CI{r}>0,$CK{r}>0),TEXT($CI{r}+$CK{r},"0"),'
+     'IF($CI{r}=0,IF($CK{r}>0,"(0+"&TEXT($CK{r},"0")&")",""),'
+     'TEXT($CI{r},"0")&IF($CK{r}>0," (+0+"&TEXT($CK{r},"0")&")",""))),'
      # E7: Nicht-Traeger bekommen KEINE eigene Rechnung mehr. METZLER
      # Bernard (F0026, Comite) zeigte hier 50, obwohl CLEMENT Liliane den
      # Haushalt bereits mit (0+50) abrechnet - 100 EUR fuer eine Familie.
      # Der Comite-Mindestbetrag gilt nur noch fuer den Rechnungstraeger.
-     'IF(AND($BI{r}<>"",$CL{r}=0,OR($CC{r}="TRAEGER",$Q{r}="GAJGL")),'
+     'IF(AND($BM{r}<>"",$CP{r}=0,OR($CG{r}="TRAEGER",$Q{r}="GAJGL")),'
      'TEXT(Cotisation!$B$4,"0"),'
-     'IF(LEFT($BV{r},4)="ADR:",$Q{r}&"",$BV{r}&""))))))))'),
+     'IF(LEFT($BZ{r},4)="ADR:",$Q{r}&"",$BZ{r}&""))))))))'),
 ]
 
 
