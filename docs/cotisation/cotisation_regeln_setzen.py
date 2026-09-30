@@ -118,8 +118,8 @@ FORMELN = [
      '=IF($Q{r}="","",IF(SUMPRODUCT(--(SUBSTITUTE(SUBSTITUTE('
      'SUBSTITUTE(UPPER(Cotisation!$I$2:$I$50)," ",""),".",""),"\'","")'
      '=SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(UPPER($G{r})," ",""),".",""),"\'","")))'
-     '&gt;0),"ADR:"&amp;SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(UPPER($G{r})," ",""),".",""),"\'",""),'
-     'IF($Q{r}="XSEUL","XS:"&amp;$D{r},$Q{r}))'),
+     '>0),"ADR:"&SUBSTITUTE(SUBSTITUTE(SUBSTITUTE(UPPER($G{r})," ",""),".",""),"\'",""),'
+     'IF($Q{r}="XSEUL","XS:"&$D{r},$Q{r}))'),
     ("CJ", "XSEULwert",
      # E7: der Comite-Zweig sitzt jetzt IN CJ statt in einer Traeger-
      # Ausnahme. Seit E8 ist jedes XSEUL-Mitglied sein eigener Rechnungs-
@@ -131,7 +131,7 @@ FORMELN = [
      '=IF($Q{r}<>"XSEUL","",IF(AND(LEFT($BV{r},4)="ADR:",$BY{r}>=2),"",'
      'IF($CL{r}=1,TEXT(Cotisation!$B$5,"0"),'
      'IF($BI{r}<>"",TEXT(Cotisation!$B$4,"0"),'
-     'IF(OR($O{r}="N",$O{r}="R"),"(0+"&amp;TEXT(Cotisation!$B$4,"0")&amp;")","0")))))'),
+     'IF(OR($O{r}="N",$O{r}="R"),"(0+"&TEXT(Cotisation!$B$4,"0")&")","0")))))'),
     # ---------------------------------------------------------------- E7
     # "Nur der Rechnungstraeger bekommt einen Posten." Ein Offizieller, der
     # NICHT Traeger ist, darf keine eigene Rechnung erzeugen - die 50 EUR
@@ -177,6 +177,27 @@ FORMELN = [
 
 def esc(s: str) -> str:
     return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
+def pruefe_keine_entities() -> None:
+    """Abbruch, wenn eine Formel bereits XML-Entities enthaelt.
+
+    esc() escaped "&", "<" und ">". Stand in FORMELN schon "&amp;" oder
+    "&gt;", entstand "&amp;amp;" bzw. "&amp;gt;" - Excel liest das als Text
+    statt als Operator, die Formel ist syntaktisch kaputt und Excel
+    oeffnet die Datei nur noch mit dem Reparatur-Dialog. Genau das ist am
+    30.09.2026 passiert.
+
+    Die Formeln muessen ROHE Zeichen enthalten; esc() erledigt den Rest.
+    """
+    for eintrag in FORMELN:
+        spalte, formel = eintrag[0], eintrag[-1]
+        for entity in ("&amp;", "&gt;", "&lt;", "&quot;"):
+            if entity in formel:
+                raise SystemExit(
+                    f"ABBRUCH: Formel fuer {spalte} enthaelt die Entity "
+                    f"{entity!r}. In FORMELN gehoeren ROHE Zeichen hinein, "
+                    f"esc() escaped beim Schreiben. Nichts geschrieben.")
 
 
 def colpos(sp: str) -> int:
@@ -240,6 +261,10 @@ def zelle_einfuegen(inhalt: str, ref: str, xml: str) -> str:
 
 
 def main() -> int:
+    # VOR allem anderen: keine Entity in den Formeln. Sonst entstehen
+    # doppelt escapte Formeln und Excel zeigt nur noch den Reparatur-Dialog.
+    pruefe_keine_entities()
+
     if "--datei" in sys.argv:
         pfad = mappe.set_ziel(sys.argv[sys.argv.index("--datei") + 1])
     else:

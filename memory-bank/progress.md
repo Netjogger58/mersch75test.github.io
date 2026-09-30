@@ -1,3 +1,15 @@
+## Excel-Reparatur-Dialog: doppelt escapte Entities in BV und CJ – 2026-09-30
+
+- **Symptom:** Excel öffnet die Arbeitsmappe nicht mehr, sondern fragt „Wir haben ein Problem bei einigen Inhalten … Sollen wir so viel wie möglich wiederherstellen?"
+- **Ursache:** In `FORMELN` standen in **BV** und **CJ** bereits die XML-Entities `&gt;` und `&amp;`. Beim Schreiben wandert jede Formel durch `esc()`, das `&`, `<`, `>` **noch einmal** escapt. Im File stand dadurch `&amp;gt;` statt `&gt;`. Excel liest das als **Text** statt als Operator, die Formel ist syntaktisch kaputt → Reparatur-Dialog. Betroffen waren ausschließlich die zwei gestern neu geschriebenen Spalten; CL, BY, BZ, CA, CE, CC, CH und L waren nie betroffen.
+- **Fix:** Entities in `FORMELN` durch rohe Zeichen ersetzt. `esc()` bleibt unverändert – es ist korrekt, es darf nur keine Entities in den Quelltext bekommen.
+- **Dauerhafte Absicherung:** Neue Funktion `pruefe_keine_entities()` bricht **vor** jedem Schreibvorgang ab, wenn eine Formel `&amp;`, `&gt;`, `&lt;` oder `&quot;` enthält. Aufruf als erstes in `main()`.
+- **Mappe wiederhergestellt:** Aus der Sicherung `…_vor-E7E8.xlsm` (Zustand, den der User erfolgreich geöffnet hatte), danach die korrigierten Formeln neu eingespielt: 8.997 Zellen in CL, BY, BZ, CA, CE, CC, CH, BV, CJ, L. Die kaputte Fassung liegt als `…_KAPUTT-2026-09-30.xlsm` zur Analyse daneben.
+- **Neu: `mappe_pruefen.py`** prüft die Mappe auf alles, woran Excel beim Öffnen scheitert: ZIP-Integrität, Wohlgeformtheit aller 38 XML-Teile, doppelt escapte Entities in der **ganzen** Mappe und Klammerbalance aller 27.486 Formelzellen in Blatt 1.
+- **Verifikation:** `mappe_pruefen.py` grün (0 doppelte Entities, 0 unbalancierte Formeln, ZIP ok, Makro erhalten), `pruefe_formeln.py` 47.407 Zellen / 45 Muster / 0 Fehler, `spec_pruefen.py` 19/19, `pruefe_stripe_tor.py` und `pruefe_stripe_export.py` grün, `fullCalcOnLoad="1"` gesetzt.
+- **Eigener Fehler unterwegs:** Beim Versuch, BV und CJ per Zeilenersetzung zu reparieren, wurde die BV-Formel zerstückelt und in CJ ging `$O{r}="R"` verloren. Die Datei wurde aus Git zurückgesetzt und die Korrektur minimal und maschinell vorgenommen. Lehre: Textersetzung in Formelstrings ist fehleranfällig – die Klammerbilanz muss **programmatisch** geprüft werden, was inzwischen in `pruefe_keine_entities()` und `mappe_pruefen.py` passiert.
+
+
 ## Turniere im Generator waren unerreichbar, magicScan stuerzte ab – 2026-09-30
 
 - **Symptom:** Im Generator war kein einziges Turnier zu finden.
