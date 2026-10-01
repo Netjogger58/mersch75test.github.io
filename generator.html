@@ -1930,26 +1930,48 @@ function updateLandscapePreview() {
     }
 
     // Coupe wird als eigener Postermodus behandelt und nie in die Meisterschaft eingemischt.
-    // Die feste Reihenfolge bleibt Frauen – Männer – U15 von links nach rechts.
-    const coupePosterTeams = ['fe', 's1', 'u15'].filter(function(id) {
+    // Reihenfolge: Frauen – Männer – U13M – U15 von links nach rechts.
+    // U13M steht VOR U15 und ist genauso gross wie U15: beide sind
+    // Jugendmannschaften im Pokal, es gibt keinen Grund, eine vorzuziehen.
+    //
+    // Diese Saison sind hoechstens VIER Mersch75-Mannschaften im Pokal
+    // moeglich: Frauen, Maenner, U15, U13M. Ab 5.10. steht fest, wer in
+    // der K.O.-Runde noch dabei ist.
+    const COUPE_MAX = 4;
+    const coupePosterTeams = ['fe', 's1', 'u13p1', 'u15'].filter(function(id) {
         const typeEl = document.getElementById(id + '-type');
         const visibility = document.getElementById(id + '-land-show');
         return teamHasConfiguredGame(id) && typeEl && typeEl.value === 'Coupe' &&
             isGameTypeVisible('landscape', 'Coupe') && (!visibility || visibility.checked);
-    });
+    }).slice(0, COUPE_MAX);
     if (coupePosterTeams.length > 0) {
-        const coupeSlots = [
-            { type: 'big', top: 350, left: 76 }, // Frauen: Icon-Kante 2cm vom linken Rand
-            { type: 'big', top: 350, left: 570 },
-            { type: 'big', top: 350, left: 1064 }
-        ];
+        // ALLE Bloecke gleich gross, unabhaengig von der Zahl der
+        // Mannschaften. Bei bis zu drei bleibt das bisherige Raster
+        // unveraendert - fertige Poster duerfen sich durch eine
+        // Codeaenderung nicht verschieben. Ab vier passt es nicht mehr:
+        // die alten Bloecke sind 480 px breit, drei davon brauchen schon
+        // 1544 px von 1600. Dann wird gerechnet.
+        const n = Math.min(coupePosterTeams.length, 4);
+        const ALT_LEFT = [76, 570, 1064];
+        const breite = n <= 3 ? 480 : 340;
+        const hoehe = n <= 3 ? 320 : 227;
+        const coupeSlots = [];
+        for (let i = 0; i < n; i++) {
+            const left = n <= 3 ? ALT_LEFT[i] : 60 + i * (breite + 40);
+            coupeSlots.push({ type: 'big', top: 350, left: left,
+                              width: breite, height: hoehe });
+        }
         const coupeOrdered = getOrderedTeams(coupePosterTeams); // Switch Pos 1&2: Pos-Feld entscheidet
         for (let i = 0; i < coupeOrdered.length; i++) {
             renderLandscapeGame({ id: coupeOrdered[i], forceBig: true }, coupeSlots[i], cont, true); // Coupe: alle Icons M-S-Groesse in einer Reihe
         }
-        // Coupe-Pokal: rechts im freien Bereich ueber der letzten (dritten) Mannschaft.
+        // Coupe-Pokal: bei bis zu drei Mannschaf ten rechts neben der
+        // letzten. Ab vier ist dort kein Platz mehr, dann steht er
+        // mittig ueber der Reihe.
         if (coupeOrdered.length > 0) {
-            cont.innerHTML += '<img class="coupe-trophy" src="assets/Coupe%20de%20Luxembourg2026.webp" alt="Pokal Coupe de Luxembourg 2026" crossorigin="anonymous" style="top:150px;left:' + (coupeSlots[coupeOrdered.length - 1].left + 229) + 'px;width:150px;height:76px;">'; // translateX(-50%) aus CSS: left = Mitte
+            const letzte = coupeSlots[Math.min(coupeOrdered.length, coupeSlots.length) - 1];
+            const pokalLeft = n <= 3 ? (letzte.left + 229) : 800;
+            cont.innerHTML += '<img class="coupe-trophy" src="assets/Coupe%20de%20Luxembourg2026.webp" alt="Pokal Coupe de Luxembourg 2026" crossorigin="anonymous" style="top:150px;left:' + pokalLeft + 'px;width:150px;height:76px;">'; // translateX(-50%) aus CSS: left = Mitte
         }
         const coupeTournoiPanel = document.getElementById('l-dynamic-tournoi');
         if (coupeTournoiPanel) coupeTournoiPanel.innerHTML = '';
