@@ -1588,3 +1588,76 @@ festverdrahten, sondern per SpaltenNAME (oder zumindest gegen die
 Kopfzeile gegenpruefen). Der Waechter in `cotisation_regeln_setzen.py`
 hat den Falschzugriff von `CL` auf `CP` sofort gemeldet und abgebrochen,
 bevor etwas in die falsche Spalte geschrieben wurde.
+
+## 2026-10-01 — Live Center: Turnier-Rubriken und Coupe-Knöpfe
+
+**1. Zwei veraltete Turnierzeilen (U9 und U11 am 10.11.26 9:30, beide
+Mersch75).** Sie stammen aus `d3d160e` (08.09.2026), nicht aus der
+aktuellen Arbeit. Beim Ergaenzen der Saison-Termine in `d5f8b83` wurden
+sie **nicht entfernt** — obwohl die neue Liste unmittelbar darunter
+sortiert eingefuegt wurde. Der Fehler war nicht ein Irrtum ueber die
+Daten des Users, sondern liegen gebliebener Altstand im selben Array.
+10.11.26 kommt in den gemeldeten Daten ueberhaupt nicht vor.
+
+**2. Turniere in JEDER Jugend-Rubrik.** `passtZurKategorie()` gab
+Turnierzeilen einen pauschalen Durchlass (`return istJugendKategorie(kat)`).
+Damit stand jedes Turnier in allen sieben Jugend-Rubriken. Die Annahme
+davor war, eine Turniermannschaft wechsle je Turnier — trifft hier nicht
+zu, es gibt feste Mannschaften (U11M-1, U9M, U7M) und genau fuer die
+gibt es eigene Knoepfe. Gegen den alten Zustand gemessen: jede der sieben
+Turnierzeilen kam in 7 Rubriken statt in einer.
+
+**3. Coupe nur EIN Knopf.** U15, U13M, Maenner und Frauen standen
+gemischt in einem „Coupe"-Fenster. Jetzt gibt es zusaetzlich je Rubrik
+einen Knopf (Coupe Manner/Frauen/U13M/U15). Die Knoepfe kommen aus einem
+festen Satz **plus** den Daten: aus den Daten allein waere der
+U13-Knopf diese Woche weg, weil dort kein Spiel ansteht — ein
+verschwindender Knopf ist schlechter als einer, der „Keng Coupe-Spill"
+zeigt. Die Rubrik heisst jetzt `U13M` statt `U13`, damit der Knopf zur
+Mannschaft passt.
+
+**4. U13M im Coupe-Poster (Generator).** `coupePosterTeams` war
+`['fe','s1','u15']`, obwohl `getGeneratorCoupeTeamKey` ein Coupe-U13-Spiel
+bereits `u13p1` zuordnet und `buildCoupeRawScheduleText` es als
+`COUPE: U13M-P1` ins Textfeld schreibt — das Spiel kam an, hatte aber
+keinen Block. Neu `['fe','s1','u13p1','u15']`.
+
+**Die Geometrie war das eigentliche Problem:** Coupe-Bloecke sind
+480x320 px, das Poster 1600 breit. Drei belegen schon 1544 px. Bis drei
+Mannschaften bleibt das alte Raster [76,570,1064] **exakt** stehen —
+fertige Poster duerfen sich durch eine Codeaenderung nicht verschieben.
+Ab vier wird gerechnet: 340x227 bei [60,440,820,1200], Rand 1540 px. Der
+Pokal stand bisher rechts neben dem letzten Block; ab vier ist dort kein
+Platz, dann steht er mittig bei 800.
+
+**Offen und bewusst nicht geraten:** Ob im Coupe eine U13-Mannschaft
+oder **beide** spielen, weiss das Secretariat nicht; die FLH fuehrt den
+Wettbewerb als „U13 MIXTE (U13M-C)". Vorerst P1, an der
+Entscheidungsstelle dokumentiert. Beide -> ein Schluessel reicht nicht
+mehr, es braucht eine Zuordnung je Spiel. Ausserdem: `COUPE_MAX = 4`
+schneidet eine fuenfte Mannschaft **still** weg.
+
+**FLH-Schnittstelle, wichtig fuer alles Coupe:** `buildUrl()` in
+`js/flh-live-sync.js` uebergibt **keine Woche**. Die FLH antwortet mit
+der Woche, die sie gerade fuehrt. Gegenparametrisieren (`dt`, `d`, `mdt`,
+`mdts`) aendert nichts. Ein Coupe-Spiel aus einer anderen Woche fehlt
+daher still — am 03.10. war es nur sichtbar, weil die Woche
+28.09.-04.10. gerade die aktuelle war.
+
+**Praxisfalle beim Testen:** Funktionen aus den HTML-Seiten per Regex
+herauszuschneiden ist unzuverlaessig, weil Bloecke am Zeilenanfang
+stehen (`}).join("") ...`). `node` meldet dann einen Syntaxfehler und man
+haelt die Extraktion fuer einen Codefehler. Ersetzt durch einen
+klammerbewussten Scanner, der Zeilen, Kommentare und Template-Literale
+mitzaehlt. Ausserdem: `renderCoupe().rows` ist ein **String** —
+`.length` ergibt die HTML-Laenge, nicht die Zahl der Zeilen.
+
+**Neue Waelter:** `turnier_daten_pruefen.py` (keine zwei Mannschaften
+zur selben Zeit am selben Ort, Sortierung, Dubletten),
+`turnier_rubrik_pruefen.py` (jede Turnierzeile in genau EINER Rubrik),
+`coupe_spiel_pruefen.py`, `coupe_knoepfe_pruefen.py`,
+`generator_coupe_pruefen.py`, `coupe_poster_raster_pruefen.py`. Alle
+nehmen die echten Live-Daten der FLH und fallen ohne Netz auf
+„uebersprungen" zurueck statt zu fehlschlagen.
+
+**Commits:** `5a2549f`, `5dbe8f5`, `7089153`, `7efedb3`, `2cc4401`, `f15b7ac`.
