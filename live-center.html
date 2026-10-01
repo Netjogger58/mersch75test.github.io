@@ -560,7 +560,12 @@ function mergeCoupeDataFromLive(livePayload) {
         .filter(function(game) { return String(game.team || '').indexOf('COUPE:') === 0; })
         .map(function(game) {
             const label = String(game.team || '').replace('COUPE:', '').trim();
-            const category = label.indexOf('U15') === 0 ? 'U15' : label.indexOf('U13') === 0 ? 'U13' : label.indexOf('FRAUEN') === 0 || label.indexOf('Fraen') === 0 ? 'Fraen' : 'Männer';
+            // Rubrik heisst hier "U13M", nicht "U13": die Coupe fuehrt die
+            // Mannschaft als "U13 MIXTE", in den uebrigen Rubriken heisst
+            // sie U13M-P1 bzw. U13M-P2. Sonst stuende neben "U13M-P1" ein
+            // Knopf "U13", und niemand wuesste, ob dieselbe Mannschaft
+            // gemeint ist.
+            const category = label.indexOf('U15') === 0 ? 'U15' : label.indexOf('U13') === 0 ? 'U13M' : label.indexOf('FRAUEN') === 0 || label.indexOf('Fraen') === 0 ? 'Fraen' : 'Männer';
             return { kat: category, datum: game.datum, heim: game.heim, gast: game.gast, score: game.score || '', sbo: game.sbo || '', rtl: game.rtl || game.yt || '', nr: game.nr || '', bem: game.bem || '' };
         });
     if (liveCoupe.length) coupeData.splice(0, coupeData.length, ...liveCoupe);
@@ -741,10 +746,58 @@ const m = heim.includes("Mersch75");
 return (m ? h>g : g>h) ? "win" : (m ? h<g : g<h) ? "loss" : "";
 }
 
-function renderCoupe() {
+// Beschriftung der Coupe-Knöpfe je Rubrik. Der Knopf "Coupe U13M" heisst
+// so wie die Mannschaft in den uebrigen Rubriken - die FLH fuehrt den
+// Wettbewerb als "U13 MIXTE", wir nennen ihn U13M.
+const COUPE_KNOPF_LABEL = {
+    'Männer': 'Coupe Männer',
+    'Fraen':   'Coupe Frauen',
+    'U13M':    'Coupe U13M',
+    'U15':     'Coupe U15'
+};
+
+// Reihenfolge: Erwachsene zuerst, dann Jugend von alt nach jung.
+const COUPE_KNOPF_RANG = { 'Männer': 1, 'Fraen': 2, 'U13M': 3, 'U15': 4 };
+
+// Die Coupe-Rubriken, die es geben KANN. Fest, damit die Knoepfe
+// vorhanden sind, auch wenn diese Woche kein Spiel ansteht.
+const COUPE_RUBRIKEN_FEST = ['Männer', 'Fraen', 'U13M', 'U15'];
+
+// Welche Coupe-Rubriken zeigt die Leiste? Vereinigung aus dem festen
+// Satz und dem, was die Daten hergeben.
+//
+// Bewusst nicht nur aus den Daten: der Coupe U13 hat diese Woche kein
+// Spiel, der Knopf waere dann weg und niemand wuesste, dass es ihn
+// gibt. Der feste Satz haelt ihn bereit, die Daten ergaenzen, was neu
+// dazukommt. Ein Knopf ohne Spiel zeigt "Keng Coupe-Spill an dech
+// aktueller Woch" - das ist ehrlicher als ein Knopf, der verschwindet.
+function coupeRubriken() {
+    const gesehen = {};
+    const raus = [];
+    COUPE_RUBRIKEN_FEST.forEach(function(k) {
+        gesehen[k] = true;
+        raus.push({ kat: k, label: COUPE_KNOPF_LABEL[k] || ('Coupe ' + k) });
+    });
+    if (typeof coupeData !== 'undefined' && coupeData) {
+        coupeData.forEach(function(r) {
+            const k = String(r.kat || '').trim();
+            if (!k || gesehen[k]) return;
+            gesehen[k] = true;
+            raus.push({ kat: k, label: COUPE_KNOPF_LABEL[k] || ('Coupe ' + k) });
+        });
+    }
+    raus.sort(function(a, b) {
+        return (COUPE_KNOPF_RANG[a.kat] || 99) - (COUPE_KNOPF_RANG[b.kat] || 99);
+    });
+    return raus;
+}
+
+function renderCoupe(katFilter) {
+const zeilen = (typeof coupeData !== 'undefined' ? coupeData : [])
+        .filter(function(r) { return !katFilter || r.kat === katFilter; });
 return {
 head: "<tr><th>Kat.</th><th>Datum</th><th>Heim</th><th>Gast</th><th>Resultat</th><th>SBO</th><th>RTL/YT</th><th class='col-bem'>Bemerkung</th></tr>",
-rows: typeof coupeData !== 'undefined' ? coupeData.map(r => {
+rows: zeilen.length ? zeilen.map(r => {
 return `<tr>
 <td><span class="tag tag-coupe">${r.kat}</span></td>
 <td style="white-space:nowrap">${r.datum}</td>
@@ -754,7 +807,9 @@ return `<tr>
 ${sboCell(r)}${rtlCell(r.rtl)}
 <td class="col-bem">${r.bem}</td>
 </tr>`;
-}).join("") : ""
+}).join("") : (katFilter
+    ? `<tr><td colspan="8" style="padding:24px;text-align:center;color:#666;">Keng Coupe-Spill an dech aktueller Woch.</td></tr>`
+    : '')
 };
 }
 
@@ -1035,6 +1090,18 @@ function renderFilterBar(allCats, activeSpecial) {
         const isActive = activeSpecial === e.cat;
         bar += '<button type="button" class="agf-btn agf-special' + (isActive ? ' active' : '') + '" data-cat="' + e.cat + '" data-type="special">' + e.label + '</button>';
     });
+    // Zusatzknoepfe: Coupe je Rubrik. Bisher gab es nur EINEN Knopf
+    // "Coupe", in dem U15, U13M, Maenner und Frauen gemischt standen -
+    // wer nur die U15-Spiele sehen wollte, musste selbst herausfiltern.
+    // Die Knöpfe entstehen aus den Daten, damit kein Knopf fuer eine
+    // Rubrik entsteht, die es diese Woche gar nicht gibt.
+    if (typeof coupeRubriken === 'function') {
+        coupeRubriken().forEach(r => {
+            const id = 'coupe:' + r.kat;
+            const isActive = activeSpecial === id;
+            bar += '<button type="button" class="agf-btn agf-special' + (isActive ? ' active' : '') + '" data-cat="' + id + '" data-type="special">' + r.label + '</button>';
+        });
+    }
     filterEl.innerHTML = bar;
     filterEl.style.display = 'flex';
     Array.from(filterEl.querySelectorAll('.agf-btn')).forEach(btn => {
@@ -1070,6 +1137,9 @@ function switchSpecialEntry(cat) {
         result = renderTurniere();
     } else if (cat === 'coupe') {
         result = renderCoupe();
+    } else if (cat && String(cat).indexOf('coupe:') === 0) {
+        // Zusatzknoepfe: "coupe:U15" zeigt nur die Coupe-Spiele der U15.
+        result = renderCoupe(String(cat).slice('coupe:'.length));
     } else if (cat === 'm75') {
         result = renderM75();
     } else if (cat === 'archive') {
