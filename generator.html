@@ -1191,6 +1191,18 @@ function getGeneratorCoupeTeamKey(game) {
     const label = String(game && game.team || '').toUpperCase();
     if (label.indexOf('FRAUEN') !== -1 || label.indexOf('D-C-LN') !== -1) return 'fe';
     if (label.indexOf('U15') !== -1) return 'u15';
+    // OFFENE FRAGE (Stand 01.10.2026, vom Secretariat noch nicht
+    // entschieden): Spielt im Coupe eine U13-Mannschaft oder beide?
+    // Die FLH fuehrt den Wettbewerb als "U13 MIXTE (U13M-C)" und sagt
+    // nicht, welche der beiden Mannschaften darin spielt. Vorerst wird
+    // P1 angenommen.
+    //
+    // Sobald das klar ist, ist es eine Zeile - je nachdem:
+    //   nur P1  -> bleibt 'u13p1', nichts zu tun
+    //   nur P2  -> 'u13p2' HIER und in coupePosterTeams unten
+    //              (suche "['fe', 's1', 'u13p1', 'u15']")
+    //   beide   -> ein Schluessel reicht nicht mehr; dann braucht es
+    //              eine Zuordnung je Spiel statt einer Regel fuer alle
     if (label.indexOf('U13') !== -1) return 'u13p1';
     return 's1';
 }
