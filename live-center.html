@@ -1124,18 +1124,19 @@ function trimText(v) {
 //     Turnier nur, wenn man zufaellig die richtige Altersklasse waehlt.
 function passtZurKategorie(row, kat) {
     if (!kat || kat === 'all') return true;
-    if (istTurnier(row)) {
-        const eigene = normalizeTeamLabel(row.team || '');
-        if (eigene && eigene === normalizeTeamLabel(kat)) return true;
-        return istJugendKategorie(kat);
-    }
+    // Turnier UND Meisterschaftsspiel gehören ausschliesslich in ihre EIGENE
+    // Rubrik.
+    //
+    // Vorher stand hier ein pauschaler Durchlass: eine Turnierzeile
+    // bekam in JEDER Jugend-Rubrik einen Platz. Das U11-Turnier erschien
+    // deshalb auch unter U15, U13M-P1, U13M-P2, U11M-2 und U7M. Der
+    // Grund dafuer war die Annahme, eine Turniermannschaft wechsle je
+    // Turnier - das trifft hier nicht zu, es gibt feste Mannschaften
+    // (U11M-1, U9M, U7M), und genau die sind als Rubriken angelegt.
+    //
+    // Wer alle Turniere auf einmal sehen will, nutzt den Knopf
+    // "Turniere" in der Rubrikleiste - der sammelt weiterhin alles ein.
     return normalizeTeamLabel(row.team || '') === normalizeTeamLabel(kat);
-}
-
-// Jugend-Kategorie = Bezeichnung enthaelt "U" gefolgt von einer Ziffer
-// (U7, U9M, U11M-1, U13M-P2, U15G). Herren und Frauen fallen durch.
-function istJugendKategorie(kat) {
-    return /U\s?\d/.test(normalizeTeamLabel(kat || '').toUpperCase());
 }
 
 
