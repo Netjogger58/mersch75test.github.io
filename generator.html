@@ -162,6 +162,8 @@
 #m75-gen-wrapper .p-header-wrapper { display: flex; flex-direction: column; align-items: center; padding-top: 25px; width: 100%; z-index: 5; }
 #m75-gen-wrapper .p-header-top { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 0 40px; box-sizing: border-box; }
 #m75-gen-wrapper .p-header-top .img-50 { object-fit: contain; width: auto; height: auto; max-width: 100%; }
+#m75-gen-wrapper .p-header-matchday { display: flex; align-items: center; justify-content: center; flex: 0 1 auto; min-width: 0; }
+#m75-gen-wrapper .p-header-matchday .p-matchday-img { height: 60px; width: auto; max-width: 100%; object-fit: contain; display: block; }
 
 #m75-gen-wrapper #p-dynamic-container { flex: 1; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; align-content: flex-start; gap: 35px 0; padding: 10px; box-sizing: border-box; width: 100%; z-index: 4; }
 #m75-gen-wrapper .p-game-block { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; box-sizing: border-box; padding: 0 15px; }
@@ -287,6 +289,9 @@
         <source srcset="assets/shared/media/Logos%20FLH%20Eq/Logo%20Leder%20Mersch75%20ohne%20Hintergrund.avif" type="image/avif"><source srcset="assets/shared/media/Logos%20FLH%20Eq/Logo%20Leder%20Mersch75%20ohne%20Hintergrund.webp" type="image/webp">
     <img src="assets/shared/media/Logos%20FLH%20Eq/Logo%20Leder%20Mersch75%20ohne%20Hintergrund.png" alt="Mersch75" class="img-50" loading="lazy">
 </picture>
+                            <div class="p-header-matchday">
+    <img src="assets/Matchday%20Font.webp?v=20261002b1" alt="Matchday" class="p-matchday-img">
+</div>
                             <picture>
     <source srcset="assets/shared/media/Logos%20FLH%20Eq/Logo%20Leder%20Mersch75%20ohne%20Hintergrund.avif" type="image/avif">
         <source srcset="assets/shared/media/Logos%20FLH%20Eq/Logo%20Leder%20Mersch75%20ohne%20Hintergrund.avif" type="image/avif"><source srcset="assets/shared/media/Logos%20FLH%20Eq/Logo%20Leder%20Mersch75%20ohne%20Hintergrund.webp" type="image/webp">
@@ -965,6 +970,7 @@ function renderPortraitControls() {
     html += '<div class="slider-row"><span class="sl-lbl">Poster H.</span><input type="range" id="p-scale-height" min="866" max="2500" value="1180" oninput="this.nextElementSibling.innerText=this.value;var af=document.getElementById(\'p-autofit-height\');if(af)af.checked=false;updatePortraitPreview();"><span class="sl-val">1180</span></div>';
     html += '<div class="slider-row" style="justify-content:flex-start;gap:8px;"><label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--primary-blue);cursor:pointer;"><input type="checkbox" id="p-autofit-height" checked onchange="updatePortraitPreview();"> Höhe autom. an Teams anpassen</label></div>';
     html += '<div class="slider-row"><span class="sl-lbl">50 J.</span> <input type="range" id="p-scale-50years" min="40" max="150" value="100" oninput="this.nextElementSibling.innerText=this.value;updatePortraitPreview();"><span class="sl-val">100</span></div>';
+    html += '<div class="slider-row"><span class="sl-lbl">Matchday</span> <input type="range" id="p-scale-matchday" min="0" max="140" value="60" oninput="this.nextElementSibling.innerText=this.value;updatePortraitPreview();"><span class="sl-val">60</span></div>';
     html += '</div></div>';
     html += renderGameTypeControls('portrait');
     selector.innerHTML = html;
@@ -1045,9 +1051,11 @@ function resetLandTeamSettings(id) {
 function resetHeaderSettings() {
     const w = document.getElementById('p-scale-width'); const h = document.getElementById('p-scale-height');
     const f = document.getElementById('p-scale-50years');
+    const md = document.getElementById('p-scale-matchday');
     if (w) { w.value = 800; w.nextElementSibling.innerText = "800"; }
     if (h) { h.value = 1060; h.nextElementSibling.innerText = "1060"; }
     if (f) { f.value = 100; f.nextElementSibling.innerText = "100"; }
+    if (md) { md.value = 60; md.nextElementSibling.innerText = "60"; }
     updatePortraitPreview();
 }
 
@@ -2362,6 +2370,14 @@ function updatePortraitPreview() {
     for (let i = 0; i < top50.length; i++) {
         top50[i].style.width = s50 + 'px';
         top50[i].style.height = 'auto';
+    }
+
+    const sdEl = document.getElementById('p-scale-matchday');
+    const sd = sdEl ? sdEl.value : 60;
+    const imgMatch = document.querySelector('.p-header-matchday .p-matchday-img');
+    if (imgMatch) {
+        if (parseInt(sd, 10) === 0) { imgMatch.style.display = 'none'; }
+        else { imgMatch.style.display = 'block'; imgMatch.style.height = sd + 'px'; }
     }
 
     const cont = document.getElementById('p-dynamic-container');
