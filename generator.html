@@ -175,12 +175,14 @@
 #m75-gen-wrapper .p-game-info { font-family: 'Barlow', sans-serif; font-weight: 700; color: #FFFFFF; text-shadow: 0 0 2px rgba(0,0,0,0.8); text-align: center; line-height: 1.25; margin-top: 12px; }
 #m75-gen-wrapper .p-game-info .date { font-weight: 900; color: #FFFFFF; }
 
-#m75-gen-wrapper .p-footer { height: 150px; width: 100%; background: white; display: flex; align-items: center; justify-content: space-between; padding: 0 40px !important; box-sizing: border-box; box-shadow: 0 -5px 20px rgba(0, 0, 0, .1); z-index: 10; flex-shrink: 0; margin-top: auto; }
-#m75-gen-wrapper .p-footer-50logo { width: 90px; height: auto; max-height: 80px; object-fit: contain; flex-shrink: 0; }
-#m75-gen-wrapper .p-footer-sponsors { display: flex; flex-direction: column; flex: 1; justify-content: center; align-items: center; height: 100%; padding: 0 20px; gap: 15px; }
-#m75-gen-wrapper .p-footer-row { display: flex; justify-content: center; align-items: center; width: 100%; gap: 25px; }
+#m75-gen-wrapper .p-footer { height: 150px; width: 100%; background: white; display: flex; align-items: center; justify-content: center; padding: 0 40px !important; box-sizing: border-box; box-shadow: 0 -5px 20px rgba(0, 0, 0, .1); z-index: 10; flex-shrink: 0; margin-top: auto; }
+#m75-gen-wrapper .p-footer-sponsors { display: flex; flex-direction: column; flex: 1; justify-content: center; align-items: center; height: 100%; padding: 0 10px; gap: 15px; }
+#m75-gen-wrapper .p-footer-row { display: flex; justify-content: center; align-items: center; width: 100%; gap: 16px; }
 #m75-gen-wrapper .p-footer-sp { display: flex; justify-content: center; align-items: center; }
-#m75-gen-wrapper .p-footer-row-top .p-footer-sp img { max-width: 120px; max-height: 48px; object-fit: contain; }
+/* Alle Logos der oberen Reihe teilen sich exakt dieselbe Hoehe, damit die
+   Reihe buendig wirkt. Die Hoehe folgt dem Seitenverhaeltnis-Summe-Budget,
+   damit 5 Logos in die Sponsorenleiste passen. */
+#m75-gen-wrapper .p-footer-row-top .p-footer-sp img { height: 32px; width: auto; max-width: 170px; max-height: none; object-fit: contain; }
 #m75-gen-wrapper .p-footer-row-bottom .p-footer-sp img { max-width: 100px; max-height: 42px; object-fit: contain; }
 </style>
 
@@ -303,13 +305,13 @@
                     <div id="p-dynamic-container"></div>
                     
                     <div class="p-footer">
-                        <picture>
-    <source srcset="assets/shared/media/Logos%20FLH%20Eq/Logo%20Leder%20Mersch75%20ohne%20Hintergrund.avif" type="image/avif">
-        <source srcset="assets/shared/media/Logos%20FLH%20Eq/Logo%20Leder%20Mersch75%20ohne%20Hintergrund.avif" type="image/avif"><source srcset="assets/shared/media/Logos%20FLH%20Eq/Logo%20Leder%20Mersch75%20ohne%20Hintergrund.webp" type="image/webp">
-    <img src="assets/shared/media/Logos%20FLH%20Eq/Logo%20Leder%20Mersch75%20ohne%20Hintergrund.png" alt="Mersch75" class="p-footer-50logo" loading="lazy">
-</picture>
                         <div class="p-footer-sponsors">
                             <div class="p-footer-row p-footer-row-top">
+                                <div class="p-footer-sp"><picture>
+    <source srcset="assets/shared/media/Sponsoring/Mixvoip.avif" type="image/avif">
+        <source srcset="assets/shared/media/Sponsoring/Mixvoip.avif" type="image/avif"><source srcset="assets/shared/media/Sponsoring/Mixvoip.webp" type="image/webp">
+    <img src="assets/shared/media/Sponsoring/Mixvoip.png" alt="Mixvoip" loading="lazy">
+</picture></div>
                                 <div class="p-footer-sp"><picture>
     <source srcset="assets/shared/media/Sponsoring/PetersSports.avif" type="image/avif">
         <source srcset="assets/shared/media/Sponsoring/PetersSports.avif" type="image/avif"><source srcset="assets/shared/media/Sponsoring/PetersSports.webp" type="image/webp">
@@ -324,6 +326,11 @@
     <source srcset="assets/shared/media/Sponsoring/MansfeldImmobiliere-laang-new.avif" type="image/avif">
         <source srcset="assets/shared/media/Sponsoring/MansfeldImmobiliere-laang-new.avif" type="image/avif"><source srcset="assets/shared/media/Sponsoring/MansfeldImmobiliere-laang-new.webp" type="image/webp">
     <img src="assets/shared/media/Sponsoring/MansfeldImmobiliere-laang-new.png" alt="Mansfeld" loading="lazy">
+</picture></div>
+                                <div class="p-footer-sp"><picture>
+    <source srcset="assets/shared/media/Sponsoring/AbbyToussaint.avif" type="image/avif">
+        <source srcset="assets/shared/media/Sponsoring/AbbyToussaint.avif" type="image/avif"><source srcset="assets/shared/media/Sponsoring/AbbyToussaint.webp" type="image/webp">
+    <img src="assets/shared/media/Sponsoring/AbbyToussaint.png" alt="Abby Toussaint" loading="lazy">
 </picture></div>
                             </div>
                             <div class="p-footer-row p-footer-row-bottom">
@@ -354,11 +361,6 @@
 </picture></div>
                             </div>
                         </div>
-                        <picture>
-    <source srcset="assets/shared/media/Logos%20FLH%20Eq/Logo%20Leder%20Mersch75%20ohne%20Hintergrund.avif" type="image/avif">
-        <source srcset="assets/shared/media/Logos%20FLH%20Eq/Logo%20Leder%20Mersch75%20ohne%20Hintergrund.avif" type="image/avif"><source srcset="assets/shared/media/Logos%20FLH%20Eq/Logo%20Leder%20Mersch75%20ohne%20Hintergrund.webp" type="image/webp">
-    <img src="assets/shared/media/Logos%20FLH%20Eq/Logo%20Leder%20Mersch75%20ohne%20Hintergrund.png" alt="Mersch75" class="p-footer-50logo" loading="lazy">
-</picture>
                     </div>
                 </div>
             </div>
@@ -2344,17 +2346,13 @@ function updatePortraitPreview() {
         headerTop.style.padding = '0 ' + (40 * footerScale) + 'px';
     }
     
-    const fLogo = document.querySelectorAll('.p-footer-50logo');
-    for (let i = 0; i < fLogo.length; i++) { 
-        fLogo[i].style.width = (90 * footerScale) + 'px';
-        fLogo[i].style.height = 'auto'; 
-        fLogo[i].style.maxHeight = (80 * footerScale) + 'px'; 
-    }
-
     const spTop = document.querySelectorAll('.p-footer-row-top .p-footer-sp img');
     for (let i = 0; i < spTop.length; i++) { 
-        spTop[i].style.maxWidth = (120 * footerScale) + 'px';
-        spTop[i].style.maxHeight = (48 * footerScale) + 'px'; 
+        // Einheitliche Hoehe fuer die gesamte obere Reihe (siehe CSS-Notiz).
+        spTop[i].style.height = (32 * footerScale) + 'px';
+        spTop[i].style.width = 'auto';
+        spTop[i].style.maxWidth = (170 * footerScale) + 'px';
+        spTop[i].style.maxHeight = 'none';
     }
     
     const spBot = document.querySelectorAll('.p-footer-row-bottom .p-footer-sp img');
