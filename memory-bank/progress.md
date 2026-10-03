@@ -1,3 +1,16 @@
+## Generator-Poster: Adresse 2-Zeiler, weiße Datums-Schrift, Titel-Checkbox – 03.10.2026
+
+- **Wunsch des Nutzers:** Beim Tournoi und bei den Jugendspielen pro Spiel: (1) Datum UND Zeit in einer Reihe, (2) Adresse mit Straße in einer Reihe und darunter Ort + PLZ, (3) Adresse in derselben Schriftgröße wie das Datum und komplett weiß (war z. B. beim Tournoi nicht der Fall), (4) Titeltext wie beim Portrait per Checkbox abschaltbar.
+- **Umsetzung in `generator.html`:**
+  - Neue Funktion `formatAddressHtml(locVal)` (vor `loadSavedSchedule`): trennt bei `Strasse | PLZ Ort` am `|`; fehlendes `|` wird am Muster `L-1234`/`B-1234` gebrochen. Liefert `Straße<br>PLZ Ort`. Alle Adressquellen (`hallCodes`, `addresses`) sind im Format `X | L-xxxx Ort`, Trefferquote daher 100 %.
+  - `renderLandscapeTournamentStrip` (Tournoi-Reihe U9/U11/U7/U4): `dateHtml` ist jetzt `white-space:nowrap` (Datum+Zeit nie umgebrochen), Adresse läuft durch `formatAddressHtml`, Schriftgröße 12 px = Datumsgröße, Farbe `#FFFFFF`.
+  - `renderLandscapeGame` (alle Landscape-Spiele inkl. Jugend-Layouts `youth3col`): `ls` wird über `formatAddressHtml(locVal)` gebaut; Adresse in exakt derselben Größe wie `ds` (baseDt, Jugend 22/14 px × 0.9) und weiß.
+  - Titel-Checkboxen: `#l-show-tournoi-title` (Titel „--- TOURNOI ---" der Tournoi-Reihe, Default an) und `.cb-title-land[data-team]` (Titel je Team im Landscape-Layout, Default an) – gleiches Prinzip wie die Portrait-Checkbox `.cb-title`; `updateLandscapePreview` liest beide aus.
+- **Warum sah der Nutzer „immer noch falsch":** Die Änderungen lagen nur im lokalen Arbeitsverzeichnis; `main` (und damit GitHub Pages bzw. mersch75.lu) war noch bei `5a77eb8`. Erst Commit + Push macht die Änderungen live (GitHub Pages baut neu, ca. 1–2 Min).
+- **Vor dem Push geprüft:** Alle 6 inline-Scriptblöcke `node --check` OK; `formatAddressHtml` funktional 6/6 (5 Adressformate + leer).
+- **Nicht mitgepushed (bewusst offen gelassen):** `assets/Media/Hauptseite/Matchday 260926 LSP.webp` und `assets/assets/Portrait 26092026.webp` – ungetrackte binäre Änderungen aus vorheriger Session, gehören erst nach Rücksprache rein.
+
+
 ## Zweite Ursache gefunden: eine Klammer zu viel in BV – 2026-09-30
 
 - **Symptom:** Der Reparatur-Dialog blieb trotz behobener Entities und trotz `t="str"`. Meine Prüfungen meldeten alles grün.

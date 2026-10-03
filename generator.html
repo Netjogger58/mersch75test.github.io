@@ -898,6 +898,8 @@ function renderLandscapeControls() {
         mainHtml += '<button type="button" class="btn-reset" onclick="resetLandTeamSettings(\'' + team.id + '\')">🔄 Reset</button>';
         mainHtml += '</div>';
         mainHtml += '<div style="margin-top:8px;"><input type="text" id="' + team.id + '-land-title" class="trigger-view trigger-text" value="' + team.defaultTitle + '" placeholder="Titel" style="width:100%;font-size:11px;padding:6px;border:1px solid var(--border-gray);border-radius:4px;"></div>';
+        // Titeltext an-/abschaltbar - entspricht der Portrait-Checkbox .cb-title
+        mainHtml += '<div class="options-row" style="margin-top:6px;justify-content:flex-start;gap:10px;"><label><input type="checkbox" class="cb-title-land" data-team="' + team.id + '" checked onchange="updateLandscapePreview()"> Titel</label></div>';
         mainHtml += '<div class="team-slider-wrap">';
         mainHtml += '<div class="slider-row"><span class="sl-lbl">Logo</span><input type="range" class="land-scale-logo" data-team="' + team.id + '" min="50" max="200" value="' + defaultLogoScale + '" oninput="this.nextElementSibling.innerText=this.value+\'%\'; updateLandscapePreview();"><span class="sl-val">' + defaultLogoScale + '%</span></div>';
         mainHtml += '<div class="slider-row"><span class="sl-lbl">Titel</span><input type="range" class="land-scale-title" data-team="' + team.id + '" min="50" max="200" value="' + defaultTitleScale + '" oninput="this.nextElementSibling.innerText=this.value+\'%\'; updateLandscapePreview();"><span class="sl-val">' + defaultTitleScale + '%</span></div>';
@@ -914,6 +916,7 @@ function renderLandscapeControls() {
     html += '<div class="portrait-team-item" style="background:#f0f7ff;border-color:var(--secondary-blue);">';
     html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><label class="team-main-cb" style="color:var(--secondary-blue);cursor:default;margin:0;">🎚️ Kopfzeile &amp; Logos</label><button type="button" class="btn-reset" onclick="resetLandHeaderSettings()">🔄 Reset</button></div>';
     html += '<div class="team-slider-wrap" style="margin-top:10px;border-top:none;">';
+    html += '<div class="slider-row"><label style="display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" id="l-show-tournoi-title" checked onchange="updateLandscapePreview()"> Titeltext „--- TOURNOI ---“</label></div>';
     html += '<div class="slider-row"><span class="sl-lbl">MixVoip L</span><input type="range" id="l-scale-mixvoip-l" min="100" max="500" value="280" oninput="this.nextElementSibling.innerText=this.value;updateLandscapePreview();"><span class="sl-val">280</span></div>';
     html += '<div class="slider-row"><span class="sl-lbl">Matchday</span><input type="range" id="l-scale-matchday" min="40" max="250" value="90" oninput="this.nextElementSibling.innerText=this.value;updateLandscapePreview();"><span class="sl-val">90</span></div>';
     html += '<div class="slider-row"><span class="sl-lbl">MixVoip R</span><input type="range" id="l-scale-mixvoip-r" min="100" max="500" value="280" oninput="this.nextElementSibling.innerText=this.value;updateLandscapePreview();"><span class="sl-val">280</span></div>';
@@ -1039,6 +1042,10 @@ function resetTeamSettings(id) {
 }
 
 function resetLandTeamSettings(id) {
+    const ct = document.querySelector('.cb-title-land[data-team="' + id + '"]');
+    if (ct) ct.checked = true;
+    const tourTitle = document.getElementById('l-show-tournoi-title');
+    if (tourTitle) tourTitle.checked = true;
     const ls = document.querySelector('.land-scale-logo[data-team="' + id + '"]');
     const ts = document.querySelector('.land-scale-title[data-team="' + id + '"]');
     const tx = document.querySelector('.land-scale-text[data-team="' + id + '"]');
@@ -1079,6 +1086,29 @@ function formatDate(dateStr, timeStr) {
     let t = "";
     if (timeStr) { t = timeStr.replace(/\s/g, '').replace(':', 'h'); t = t.replace(/h+/gi, 'h'); } else { t = "00h00"; }
     return '<span style="font-family: \'Barlow\', sans-serif !important; font-style: normal !important; font-weight: 800 !important;">' + days[d.getDay()] + ' - ' + p[2] + '.' + p[1] + '.' + p[0] + ' - ' + t + '</span>';
+}
+
+/**
+ * Adresse fuer Poster-Zeilen aufbereiten.
+ * ZIEL: Strasse in EINER Zeile, darunter PLZ + Ort in EINER Zeile.
+ *
+ * Quelle ist fast immer "Strasse | PLZ Ort" (hallCodes/aliases). Wenn das
+ * Trennzeichen fehlt, wird vor "L-1234" bzw. "B-1234" umgebrochen, damit
+ * die Strasse nicht mit der Postleitzahl in einer Zeile landet.
+ */
+function formatAddressHtml(locVal) {
+    if (!locVal) return '';
+    var parts = String(locVal).split('|').map(function (s) {
+        return String(s).trim();
+    }).filter(function (s) { return s !== ''; });
+
+    if (parts.length === 1) {
+        var m = parts[0].match(/^(.*?)[\s]*([LB]-\d{4}\s+.+)$/);
+        if (m && m[1] && m[1].trim()) parts = [m[1].trim(), m[2].trim()];
+    }
+    if (parts.length > 2) parts = [parts[0], parts.slice(1).join(' ')];
+    if (!parts.length) return '';
+    return parts.join('<br>');
 }
 
 async function loadSavedSchedule() {
@@ -1852,7 +1882,12 @@ function renderLandscapeTournamentStrip(cont, top) {
     if (isLandscapeTeamActive('u4M')) ids.push('u4M');
 
     let html = '<div class="abs game-layer" style="display:block;pointer-events:none;">';
-    html += '<div class="abs" style="top:' + top + 'px;left:' + left + 'px;width:' + width + 'px;height:30px;font-size:24px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;text-align:center;color:#FFFFFF;text-shadow:0 0 3px rgba(0,0,0,0.8);">--- TOURNOI ---</div>';
+    // Titeltext abschaltbar (Checkbox "Titeltext --- TOURNOI ---").
+    const tTitleEl = document.getElementById('l-show-tournoi-title');
+    const showTournoiTitle = tTitleEl ? tTitleEl.checked : true;
+    if (showTournoiTitle) {
+        html += '<div class="abs" style="top:' + top + 'px;left:' + left + 'px;width:' + width + 'px;height:30px;font-size:24px;font-family:\'Barlow\',sans-serif;font-weight:900;font-style:italic;text-align:center;color:#FFFFFF;text-shadow:0 0 3px rgba(0,0,0,0.8);">--- TOURNOI ---</div>';
+    }
     const lineTop = top + 34;
     html += '<div class="abs" style="top:' + lineTop + 'px;left:' + (left + 16) + 'px;width:' + (width - 32) + 'px;height:3px;background:var(--primary-blue);"></div>';
     html += '<div class="abs" style="top:' + lineTop + 'px;left:' + (left + 16) + 'px;width:3px;height:10px;background:var(--primary-blue);"></div>';
@@ -1885,7 +1920,8 @@ function renderLandscapeTournamentStrip(cont, top) {
             const dv = getGameFieldValue(id, 'date', 1);
             const tm = getGameFieldValue(id, 'time', 1);
             const ds = dv ? formatDate(dv, tm) : '';
-            if (ds) dateHtml = '<div style="font-family:\'Barlow\',sans-serif;font-weight:800;font-size:12px;line-height:1.1;color:#FFFFFF;text-shadow:0 0 3px rgba(0,0,0,0.8);">' + ds + '</div>';
+            // Datum UND Zeit in einer Zeile - kein Umbruch, auch bei schmaler Spalte.
+            if (ds) dateHtml = '<div style="font-family:\'Barlow\',sans-serif;font-weight:800;font-size:12px;line-height:1.1;white-space:nowrap;color:#FFFFFF;text-shadow:0 0 3px rgba(0,0,0,0.8);">' + ds + '</div>';
         }
 
         html += '<div class="abs badge" style="top:' + colTop + 'px;left:' + (center - 35) + 'px;width:70px;height:26px;border-radius:6px;"><div class="sub" style="font-size:6px;">' + tv + '</div><div class="main" style="font-size:15px;font-weight:900;font-style:italic;">' + mb + '</div></div>';
@@ -1895,8 +1931,11 @@ function renderLandscapeTournamentStrip(cont, top) {
             var lv = getGameFieldValue(id, 'loc', 1) || '';
             if (!lv && typeof hallCodes !== 'undefined') { var hv = getGameFieldValue(id, 'hall', 1) || ''; if (hv && hallCodes[hv]) lv = hallCodes[hv]; }
             if (!lv && typeof resolveOpponentAddress === 'function') { var oh = getGameFieldValue(id, 'opp', 1) || ''; lv = resolveOpponentAddress(oh); }
-            if (lv) { var lpp = String(lv).split('|'); for (var li2 = 0; li2 < lpp.length; li2++) { lpp[li2] = lpp[li2].trim(); } lv = lpp.join('<br>');
-                locHtml = '<div style="font-family:Barlow,sans-serif;font-weight:600;font-size:10px;line-height:1.15;color:#FFE45C;text-shadow:0 0 3px rgba(0,0,0,0.8);margin-top:2px;">' + lv + '</div>'; }
+            if (lv) {
+                var laddr = formatAddressHtml(lv);
+                // Gleiche Schriftgroesse wie das Datum (12px) und WEISS.
+                if (laddr) locHtml = '<div style="font-family:\'Barlow\',sans-serif;font-weight:600;font-size:12px;line-height:1.15;white-space:nowrap;color:#FFFFFF;text-shadow:0 0 3px rgba(0,0,0,0.8);margin-top:2px;">' + laddr + '</div>';
+            }
         }
         if (dateHtml || locHtml) {
             html += '<div class="abs" style="top:' + (colTop + 90) + 'px;left:' + colLeft + 'px;width:' + colWidth + 'px;text-align:center;">' + dateHtml + locHtml + '</div>';
@@ -2105,7 +2144,10 @@ function renderLandscapeGame(teamRef, sl, cont, hasGame) {
     if (isNaN(sclPhoto)) sclPhoto = 100;
     
     const titleEl = document.getElementById(prefix + '-land-title');
-    const ts = titleEl ? titleEl.value : "";
+    // Titeltext ausblenden - gleiches Prinzip wie die Portrait-Checkbox .cb-title
+    const titleCbEl = document.querySelector('.cb-title-land[data-team="' + prefix + '"]');
+    const showTitle = titleCbEl ? titleCbEl.checked : true;
+    const ts = (titleEl && showTitle) ? titleEl.value : "";
 
     const photoToggle = document.querySelector('.trigger-photo-toggle[data-team="' + prefix + '"]');
     const photoSrc = getTeamPhotoSource(prefix);
@@ -2113,7 +2155,7 @@ function renderLandscapeGame(teamRef, sl, cont, hasGame) {
 
     if (showPhoto) {
         // Titel fir Photo-Only aus LANDSCAPE_PHOTO_TITLES huelen
-        const photoTitle = (!hasGame && LANDSCAPE_PHOTO_TITLES[prefix]) ? LANDSCAPE_PHOTO_TITLES[prefix] : ts;
+        const photoTitle = !showTitle ? '' : ((!hasGame && LANDSCAPE_PHOTO_TITLES[prefix]) ? LANDSCAPE_PHOTO_TITLES[prefix] : ts);
         const isMainTeam = (prefix === 'fe' || prefix === 's1');
         const titleColor = '#FFFFFF';
         let pW, pH, pTop, pLeft;
@@ -2225,28 +2267,27 @@ function renderLandscapeGame(teamRef, sl, cont, hasGame) {
     }
     
     const ds = dv ? formatDate(dv, tv2) : "";
-    let ls = "";
-    if (dv && locVal) {
-        const parts = locVal.split('|');
-        for(let k = 0; k < parts.length; k++) { parts[k] = parts[k].trim(); }
-        ls = parts.join('<br>');
-    }
+    // Strasse / PLZ+Ort immer auf zwei Zeilen - schiebt die Postleitzahl
+    // unter die Strasse, auch wenn das Quellfeld kein '|' enthaelt.
+    let ls = (dv && locVal) ? formatAddressHtml(locVal) : "";
     
     const lc = '#FFFFFF';
     const titleColor = '#FFFFFF';
     const dateColor = '#FFFFFF';
     if (ds || ls) {
         if (sl.type === 'big') { 
-            th = '<span style="font-family:\'Barlow\',sans-serif;font-weight:800;color:' + dateColor + ';">' + ds + '</span><br><span style="font-family:\'Barlow\',sans-serif;font-weight:600;font-size:0.85em;color:' + dateColor + ';line-height:1.3;">' + ls + '</span>';
+            // Adresse in derselben Schriftgroesse wie das Datum (vorher 0.85em).
+            th = '<span style="font-family:\'Barlow\',sans-serif;font-weight:800;color:' + dateColor + ';">' + ds + '</span><br><span style="font-family:\'Barlow\',sans-serif;font-weight:600;color:' + dateColor + ';line-height:1.3;">' + ls + '</span>';
         } else {
-            var baseDt = 11, baseLc = 10;
+            var baseDt = 11;
             if (['u15', 'u13p1', 'u13p2', 'u11MEL', 'u11MES'].indexOf(prefix) !== -1) { 
-                baseDt = 22; baseLc = 18;
-            } else if (['u9M', 'u7M'].indexOf(prefix) !== -1) { 
-                baseDt = 14; baseLc = 12; 
+                baseDt = 22;
+            } else if (['u9M', 'u7M'].indexOf(prefix) !== -1) {
+                baseDt = 14;
             }
             if (sl.dateFont) baseDt = sl.dateFont;
-            if (sl.locFont) baseLc = sl.locFont;
+            // Adresse immer in Datumsgrösse - keine kleinere Adressschrift.
+            var baseLc = baseDt;
             th = '<div style="font-family:\'Barlow\',sans-serif;font-weight:800;font-size:' + (baseDt * sclTe) + 'px;color:' + dateColor + ';">' + ds + '</div><div style="font-family:\'Barlow\',sans-serif;font-weight:600;font-size:' + (baseLc * sclTe) + 'px;color:' + dateColor + ';line-height:1.1;margin-top:2px;">' + ls + '</div>';
         }
     }
@@ -2284,7 +2325,7 @@ function renderLandscapeGame(teamRef, sl, cont, hasGame) {
             const textW = 200;
             const badgeCenter = sl.left + colOffset2 + (badgeW / 2);
             const textLeft = badgeCenter - (textW / 2);
-            html += '<div class="abs" style="top:' + (sl.top + badgeH + 5 + ((sclL - 1) * badgeH)) + 'px;left:' + textLeft + 'px;width:' + textW + 'px;height:auto;text-align:center;overflow:visible;line-height:1.1;">' + th + '</div>';
+            html += '<div class="abs" style="top:' + (sl.top + badgeH + 5 + ((sclL - 1) * badgeH)) + 'px;left:' + textLeft + 'px;width:' + textW + 'px;height:auto;text-align:center;overflow:visible;white-space:nowrap;line-height:1.1;">' + th + '</div>';
         }
         html += '</div>';
     } else {
@@ -2309,7 +2350,7 @@ function renderLandscapeGame(teamRef, sl, cont, hasGame) {
         html += '<div class="abs logo-box" style="top:' + sl.top + 'px;left:' + heimLeft + 'px;width:' + logoSize + 'px;height:' + logoSize + 'px;border-radius:12px;padding:6px;transform: scale(' + sclL + '); transform-origin: top center;"><img src="' + l1 + '" crossorigin="anonymous"></div>';
         html += '<div class="abs badge" style="top:' + (sl.top + badgeTop) + 'px;left:' + badgeLeft + 'px;width:' + badgeW + 'px;height:' + badgeH + 'px;border-radius:8px;transform: scale(' + sclL + '); transform-origin: top center;"><div class="sub" style="font-size:8px;">' + tv + '</div><div class="main" style="font-size:' + badgeFont + 'px;">' + mb + '</div></div>';
         html += '<div class="abs logo-box" style="top:' + sl.top + 'px;left:' + gastLeft + 'px;width:' + logoSize + 'px;height:' + logoSize + 'px;border-radius:12px;padding:6px;transform: scale(' + sclL + '); transform-origin: top center;"><img src="' + l2 + '" crossorigin="anonymous"></div>';
-        html += '<div class="abs" style="top:' + dateTop + 'px;left:' + badgeLeft + 'px;width:' + badgeW + 'px;height:auto;text-align:center;overflow:visible;line-height:1.2;">' + th + '</div>';
+        html += '<div class="abs" style="top:' + dateTop + 'px;left:' + badgeLeft + 'px;width:' + badgeW + 'px;height:auto;text-align:center;overflow:visible;white-space:nowrap;line-height:1.2;">' + th + '</div>';
         html += '</div>';
     }
     cont.innerHTML += html;
